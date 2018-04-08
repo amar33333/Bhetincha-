@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
 import {
   Button,
   Card,
@@ -23,7 +24,7 @@ class Login extends Component {
               <CardGroup>
                 <Card className="p-4">
                   <CardBody>
-                    <h1>Login</h1>
+                    <h1>Login{this.props.auth.name}</h1>
                     <p className="text-muted">Sign In to your account</p>
                     <InputGroup className="mb-3">
                       <InputGroupAddon addonType="prepend">
@@ -82,4 +83,8 @@ class Login extends Component {
   }
 }
 
-export default Login;
+function mapStateToProps({ auth }) {
+  return { auth };
+}
+
+export default connect(mapStateToProps)(Login);
