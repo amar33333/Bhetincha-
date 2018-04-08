@@ -1,0 +1,20 @@
+const MAIN_URL = "http://159.65.150.212:8025";
+
+const SECTION_LIST = "category/getsectionlist/";
+
+const GET_USER_INFO = "api/accounts/getuserinfo/";
+
+const BUSINESS_INFO = "business/business/";
+const BUSINESS_LIST = "business/business/";
+
+const O_TOKEN = "o/token/";
+export const CLIENT_ID = "yMa3A0afyWb3y3wAjszbLj4vd32ZNrDMGk3bjQKo";
+export const CLIENT_SECRET =
+  "pP8obLTgrx0daKYSUFr1o7XwPilalHPYOVnbZumTkv2agQJTMsZLwzB3pz57RvUtIcrcPNKG05bTZdeKgsi0JbfGPBNOMfC3O2y44QCvXqG5CnrS85EU1kcDzF8VsbGP";
+
+export const SECTION_LIST_URL = `${MAIN_URL}/${SECTION_LIST}`;
+export const GET_USER_INFO_URL = `${MAIN_URL}/${GET_USER_INFO}`;
+export const O_TOKEN_URL = `${MAIN_URL}/${O_TOKEN}`;
+export const BUSINESS_INFO_URL = `${MAIN_URL}/${BUSINESS_INFO}`;
+export const BUSINESS_LIST_URL = `${MAIN_URL}/${BUSINESS_LIST}`;
+export { MAIN_URL };

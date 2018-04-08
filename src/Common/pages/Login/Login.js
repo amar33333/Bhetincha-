@@ -11,11 +11,35 @@ import {
   InputGroup,
   InputGroupAddon,
   InputGroupText,
-  Row
+  Row,
+  Form
 } from "reactstrap";
 
+import { onSubmit } from "../../../actions";
+
 class Login extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      username: "",
+      password: ""
+    };
+  }
+
+  onChange = (key, event) => this.setState({ [key]: event.target.value });
+
+  onSubmit = event => {
+    event.preventDefault();
+    const { username, password } = this.state;
+    this.props.onSubmit({
+      username,
+      password
+    });
+    // call function
+  };
+
   render() {
+    const { username, password } = this.state;
     return (
       <div className="app flex-row align-items-center">
         <Container>
@@ -24,36 +48,50 @@ class Login extends Component {
               <CardGroup>
                 <Card className="p-4">
                   <CardBody>
-                    <h1>Login{this.props.auth.name}</h1>
-                    <p className="text-muted">Sign In to your account</p>
-                    <InputGroup className="mb-3">
-                      <InputGroupAddon addonType="prepend">
-                        <InputGroupText>
-                          <i className="icon-user" />
-                        </InputGroupText>
-                      </InputGroupAddon>
-                      <Input type="text" placeholder="Username" />
-                    </InputGroup>
-                    <InputGroup className="mb-4">
-                      <InputGroupAddon addonType="prepend">
-                        <InputGroupText>
-                          <i className="icon-lock" />
-                        </InputGroupText>
-                      </InputGroupAddon>
-                      <Input type="password" placeholder="Password" />
-                    </InputGroup>
-                    <Row>
-                      <Col xs="6">
-                        <Button color="primary" className="px-4">
-                          Login
-                        </Button>
-                      </Col>
-                      <Col xs="6" className="text-right">
-                        <Button color="link" className="px-0">
-                          Forgot password?
-                        </Button>
-                      </Col>
-                    </Row>
+                    <Form onSubmit={this.onSubmit}>
+                      <h1>Login{this.props.auth.name}</h1>
+                      <p className="text-muted">Sign In to your account</p>
+                      <InputGroup className="mb-3">
+                        <InputGroupAddon addonType="prepend">
+                          <InputGroupText>
+                            <i className="icon-user" />
+                          </InputGroupText>
+                        </InputGroupAddon>
+                        <Input
+                          required
+                          type="text"
+                          placeholder="Username"
+                          value={username}
+                          onChange={this.onChange.bind(this, "username")}
+                        />
+                      </InputGroup>
+                      <InputGroup className="mb-4">
+                        <InputGroupAddon addonType="prepend">
+                          <InputGroupText>
+                            <i className="icon-lock" />
+                          </InputGroupText>
+                        </InputGroupAddon>
+                        <Input
+                          required
+                          type="password"
+                          placeholder="Password"
+                          value={password}
+                          onChange={this.onChange.bind(this, "password")}
+                        />
+                      </InputGroup>
+                      <Row>
+                        <Col xs="6">
+                          <Button color="primary" className="px-4">
+                            Login
+                          </Button>
+                        </Col>
+                        <Col xs="6" className="text-right">
+                          <Button color="link" className="px-0">
+                            Forgot password?
+                          </Button>
+                        </Col>
+                      </Row>
+                    </Form>
                   </CardBody>
                 </Card>
                 <Card
@@ -87,4 +125,4 @@ function mapStateToProps({ auth }) {
   return { auth };
 }
 
-export default connect(mapStateToProps)(Login);
+export default connect(mapStateToProps, { onSubmit })(Login);
