@@ -1,0 +1,6 @@
+{
+  "name": "sidebarfooter",
+  "version": "0.0.0",
+  "private": true,
+  "main": "./SidebarFooter.js"
+}

@@ -1,0 +1,6 @@
+{
+  "name": "sidebarheader",
+  "version": "0.0.0",
+  "private": true,
+  "main": "./SidebarHeader.js"
+}

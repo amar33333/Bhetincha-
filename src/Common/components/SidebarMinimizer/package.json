@@ -1,0 +1,6 @@
+{
+  "name": "sidebarminimizer",
+  "version": "0.0.0",
+  "private": true,
+  "main": "./SidebarMinimizer.js"
+}
