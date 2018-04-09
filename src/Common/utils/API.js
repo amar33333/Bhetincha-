@@ -6,6 +6,10 @@ const GET_USER_INFO = "api/accounts/getuserinfo/";
 
 const BUSINESS_INFO = "business/business/";
 const BUSINESS_LIST = "business/business/";
+const INDUSTRY = "category/industry/";
+const CATEGORY = "category/category/";
+const ACCOUNTS = "accounts";
+const USER = "user/";
 
 const O_TOKEN = "o/token/";
 export const CLIENT_ID = "yMa3A0afyWb3y3wAjszbLj4vd32ZNrDMGk3bjQKo";
@@ -17,4 +21,7 @@ export const GET_USER_INFO_URL = `${MAIN_URL}/${GET_USER_INFO}`;
 export const O_TOKEN_URL = `${MAIN_URL}/${O_TOKEN}`;
 export const BUSINESS_INFO_URL = `${MAIN_URL}/${BUSINESS_INFO}`;
 export const BUSINESS_LIST_URL = `${MAIN_URL}/${BUSINESS_LIST}`;
+export const INDUSTRY_URL = `${MAIN_URL}/${INDUSTRY}`;
+export const CATEGORY_URL = `${MAIN_URL}/${CATEGORY}`;
+export const REGISTER_URL = `${MAIN_URL}/${ACCOUNTS}/${USER}`;
 export { MAIN_URL };
