@@ -40,6 +40,18 @@ class Footer extends Component {
             </Col>
             <Col xs="12" md="3">
               <Row>
+                <span class="fa-stack fa-lg footer_social__icon">
+                  <i class="fa fa-circle-thin fa-stack-2x" />
+                  <i class="fa fa-facebook fa-stack-1x" />
+                </span>
+                <span class="fa-stack fa-lg footer_social__icon">
+                  <i class="fa fa-circle-thin fa-stack-2x" />
+                  <i class="fa fa-twitter fa-stack-1x" />
+                </span>
+                <span class="fa-stack fa-lg footer_social__icon">
+                  <i class="fa fa-circle-thin fa-stack-2x" />
+                  <i class="fa fa-google-plus fa-stack-1x" />
+                </span>
                 {/* <span>
                   <Icon name="facebook f" size="large" circular inverted />
                 </span>
@@ -49,6 +61,8 @@ class Footer extends Component {
                 <span>
                   <Icon name="google plus" size="large" circular inverted />
                 </span> */}
+              </Row>
+              <Row>
                 <div className="toll-free">
                   <h4>Toll Free</h4>
                   <h3>

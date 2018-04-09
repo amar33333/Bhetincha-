@@ -140,7 +140,8 @@ class RegisterModal extends Component {
         </FormGroup>
 
         <Button
-          color="success"
+          className="register-button"
+          color="primary"
           block
           //onClick={() => this.onRegisterBtnClick()}
         >

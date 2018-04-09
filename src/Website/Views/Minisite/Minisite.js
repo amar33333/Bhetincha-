@@ -12,7 +12,9 @@ class Minisite extends Component {
       <div>
         <MainNavbar />
         <BusinessNav name={this.props.match.params.businessName} />
-        <div>Welcome to Minisite, {this.props.match.params.businessName}!</div>
+        <div className="body-wrapper">
+          Welcome to Minisite, {this.props.match.params.businessName}!
+        </div>
         <Footer />
       </div>
     );

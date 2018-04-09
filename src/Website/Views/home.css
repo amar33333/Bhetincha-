@@ -1,6 +1,7 @@
 .body-wrapper {
   background-color: rgb(255, 255, 255) !important;
   margin-top: 0px !important;
+  min-height: 50vh;
 }
 
 .nav-wrapper {
@@ -21,13 +22,27 @@
   list-style-type: none !important;
 }
 
-.main-nav-search input {
+input.main-nav-search {
   background: transparent !important;
   border: 1px cornsilk solid !important;
   color: cornsilk !important;
   width: 40vw !important;
 }
 
+input.main-nav-search::-moz-placeholder {
+  color: cornsilk;
+  opacity: 0.7;
+}
+
+input.main-nav-search::-ms-input-placeholder {
+  color: cornsilk;
+  opacity: 0.7;
+}
+
+input.main-nav-search::placeholder {
+  color: cornsilk;
+  opacity: 0.7;
+}
 .main-nav-search i {
   color: cornsilk;
 }
@@ -124,6 +139,10 @@
   align-items: center !important;
 }
 
+.register-button {
+  margin-top: 10px;
+}
+
 /* ===========end of home page css ================ */
 
 .hero-header {
@@ -187,4 +206,42 @@
 .toll-free a:hover {
   color: whitesmoke;
   text-decoration: none;
+}
+
+.footer_social__icon {
+  transition: ease 0.1s;
+}
+
+.footer_social__icon:hover {
+  transform: scale(1.1);
+}
+
+.avatar {
+  margin-right: 0.5rem;
+  vertical-align: middle;
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+}
+
+.profile-dropdown {
+  padding: 10px;
+}
+
+.profile-dropdown__icon {
+  margin-right: 2rem;
+  color: cornsilk;
+}
+
+.profile-dropdown__item {
+  cursor: pointer;
+}
+
+.profile-dropdown__item:hover {
+  transition: ease-in-out 0.2s;
+  transform: translate(10px);
+}
+
+.profile-dropdown__item__icon {
+  margin-right: 10px;
 }

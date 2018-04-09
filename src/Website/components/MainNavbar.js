@@ -1,51 +1,38 @@
 import React, { Component } from "react";
-// import logo from "./logo.svg";
-// import "../../static/css/styles.css";
-// import { Input, Dropdown } from "semantic-ui-react";
 import {
-  Collapse,
   Navbar,
-  NavbarToggler,
   NavbarBrand,
-  Nav,
   NavItem,
-  NavLink,
-  Input
+  Input,
+  Dropdown,
+  DropdownMenu,
+  DropdownToggle,
+  DropdownItem,
+  Badge
 } from "reactstrap";
 
 // import { Image, Icon } from "semantic-ui-react";
 
 import avatar from "../../static/img/avatar.jpg";
-const trigger = <span />;
-
-const options = [
-  {
-    key: "user",
-    text: (
-      <span>
-        Signed in as <strong>Tech Kunja</strong>
-      </span>
-    ),
-    disabled: true
-  },
-  { key: "profile", text: "Your Profile" },
-  { key: "stars", text: "Your Stars" },
-  { key: "explore", text: "Explore" },
-  { key: "integrations", text: "Integrations" },
-  { key: "help", text: "Help" },
-  { key: "settings", text: "Settings" },
-  { key: "sign-out", text: "Sign Out" }
-];
 
 class MainNavbar extends Component {
   constructor(props) {
     super(props);
 
     this.toggle = this.toggle.bind(this);
+    this.profileDropdowntoggle = this.profileDropdowntoggle.bind(this);
     this.state = {
-      isOpen: false
+      isOpen: false,
+      profileDropdownOpen: false
     };
   }
+
+  profileDropdowntoggle() {
+    this.setState({
+      profileDropdownOpen: !this.state.profileDropdownOpen
+    });
+  }
+
   toggle() {
     this.setState({
       isOpen: !this.state.isOpen
@@ -63,24 +50,62 @@ class MainNavbar extends Component {
               className="main-nav-search"
             />
           </NavItem>
-          {/* <NavbarToggler onClick={this.toggle} />
-          <Collapse isOpen={this.state.isOpen} navbar>
-            <Nav className="ml-5" navbar>
-              <NavItem>
-                <NavLink href="/components/">Home</NavLink>
-              </NavItem>
-            </Nav>
-          </Collapse> */}
           <div>
-            <img alt="Avatar" src={avatar} avatar />
-            {/* <Dropdown
-              basic
-              trigger={trigger}
-              direction={"left"}
-              pointing={"top"}
-              options={options}
-              className="mr-5 user-dropdown"
-            /> */}
+            <Dropdown
+              isOpen={this.state.profileDropdownOpen}
+              toggle={this.profileDropdowntoggle}
+              direction="top"
+            >
+              <DropdownToggle
+                tag="span"
+                onClick={this.profileDropdowntoggle}
+                data-toggle="dropdown"
+                aria-expanded={this.state.profileDropdownOpen}
+              >
+                <img className="avatar" alt="Avatar" src={avatar} />
+                <i className="fa fa-chevron-down profile-dropdown__icon" />
+              </DropdownToggle>
+              <DropdownMenu right>
+                <div className="profile-dropdown">
+                  <div
+                    onClick={this.profileDropdowntoggle}
+                    className="profile-dropdown__item"
+                  >
+                    <i className="fa fa-user profile-dropdown__item__icon" />Profile
+                  </div>
+                  <DropdownItem divider />
+                  <div
+                    onClick={this.profileDropdowntoggle}
+                    className="profile-dropdown__item"
+                  >
+                    <i className="fa fa-cog profile-dropdown__item__icon" />Settings
+                  </div>
+                  <DropdownItem divider />
+                  <div
+                    onClick={this.profileDropdowntoggle}
+                    className="profile-dropdown__item"
+                  >
+                    <i className="fa fa-bell profile-dropdown__item__icon" />Notification{" "}
+                    <Badge color="warning">4</Badge>
+                  </div>
+                  <DropdownItem divider />
+                  <div
+                    onClick={this.profileDropdowntoggle}
+                    className="profile-dropdown__item"
+                  >
+                    <i className="fa fa-lock profile-dropdown__item__icon" />Change
+                    Password
+                  </div>
+                  <DropdownItem divider />
+                  <div
+                    onClick={this.profileDropdowntoggle}
+                    className="profile-dropdown__item"
+                  >
+                    <i className="fa fa-sign-out profile-dropdown__item__icon" />Logout
+                  </div>
+                </div>
+              </DropdownMenu>
+            </Dropdown>
           </div>
         </Navbar>
       </div>
