@@ -7,4 +7,4 @@ const createStoreWithMiddleware = applyMiddleware(promiseMiddleware())(
   createStore
 );
 
-export default createStoreWithMiddleware(reducers);
+export default () => createStoreWithMiddleware(reducers);
