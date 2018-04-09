@@ -1,10 +1,7 @@
 import {
   FETCH_USER_PENDING,
   FETCH_USER_FULFILLED,
-  FETCH_USER_REJECTED,
-  CREATE_USER_PENDING,
-  CREATE_USER_FULFILLED,
-  CREATE_USER_REJECTED
+  FETCH_USER_REJECTED
 } from "../actions/types";
 
 const INITIAL_STATE = {
@@ -21,20 +18,6 @@ export default function(state = INITIAL_STATE, action) {
       return { ...state, loading: false, statusClass: "fulfilled" };
 
     case FETCH_USER_REJECTED:
-      return { ...state, loading: false, statusClass: "rejected" };
-
-    case CREATE_USER_PENDING:
-      return { ...state, loading: true, statusClass: "pending" };
-
-    case CREATE_USER_FULFILLED:
-      return {
-        ...state,
-        data: action.payload.data,
-        loading: false,
-        statusClass: "fulfilled"
-      };
-
-    case CREATE_USER_REJECTED:
       return { ...state, loading: false, statusClass: "rejected" };
 
     default:

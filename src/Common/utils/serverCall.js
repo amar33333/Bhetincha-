@@ -1,4 +1,11 @@
-import { O_TOKEN_URL, CLIENT_ID, CLIENT_SECRET } from "./API";
+import {
+  O_TOKEN_URL,
+  CLIENT_ID,
+  CLIENT_SECRET,
+  INDUSTRY_URL,
+  CATEGORY_URL,
+  REGISTER_URL
+} from "./API";
 import axios from "axios";
 import querystring from "querystring";
 
@@ -15,5 +22,55 @@ export const onLogin = ({ username, password }) =>
     }),
     headers: {
       "Content-Type": "application/x-www-form-urlencoded"
+    }
+  });
+
+export const onRegister = ({ username, password, email, business_name }) =>
+  axios({
+    method: "post",
+    url: REGISTER_URL,
+    data: querystring.stringify({
+      client_id: CLIENT_ID,
+      client_secret: CLIENT_SECRET,
+      grant_type: "password",
+      username,
+      password
+    }),
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded"
+    }
+  });
+
+export const onIndustryPost = ({ industry }) =>
+  axios({
+    method: "post",
+    url: INDUSTRY_URL,
+    data: {
+      name: industry
+    },
+    headers: {
+      "Content-Type": "application/json"
+    }
+  });
+
+export const onIndustryGet = () =>
+  axios({
+    method: "get",
+    url: INDUSTRY_URL,
+    headers: {
+      "Content-Type": "application/json"
+    }
+  });
+
+export const onCategoryPost = ({ category, industry }) =>
+  axios({
+    method: "post",
+    url: CATEGORY_URL,
+    data: {
+      name: category,
+      industry
+    },
+    headers: {
+      "Content-Type": "application/json"
     }
   });

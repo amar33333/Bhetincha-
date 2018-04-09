@@ -1,10 +1,10 @@
 import {
-  FETCH_USER_PENDING,
-  FETCH_USER_FULFILLED,
-  FETCH_USER_REJECTED,
-  CREATE_USER_PENDING,
-  CREATE_USER_FULFILLED,
-  CREATE_USER_REJECTED
+  FETCH_INDUSTRY_PENDING,
+  FETCH_INDUSTRY_FULFILLED,
+  FETCH_INDUSTRY_REJECTED,
+  CREATE_INDUSTRY_PENDING,
+  CREATE_INDUSTRY_FULFILLED,
+  CREATE_INDUSTRY_REJECTED
 } from "../actions/types";
 
 const INITIAL_STATE = {
@@ -13,20 +13,27 @@ const INITIAL_STATE = {
 };
 
 export default function(state = INITIAL_STATE, action) {
+  // console.log("actionsL: ", action);
   switch (action.type) {
-    case FETCH_USER_PENDING:
+    case CREATE_INDUSTRY_PENDING:
       return { ...state, loading: true, statusClass: "pending" };
 
-    case FETCH_USER_FULFILLED:
-      return { ...state, loading: false, statusClass: "fulfilled" };
+    case CREATE_INDUSTRY_FULFILLED:
+      return {
+        ...state,
+        ...action.payload.data,
+        loading: false,
+        statusClass: "fulfilled"
+      };
 
-    case FETCH_USER_REJECTED:
+    case CREATE_INDUSTRY_REJECTED:
       return { ...state, loading: false, statusClass: "rejected" };
 
-    case CREATE_USER_PENDING:
+    case FETCH_INDUSTRY_PENDING:
       return { ...state, loading: true, statusClass: "pending" };
 
-    case CREATE_USER_FULFILLED:
+    case FETCH_INDUSTRY_FULFILLED:
+      // console.log("fuludids");
       return {
         ...state,
         data: action.payload.data,
@@ -34,7 +41,7 @@ export default function(state = INITIAL_STATE, action) {
         statusClass: "fulfilled"
       };
 
-    case CREATE_USER_REJECTED:
+    case FETCH_INDUSTRY_REJECTED:
       return { ...state, loading: false, statusClass: "rejected" };
 
     default:

@@ -15,6 +15,9 @@ import {
   Checkbox,
   Form
 } from "semantic-ui-react";
+import { connect } from "react-redux";
+
+import { onRegisterSubmit } from "../../../../actions";
 
 class RegisterModal extends Component {
   state = { username: "", password: "", email: "", business_name: "" };
@@ -26,8 +29,19 @@ class RegisterModal extends Component {
   //Change this.....
   onFormSubmit = event => {
     event.preventDefault();
-    const { username, password } = this.state;
-    this.props.onSubmit({ username, password });
+    const {
+      username,
+      password,
+      confirm_password,
+      email,
+      business_name
+    } = this.state;
+
+    if (password === confirm_password) {
+      this.props.onRegisterSubmit({ username, password, email, business_name });
+    } else {
+      console.log("password mismatch");
+    }
   };
 
   render() {
@@ -40,6 +54,8 @@ class RegisterModal extends Component {
             </InputGroupText>
           </InputGroupAddon>
           <Input
+            autoFocus
+            required
             type="text"
             placeholder="Business Name"
             value={this.state.business_name}
@@ -53,6 +69,7 @@ class RegisterModal extends Component {
             </InputGroupText>
           </InputGroupAddon>
           <Input
+            required
             type="text"
             placeholder="Username"
             value={this.state.username}
@@ -64,6 +81,7 @@ class RegisterModal extends Component {
             <InputGroupText>@</InputGroupText>
           </InputGroupAddon>
           <Input
+            required
             type="text"
             placeholder="Email"
             value={this.state.email}
@@ -77,6 +95,7 @@ class RegisterModal extends Component {
             </InputGroupText>
           </InputGroupAddon>
           <Input
+            required
             type="password"
             value={this.state.password}
             onChange={this.onChange.bind(this, "password")}
@@ -89,7 +108,13 @@ class RegisterModal extends Component {
               <i className="icon-lock" />
             </InputGroupText>
           </InputGroupAddon>
-          <Input type="password" placeholder="Repeat password" />
+          <Input
+            required
+            value={this.state.confirm_password}
+            type="password"
+            placeholder="Repeat password"
+            onChange={this.onChange.bind(this, "confirm_password")}
+          />
         </InputGroup>
         <Form.Field
           control={Checkbox}
@@ -140,4 +165,4 @@ class RegisterModal extends Component {
   }
 }
 
-export default RegisterModal;
+export default connect(null, onRegisterSubmit)(RegisterModal);
