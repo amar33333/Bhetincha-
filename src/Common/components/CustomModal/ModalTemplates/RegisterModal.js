@@ -114,9 +114,6 @@ class RegisterModal extends Component {
           />
         </InputGroup>
         <FormGroup check>
-          <Label for="checkbox2" sm={2}>
-            Checkbox
-          </Label>
           <Col sm={{ size: 10 }}>
             <FormGroup check>
               <Label check>
