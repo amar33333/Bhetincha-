@@ -10,6 +10,8 @@ import "simple-line-icons/css/simple-line-icons.css";
 // Import Semantic UI css
 import "semantic-ui-css/semantic.min.css";
 
+import "bootstrap/dist/css/bootstrap.min.css";
+
 // import "../node_modules/@coreui/styles/scss/_dropdown-menu-right.scss";
 
 import { MainRoute } from "./config/routes";
