@@ -18,28 +18,25 @@ import {
 import { onSubmit } from "../../../actions";
 
 class Login extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      username: "",
-      password: ""
-    };
-  }
+  state = { username: "", password: "" };
+
+  // static getDerivedStateFromProps(nextProps, prevState) {
+  //   if (nextProps.statusClass === "fulfilled")
+  //     nextProps.history.push("/admin/dashboard");
+
+  //   return null;
+  // }
 
   onChange = (key, event) => this.setState({ [key]: event.target.value });
 
-  onSubmit = event => {
+  onFormSubmit = event => {
     event.preventDefault();
     const { username, password } = this.state;
-    this.props.onSubmit({
-      username,
-      password
-    });
-    // call function
+    this.props.onSubmit({ username, password });
   };
 
   render() {
-    const { username, password } = this.state;
+    const { loading } = this.props;
     return (
       <div className="app flex-row align-items-center">
         <Container>
@@ -48,8 +45,8 @@ class Login extends Component {
               <CardGroup>
                 <Card className="p-4">
                   <CardBody>
-                    <Form onSubmit={this.onSubmit}>
-                      <h1>Login{this.props.auth.name}</h1>
+                    <Form onSubmit={this.onFormSubmit}>
+                      <h1>Login</h1>
                       <p className="text-muted">Sign In to your account</p>
                       <InputGroup className="mb-3">
                         <InputGroupAddon addonType="prepend">
@@ -59,9 +56,10 @@ class Login extends Component {
                         </InputGroupAddon>
                         <Input
                           required
+                          disabled={loading}
                           type="text"
                           placeholder="Username"
-                          value={username}
+                          value={this.state.username}
                           onChange={this.onChange.bind(this, "username")}
                         />
                       </InputGroup>
@@ -73,15 +71,20 @@ class Login extends Component {
                         </InputGroupAddon>
                         <Input
                           required
+                          disabled={loading}
                           type="password"
                           placeholder="Password"
-                          value={password}
+                          value={this.state.password}
                           onChange={this.onChange.bind(this, "password")}
                         />
                       </InputGroup>
                       <Row>
                         <Col xs="6">
-                          <Button color="primary" className="px-4">
+                          <Button
+                            disabled={loading}
+                            color="primary"
+                            className="px-4"
+                          >
                             Login
                           </Button>
                         </Col>
@@ -122,7 +125,7 @@ class Login extends Component {
 }
 
 function mapStateToProps({ auth }) {
-  return { auth };
+  return { ...auth };
 }
 
 export default connect(mapStateToProps, { onSubmit })(Login);

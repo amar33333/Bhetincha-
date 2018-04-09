@@ -12,7 +12,29 @@ import nav from "./config/nav";
 
 import { Dashboard, Component2 } from "./views";
 
+// Import Main styles for this application
+import "../static/scss/style.css";
+
 class Admin extends Component {
+  componentDidMount() {
+    document.body.classList.add(
+      "app",
+      "header-fixed",
+      "sidebar-fixed",
+      "aside-menu-fixed",
+      "aside-menu-hidden"
+    );
+  }
+
+  componentWillUnmount() {
+    document.body.classList.remove(
+      "app",
+      "header-fixed",
+      "sidebar-fixed",
+      "aside-menu-fixed",
+      "aside-menu-hidden"
+    );
+  }
   render() {
     const MATCH_URL = this.props.match.url;
     return (

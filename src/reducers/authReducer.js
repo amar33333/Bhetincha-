@@ -1,10 +1,23 @@
-import { IS_LOGGED_IN } from "../actions/types";
+import {
+  FETCH_USER_PENDING,
+  FETCH_USER_FULFILLED,
+  FETCH_USER_REJECTED
+} from "../actions/types";
 
-export default function(state = { name: "hello" }, action) {
+const INITIAL_STATE = {
+  loading: false,
+  statusClass: ""
+};
+export default function(state = INITIAL_STATE, action) {
   switch (action.type) {
-    case IS_LOGGED_IN:
-      console.log(action.payload);
-      return { ...state };
+    case FETCH_USER_PENDING:
+      return { ...state, loading: true, statusClass: "pending" };
+
+    case FETCH_USER_FULFILLED:
+      return { ...state, loading: false, statusClass: "fulfilled" };
+
+    case FETCH_USER_REJECTED:
+      return { ...state, loading: false, statusClass: "rejected" };
 
     default:
       return state;
