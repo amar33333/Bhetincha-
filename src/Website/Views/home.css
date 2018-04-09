@@ -1,0 +1,179 @@
+.nav-wrapper {
+  background-color: rgb(41, 39, 39);
+  min-height: 80px;
+}
+/* .main-search-input input {
+  border: none !important;
+  border-bottom: snow 1px solid;
+  background: transparent !important;
+} */
+
+.nav-align {
+  position: absolute;
+  left: 10%;
+}
+.main-nav li {
+  list-style-type: none !important;
+}
+
+.main-nav-search input {
+  background: transparent !important;
+  border: 1px cornsilk solid !important;
+  color: cornsilk !important;
+  width: 40vw !important;
+}
+
+.main-nav-search i {
+  color: cornsilk;
+}
+
+.user-dropdown i {
+  color: cornsilk;
+}
+.banner-wrapper {
+  max-height: 60vh;
+  max-width: 100vmax;
+  overflow: hidden;
+}
+
+/*=============== Home page css ================= */
+.home-page__header {
+  margin: 2rem;
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
+}
+
+.home-page__header .login-btn {
+  margin-right: 1rem;
+}
+.home-page__header button.login-btn {
+  background-color: transparent !important;
+  color: #007bff;
+}
+
+.home-page__header button.login-btn:hover {
+  background-color: #007bff !important;
+  color: #fff;
+  border: #007bff !important;
+}
+
+.home_page__slogan {
+  text-transform: uppercase;
+  font-size: 1.3rem;
+}
+
+.centered {
+  height: 80vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.home_page__centered__wrapper {
+  width: 80%;
+}
+.home-page__searchbar {
+  display: flex;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  margin-top: 30px;
+}
+.home-page__logo {
+  display: flex;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+}
+
+.home-page__searchbar__input {
+  width: 100%;
+}
+.home-page__category {
+  display: flex;
+  margin-top: 1.5rem;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+}
+
+.home-page__category__icon:first-child {
+  margin-right: 0px !important;
+}
+.home-page__category__icon {
+  margin-left: 3rem !important;
+}
+.register-modal {
+  max-width: 400px !important;
+}
+.modal_register__social__icons {
+  display: flex;
+  justify-content: center !important;
+  align-items: center !important;
+}
+
+/* ===========end of home page css ================ */
+
+.hero-header {
+  min-height: 80px;
+  width: 100%;
+  /* margin-bottom: 50px; */
+  background-color: #018fd7;
+  color: cornsilk;
+}
+.business-name {
+  position: relative;
+  display: inline-block;
+}
+.slogan {
+  position: relative;
+  display: inline-block;
+}
+
+.main-wrapper {
+  min-height: 100px;
+}
+
+.footer {
+  /* position: absolute; */
+  min-height: 80px;
+  width: 100%;
+  background-color: rgb(41, 39, 39);
+  color: rgb(146, 144, 144);
+  bottom: 0;
+}
+
+.footer-bottom {
+  text-align: center;
+  border-top: 1px rgb(146, 144, 144) solid;
+}
+
+.footer-link {
+  color: rgb(146, 144, 144);
+  text-decoration: none;
+}
+
+.footer-link:hover {
+  text-decoration: none;
+  color: whitesmoke;
+}
+
+.footer ul {
+  list-style: none;
+  padding-left: 0px !important;
+}
+
+.toll-free {
+  margin-top: 20px;
+}
+
+.toll-free a {
+  color: rgb(146, 144, 144);
+  text-decoration: none;
+}
+
+.toll-free a:hover {
+  color: whitesmoke;
+  text-decoration: none;
+}
