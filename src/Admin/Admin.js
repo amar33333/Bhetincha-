@@ -12,7 +12,6 @@ import nav from "./config/nav";
 import WebsiteRoute from "./config/routes";
 
 // Import Main styles for this application
-import "../static/scss/style.css";
 
 class Admin extends Component {
   componentDidMount() {

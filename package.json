@@ -22,13 +22,12 @@
     "reactstrap": "5.0.0-beta",
     "redux": "^3.7.2",
     "redux-promise-middleware": "^5.0.0",
-    "semantic-ui-css": "^2.3.1",
-    "semantic-ui-react": "^0.79.1",
     "simple-line-icons": "^2.4.1"
   },
   "scripts": {
     "build-css": "node-sass-chokidar src/ -o src/",
-    "watch-css": "npm run build-css && node-sass-chokidar src/ -o src/ --watch --recursive",
+    "watch-css":
+      "npm run build-css && node-sass-chokidar src/ -o src/ --watch --recursive",
     "start-js": "react-scripts start",
     "start": "npm-run-all -p watch-css start-js",
     "build-js": "react-scripts build",

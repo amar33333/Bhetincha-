@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 // import logo from "./logo.svg";
 // import { Image } from "semantic-ui-react";
-import { Container, Icon } from "semantic-ui-react";
-import { Row, Col } from "reactstrap";
+// import { Container, Icon } from "semantic-ui-react";
+import { Container, Row, Col } from "reactstrap";
 import moment from "moment";
 
 const DEVELOPER = "Tech Kunja";
@@ -40,7 +40,7 @@ class Footer extends Component {
             </Col>
             <Col xs="12" md="3">
               <Row>
-                <span>
+                {/* <span>
                   <Icon name="facebook f" size="large" circular inverted />
                 </span>
                 <span>
@@ -48,7 +48,7 @@ class Footer extends Component {
                 </span>
                 <span>
                   <Icon name="google plus" size="large" circular inverted />
-                </span>
+                </span> */}
                 <div className="toll-free">
                   <h4>Toll Free</h4>
                   <h3>

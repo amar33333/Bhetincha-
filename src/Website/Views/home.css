@@ -1,3 +1,8 @@
+.body-wrapper {
+  background-color: rgb(255, 255, 255) !important;
+  margin-top: 0px !important;
+}
+
 .nav-wrapper {
   background-color: rgb(41, 39, 39);
   min-height: 80px;
@@ -38,7 +43,8 @@
 
 /*=============== Home page css ================= */
 .home-page__header {
-  margin: 2rem;
+  /* margin: 2rem; */
+  padding: 2rem 2rem 0 0;
   display: flex;
   justify-content: flex-end;
   align-items: flex-end;
@@ -98,18 +104,23 @@
   align-items: center;
 }
 
+.model_register input {
+  width: 90% !important;
+}
+
 .home-page__category__icon:first-child {
   margin-right: 0px !important;
 }
 .home-page__category__icon {
   margin-left: 3rem !important;
 }
-.register-modal {
+.register_modal {
   max-width: 400px !important;
 }
 .modal_register__social__icons {
+  margin-top: 10px;
   display: flex;
-  justify-content: center !important;
+  justify-content: space-around !important;
   align-items: center !important;
 }
 

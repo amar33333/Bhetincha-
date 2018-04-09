@@ -7,11 +7,10 @@ import "flag-icon-css/css/flag-icon.min.css";
 import "font-awesome/css/font-awesome.min.css";
 // Import Simple Line Icons Set
 import "simple-line-icons/css/simple-line-icons.css";
-// Import Semantic UI css
-import "semantic-ui-css/semantic.min.css";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 
+import "./static/scss/style.css";
 // import "../node_modules/@coreui/styles/scss/_dropdown-menu-right.scss";
 
 import { MainRoute } from "./config/routes";

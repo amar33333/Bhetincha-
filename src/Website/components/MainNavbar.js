@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 // import logo from "./logo.svg";
 // import "../../static/css/styles.css";
-import { Input, Dropdown } from "semantic-ui-react";
+// import { Input, Dropdown } from "semantic-ui-react";
 import {
   Collapse,
   Navbar,
@@ -9,10 +9,11 @@ import {
   NavbarBrand,
   Nav,
   NavItem,
-  NavLink
+  NavLink,
+  Input
 } from "reactstrap";
 
-import { Image, Icon } from "semantic-ui-react";
+// import { Image, Icon } from "semantic-ui-react";
 
 import avatar from "../../static/img/avatar.jpg";
 const trigger = <span />;
@@ -71,15 +72,15 @@ class MainNavbar extends Component {
             </Nav>
           </Collapse> */}
           <div>
-            <Image src={avatar} avatar />
-            <Dropdown
+            <img alt="Avatar" src={avatar} avatar />
+            {/* <Dropdown
               basic
               trigger={trigger}
               direction={"left"}
               pointing={"top"}
               options={options}
               className="mr-5 user-dropdown"
-            />
+            /> */}
           </div>
         </Navbar>
       </div>

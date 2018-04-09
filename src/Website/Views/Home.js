@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 // import { Link } from "react-router-dom";
-import { Button, Col, Row } from "reactstrap";
-import { Input, Image, Icon } from "semantic-ui-react";
+import { Button, Col, Row, Input } from "reactstrap";
 
 import logo from "../../static/img/logo.png";
 import "./home.css";
@@ -55,7 +54,7 @@ class Home extends Component {
           <CustomModal
             isOpen={this.state.registerModal}
             toggle={this.toggleRegisterModal}
-            className={"modal-xs" + this.props.className}
+            className={"register_modal " + this.props.className}
           >
             <RegisterModal />
           </CustomModal>
@@ -72,7 +71,7 @@ class Home extends Component {
           <div className="home_page__centered__wrapper">
             <Row className="home-page__logo">
               <Col xs="8" md="6">
-                <Image src={logo} size="large" />
+                <img alt="logo" src={logo} size="large" />
               </Col>
             </Row>
             <Row className="home-page__searchbar">
@@ -85,9 +84,8 @@ class Home extends Component {
                 />
               </Col>
             </Row>
-            <Row className="home-page__category">
+            {/* <Row className="home-page__category">
               <Col xs="12" md="10">
-                {/* <span className="fa fa-atm home-page__category__icon" /> */}
                 <Icon
                   name="payment"
                   size="large"
@@ -124,7 +122,7 @@ class Home extends Component {
                 />{" "}
                 <span>University </span>
               </Col>
-            </Row>
+            </Row> */}
           </div>
         </div>
       </div>
