@@ -3,20 +3,12 @@ import {
   Button,
   Col,
   Row,
-  Modal,
-  ModalHeader,
-  ModalBody,
-  Input as InputR,
+  Input,
   InputGroup,
   InputGroupAddon,
-  InputGroupText,
-  Card,
-  CardGroup,
-  CardBody
+  InputGroupText
 } from "reactstrap";
 import {
-  Input,
-  Image,
   Icon,
   Divider,
   Button as ButtonS,
@@ -47,7 +39,7 @@ class RegisterModal extends Component {
               <i className="icon-user" />
             </InputGroupText>
           </InputGroupAddon>
-          <InputR
+          <Input
             type="text"
             placeholder="Business Name"
             value={this.state.business_name}
@@ -60,7 +52,7 @@ class RegisterModal extends Component {
               <i className="icon-user" />
             </InputGroupText>
           </InputGroupAddon>
-          <InputR
+          <Input
             type="text"
             placeholder="Username"
             value={this.state.username}
@@ -71,7 +63,7 @@ class RegisterModal extends Component {
           <InputGroupAddon addonType="prepend">
             <InputGroupText>@</InputGroupText>
           </InputGroupAddon>
-          <InputR
+          <Input
             type="text"
             placeholder="Email"
             value={this.state.email}
@@ -84,7 +76,7 @@ class RegisterModal extends Component {
               <i className="icon-lock" />
             </InputGroupText>
           </InputGroupAddon>
-          <InputR
+          <Input
             type="password"
             value={this.state.password}
             onChange={this.onChange.bind(this, "password")}
@@ -97,7 +89,7 @@ class RegisterModal extends Component {
               <i className="icon-lock" />
             </InputGroupText>
           </InputGroupAddon>
-          <InputR type="password" placeholder="Repeat password" />
+          <Input type="password" placeholder="Repeat password" />
         </InputGroup>
         <Form.Field
           control={Checkbox}

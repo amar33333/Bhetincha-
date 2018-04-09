@@ -4,24 +4,64 @@ import { Button, Col, Row } from "reactstrap";
 import { Input, Image, Icon } from "semantic-ui-react";
 
 import logo from "../../static/img/logo.png";
-
 import "./home.css";
 
+import CustomModal from "../../Common/components/CustomModal";
+import LoginModal from "../../Common/components/CustomModal/ModalTemplates/LoginModal";
+import RegisterModal from "../../Common/components/CustomModal/ModalTemplates/RegisterModal";
+
 class Home extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      loginModal: false,
+      registerModal: false
+    };
+  }
+
+  toggleLoginModal = () => {
+    this.setState({
+      loginModal: !this.state.loginModal
+    });
+  };
+
+  toggleRegisterModal = () => {
+    this.setState({
+      registerModal: !this.state.registerModal
+    });
+  };
+
   render() {
     return (
       <div className="body-wrapper">
         <div className="home-page__header">
           <Button
             className="login-btn"
-            // onClick={this.toggleLoginModal}
+            onClick={this.toggleLoginModal}
             variant="raised"
             color="primary"
           >
             Login
           </Button>
+
+          <CustomModal
+            isOpen={this.state.loginModal}
+            toggle={this.toggleLoginModal}
+            className={"modal-xs" + this.props.className}
+          >
+            <LoginModal />
+          </CustomModal>
+
+          <CustomModal
+            isOpen={this.state.registerModal}
+            toggle={this.toggleRegisterModal}
+            className={"modal-xs" + this.props.className}
+          >
+            <RegisterModal />
+          </CustomModal>
+
           <Button
-            // onClick={this.toggleRegisterModal}
+            onClick={this.toggleRegisterModal}
             variant="raised"
             color="warning"
           >

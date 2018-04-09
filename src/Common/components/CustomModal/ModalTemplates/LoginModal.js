@@ -3,16 +3,10 @@ import {
   Button,
   Col,
   Row,
-  Modal,
-  ModalHeader,
-  ModalBody,
-  Input as InputR,
+  Input,
   InputGroup,
   InputGroupAddon,
   InputGroupText,
-  Card,
-  CardGroup,
-  CardBody,
   Form
 } from "reactstrap";
 
@@ -45,7 +39,7 @@ class LoginModal extends Component {
               <i className="icon-user" />
             </InputGroupText>
           </InputGroupAddon>
-          <InputR
+          <Input
             autoFocus
             required
             type="text"
@@ -60,7 +54,7 @@ class LoginModal extends Component {
               <i className="icon-lock" />
             </InputGroupText>
           </InputGroupAddon>
-          <InputR
+          <Input
             required
             type="password"
             value={this.state.password}
