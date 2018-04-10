@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import LaddaButton, { S, EXPAND_RIGHT } from "react-ladda";
 import {
   Button,
   Col,
@@ -88,6 +89,7 @@ class LoginModal extends Component {
           <Input
             autoFocus
             required
+            disabled={this.props.loading}
             type="text"
             placeholder="Username"
             value={this.state.username}
@@ -103,6 +105,7 @@ class LoginModal extends Component {
           <Input
             required
             type="password"
+            disabled={this.props.loading}
             value={this.state.password}
             onChange={this.onChange.bind(this, "password")}
             placeholder="Password"
@@ -111,13 +114,13 @@ class LoginModal extends Component {
         {this.props.error && "Username & Password Error"}
         <Row>
           <Col xs="6">
-            <Button
-              color="primary"
-              className="px-4"
-              //onClick={() => this.onLoginBtnClick()}
+            <LaddaButton
+              loading={this.props.loading}
+              data-size={S}
+              data-style={EXPAND_RIGHT}
             >
               Login
-            </Button>
+            </LaddaButton>
           </Col>
           <Col xs="6" className="text-right">
             <Button

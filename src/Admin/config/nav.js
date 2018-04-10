@@ -92,7 +92,7 @@ const items = {
     },
     {
       title: true,
-      name: "Components"
+      name: "User Management"
     },
     {
       name: "Users",
