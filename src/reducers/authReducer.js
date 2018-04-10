@@ -18,7 +18,12 @@ export default function(state = INITIAL_STATE, action) {
       return { ...state, loading: true, statusClass: "pending" };
 
     case FETCH_USER_FULFILLED:
-      return { ...state, loading: false, statusClass: "fulfilled" };
+      return {
+        ...state,
+        data: action.payload.data,
+        loading: false,
+        statusClass: "fulfilled"
+      };
 
     case FETCH_USER_REJECTED:
       return { ...state, loading: false, statusClass: "rejected" };

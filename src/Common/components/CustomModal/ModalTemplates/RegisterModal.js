@@ -27,11 +27,7 @@ class RegisterModal extends Component {
 
   static getDerivedStateFromProps(nextProps, prevState) {
     console.log("next prosp: ", nextProps);
-    if (
-      nextProps.statusClass === "fulfilled" &&
-      nextProps.data.msg === "success"
-    )
-      nextProps.history.push("/admin/dashboard");
+    if (nextProps.statusClass === "fulfilled") nextProps.history.push("/");
 
     return null;
   }

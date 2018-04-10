@@ -6,6 +6,10 @@ export const onSubmit = ({ username, password }) => ({
   payload: onLogin({ username, password })
 });
 
+export const onRequestLoginData = ({ username, password }) => ({
+  type: FETCH_USER,
+  payload: onLogin({ username, password })
+});
 // export function onRegisterSubmit({ username, password, business_name, email }) {
 //   return {
 //     type: CREATE_USER,

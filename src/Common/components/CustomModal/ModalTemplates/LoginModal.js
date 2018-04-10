@@ -11,10 +11,56 @@ import {
 } from "reactstrap";
 
 import { connect } from "react-redux";
-import { onSubmit } from "../../../../actions";
+import { onSubmit, onRequestLoginData } from "../../../../actions";
 
 class LoginModal extends Component {
   state = { username: "", password: "" };
+
+  // componentWillReceiveProps(nextProps, nextState) {
+  //   console.log("this pros: ");
+  // }
+
+  // static getDerivedStateFromProps(nextProps, prevState) {
+  //   console.log("next prosp login: ", nextProps);
+
+  //   // if (nextProps.statusClass === "fulfilled" && nextProps.data) {
+  //   //   const { data } = nextProps.data;
+  //   // }
+
+  //   if (nextProps.statusClass === "fulfilled")
+  //     nextProps.history.push("/admin/dashboard");
+
+  //   return null;
+  // }
+
+  // requestData(access_token) {
+  //   const cookies = new Cookie();
+
+  //   axios({
+  //     method: "get",
+  //     url: "http://192.168.1.2:8000/api/accounts/getuserinfo/",
+  //     headers: {
+  //       Authorization: "Bearer " + access_token,
+  //       "Content-Type": "application/json"
+  //     }
+  //   })
+  //     .then(response => {
+  //       console.log("response_data: ", response);
+  //       cookies.set("user_data", response.data, {
+  //         path: "/",
+  //         expires: expiryDate
+  //       });
+  //       console.log("ccokies: ", cookies.get("user_data"));
+
+  //       const history = createHashHistory();
+  //       const path = "/" + response.data.username;
+  //       console.log("sagar_login.js: ", path);
+  //       this.props.history.push(path);
+  //     })
+  //     .catch(error => {
+  //       console.log("error_data: ", error);
+  //     });
+  // }
 
   onForgotPassBtnClick = () => {
     console.log("Forgot Password Clicked");
@@ -87,4 +133,10 @@ class LoginModal extends Component {
   }
 }
 
-export default connect(null, { onSubmit })(LoginModal);
+const mapStateToProps = ({ auth }) => {
+  return { ...auth };
+};
+
+export default connect(mapStateToProps, { onSubmit, onRequestLoginData })(
+  LoginModal
+);

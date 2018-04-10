@@ -48,7 +48,7 @@ class Home extends Component {
             toggle={this.toggleLoginModal}
             className={"modal-xs" + this.props.className}
           >
-            <LoginModal />
+            <LoginModal {...this.props} />
           </CustomModal>
 
           <CustomModal
@@ -56,7 +56,7 @@ class Home extends Component {
             toggle={this.toggleRegisterModal}
             className={"register_modal " + this.props.className}
           >
-            <RegisterModal />
+            <RegisterModal {...this.props} />
           </CustomModal>
 
           <Button
