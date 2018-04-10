@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import LaddaButton, { S, ZOOM_IN } from "react-ladda";
+import LaddaButton, { S, EXPAND_RIGHT } from "react-ladda";
 import {
   Button,
   Col,
@@ -117,7 +117,7 @@ class LoginModal extends Component {
             <LaddaButton
               loading={this.props.loading}
               data-size={S}
-              data-style={ZOOM_IN}
+              data-style={EXPAND_RIGHT}
             >
               Login
             </LaddaButton>
