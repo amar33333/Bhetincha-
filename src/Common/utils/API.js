@@ -1,4 +1,4 @@
-const MAIN_URL = "http://159.65.150.212:8005";
+const MAIN_URL = "http://159.65.150.212:8025";
 
 const SECTION_LIST = "category/getsectionlist/";
 
