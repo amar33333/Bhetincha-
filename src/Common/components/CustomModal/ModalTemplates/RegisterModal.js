@@ -25,12 +25,12 @@ class RegisterModal extends Component {
     business_name: ""
   };
 
-  static getDerivedStateFromProps(nextProps, prevState) {
-    console.log("next prosp: ", nextProps);
-    if (nextProps.statusClass === "fulfilled") nextProps.history.push("/");
+  // static getDerivedStateFromProps(nextProps, prevState) {
+  //   console.log("next prosp: ", nextProps);
+  //   if (nextProps.statusClass === "fulfilled") nextProps.history.push("/");
 
-    return null;
-  }
+  //   return null;
+  // }
 
   onChange = (key, event) => {
     this.setState({ [key]: event.target.value });

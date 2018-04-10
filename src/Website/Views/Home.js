@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 // import { Link } from "react-router-dom";
 import { Button, Col, Row, Input } from "reactstrap";
+import { connect } from "react-redux";
 
 import logo from "../../static/img/logo.png";
 import "./home.css";
@@ -9,26 +10,28 @@ import CustomModal from "../../Common/components/CustomModal";
 import LoginModal from "../../Common/components/CustomModal/ModalTemplates/LoginModal";
 import RegisterModal from "../../Common/components/CustomModal/ModalTemplates/RegisterModal";
 
+import { toggleLoginModal, toggleRegisterModal } from "../../actions";
+
 class Home extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      loginModal: false,
-      registerModal: false
-    };
-  }
+  // constructor(props) {
+  //   super(props);
+  //   // this.state = {
+  //   //   loginModal: false,
+  //   //   registerModal: false
+  //   // };
+  // }
 
-  toggleLoginModal = () => {
-    this.setState({
-      loginModal: !this.state.loginModal
-    });
-  };
+  // toggleLoginModal = () => {
+  //   this.setState({
+  //     loginModal: !this.state.loginModal
+  //   });
+  // };
 
-  toggleRegisterModal = () => {
-    this.setState({
-      registerModal: !this.state.registerModal
-    });
-  };
+  // toggleRegisterModal = () => {
+  //   this.setState({
+  //     registerModal: !this.state.registerModal
+  //   });
+  // };
 
   render() {
     return (
@@ -36,7 +39,7 @@ class Home extends Component {
         <div className="home-page__header">
           <Button
             className="login-btn"
-            onClick={this.toggleLoginModal}
+            onClick={() => this.props.toggleLoginModal(!this.props.loginModal)}
             variant="raised"
             color="primary"
           >
@@ -44,23 +47,27 @@ class Home extends Component {
           </Button>
 
           <CustomModal
-            isOpen={this.state.loginModal}
-            toggle={this.toggleLoginModal}
+            isOpen={this.props.loginModal}
+            toggle={() => this.props.toggleLoginModal(!this.props.loginModal)}
             className={"modal-xs" + this.props.className}
           >
             <LoginModal {...this.props} />
           </CustomModal>
 
           <CustomModal
-            isOpen={this.state.registerModal}
-            toggle={this.toggleRegisterModal}
+            isOpen={this.props.registerModal}
+            toggle={() =>
+              this.props.toggleRegisterModal(!this.props.registerModal)
+            }
             className={"register_modal " + this.props.className}
           >
             <RegisterModal {...this.props} />
           </CustomModal>
 
           <Button
-            onClick={this.toggleRegisterModal}
+            onClick={() =>
+              this.props.toggleRegisterModal(!this.props.registerModal)
+            }
             variant="raised"
             color="warning"
           >
@@ -130,4 +137,7 @@ class Home extends Component {
   }
 }
 
-export default Home;
+export default connect(({ auth }) => ({ ...auth }), {
+  toggleLoginModal,
+  toggleRegisterModal
+})(Home);

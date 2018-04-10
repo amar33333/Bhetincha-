@@ -73,7 +73,7 @@ class LoginModal extends Component {
   onFormSubmit = event => {
     event.preventDefault();
     const { username, password } = this.state;
-    this.props.onSubmit({ username, password });
+    this.props.onSubmit({ username, password, history: this.props.history });
   };
 
   render() {
@@ -108,6 +108,7 @@ class LoginModal extends Component {
             placeholder="Password"
           />
         </InputGroup>
+        {this.props.error && "Username & Password Error"}
         <Row>
           <Col xs="6">
             <Button

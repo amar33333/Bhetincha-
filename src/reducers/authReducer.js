@@ -4,16 +4,27 @@ import {
   FETCH_USER_REJECTED,
   CREATE_USER_PENDING,
   CREATE_USER_FULFILLED,
-  CREATE_USER_REJECTED
+  CREATE_USER_REJECTED,
+  TOGGLE_LOGIN_MODAL,
+  TOGGLE_REGISTER_MODAL
 } from "../actions/types";
 
 const INITIAL_STATE = {
   loading: false,
-  statusClass: ""
+  statusClass: "",
+  loginModal: false,
+  registerModal: false,
+  error: false
 };
 
 export default function(state = INITIAL_STATE, action) {
   switch (action.type) {
+    case TOGGLE_LOGIN_MODAL:
+      return { ...state, loginModal: action.payload };
+
+    case TOGGLE_REGISTER_MODAL:
+      return { ...state, registerModal: action.payload };
+
     case FETCH_USER_PENDING:
       return { ...state, loading: true, statusClass: "pending" };
 
@@ -22,11 +33,21 @@ export default function(state = INITIAL_STATE, action) {
         ...state,
         data: action.payload.data,
         loading: false,
-        statusClass: "fulfilled"
+        statusClass: "fulfilled",
+        loginModal: false,
+        registerModal: false,
+        error: false
       };
 
     case FETCH_USER_REJECTED:
-      return { ...state, loading: false, statusClass: "rejected" };
+      return {
+        ...state,
+        loading: false,
+        statusClass: "rejected",
+        // loginModal: false,
+        registerModal: false,
+        error: true
+      };
 
     case CREATE_USER_PENDING:
       return { ...state, loading: true, statusClass: "pending" };
@@ -37,11 +58,19 @@ export default function(state = INITIAL_STATE, action) {
         ...state,
         data: action.payload.data,
         loading: false,
-        statusClass: "fulfilled"
+        statusClass: "fulfilled",
+        loginModal: false,
+        registerModal: false
       };
 
     case CREATE_USER_REJECTED:
-      return { ...state, loading: false, statusClass: "rejected" };
+      return {
+        ...state,
+        loading: false,
+        statusClass: "rejected",
+        loginModal: false,
+        registerModal: false
+      };
 
     default:
       return state;
