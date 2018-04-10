@@ -4,7 +4,8 @@ import {
   CLIENT_SECRET,
   INDUSTRY_URL,
   CATEGORY_URL,
-  REGISTER_URL
+  REGISTER_URL,
+  GET_USER_INFO_URL
 } from "./API";
 import axios from "axios";
 import querystring from "querystring";
@@ -22,6 +23,16 @@ export const onLogin = ({ username, password }) =>
     }),
     headers: {
       "Content-Type": "application/x-www-form-urlencoded"
+    }
+  });
+
+export const onUserGet = ({ access_token }) =>
+  axios({
+    method: "get",
+    url: GET_USER_INFO_URL,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
     }
   });
 
