@@ -17,7 +17,24 @@ import { connect } from "react-redux";
 import { onRegisterSubmit } from "../../../../actions";
 
 class RegisterModal extends Component {
-  state = { username: "", password: "", email: "", business_name: "" };
+  state = {
+    username: "",
+    password: "",
+    confirm_password: "",
+    email: "",
+    business_name: ""
+  };
+
+  static getDerivedStateFromProps(nextProps, prevState) {
+    console.log("next prosp: ", nextProps);
+    if (
+      nextProps.statusClass === "fulfilled" &&
+      nextProps.data.msg === "success"
+    )
+      nextProps.history.push("/admin/dashboard");
+
+    return null;
+  }
 
   onChange = (key, event) => {
     this.setState({ [key]: event.target.value });
@@ -163,4 +180,10 @@ class RegisterModal extends Component {
   }
 }
 
-export default connect(null, onRegisterSubmit)(RegisterModal);
+const mapStateToProps = ({ auth }) => {
+  return {
+    ...auth
+  };
+};
+
+export default connect(mapStateToProps, { onRegisterSubmit })(RegisterModal);

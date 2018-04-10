@@ -6,6 +6,13 @@ export const onSubmit = ({ username, password }) => ({
   payload: onLogin({ username, password })
 });
 
+// export function onRegisterSubmit({ username, password, business_name, email }) {
+//   return {
+//     type: CREATE_USER,
+//     payload: onRegister({ username, password })
+//   };
+// }
+
 export const onRegisterSubmit = ({
   username,
   password,

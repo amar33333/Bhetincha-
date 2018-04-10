@@ -8,6 +8,7 @@ const BUSINESS_INFO = "business/business/";
 const BUSINESS_LIST = "business/business/";
 const INDUSTRY = "category/industry/";
 const CATEGORY = "category/category/";
+const API = "api";
 const ACCOUNTS = "accounts";
 const USER = "user/";
 
@@ -23,5 +24,5 @@ export const BUSINESS_INFO_URL = `${MAIN_URL}/${BUSINESS_INFO}`;
 export const BUSINESS_LIST_URL = `${MAIN_URL}/${BUSINESS_LIST}`;
 export const INDUSTRY_URL = `${MAIN_URL}/${INDUSTRY}`;
 export const CATEGORY_URL = `${MAIN_URL}/${CATEGORY}`;
-export const REGISTER_URL = `${MAIN_URL}/${ACCOUNTS}/${USER}`;
+export const REGISTER_URL = `${MAIN_URL}/${API}/${ACCOUNTS}/${USER}`;
 export { MAIN_URL };

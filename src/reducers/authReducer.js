@@ -27,6 +27,7 @@ export default function(state = INITIAL_STATE, action) {
       return { ...state, loading: true, statusClass: "pending" };
 
     case CREATE_USER_FULFILLED:
+      console.log("fulfflled");
       return {
         ...state,
         data: action.payload.data,

@@ -26,6 +26,7 @@ export const onLogin = ({ username, password }) =>
   });
 
 export const onRegister = ({ username, password, email, business_name }) =>
+  // console.log("asdasd: ", username, password, email, business_name);
   axios({
     method: "post",
     url: REGISTER_URL,
@@ -34,7 +35,9 @@ export const onRegister = ({ username, password, email, business_name }) =>
       client_secret: CLIENT_SECRET,
       grant_type: "password",
       username,
-      password
+      password,
+      email,
+      business_name
     }),
     headers: {
       "Content-Type": "application/x-www-form-urlencoded"

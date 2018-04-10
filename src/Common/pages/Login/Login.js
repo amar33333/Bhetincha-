@@ -20,12 +20,14 @@ import { onSubmit } from "../../../actions";
 class Login extends Component {
   state = { username: "", password: "" };
 
-  // static getDerivedStateFromProps(nextProps, prevState) {
-  //   if (nextProps.statusClass === "fulfilled")
-  //     nextProps.history.push("/admin/dashboard");
+  static getDerivedStateFromProps(nextProps, prevState) {
+    console.log("next prosp login: ", nextProps);
 
-  //   return null;
-  // }
+    if (nextProps.statusClass === "fulfilled")
+      nextProps.history.push("/admin/dashboard");
+
+    return null;
+  }
 
   onChange = (key, event) => this.setState({ [key]: event.target.value });
 
