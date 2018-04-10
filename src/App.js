@@ -14,12 +14,12 @@ import "./static/scss/style.css";
 // import "../node_modules/@coreui/styles/scss/_dropdown-menu-right.scss";
 
 import { MainRoute } from "./config/routes";
-import createStore from "./config/store";
+import { store } from "./config/store";
 
 class App extends Component {
   render() {
     return (
-      <Provider store={createStore()}>
+      <Provider store={store}>
         <MainRoute />
       </Provider>
     );

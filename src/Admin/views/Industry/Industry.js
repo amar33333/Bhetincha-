@@ -7,7 +7,11 @@ import {
   InputGroup,
   InputGroupAddon,
   InputGroupText,
-  Form
+  Form,
+  FormGroup,
+  Card,
+  CardBody,
+  CardHeader
 } from "reactstrap";
 import { connect } from "react-redux";
 
@@ -29,34 +33,42 @@ class Industry extends Component {
   render() {
     console.log("pdodfsdf indsudsd: ", this.props);
     return (
-      <Form onSubmit={this.onFormSubmit}>
-        <InputGroup className="mb-3">
-          <InputGroupAddon addonType="prepend">
-            <InputGroupText>
-              <i className="icon-user" />
-            </InputGroupText>
-          </InputGroupAddon>
-          <Input
-            autoFocus
-            required
-            type="text"
-            placeholder="Type Industry Name"
-            value={this.state.industry}
-            onChange={this.onChange.bind(this, "industry")}
-          />
-        </InputGroup>
-        <Row>
-          <Col xs="6">
-            <Button
-              color="primary"
-              className="px-4"
-              //onClick={() => this.onLoginBtnClick()}
-            >
-              Add
-            </Button>
-          </Col>
-        </Row>
-      </Form>
+      <Row className="hr-centered">
+        <Col xs="12" md="6">
+          <Card>
+            <CardHeader>
+              <strong>Add Industry</strong>
+            </CardHeader>
+            <CardBody>
+              <Form onSubmit={this.onFormSubmit} inline>
+                <FormGroup className="mb-2 mr-sm-2 mb-sm-0">
+                  <InputGroup>
+                    <InputGroupAddon addonType="prepend">
+                      <InputGroupText>
+                        <i className="fa fa-industry" />
+                      </InputGroupText>
+                    </InputGroupAddon>
+                    <Input
+                      autoFocus
+                      required
+                      type="text"
+                      placeholder="Type Industry Name"
+                      value={this.state.industry}
+                      onChange={this.onChange.bind(this, "industry")}
+                    />
+                  </InputGroup>
+                </FormGroup>
+                <Button
+                  color="primary"
+                  //onClick={() => this.onLoginBtnClick()}
+                >
+                  <span className="fa fa-plus" /> Add
+                </Button>
+              </Form>
+            </CardBody>
+          </Card>
+        </Col>
+      </Row>
     );
   }
 }

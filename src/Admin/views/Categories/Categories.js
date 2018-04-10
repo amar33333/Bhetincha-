@@ -8,7 +8,11 @@ import {
   InputGroupAddon,
   InputGroupText,
   Form,
-  Label
+  FormGroup,
+  Label,
+  Card,
+  CardHeader,
+  CardBody
 } from "reactstrap";
 import Select from "react-select";
 
@@ -80,43 +84,64 @@ class Categories extends Component {
     const value = industry && industry.value;
 
     return (
-      <Form onSubmit={this.onFormSubmit}>
-        <Label for="group">Group</Label>
-        <Select
-          autoFocus
-          required
-          name="Industies"
-          value={value}
-          onChange={this.handleIndustryChange}
-          options={industries}
-        />
-        <InputGroup className="mb-3">
-          <InputGroupAddon addonType="prepend">
-            <InputGroupText>
-              <i className="icon-user" />
-            </InputGroupText>
-          </InputGroupAddon>
-          <Input
-            autoFocus
-            required
-            type="text"
-            placeholder="Type Category Name"
-            value={this.state.category}
-            onChange={this.onChange.bind(this, "category")}
-          />
-        </InputGroup>
-        <Row>
-          <Col xs="6">
-            <Button
-              color="primary"
-              className="px-4"
-              //onClick={() => this.onLoginBtnClick()}
-            >
-              Add
-            </Button>
-          </Col>
-        </Row>
-      </Form>
+      <Row className="hr-centered">
+        <Col xs="12" md="8">
+          <Card>
+            <CardHeader>
+              <strong>Add Categories</strong>
+            </CardHeader>
+            <CardBody>
+              <Form onSubmit={this.onFormSubmit}>
+                <Row className="mb-3">
+                  <Col xs="12" md="6">
+                    <Label for="Industies">Industry</Label>
+                    <Select
+                      autoFocus
+                      autosize
+                      clearable
+                      required
+                      name="Industies"
+                      className="select-industry"
+                      value={value}
+                      onChange={this.handleIndustryChange}
+                      options={industries}
+                    />
+                  </Col>
+                </Row>
+                <Row>
+                  <Col xs="12" md="4">
+                    <FormGroup className="mb-2 mr-sm-2 mb-sm-0">
+                      <InputGroup>
+                        <InputGroupAddon addonType="prepend">
+                          <InputGroupText>
+                            <i className="icon-user" />
+                          </InputGroupText>
+                        </InputGroupAddon>
+                        <Input
+                          autoFocus
+                          required
+                          type="text"
+                          placeholder="Type Category Name"
+                          value={this.state.category}
+                          onChange={this.onChange.bind(this, "category")}
+                        />
+                      </InputGroup>
+                    </FormGroup>
+                  </Col>
+                  <Col xs="12" md="2">
+                    <Button
+                      color="primary"
+                      //onClick={() => this.onLoginBtnClick()}
+                    >
+                      <span className="fa fa-plus" /> Add
+                    </Button>
+                  </Col>
+                </Row>
+              </Form>
+            </CardBody>
+          </Card>
+        </Col>
+      </Row>
     );
   }
 }

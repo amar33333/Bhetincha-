@@ -4,11 +4,11 @@ const items = {
       name: "Dashboard",
       url: "/admin/dashboard",
       icon: "icon-speedometer",
-      permission: "CAN_VIEW_DASHBOARD",
-      badge: {
-        variant: "info",
-        text: "NEW"
-      }
+      permission: "CAN_VIEW_DASHBOARD"
+      // badge: {
+      //   variant: "info",
+      //   text: "NEW"
+      // }
     },
     {
       title: true,
@@ -17,19 +17,19 @@ const items = {
     {
       name: "Areas",
       url: "/admin/settings",
-      icon: "icon-settings",
+      icon: "fa fa-map",
       permission: "CAN_VIEW_SETTINGS"
     },
     {
       name: "Cities",
       url: "/admin/users",
-      icon: "icon-user",
+      icon: "fa fa-map-pin",
       permission: "CAN_VIEW_USERS"
     },
     {
       name: "Districts",
       url: "/admin/users",
-      icon: "icon-user",
+      icon: "fa fa-map-o",
       permission: "CAN_VIEW_USERS"
     },
     {
@@ -39,25 +39,25 @@ const items = {
     {
       name: "Industry",
       url: "/admin/industry",
-      icon: "icon-user",
+      icon: "fa fa-industry",
       permission: "CAN_VIEW_USERS"
     },
     {
       name: "Categories",
       url: "/admin/categories",
-      icon: "icon-user",
+      icon: "fa fa-cube",
       permission: "CAN_VIEW_USERS"
     },
     {
       name: "Sub-Categories",
       url: "/admin/sub-categories",
-      icon: "icon-user",
+      icon: "fa fa-cubes",
       permission: "CAN_VIEW_USERS"
     },
     {
       name: "Sections",
       url: "/admin/sections",
-      icon: "icon-user",
+      icon: "fa fa-tasks",
       permission: "CAN_VIEW_USERS"
     },
     {
@@ -67,7 +67,7 @@ const items = {
     {
       name: "Individual",
       url: "/admin/users",
-      icon: "icon-user",
+      icon: "fa fa-user",
       permission: "CAN_VIEW_USERS"
     },
     {
@@ -77,7 +77,7 @@ const items = {
     {
       name: "Logs",
       url: "/admin/users",
-      icon: "icon-user",
+      icon: "fa fa-list",
       permission: "CAN_VIEW_USERS"
     },
     {
@@ -87,7 +87,7 @@ const items = {
     {
       name: "Tele-Calling",
       url: "/admin/users",
-      icon: "icon-user",
+      icon: "fa fa-headphones",
       permission: "CAN_VIEW_USERS"
     },
     {
@@ -97,7 +97,7 @@ const items = {
     {
       name: "Users",
       url: "/admin/users",
-      icon: "icon-user",
+      icon: "fa fa-users",
       permission: "CAN_VIEW_USERS",
       children: [
         {
