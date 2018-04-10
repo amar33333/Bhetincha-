@@ -54,12 +54,12 @@ const items = {
       icon: "fa fa-cubes",
       permission: "CAN_VIEW_USERS"
     },
-    {
-      name: "Sections",
-      url: "/admin/sections",
-      icon: "fa fa-tasks",
-      permission: "CAN_VIEW_USERS"
-    },
+    // {
+    //   name: "Sections",
+    //   url: "/admin/sections",
+    //   icon: "fa fa-tasks",
+    //   permission: "CAN_VIEW_USERS"
+    // },
     {
       title: true,
       name: "INDIVIDUAL"

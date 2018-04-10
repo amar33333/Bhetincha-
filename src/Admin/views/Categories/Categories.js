@@ -46,6 +46,7 @@ class Categories extends Component {
       industry: industry.value,
       category
     });
+    this.setState({ category: "", industry: "" });
   };
 
   handleIndustryChange = industry => {
@@ -54,14 +55,14 @@ class Categories extends Component {
   };
 
   render() {
-    console.log("cqeqweL: ", this.props);
+    // console.log("cqeqweL: ", this.props);
     const industries = this.props.industries.data
       ? this.props.industries.data.map(industry => {
           return { value: industry.id, label: industry.name };
         })
       : null;
 
-    console.log("indsua: ", industries);
+    // console.log("indsua: ", industries);
 
     // if (industries) {
     //   this.setState({ industries });
@@ -148,9 +149,10 @@ class Categories extends Component {
 
 const mapStateToProps = state => {
   return {
-    industries: state.industry
+    industries: state.industries
   };
 };
+
 export default connect(mapStateToProps, { onCategorySubmit, onIndustryList })(
   Categories
 );

@@ -11,7 +11,7 @@ import AddUser from "../views/Users/Manage Users/Add User";
 import Industry from "../views/Industry/Industry";
 import Categories from "../views/Categories/Categories";
 import SubCategories from "../views/Sub Categories/SubCategories";
-import Sections from "../views/Sections/Sections";
+// import Sections from "../views/Sections/Sections";
 
 class WebsiteRoute extends Component {
   render() {
@@ -43,12 +43,12 @@ class WebsiteRoute extends Component {
           component={SubCategories}
           permission="CAN_VIEW_DASHBOARD"
         />
-        <Route
+        {/* <Route
           path="/admin/sections"
           name="Sections"
           component={Sections}
           permission="CAN_VIEW_DASHBOARD"
-        />
+        /> */}
         <Route
           exact
           path="/admin/users"

@@ -36,7 +36,7 @@ export default function(state = INITIAL_STATE, action) {
       // console.log("fuludids");
       return {
         ...state,
-        data: action.payload.data,
+        data: action.payload,
         loading: false,
         statusClass: "fulfilled"
       };

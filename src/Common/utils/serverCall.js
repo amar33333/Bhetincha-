@@ -5,7 +5,9 @@ import {
   INDUSTRY_URL,
   CATEGORY_URL,
   REGISTER_URL,
-  GET_USER_INFO_URL
+  GET_USER_INFO_URL,
+  EXTRA_SECTION_GET_URL,
+  SUB_CATEGORY_URL
 } from "./API";
 import axios from "axios";
 import querystring from "querystring";
@@ -84,6 +86,38 @@ export const onCategoryPost = ({ category, industry }) =>
       name: category,
       industry
     },
+    headers: {
+      "Content-Type": "application/json"
+    }
+  });
+
+export const onCategoryGet = () =>
+  axios({
+    method: "get",
+    url: CATEGORY_URL,
+    headers: {
+      "Content-Type": "application/json"
+    }
+  });
+
+export const onSubCategoryPost = ({ category, extraSection, subCategory }) =>
+  axios({
+    method: "post",
+    url: SUB_CATEGORY_URL,
+    data: {
+      category: category,
+      extra_section: extraSection,
+      name: subCategory
+    },
+    headers: {
+      "Content-Type": "application/json"
+    }
+  });
+
+export const onExtraSectionGet = () =>
+  axios({
+    method: "get",
+    url: EXTRA_SECTION_GET_URL,
     headers: {
       "Content-Type": "application/json"
     }

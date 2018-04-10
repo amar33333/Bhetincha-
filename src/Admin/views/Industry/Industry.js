@@ -28,10 +28,11 @@ class Industry extends Component {
     event.preventDefault();
     const { industry } = this.state;
     this.props.onIndustrySubmit({ industry });
+    this.setState({ industry: "" });
   };
 
   render() {
-    console.log("pdodfsdf indsudsd: ", this.props);
+    // console.log("pdodfsdf indsudsd: ", this.props);
     return (
       <Row className="hr-centered">
         <Col xs="12" md="6">
@@ -75,7 +76,7 @@ class Industry extends Component {
 
 const mapStateToProps = state => {
   return {
-    industry: state.industry
+    industry: state.industries
   };
 };
 
