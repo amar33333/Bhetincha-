@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import DynamicImport from "../Common/utils/DynamicImport";
-import { BrowserRouter, Route, Switch } from "react-router-dom";
+import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
 import { Login, Register, Page404, Page500, Loading } from "../Common/pages";
 import Website from "../Website";
 
@@ -16,6 +16,7 @@ class MainRoute extends Component {
       <BrowserRouter>
         <Switch>
           <Route exact path="/login" name="Login Page" component={Login} />
+          <Redirect from="/logout" to="/" />
           <Route
             exact
             path="/register"

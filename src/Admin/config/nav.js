@@ -141,8 +141,11 @@ const items = {
 
 items.routes = {};
 items.items.forEach(item => {
-  // if (item.allowOnBreadCrumb)
-  items.routes[item.url] = item.name;
+  if (item.children)
+    item.children.forEach(innerItem => {
+      items.routes[innerItem.url] = innerItem.name;
+    });
+  else if (item.url) items.routes[item.url] = item.name;
 });
 
 export default items;
