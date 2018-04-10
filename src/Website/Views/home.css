@@ -245,3 +245,15 @@ input.main-nav-search::placeholder {
 .profile-dropdown__item__icon {
   margin-right: 10px;
 }
+
+/* ======== Admin ============= */
+
+.hr-centered {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.select-industry {
+  width: 100%;
+}
