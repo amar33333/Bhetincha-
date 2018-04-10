@@ -38,22 +38,38 @@ export const onUserGet = ({ access_token }) =>
     }
   });
 
+// export const onRegister = ({ username, password, email, business_name }) =>
+//   // console.log("asdasd: ", username, password, email, business_name);
+//   axios({
+//     method: "post",
+//     url: REGISTER_URL,
+//     data: querystring.stringify({
+//       client_id: CLIENT_ID,
+//       client_secret: CLIENT_SECRET,
+//       grant_type: "password",
+//       username,
+//       password,
+//       email,
+//       business_name
+//     }),
+//     headers: {
+//       "Content-Type": "application/x-www-form-urlencoded"
+//     }
+//   });
+
 export const onRegister = ({ username, password, email, business_name }) =>
   // console.log("asdasd: ", username, password, email, business_name);
   axios({
     method: "post",
     url: REGISTER_URL,
-    data: querystring.stringify({
-      client_id: CLIENT_ID,
-      client_secret: CLIENT_SECRET,
-      grant_type: "password",
+    data: {
       username,
       password,
       email,
       business_name
-    }),
+    },
     headers: {
-      "Content-Type": "application/x-www-form-urlencoded"
+      "Content-Type": "application/json"
     }
   });
 

@@ -20,7 +20,7 @@ import {
 } from "../../../actions";
 
 class SubCategories extends Component {
-  state = { subCategory: "", category: "", extraSection: "" };
+  state = { subCategory: "", category: "", extraSection: [] };
 
   componentWillMount() {
     this.getCategoriesList();
@@ -40,7 +40,9 @@ class SubCategories extends Component {
   };
 
   handleSelectChange = (key, value) => {
-    this.setState({ [key]: value });
+    this.setState({ [key]: value }, () => {
+      console.log("print stte: ", this.state);
+    });
   };
 
   onFormSubmit = event => {
@@ -48,10 +50,10 @@ class SubCategories extends Component {
     const { category, subCategory, extraSection } = this.state;
     this.props.onSubCategorySubmit({
       category: category.value,
-      extraSection: [extraSection.value],
+      extraSection: extraSection,
       subCategory
     });
-    this.setState({ subCategory: "", category: "", extraSection: "" });
+    this.setState({ subCategory: "", category: "", extraSection: [] });
   };
 
   render() {
@@ -75,7 +77,7 @@ class SubCategories extends Component {
     const valueCategory = category && category.value;
 
     const { extraSection } = this.state;
-    const valueExtraSection = extraSection && extraSection.value;
+    const valueExtraSection = extraSection;
 
     return (
       <Form onSubmit={this.onFormSubmit}>
@@ -110,8 +112,9 @@ class SubCategories extends Component {
           autosize
           clearable
           required
-          //multi
+          multi
           //removeSelected={false}
+          closeOnSelect={false}
           name="Extra-Sections"
           className="select-extra-sections"
           value={valueExtraSection}

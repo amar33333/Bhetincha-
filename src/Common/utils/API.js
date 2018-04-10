@@ -1,4 +1,4 @@
-const MAIN_URL = "http://159.65.150.212:8025";
+const MAIN_URL = "http://159.65.150.212:8005";
 
 const SECTION_LIST = "category/getsectionlist/";
 
@@ -27,6 +27,7 @@ export const BUSINESS_LIST_URL = `${MAIN_URL}/${BUSINESS_LIST}`;
 export const INDUSTRY_URL = `${MAIN_URL}/${INDUSTRY}`;
 export const CATEGORY_URL = `${MAIN_URL}/${CATEGORY}`;
 export const EXTRA_SECTION_GET_URL = `${MAIN_URL}/${EXTRA_SECTION_GET}`;
-export const REGISTER_URL = `${MAIN_URL}/${API}/${ACCOUNTS}/${USER}`;
+// export const REGISTER_URL = `${MAIN_URL}/${API}/${ACCOUNTS}/${USER}`;
+export const REGISTER_URL = `${MAIN_URL}/${BUSINESS_INFO}`;
 export const SUB_CATEGORY_URL = `${MAIN_URL}/${SUB_CATEGORY}`;
 export { MAIN_URL };
