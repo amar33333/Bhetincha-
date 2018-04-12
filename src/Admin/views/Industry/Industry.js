@@ -17,7 +17,11 @@ import { connect } from "react-redux";
 import ReactTable from "react-table";
 import "react-table/react-table.css";
 
-import { onIndustrySubmit, onIndustryList } from "../../actions";
+import {
+  onIndustrySubmit,
+  onIndustryList,
+  onUnmountIndustry
+} from "../../actions";
 
 class Industry extends Component {
   state = {
@@ -28,12 +32,12 @@ class Industry extends Component {
   };
 
   componentWillMount() {
-    this.getIndustriesList();
+    this.props.onIndustryList();
   }
 
-  getIndustriesList = () => {
-    this.props.onIndustryList();
-  };
+  componentWillUnmount() {
+    this.props.onUnmountIndustry();
+  }
 
   onChange = (key, event) => {
     this.setState({ [key]: event.target.value });
@@ -196,5 +200,5 @@ class Industry extends Component {
 
 export default connect(
   ({ AdminContainer: { industries } }) => ({ industries }),
-  { onIndustrySubmit, onIndustryList }
+  { onIndustrySubmit, onIndustryList, onUnmountIndustry }
 )(Industry);

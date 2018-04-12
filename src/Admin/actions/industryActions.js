@@ -5,7 +5,8 @@ import {
   CREATE_INDUSTRY_PENDING,
   FETCH_INDUSTRY_FULFILLED,
   FETCH_INDUSTRY_REJECTED,
-  FETCH_INDUSTRY_PENDING
+  FETCH_INDUSTRY_PENDING,
+  UNMOUNT_INDUSTRY
 } from "./types";
 
 export const onIndustrySubmit = ({ industry }) => dispatch => {
@@ -20,11 +21,6 @@ export const onIndustrySubmit = ({ industry }) => dispatch => {
   dispatch({ type: CREATE_INDUSTRY_PENDING });
 };
 
-// ({
-//   type: CREATE_INDUSTRY,
-//   payload: onIndustryPost({ industry })
-// });
-
 export const onIndustryList = () => dispatch => {
   onIndustryGet()
     .then(response =>
@@ -37,7 +33,7 @@ export const onIndustryList = () => dispatch => {
   dispatch({ type: FETCH_INDUSTRY_PENDING });
 };
 
-// ({
-//   type: FETCH_INDUSTRY,
-//   payload: onIndustryGet()
-// });
+export const onUnmountIndustry = () => ({
+  type: UNMOUNT_INDUSTRY,
+  payload: null
+});

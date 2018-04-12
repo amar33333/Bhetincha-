@@ -1,7 +1,8 @@
 import {
   FETCH_CATEGORY_FULFILLED,
   FETCH_CATEGORY_PENDING,
-  FETCH_CATEGORY_REJECTED
+  FETCH_CATEGORY_REJECTED,
+  UNMOUNT_CATEGORY
 } from "../actions/types";
 
 const INITIAL_STATE = {
@@ -11,6 +12,13 @@ const INITIAL_STATE = {
 
 export default function(state = INITIAL_STATE, action) {
   switch (action.type) {
+    case UNMOUNT_CATEGORY:
+      return {
+        ...state,
+        data: action.payload,
+        loading: false,
+        statusClass: "fulfilled"
+      };
     case FETCH_CATEGORY_PENDING:
       return { ...state, loading: true, statusClass: "pending" };
 

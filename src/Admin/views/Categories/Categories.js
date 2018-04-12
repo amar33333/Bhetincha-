@@ -18,7 +18,12 @@ import Select from "react-select";
 
 import { connect } from "react-redux";
 
-import { onCategorySubmit, onIndustryList } from "../../actions";
+import {
+  onCategorySubmit,
+  onIndustryList,
+  onUnmountIndustry,
+  onUnmountCategory
+} from "../../actions";
 
 class Categories extends Component {
   state = {
@@ -27,12 +32,12 @@ class Categories extends Component {
   };
 
   componentWillMount() {
-    this.getIndustriesList();
+    this.props.onIndustryList();
   }
 
-  getIndustriesList = () => {
-    this.props.onIndustryList();
-  };
+  componentWillUnmount() {
+    this.props.onUnmountIndustry();
+  }
 
   onChange = (key, event) => {
     this.setState({ [key]: event.target.value });
@@ -149,5 +154,5 @@ class Categories extends Component {
 
 export default connect(
   ({ AdminContainer: { industries } }) => ({ industries }),
-  { onCategorySubmit, onIndustryList }
+  { onCategorySubmit, onIndustryList, onUnmountIndustry, onUnmountCategory }
 )(Categories);

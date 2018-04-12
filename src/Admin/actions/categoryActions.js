@@ -5,7 +5,8 @@ import {
   CREATE_CATEGORY_PENDING,
   FETCH_CATEGORY_FULFILLED,
   FETCH_CATEGORY_REJECTED,
-  FETCH_CATEGORY_PENDING
+  FETCH_CATEGORY_PENDING,
+  UNMOUNT_CATEGORY
 } from "./types";
 
 export const onCategorySubmit = ({ category, industry }) => dispatch => {
@@ -30,7 +31,7 @@ export const onCategoryList = () => dispatch => {
   dispatch({ type: FETCH_CATEGORY_PENDING });
 };
 
-// ({
-//   type: CREATE_CATEGORY,
-//   payload: onCategoryPost({ category, industry })
-// });
+export const onUnmountCategory = () => ({
+  type: UNMOUNT_CATEGORY,
+  payload: null
+});
