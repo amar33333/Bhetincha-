@@ -1,3 +1,3 @@
-export default function(state = { name: "hello" }, action) {
+export default function(state = { j_hoos: "hello" }, action) {
   return state;
 }

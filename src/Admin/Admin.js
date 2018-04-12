@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Container } from "reactstrap";
+import { connect } from "react-redux";
 import {
   Header,
   Sidebar,
@@ -10,6 +11,8 @@ import {
 import nav from "./config/nav";
 
 import WebsiteRoute from "./config/routes";
+import withReducer from "../config/withReducer";
+import adminReducers from "./reducers";
 
 // Import Main styles for this application
 
@@ -53,4 +56,6 @@ class Admin extends Component {
   }
 }
 
-export default Admin;
+export default withReducer("AdminContainer", adminReducers)(
+  connect(({ auth }) => ({ ...auth }))(Admin)
+);

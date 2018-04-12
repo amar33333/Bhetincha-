@@ -4,7 +4,7 @@ import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
 import { Login, Register, Page404, Page500, Loading } from "../Common/pages";
 import Website from "../Website";
 
-const Admin = props => (
+const AsyncAdmin = props => (
   <DynamicImport load={() => import("../Admin")}>
     {Component => (Component === null ? <Loading /> : <Component {...props} />)}
   </DynamicImport>
@@ -25,7 +25,7 @@ class MainRoute extends Component {
           />
           <Route exact path="/404" name="Page 404" component={Page404} />
           <Route exact path="/500" name="Page 500" component={Page500} />
-          <Route path="/admin" name="Admin" component={Admin} />
+          <Route path="/admin" name="Admin" component={AsyncAdmin} />
           <Route path="/" name="Website" component={Website} />
         </Switch>
       </BrowserRouter>
