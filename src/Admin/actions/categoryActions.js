@@ -1,4 +1,4 @@
-import { onCategoryPost, onCategoryGet } from "../Common/utils/serverCall";
+import { onCategoryPost, onCategoryGet } from "../config/adminServerCall";
 import {
   CREATE_CATEGORY_FULFILLED,
   CREATE_CATEGORY_REJECTED,

@@ -6,7 +6,8 @@ import {
   CREATE_USER_FULFILLED,
   CREATE_USER_REJECTED,
   TOGGLE_LOGIN_MODAL,
-  TOGGLE_REGISTER_MODAL
+  TOGGLE_REGISTER_MODAL,
+  COOKIES_LOAD_FULFILLED
 } from "../actions/types";
 
 const INITIAL_STATE = {
@@ -14,11 +15,15 @@ const INITIAL_STATE = {
   statusClass: "",
   loginModal: false,
   registerModal: false,
-  error: false
+  error: false,
+  cookies: null
 };
 
 export default function(state = INITIAL_STATE, action) {
   switch (action.type) {
+    case COOKIES_LOAD_FULFILLED:
+      return { ...state, ...action.payload };
+
     case TOGGLE_LOGIN_MODAL:
       return { ...state, loginModal: action.payload };
 
@@ -31,7 +36,7 @@ export default function(state = INITIAL_STATE, action) {
     case FETCH_USER_FULFILLED:
       return {
         ...state,
-        data: action.payload.data,
+        ...action.payload,
         loading: false,
         statusClass: "fulfilled",
         loginModal: false,

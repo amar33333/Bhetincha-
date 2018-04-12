@@ -1,4 +1,14 @@
 import { combineReducers } from "redux";
-import admin from "./adminReducer";
+import IndustryReducer from "./industryReducer";
+import SubCategoryReducer from "./subCategoryReducer";
+import CategoryReducer from "./categoryReducer";
+import ExtraSectionReducer from "./extraSectionReducer";
 
-export default combineReducers({ admin });
+const createReducer = combineReducers({
+  industries: IndustryReducer,
+  categories: CategoryReducer,
+  sub_categories: SubCategoryReducer,
+  extra_sections: ExtraSectionReducer
+});
+
+export default createReducer;

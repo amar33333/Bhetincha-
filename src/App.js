@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Provider } from "react-redux";
+import { connect } from "react-redux";
 
 // Import Flag Icons Set
 import "flag-icon-css/css/flag-icon.min.css";
@@ -14,16 +14,16 @@ import "./static/scss/style.css";
 // import "../node_modules/@coreui/styles/scss/_dropdown-menu-right.scss";
 
 import { MainRoute } from "./config/routes";
-import { store } from "./config/store";
+
+import { loadCookies } from "./actions";
 
 class App extends Component {
+  componentWillMount() {
+    this.props.loadCookies();
+  }
   render() {
-    return (
-      <Provider store={store}>
-        <MainRoute />
-      </Provider>
-    );
+    return <MainRoute />;
   }
 }
 
-export default App;
+export default connect(({ auth }) => ({ ...auth }), { loadCookies })(App);

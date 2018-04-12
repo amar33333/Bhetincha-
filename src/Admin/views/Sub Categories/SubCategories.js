@@ -17,7 +17,7 @@ import {
   onCategoryList,
   onExtraSectionList,
   onSubCategorySubmit
-} from "../../../actions";
+} from "../../actions";
 
 class SubCategories extends Component {
   state = { subCategory: "", category: "", extraSection: [] };
@@ -144,15 +144,15 @@ class SubCategories extends Component {
     );
   }
 }
-const mapStateToProps = state => {
-  return {
-    categories: state.categories,
-    extra_sections: state.extra_sections
-  };
-};
 
-export default connect(mapStateToProps, {
-  onCategoryList,
-  onExtraSectionList,
-  onSubCategorySubmit
-})(SubCategories);
+export default connect(
+  ({ AdminContainer: { categories, extra_sections } }) => ({
+    categories,
+    extra_sections
+  }),
+  {
+    onCategoryList,
+    onExtraSectionList,
+    onSubCategorySubmit
+  }
+)(SubCategories);

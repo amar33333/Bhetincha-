@@ -134,7 +134,7 @@ const items = {
       name: "Logout",
       url: "/logout",
       icon: "fa fa-sign-out",
-      permission: "CAN_VIEW_SETTINGS"
+      permission: "CAN_LOGOUT"
     }
   ]
 };

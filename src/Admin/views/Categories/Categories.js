@@ -18,7 +18,7 @@ import Select from "react-select";
 
 import { connect } from "react-redux";
 
-import { onCategorySubmit, onIndustryList } from "../../../actions";
+import { onCategorySubmit, onIndustryList } from "../../actions";
 
 class Categories extends Component {
   state = {
@@ -147,12 +147,7 @@ class Categories extends Component {
   }
 }
 
-const mapStateToProps = state => {
-  return {
-    industries: state.industries
-  };
-};
-
-export default connect(mapStateToProps, { onCategorySubmit, onIndustryList })(
-  Categories
-);
+export default connect(
+  ({ AdminContainer: { industries } }) => ({ industries }),
+  { onCategorySubmit, onIndustryList }
+)(Categories);

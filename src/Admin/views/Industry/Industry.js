@@ -17,7 +17,7 @@ import { connect } from "react-redux";
 import ReactTable from "react-table";
 import "react-table/react-table.css";
 
-import { onIndustrySubmit, onIndustryList } from "../../../actions";
+import { onIndustrySubmit, onIndustryList } from "../../actions";
 
 class Industry extends Component {
   state = {
@@ -194,12 +194,7 @@ class Industry extends Component {
   }
 }
 
-const mapStateToProps = state => {
-  return {
-    industries: state.industries
-  };
-};
-
-export default connect(mapStateToProps, { onIndustrySubmit, onIndustryList })(
-  Industry
-);
+export default connect(
+  ({ AdminContainer: { industries } }) => ({ industries }),
+  { onIndustrySubmit, onIndustryList }
+)(Industry);

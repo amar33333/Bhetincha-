@@ -1,21 +1,21 @@
 import React, { Component } from "react";
 import { Route, Switch, Redirect } from "react-router-dom";
-// import { Dashboard, Component2 } from "../views";
 
-import Dashboard from "../views/Dashboard/";
-import ManageUsers from "../views/Users/Manage Users/";
-import Groups from "../views/Users/Groups/";
-import Permissions from "../views/Users/Permissions/";
-import Settings from "../views/Settings/";
-import AddUser from "../views/Users/Manage Users/Add User";
-import Industry from "../views/Industry/Industry";
-import Categories from "../views/Categories/Categories";
-import SubCategories from "../views/Sub Categories/SubCategories";
-// import Sections from "../views/Sections/Sections";
+import {
+  Dashboard,
+  ManageUsers,
+  Groups,
+  Permissions,
+  Settings,
+  AddUser,
+  Industry,
+  Categories,
+  SubCategories
+} from "../views";
 
-class WebsiteRoute extends Component {
+class AdminRoute extends Component {
   render() {
-    const MATCH_URL = this.props.match.url;
+    // const MATCH_URL = this.props.match.url;
     return (
       <Switch>
         <Route
@@ -105,4 +105,4 @@ class WebsiteRoute extends Component {
   }
 }
 
-export default WebsiteRoute;
+export default AdminRoute;

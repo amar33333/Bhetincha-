@@ -10,7 +10,8 @@
     "classnames": "^2.2.3",
     "flag-icon-css": "3.0.0",
     "font-awesome": "^4.7.0",
-    "prop-types": "^15.5.8",
+    "moment": "^2.22.0",
+    "prop-types": "^15.6.1",
     "querystring": "^0.2.0",
     "react": "^16.3.1",
     "react-chartjs-2": "2.7.0",
@@ -25,7 +26,8 @@
     "reactstrap": "5.0.0-beta",
     "redux": "^3.7.2",
     "redux-thunk": "^2.2.0",
-    "simple-line-icons": "^2.4.1"
+    "simple-line-icons": "^2.4.1",
+    "universal-cookie": "^2.1.2"
   },
   "scripts": {
     "build-css": "node-sass-chokidar src/ -o src/",
