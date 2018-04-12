@@ -7,10 +7,27 @@ import {
   REGISTER_URL,
   GET_USER_INFO_URL,
   EXTRA_SECTION_GET_URL,
-  SUB_CATEGORY_URL
+  SUB_CATEGORY_URL,
+  SEARCH_URL
 } from "./API";
 import axios from "axios";
 import querystring from "querystring";
+
+export const onSearch = ({ query }) => {
+  const elastic_query = {
+    query: {
+      match: {
+        name: query
+      }
+    }
+  };
+  return axios.get(SEARCH_URL, {
+    params: {
+      source: JSON.stringify(elastic_query),
+      source_content_type: "application/json"
+    }
+  });
+};
 
 export const onLogin = ({ username, password }) =>
   axios({

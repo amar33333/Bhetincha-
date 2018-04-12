@@ -30,4 +30,5 @@ export const EXTRA_SECTION_GET_URL = `${MAIN_URL}/${EXTRA_SECTION_GET}`;
 // export const REGISTER_URL = `${MAIN_URL}/${API}/${ACCOUNTS}/${USER}`;
 export const REGISTER_URL = `${MAIN_URL}/${BUSINESS_INFO}`;
 export const SUB_CATEGORY_URL = `${MAIN_URL}/${SUB_CATEGORY}`;
+export const SEARCH_URL = "http://159.65.150.212:9200/category-index/_search/";
 export { MAIN_URL };
