@@ -1,11 +1,22 @@
 import { Component } from "react";
+import { connect } from "react-redux";
 
 class DynamicImport extends Component {
   state = { component: null };
+
   componentDidMount() {
-    this.props
-      .load()
-      .then(module => this.setState(() => ({ component: module.default })));
+    console.log("component will mount dynamic simport ran ...", this.props);
+
+    if (this.props.cookies === null) {
+      console.log("cookies is nulll");
+      this.props.history.push("/logout");
+    } else {
+      console.log("cooies not NULLLL");
+
+      this.props
+        .load()
+        .then(module => this.setState(() => ({ component: module.default })));
+    }
   }
 
   render() {
@@ -13,4 +24,4 @@ class DynamicImport extends Component {
   }
 }
 
-export default DynamicImport;
+export default connect(({ auth }) => ({ ...auth }))(DynamicImport);
