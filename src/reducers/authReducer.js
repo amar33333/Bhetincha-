@@ -31,7 +31,7 @@ export default function(state = INITIAL_STATE, action) {
     case FETCH_USER_FULFILLED:
       return {
         ...state,
-        data: action.payload.data,
+        ...action.payload,
         loading: false,
         statusClass: "fulfilled",
         loginModal: false,

@@ -11,6 +11,9 @@ import {
   TOGGLE_REGISTER_MODAL
 } from "./types";
 
+import Cookies from "universal-cookie";
+import moment from "moment";
+
 export const toggleLoginModal = show => ({
   type: TOGGLE_LOGIN_MODAL,
   payload: show
@@ -25,17 +28,43 @@ export const onSubmit = ({ username, password, history }) => dispatch => {
     .then(response => {
       onUserGet({ access_token: response.data.access_token })
         .then(userData => {
+          const cookies = new Cookies();
+          const initialDate = new Date();
+
+          let expiryDate = moment(initialDate)
+            .add(1, "months")
+            .toDate();
+
+          const token_data = response.data;
+          cookies.set("token_data", token_data, {
+            path: "/",
+            expires: expiryDate
+          });
+
+          cookies.set("user_data", userData.data, {
+            path: "/",
+            expires: expiryDate
+          });
+
+          const cookies_data = {
+            token_data: cookies.get("token_data"),
+            user_data: cookies.get("user_data")
+          };
+
           dispatch({
             type: FETCH_USER_FULFILLED,
-            payload: userData.data
+            payload: {
+              cookies: cookies_data
+            }
           });
           // if (userData.data.username === "admin") history.push("/admin");
+
           // else
           history.push(`/${userData.data.username}`);
         })
-        .catch(error =>
-          dispatch({ type: FETCH_USER_REJECTED, payload: error })
-        );
+        .catch(error => {
+          dispatch({ type: FETCH_USER_REJECTED, payload: error });
+        });
 
       // dispatch({
       //   type: FETCH_USER_FULFILLED,
