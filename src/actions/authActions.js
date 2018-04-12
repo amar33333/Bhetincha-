@@ -1,3 +1,5 @@
+import moment from "moment";
+
 import { onLogin, onRegister, onUserGet } from "../Common/utils/serverCall";
 import {
   FETCH_USER,
@@ -8,19 +10,26 @@ import {
   CREATE_USER_REJECTED,
   CREATE_USER_PENDING,
   TOGGLE_LOGIN_MODAL,
-  TOGGLE_REGISTER_MODAL
+  TOGGLE_REGISTER_MODAL,
+  COOKIES_LOAD_FULFILLED
 } from "./types";
-
-import Cookies from "universal-cookie";
-import moment from "moment";
+import CookiesProvider from "../Common/utils/CookiesProvider";
 
 export const toggleLoginModal = show => ({
   type: TOGGLE_LOGIN_MODAL,
   payload: show
 });
+
 export const toggleRegisterModal = show => ({
   type: TOGGLE_REGISTER_MODAL,
   payload: show
+});
+
+export const loadCookies = () => ({
+  type: COOKIES_LOAD_FULFILLED,
+  payload: {
+    cookies: CookiesProvider.getAllCookies()
+  }
 });
 
 export const onSubmit = ({ username, password, history }) => dispatch => {
@@ -28,33 +37,32 @@ export const onSubmit = ({ username, password, history }) => dispatch => {
     .then(response => {
       onUserGet({ access_token: response.data.access_token })
         .then(userData => {
-          const cookies = new Cookies();
           const initialDate = new Date();
 
           let expiryDate = moment(initialDate)
-            .add(1, "months")
+            .add(10, "months")
             .toDate();
 
-          const token_data = response.data;
-          cookies.set("token_data", token_data, {
-            path: "/",
-            expires: expiryDate
-          });
+          console.log("expire date: ", expiryDate);
 
-          cookies.set("user_data", userData.data, {
-            path: "/",
-            expires: expiryDate
-          });
+          CookiesProvider.setCookies(
+            "token_data",
+            response.data,
+            "/",
+            expiryDate
+          );
 
-          const cookies_data = {
-            token_data: cookies.get("token_data"),
-            user_data: cookies.get("user_data")
-          };
+          CookiesProvider.setCookies(
+            "user_data",
+            userData.data,
+            "/",
+            expiryDate
+          );
 
           dispatch({
             type: FETCH_USER_FULFILLED,
             payload: {
-              cookies: cookies_data
+              cookies: CookiesProvider.getAllCookies()
             }
           });
           // if (userData.data.username === "admin") history.push("/admin");
@@ -65,32 +73,16 @@ export const onSubmit = ({ username, password, history }) => dispatch => {
         .catch(error => {
           dispatch({ type: FETCH_USER_REJECTED, payload: error });
         });
-
-      // dispatch({
-      //   type: FETCH_USER_FULFILLED,
-      //   payload: response.data
-      // });
     })
     .catch(error => dispatch({ type: FETCH_USER_REJECTED, payload: error }));
 
   dispatch({ type: FETCH_USER_PENDING });
 };
 
-// ({
-//   type: FETCH_USER,
-//   payload: onLogin({ username, password })
-// });
-
 export const onRequestLoginData = ({ username, password }) => ({
   type: FETCH_USER,
   payload: onLogin({ username, password })
 });
-// // export function onRegisterSubmit({ username, password, business_name, email }) {
-//   return {
-//     type: CREATE_USER,
-//     payload: onRegister({ username, password })
-//   };
-// }
 
 export const onRegisterSubmit = ({
   username,
@@ -106,7 +98,3 @@ export const onRegisterSubmit = ({
 
   dispatch({ type: CREATE_USER_PENDING });
 };
-// ({
-//   type: CREATE_USER,
-//   payload: onRegister({ username, password, business_name, email })
-// });

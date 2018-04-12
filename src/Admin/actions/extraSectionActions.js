@@ -1,4 +1,4 @@
-import { onExtraSectionGet } from "../Common/utils/serverCall";
+import { onExtraSectionGet } from "../config/adminServerCall";
 import {
   FETCH_EXTRA_SECTION_FULFILLED,
   FETCH_EXTRA_SECTION_REJECTED,

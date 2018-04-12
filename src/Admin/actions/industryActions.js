@@ -1,4 +1,4 @@
-import { onIndustryPost, onIndustryGet } from "../Common/utils/serverCall";
+import { onIndustryPost, onIndustryGet } from "../config/adminServerCall";
 import {
   CREATE_INDUSTRY_FULFILLED,
   CREATE_INDUSTRY_REJECTED,

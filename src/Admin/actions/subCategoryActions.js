@@ -1,4 +1,4 @@
-import { onSubCategoryPost } from "../Common/utils/serverCall";
+import { onSubCategoryPost } from "../config/adminServerCall";
 import {
   CREATE_SUB_CATEGORY_FULFILLED,
   CREATE_SUB_CATEGORY_REJECTED,
