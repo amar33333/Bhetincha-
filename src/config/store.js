@@ -1,15 +1,28 @@
 import { applyMiddleware, createStore } from "redux";
 import thunkMiddleware from "redux-thunk";
 import { createLogger } from "redux-logger";
-
-import reducers from "../reducers";
+import createReducer from "../reducers";
 
 const loggerMiddleware = createLogger();
 
-export const store = createStore(
-  reducers,
-  applyMiddleware(thunkMiddleware, loggerMiddleware)
-);
-// const createStoreWithMiddleware = applyMiddleware(thunkMiddleware)(createStore);
+export default () => {
+  const createStoreWithMiddleware = applyMiddleware(
+    thunkMiddleware,
+    loggerMiddleware
+  )(createStore);
 
-// export default () => createStoreWithMiddleware(reducers);
+  const store = createStoreWithMiddleware(
+    createReducer(),
+
+    // This must only be in the production
+    window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+  );
+
+  store.asyncReducers = {};
+  store.injectReducer = (key, reducer) => {
+    store.asyncReducers[key] = reducer;
+    store.replaceReducer(createReducer(store.asyncReducers));
+    return store;
+  };
+  return store;
+};

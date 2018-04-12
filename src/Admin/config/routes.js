@@ -15,7 +15,7 @@ import SubCategories from "../views/Sub Categories/SubCategories";
 
 class WebsiteRoute extends Component {
   render() {
-    const MATCH_URL = this.props.match.url;
+    // const MATCH_URL = this.props.match.url;
     return (
       <Switch>
         <Route

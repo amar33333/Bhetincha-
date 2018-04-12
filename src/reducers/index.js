@@ -5,12 +5,21 @@ import CategoryReducer from "./categoryReducer";
 import ExtraSectionReducer from "./extraSectionReducer";
 import SearchReducer from "./searchReducer";
 
-const rootReducer = combineReducers({
-  auth: AuthReducer,
-  industries: IndustryReducer,
-  categories: CategoryReducer,
-  extra_sections: ExtraSectionReducer,
-  search_result: SearchReducer
-});
+// const rootReducer = combineReducers({
+//   auth: AuthReducer,
+//   industries: IndustryReducer,
+//   categories: CategoryReducer,
+//   extra_sections: ExtraSectionReducer,
+//   search_result: SearchReducer
+// });
 
-export default rootReducer;
+const createReducer = asyncReducers =>
+  combineReducers({
+    auth: AuthReducer,
+    industries: IndustryReducer,
+    categories: CategoryReducer,
+    extra_sections: ExtraSectionReducer,
+    search_result: SearchReducer,
+    ...asyncReducers
+  });
+export default createReducer;
