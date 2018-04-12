@@ -22,4 +22,5 @@ const createReducer = asyncReducers =>
     search_result: SearchReducer,
     ...asyncReducers
   });
+
 export default createReducer;
