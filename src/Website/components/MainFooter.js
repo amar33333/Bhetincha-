@@ -1,14 +1,7 @@
 import React, { Component } from "react";
-// import logo from "./logo.svg";
-// import { Image } from "semantic-ui-react";
-// import { Container, Icon } from "semantic-ui-react";
 import { Container, Row, Col } from "reactstrap";
-import moment from "moment";
 
-const DEVELOPER = "Tech Kunja";
-const OWNER = "Bhetincha.com";
-
-class Footer extends Component {
+class BusinessFooter extends Component {
   render() {
     return (
       <div className="footer p-3">
@@ -52,15 +45,6 @@ class Footer extends Component {
                   <i class="fa fa-circle-thin fa-stack-2x" />
                   <i class="fa fa-google-plus fa-stack-1x" />
                 </span>
-                {/* <span>
-                  <Icon name="facebook f" size="large" circular inverted />
-                </span>
-                <span>
-                  <Icon name="twitter" size="large" circular inverted />
-                </span>
-                <span>
-                  <Icon name="google plus" size="large" circular inverted />
-                </span> */}
               </Row>
               <Row>
                 <div className="toll-free">
@@ -73,26 +57,9 @@ class Footer extends Component {
             </Col>
           </Row>
         </Container>
-        <Container>
-          <div className="footer-bottom mt-3 pt-3">
-            <p>
-              &copy; {moment().year()}, {OWNER}. All rights reserved | Powered
-              by{" "}
-              <a
-                href="http://techkunja.com.np"
-                rel="noopener noreferrer"
-                target="_blank"
-                className="footer-link"
-              >
-                {" "}
-                {DEVELOPER}
-              </a>
-            </p>
-          </div>
-        </Container>
       </div>
     );
   }
 }
 
-export default Footer;
+export default BusinessFooter;

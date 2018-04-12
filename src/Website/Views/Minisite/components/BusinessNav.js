@@ -32,27 +32,42 @@ class BusinessNav extends Component {
       <div>
         <Navbar color="faded" light expand="md">
           <NavbarBrand href={`/${this.props.name}`}>
-            {" "}
-            {this.props.name}{" "}
-          </NavbarBrand>{" "}
-          <NavbarToggler onClick={this.toggle} />{" "}
+            <img
+              src={this.props.logo}
+              alt="brand-logo"
+              className="main_nav__brand-logo"
+            />
+            {/* {this.props.name} */}
+          </NavbarBrand>
+          <NavbarToggler onClick={this.toggle} />
           <Collapse isOpen={this.state.isOpen} navbar>
             <Nav className="ml-5" navbar>
               <NavItem active>
-                <NavLink href="/components/"> Home </NavLink>{" "}
-              </NavItem>{" "}
+                <NavLink
+                  href={`/${this.props.name}`}
+                  className="minisite_business__nav__item"
+                >
+                  Home
+                </NavLink>
+              </NavItem>
               <NavItem>
-                <NavLink href="#"> About </NavLink>{" "}
-              </NavItem>{" "}
+                <NavLink href="#" className="minisite_business__nav__item">
+                  About
+                </NavLink>
+              </NavItem>
               <NavItem>
-                <NavLink href="#"> Gallery </NavLink>{" "}
-              </NavItem>{" "}
+                <NavLink href="#" className="minisite_business__nav__item">
+                  Gallery
+                </NavLink>
+              </NavItem>
               <NavItem>
-                <NavLink href="#"> Contact </NavLink>{" "}
-              </NavItem>{" "}
-            </Nav>{" "}
-          </Collapse>{" "}
-        </Navbar>{" "}
+                <NavLink href="#" className="minisite_business__nav__item">
+                  Contact
+                </NavLink>
+              </NavItem>
+            </Nav>
+          </Collapse>
+        </Navbar>
       </div>
     );
   }

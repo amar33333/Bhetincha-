@@ -1,7 +1,12 @@
+body {
+  font-family: "Palanquin", sans-serif;
+}
+
 .body-wrapper {
   background-color: rgb(255, 255, 255) !important;
   margin-top: 0px !important;
   min-height: 50vh;
+  padding: 15px;
 }
 
 .nav-wrapper {
@@ -49,11 +54,6 @@ input.main-nav-search::placeholder {
 
 .user-dropdown i {
   color: cornsilk;
-}
-.banner-wrapper {
-  max-height: 60vh;
-  max-width: 100vmax;
-  overflow: hidden;
 }
 
 /*=============== Home page css ================= */
@@ -142,7 +142,9 @@ input.main-nav-search::placeholder {
 .register-button {
   margin-top: 10px;
 }
-
+.main_nav__brand-logo {
+  width: 30px;
+}
 /* ===========end of home page css ================ */
 
 .hero-header {
@@ -165,28 +167,96 @@ input.main-nav-search::placeholder {
   min-height: 100px;
 }
 
+.avatar {
+  margin-right: 0.5rem;
+  vertical-align: middle;
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.profile-dropdown {
+  padding: 10px;
+}
+
+.profile-dropdown__icon {
+  margin-right: 2rem;
+  color: cornsilk;
+  cursor: pointer;
+}
+
+.profile-dropdown__item {
+  cursor: pointer;
+  transition: ease-in-out 0.2s;
+}
+
+.profile-dropdown__item:hover {
+  transform: translate(10px);
+}
+
+.profile-dropdown__item__icon {
+  margin-right: 10px;
+}
+
+/* ======== Admin ============= */
+
+.hr-centered {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.select-industry {
+  width: 100%;
+}
+
+/* =======Footer========= */
 .footer {
-  /* position: absolute; */
   min-height: 80px;
   width: 100%;
   background-color: rgb(41, 39, 39);
   color: rgb(146, 144, 144);
   bottom: 0;
 }
+.footer a {
+  color: rgb(146, 144, 144);
+  text-decoration: none;
+}
 
-.footer-bottom {
-  text-align: center;
+.footer a:hover {
+  text-decoration: none;
+  color: whitesmoke;
+}
+.bottom-footer {
   border-top: 1px rgb(146, 144, 144) solid;
+}
+
+.bottom-footer__nav {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: -15px;
+}
+
+.bottom-footer__nav__item {
+  display: inline-block;
+  margin-right: 0.3rem;
+}
+
+.bottom-footer__nav__item:not(:last-child)::after {
+  content: "|";
+  margin-left: 0.3rem;
+}
+
+.bottom-footer__meta {
+  text-align: center;
 }
 
 .footer-link {
   color: rgb(146, 144, 144);
   text-decoration: none;
-}
-
-.footer-link:hover {
-  text-decoration: none;
-  color: whitesmoke;
 }
 
 .footer ul {
@@ -214,46 +284,4 @@ input.main-nav-search::placeholder {
 
 .footer_social__icon:hover {
   transform: scale(1.1);
-}
-
-.avatar {
-  margin-right: 0.5rem;
-  vertical-align: middle;
-  width: 35px;
-  height: 35px;
-  border-radius: 50%;
-}
-
-.profile-dropdown {
-  padding: 10px;
-}
-
-.profile-dropdown__icon {
-  margin-right: 2rem;
-  color: cornsilk;
-}
-
-.profile-dropdown__item {
-  cursor: pointer;
-}
-
-.profile-dropdown__item:hover {
-  transition: ease-in-out 0.2s;
-  transform: translate(10px);
-}
-
-.profile-dropdown__item__icon {
-  margin-right: 10px;
-}
-
-/* ======== Admin ============= */
-
-.hr-centered {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.select-industry {
-  width: 100%;
 }

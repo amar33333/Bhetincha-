@@ -69,16 +69,16 @@ class MainNavbar extends Component {
                 <div className="profile-dropdown">
                   <div
                     onClick={this.profileDropdowntoggle}
-                    className="profile-dropdown__item"
+                    className="profile-dropdown__item__heading"
                   >
-                    <i className="fa fa-user profile-dropdown__item__icon" />Profile
+                    <strong>{this.props.name}</strong>
                   </div>
                   <DropdownItem divider />
                   <div
                     onClick={this.profileDropdowntoggle}
                     className="profile-dropdown__item"
                   >
-                    <i className="fa fa-cog profile-dropdown__item__icon" />Settings
+                    <i className="fa fa-dashboard profile-dropdown__item__icon" />Dashboard
                   </div>
                   <DropdownItem divider />
                   <div
