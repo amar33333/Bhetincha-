@@ -13,6 +13,8 @@ import {
   SubCategories
 } from "../views";
 
+import CookiesProvider from "../../Common/utils/CookiesProvider";
+
 class AdminRoute extends Component {
   render() {
     // const MATCH_URL = this.props.match.url;

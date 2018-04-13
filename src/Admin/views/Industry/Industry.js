@@ -39,15 +39,15 @@ class Industry extends Component {
     this.props.onUnmountIndustry();
   }
 
-  onChange = (key, event) => {
-    this.setState({ [key]: event.target.value });
-  };
-
   onFormSubmit = event => {
     event.preventDefault();
     const { industry } = this.state;
     this.props.onIndustrySubmit({ industry });
     this.setState({ industry: "" });
+  };
+
+  onChange = (key, event) => {
+    this.setState({ [key]: event.target.value });
   };
 
   // requestData = (pageSize, page, sorted, filtered) => {

@@ -11,7 +11,8 @@ import {
   CREATE_USER_PENDING,
   TOGGLE_LOGIN_MODAL,
   TOGGLE_REGISTER_MODAL,
-  COOKIES_LOAD_FULFILLED
+  COOKIES_LOAD_FULFILLED,
+  LOGOUT_USER
 } from "./types";
 import CookiesProvider from "../Common/utils/CookiesProvider";
 
@@ -40,7 +41,7 @@ export const onSubmit = ({ username, password, history }) => dispatch => {
           const initialDate = new Date();
 
           let expiryDate = moment(initialDate)
-            .add(10, "months")
+            .add(10, "s")
             .toDate();
 
           console.log("expire date: ", expiryDate);
@@ -51,6 +52,8 @@ export const onSubmit = ({ username, password, history }) => dispatch => {
             "/",
             expiryDate
           );
+
+          console.log("authactions: ", CookiesProvider.getTokenData());
 
           CookiesProvider.setCookies(
             "user_data",
@@ -98,3 +101,8 @@ export const onRegisterSubmit = ({
 
   dispatch({ type: CREATE_USER_PENDING });
 };
+
+export const onLogout = () => ({
+  type: LOGOUT_USER,
+  payload: null
+});

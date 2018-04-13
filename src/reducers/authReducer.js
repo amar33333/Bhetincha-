@@ -7,7 +7,8 @@ import {
   CREATE_USER_REJECTED,
   TOGGLE_LOGIN_MODAL,
   TOGGLE_REGISTER_MODAL,
-  COOKIES_LOAD_FULFILLED
+  COOKIES_LOAD_FULFILLED,
+  LOGOUT_USER
 } from "../actions/types";
 
 const INITIAL_STATE = {
@@ -21,6 +22,9 @@ const INITIAL_STATE = {
 
 export default function(state = INITIAL_STATE, action) {
   switch (action.type) {
+    case LOGOUT_USER:
+      return { ...state, cookies: action.payload };
+
     case COOKIES_LOAD_FULFILLED:
       return { ...state, ...action.payload };
 

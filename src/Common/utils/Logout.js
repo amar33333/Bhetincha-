@@ -1,6 +1,8 @@
-import React, { Component } from "react";
+import { Component } from "react";
+import { connect } from "react-redux";
 
 import CookiesProvider from "./CookiesProvider";
+import { onLogout } from "../../actions";
 
 class Logout extends Component {
   constructor(props) {
@@ -9,8 +11,9 @@ class Logout extends Component {
   }
 
   logout() {
-    console.log("asdasdasd logout");
+    console.log("Logout");
     CookiesProvider.removeAllCookies();
+    this.props.onLogout();
 
     this.props.history.push("/");
   }
@@ -20,4 +23,4 @@ class Logout extends Component {
   }
 }
 
-export default Logout;
+export default connect(null, { onLogout })(Logout);
