@@ -1,11 +1,11 @@
 import { combineReducers } from "redux";
 import AuthReducer from "./authReducer";
-import SearchReducer from "./searchReducer";
+import WebsiteReducers from "../Website/reducers";
 
 const createReducer = asyncReducers =>
   combineReducers({
     auth: AuthReducer,
-    search_result: SearchReducer,
+    ...WebsiteReducers,
     ...asyncReducers
   });
 
