@@ -26,4 +26,4 @@ class App extends Component {
   }
 }
 
-export default connect(({ auth }) => ({ ...auth }), { loadCookies })(App);
+export default connect(null, { loadCookies })(App);

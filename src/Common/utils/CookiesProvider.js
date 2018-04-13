@@ -1,5 +1,4 @@
 import Cookies from "universal-cookie";
-import moment from "moment";
 
 const cookies = new Cookies();
 

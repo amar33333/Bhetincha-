@@ -119,14 +119,6 @@ class SubCategories extends Component {
           className="select-extra-sections"
           value={valueExtraSection}
           onChange={this.handleSelectChange.bind(this, "extraSection")}
-          /* options={[
-            { label: "Chocolate", value: "chocolate" },
-            { label: "Vanilla", value: "vanilla" },
-            { label: "Strawberry", value: "strawberry" },
-            { label: "Caramel", value: "caramel" },
-            { label: "Cookies and Cream", value: "cookiescream" },
-            { label: "Peppermint", value: "peppermint" }
-          ]} */
           options={extraSections}
         />
         <Row>
