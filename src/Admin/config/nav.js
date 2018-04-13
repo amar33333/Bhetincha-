@@ -15,23 +15,36 @@ const items = {
       name: "General Setup"
     },
     {
-      name: "Areas",
-      url: "/admin/settings",
-      icon: "fa fa-map",
-      permission: "CAN_VIEW_SETTINGS"
+      name: "Countries",
+      url: "/admin/countries",
+      icon: "fa fa-map-o",
+      permission: "CAN_VIEW_USERS"
     },
     {
-      name: "Cities",
-      url: "/admin/users",
-      icon: "fa fa-map-pin",
+      name: "States",
+      url: "/admin/states",
+      icon: "fa fa-map-o",
       permission: "CAN_VIEW_USERS"
     },
     {
       name: "Districts",
-      url: "/admin/users",
+      url: "/admin/districts",
       icon: "fa fa-map-o",
       permission: "CAN_VIEW_USERS"
     },
+    {
+      name: "Cities",
+      url: "/admin/cities",
+      icon: "fa fa-map-pin",
+      permission: "CAN_VIEW_USERS"
+    },
+    {
+      name: "Areas",
+      url: "/admin/areas",
+      icon: "fa fa-map",
+      permission: "CAN_VIEW_SETTINGS"
+    },
+
     {
       title: true,
       name: "Business"
