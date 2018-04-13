@@ -9,22 +9,10 @@ import {
   CREATE_USER_FULFILLED,
   CREATE_USER_REJECTED,
   CREATE_USER_PENDING,
-  TOGGLE_LOGIN_MODAL,
-  TOGGLE_REGISTER_MODAL,
   COOKIES_LOAD_FULFILLED,
   LOGOUT_USER
 } from "./types";
 import CookiesProvider from "../Common/utils/CookiesProvider";
-
-export const toggleLoginModal = show => ({
-  type: TOGGLE_LOGIN_MODAL,
-  payload: show
-});
-
-export const toggleRegisterModal = show => ({
-  type: TOGGLE_REGISTER_MODAL,
-  payload: show
-});
 
 export const loadCookies = () => ({
   type: COOKIES_LOAD_FULFILLED,

@@ -5,26 +5,30 @@ import {
 } from "../actions/types";
 
 const INITIAL_STATE = {
-  loading: false,
-  statusClass: ""
+  loading: false
 };
 
 export default function(state = INITIAL_STATE, action) {
   // console.log("actionsL: ", action);
   switch (action.type) {
     case SEARCH_QUERY_PENDING:
-      return { ...state, loading: true, statusClass: "pending" };
+      return {
+        ...state,
+        loading: true
+      };
 
     case SEARCH_QUERY_FULFILLED:
       return {
         ...state,
         data: action.payload,
-        loading: false,
-        statusClass: "fulfilled"
+        loading: false
       };
 
     case SEARCH_QUERY_REJECTED:
-      return { ...state, loading: false, statusClass: "rejected" };
+      return {
+        ...state,
+        loading: false
+      };
 
     default:
       return state;

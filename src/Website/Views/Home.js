@@ -15,7 +15,7 @@ import {
   toggleLoginModal,
   toggleRegisterModal,
   onSearchQuerySubmit
-} from "../../actions";
+} from "../actions";
 
 class Home extends Component {
   // constructor(props) {
@@ -186,7 +186,7 @@ class Home extends Component {
 }
 
 export default connect(
-  ({ auth, search_result }) => ({ ...auth, search_result }),
+  ({ auth, home, search_result }) => ({ ...auth, ...home, search_result }),
   {
     toggleLoginModal,
     toggleRegisterModal,
