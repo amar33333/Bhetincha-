@@ -1,4 +1,4 @@
 import { combineReducers } from "redux";
-import test from "./testReducer";
+import minisite from "./minisiteReducer";
 
-export default combineReducers({ test });
+export default combineReducers({ minisite });

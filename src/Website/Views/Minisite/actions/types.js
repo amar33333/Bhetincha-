@@ -1,1 +1,1 @@
-export const TEST = "TEST__MINISITE";
+export const TOGGLE_LOGGEDIN = "TOGGLE_LOGGEDIN__MINISITE";

@@ -1,14 +1,13 @@
-import { TEST } from "../actions/types";
+import { TOGGLE_LOGGEDIN } from "../actions/types";
 
 const INITIAL_STATE = {
-  msg: "test loaded"
+  loggedIn: false
 };
 
 export default function(state = INITIAL_STATE, action) {
   switch (action.type) {
-    case TEST:
-      return { ...state, msg: "test changed the message" };
-
+    case TOGGLE_LOGGEDIN:
+      return { ...state, loggedIn: !state.loggedIn };
     default:
       return state;
   }

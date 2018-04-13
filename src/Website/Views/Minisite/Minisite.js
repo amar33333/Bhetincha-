@@ -1,34 +1,24 @@
 import React, { Component } from "react";
 import { BottomFooter, MainNavbar } from "../../components";
 import { connect } from "react-redux";
-import BusinessNav from "./components/BusinessNav";
+import { BusinessNav, BusinessFooter } from "./components";
 import banner from "../../../static/img/banner.jpg";
 import logo from "../../../static/img/avatar.jpg";
 import { Container, Row, Col } from "reactstrap";
 
 import "./minisite.css";
-import BusinessFooter from "./components/BusinessFooter";
 
 import withReducer from "../../../config/withReducer";
 import reducers from "./reducers";
-import { onTestCalled } from "./actions";
+import { logInToggle } from "./actions";
 
 class Minisite extends Component {
-  constructor(props) {
-    super(props);
-    this.logInToggle = this.logInToggle.bind(this);
-    this.state = {
-      loggedIn: true
-    };
-  }
-  // const BUSINESSNAME = this.props.match.params.businessName;
-  //this.businessNavEl.state.jlaskjdf;lasjdl
   componentWillMount() {
     console.log(this.props);
   }
 
   renderUploadOverlay = () => {
-    if (this.state.loggedIn) {
+    if (this.props.loggedIn) {
       return (
         <div className="minisite_banner__img__change__overlay">
           <a href="#">
@@ -42,7 +32,7 @@ class Minisite extends Component {
   };
 
   renderAboutEdit = () => {
-    if (this.state.loggedIn) {
+    if (this.props.loggedIn) {
       return (
         <span className="minisite_about__edit__icon">
           <a href="#">
@@ -53,20 +43,19 @@ class Minisite extends Component {
     }
   };
 
-  logInToggle() {
-    this.setState({
-      loggedIn: !this.state.loggedIn
-    });
-  }
+  // logInToggle() {
+  //   this.setState({
+  //     loggedIn: !this.state.loggedIn
+  //   });
+  // }
 
   render() {
     return (
       <div>
-        <h1>Test message here: {this.props.test.msg}</h1>
         <MainNavbar name={this.props.match.params.businessName} />
         <BusinessNav
-          loginStat={this.state.loggedIn}
-          onLogInClicked={this.logInToggle}
+          loginStat={this.props.loggedIn}
+          onLogInClicked={this.props.logInToggle}
           logo={logo}
           name={this.props.match.params.businessName}
         />
@@ -107,7 +96,7 @@ class Minisite extends Component {
 }
 
 export default withReducer("MinisiteComponent", reducers)(
-  connect(({ MinisiteComponent: { test } }) => ({ test }), { onTestCalled })(
-    Minisite
-  )
+  connect(({ MinisiteComponent: { minisite } }) => ({ ...minisite }), {
+    logInToggle
+  })(Minisite)
 );
