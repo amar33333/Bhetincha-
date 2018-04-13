@@ -6,13 +6,9 @@
 
 .minisite_banner__img {
   display: block;
-  /* width: 100vw !important; */
-  /* max-width: 100% !important; */
-  /* max-height: auto; */
   object-fit: cover;
   height: 80vh;
   width: 100%;
-  /* overflow: hidden; */
 }
 
 .minisite_heading__text_wrapper {
