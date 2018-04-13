@@ -6,7 +6,14 @@ import Settings from "./Settings/";
 import AddUser from "./Users/Manage Users/Add User";
 import Industry from "../views/Industry/Industry";
 import Categories from "../views/Categories/Categories";
-import SubCategories from "../views/Sub Categories/SubCategories";
+import SubCategories from "../views/SubCategories/SubCategories";
+import {
+  Areas,
+  Cities,
+  Countries,
+  Districts,
+  States
+} from "../views/GeneralSetup";
 
 export {
   Dashboard,
@@ -17,5 +24,10 @@ export {
   AddUser,
   Industry,
   Categories,
-  SubCategories
+  SubCategories,
+  Areas,
+  Cities,
+  Countries,
+  Districts,
+  States
 };
