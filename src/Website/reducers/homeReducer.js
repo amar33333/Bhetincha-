@@ -8,10 +8,10 @@ const INITIAL_STATE = {
 export default function(state = INITIAL_STATE, action) {
   switch (action.type) {
     case TOGGLE_LOGIN_MODAL:
-      return { ...state, loginModal: action.payload };
+      return { ...state, loginModal: !state.loginModal };
 
     case TOGGLE_REGISTER_MODAL:
-      return { ...state, registerModal: action.payload };
+      return { ...state, registerModal: !state.registerModal };
 
     default:
       return state;

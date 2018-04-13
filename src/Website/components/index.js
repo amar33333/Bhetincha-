@@ -1,4 +1,5 @@
 import BottomFooter from "./BottomFooter";
 import MainNavbar from "./MainNavbar";
+import Avatar from "./Avatar";
 
-export { BottomFooter, MainNavbar };
+export { BottomFooter, MainNavbar, Avatar };

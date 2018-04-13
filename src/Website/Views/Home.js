@@ -11,33 +11,17 @@ import CustomModal from "../../Common/components/CustomModal";
 import LoginModal from "../../Common/components/CustomModal/ModalTemplates/LoginModal";
 import RegisterModal from "../../Common/components/CustomModal/ModalTemplates/RegisterModal";
 
+import { Avatar } from "../components";
+
 import {
   toggleLoginModal,
   toggleRegisterModal,
   onSearchQuerySubmit
 } from "../actions";
 
+import { BottomFooter } from "../components";
+
 class Home extends Component {
-  // constructor(props) {
-  //   super(props);
-  //   // this.state = {
-  //   //   loginModal: false,
-  //   //   registerModal: false
-  //   // };
-  // }
-
-  // toggleLoginModal = () => {
-  //   this.setState({
-  //     loginModal: !this.state.loginModal
-  //   });
-  // };
-
-  // toggleRegisterModal = () => {
-  //   this.setState({
-  //     registerModal: !this.state.registerModal
-  //   });
-  // };
-
   constructor(props) {
     super(props);
 
@@ -54,24 +38,13 @@ class Home extends Component {
     this.props.onSearchQuerySubmit({ query });
   };
 
-  render() {
-    // console.log("home search_result: ", this.props.search_result);
-    // const result = this.props.search_result.data
-    //   ? this.props.search_result.data.hits.hits[0]._source.name
-    //   : "";
-
-    const result = this.props.search_result.data
-      ? this.props.search_result.data.hits.hits.length !== 0
-        ? this.props.search_result.data.hits.hits[0]._source.name
-        : "Data Not Found"
-      : "";
-
-    return (
-      <div className="body-wrapper">
+  renderLoginRegister = () => {
+    if (!this.props.cookies) {
+      return (
         <div className="home-page__header">
           <Button
             className="login-btn"
-            onClick={() => this.props.toggleLoginModal(!this.props.loginModal)}
+            onClick={this.props.toggleLoginModal}
             variant="raised"
             color="primary"
           >
@@ -80,7 +53,7 @@ class Home extends Component {
 
           <CustomModal
             isOpen={this.props.loginModal}
-            toggle={() => this.props.toggleLoginModal(!this.props.loginModal)}
+            toggle={this.props.toggleLoginModal}
             className={"modal-xs" + this.props.className}
           >
             <LoginModal {...this.props} />
@@ -88,98 +61,82 @@ class Home extends Component {
 
           <CustomModal
             isOpen={this.props.registerModal}
-            toggle={() =>
-              this.props.toggleRegisterModal(!this.props.registerModal)
-            }
+            toggle={this.props.toggleRegisterModal}
             className={"register_modal " + this.props.className}
           >
             <RegisterModal {...this.props} />
           </CustomModal>
 
           <Button
-            onClick={() =>
-              this.props.toggleRegisterModal(!this.props.registerModal)
-            }
+            onClick={this.props.toggleRegisterModal}
             variant="raised"
             color="warning"
           >
             Register
           </Button>
         </div>
-        <Form onSubmit={this.onSearchQuerySubmit}>
-          <div className="centered">
-            <div className="home_page__centered__wrapper">
-              <Row className="home-page__logo">
-                <Col xs="8" md="6">
-                  <img alt="logo" src={logo} size="large" />
-                </Col>
-              </Row>
-              <Row className="home-page__searchbar">
-                <Col xs="8" md="6">
-                  <Input
-                    autoFocus
-                    //fluid // warning says this is not a boolean
-                    className="home-page__searchbar__input"
-                    icon="search"
-                    placeholder="Search..."
-                    value={this.state.query}
-                    onChange={this.onChange}
-                  />
-                  <LaddaButton
-                    loading={this.props.loading}
-                    data-size={S}
-                    data-style={EXPAND_RIGHT}
-                  >
-                    SEARCH
-                  </LaddaButton>
-                </Col>
-              </Row>
-              <Row>
-                <Col>{result}</Col>
-              </Row>
+      );
+    } else {
+      return (
+        <div className="home-page__header">
+          <Avatar
+            group={this.props.cookies.user_data.username}
+            history={this.props.history}
+            name={this.props.cookies.user_data.username}
+          />
+        </div>
+      );
+    }
+  };
 
-              {/* <Row className="home-page__category">
-              <Col xs="12" md="10">
-                <Icon
-                  name="payment"
-                  size="large"
-                  color="grey"
-                  className="home-page__category__icon"
-                />{" "}
-                <span>ATM Lounges </span>
-                <Icon
-                  name="hospital"
-                  size="large"
-                  color="grey"
-                  className="home-page__category__icon"
-                />{" "}
-                <span>Hospitals </span>
-                <Icon
-                  name="ambulance"
-                  size="large"
-                  color="grey"
-                  className="home-page__category__icon"
-                />{" "}
-                <span>Ambulance </span>
-                <Icon
-                  name="food"
-                  size="large"
-                  color="grey"
-                  className="home-page__category__icon"
-                />{" "}
-                <span>Restaurant </span>
-                <Icon
-                  name="university"
-                  size="large"
-                  color="grey"
-                  className="home-page__category__icon"
-                />{" "}
-                <span>University </span>
-              </Col>
-            </Row> */}
+  render() {
+    const result = this.props.search_result.data
+      ? this.props.search_result.data.hits.hits.length !== 0
+        ? this.props.search_result.data.hits.hits[0]._source.name
+        : "Data Not Found"
+      : "";
+
+    return (
+      <div>
+        <div className="body-wrapper">
+          {this.renderLoginRegister()}
+          <Form onSubmit={this.onSearchQuerySubmit}>
+            <div className="centered">
+              <div className="home_page__centered__wrapper">
+                <Row className="home-page__logo">
+                  <Col xs="8" md="6">
+                    <img alt="logo" src={logo} size="large" />
+                  </Col>
+                </Row>
+                <Row className="home-page__searchbar">
+                  <Col xs="8" md="6">
+                    <Input
+                      autoFocus
+                      //fluid // warning says this is not a boolean
+                      className="home-page__searchbar__input"
+                      icon="search"
+                      placeholder="Search..."
+                      value={this.state.query}
+                      onChange={this.onChange}
+                    />
+                    <LaddaButton
+                      loading={this.props.search_result.loading}
+                      data-size={S}
+                      data-style={EXPAND_RIGHT}
+                      className="mt-3"
+                    >
+                      अवश्य भेटिन्छ
+                    </LaddaButton>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col>{result}</Col>
+                </Row>
+              </div>
             </div>
-          </div>
-        </Form>
+          </Form>
+        </div>
+        <BottomFooter theme="light" />
       </div>
     );
   }

@@ -5,7 +5,7 @@ body {
 .body-wrapper {
   background-color: rgb(255, 255, 255) !important;
   margin-top: 0px !important;
-  min-height: 50vh;
+  /* min-height: 50vh; */
   padding: 15px;
 }
 
@@ -145,6 +145,11 @@ input.main-nav-search::placeholder {
 .main_nav__brand-logo {
   width: 30px;
 }
+
+.home-page__header .profile-dropdown__icon {
+  color: brown;
+}
+
 /* ===========end of home page css ================ */
 
 .hero-header {
@@ -199,6 +204,16 @@ input.main-nav-search::placeholder {
   margin-right: 10px;
 }
 
+.profile-dropdown a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.profile-dropdown a:hover {
+  text-transform: none;
+  color: inherit;
+}
+
 /* ======== Admin ============= */
 
 .hr-centered {
@@ -213,23 +228,44 @@ input.main-nav-search::placeholder {
 
 /* =======Footer========= */
 .footer {
+  position: absolute;
   min-height: 80px;
   width: 100%;
-  background-color: rgb(41, 39, 39);
-  color: rgb(146, 144, 144);
   bottom: 0;
 }
-.footer a {
+.footer-dark a {
   color: rgb(146, 144, 144);
   text-decoration: none;
 }
 
-.footer a:hover {
+.footer-dark a:hover {
   text-decoration: none;
   color: whitesmoke;
 }
+
 .bottom-footer {
+  font-size: 0.7rem;
   border-top: 1px rgb(146, 144, 144) solid;
+}
+
+.footer-dark {
+  background-color: rgb(41, 39, 39);
+  color: rgb(146, 144, 144);
+}
+
+.footer-light {
+  background-color: #fff;
+  color: rgb(41, 39, 39);
+}
+
+.footer-light a {
+  text-decoration: none;
+  color: rgb(41, 39, 39);
+}
+
+.footer-light a:hover {
+  text-decoration: underline;
+  color: rgb(0, 0, 0);
 }
 
 .bottom-footer__nav {

@@ -59,9 +59,11 @@ class Minisite extends Component {
           logo={logo}
           name={this.props.match.params.businessName}
         />
-        <img className="minisite_banner__img" src={banner} alt="banner" />
-        {console.log("fuck this shit" + this.businessNavEl)}
-        {this.renderUploadOverlay()}
+        <div className="minisite_banner__wrapper">
+          <img className="minisite_banner__img" src={banner} alt="banner" />
+          {console.log("fuck this shit" + this.businessNavEl)}
+          {this.renderUploadOverlay()}
+        </div>
         <div className="body-wrapper">
           <Container>
             <Row>
