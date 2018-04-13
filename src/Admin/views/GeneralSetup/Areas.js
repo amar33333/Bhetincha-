@@ -1,4 +1,6 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
+
 import {
   Button,
   Col,
@@ -11,24 +13,46 @@ import {
   FormGroup,
   Card,
   CardBody,
-  CardHeader
+  CardHeader,
+  Label
 } from "reactstrap";
 
-class Areas extends Component {
-  state = { area: "" };
+import Select from "react-select";
 
-  onFormSubmit = event => {
-    event.preventDefault();
-    // const { industry } = this.state;
-    // this.props.onIndustrySubmit({ industry });
-    this.setState({ area: "" });
-  };
+import { onCityList, onAreaSubmit } from "../../actions";
+
+class Areas extends Component {
+  state = { area: "", city: "" };
+
+  componentWillMount() {
+    this.props.onCityList();
+  }
 
   onChange = (key, event) => {
     this.setState({ [key]: event.target.value });
   };
 
+  handleSelectChange = city => {
+    this.setState({ city });
+  };
+
+  onFormSubmit = event => {
+    event.preventDefault();
+    const { area, city } = this.state;
+    this.props.onAreaSubmit({ area, city: city.value });
+    this.setState({ area: "", city: "" });
+  };
+
   render() {
+    const cities = this.props.general_setup.cities
+      ? this.props.general_setup.cities.map(city => {
+          return { value: city.id, label: city.name };
+        })
+      : null;
+
+    const { city } = this.state;
+    const value = city && city.value;
+
     return (
       <div className="animated fadeIn">
         <Row className="hr-centered">
@@ -40,6 +64,18 @@ class Areas extends Component {
               <CardBody>
                 <Form onSubmit={this.onFormSubmit} inline>
                   <FormGroup className="mb-2 mr-sm-2 mb-sm-0">
+                    <Label for="Industies">Cities</Label>
+                    <Select
+                      autoFocus
+                      autosize
+                      clearable
+                      required
+                      name="Industies"
+                      className="select-industry"
+                      value={value}
+                      onChange={this.handleSelectChange}
+                      options={cities}
+                    />
                     <InputGroup>
                       <InputGroupAddon addonType="prepend">
                         <InputGroupText>
@@ -72,4 +108,10 @@ class Areas extends Component {
   }
 }
 
-export default Areas;
+export default connect(
+  ({ AdminContainer: { general_setup } }) => ({ general_setup }),
+  {
+    onCityList,
+    onAreaSubmit
+  }
+)(Areas);

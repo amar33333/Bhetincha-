@@ -39,7 +39,7 @@ class States extends Component {
     this.setState({ [key]: event.target.value });
   };
 
-  handleCountryChange = country => {
+  handleSelectChange = country => {
     this.setState({ country });
   };
 
@@ -64,7 +64,7 @@ class States extends Component {
               <CardBody>
                 <Form onSubmit={this.onFormSubmit} inline>
                   <FormGroup className="mb-2 mr-sm-2 mb-sm-0">
-                    <Label for="Industies">Country</Label>
+                    <Label for="Country">Country</Label>
                     <Select
                       autoFocus
                       autosize
@@ -73,7 +73,7 @@ class States extends Component {
                       name="Industies"
                       className="select-industry"
                       value={value}
-                      onChange={this.handleCountryChange}
+                      onChange={this.handleSelectChange}
                       options={countries}
                     />
                     <InputGroup>

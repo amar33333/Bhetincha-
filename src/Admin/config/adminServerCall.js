@@ -79,18 +79,6 @@ export const onExtraSectionGet = () =>
     }
   });
 
-export const onAreaPost = ({ area }) =>
-  axios({
-    method: "post",
-    url: AREA_URL,
-    data: {
-      name: area
-    },
-    headers: {
-      "Content-Type": "application/json"
-    }
-  });
-
 export const onCountryPost = ({ country }) => {
   console.log("country: ", country);
   console.log("url: ", COUNTRY_URL);
@@ -117,18 +105,6 @@ export const onCountryGet = () =>
     }
   });
 
-export const onCityPost = ({ city }) =>
-  axios({
-    method: "post",
-    url: CITY_URL,
-    data: {
-      name: city
-    },
-    headers: {
-      "Content-Type": "application/json"
-    }
-  });
-
 export const onStatePost = ({ state, country }) =>
   axios({
     method: "post",
@@ -143,14 +119,85 @@ export const onStatePost = ({ state, country }) =>
     }
   });
 
-export const onDistrictPost = ({ district }) =>
+export const onStateGet = () =>
+  axios({
+    method: "get",
+    url: STATE_URL,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
+export const onDistrictPost = ({ state, district, districtCode }) =>
   axios({
     method: "post",
     url: DISTRICT_URL,
     data: {
-      name: district
+      name: district,
+      state,
+      districtCode
     },
     headers: {
-      "Content-Type": "application/json"
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
+export const onDistrictGet = () =>
+  axios({
+    method: "get",
+    url: DISTRICT_URL,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
+export const onCityPost = ({ district, city }) =>
+  axios({
+    method: "post",
+    url: CITY_URL,
+    data: {
+      name: city,
+      district
+    },
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
+export const onCityGet = () =>
+  axios({
+    method: "get",
+    url: CITY_URL,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
+export const onAreaPost = ({ city, area }) =>
+  axios({
+    method: "post",
+    url: AREA_URL,
+    data: {
+      name: area,
+      city
+    },
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
+export const onAreaGet = () =>
+  axios({
+    method: "get",
+    url: AREA_URL,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
     }
   });
