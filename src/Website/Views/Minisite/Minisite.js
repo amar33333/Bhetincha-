@@ -9,21 +9,70 @@ import "./minisite.css";
 import BusinessFooter from "./components/BusinessFooter";
 
 class Minisite extends Component {
+  constructor(props) {
+    super(props);
+    this.logInToggle = this.logInToggle.bind(this);
+    this.state = {
+      loggedIn: true
+    };
+  }
   // const BUSINESSNAME = this.props.match.params.businessName;
+  //this.businessNavEl.state.jlaskjdf;lasjdl
   componentWillMount() {
     console.log(this.props);
   }
+
+  renderUploadOverlay = () => {
+    if (this.state.loggedIn) {
+      return (
+        <div className="minisite_banner__img__change__overlay">
+          <a href="#">
+            <span className="fa fa-camera">
+              <strong> Upload New Banner</strong>
+            </span>
+          </a>
+        </div>
+      );
+    }
+  };
+
+  renderAboutEdit = () => {
+    if (this.state.loggedIn) {
+      return (
+        <div className="minisite_about__edit__icon">
+          <a href="#">
+            <span className="fa fa-pencil" />
+          </a>
+        </div>
+      );
+    }
+  };
+
+  logInToggle() {
+    this.setState({
+      loggedIn: !this.state.loggedIn
+    });
+  }
+
   render() {
     return (
       <div>
         <MainNavbar name={this.props.match.params.businessName} />
-        <BusinessNav logo={logo} name={this.props.match.params.businessName} />
+        <BusinessNav
+          loginStat={this.state.loggedIn}
+          onLogInClicked={this.logInToggle}
+          logo={logo}
+          name={this.props.match.params.businessName}
+        />
         <img className="minisite_banner__img" src={banner} alt="banner" />
+        {console.log("fuck this shit" + this.businessNavEl)}
+        {this.renderUploadOverlay()}
         <div className="body-wrapper">
           <Container>
             <Row>
               <Col xs="12" md="12">
                 <h3 className="minisite_heading__text"> About us </h3>
+                {this.renderAboutEdit()}
               </Col>
             </Row>
             <Row>

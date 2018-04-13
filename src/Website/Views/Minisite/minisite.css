@@ -45,3 +45,31 @@
 .minisite_business__nav__item {
   text-transform: uppercase;
 }
+
+.minisite_banner__img__change__overlay {
+  position: absolute;
+  padding: 0.7rem;
+  background-color: cornflowerblue;
+  right: 1%;
+  top: 25%;
+  z-index: 99;
+  color: cornsilk;
+  display: none;
+}
+.minisite_banner__img__change__overlay:hover {
+  display: block;
+}
+
+.minisite_banner__img__change__overlay a,
+.minisite_banner__img__change__overlay a:hover {
+  text-transform: none;
+  color: cornsilk;
+}
+
+.minisite_banner__img:hover + .minisite_banner__img__change__overlay {
+  display: block;
+}
+
+.minisite_about__edit__icon {
+  display: inline-block;
+}
