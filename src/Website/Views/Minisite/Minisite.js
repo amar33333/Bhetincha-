@@ -39,11 +39,11 @@ class Minisite extends Component {
   renderAboutEdit = () => {
     if (this.state.loggedIn) {
       return (
-        <div className="minisite_about__edit__icon">
+        <span className="minisite_about__edit__icon">
           <a href="#">
-            <span className="fa fa-pencil" />
+            <i aria-hidden="true" className="fa fa-pencil" />
           </a>
-        </div>
+        </span>
       );
     }
   };
@@ -70,7 +70,7 @@ class Minisite extends Component {
         <div className="body-wrapper">
           <Container>
             <Row>
-              <Col xs="12" md="12">
+              <Col xs="12" md="12" className="minisite_heading__text_wrapper">
                 <h3 className="minisite_heading__text"> About us </h3>
                 {this.renderAboutEdit()}
               </Col>

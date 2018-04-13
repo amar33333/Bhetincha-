@@ -15,12 +15,19 @@
   /* overflow: hidden; */
 }
 
-.minisite_heading__text {
-  /* font-size: 2rem; */
-  text-align: center;
-  text-transform: uppercase;
+.minisite_heading__text_wrapper {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
   margin-top: 2rem;
   margin-bottom: 3rem;
+}
+
+.minisite_heading__text {
+  text-align: center !important;
+  text-transform: uppercase;
+  margin-bottom: 0px;
 }
 
 .minisite_heading__text::after {
@@ -72,4 +79,6 @@
 
 .minisite_about__edit__icon {
   display: inline-block;
+  font-size: 1.3rem;
+  margin-left: 1.2rem;
 }
