@@ -7,7 +7,8 @@ import {
   NavbarBrand,
   Nav,
   NavItem,
-  NavLink
+  NavLink,
+  Button
 } from "reactstrap";
 
 class BusinessNav extends Component {
@@ -15,7 +16,6 @@ class BusinessNav extends Component {
     super(props);
 
     this.toggle = this.toggle.bind(this);
-
     this.state = {
       isOpen: false
     };
@@ -67,6 +67,9 @@ class BusinessNav extends Component {
               </NavItem>
             </Nav>
           </Collapse>
+          <Button color="primary" onClick={this.props.onLogInClicked}>
+            {this.props.loginStat ? "Log out" : "Login"}
+          </Button>
         </Navbar>
       </div>
     );
