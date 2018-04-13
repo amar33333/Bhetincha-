@@ -1,4 +1,4 @@
-import { SEARCH_URL } from "./WEBSITEAPI";
+import { SEARCH_URL } from "./WEBSITE_API";
 import axios from "axios";
 
 export const onSearch = ({ query }) => {
