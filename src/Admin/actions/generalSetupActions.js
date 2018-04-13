@@ -4,7 +4,11 @@ import {
   onCityPost,
   onCountryPost,
   onStatePost,
-  onCountryGet
+  onCountryGet,
+  onStateGet,
+  onAreaGet,
+  onDistrictGet,
+  onCityGet
 } from "../config/adminServerCall";
 import {
   // AREA
@@ -37,6 +41,12 @@ import {
   FETCH_CITY_FULFILLED,
   FETCH_CITY_PENDING,
   FETCH_CITY_REJECTED,
+  FETCH_DISTRICT_FULFILLED,
+  FETCH_DISTRICT_PENDING,
+  FETCH_DISTRICT_REJECTED,
+  FETCH_STATE_FULFILLED,
+  FETCH_STATE_PENDING,
+  FETCH_STATE_REJECTED,
   FETCH_COUNTRY_FULFILLED,
   FETCH_COUNTRY_PENDING,
   FETCH_COUNTRY_REJECTED,
@@ -82,8 +92,22 @@ export const onStateSubmit = ({ state, country }) => dispatch => {
   dispatch({ type: CREATE_STATE_PENDING });
 };
 
-export const onDistrictSubmit = ({ district }) => dispatch => {
-  onDistrictPost({ district })
+export const onStateList = () => dispatch => {
+  onStateGet()
+    .then(response =>
+      dispatch({ type: FETCH_STATE_FULFILLED, payload: response.data })
+    )
+    .catch(error => dispatch({ type: FETCH_STATE_REJECTED, payload: error }));
+
+  dispatch({ type: FETCH_STATE_PENDING });
+};
+
+export const onDistrictSubmit = ({
+  state,
+  district,
+  districtCode
+}) => dispatch => {
+  onDistrictPost({ state, district, districtCode })
     .then(response =>
       dispatch({ type: CREATE_DISTRICT_FULFILLED, payload: response.data })
     )
@@ -94,8 +118,20 @@ export const onDistrictSubmit = ({ district }) => dispatch => {
   dispatch({ type: CREATE_DISTRICT_PENDING });
 };
 
-export const onCitySubmit = ({ city }) => dispatch => {
-  onCityPost({ city })
+export const onDistrictList = () => dispatch => {
+  onDistrictGet()
+    .then(response =>
+      dispatch({ type: FETCH_DISTRICT_FULFILLED, payload: response.data })
+    )
+    .catch(error =>
+      dispatch({ type: FETCH_DISTRICT_REJECTED, payload: error })
+    );
+
+  dispatch({ type: FETCH_DISTRICT_PENDING });
+};
+
+export const onCitySubmit = ({ district, city }) => dispatch => {
+  onCityPost({ district, city })
     .then(response =>
       dispatch({ type: CREATE_CITY_FULFILLED, payload: response.data })
     )
@@ -104,14 +140,34 @@ export const onCitySubmit = ({ city }) => dispatch => {
   dispatch({ type: CREATE_CITY_PENDING });
 };
 
-export const onAreaSubmit = ({ area }) => dispatch => {
-  onAreaPost({ area })
+export const onCityList = () => dispatch => {
+  onCityGet()
+    .then(response =>
+      dispatch({ type: FETCH_CITY_FULFILLED, payload: response.data })
+    )
+    .catch(error => dispatch({ type: FETCH_CITY_REJECTED, payload: error }));
+
+  dispatch({ type: FETCH_CITY_PENDING });
+};
+
+export const onAreaSubmit = ({ city, area }) => dispatch => {
+  onAreaPost({ city, area })
     .then(response =>
       dispatch({ type: CREATE_AREA_FULFILLED, payload: response.data })
     )
     .catch(error => dispatch({ type: CREATE_AREA_REJECTED, payload: error }));
 
   dispatch({ type: CREATE_AREA_PENDING });
+};
+
+export const onAreaList = () => dispatch => {
+  onAreaGet()
+    .then(response =>
+      dispatch({ type: FETCH_AREA_FULFILLED, payload: response.data })
+    )
+    .catch(error => dispatch({ type: FETCH_AREA_REJECTED, payload: error }));
+
+  dispatch({ type: FETCH_AREA_PENDING });
 };
 
 // export const onUnmountArea = () => ({

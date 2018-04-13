@@ -1,4 +1,6 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
+
 import {
   Button,
   Col,
@@ -11,24 +13,46 @@ import {
   FormGroup,
   Card,
   CardBody,
-  CardHeader
+  CardHeader,
+  Label
 } from "reactstrap";
 
+import Select from "react-select";
+
+import { onCitySubmit, onDistrictList } from "../../actions";
+
 class Cities extends Component {
-  state = { city: "" };
+  state = { city: "", district: "" };
+
+  componentWillMount() {
+    this.props.onDistrictList();
+  }
 
   onFormSubmit = event => {
     event.preventDefault();
-    // const { industry } = this.state;
-    // this.props.onIndustrySubmit({ industry });
-    this.setState({ city: "" });
+    const { city, district } = this.state;
+    this.props.onCitySubmit({ city, district: district.value });
+    this.setState({ city: "", district: "" });
   };
 
   onChange = (key, event) => {
     this.setState({ [key]: event.target.value });
   };
 
+  handleSelectChange = district => {
+    this.setState({ district });
+  };
+
   render() {
+    const districts = this.props.general_setup.districts
+      ? this.props.general_setup.districts.map(district => {
+          return { value: district.id, label: district.name };
+        })
+      : null;
+
+    const { district } = this.state;
+    const value = district && district.value;
+
     return (
       <div className="animated fadeIn">
         <Row className="hr-centered">
@@ -40,6 +64,18 @@ class Cities extends Component {
               <CardBody>
                 <Form onSubmit={this.onFormSubmit} inline>
                   <FormGroup className="mb-2 mr-sm-2 mb-sm-0">
+                    <Label for="Industies">District</Label>
+                    <Select
+                      autoFocus
+                      autosize
+                      clearable
+                      required
+                      name="Industies"
+                      className="select-industry"
+                      value={value}
+                      onChange={this.handleSelectChange}
+                      options={districts}
+                    />
                     <InputGroup>
                       <InputGroupAddon addonType="prepend">
                         <InputGroupText>
@@ -72,4 +108,10 @@ class Cities extends Component {
   }
 }
 
-export default Cities;
+export default connect(
+  ({ AdminContainer: { general_setup } }) => ({ general_setup }),
+  {
+    onCitySubmit,
+    onDistrictList
+  }
+)(Cities);
