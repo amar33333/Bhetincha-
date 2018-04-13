@@ -11,6 +11,8 @@ import {
 } from "./ADMIN_API";
 import axios from "axios";
 
+const access_token = "tKTS6MQ2oarrEahS0IQFnOCrrhZ87e";
+
 export const onIndustryPost = ({ industry }) =>
   axios({
     method: "post",
@@ -100,10 +102,20 @@ export const onCountryPost = ({ country }) => {
     },
     headers: {
       "Content-Type": "application/json",
-      Authorization: "Bearer " + "tKTS6MQ2oarrEahS0IQFnOCrrhZ87e"
+      Authorization: "Bearer " + access_token
     }
   });
 };
+
+export const onCountryGet = () =>
+  axios({
+    method: "get",
+    url: COUNTRY_URL,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
 
 export const onCityPost = ({ city }) =>
   axios({
@@ -117,15 +129,17 @@ export const onCityPost = ({ city }) =>
     }
   });
 
-export const onStatePost = ({ state }) =>
+export const onStatePost = ({ state, country }) =>
   axios({
     method: "post",
     url: STATE_URL,
     data: {
-      name: state
+      name: state,
+      country
     },
     headers: {
-      "Content-Type": "application/json"
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
     }
   });
 

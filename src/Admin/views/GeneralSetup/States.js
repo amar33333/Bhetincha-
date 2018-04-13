@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
 import {
   Button,
   Col,
@@ -7,6 +8,7 @@ import {
   InputGroup,
   InputGroupAddon,
   InputGroupText,
+  Label,
   Form,
   FormGroup,
   Card,
@@ -14,21 +16,43 @@ import {
   CardHeader
 } from "reactstrap";
 
+import Select from "react-select";
+
+import { onStateSubmit, onCountryList } from "../../actions";
+
 class States extends Component {
-  state = { state: "" };
+  state = { state: "", country: "" };
+
+  componentWillMount() {
+    this.props.onCountryList();
+  }
 
   onFormSubmit = event => {
     event.preventDefault();
-    // const { industry } = this.state;
-    // this.props.onIndustrySubmit({ industry });
-    this.setState({ state: "" });
+
+    const { state, country } = this.state;
+    this.props.onStateSubmit({ state, country: country.value });
+    this.setState({ state: "", country: "" });
   };
 
   onChange = (key, event) => {
     this.setState({ [key]: event.target.value });
   };
 
+  handleCountryChange = country => {
+    this.setState({ country });
+  };
+
   render() {
+    const countries = this.props.general_setup.countries
+      ? this.props.general_setup.countries.map(country => {
+          return { value: country.id, label: country.name };
+        })
+      : null;
+
+    const { country } = this.state;
+    const value = country && country.value;
+
     return (
       <div className="animated fadeIn">
         <Row className="hr-centered">
@@ -40,6 +64,18 @@ class States extends Component {
               <CardBody>
                 <Form onSubmit={this.onFormSubmit} inline>
                   <FormGroup className="mb-2 mr-sm-2 mb-sm-0">
+                    <Label for="Industies">Country</Label>
+                    <Select
+                      autoFocus
+                      autosize
+                      clearable
+                      required
+                      name="Industies"
+                      className="select-industry"
+                      value={value}
+                      onChange={this.handleCountryChange}
+                      options={countries}
+                    />
                     <InputGroup>
                       <InputGroupAddon addonType="prepend">
                         <InputGroupText>
@@ -72,4 +108,10 @@ class States extends Component {
   }
 }
 
-export default States;
+export default connect(
+  ({ AdminContainer: { general_setup } }) => ({ general_setup }),
+  {
+    onStateSubmit,
+    onCountryList
+  }
+)(States);

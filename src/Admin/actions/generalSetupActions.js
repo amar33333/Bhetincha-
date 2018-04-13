@@ -3,7 +3,8 @@ import {
   onDistrictPost,
   onCityPost,
   onCountryPost,
-  onStatePost
+  onStatePost,
+  onCountryGet
 } from "../config/adminServerCall";
 import {
   // AREA
@@ -30,6 +31,15 @@ import {
   CREATE_CITY_FULFILLED,
   CREATE_CITY_REJECTED,
   CREATE_CITY_PENDING,
+  FETCH_AREA_FULFILLED,
+  FETCH_AREA_PENDING,
+  FETCH_AREA_REJECTED,
+  FETCH_CITY_FULFILLED,
+  FETCH_CITY_PENDING,
+  FETCH_CITY_REJECTED,
+  FETCH_COUNTRY_FULFILLED,
+  FETCH_COUNTRY_PENDING,
+  FETCH_COUNTRY_REJECTED,
 
   // UNMOUNT
   UNMOUNT_AREA,
@@ -52,8 +62,18 @@ export const onCountrySubmit = ({ country }) => dispatch => {
   dispatch({ type: CREATE_COUNTRY_PENDING });
 };
 
-export const onStateSubmit = ({ state }) => dispatch => {
-  onStatePost({ state })
+export const onCountryList = () => dispatch => {
+  onCountryGet()
+    .then(response =>
+      dispatch({ type: FETCH_COUNTRY_FULFILLED, payload: response.data })
+    )
+    .catch(error => dispatch({ type: FETCH_COUNTRY_REJECTED, payload: error }));
+
+  dispatch({ type: FETCH_COUNTRY_PENDING });
+};
+
+export const onStateSubmit = ({ state, country }) => dispatch => {
+  onStatePost({ state, country })
     .then(response =>
       dispatch({ type: CREATE_STATE_FULFILLED, payload: response.data })
     )
