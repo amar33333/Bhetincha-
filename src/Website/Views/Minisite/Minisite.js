@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { BottomFooter, MainNavbar } from "../../components";
+import { connect } from "react-redux";
 import BusinessNav from "./components/BusinessNav";
 import banner from "../../../static/img/banner.jpg";
 import logo from "../../../static/img/avatar.jpg";
@@ -7,6 +8,10 @@ import { Container, Row, Col } from "reactstrap";
 
 import "./minisite.css";
 import BusinessFooter from "./components/BusinessFooter";
+
+import withReducer from "../../../config/withReducer";
+import reducers from "./reducers";
+import { onTestCalled } from "./actions";
 
 class Minisite extends Component {
   constructor(props) {
@@ -57,6 +62,7 @@ class Minisite extends Component {
   render() {
     return (
       <div>
+        <h1>Test message here: {this.props.test.msg}</h1>
         <MainNavbar name={this.props.match.params.businessName} />
         <BusinessNav
           loginStat={this.state.loggedIn}
@@ -100,4 +106,8 @@ class Minisite extends Component {
   }
 }
 
-export default Minisite;
+export default withReducer("MinisiteComponent", reducers)(
+  connect(({ MinisiteComponent: { test } }) => ({ test }), { onTestCalled })(
+    Minisite
+  )
+);
