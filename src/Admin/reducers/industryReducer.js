@@ -4,7 +4,8 @@ import {
   FETCH_INDUSTRY_REJECTED,
   CREATE_INDUSTRY_PENDING,
   CREATE_INDUSTRY_FULFILLED,
-  CREATE_INDUSTRY_REJECTED
+  CREATE_INDUSTRY_REJECTED,
+  UNMOUNT_INDUSTRY
 } from "../actions/types";
 
 const INITIAL_STATE = {
@@ -13,8 +14,15 @@ const INITIAL_STATE = {
 };
 
 export default function(state = INITIAL_STATE, action) {
-  // console.log("actionsL: ", action);
   switch (action.type) {
+    case UNMOUNT_INDUSTRY:
+      return {
+        ...state,
+        data: action.payload,
+        loading: false,
+        statusClass: "fulfilled"
+      };
+
     case CREATE_INDUSTRY_PENDING:
       return { ...state, loading: true, statusClass: "pending" };
 

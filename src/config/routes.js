@@ -7,7 +7,7 @@ import Website from "../Website";
 import Logout from "../Common/utils/Logout";
 
 const AsyncAdmin = props => (
-  <DynamicImport load={() => import("../Admin")}>
+  <DynamicImport {...props} load={() => import("../Admin")}>
     {Component => (Component === null ? <Loading /> : <Component {...props} />)}
   </DynamicImport>
 );

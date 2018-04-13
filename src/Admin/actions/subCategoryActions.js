@@ -2,7 +2,8 @@ import { onSubCategoryPost } from "../config/adminServerCall";
 import {
   CREATE_SUB_CATEGORY_FULFILLED,
   CREATE_SUB_CATEGORY_REJECTED,
-  CREATE_SUB_CATEGORY_PENDING
+  CREATE_SUB_CATEGORY_PENDING,
+  UNMOUNT_SUB_CATEGORY
 } from "./types";
 
 export const onSubCategorySubmit = ({
@@ -19,3 +20,8 @@ export const onSubCategorySubmit = ({
     );
   dispatch({ type: CREATE_SUB_CATEGORY_PENDING });
 };
+
+export const onUnmountSubCategory = () => ({
+  type: UNMOUNT_SUB_CATEGORY,
+  payload: null
+});

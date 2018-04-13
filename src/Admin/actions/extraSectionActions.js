@@ -2,7 +2,8 @@ import { onExtraSectionGet } from "../config/adminServerCall";
 import {
   FETCH_EXTRA_SECTION_FULFILLED,
   FETCH_EXTRA_SECTION_REJECTED,
-  FETCH_EXTRA_SECTION_PENDING
+  FETCH_EXTRA_SECTION_PENDING,
+  UNMOUNT_EXTRA_SECTION
 } from "./types";
 
 export const onExtraSectionList = () => dispatch => {
@@ -17,7 +18,7 @@ export const onExtraSectionList = () => dispatch => {
   dispatch({ type: FETCH_EXTRA_SECTION_PENDING });
 };
 
-// ({
-//   type: FETCH_USER,
-//   payload: onCategoryPost({ category, industry })
-// });
+export const onUnmountExtraSection = () => ({
+  type: UNMOUNT_EXTRA_SECTION,
+  payload: null
+});

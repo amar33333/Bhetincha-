@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Button } from "reactstrap";
 import { Link } from "react-router-dom";
 
-// import PermissionProvider from '../../../Utils/PermissionProvider';
+import CookiesProvider from "../../../../Common/utils/CookiesProvider";
 
 class ManageUsers extends Component {
   render() {

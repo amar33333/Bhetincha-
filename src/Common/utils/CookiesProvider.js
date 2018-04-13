@@ -26,14 +26,14 @@ class CookiesProvider {
   };
 
   static setCookies = (key, object, path, expires) => {
+    console.log("key: ", key);
+    console.log("object: ", object);
+    console.log("path: ", path);
+    console.log("expires: ", expires);
     cookies.set(key, object, {
       path,
       expires
     });
-    setTimeout(
-      () => console.log("cookies expired"),
-      moment(expires).valueOf() - moment().valueOf()
-    );
   };
 
   static getAllCookies = () => {

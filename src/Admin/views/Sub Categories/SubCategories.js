@@ -16,24 +16,24 @@ import Select from "react-select";
 import {
   onCategoryList,
   onExtraSectionList,
-  onSubCategorySubmit
+  onSubCategorySubmit,
+  onUnmountCategory,
+  onUnmountExtraSection,
+  onUnmountSubCategory
 } from "../../actions";
 
 class SubCategories extends Component {
   state = { subCategory: "", category: "", extraSection: [] };
 
   componentWillMount() {
-    this.getCategoriesList();
-    this.getExtraSectionsList();
+    this.props.onCategoryList();
+    this.props.onExtraSectionList();
   }
 
-  getCategoriesList = () => {
-    this.props.onCategoryList();
-  };
-
-  getExtraSectionsList = () => {
-    this.props.onExtraSectionList();
-  };
+  componentWillUnmount() {
+    this.props.onUnmountCategory();
+    this.props.onUnmountExtraSection();
+  }
 
   onChange = (key, event) => {
     this.setState({ [key]: event.target.value });
@@ -153,6 +153,9 @@ export default connect(
   {
     onCategoryList,
     onExtraSectionList,
-    onSubCategorySubmit
+    onSubCategorySubmit,
+    onUnmountCategory,
+    onUnmountExtraSection,
+    onUnmountSubCategory
   }
 )(SubCategories);
