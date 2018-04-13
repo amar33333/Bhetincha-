@@ -16,7 +16,6 @@ export const CLIENT_SECRET =
 export const GET_USER_INFO_URL = `${MAIN_URL}/${GET_USER_INFO}`;
 export const BUSINESS_INFO_URL = `${MAIN_URL}/${BUSINESS_INFO}`;
 export const BUSINESS_LIST_URL = `${MAIN_URL}/${BUSINESS_LIST}`;
-export const SEARCH_URL = "http://159.65.150.212:9200/category-index/_search/";
 export const REGISTER_URL = `${MAIN_URL}/${BUSINESS_INFO}`;
 // export const REGISTER_URL = `${MAIN_URL}/${API}/${ACCOUNTS}/${USER}`;
 

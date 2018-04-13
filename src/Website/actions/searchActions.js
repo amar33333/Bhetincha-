@@ -1,4 +1,4 @@
-import { onSearch } from "../../Common/utils/serverCall";
+import { onSearch } from "../config/websiteServerCall";
 
 import {
   SEARCH_QUERY_PENDING,
