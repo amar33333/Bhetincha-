@@ -41,7 +41,7 @@ export const onSubmit = ({ username, password, history }) => dispatch => {
           const initialDate = new Date();
 
           let expiryDate = moment(initialDate)
-            .add(10, "s")
+            .add(12, "h")
             .toDate();
 
           console.log("expire date: ", expiryDate);

@@ -10,7 +10,12 @@ import {
   AddUser,
   Industry,
   Categories,
-  SubCategories
+  SubCategories,
+  Areas,
+  Cities,
+  Countries,
+  Districts,
+  States
 } from "../views";
 
 class AdminRoute extends Component {
@@ -25,6 +30,36 @@ class AdminRoute extends Component {
           permission="CAN_VIEW_DASHBOARD"
         />
         {/* {this.getPermissionRoutes(permissions_set)} */}
+        <Route
+          path="/admin/areas"
+          name="Industry"
+          component={Areas}
+          permission="CAN_VIEW_DASHBOARD"
+        />
+        <Route
+          path="/admin/cities"
+          name="Cities"
+          component={Cities}
+          permission="CAN_VIEW_DASHBOARD"
+        />
+        <Route
+          path="/admin/districts"
+          name="Districts"
+          component={Districts}
+          permission="CAN_VIEW_DASHBOARD"
+        />
+        <Route
+          path="/admin/countries"
+          name="Countries"
+          component={Countries}
+          permission="CAN_VIEW_DASHBOARD"
+        />
+        <Route
+          path="/admin/states"
+          name="States"
+          component={States}
+          permission="CAN_VIEW_DASHBOARD"
+        />
         <Route
           path="/admin/industry"
           name="Industry"
