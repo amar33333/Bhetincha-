@@ -97,8 +97,8 @@ class Minisite extends Component {
   }
 }
 
-export default withReducer("MinisiteComponent", reducers)(
-  connect(({ MinisiteComponent: { minisite } }) => ({ ...minisite }), {
+export default withReducer("MinisiteContainer", reducers)(
+  connect(({ MinisiteContainer: { minisite } }) => ({ ...minisite }), {
     logInToggle
   })(Minisite)
 );
