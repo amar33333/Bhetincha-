@@ -9,7 +9,7 @@ class DynamicImport extends Component {
   componentDidMount() {
     console.log("component did mount dynamic simport ran ...", this.props);
 
-    if (!CookiesProvider.getTokenData()) {
+    if (this.props.history && !CookiesProvider.getTokenData()) {
       console.log("cookies is nulll");
       this.props.history.push("/logout");
     } else {
@@ -24,7 +24,7 @@ class DynamicImport extends Component {
   componentWillUpdate() {
     console.log("component WILL UPDATE Dynamic import ran ...", this.props);
 
-    if (!CookiesProvider.getTokenData()) {
+    if (this.props.history && !CookiesProvider.getTokenData()) {
       console.log("route: cookies is nulll: ", CookiesProvider.getTokenData());
       this.props.history.push("/logout");
     } else {
