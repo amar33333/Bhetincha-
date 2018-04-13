@@ -1,4 +1,8 @@
-const MAIN_URL = "http://159.65.150.212:8025";
+const HOST = "http://159.65.150.212";
+const MONGO_PORT = "8025";
+const ELASTIC_PORT = "9200";
+export const MAIN_URL = `${HOST}:${MONGO_PORT}`;
+export const ELASTIC_URL = `${HOST}:${ELASTIC_PORT}`;
 
 const GET_USER_INFO = "api/accounts/getuserinfo/";
 
@@ -20,5 +24,3 @@ export const REGISTER_URL = `${MAIN_URL}/${BUSINESS_INFO}`;
 // export const REGISTER_URL = `${MAIN_URL}/${API}/${ACCOUNTS}/${USER}`;
 
 export const O_TOKEN_URL = `${MAIN_URL}/${O_TOKEN}`;
-
-export { MAIN_URL };

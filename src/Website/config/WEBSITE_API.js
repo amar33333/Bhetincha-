@@ -1,1 +1,2 @@
-export const SEARCH_URL = "http://159.65.150.212:9200/category-index/_search/";
+import { ELASTIC_URL } from "../../Common/utils/API";
+export const SEARCH_URL = `${ELASTIC_URL}/category-index/_search/`;
