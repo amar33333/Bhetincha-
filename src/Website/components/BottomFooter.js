@@ -9,9 +9,13 @@ const DEVELOPER = "Tech Kunja";
 const OWNER = "Bhetincha.com";
 
 class BottomFooter extends Component {
-  render() {
+  constructor(props) {
+    super(props);
+  }
+
+  renderBottomFooter = () => {
     return (
-      <div className="footer p-3">
+      <div className={`footer footer-${this.props.theme} p-3`}>
         <Container className="bottom-footer mt-1 pt-3">
           <Row className="bottom-footer__nav">
             <ul>
@@ -46,6 +50,10 @@ class BottomFooter extends Component {
         </Container>
       </div>
     );
+  };
+
+  render() {
+    return <div>{this.renderBottomFooter()}</div>;
   }
 }
 

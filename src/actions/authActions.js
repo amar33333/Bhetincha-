@@ -12,6 +12,10 @@ import {
   COOKIES_LOAD_FULFILLED,
   LOGOUT_USER
 } from "./types";
+
+import { TOGGLE_LOGIN_MODAL } from "../Website/actions/types";
+
+import { TOGGLE_REGISTER_MODAL } from "../Website/actions/types";
 import CookiesProvider from "../Common/utils/CookiesProvider";
 
 export const loadCookies = () => ({
@@ -49,13 +53,13 @@ export const onSubmit = ({ username, password, history }) => dispatch => {
             "/",
             expiryDate
           );
-
           dispatch({
             type: FETCH_USER_FULFILLED,
             payload: {
               cookies: CookiesProvider.getAllCookies()
             }
           });
+          dispatch({ type: TOGGLE_LOGIN_MODAL });
           // if (userData.data.username === "admin") history.push("/admin");
 
           // else
@@ -82,9 +86,10 @@ export const onRegisterSubmit = ({
   email
 }) => dispatch => {
   onRegister({ username, password, business_name, email })
-    .then(response =>
-      dispatch({ type: CREATE_USER_FULFILLED, payload: response.data })
-    )
+    .then(response => {
+      dispatch({ type: CREATE_USER_FULFILLED, payload: response.data });
+      dispatch({ type: TOGGLE_REGISTER_MODAL });
+    })
     .catch(error => dispatch({ type: CREATE_USER_REJECTED, payload: error }));
 
   dispatch({ type: CREATE_USER_PENDING });

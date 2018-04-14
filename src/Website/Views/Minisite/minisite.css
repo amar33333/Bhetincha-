@@ -48,13 +48,15 @@
 .minisite_business__nav__item {
   text-transform: uppercase;
 }
-
+.minisite_banner__wrapper {
+  position: relative;
+}
 .minisite_banner__img__change__overlay {
   position: absolute;
   padding: 0.7rem;
   background-color: cornflowerblue;
   right: 1%;
-  top: 25%;
+  top: 10%;
   z-index: 99;
   color: cornsilk;
   display: none;
