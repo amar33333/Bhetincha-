@@ -21,15 +21,21 @@ import { onCountrySubmit } from "../../actions";
 class Countries extends Component {
   state = { country: "" };
 
+  access_token = this.props.cookies
+    ? this.props.cookies.token_data.access_token
+    : null;
+
   onFormSubmit = event => {
     event.preventDefault();
+
     const { country } = this.state;
-    this.props.onCountrySubmit({ country });
+
+    this.props.onCountrySubmit({ country, access_token: this.access_token });
     this.setState({ country: "" });
   };
 
   onChange = (key, event) => {
-    this.setState({ [key]: event.target.value });
+    this.setState({ [key]: event.target.value.toUpperCase() });
   };
 
   render() {
@@ -76,4 +82,6 @@ class Countries extends Component {
   }
 }
 
-export default connect(null, { onCountrySubmit })(Countries);
+export default connect(({ auth }) => ({ ...auth }), { onCountrySubmit })(
+  Countries
+);

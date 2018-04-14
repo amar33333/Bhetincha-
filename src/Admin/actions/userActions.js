@@ -19,8 +19,8 @@ import {
   FETCH_USER_PENDING
 } from "./types";
 
-export const onGroupSubmit = ({ group }) => dispatch => {
-  onGroupPost({ group })
+export const onGroupSubmit = ({ group, access_token }) => dispatch => {
+  onGroupPost({ group, access_token })
     .then(response =>
       dispatch({ type: CREATE_GROUP_FULFILLED, payload: response.data })
     )
@@ -28,8 +28,8 @@ export const onGroupSubmit = ({ group }) => dispatch => {
   dispatch({ type: CREATE_GROUP_PENDING });
 };
 
-export const onGroupList = () => dispatch => {
-  onGroupGet()
+export const onGroupList = ({ access_token }) => dispatch => {
+  onGroupGet({ access_token })
     .then(response => {
       dispatch({ type: FETCH_GROUP_FULFILLED, payload: response.data });
     })
@@ -45,7 +45,8 @@ export const onUserSubmit = ({
   username,
   email,
   password,
-  group
+  group,
+  access_token
 }) => dispatch => {
   onUserPost({
     first_name,
@@ -53,7 +54,8 @@ export const onUserSubmit = ({
     username,
     email,
     password,
-    group
+    group,
+    access_token
   })
     .then(response =>
       dispatch({ type: CREATE_USER_FULFILLED, payload: response.data })
@@ -62,8 +64,8 @@ export const onUserSubmit = ({
   dispatch({ type: CREATE_USER_PENDING });
 };
 
-export const onUserList = () => dispatch => {
-  onUserGet()
+export const onUserList = ({ access_token }) => dispatch => {
+  onUserGet({ access_token })
     .then(response => {
       dispatch({ type: FETCH_USER_FULFILLED, payload: response.data });
     })

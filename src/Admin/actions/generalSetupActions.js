@@ -59,9 +59,8 @@ import {
   UNMOUNT_CITY
 } from "./types";
 
-export const onCountrySubmit = ({ country }) => dispatch => {
-  console.log("coutnet: ", country);
-  onCountryPost({ country })
+export const onCountrySubmit = ({ country, access_token }) => dispatch => {
+  onCountryPost({ country, access_token })
     .then(response =>
       dispatch({ type: CREATE_COUNTRY_FULFILLED, payload: response.data })
     )
@@ -72,8 +71,8 @@ export const onCountrySubmit = ({ country }) => dispatch => {
   dispatch({ type: CREATE_COUNTRY_PENDING });
 };
 
-export const onCountryList = () => dispatch => {
-  onCountryGet()
+export const onCountryList = ({ access_token }) => dispatch => {
+  onCountryGet({ access_token })
     .then(response =>
       dispatch({ type: FETCH_COUNTRY_FULFILLED, payload: response.data })
     )
@@ -82,8 +81,8 @@ export const onCountryList = () => dispatch => {
   dispatch({ type: FETCH_COUNTRY_PENDING });
 };
 
-export const onStateSubmit = ({ state, country }) => dispatch => {
-  onStatePost({ state, country })
+export const onStateSubmit = ({ state, country, access_token }) => dispatch => {
+  onStatePost({ state, country, access_token })
     .then(response =>
       dispatch({ type: CREATE_STATE_FULFILLED, payload: response.data })
     )
@@ -92,8 +91,8 @@ export const onStateSubmit = ({ state, country }) => dispatch => {
   dispatch({ type: CREATE_STATE_PENDING });
 };
 
-export const onStateList = () => dispatch => {
-  onStateGet()
+export const onStateList = ({ access_token }) => dispatch => {
+  onStateGet({ access_token })
     .then(response =>
       dispatch({ type: FETCH_STATE_FULFILLED, payload: response.data })
     )
@@ -105,9 +104,10 @@ export const onStateList = () => dispatch => {
 export const onDistrictSubmit = ({
   state,
   district,
-  districtCode
+  districtCode,
+  access_token
 }) => dispatch => {
-  onDistrictPost({ state, district, districtCode })
+  onDistrictPost({ state, district, districtCode, access_token })
     .then(response =>
       dispatch({ type: CREATE_DISTRICT_FULFILLED, payload: response.data })
     )
@@ -118,8 +118,8 @@ export const onDistrictSubmit = ({
   dispatch({ type: CREATE_DISTRICT_PENDING });
 };
 
-export const onDistrictList = () => dispatch => {
-  onDistrictGet()
+export const onDistrictList = ({ access_token }) => dispatch => {
+  onDistrictGet({ access_token })
     .then(response =>
       dispatch({ type: FETCH_DISTRICT_FULFILLED, payload: response.data })
     )
@@ -130,8 +130,8 @@ export const onDistrictList = () => dispatch => {
   dispatch({ type: FETCH_DISTRICT_PENDING });
 };
 
-export const onCitySubmit = ({ district, city }) => dispatch => {
-  onCityPost({ district, city })
+export const onCitySubmit = ({ district, city, access_token }) => dispatch => {
+  onCityPost({ district, city, access_token })
     .then(response =>
       dispatch({ type: CREATE_CITY_FULFILLED, payload: response.data })
     )
@@ -140,8 +140,8 @@ export const onCitySubmit = ({ district, city }) => dispatch => {
   dispatch({ type: CREATE_CITY_PENDING });
 };
 
-export const onCityList = () => dispatch => {
-  onCityGet()
+export const onCityList = ({ access_token }) => dispatch => {
+  onCityGet({ access_token })
     .then(response =>
       dispatch({ type: FETCH_CITY_FULFILLED, payload: response.data })
     )
@@ -150,8 +150,8 @@ export const onCityList = () => dispatch => {
   dispatch({ type: FETCH_CITY_PENDING });
 };
 
-export const onAreaSubmit = ({ city, area }) => dispatch => {
-  onAreaPost({ city, area })
+export const onAreaSubmit = ({ city, area, access_token }) => dispatch => {
+  onAreaPost({ city, area, access_token })
     .then(response =>
       dispatch({ type: CREATE_AREA_FULFILLED, payload: response.data })
     )
@@ -160,8 +160,8 @@ export const onAreaSubmit = ({ city, area }) => dispatch => {
   dispatch({ type: CREATE_AREA_PENDING });
 };
 
-export const onAreaList = () => dispatch => {
-  onAreaGet()
+export const onAreaList = ({ access_token }) => dispatch => {
+  onAreaGet({ access_token })
     .then(response =>
       dispatch({ type: FETCH_AREA_FULFILLED, payload: response.data })
     )

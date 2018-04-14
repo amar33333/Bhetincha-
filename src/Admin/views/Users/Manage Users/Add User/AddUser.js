@@ -27,10 +27,14 @@ class AddUser extends Component {
       password: "",
       group: ""
     };
+
+    this.access_token = this.props.cookies
+      ? this.props.cookies.token_data.access_token
+      : null;
   }
 
   componentWillMount() {
-    this.props.onGroupList();
+    this.props.onGroupList({ access_token: this.access_token });
   }
 
   onChange = (key, event) => this.setState({ [key]: event.target.value });
@@ -48,13 +52,15 @@ class AddUser extends Component {
       group,
       email
     } = this.state;
+
     this.props.onUserSubmit({
       first_name,
       last_name,
       username,
       email,
       password,
-      group
+      group,
+      access_token: this.access_token
     });
     this.clearState();
   };
@@ -223,6 +229,6 @@ class AddUser extends Component {
 }
 
 export default connect(
-  ({ AdminContainer: { user_reducer } }) => ({ user_reducer }),
+  ({ AdminContainer: { user_reducer }, auth }) => ({ user_reducer, ...auth }),
   { onUserSubmit, onGroupList }
 )(AddUser);

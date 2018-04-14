@@ -23,9 +23,12 @@ import { onCityList, onAreaSubmit } from "../../actions";
 
 class Areas extends Component {
   state = { area: "", city: "" };
+  access_token = this.props.cookies
+    ? this.props.cookies.token_data.access_token
+    : null;
 
   componentWillMount() {
-    this.props.onCityList();
+    this.props.onCityList({ access_token: this.access_token });
   }
 
   onChange = (key, event) => {
@@ -38,8 +41,14 @@ class Areas extends Component {
 
   onFormSubmit = event => {
     event.preventDefault();
+
     const { area, city } = this.state;
-    this.props.onAreaSubmit({ area, city: city.value });
+
+    this.props.onAreaSubmit({
+      area,
+      city: city.value,
+      access_token: this.access_token
+    });
     this.setState({ area: "", city: "" });
   };
 
@@ -109,7 +118,7 @@ class Areas extends Component {
 }
 
 export default connect(
-  ({ AdminContainer: { general_setup } }) => ({ general_setup }),
+  ({ AdminContainer: { general_setup }, auth }) => ({ general_setup, ...auth }),
   {
     onCityList,
     onAreaSubmit
