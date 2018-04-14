@@ -7,11 +7,13 @@ import {
   STATE_URL,
   DISTRICT_URL,
   CITY_URL,
-  AREA_URL
+  AREA_URL,
+  USER_GROUPS_URL,
+  USERS_URL
 } from "./ADMIN_API";
 import axios from "axios";
 
-const access_token = "tKTS6MQ2oarrEahS0IQFnOCrrhZ87e";
+const access_token = "gOR9NbXeZoDVgVdx6Cwae9fXRYhFR9";
 
 export const onIndustryPost = ({ industry }) =>
   axios({
@@ -196,6 +198,64 @@ export const onAreaGet = () =>
   axios({
     method: "get",
     url: AREA_URL,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
+export const onGroupPost = ({ group }) =>
+  axios({
+    method: "post",
+    url: USER_GROUPS_URL,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    },
+    data: {
+      name: group
+    }
+  });
+
+export const onGroupGet = () =>
+  axios({
+    method: "get",
+    url: USER_GROUPS_URL,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
+export const onUserPost = ({
+  first_name,
+  last_name,
+  username,
+  password,
+  email,
+  group
+}) =>
+  axios({
+    method: "post",
+    url: USERS_URL,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    },
+    data: {
+      first_name,
+      last_name,
+      username,
+      password,
+      email,
+      group
+    }
+  });
+
+export const onUserGet = () =>
+  axios({
+    method: "get",
+    url: USERS_URL,
     headers: {
       "Content-Type": "application/json",
       Authorization: "Bearer " + access_token
