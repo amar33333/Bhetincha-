@@ -96,4 +96,4 @@ class Avatar extends Component {
   }
 }
 
-export default connect(({ auth }) => ({ ...auth }))(Avatar);
+export default connect(({ auth: { cookies } }) => ({ cookies }))(Avatar);

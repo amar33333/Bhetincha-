@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { Container } from "reactstrap";
-import { connect } from "react-redux";
 import {
   Header,
   Sidebar,
@@ -16,7 +15,7 @@ import businessReducers from "./reducers";
 
 import { ROUTE_PARAMS_BUSINESS_NAME } from "../config/CONSTANTS";
 
-class Admin extends Component {
+class Business extends Component {
   state = { nav: [], routes: [] };
 
   componentDidMount() {
@@ -82,6 +81,4 @@ class Admin extends Component {
   }
 }
 
-export default withReducer("BusinessContainer", businessReducers)(
-  connect(({ auth }) => ({ ...auth }))(Admin)
-);
+export default withReducer("BusinessContainer", businessReducers)(Business);

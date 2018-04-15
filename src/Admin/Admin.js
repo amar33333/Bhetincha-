@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { Container } from "reactstrap";
-import { connect } from "react-redux";
 import {
   Header,
   Sidebar,
@@ -56,6 +55,4 @@ class Admin extends Component {
   }
 }
 
-export default withReducer("AdminContainer", adminReducers)(
-  connect(({ auth }) => ({ ...auth }))(Admin)
-);
+export default withReducer("AdminContainer", adminReducers)(Admin);
