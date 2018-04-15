@@ -39,7 +39,7 @@ class MainNavbar extends Component {
               className="main-nav-search"
             />
           </NavItem>
-          <Avatar name={this.props.name} />
+          <Avatar group={this.props.group} name={this.props.name} />
         </Navbar>
       </div>
     );

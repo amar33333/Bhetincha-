@@ -52,7 +52,11 @@ class Minisite extends Component {
   render() {
     return (
       <div>
-        <MainNavbar name={this.props.match.params.businessName} />
+        <MainNavbar
+          group={this.props.cookies.user_data.groups[0].name}
+          name={this.props.cookies.user_data.username}
+          history={this.props.history}
+        />
         <BusinessNav
           loginStat={this.props.loggedIn}
           onLogInClicked={this.props.logInToggle}
@@ -61,7 +65,6 @@ class Minisite extends Component {
         />
         <div className="minisite_banner__wrapper">
           <img className="minisite_banner__img" src={banner} alt="banner" />
-          {console.log("fuck this shit" + this.businessNavEl)}
           {this.renderUploadOverlay()}
         </div>
         <div className="body-wrapper">
@@ -98,7 +101,10 @@ class Minisite extends Component {
 }
 
 export default withReducer("MinisiteContainer", reducers)(
-  connect(({ MinisiteContainer: { minisite } }) => ({ ...minisite }), {
-    logInToggle
-  })(Minisite)
+  connect(
+    ({ MinisiteContainer: { minisite }, auth }) => ({ ...minisite, ...auth }),
+    {
+      logInToggle
+    }
+  )(Minisite)
 );
