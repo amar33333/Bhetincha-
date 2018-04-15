@@ -13,9 +13,11 @@ import {
   LOGOUT_USER
 } from "./types";
 
-import { TOGGLE_LOGIN_MODAL } from "../Website/actions/types";
+import {
+  TOGGLE_LOGIN_MODAL,
+  TOGGLE_REGISTER_MODAL
+} from "../Website/actions/types";
 
-import { TOGGLE_REGISTER_MODAL } from "../Website/actions/types";
 import CookiesProvider from "../Common/utils/CookiesProvider";
 
 export const loadCookies = () => ({
@@ -65,7 +67,7 @@ export const onSubmit = ({ username, password, history }) => dispatch => {
           // else
           switch (userData.data.groups[0].name) {
             case "BUSINESS":
-              history.push(`/${userData.data.username}/dashboard`);
+              history.push(`/${userData.data.username}`);
               break;
 
             case "INDIVIDUAL":
