@@ -7,11 +7,11 @@ import {
   STATE_URL,
   DISTRICT_URL,
   CITY_URL,
-  AREA_URL
+  AREA_URL,
+  USER_GROUPS_URL,
+  USERS_URL
 } from "./ADMIN_API";
 import axios from "axios";
-
-const access_token = "tKTS6MQ2oarrEahS0IQFnOCrrhZ87e";
 
 export const onIndustryPost = ({ industry }) =>
   axios({
@@ -79,10 +79,8 @@ export const onExtraSectionGet = () =>
     }
   });
 
-export const onCountryPost = ({ country }) => {
-  console.log("country: ", country);
-  console.log("url: ", COUNTRY_URL);
-  return axios({
+export const onCountryPost = ({ country, access_token }) =>
+  axios({
     method: "post",
     url: COUNTRY_URL,
     data: {
@@ -93,9 +91,8 @@ export const onCountryPost = ({ country }) => {
       Authorization: "Bearer " + access_token
     }
   });
-};
 
-export const onCountryGet = () =>
+export const onCountryGet = ({ access_token }) =>
   axios({
     method: "get",
     url: COUNTRY_URL,
@@ -105,7 +102,7 @@ export const onCountryGet = () =>
     }
   });
 
-export const onStatePost = ({ state, country }) =>
+export const onStatePost = ({ state, country, access_token }) =>
   axios({
     method: "post",
     url: STATE_URL,
@@ -119,7 +116,7 @@ export const onStatePost = ({ state, country }) =>
     }
   });
 
-export const onStateGet = () =>
+export const onStateGet = ({ access_token }) =>
   axios({
     method: "get",
     url: STATE_URL,
@@ -129,7 +126,12 @@ export const onStateGet = () =>
     }
   });
 
-export const onDistrictPost = ({ state, district, districtCode }) =>
+export const onDistrictPost = ({
+  state,
+  district,
+  districtCode,
+  access_token
+}) =>
   axios({
     method: "post",
     url: DISTRICT_URL,
@@ -144,7 +146,7 @@ export const onDistrictPost = ({ state, district, districtCode }) =>
     }
   });
 
-export const onDistrictGet = () =>
+export const onDistrictGet = ({ access_token }) =>
   axios({
     method: "get",
     url: DISTRICT_URL,
@@ -154,7 +156,7 @@ export const onDistrictGet = () =>
     }
   });
 
-export const onCityPost = ({ district, city }) =>
+export const onCityPost = ({ district, city, access_token }) =>
   axios({
     method: "post",
     url: CITY_URL,
@@ -168,7 +170,7 @@ export const onCityPost = ({ district, city }) =>
     }
   });
 
-export const onCityGet = () =>
+export const onCityGet = ({ access_token }) =>
   axios({
     method: "get",
     url: CITY_URL,
@@ -178,7 +180,7 @@ export const onCityGet = () =>
     }
   });
 
-export const onAreaPost = ({ city, area }) =>
+export const onAreaPost = ({ city, area, access_token }) =>
   axios({
     method: "post",
     url: AREA_URL,
@@ -192,10 +194,69 @@ export const onAreaPost = ({ city, area }) =>
     }
   });
 
-export const onAreaGet = () =>
+export const onAreaGet = ({ access_token }) =>
   axios({
     method: "get",
     url: AREA_URL,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
+export const onGroupPost = ({ group, access_token }) =>
+  axios({
+    method: "post",
+    url: USER_GROUPS_URL,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    },
+    data: {
+      name: group
+    }
+  });
+
+export const onGroupGet = ({ access_token }) =>
+  axios({
+    method: "get",
+    url: USER_GROUPS_URL,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
+export const onUserPost = ({
+  first_name,
+  last_name,
+  username,
+  password,
+  email,
+  group,
+  access_token
+}) =>
+  axios({
+    method: "post",
+    url: USERS_URL,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    },
+    data: {
+      first_name,
+      last_name,
+      username,
+      password,
+      email,
+      group
+    }
+  });
+
+export const onUserGet = ({ access_token }) =>
+  axios({
+    method: "get",
+    url: USERS_URL,
     headers: {
       "Content-Type": "application/json",
       Authorization: "Bearer " + access_token

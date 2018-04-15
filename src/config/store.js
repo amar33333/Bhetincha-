@@ -22,7 +22,6 @@ export default () => {
   store.injectReducer = (key, reducer) => {
     store.asyncReducers[key] = reducer;
     store.replaceReducer(createReducer(store.asyncReducers));
-    return store;
   };
   return store;
 };

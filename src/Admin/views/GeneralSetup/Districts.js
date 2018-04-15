@@ -25,12 +25,25 @@ class Districts extends Component {
   constructor(props) {
     super(props);
     this.state = { district: "", districtCode: "", state: "" };
-    this.props.onStateList();
+
+    this.access_token = this.props.cookies
+      ? this.props.cookies.token_data.access_token
+      : null;
+
+    this.props.onStateList({ access_token: this.access_token });
   }
+
   onFormSubmit = event => {
     event.preventDefault();
+
     const { district, districtCode, state } = this.state;
-    this.props.onDistrictSubmit({ district, districtCode, state: state.value });
+
+    this.props.onDistrictSubmit({
+      district,
+      districtCode,
+      state: state.value,
+      access_token: this.access_token
+    });
     this.setState({ district: "", districtCode: "", state: "" });
   };
 
@@ -123,7 +136,7 @@ class Districts extends Component {
 }
 
 export default connect(
-  ({ AdminContainer: { general_setup } }) => ({ general_setup }),
+  ({ AdminContainer: { general_setup }, auth }) => ({ general_setup, ...auth }),
   {
     onStateList,
     onDistrictSubmit

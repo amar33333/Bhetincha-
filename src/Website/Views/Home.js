@@ -27,9 +27,7 @@ class Home extends Component {
     this.state = { query: "", result: "" };
   }
 
-  onChange = event => {
-    this.setState({ query: event.target.value });
-  };
+  onChange = event => this.setState({ query: event.target.value });
 
   onSearchQuerySubmit = event => {
     event.preventDefault();
@@ -37,56 +35,47 @@ class Home extends Component {
     this.props.onSearchQuerySubmit({ query });
   };
 
-  renderLoginRegister = () => {
-    if (!this.props.cookies) {
-      return (
-        <div className="home-page__header">
-          <Button
-            className="login-btn"
-            onClick={this.props.toggleLoginModal}
-            variant="raised"
-            color="primary"
-          >
-            Login
-          </Button>
+  renderLoginRegister = () =>
+    !this.props.cookies ? (
+      <div className="home-page__header">
+        <Button
+          className="login-btn"
+          onClick={this.props.toggleLoginModal}
+          variant="raised"
+          color="primary"
+        >
+          Login
+        </Button>
 
-          <CustomModal
-            isOpen={this.props.loginModal}
-            toggle={this.props.toggleLoginModal}
-            className={"modal-xs" + this.props.className}
-          >
-            <LoginModal {...this.props} />
-          </CustomModal>
+        <CustomModal
+          isOpen={this.props.loginModal}
+          toggle={this.props.toggleLoginModal}
+          className={"modal-xs" + this.props.className}
+        >
+          <LoginModal {...this.props} />
+        </CustomModal>
 
-          <CustomModal
-            isOpen={this.props.registerModal}
-            toggle={this.props.toggleRegisterModal}
-            className={"register_modal " + this.props.className}
-          >
-            <RegisterModal {...this.props} />
-          </CustomModal>
+        <CustomModal
+          isOpen={this.props.registerModal}
+          toggle={this.props.toggleRegisterModal}
+          className={"register_modal " + this.props.className}
+        >
+          <RegisterModal {...this.props} />
+        </CustomModal>
 
-          <Button
-            onClick={this.props.toggleRegisterModal}
-            variant="raised"
-            color="warning"
-          >
-            Register
-          </Button>
-        </div>
-      );
-    } else {
-      return (
-        <div className="home-page__header">
-          <Avatar
-            group={this.props.cookies.user_data.username}
-            history={this.props.history}
-            name={this.props.cookies.user_data.username}
-          />
-        </div>
-      );
-    }
-  };
+        <Button
+          onClick={this.props.toggleRegisterModal}
+          variant="raised"
+          color="warning"
+        >
+          Register
+        </Button>
+      </div>
+    ) : (
+      <div className="home-page__header">
+        <Avatar />
+      </div>
+    );
 
   render() {
     const result = this.props.search_result.data
@@ -147,7 +136,11 @@ class Home extends Component {
 }
 
 export default connect(
-  ({ auth, home, search_result }) => ({ ...auth, ...home, search_result }),
+  ({ auth: { cookies }, home, search_result }) => ({
+    cookies,
+    ...home,
+    search_result
+  }),
   {
     toggleLoginModal,
     toggleRegisterModal,

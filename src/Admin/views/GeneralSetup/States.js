@@ -22,16 +22,24 @@ import { onStateSubmit, onCountryList } from "../../actions";
 
 class States extends Component {
   state = { state: "", country: "" };
+  access_token = this.props.cookies
+    ? this.props.cookies.token_data.access_token
+    : null;
 
   componentWillMount() {
-    this.props.onCountryList();
+    this.props.onCountryList({ access_token: this.access_token });
   }
 
   onFormSubmit = event => {
     event.preventDefault();
 
     const { state, country } = this.state;
-    this.props.onStateSubmit({ state, country: country.value });
+
+    this.props.onStateSubmit({
+      state,
+      country: country.value,
+      access_token: this.access_token
+    });
     this.setState({ state: "", country: "" });
   };
 
@@ -109,7 +117,7 @@ class States extends Component {
 }
 
 export default connect(
-  ({ AdminContainer: { general_setup } }) => ({ general_setup }),
+  ({ AdminContainer: { general_setup }, auth }) => ({ general_setup, ...auth }),
   {
     onStateSubmit,
     onCountryList

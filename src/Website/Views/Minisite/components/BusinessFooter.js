@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
 import { Container, Row, Col } from "reactstrap";
 import { BottomFooter } from "../../../components";
 
@@ -43,13 +44,13 @@ class BusinessFooter extends Component {
               </div>
               <ul>
                 <li>
-                  <a href="#">Gallery</a>
+                  <Link to="#">Gallery</Link>
                 </li>
                 <li>
-                  <a href="#">Products</a>
+                  <Link to="#">Products</Link>
                 </li>
                 <li>
-                  <a href="#">Jobs</a>
+                  <Link to="#">Jobs</Link>
                 </li>
               </ul>
             </Col>

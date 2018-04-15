@@ -23,15 +23,24 @@ import { onCitySubmit, onDistrictList } from "../../actions";
 
 class Cities extends Component {
   state = { city: "", district: "" };
+  access_token = this.props.cookies
+    ? this.props.cookies.token_data.access_token
+    : null;
 
   componentWillMount() {
-    this.props.onDistrictList();
+    this.props.onDistrictList({ access_token: this.access_token });
   }
 
   onFormSubmit = event => {
     event.preventDefault();
+
     const { city, district } = this.state;
-    this.props.onCitySubmit({ city, district: district.value });
+
+    this.props.onCitySubmit({
+      city,
+      district: district.value,
+      access_token: this.access_token
+    });
     this.setState({ city: "", district: "" });
   };
 
@@ -109,7 +118,7 @@ class Cities extends Component {
 }
 
 export default connect(
-  ({ AdminContainer: { general_setup } }) => ({ general_setup }),
+  ({ AdminContainer: { general_setup }, auth }) => ({ general_setup, ...auth }),
   {
     onCitySubmit,
     onDistrictList

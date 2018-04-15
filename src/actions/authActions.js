@@ -13,9 +13,16 @@ import {
   LOGOUT_USER
 } from "./types";
 
-import { TOGGLE_LOGIN_MODAL } from "../Website/actions/types";
+import {
+  TOGGLE_LOGIN_MODAL,
+  TOGGLE_REGISTER_MODAL
+} from "../Website/actions/types";
 
-import { TOGGLE_REGISTER_MODAL } from "../Website/actions/types";
+import {
+  USER_GROUP_BUSINESS,
+  USER_GROUP_INDIVIDUAL
+} from "../config/CONSTANTS";
+
 import CookiesProvider from "../Common/utils/CookiesProvider";
 
 export const loadCookies = () => ({
@@ -63,7 +70,18 @@ export const onSubmit = ({ username, password, history }) => dispatch => {
           // if (userData.data.username === "admin") history.push("/admin");
 
           // else
-          history.push(`/${userData.data.username}`);
+          switch (userData.data.groups[0].name) {
+            case USER_GROUP_BUSINESS:
+              history.push(`/${userData.data.username}`);
+              break;
+
+            case USER_GROUP_INDIVIDUAL:
+              // history.push("/");
+              break;
+
+            default:
+              history.push(`/admin`);
+          }
         })
         .catch(error => {
           dispatch({ type: FETCH_USER_REJECTED, payload: error });

@@ -7,14 +7,9 @@ class DynamicImport extends Component {
   state = { component: null };
 
   componentDidMount() {
-    console.log("component did mount dynamic simport ran ...", this.props);
-
     if (this.props.history && !CookiesProvider.getTokenData()) {
-      console.log("cookies is nulll");
       this.props.history.push("/logout");
     } else {
-      console.log("cooies not NULLLL");
-      console.log("cookies: ", CookiesProvider.getTokenData());
       this.props
         .load()
         .then(module => this.setState(() => ({ component: module.default })));
@@ -22,14 +17,8 @@ class DynamicImport extends Component {
   }
 
   componentWillUpdate() {
-    console.log("component WILL UPDATE Dynamic import ran ...", this.props);
-
     if (this.props.history && !CookiesProvider.getTokenData()) {
-      console.log("route: cookies is nulll: ", CookiesProvider.getTokenData());
       this.props.history.push("/logout");
-    } else {
-      console.log("cooies not NULLLL");
-      console.log("cookies: ", CookiesProvider.getTokenData());
     }
   }
 
@@ -38,4 +27,4 @@ class DynamicImport extends Component {
   }
 }
 
-export default connect(({ auth }) => ({ ...auth }))(DynamicImport);
+export default connect(({ auth: { cookies } }) => ({ cookies }))(DynamicImport);

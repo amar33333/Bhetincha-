@@ -1,35 +1,28 @@
 import React, { Component } from "react";
-// import logo from "./logo.svg";
-// import { Image } from "semantic-ui-react";
-// import { Container, Icon } from "semantic-ui-react";
-import { Container, Row, Col } from "reactstrap";
+import { Container, Row } from "reactstrap";
+import { Link } from "react-router-dom";
 import moment from "moment";
 
-const DEVELOPER = "Tech Kunja";
-const OWNER = "Bhetincha.com";
+import { DEVELOPER, OWNER } from "../../config/CONSTANTS";
 
 class BottomFooter extends Component {
-  constructor(props) {
-    super(props);
-  }
-
-  renderBottomFooter = () => {
+  render() {
     return (
       <div className={`footer footer-${this.props.theme} p-3`}>
         <Container className="bottom-footer mt-1 pt-3">
           <Row className="bottom-footer__nav">
             <ul>
               <li className="bottom-footer__nav__item">
-                <a href="#">Site Map</a>
+                <Link to="#">Site Map</Link>
               </li>
               <li className="bottom-footer__nav__item">
-                <a href="#">Privacy Policy</a>
+                <Link to="#">Privacy Policy</Link>
               </li>
               <li className="bottom-footer__nav__item">
-                <a href="#">User Agreement</a>
+                <Link to="#">User Agreement</Link>
               </li>
               <li className="bottom-footer__nav__item">
-                <a href="#">Help</a>
+                <Link to="#">Help</Link>
               </li>
             </ul>
           </Row>
@@ -50,10 +43,6 @@ class BottomFooter extends Component {
         </Container>
       </div>
     );
-  };
-
-  render() {
-    return <div>{this.renderBottomFooter()}</div>;
   }
 }
 

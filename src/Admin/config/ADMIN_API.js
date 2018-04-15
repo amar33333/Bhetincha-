@@ -15,6 +15,9 @@ const CATEGORY = "category/category/";
 const SUB_CATEGORY = "category/subcategory/";
 const API = "api";
 const ACCOUNTS = "accounts";
+const USER = "user/";
+const PERMISSION = "permission";
+const GROUP = "group/";
 const EXTRA_SECTION_GET = "category/getsectionlist/";
 
 export const COUNTRY_URL = `${MAIN_URL}/${ADDRESS}/${COUNTRY}`;
@@ -28,3 +31,6 @@ export const INDUSTRY_URL = `${MAIN_URL}/${INDUSTRY}`;
 export const CATEGORY_URL = `${MAIN_URL}/${CATEGORY}`;
 export const EXTRA_SECTION_GET_URL = `${MAIN_URL}/${EXTRA_SECTION_GET}`;
 export const SUB_CATEGORY_URL = `${MAIN_URL}/${SUB_CATEGORY}`;
+
+export const USERS_URL = `${MAIN_URL}/${API}/${ACCOUNTS}/${USER}`;
+export const USER_GROUPS_URL = `${MAIN_URL}/${PERMISSION}/${GROUP}`;

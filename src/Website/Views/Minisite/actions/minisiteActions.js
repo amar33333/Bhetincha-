@@ -1,3 +1,3 @@
-import { TOGGLE_LOGGEDIN } from "./types";
+import { TOGGLE_EDIT } from "./types";
 
-export const logInToggle = () => ({ type: TOGGLE_LOGGEDIN });
+export const onEditClicked = () => ({ type: TOGGLE_EDIT });

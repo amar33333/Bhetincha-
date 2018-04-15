@@ -1,13 +1,13 @@
-import { TOGGLE_LOGGEDIN } from "../actions/types";
+import { TOGGLE_EDIT } from "../actions/types";
 
 const INITIAL_STATE = {
-  loggedIn: false
+  edit: false
 };
 
 export default function(state = INITIAL_STATE, action) {
   switch (action.type) {
-    case TOGGLE_LOGGEDIN:
-      return { ...state, loggedIn: !state.loggedIn };
+    case TOGGLE_EDIT:
+      return { ...state, edit: !state.edit };
     default:
       return state;
   }
