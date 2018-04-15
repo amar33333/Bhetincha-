@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import { Navbar, NavItem, Input } from "reactstrap";
 
@@ -19,11 +20,11 @@ class MainNavbar extends Component {
               className="main-nav-search"
             />
           </NavItem>
-          <Avatar />
+          {this.props.cookies && <Avatar />}
         </Navbar>
       </div>
     );
   }
 }
 
-export default MainNavbar;
+export default connect(({ auth: { cookies } }) => ({ cookies }))(MainNavbar);

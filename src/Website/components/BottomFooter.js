@@ -6,7 +6,7 @@ import moment from "moment";
 import { DEVELOPER, OWNER } from "../../config/CONSTANTS";
 
 class BottomFooter extends Component {
-  renderBottomFooter = () => {
+  render() {
     return (
       <div className={`footer footer-${this.props.theme} p-3`}>
         <Container className="bottom-footer mt-1 pt-3">
@@ -43,10 +43,6 @@ class BottomFooter extends Component {
         </Container>
       </div>
     );
-  };
-
-  render() {
-    return <div>{this.renderBottomFooter()}</div>;
   }
 }
 
