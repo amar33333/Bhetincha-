@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { BottomFooter, MainNavbar } from "../../components";
 import { connect } from "react-redux";
+import { Link } from "react-router-dom";
 import { BusinessNav, BusinessFooter } from "./components";
 import banner from "../../../static/img/banner.jpg";
 import logo from "../../../static/img/avatar.jpg";
@@ -21,11 +22,11 @@ class Minisite extends Component {
     if (this.props.loggedIn) {
       return (
         <div className="minisite_banner__img__change__overlay">
-          <a href="#">
+          <Link to="#">
             <span className="fa fa-camera">
               <strong> Upload New Banner</strong>
             </span>
-          </a>
+          </Link>
         </div>
       );
     }
@@ -35,9 +36,9 @@ class Minisite extends Component {
     if (this.props.loggedIn) {
       return (
         <span className="minisite_about__edit__icon">
-          <a href="#">
+          <Link to="#">
             <i aria-hidden="true" className="fa fa-pencil" />
-          </a>
+          </Link>
         </span>
       );
     }

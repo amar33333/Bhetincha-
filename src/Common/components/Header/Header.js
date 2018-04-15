@@ -1,5 +1,6 @@
 import React, { Component } from "react";
-import { NavbarToggler, NavbarBrand } from "reactstrap";
+import { NavbarToggler, NavbarBrand, Nav } from "reactstrap";
+import { Avatar } from "../../../Website/components";
 
 class Header extends Component {
   sidebarToggle(e) {
@@ -35,6 +36,28 @@ class Header extends Component {
         >
           <span className="navbar-toggler-icon" />
         </NavbarToggler>
+        <Nav className="ml-auto" navbar>
+          {/* <NavItem className="d-md-down-none">
+            <NavLink href="#">
+              <i className="icon-bell" />
+              <Badge pill color="danger">
+                5
+              </Badge>
+            </NavLink>
+          </NavItem>
+          <NavItem className="d-md-down-none">
+            <NavLink href="#">
+              <i className="icon-list" />
+            </NavLink>
+          </NavItem>
+          <NavItem className="d-md-down-none">
+            <NavLink href="#">
+              <i className="icon-location-pin" />
+            </NavLink>
+          </NavItem>
+          <HeaderDropdown /> */}
+          <Avatar />
+        </Nav>
         <NavbarToggler className="d-md-down-none" onClick={this.asideToggle}>
           <span className="navbar-toggler-icon" />
         </NavbarToggler>

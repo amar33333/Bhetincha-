@@ -28,9 +28,7 @@ class Home extends Component {
     this.state = { query: "", result: "" };
   }
 
-  onChange = event => {
-    this.setState({ query: event.target.value });
-  };
+  onChange = event => this.setState({ query: event.target.value });
 
   onSearchQuerySubmit = event => {
     event.preventDefault();
