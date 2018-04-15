@@ -63,7 +63,18 @@ export const onSubmit = ({ username, password, history }) => dispatch => {
           // if (userData.data.username === "admin") history.push("/admin");
 
           // else
-          history.push(`/${userData.data.username}`);
+          switch (userData.data.groups[0].name) {
+            case "BUSINESS":
+              history.push(`/${userData.data.username}/dashboard`);
+              break;
+
+            case "INDIVIDUAL":
+              // history.push("/");
+              break;
+
+            default:
+              history.push(`/admin`);
+          }
         })
         .catch(error => {
           dispatch({ type: FETCH_USER_REJECTED, payload: error });

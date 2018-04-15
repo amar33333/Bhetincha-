@@ -5,7 +5,7 @@ export default [
     id: "adminDashboard",
     badge: false,
     link: "/admin",
-    group: "admin"
+    group: "ADMIN"
   },
   {
     className: "fa fa-dashboard",
@@ -13,7 +13,7 @@ export default [
     id: "businessDashboard",
     badge: false,
     link: "/:businessName/dashboard",
-    group: "business"
+    group: "BUSINESS"
   },
   {
     className: "fa fa-dashboard",
@@ -21,7 +21,7 @@ export default [
     id: "profile",
     badge: false,
     link: "/",
-    group: "individual"
+    group: "INDIVIDUAL"
   },
   {
     className: "fa fa-bell",

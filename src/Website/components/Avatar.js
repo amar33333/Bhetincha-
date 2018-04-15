@@ -40,9 +40,9 @@ class Avatar extends Component {
     avatarItems.map(
       avatarItem =>
         !avatarItem.group ||
-        (avatarItem.group === "admin" &&
-          this.props.group !== "business" &&
-          this.props.group !== "individual") ||
+        (avatarItem.group === "ADMIN" &&
+          this.props.group !== "BUSINESS" &&
+          this.props.group !== "INDIVIDUAL") ||
         avatarItem.group === this.props.group ? (
           <div>
             <DropdownItem divider />

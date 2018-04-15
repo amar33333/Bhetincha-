@@ -80,7 +80,7 @@ class Home extends Component {
       return (
         <div className="home-page__header">
           <Avatar
-            group={this.props.cookies.user_data.username}
+            group={this.props.cookies.user_data.groups[0].name}
             history={this.props.history}
             name={this.props.cookies.user_data.username}
           />
