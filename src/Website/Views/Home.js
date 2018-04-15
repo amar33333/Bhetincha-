@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 // import { Link } from "react-router-dom";
-import { Button, Col, Row, Input, Form } from "reactstrap";
+import { Container, Button, Col, Row, Input, Form } from "reactstrap";
 import LaddaButton, { S, EXPAND_RIGHT } from "react-ladda";
 import { connect } from "react-redux";
 
@@ -85,51 +85,46 @@ class Home extends Component {
       : "";
 
     return (
-      <div>
-        <div className="body-wrapper">
-          {this.renderLoginRegister()}
+      <div className="body-wrapper">
+        {this.renderLoginRegister()}
+        <Container>
+          <Row>
+            <Col xs="12" className="centered">
+              <img alt="logo" src={logo} className="home-page__logo" />
+            </Col>
+          </Row>
           <Form onSubmit={this.onSearchQuerySubmit}>
-            <div className="centered">
-              <div className="home_page__centered__wrapper">
-                <Row className="home-page__logo">
-                  <Col xs="8" md="6">
-                    <img
-                      alt="logo"
-                      src={logo}
-                      size="large"
-                      className="img-fluid"
-                    />
-                  </Col>
-                </Row>
-                <Row className="home-page__searchbar">
-                  <Col xs="8" md="6">
-                    <Input
-                      autoFocus
-                      //fluid // warning says this is not a boolean
-                      className="home-page__searchbar__input"
-                      icon="search"
-                      placeholder="Search..."
-                      value={this.state.query}
-                      onChange={this.onChange}
-                    />
-                    <LaddaButton
-                      loading={this.props.search_result.loading}
-                      data-size={S}
-                      data-style={EXPAND_RIGHT}
-                      className="mt-3"
-                    >
-                      अवश्य भेटिन्छ
-                    </LaddaButton>
-                  </Col>
-                </Row>
-                <Row>
-                  <Col>{result}</Col>
-                </Row>
-              </div>
-            </div>
+            <Row>
+              <Col xs="12" className="home-page__searchbar ">
+                <Input
+                  autoFocus
+                  //fluid // warning says this is not a boolean
+                  className="home-page__searchbar__input centered"
+                  icon="search"
+                  placeholder="Search anything..."
+                  value={this.state.query}
+                  onChange={this.onChange}
+                />
+              </Col>
+            </Row>
+            <Row>
+              <Col xs="12" className="centered">
+                <LaddaButton
+                  loading={this.props.search_result.loading}
+                  data-size={S}
+                  data-style={EXPAND_RIGHT}
+                  className="mt-3"
+                >
+                  अवश्य भेटिन्छ
+                </LaddaButton>
+              </Col>
+            </Row>
           </Form>
-        </div>
-        <BottomFooter theme="light" />
+          <Row>
+            <Col className="centered">{result}</Col>
+          </Row>
+          <BottomFooter theme="light" />
+        </Container>
       </div>
     );
   }

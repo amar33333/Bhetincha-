@@ -5,7 +5,6 @@ body {
 .body-wrapper {
   background-color: rgb(255, 255, 255) !important;
   margin-top: 0px !important;
-  /* min-height: 50vh; */
   padding: 15px;
 }
 
@@ -85,8 +84,10 @@ input.main-nav-search::placeholder {
 }
 
 .centered {
-  /* height: 80vh; */
+  /* height: 75vh; */
+  width: 100%;
   display: flex;
+  flex-direction: row;
   justify-content: center;
   align-items: center;
 }
@@ -102,14 +103,18 @@ input.main-nav-search::placeholder {
   margin-top: 30px;
 }
 .home-page__logo {
-  display: flex;
-  text-align: center;
-  justify-content: center;
-  align-items: center;
+  margin-top: 10%;
+  width: 50%;
+}
+
+@media screen and (max-width: 450px) {
+  .home-page__logo {
+    margin-top: 50%;
+  }
 }
 
 .home-page__searchbar__input {
-  width: 100%;
+  width: 50%;
 }
 .home-page__category {
   display: flex;
