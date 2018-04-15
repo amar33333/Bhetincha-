@@ -79,10 +79,7 @@ class Home extends Component {
     } else {
       return (
         <div className="home-page__header">
-          <Avatar
-            group={this.props.cookies.user_data.groups[0].name}
-            name={this.props.cookies.user_data.username}
-          />
+          <Avatar />
         </div>
       );
     }

@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
 import {
   Dropdown,
   DropdownMenu,
@@ -7,47 +8,42 @@ import {
   Badge
 } from "reactstrap";
 
+import {
+  USER_GROUP_BUSINESS,
+  USER_GROUP_INDIVIDUAL,
+  ROUTE_PARAMS_BUSINESS_NAME
+} from "../../config/CONSTANTS";
+
 import { Link } from "react-router-dom";
 
 import avatar from "../../static/img/avatar.jpg";
 import avatarItems from "../config/avatarItems";
 
 class Avatar extends Component {
-  constructor(props) {
-    super(props);
+  state = { isOpen: false };
 
-    this.toggle = this.toggle.bind(this);
-    this.profileDropdowntoggle = this.profileDropdowntoggle.bind(this);
-    this.state = {
-      isOpen: false,
-      profileDropdownOpen: false
-    };
-  }
+  static getDerivedStateFromProps = nextProps => ({
+    group: nextProps.cookies.user_data.groups[0].name,
+    username: nextProps.cookies.user_data.username
+  });
 
-  profileDropdowntoggle() {
-    this.setState({
-      profileDropdownOpen: !this.state.profileDropdownOpen
-    });
-  }
-
-  toggle() {
-    this.setState({
-      isOpen: !this.state.isOpen
-    });
-  }
+  profileDropdowntoggle = () => this.setState({ isOpen: !this.state.isOpen });
 
   renderDropdownItems = () =>
     avatarItems.map(
       (avatarItem, i) =>
         !avatarItem.group ||
         (avatarItem.group === "ADMIN" &&
-          this.props.group !== "BUSINESS" &&
-          this.props.group !== "INDIVIDUAL") ||
-        avatarItem.group === this.props.group ? (
+          this.state.group !== USER_GROUP_BUSINESS &&
+          this.state.group !== USER_GROUP_INDIVIDUAL) ||
+        avatarItem.group === this.state.group ? (
           <div key={i}>
             <DropdownItem divider />
             <Link
-              to={avatarItem.link.replace(":businessName", this.props.name)}
+              to={avatarItem.link.replace(
+                ROUTE_PARAMS_BUSINESS_NAME,
+                this.state.username
+              )}
             >
               <div
                 onClick={this.profileDropdowntoggle}
@@ -58,7 +54,7 @@ class Avatar extends Component {
                     avatarItem.className
                   } profile-dropdown__item__icon`}
                 />
-                {`${avatarItem.title} `}
+                {avatarItem.title}
                 {avatarItem.badge && <Badge color="warning">4</Badge>}
               </div>
             </Link>
@@ -70,7 +66,7 @@ class Avatar extends Component {
     return (
       <div>
         <Dropdown
-          isOpen={this.state.profileDropdownOpen}
+          isOpen={this.state.isOpen}
           toggle={this.profileDropdowntoggle}
           direction="top"
         >
@@ -78,7 +74,7 @@ class Avatar extends Component {
             tag="span"
             onClick={this.profileDropdowntoggle}
             data-toggle="dropdown"
-            aria-expanded={this.state.profileDropdownOpen}
+            aria-expanded={this.state.isOpen}
           >
             <img className="avatar" alt="Avatar" src={avatar} />
             <i className="fa fa-chevron-down profile-dropdown__icon" />
@@ -89,7 +85,7 @@ class Avatar extends Component {
                 onClick={this.profileDropdowntoggle}
                 className="profile-dropdown__item__heading"
               >
-                <strong>{this.props.name}</strong>
+                <strong>{`Howdy, ${this.state.username}!`}</strong>
               </div>
               {this.renderDropdownItems()}
             </div>
@@ -100,4 +96,4 @@ class Avatar extends Component {
   }
 }
 
-export default Avatar;
+export default connect(({ auth }) => ({ ...auth }))(Avatar);

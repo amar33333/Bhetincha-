@@ -9,10 +9,6 @@ const DEVELOPER = "Tech Kunja";
 const OWNER = "Bhetincha.com";
 
 class BottomFooter extends Component {
-  constructor(props) {
-    super(props);
-  }
-
   renderBottomFooter = () => {
     return (
       <div className={`footer footer-${this.props.theme} p-3`}>

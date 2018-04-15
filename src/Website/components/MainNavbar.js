@@ -1,8 +1,8 @@
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
 import { Navbar, NavbarBrand, NavItem, Input } from "reactstrap";
 
 import Avatar from "./Avatar";
-// import { Image, Icon } from "semantic-ui-react";
 
 class MainNavbar extends Component {
   constructor(props) {
@@ -31,7 +31,9 @@ class MainNavbar extends Component {
     return (
       <div>
         <Navbar color="dark" dark expand="md" className="main-nav">
-          <NavbarBrand href="/">Bhetincha</NavbarBrand>
+          <Link to="/">
+            <NavbarBrand>Bhetincha</NavbarBrand>
+          </Link>
           <NavItem className="mx-auto">
             <Input
               icon="search"
@@ -39,7 +41,7 @@ class MainNavbar extends Component {
               className="main-nav-search"
             />
           </NavItem>
-          <Avatar group={this.props.group} name={this.props.name} />
+          <Avatar />
         </Navbar>
       </div>
     );
