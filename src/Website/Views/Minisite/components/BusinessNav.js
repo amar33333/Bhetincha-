@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import { Link } from "react-router-dom";
 
 import {
   Collapse,
@@ -23,24 +24,23 @@ class BusinessNav extends Component {
     return (
       <div>
         <Navbar color="faded" light expand="md">
-          <NavbarBrand href={`/${this.props.businessName}`}>
+          <Link to={`/${this.props.businessName}`} className="navbar-brand">
             <img
               src={this.props.logo}
               alt="brand-logo"
               className="main_nav__brand-logo"
             />
-            {/* {this.props.businessName} */}
-          </NavbarBrand>
+          </Link>
           <NavbarToggler onClick={this.toggle} />
           <Collapse isOpen={this.state.isOpen} navbar>
             <Nav className="ml-5" navbar>
               <NavItem active>
-                <NavLink
-                  href={`/${this.props.businessName}`}
-                  className="minisite_business__nav__item"
+                <Link
+                  to={`/${this.props.businessName}`}
+                  className="nav-link minisite_business__nav__item"
                 >
                   Home
-                </NavLink>
+                </Link>
               </NavItem>
               <NavItem>
                 <NavLink href="#" className="minisite_business__nav__item">
