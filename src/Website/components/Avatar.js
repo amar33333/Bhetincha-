@@ -38,13 +38,13 @@ class Avatar extends Component {
 
   renderDropdownItems = () =>
     avatarItems.map(
-      avatarItem =>
+      (avatarItem, i) =>
         !avatarItem.group ||
         (avatarItem.group === "ADMIN" &&
           this.props.group !== "BUSINESS" &&
           this.props.group !== "INDIVIDUAL") ||
         avatarItem.group === this.props.group ? (
-          <div>
+          <div key={i}>
             <DropdownItem divider />
             <Link
               to={avatarItem.link.replace(":businessName", this.props.name)}

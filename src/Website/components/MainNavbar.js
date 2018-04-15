@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Navbar, NavbarBrand, NavItem, Input } from "reactstrap";
 
-import { Avatar } from "../components";
+import Avatar from "./Avatar";
 // import { Image, Icon } from "semantic-ui-react";
 
 class MainNavbar extends Component {

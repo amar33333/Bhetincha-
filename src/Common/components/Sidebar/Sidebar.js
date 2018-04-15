@@ -160,7 +160,9 @@ class Sidebar extends Component {
           ? divider(item, idx)
           : item.label
             ? navLabel(item, idx)
-            : item.children ? navDropdown(item, idx) : navItem(item, idx);
+            : item.children
+              ? navDropdown(item, idx)
+              : navItem(item, idx);
 
     // nav list
     const navList = items => {
@@ -178,7 +180,7 @@ class Sidebar extends Component {
         <SidebarHeader />
         <SidebarForm />
         <nav className="sidebar-nav">
-          <Nav>{navList(this.props.nav.items)}</Nav>
+          <Nav>{navList(this.props.nav)}</Nav>
         </nav>
         <SidebarFooter />
         <SidebarMinimizer />

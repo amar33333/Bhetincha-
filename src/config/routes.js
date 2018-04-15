@@ -12,6 +12,12 @@ const AsyncAdmin = props => (
   </DynamicImport>
 );
 
+const AsyncBusiness = props => (
+  <DynamicImport history={props.history} load={() => import("../Business")}>
+    {Component => (Component === null ? <Loading /> : <Component {...props} />)}
+  </DynamicImport>
+);
+
 class MainRoute extends Component {
   render() {
     return (
@@ -29,6 +35,11 @@ class MainRoute extends Component {
           <Route exact path="/404" name="Page 404" component={Page404} />
           <Route exact path="/500" name="Page 500" component={Page500} />
           <Route path="/admin" name="Admin" component={AsyncAdmin} />
+          <Route
+            path="/:businessName/:businessRoute"
+            name="Business Dashboard"
+            component={AsyncBusiness}
+          />
           <Route path="/" name="Website" component={Website} />
         </Switch>
       </BrowserRouter>

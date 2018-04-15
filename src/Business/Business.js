@@ -10,13 +10,13 @@ import {
 } from "../Common/components";
 import nav from "./config/nav";
 
-import AdminRoute from "./config/routes";
+import BusinessRoute from "./config/routes";
 import withReducer from "../config/withReducer";
-import adminReducers from "./reducers";
-
-// Import Main styles for this application
+import businessReducers from "./reducers";
 
 class Admin extends Component {
+  state = { nav: [], routes: [] };
+
   componentDidMount() {
     document.body.classList.add(
       "app",
@@ -25,6 +25,27 @@ class Admin extends Component {
       "aside-menu-fixed",
       "aside-menu-hidden"
     );
+
+    const routes = {};
+    Object.keys(nav.routes).forEach(
+      key =>
+        (routes[
+          key.replace(":businessName", this.props.match.params.businessName)
+        ] =
+          nav.routes[key])
+    );
+
+    this.setState({
+      nav: nav.items.map(item => ({
+        ...item,
+        url: item.url.replace(
+          ":businessName",
+          this.props.match.params.businessName
+        )
+      })),
+
+      routes
+    });
   }
 
   componentWillUnmount() {
@@ -41,11 +62,11 @@ class Admin extends Component {
       <div className="app">
         <Header />
         <div className="app-body">
-          <Sidebar {...this.props} nav={nav.items} />
+          <Sidebar {...this.props} nav={this.state.nav} />
           <main className="main">
-            <Breadcrumb routes={nav.routes} />
+            <Breadcrumb routes={this.state.routes} />
             <Container fluid>
-              <AdminRoute {...this.props} />
+              <BusinessRoute params={this.props.match.params} />
             </Container>
           </main>
           <Aside />
@@ -56,6 +77,6 @@ class Admin extends Component {
   }
 }
 
-export default withReducer("AdminContainer", adminReducers)(
+export default withReducer("BusinessContainer", businessReducers)(
   connect(({ auth }) => ({ ...auth }))(Admin)
 );
