@@ -1,8 +1,10 @@
+import { ROUTE_PARAMS_BUSINESS_NAME } from "../../config/CONSTANTS";
+
 const items = {
   items: [
     {
       name: "Dashboard",
-      url: "/:businessName/dashboard",
+      url: `/${ROUTE_PARAMS_BUSINESS_NAME}/dashboard`,
       icon: "icon-speedometer",
       permission: "CAN_VIEW_DASHBOARD"
     }

@@ -18,6 +18,11 @@ import {
   TOGGLE_REGISTER_MODAL
 } from "../Website/actions/types";
 
+import {
+  USER_GROUP_BUSINESS,
+  USER_GROUP_INDIVIDUAL
+} from "../config/CONSTANTS";
+
 import CookiesProvider from "../Common/utils/CookiesProvider";
 
 export const loadCookies = () => ({
@@ -66,11 +71,11 @@ export const onSubmit = ({ username, password, history }) => dispatch => {
 
           // else
           switch (userData.data.groups[0].name) {
-            case "BUSINESS":
+            case USER_GROUP_BUSINESS:
               history.push(`/${userData.data.username}`);
               break;
 
-            case "INDIVIDUAL":
+            case USER_GROUP_INDIVIDUAL:
               // history.push("/");
               break;
 

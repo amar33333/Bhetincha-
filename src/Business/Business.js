@@ -14,6 +14,8 @@ import BusinessRoute from "./config/routes";
 import withReducer from "../config/withReducer";
 import businessReducers from "./reducers";
 
+import { ROUTE_PARAMS_BUSINESS_NAME } from "../config/CONSTANTS";
+
 class Admin extends Component {
   state = { nav: [], routes: [] };
 
@@ -30,7 +32,10 @@ class Admin extends Component {
     Object.keys(nav.routes).forEach(
       key =>
         (routes[
-          key.replace(":businessName", this.props.match.params.businessName)
+          key.replace(
+            ROUTE_PARAMS_BUSINESS_NAME,
+            this.props.match.params.businessName
+          )
         ] =
           nav.routes[key])
     );
@@ -39,7 +44,7 @@ class Admin extends Component {
       nav: nav.items.map(item => ({
         ...item,
         url: item.url.replace(
-          ":businessName",
+          ROUTE_PARAMS_BUSINESS_NAME,
           this.props.match.params.businessName
         )
       })),
