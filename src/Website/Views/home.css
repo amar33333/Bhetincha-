@@ -85,7 +85,7 @@ input.main-nav-search::placeholder {
 }
 
 .centered {
-  height: 80vh;
+  /* height: 80vh; */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -228,10 +228,7 @@ input.main-nav-search::placeholder {
 
 /* =======Footer========= */
 .footer {
-  position: absolute;
   min-height: 80px;
-  width: 100%;
-  bottom: 0;
 }
 .footer-dark a {
   color: rgb(146, 144, 144);
@@ -244,6 +241,9 @@ input.main-nav-search::placeholder {
 }
 
 .bottom-footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
   font-size: 0.7rem;
   border-top: 1px rgb(146, 144, 144) solid;
 }

@@ -90,8 +90,7 @@ class Minisite extends Component {
             </Row>
           </Container>
         </div>
-        <BusinessFooter />
-        <BottomFooter />
+        <BusinessFooter theme="dark" />
       </div>
     );
   }

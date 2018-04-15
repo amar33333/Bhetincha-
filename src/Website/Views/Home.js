@@ -24,7 +24,6 @@ import { BottomFooter } from "../components";
 class Home extends Component {
   constructor(props) {
     super(props);
-
     this.state = { query: "", result: "" };
   }
 
@@ -105,7 +104,12 @@ class Home extends Component {
               <div className="home_page__centered__wrapper">
                 <Row className="home-page__logo">
                   <Col xs="8" md="6">
-                    <img alt="logo" src={logo} size="large" />
+                    <img
+                      alt="logo"
+                      src={logo}
+                      size="large"
+                      className="img-fluid"
+                    />
                   </Col>
                 </Row>
                 <Row className="home-page__searchbar">

@@ -1,10 +1,11 @@
 import React, { Component } from "react";
 import { Container, Row, Col } from "reactstrap";
+import { BottomFooter } from "../../../components";
 
 class BusinessFooter extends Component {
   render() {
     return (
-      <div className="footer p-3">
+      <div className={`footer footer-${this.props.theme} p-3`}>
         <Container>
           <Row>
             <Col xs="12" md="4">
@@ -79,6 +80,7 @@ class BusinessFooter extends Component {
             </Col>
           </Row>
         </Container>
+        <BottomFooter theme={this.props.theme} />
       </div>
     );
   }
