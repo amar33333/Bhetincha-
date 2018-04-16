@@ -7,7 +7,7 @@ import banner from "../../../static/img/banner.jpg";
 import logo from "../../../static/img/avatar.jpg";
 import { Container, Row, Col } from "reactstrap";
 
-import { handleAboutUsSaved } from "./actions";
+import { handleAboutUsSave, onEditAboutUsClicked } from "./actions";
 
 import "react-quill/dist/quill.snow.css";
 import "./minisite.css";
@@ -28,9 +28,13 @@ class Minisite extends Component {
 
   renderAboutEdit = () => (
     <span className="minisite_about__edit__icon">
-      <Link to="#">
-        <i aria-hidden="true" className="fa fa-pencil" />
-      </Link>
+      {/* <Link to="#"> */}
+      <i
+        onClick={this.props.onEditAboutUsClicked}
+        aria-hidden="true"
+        className="fa fa-pencil"
+      />
+      {/* </Link> */}
     </span>
   );
 
@@ -44,22 +48,22 @@ class Minisite extends Component {
         />
         <div className="minisite_banner__wrapper">
           <img className="minisite_banner__img" src={banner} alt="banner" />
-          {this.props.minisite.edit && this.renderUploadOverlay()}
+          {this.props.minisite.edit.main && this.renderUploadOverlay()}
         </div>
         <div className="body-wrapper">
           <Container>
             <Row>
               <Col xs="12" md="12" className="minisite_heading__text_wrapper">
                 <h3 className="minisite_heading__text">About us</h3>
-                {this.props.minisite.edit && this.renderAboutEdit()}
+                {this.props.minisite.edit.main && this.renderAboutEdit()}
               </Col>
             </Row>
             <Row>
               <Col xs="12" md="12">
-                {this.props.minisite.edit ? (
+                {this.props.minisite.edit.aboutUs ? (
                   <AboutEditor
                     initialValue={this.props.minisite.data.aboutUs}
-                    onAboutUsSaved={this.props.handleAboutUsSaved}
+                    onAboutUsSave={this.props.handleAboutUsSave}
                   />
                 ) : (
                   <div
@@ -84,6 +88,6 @@ export default withReducer("MinisiteContainer", reducers)(
     ({ MinisiteContainer: { minisite } }) => ({
       minisite
     }),
-    { handleAboutUsSaved }
+    { handleAboutUsSave, onEditAboutUsClicked }
   )(Minisite)
 );
