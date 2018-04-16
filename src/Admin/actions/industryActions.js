@@ -9,8 +9,11 @@ import {
   UNMOUNT_INDUSTRY
 } from "./types";
 
-export const onIndustrySubmit = ({ industry }) => dispatch => {
-  onIndustryPost({ industry })
+export const onIndustrySubmit = ({ industry, access_token }) => dispatch => {
+  onIndustryPost({
+    industry,
+    access_token
+  })
     .then(response =>
       dispatch({ type: CREATE_INDUSTRY_FULFILLED, payload: response.data })
     )
@@ -21,8 +24,10 @@ export const onIndustrySubmit = ({ industry }) => dispatch => {
   dispatch({ type: CREATE_INDUSTRY_PENDING });
 };
 
-export const onIndustryList = () => dispatch => {
-  onIndustryGet()
+export const onIndustryList = ({ access_token }) => dispatch => {
+  onIndustryGet({
+    access_token
+  })
     .then(response =>
       dispatch({ type: FETCH_INDUSTRY_FULFILLED, payload: response.data })
     )

@@ -9,9 +9,15 @@ import {
 export const onSubCategorySubmit = ({
   category,
   subCategory,
-  extraSection
+  extraSection,
+  access_token
 }) => dispatch => {
-  onSubCategoryPost({ category, subCategory, extraSection })
+  onSubCategoryPost({
+    category,
+    subCategory,
+    extraSection,
+    access_token
+  })
     .then(response =>
       dispatch({ type: CREATE_SUB_CATEGORY_FULFILLED, payload: response.data })
     )
