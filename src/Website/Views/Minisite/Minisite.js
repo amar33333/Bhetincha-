@@ -2,11 +2,14 @@ import React, { Component } from "react";
 import { BottomFooter, MainNavbar } from "../../components";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
-import { BusinessNav, BusinessFooter } from "./components";
+import { BusinessNav, BusinessFooter, AboutEditor } from "./components";
 import banner from "../../../static/img/banner.jpg";
 import logo from "../../../static/img/avatar.jpg";
 import { Container, Row, Col } from "reactstrap";
 
+import { handleAboutUsSaved } from "./actions";
+
+import "react-quill/dist/quill.snow.css";
 import "./minisite.css";
 
 import withReducer from "../../../config/withReducer";
@@ -53,18 +56,19 @@ class Minisite extends Component {
             </Row>
             <Row>
               <Col xs="12" md="12">
-                <p className="text-center">
-                  Mollit et et enim non quis cillum excepteur non enim commodo
-                  excepteur.Aute in velit mollit labore eiusmod
-                  exercitation.Incididunt labore aliqua sint proident ut ad esse
-                  ex eu.Reprehenderit Lorem est reprehenderit consectetur
-                  est.Quis irure eiusmod in labore.Lorem.Mollit et et enim non
-                  quis cillum excepteur non enim commodo excepteur.Aute in velit
-                  mollit labore eiusmod exercitation.Incididunt labore aliqua
-                  sint proident ut ad esse ex eu.Reprehenderit Lorem est
-                  reprehenderit consectetur est.Quis irure eiusmod in
-                  labore.Lorem.
-                </p>
+                {this.props.minisite.edit ? (
+                  <AboutEditor
+                    initialValue={this.props.minisite.data.aboutUs}
+                    onAboutUsSaved={this.props.handleAboutUsSaved}
+                  />
+                ) : (
+                  <div
+                    className="quill ql-editor"
+                    dangerouslySetInnerHTML={{
+                      __html: this.props.minisite.data.aboutUs
+                    }}
+                  />
+                )}
               </Col>
             </Row>
           </Container>
@@ -76,7 +80,10 @@ class Minisite extends Component {
 }
 
 export default withReducer("MinisiteContainer", reducers)(
-  connect(({ MinisiteContainer: { minisite } }) => ({
-    minisite
-  }))(Minisite)
+  connect(
+    ({ MinisiteContainer: { minisite } }) => ({
+      minisite
+    }),
+    { handleAboutUsSaved }
+  )(Minisite)
 );
