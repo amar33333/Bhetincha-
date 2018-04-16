@@ -87,7 +87,7 @@ class Home extends Component {
     return (
       <div className="body-wrapper">
         {this.renderLoginRegister()}
-        <Container>
+        <Container className="full-height">
           <Row>
             <Col xs="12" className="centered">
               <img alt="logo" src={logo} className="home-page__logo" />
@@ -123,8 +123,8 @@ class Home extends Component {
           <Row>
             <Col className="centered">{result}</Col>
           </Row>
-          <BottomFooter theme="light" />
         </Container>
+        <BottomFooter theme="light" />
       </div>
     );
   }

@@ -23,7 +23,7 @@ class Avatar extends Component {
   state = { isOpen: false };
 
   static getDerivedStateFromProps = nextProps => ({
-    // group: nextProps.cookies.user_data.groups[0].name,
+    group: nextProps.cookies.user_data.groups[0].name,
     username: nextProps.cookies.user_data.username
   });
 

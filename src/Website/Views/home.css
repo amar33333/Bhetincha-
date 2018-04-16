@@ -3,9 +3,15 @@ body {
 }
 
 .body-wrapper {
+  position: relative;
+  min-height: 100%;
   background-color: rgb(255, 255, 255) !important;
   margin-top: 0px !important;
   padding: 15px;
+}
+
+.full-height {
+  min-height: 100%;
 }
 
 .nav-wrapper {
@@ -151,7 +157,8 @@ input.main-nav-search::placeholder {
   width: 30px;
 }
 
-.home-page__header .profile-dropdown__icon {
+.home-page__header .profile-dropdown__icon,
+.app .profile-dropdown__icon {
   color: brown;
 }
 
@@ -233,6 +240,7 @@ input.main-nav-search::placeholder {
 
 /* =======Footer========= */
 .footer {
+  position: relative;
   min-height: 80px;
 }
 .footer-dark a {

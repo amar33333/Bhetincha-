@@ -8,7 +8,7 @@ import "font-awesome/css/font-awesome.min.css";
 // Import Simple Line Icons Set
 import "simple-line-icons/css/simple-line-icons.css";
 
-import "bootstrap/dist/css/bootstrap.min.css";
+// import "bootstrap/dist/css/bootstrap.min.css";
 
 import "./static/scss/style.css";
 // import "../node_modules/@coreui/styles/scss/_dropdown-menu-right.scss";

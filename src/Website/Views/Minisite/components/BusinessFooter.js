@@ -80,8 +80,8 @@ class BusinessFooter extends Component {
               </Row>
             </Col>
           </Row>
+          <BottomFooter theme={this.props.theme} />
         </Container>
-        <BottomFooter theme={this.props.theme} />
       </div>
     );
   }
