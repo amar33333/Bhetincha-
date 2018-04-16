@@ -1,9 +1,12 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
 import { Button } from "reactstrap";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 
-class AboutEditor extends Component {
+import { handleAboutUsSave } from "../actions";
+
+class AboutUsEditor extends Component {
   static getDerivedStateFromProps(nextProps) {
     return {
       text: nextProps.initialValue ? nextProps.initialValue : ""
@@ -46,6 +49,15 @@ class AboutEditor extends Component {
   render() {
     return (
       <div>
+        <ReactQuill
+          modules={this.modules}
+          formats={this.formats}
+          value={this.state.text}
+          onChange={this.handleChange}
+        />
+        <Button onClick={() => this.props.handleAboutUsSave(this.state.text)}>
+          Save
+        </Button>
         <p>
           <strong>Preview:</strong>
         </p>
@@ -55,18 +67,9 @@ class AboutEditor extends Component {
             __html: this.state.text
           }}
         />
-        <ReactQuill
-          modules={this.modules}
-          formats={this.formats}
-          value={this.state.text}
-          onChange={this.handleChange}
-        />
-        <Button onClick={() => this.props.onAboutUsSave(this.state.text)}>
-          Save
-        </Button>
       </div>
     );
   }
 }
 
-export default AboutEditor;
+export default connect(null, { handleAboutUsSave })(AboutUsEditor);

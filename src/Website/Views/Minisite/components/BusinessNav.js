@@ -63,7 +63,7 @@ class BusinessNav extends Component {
             this.props.businessName ===
               this.props.cookies.user_data.username && (
               <Button color="primary" onClick={this.props.onEditMainClicked}>
-                {this.props.minisite.edit.main ? "View" : "Edit"}
+                {this.props.mainEdit ? "View" : "Edit"}
               </Button>
             )}
         </Navbar>
@@ -73,9 +73,9 @@ class BusinessNav extends Component {
 }
 
 export default connect(
-  ({ MinisiteContainer: { minisite }, auth: { cookies } }) => ({
+  ({ MinisiteContainer: { edit }, auth: { cookies } }) => ({
     cookies,
-    minisite
+    mainEdit: edit.main
   }),
   { onEditMainClicked }
 )(BusinessNav);

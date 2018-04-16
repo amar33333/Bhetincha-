@@ -1,4 +1,5 @@
 import { combineReducers } from "redux";
-import minisite from "./minisiteReducer";
+import crud from "./crudReducer";
+import edit from "./editReducers";
 
-export default combineReducers({ minisite });
+export default combineReducers({ crud, edit });

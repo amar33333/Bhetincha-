@@ -1,5 +1,5 @@
 import BusinessFooter from "./BusinessFooter";
 import BusinessNav from "./BusinessNav";
-import AboutEditor from "./AboutEditor";
+import AboutUs from "./AboutUs";
 
-export { BusinessFooter, BusinessNav, AboutEditor };
+export { BusinessFooter, BusinessNav, AboutUs };

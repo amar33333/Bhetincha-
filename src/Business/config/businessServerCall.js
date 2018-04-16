@@ -22,13 +22,12 @@ export const onBusinessAllGet = ({ access_token }) =>
     }
   });
 
-export const onBusinessEachGet = ({ id, access_token }) =>
+export const onBusinessEachGet = ({ id }) =>
   axios({
     method: "get",
     url: `${BUSINESS_URL}${id}`,
     headers: {
-      "Content-Type": "application/json",
-      Authorization: "Bearer " + access_token
+      "Content-Type": "application/json"
     }
   });
 
