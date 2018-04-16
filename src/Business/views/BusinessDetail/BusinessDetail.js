@@ -3,13 +3,13 @@ import { connect } from "react-redux";
 
 import { onBusinessSubmit } from "../../actions";
 
-class Dashboard extends Component {
+class BusinessDetail extends Component {
   render() {
-    return <div className="animated fadeIn">Hello Dashboard</div>;
+    return <div className="animated fadeIn">Hello BusinessDetail</div>;
   }
 }
 
 export default connect(
   ({ BusinessContainer: { name_of_reducer } }) => ({ name_of_reducer }),
   { onBusinessSubmit }
-)(Dashboard);
+)(BusinessDetail);

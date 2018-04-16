@@ -1,4 +1,9 @@
 import { combineReducers } from "redux";
-const createReducer = combineReducers({});
+
+import BusinessReducer from "./businessReducer";
+
+const createReducer = combineReducers({
+  business_reducer: BusinessReducer
+});
 
 export default createReducer;
