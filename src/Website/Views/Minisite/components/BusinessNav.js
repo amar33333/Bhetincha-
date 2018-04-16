@@ -13,7 +13,7 @@ import {
   Button
 } from "reactstrap";
 
-import { onEditClicked } from "../actions";
+import { onEditMainClicked } from "../actions";
 
 class BusinessNav extends Component {
   state = { isOpen: false };
@@ -62,8 +62,8 @@ class BusinessNav extends Component {
           {this.props.cookies &&
             this.props.businessName ===
               this.props.cookies.user_data.username && (
-              <Button color="primary" onClick={this.props.onEditClicked}>
-                {this.props.minisite.edit ? "View" : "Edit"}
+              <Button color="primary" onClick={this.props.onEditMainClicked}>
+                {this.props.minisite.edit.main ? "View" : "Edit"}
               </Button>
             )}
         </Navbar>
@@ -77,5 +77,5 @@ export default connect(
     cookies,
     minisite
   }),
-  { onEditClicked }
+  { onEditMainClicked }
 )(BusinessNav);
