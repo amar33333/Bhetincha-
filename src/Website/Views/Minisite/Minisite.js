@@ -50,7 +50,7 @@ class Minisite extends Component {
           <Container>
             <Row>
               <Col xs="12" md="12" className="minisite_heading__text_wrapper">
-                <h3 className="minisite_heading__text"> About us </h3>
+                <h3 className="minisite_heading__text">About us</h3>
                 {this.props.minisite.edit && this.renderAboutEdit()}
               </Col>
             </Row>

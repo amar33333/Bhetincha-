@@ -39,29 +39,39 @@ class Business extends Component {
           nav.routes[key])
     );
 
-    const items = [];
-    nav.items.forEach(item => {
-      let temp = item.url
-        ? {
-            ...item,
-            url: item.url.replace(
+    const items = nav.items.map(item => {
+      const temp = {};
+      if (item.name) {
+        temp.name = item.name.replace(
+          ROUTE_PARAMS_BUSINESS_NAME,
+          this.props.match.params.businessName
+        );
+      }
+      if (item.url) {
+        temp.url = item.url.replace(
+          ROUTE_PARAMS_BUSINESS_NAME,
+          this.props.match.params.businessName
+        );
+      }
+      if (item.children) {
+        item.children = item.children.map(child => {
+          const childTemp = {};
+          if (child.name) {
+            childTemp.name = child.name.replace(
               ROUTE_PARAMS_BUSINESS_NAME,
               this.props.match.params.businessName
-            )
+            );
           }
-        : item;
-
-      temp = item.name
-        ? {
-            ...item,
-            name: item.name.replace(
+          if (child.url) {
+            childTemp.url = child.url.replace(
               ROUTE_PARAMS_BUSINESS_NAME,
               this.props.match.params.businessName
-            )
+            );
           }
-        : item;
-
-      items.push(temp);
+          return { ...child, ...childTemp };
+        });
+      }
+      return { ...item, ...temp };
     });
 
     this.setState({
