@@ -61,7 +61,7 @@ class AboutEditor extends Component {
           value={this.state.text}
           onChange={this.handleChange}
         />
-        <Button onClick={() => this.props.onAboutUsSaved(this.state.text)}>
+        <Button onClick={() => this.props.onAboutUsSave(this.state.text)}>
           Save
         </Button>
       </div>

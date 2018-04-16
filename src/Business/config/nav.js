@@ -7,6 +7,16 @@ const items = {
       url: `/${ROUTE_PARAMS_BUSINESS_NAME}/dashboard`,
       icon: "icon-speedometer",
       permission: "CAN_VIEW_DASHBOARD"
+    },
+    {
+      title: true,
+      name: `${ROUTE_PARAMS_BUSINESS_NAME}`
+    },
+    {
+      name: "Business Detail",
+      url: `/${ROUTE_PARAMS_BUSINESS_NAME}/business-detail`,
+      icon: "fa fa-map-o",
+      permission: "CAN_VIEW_USERS"
     }
   ]
 };
