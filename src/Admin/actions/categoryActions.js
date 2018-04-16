@@ -9,8 +9,16 @@ import {
   UNMOUNT_CATEGORY
 } from "./types";
 
-export const onCategorySubmit = ({ category, industry }) => dispatch => {
-  onCategoryPost({ category, industry })
+export const onCategorySubmit = ({
+  category,
+  industry,
+  access_token
+}) => dispatch => {
+  onCategoryPost({
+    category,
+    industry,
+    access_token
+  })
     .then(response =>
       dispatch({ type: CREATE_CATEGORY_FULFILLED, payload: response.data })
     )
@@ -20,8 +28,10 @@ export const onCategorySubmit = ({ category, industry }) => dispatch => {
   dispatch({ type: CREATE_CATEGORY_PENDING });
 };
 
-export const onCategoryList = () => dispatch => {
-  onCategoryGet()
+export const onCategoryList = ({ access_token }) => dispatch => {
+  onCategoryGet({
+    access_token
+  })
     .then(response =>
       dispatch({ type: FETCH_CATEGORY_FULFILLED, payload: response.data })
     )

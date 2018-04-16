@@ -13,7 +13,7 @@ import {
 } from "./ADMIN_API";
 import axios from "axios";
 
-export const onIndustryPost = ({ industry }) =>
+export const onIndustryPost = ({ industry, access_token }) =>
   axios({
     method: "post",
     url: INDUSTRY_URL,
@@ -21,20 +21,52 @@ export const onIndustryPost = ({ industry }) =>
       name: industry
     },
     headers: {
-      "Content-Type": "application/json"
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
     }
   });
 
-export const onIndustryGet = () =>
+export const onIndustryGet = ({ access_token }) =>
   axios({
     method: "get",
     url: INDUSTRY_URL,
     headers: {
-      "Content-Type": "application/json"
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
     }
   });
 
-export const onCategoryPost = ({ category, industry }) =>
+export const onIndustryEachGet = ({ id, access_token }) =>
+  axios({
+    method: "get",
+    url: `${INDUSTRY_URL}${id}/`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
+export const onCategoryEachGet = ({ id, access_token }) =>
+  axios({
+    method: "get",
+    url: `${CATEGORY_URL}${id}/`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
+export const onSubCategoryEachGet = ({ id, access_token }) =>
+  axios({
+    method: "get",
+    url: `${SUB_CATEGORY_URL}${id}/`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
+export const onCategoryPost = ({ category, industry, access_token }) =>
   axios({
     method: "post",
     url: CATEGORY_URL,
@@ -43,20 +75,27 @@ export const onCategoryPost = ({ category, industry }) =>
       industry
     },
     headers: {
-      "Content-Type": "application/json"
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
     }
   });
 
-export const onCategoryGet = () =>
+export const onCategoryGet = ({ access_token }) =>
   axios({
     method: "get",
     url: CATEGORY_URL,
     headers: {
-      "Content-Type": "application/json"
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
     }
   });
 
-export const onSubCategoryPost = ({ category, extraSection, subCategory }) =>
+export const onSubCategoryPost = ({
+  category,
+  extraSection,
+  subCategory,
+  access_token
+}) =>
   axios({
     method: "post",
     url: SUB_CATEGORY_URL,
@@ -66,16 +105,18 @@ export const onSubCategoryPost = ({ category, extraSection, subCategory }) =>
       name: subCategory
     },
     headers: {
-      "Content-Type": "application/json"
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
     }
   });
 
-export const onExtraSectionGet = () =>
+export const onExtraSectionGet = ({ access_token }) =>
   axios({
     method: "get",
     url: EXTRA_SECTION_GET_URL,
     headers: {
-      "Content-Type": "application/json"
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
     }
   });
 

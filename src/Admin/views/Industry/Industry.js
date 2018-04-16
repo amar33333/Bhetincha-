@@ -31,8 +31,12 @@ class Industry extends Component {
     loading: true
   };
 
+  access_token = this.props.cookies
+    ? this.props.cookies.token_data.access_token
+    : null;
+
   componentWillMount() {
-    this.props.onIndustryList();
+    this.props.onIndustryList({ access_token: this.access_token });
   }
 
   componentWillUnmount() {
@@ -42,7 +46,7 @@ class Industry extends Component {
   onFormSubmit = event => {
     event.preventDefault();
     const { industry } = this.state;
-    this.props.onIndustrySubmit({ industry });
+    this.props.onIndustrySubmit({ industry, access_token: this.access_token });
     this.setState({ industry: "" });
   };
 
@@ -199,6 +203,6 @@ class Industry extends Component {
 }
 
 export default connect(
-  ({ AdminContainer: { industries } }) => ({ industries }),
+  ({ AdminContainer: { industries }, auth }) => ({ industries, ...auth }),
   { onIndustrySubmit, onIndustryList, onUnmountIndustry }
 )(Industry);

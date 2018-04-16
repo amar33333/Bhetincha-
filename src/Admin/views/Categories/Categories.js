@@ -31,8 +31,12 @@ class Categories extends Component {
     industry: ""
   };
 
+  access_token = this.props.cookies
+    ? this.props.cookies.token_data.access_token
+    : null;
+
   componentWillMount() {
-    this.props.onIndustryList();
+    this.props.onIndustryList({ access_token: this.access_token });
   }
 
   componentWillUnmount() {
@@ -49,7 +53,8 @@ class Categories extends Component {
     console.log("asdqwew;asdad;A: ", category, industry);
     this.props.onCategorySubmit({
       industry: industry.value,
-      category
+      category,
+      access_token: this.access_token
     });
     this.setState({ category: "", industry: "" });
   };
@@ -153,6 +158,6 @@ class Categories extends Component {
 }
 
 export default connect(
-  ({ AdminContainer: { industries } }) => ({ industries }),
+  ({ AdminContainer: { industries }, auth }) => ({ industries, ...auth }),
   { onCategorySubmit, onIndustryList, onUnmountIndustry, onUnmountCategory }
 )(Categories);
