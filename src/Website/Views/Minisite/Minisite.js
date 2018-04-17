@@ -1,45 +1,30 @@
 import React, { Component } from "react";
 import { MainNavbar } from "../../components";
 import { connect } from "react-redux";
-import { Link } from "react-router-dom";
-import { BusinessNav, BusinessFooter, AboutUs } from "./components";
-import banner from "../../../static/img/banner.jpg";
-import logo from "../../../static/img/avatar.jpg";
-
-import { onBusinessGet } from "./actions";
+import { BusinessNav, BusinessFooter, AboutUs, CoverPhoto } from "./components";
+import { Loading, Page404 } from "../../../Common/pages";
 
 import "./minisite.css";
 
 import withReducer from "../../../config/withReducer";
+import { onBusinessGet } from "./actions";
 import reducers from "./reducers";
 
 class Minisite extends Component {
-  // componentDidMount() {
-  //   this.props.onBusinessGet({ id: 52 });
-  // }
-
-  renderUploadOverlay = () => (
-    <div className="minisite_banner__img__change__overlay">
-      <Link to="#">
-        <span className="fa fa-camera">
-          <strong> Upload New Banner</strong>
-        </span>
-      </Link>
-    </div>
-  );
+  componentDidMount() {
+    this.props.onBusinessGet({
+      username: this.props.match.params.businessName
+    });
+  }
 
   render() {
+    if (this.props.mainLoading) return <Loading />;
+    if (this.props.mainNotFound) return <Page404 />;
     return (
       <div>
         <MainNavbar />
-        <BusinessNav
-          logo={logo}
-          businessName={this.props.match.params.businessName}
-        />
-        <div className="minisite_banner__wrapper">
-          <img className="minisite_banner__img" src={banner} alt="banner" />
-          {this.props.mainEdit && this.renderUploadOverlay()}
-        </div>
+        <BusinessNav businessName={this.props.data.business_name} />
+        <CoverPhoto />
         <div className="body-wrapper">
           <AboutUs />
         </div>
@@ -51,8 +36,11 @@ class Minisite extends Component {
 
 export default withReducer("MinisiteContainer", reducers)(
   connect(
-    ({ MinisiteContainer: { edit } }) => ({
-      mainEdit: edit.main
+    ({ MinisiteContainer: { edit, crud } }) => ({
+      mainEdit: edit.main,
+      mainLoading: edit.mainLoading,
+      mainNotFound: edit.mainNotFound,
+      data: crud
     }),
     { onBusinessGet }
   )(Minisite)
