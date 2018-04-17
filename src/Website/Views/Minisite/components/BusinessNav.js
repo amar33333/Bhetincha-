@@ -7,7 +7,6 @@ import {
   Collapse,
   Navbar,
   NavbarToggler,
-  NavbarBrand,
   Nav,
   NavItem,
   NavLink,
@@ -64,7 +63,7 @@ class BusinessNav extends Component {
             this.props.businessName ===
               this.props.cookies.user_data.username && (
               <Button color="primary" onClick={this.props.onEditMainClicked}>
-                {this.props.mainEdit ? "View" : "Edit"}
+                {this.props.mainEdit ? "Preview" : "Edit Data"}
               </Button>
             )}
         </Navbar>

@@ -1,6 +1,7 @@
 import {
   UPDATE_ABOUT_FULFILLED,
-  FETCH_BUSINESS_FULFILLED
+  FETCH_BUSINESS_FULFILLED,
+  UPDATE_COVER_PHOTO_FULFILLED
 } from "../actions/types";
 
 const INITIAL_STATE = {
@@ -21,10 +22,9 @@ const INITIAL_STATE = {
 
 export default function(state = INITIAL_STATE, action) {
   switch (action.type) {
-    case UPDATE_ABOUT_FULFILLED:
-      return { ...state, ...action.payload };
-
     case FETCH_BUSINESS_FULFILLED:
+    case UPDATE_ABOUT_FULFILLED:
+    case UPDATE_COVER_PHOTO_FULFILLED:
       return { ...state, ...action.payload };
 
     default:
