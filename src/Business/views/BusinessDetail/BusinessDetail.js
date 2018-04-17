@@ -18,7 +18,7 @@ import {
 } from "reactstrap";
 
 import {
-  onBusinessSubmit,
+  onBusinessCreate,
   onIndustryList,
   onIndustryEachList,
   onCategoryEachList,
@@ -39,6 +39,8 @@ class BusinessDetail extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      business_name: "",
+      business_tagline: "",
       first_name: "",
       last_name: "",
       username: "",
@@ -69,7 +71,8 @@ class BusinessDetail extends Component {
       about_us_tagline: "",
       about_us: "",
       established_year: "",
-      company_type: ""
+      company_type: "",
+      payment_method: []
     };
 
     this.access_token = this.props.cookies
@@ -166,6 +169,7 @@ class BusinessDetail extends Component {
 
   onFormSubmit = event => {
     event.preventDefault();
+    console.log("stte data: ", this.state);
     this.props.onBusinessCreate({
       data: this.state,
       access_token: this.access_token
@@ -175,6 +179,8 @@ class BusinessDetail extends Component {
 
   clearState = () =>
     this.setState({
+      business_name: "",
+      business_tagline: "",
       first_name: "",
       last_name: "",
       username: "",
@@ -205,7 +211,8 @@ class BusinessDetail extends Component {
       about_us_tagline: "",
       about_us: "",
       established_year: "",
-      company_type: ""
+      company_type: "",
+      payment_method: []
     });
 
   _handleKeyPress = event => {
@@ -236,7 +243,6 @@ class BusinessDetail extends Component {
   };
 
   render() {
-    console.log("business; ", this.props);
     const industries = this.props.industries
       ? this.props.industries.map(industry => {
           return { value: industry.id, label: industry.name };
@@ -257,6 +263,24 @@ class BusinessDetail extends Component {
           })
         : null;
 
+    const paymentMethods = this.props.payment_methods
+      ? this.props.payment_methods.map(paymentMethod => {
+          return { value: paymentMethod.id, label: paymentMethod.name };
+        })
+      : null;
+
+    const companyTypes = this.props.company_types
+      ? this.props.company_types.map(companyType => {
+          return { value: companyType.id, label: companyType.name };
+        })
+      : null;
+
+    const { company_type } = this.state;
+    const valueCompanyType = company_type && company_type.value;
+
+    const { payment_method } = this.state;
+    const valuePaymentMethod = payment_method;
+
     const { category } = this.state;
     const valueCategory = category && category.value;
 
@@ -265,9 +289,6 @@ class BusinessDetail extends Component {
 
     const { sub_category } = this.state;
     const valueSubCategory = sub_category;
-
-    // console.log("categorry: ", valueCategory);
-    // console.log("sub_categorry: ", valueSubCategory);
 
     //PRIMARY ADDRESS
     const countries = this.props.countries
@@ -324,6 +345,198 @@ class BusinessDetail extends Component {
             </CardHeader>
             <CardBody>
               <form onSubmit={this.onFormSubmit}>
+                <Card>
+                  <CardHeader>
+                    <strong>Business Details</strong>
+                  </CardHeader>
+                  <CardBody>
+                    <Row>
+                      <Col xs="12" md="12">
+                        <FormGroup>
+                          <Label for="bname">Business Name</Label>
+                          <Input
+                            autoFocus
+                            required
+                            type="text"
+                            value={this.state.business_name}
+                            onChange={this.onChange.bind(this, "business_name")}
+                            onKeyDown={this._handleKeyPress}
+                          />
+                        </FormGroup>
+                      </Col>
+                    </Row>
+                    <Row>
+                      <Col xs="12" md="12">
+                        <FormGroup>
+                          <Label for="bname">Business Tagline</Label>
+                          <Input
+                            type="text"
+                            value={this.state.business_tagline}
+                            onChange={this.onChange.bind(
+                              this,
+                              "business_tagline"
+                            )}
+                            onKeyDown={this._handleKeyPress}
+                          />
+                        </FormGroup>
+                      </Col>
+                    </Row>
+                    <Row>
+                      <Col xs="12" md="12">
+                        <FormGroup>
+                          <Label for="group">Business Industry</Label>
+                          <Select
+                            required
+                            name="Industry"
+                            placeholder="Select an Industry"
+                            noResultsText="No Data Found"
+                            value={valueIndustry}
+                            onChange={this.handleSelectChange.bind(
+                              this,
+                              "industry"
+                            )}
+                            options={industries}
+                          />
+                        </FormGroup>
+                      </Col>
+                    </Row>
+                    <Row>
+                      <Col xs="12" md="12">
+                        <FormGroup>
+                          <Label for="group">Business Category</Label>
+                          <Select
+                            required
+                            name="Industry"
+                            placeholder="Select a Category"
+                            noResultsText="No Data Found"
+                            value={valueCategory}
+                            onChange={this.handleSelectChange.bind(
+                              this,
+                              "category"
+                            )}
+                            options={categories}
+                          />
+                        </FormGroup>
+                      </Col>
+                    </Row>
+                    <Row>
+                      <Col xs="12" md="12">
+                        <FormGroup>
+                          <Label for="group">Business Sub Category</Label>
+                          <Select
+                            required
+                            name="Industry"
+                            placeholder="Select Sub Category (Multiple if any)"
+                            noResultsText="No Data Found"
+                            multi
+                            //removeSelected={false}
+                            closeOnSelect={false}
+                            value={valueSubCategory}
+                            onChange={this.handleSelectChange.bind(
+                              this,
+                              "sub_category"
+                            )}
+                            options={subCategories}
+                          />
+                        </FormGroup>
+                      </Col>
+                    </Row>
+                    <Row>
+                      <Col xs="12" md="12">
+                        <FormGroup>
+                          <Label for="business_email">Business_email</Label>
+                          <Input
+                            required
+                            type="email"
+                            value={this.state.business_email}
+                            onKeyDown={this._handleKeyPress}
+                            onChange={this.onChange.bind(
+                              this,
+                              "business_email"
+                            )}
+                          />
+                        </FormGroup>
+                      </Col>
+                    </Row>
+                    <Row>
+                      <Col xs="12" md="12">
+                        <FormGroup>
+                          <Label for="group">Payment Methods</Label>
+                          <Select
+                            required
+                            name="Payment Method"
+                            multi
+                            //removeSelected={false}
+                            closeOnSelect={false}
+                            placeholder="Select Payment Methods (Multiple if any)"
+                            noResultsText="No Data Found"
+                            value={valuePaymentMethod}
+                            onChange={this.handleSelectChange.bind(
+                              this,
+                              "payment_method"
+                            )}
+                            options={paymentMethods}
+                          />
+                        </FormGroup>
+                      </Col>
+                    </Row>
+                    <Row>
+                      <Col xs="6" md="6">
+                        <FormGroup>
+                          <Label for="fname">First Name</Label>
+                          <Input
+                            required
+                            type="text"
+                            value={this.state.first_name}
+                            onChange={this.onChange.bind(this, "first_name")}
+                            innerRef={input => {
+                              this.nameInput = input;
+                            }}
+                            onKeyDown={this._handleKeyPress}
+                          />
+                        </FormGroup>
+                      </Col>
+                      <Col xs="6" md="6">
+                        <FormGroup>
+                          <Label for="lname">Last Name</Label>
+                          <Input
+                            required
+                            type="text"
+                            value={this.state.last_name}
+                            onKeyDown={this._handleKeyPress}
+                            onChange={this.onChange.bind(this, "last_name")}
+                          />
+                        </FormGroup>
+                      </Col>
+                    </Row>
+                    <Row>
+                      <Col xs="12" md="6">
+                        <FormGroup>
+                          <Label for="username">Username</Label>
+                          <Input
+                            required
+                            type="text"
+                            value={this.state.username}
+                            onKeyDown={this._handleKeyPress}
+                            onChange={this.onChange.bind(this, "username")}
+                          />
+                        </FormGroup>
+                      </Col>
+                      <Col xs="12" md="6">
+                        <FormGroup>
+                          <Label for="pass">Password</Label>
+                          <Input
+                            required
+                            type="password"
+                            value={this.state.password}
+                            onKeyDown={this._handleKeyPress}
+                            onChange={this.onChange.bind(this, "password")}
+                          />
+                        </FormGroup>
+                      </Col>
+                    </Row>
+                  </CardBody>
+                </Card>
                 <Card>
                   <CardHeader>
                     <strong>Business Primary Address</strong>
@@ -517,7 +730,7 @@ class BusinessDetail extends Component {
                   </CardHeader>
                   <CardBody>
                     <FileBase64
-                      multiple={true}
+                      multiple={false}
                       onDone={this.getFiles.bind(this, "business_logo")}
                     />
                   </CardBody>
@@ -529,168 +742,11 @@ class BusinessDetail extends Component {
                   </CardHeader>
                   <CardBody>
                     <FileBase64
-                      multiple={true}
+                      multiple={false}
                       onDone={this.getFiles.bind(this, "business_cover_image")}
                     />
                   </CardBody>
                 </Card>
-                <Row>
-                  <Col xs="6" md="6">
-                    <FormGroup>
-                      <Label for="bname">Business Name</Label>
-                      <Input
-                        required
-                        type="text"
-                        value={this.state.business_name}
-                        onChange={this.onChange.bind(this, "business_name")}
-                        onKeyDown={this._handleKeyPress}
-                      />
-                    </FormGroup>
-                  </Col>
-                </Row>
-                <Row>
-                  <Col xs="6" md="6">
-                    <FormGroup>
-                      <Label for="bname">Business Tagline</Label>
-                      <Input
-                        type="text"
-                        value={this.state.business_tagline}
-                        onChange={this.onChange.bind(this, "business_tagline")}
-                        onKeyDown={this._handleKeyPress}
-                      />
-                    </FormGroup>
-                  </Col>
-                </Row>
-                <Row>
-                  <Col xs="12" md="12">
-                    <FormGroup>
-                      <Label for="group">Business Industry</Label>
-                      <Select
-                        autoFocus
-                        required
-                        name="Industry"
-                        placeholder="Select an Industry"
-                        noResultsText="No Data Found"
-                        value={valueIndustry}
-                        onChange={this.handleSelectChange.bind(
-                          this,
-                          "industry"
-                        )}
-                        options={industries}
-                      />
-                    </FormGroup>
-                  </Col>
-                </Row>
-                <Row>
-                  <Col xs="12" md="12">
-                    <FormGroup>
-                      <Label for="group">Business Category</Label>
-                      <Select
-                        required
-                        name="Industry"
-                        placeholder="Select a Category"
-                        noResultsText="No Data Found"
-                        value={valueCategory}
-                        onChange={this.handleSelectChange.bind(
-                          this,
-                          "category"
-                        )}
-                        options={categories}
-                      />
-                    </FormGroup>
-                  </Col>
-                </Row>
-                <Row>
-                  <Col xs="12" md="12">
-                    <FormGroup>
-                      <Label for="group">Business Sub Category</Label>
-                      <Select
-                        required
-                        name="Industry"
-                        placeholder="Select Sub Category (Multiple if any)"
-                        noResultsText="No Data Found"
-                        multi
-                        //removeSelected={false}
-                        closeOnSelect={false}
-                        value={valueSubCategory}
-                        onChange={this.handleSelectChange.bind(
-                          this,
-                          "sub_category"
-                        )}
-                        options={subCategories}
-                      />
-                    </FormGroup>
-                  </Col>
-                </Row>
-                <Row>
-                  <Col xs="12" md="6">
-                    <FormGroup>
-                      <Label for="business_email">Business_email</Label>
-                      <Input
-                        required
-                        type="email"
-                        value={this.state.business_email}
-                        onKeyDown={this._handleKeyPress}
-                        onChange={this.onChange.bind(this, "business_email")}
-                      />
-                    </FormGroup>
-                  </Col>
-                </Row>
-                <Row>
-                  <Col xs="6" md="6">
-                    <FormGroup>
-                      <Label for="fname">First Name</Label>
-                      <Input
-                        required
-                        type="text"
-                        value={this.state.first_name}
-                        onChange={this.onChange.bind(this, "first_name")}
-                        innerRef={input => {
-                          this.nameInput = input;
-                        }}
-                        onKeyDown={this._handleKeyPress}
-                      />
-                    </FormGroup>
-                  </Col>
-                  <Col xs="6" md="6">
-                    <FormGroup>
-                      <Label for="lname">Last Name</Label>
-                      <Input
-                        required
-                        type="text"
-                        value={this.state.last_name}
-                        onKeyDown={this._handleKeyPress}
-                        onChange={this.onChange.bind(this, "last_name")}
-                      />
-                    </FormGroup>
-                  </Col>
-                </Row>
-                <Row>
-                  <Col xs="12" md="6">
-                    <FormGroup>
-                      <Label for="username">Username</Label>
-                      <Input
-                        required
-                        type="text"
-                        value={this.state.username}
-                        onKeyDown={this._handleKeyPress}
-                        onChange={this.onChange.bind(this, "username")}
-                      />
-                    </FormGroup>
-                  </Col>
-                  <Col xs="12" md="6">
-                    <FormGroup>
-                      <Label for="pass">Password</Label>
-                      <Input
-                        required
-                        type="password"
-                        value={this.state.password}
-                        onKeyDown={this._handleKeyPress}
-                        onChange={this.onChange.bind(this, "password")}
-                      />
-                    </FormGroup>
-                  </Col>
-                </Row>
                 <Card>
                   <CardHeader>
                     <strong>Contact Person Details</strong>
@@ -747,11 +803,11 @@ class BusinessDetail extends Component {
                             )}
                           />
                         </FormGroup>
-                        <FormGroup check>
+                        {/* <FormGroup check>
                           <Label for="visible_to_public" check>
                             <Input type="checkbox" /> Visible To Public
                           </Label>
-                        </FormGroup>
+                        </FormGroup> */}
                       </Col>
                     </Row>
                   </CardBody>
@@ -799,18 +855,24 @@ class BusinessDetail extends Component {
                         </FormGroup>
                         <FormGroup>
                           <Label for="company_type">Company Type</Label>
-                          <Input
-                            type="text"
-                            value={this.state.company_type}
-                            onKeyDown={this._handleKeyPress}
-                            onChange={this.onChange.bind(this, "company_type")}
+                          <Select
+                            required
+                            name="Company Type"
+                            placeholder="Select Your Company Type"
+                            noResultsText="No Data Found"
+                            value={valueCompanyType}
+                            onChange={this.handleSelectChange.bind(
+                              this,
+                              "company_type"
+                            )}
+                            options={companyTypes}
                           />
                         </FormGroup>
-                        <FormGroup check>
+                        {/* <FormGroup check>
                           <Label for="visible_to_public" check>
                             <Input type="checkbox" /> Visible To Public
                           </Label>
-                        </FormGroup>
+                        </FormGroup> */}
                       </Col>
                     </Row>
                   </CardBody>
@@ -853,7 +915,7 @@ export default connect(
     ...primary_address
   }),
   {
-    onBusinessSubmit,
+    onBusinessCreate,
     onIndustryList,
     onIndustryEachList,
     onCategoryEachList,

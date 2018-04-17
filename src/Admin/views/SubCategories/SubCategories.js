@@ -60,8 +60,6 @@ class SubCategories extends Component {
   };
 
   render() {
-    // console.log("subcategories: ", this.props);
-
     const categories = this.props.categories.data
       ? this.props.categories.data.map(category => {
           return { value: category.id, label: category.name };
@@ -73,8 +71,6 @@ class SubCategories extends Component {
           return { value: extra_section, label: extra_section };
         })
       : null;
-
-    // console.log("extasd: ", extra_sections);
 
     const { category } = this.state;
     const valueCategory = category && category.value;
