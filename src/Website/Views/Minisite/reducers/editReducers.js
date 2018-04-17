@@ -1,8 +1,15 @@
-import { TOGGLE_EDIT_MAIN, TOGGLE_EDIT_ABOUT_US } from "../actions/types";
+import {
+  TOGGLE_EDIT_MAIN,
+  TOGGLE_EDIT_ABOUT_US,
+  UPDATE_ABOUT_PENDING,
+  UPDATE_ABOUT_FULFILLED,
+  UPDATE_ABOUT_REJECTED
+} from "../actions/types";
 
 const INITIAL_STATE = {
-  main: false,
-  aboutUs: false
+  main: true,
+  aboutUs: false,
+  aboutUsLoading: false
 };
 
 export default function(state = INITIAL_STATE, action) {
@@ -11,6 +18,11 @@ export default function(state = INITIAL_STATE, action) {
       return { ...state, main: !state.main };
     case TOGGLE_EDIT_ABOUT_US:
       return { ...state, aboutUs: !state.aboutUs };
+    case UPDATE_ABOUT_PENDING:
+      return { ...state, aboutUsLoading: true };
+    case UPDATE_ABOUT_FULFILLED:
+    case UPDATE_ABOUT_REJECTED:
+      return { ...state, aboutUsLoading: false };
     default:
       return state;
   }

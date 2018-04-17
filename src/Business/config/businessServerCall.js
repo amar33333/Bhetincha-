@@ -22,10 +22,10 @@ export const onBusinessAllGet = ({ access_token }) =>
     }
   });
 
-export const onBusinessEachGet = ({ id }) =>
+export const onBusinessEachGet = ({ username }) =>
   axios({
     method: "get",
-    url: `${BUSINESS_URL}${id}`,
+    url: `${BUSINESS_URL}${username}`,
     headers: {
       "Content-Type": "application/json"
     }
@@ -34,7 +34,7 @@ export const onBusinessEachGet = ({ id }) =>
 export const onBusinessEachPut = ({ id, access_token, data }) =>
   axios({
     method: "PUT",
-    url: `${BUSINESS_URL}${id}`,
+    url: `${BUSINESS_URL}${id}/`,
     data,
     headers: {
       "Content-Type": "application/json",

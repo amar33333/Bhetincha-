@@ -6,17 +6,19 @@ import { BusinessNav, BusinessFooter, AboutUs } from "./components";
 import banner from "../../../static/img/banner.jpg";
 import logo from "../../../static/img/avatar.jpg";
 
-import { onBusinessGet } from "./actions";
-
 import "./minisite.css";
 
 import withReducer from "../../../config/withReducer";
+import { MAIN_URL } from "./config/MINISITE_API";
+import { onBusinessGet } from "./actions";
 import reducers from "./reducers";
 
 class Minisite extends Component {
-  // componentDidMount() {
-  //   this.props.onBusinessGet({ id: 52 });
-  // }
+  componentDidMount() {
+    this.props.onBusinessGet({
+      username: this.props.match.params.businessName
+    });
+  }
 
   renderUploadOverlay = () => (
     <div className="minisite_banner__img__change__overlay">
@@ -29,15 +31,17 @@ class Minisite extends Component {
   );
 
   render() {
+    console.log(`${MAIN_URL}${this.props.data.cover_photo}`);
     return (
       <div>
         <MainNavbar />
-        <BusinessNav
-          logo={logo}
-          businessName={this.props.match.params.businessName}
-        />
+        <BusinessNav businessName={this.props.data.business_name} />
         <div className="minisite_banner__wrapper">
-          <img className="minisite_banner__img" src={banner} alt="banner" />
+          <img
+            className="minisite_banner__img"
+            src={`${MAIN_URL}${this.props.data.cover_photo}`}
+            alt="banner"
+          />
           {this.props.mainEdit && this.renderUploadOverlay()}
         </div>
         <div className="body-wrapper">
@@ -51,8 +55,9 @@ class Minisite extends Component {
 
 export default withReducer("MinisiteContainer", reducers)(
   connect(
-    ({ MinisiteContainer: { edit } }) => ({
-      mainEdit: edit.main
+    ({ MinisiteContainer: { edit, crud } }) => ({
+      mainEdit: edit.main,
+      data: crud
     }),
     { onBusinessGet }
   )(Minisite)

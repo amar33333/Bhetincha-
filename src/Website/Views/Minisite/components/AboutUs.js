@@ -30,15 +30,22 @@ class AboutUs extends Component {
         </Row>
         <Row>
           <Col xs="12" md="12">
-            {this.props.aboutUsEdit ? (
-              <AboutUsEditor initialValue={this.props.aboutUsData} />
+            {this.props.mainEdit && this.props.aboutUsEdit ? (
+              <div>
+                <AboutUsEditor initialValue={this.props.data} />
+              </div>
             ) : (
-              <div
-                className="quill ql-editor"
-                dangerouslySetInnerHTML={{
-                  __html: this.props.aboutUsData
-                }}
-              />
+              <div>
+                <div>Tagline {this.props.data.tagline}</div>
+                <div>Established Year {this.props.data.establishedYear}</div>
+                {/* <div>Company Type {this.props.data.companyType}</div> */}
+                <div
+                  className="quill ql-editor"
+                  dangerouslySetInnerHTML={{
+                    __html: this.props.data.aboutUs
+                  }}
+                />
+              </div>
             )}
           </Col>
         </Row>
@@ -48,8 +55,18 @@ class AboutUs extends Component {
 }
 
 export default connect(
-  ({ MinisiteContainer: { crud, edit } }) => ({
-    aboutUsData: crud.aboutUs,
+  ({
+    MinisiteContainer: {
+      crud: { about },
+      edit
+    }
+  }) => ({
+    data: {
+      tagline: about.tagline,
+      aboutUs: about.aboutUs,
+      establishedYear: about.establishedYear
+      // companyType: about.companyType
+    },
     aboutUsEdit: edit.aboutUs,
     mainEdit: edit.main
   }),
