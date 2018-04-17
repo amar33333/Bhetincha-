@@ -27,8 +27,8 @@ export const onBusinessList = () => dispatch => {
   dispatch({ type: FETCH_BUSINESS_PENDING });
 };
 
-export const onBusinessSubmit = () => dispatch => {
-  onBusinessPost()
+export const onBusinessCreate = ({ data, access_token }) => dispatch => {
+  onBusinessPost({ data, access_token })
     .then(response =>
       dispatch({ type: FETCH_BUSINESS_FULFILLED, payload: response.data })
     )

@@ -67,6 +67,18 @@ const items = {
       icon: "fa fa-cubes",
       permission: "CAN_VIEW_USERS"
     },
+    {
+      name: "Company Type",
+      url: "/admin/company-type",
+      icon: "fa fa-cubes",
+      permission: "CAN_VIEW_USERS"
+    },
+    {
+      name: "Payment Method",
+      url: "/admin/payment-method",
+      icon: "fa fa-cubes",
+      permission: "CAN_VIEW_USERS"
+    },
     // {
     //   name: "Sections",
     //   url: "/admin/sections",

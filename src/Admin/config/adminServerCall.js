@@ -11,7 +11,40 @@ import {
   USER_GROUPS_URL,
   USERS_URL
 } from "./ADMIN_API";
+
+import {
+  PAYMENT_METHOD_URL,
+  COMPANY_TYPE_URL
+} from "../../Business/config/BUSINESS_API";
+
 import axios from "axios";
+
+export const onCompanyTypePost = ({ company_type, access_token }) => {
+  return axios({
+    method: "post",
+    url: COMPANY_TYPE_URL,
+    data: {
+      name: company_type
+    },
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+};
+
+export const onPaymentMethodPost = ({ payment_method, access_token }) =>
+  axios({
+    method: "post",
+    url: PAYMENT_METHOD_URL,
+    data: {
+      name: payment_method
+    },
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
 
 export const onIndustryPost = ({ industry, access_token }) =>
   axios({
@@ -56,16 +89,6 @@ export const onCategoryEachGet = ({ id, access_token }) =>
     }
   });
 
-export const onSubCategoryEachGet = ({ id, access_token }) =>
-  axios({
-    method: "get",
-    url: `${SUB_CATEGORY_URL}${id}/`,
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: "Bearer " + access_token
-    }
-  });
-
 export const onCategoryPost = ({ category, industry, access_token }) =>
   axios({
     method: "post",
@@ -95,13 +118,15 @@ export const onSubCategoryPost = ({
   extraSection,
   subCategory,
   access_token
-}) =>
-  axios({
+}) => {
+  const extra_section = extraSection.map(eachValue => eachValue.value);
+
+  return axios({
     method: "post",
     url: SUB_CATEGORY_URL,
     data: {
       category: category,
-      extra_section: extraSection,
+      extra_section,
       name: subCategory
     },
     headers: {
@@ -109,7 +134,17 @@ export const onSubCategoryPost = ({
       Authorization: "Bearer " + access_token
     }
   });
+};
 
+export const onSubCategoryEachGet = ({ id, access_token }) =>
+  axios({
+    method: "get",
+    url: `${SUB_CATEGORY_URL}${id}/`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
 export const onExtraSectionGet = ({ access_token }) =>
   axios({
     method: "get",

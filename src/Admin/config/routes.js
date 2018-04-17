@@ -15,7 +15,9 @@ import {
   Cities,
   Countries,
   Districts,
-  States
+  States,
+  CompanyType,
+  PaymentMethod
 } from "../views";
 
 class AdminRoute extends Component {
@@ -76,6 +78,18 @@ class AdminRoute extends Component {
           path="/admin/sub-categories"
           name="Sub Categories"
           component={SubCategories}
+          permission="CAN_VIEW_DASHBOARD"
+        />
+        <Route
+          path="/admin/company-type"
+          name="CompanyType"
+          component={CompanyType}
+          permission="CAN_VIEW_DASHBOARD"
+        />
+        <Route
+          path="/admin/payment-method"
+          name="PaymentMethod"
+          component={PaymentMethod}
           permission="CAN_VIEW_DASHBOARD"
         />
         {/* <Route
