@@ -24,7 +24,11 @@ class BusinessNav extends Component {
     return (
       <div>
         <Navbar color="faded" light expand="md">
-          <Link to={`/${this.props.businessName}`} className="navbar-brand">
+          <Link
+            // to={`/new`}
+            to={`/${this.props.businessName}`}
+            className="navbar-brand"
+          >
             <img
               src={`${MAIN_URL}${this.props.logo}`}
               alt="brand-logo"
@@ -36,6 +40,7 @@ class BusinessNav extends Component {
             <Nav className="ml-5" navbar>
               <NavItem active>
                 <Link
+                  // to={`/test01`}
                   to={`/${this.props.businessName}`}
                   className="nav-link minisite_business__nav__item"
                 >

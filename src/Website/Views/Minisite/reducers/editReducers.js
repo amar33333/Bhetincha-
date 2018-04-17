@@ -12,7 +12,6 @@ import {
 const INITIAL_STATE = {
   main: false,
   mainLoading: true,
-  mainNotFound: false,
   aboutUs: false,
   aboutUsLoading: false
 };
@@ -29,11 +28,10 @@ export default function(state = INITIAL_STATE, action) {
     case UPDATE_ABOUT_REJECTED:
       return { ...state, aboutUsLoading: false };
     case FETCH_BUSINESS_PENDING:
-      return { ...state, mainLoading: true, mainNotFound: false };
+      return { ...state, mainLoading: true };
     case FETCH_BUSINESS_FULFILLED:
-      return { ...state, mainLoading: false, mainNotFound: false };
     case FETCH_BUSINESS_REJECTED:
-      return { ...state, mainLoading: false, mainNotFound: true };
+      return { ...state, mainLoading: false };
     default:
       return state;
   }

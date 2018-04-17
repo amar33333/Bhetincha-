@@ -63,11 +63,10 @@ export const handleCoverPhotoChange = ({
     .catch(error => dispatch({ type: UPDATE_COVER_PHOTO_REJECTED }));
 };
 
-export const onBusinessGet = ({ username }) => dispatch => {
+export const onBusinessGet = ({ username, history }) => dispatch => {
   dispatch({ type: FETCH_BUSINESS_PENDING });
   onBusinessEachGet({ username })
     .then(response => {
-      console.log(response.data);
       const data = response.data;
       const payload = {};
       payload.business_name = data.business_name;
@@ -80,5 +79,8 @@ export const onBusinessGet = ({ username }) => dispatch => {
 
       dispatch({ type: FETCH_BUSINESS_FULFILLED, payload });
     })
-    .catch(error => dispatch({ type: FETCH_BUSINESS_REJECTED }));
+    .catch(error => {
+      history.replace("/404");
+      dispatch({ type: FETCH_BUSINESS_REJECTED });
+    });
 };

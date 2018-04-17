@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { MainNavbar } from "../../components";
 import { connect } from "react-redux";
 import { BusinessNav, BusinessFooter, AboutUs, CoverPhoto } from "./components";
-import { Loading, Page404 } from "../../../Common/pages";
+import { Loading } from "../../../Common/pages";
 
 import "./minisite.css";
 
@@ -11,15 +11,26 @@ import { onBusinessGet } from "./actions";
 import reducers from "./reducers";
 
 class Minisite extends Component {
-  componentDidMount() {
+  getBusiness = () => {
     this.props.onBusinessGet({
-      username: this.props.match.params.businessName
+      username: this.props.match.params.businessName,
+      history: this.props.history
     });
+  };
+  componentDidMount() {
+    this.getBusiness();
+  }
+
+  componentDidUpdate(prevProps) {
+    if (
+      prevProps.match.params.businessName !==
+      this.props.match.params.businessName
+    )
+      this.getBusiness();
   }
 
   render() {
     if (this.props.mainLoading) return <Loading />;
-    if (this.props.mainNotFound) return <Page404 />;
     return (
       <div>
         <MainNavbar />
@@ -39,7 +50,6 @@ export default withReducer("MinisiteContainer", reducers)(
     ({ MinisiteContainer: { edit, crud } }) => ({
       mainEdit: edit.main,
       mainLoading: edit.mainLoading,
-      mainNotFound: edit.mainNotFound,
       data: crud
     }),
     { onBusinessGet }

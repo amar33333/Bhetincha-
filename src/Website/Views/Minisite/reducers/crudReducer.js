@@ -23,6 +23,8 @@ const INITIAL_STATE = {
 export default function(state = INITIAL_STATE, action) {
   switch (action.type) {
     case FETCH_BUSINESS_FULFILLED:
+      return { ...INITIAL_STATE, ...action.payload };
+
     case UPDATE_ABOUT_FULFILLED:
     case UPDATE_COVER_PHOTO_FULFILLED:
       return { ...state, ...action.payload };

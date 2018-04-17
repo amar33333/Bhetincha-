@@ -20,8 +20,11 @@ export default () => {
 
   store.asyncReducers = {};
   store.injectReducer = (key, reducer) => {
-    store.asyncReducers[key] = reducer;
-    store.replaceReducer(createReducer(store.asyncReducers));
+    // console.log("this is store ", );
+    if (!store.getState()[key]) {
+      store.asyncReducers[key] = reducer;
+      store.replaceReducer(createReducer(store.asyncReducers));
+    }
   };
   return store;
 };

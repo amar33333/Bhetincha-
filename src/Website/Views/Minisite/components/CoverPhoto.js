@@ -15,7 +15,7 @@ class CoverPhoto extends Component {
           onDone={file =>
             this.props.handleCoverPhotoChange({
               id: this.props.id,
-              access_token: this.props.access_token,
+              access_token: this.props.cookies.token_data.access_token,
               username: this.props.username,
               data: { cover_photo: file.base64 }
             })
@@ -42,7 +42,7 @@ class CoverPhoto extends Component {
 
 export default connect(
   ({
-    auth,
+    auth: { cookies },
     MinisiteContainer: {
       crud: { cover_photo, id, username },
       edit
@@ -51,7 +51,7 @@ export default connect(
     cover_photo,
     id,
     username,
-    access_token: auth.cookies.token_data.access_token,
+    cookies,
     mainEdit: edit.main
   }),
   { handleCoverPhotoChange }
