@@ -124,7 +124,7 @@ class Home extends Component {
             <Col className="centered">{result}</Col>
           </Row>
         </Container>
-        <BottomFooter theme="light" />
+        <BottomFooter theme="light" extraClass="bottom-footer__home" />
       </div>
     );
   }

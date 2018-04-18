@@ -8,7 +8,11 @@ import { DEVELOPER, OWNER } from "../../config/CONSTANTS";
 class BottomFooter extends Component {
   render() {
     return (
-      <div className={`footer footer-${this.props.theme} p-3`}>
+      <div
+        className={`footer footer-${this.props.theme} ${
+          this.props.extraClass
+        } p-3`}
+      >
         <Container className="bottom-footer mt-1 pt-3">
           <Row className="bottom-footer__nav">
             <ul>
