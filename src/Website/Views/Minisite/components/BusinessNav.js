@@ -53,7 +53,10 @@ class BusinessNav extends Component {
                 </NavLink>
               </NavItem>
               <NavItem>
-                <NavLink href="#" className="minisite_business__nav__item">
+                <NavLink
+                  href="/gallery"
+                  className="minisite_business__nav__item"
+                >
                   Gallery
                 </NavLink>
               </NavItem>
