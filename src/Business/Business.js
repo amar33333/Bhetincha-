@@ -33,7 +33,7 @@ class Business extends Component {
         (routes[
           key.replace(
             ROUTE_PARAMS_BUSINESS_NAME,
-            this.props.match.params.businessName
+            this.props.match.params[ROUTE_PARAMS_BUSINESS_NAME]
           )
         ] =
           nav.routes[key])
@@ -44,13 +44,13 @@ class Business extends Component {
       if (item.name) {
         temp.name = item.name.replace(
           ROUTE_PARAMS_BUSINESS_NAME,
-          this.props.match.params.businessName
+          this.props.match.params[ROUTE_PARAMS_BUSINESS_NAME]
         );
       }
       if (item.url) {
         temp.url = item.url.replace(
           ROUTE_PARAMS_BUSINESS_NAME,
-          this.props.match.params.businessName
+          this.props.match.params[ROUTE_PARAMS_BUSINESS_NAME]
         );
       }
       if (item.children) {
@@ -59,13 +59,13 @@ class Business extends Component {
           if (child.name) {
             childTemp.name = child.name.replace(
               ROUTE_PARAMS_BUSINESS_NAME,
-              this.props.match.params.businessName
+              this.props.match.params[ROUTE_PARAMS_BUSINESS_NAME]
             );
           }
           if (child.url) {
             childTemp.url = child.url.replace(
               ROUTE_PARAMS_BUSINESS_NAME,
-              this.props.match.params.businessName
+              this.props.match.params[ROUTE_PARAMS_BUSINESS_NAME]
             );
           }
           return { ...child, ...childTemp };

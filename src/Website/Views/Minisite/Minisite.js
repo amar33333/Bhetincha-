@@ -7,13 +7,14 @@ import { BusinessNav, BusinessFooter } from "./components";
 import MinisiteRoutes from "./config/routes";
 import withReducer from "../../../config/withReducer";
 import reducers from "./reducers";
+import { ROUTE_PARAMS_BUSINESS_NAME } from "../../../config/CONSTANTS";
 
 import { onBusinessGet } from "./actions";
 
 class Minisite extends Component {
   getBusiness = () => {
     this.props.onBusinessGet({
-      username: this.props.match.params.businessName,
+      username: this.props.match.params[ROUTE_PARAMS_BUSINESS_NAME],
       history: this.props.history
     });
   };
@@ -23,8 +24,8 @@ class Minisite extends Component {
 
   componentDidUpdate(prevProps) {
     if (
-      prevProps.match.params.businessName !==
-      this.props.match.params.businessName
+      prevProps.match.params[ROUTE_PARAMS_BUSINESS_NAME] !==
+      this.props.match.params[ROUTE_PARAMS_BUSINESS_NAME]
     )
       this.getBusiness();
   }
@@ -32,7 +33,9 @@ class Minisite extends Component {
   render() {
     return (
       <div>
-        <BusinessNav businessName={this.props.match.params.businessName} />
+        <BusinessNav
+          businessName={this.props.match.params[ROUTE_PARAMS_BUSINESS_NAME]}
+        />
         {this.props.mainLoading ? (
           <Loading />
         ) : (
