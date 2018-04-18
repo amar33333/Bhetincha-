@@ -5,21 +5,34 @@ import { Container, Row, Col } from "reactstrap";
 import "react-quill/dist/quill.snow.css";
 import "../minisite.css";
 
-import AboutUsEditor from "./AboutUsEditor";
 import { onEditAboutUsClicked } from "../actions";
 
 class AboutUs extends Component {
+  state = { AsyncEditor: null };
+
+  onEditClicked = () => {
+    this.renderEditor();
+    this.props.onEditAboutUsClicked();
+  };
+
   renderAboutEdit = () => (
     <span className="minisite_about__edit__icon">
       <i
-        onClick={this.props.onEditAboutUsClicked}
+        onClick={this.onEditClicked}
         aria-hidden="true"
         className="fa fa-pencil"
       />
     </span>
   );
 
+  renderEditor = () => {
+    import("./AboutUsEditor").then(module =>
+      this.setState({ AsyncEditor: module.default })
+    );
+  };
+
   render() {
+    const AsyncEditor = this.state.AsyncEditor;
     return (
       <Container>
         <Row>
@@ -31,9 +44,11 @@ class AboutUs extends Component {
         <Row>
           <Col xs="12" md="12">
             {this.props.mainEdit && this.props.aboutUsEdit ? (
-              <div>
-                <AboutUsEditor initialValue={this.props.data} />
-              </div>
+              AsyncEditor ? (
+                <AsyncEditor initialValue={this.props.data} />
+              ) : (
+                <div>Loading</div>
+              )
             ) : (
               <div>
                 <div>Tagline {this.props.data.tagline}</div>
@@ -55,12 +70,7 @@ class AboutUs extends Component {
 }
 
 export default connect(
-  ({
-    MinisiteContainer: {
-      crud: { about },
-      edit
-    }
-  }) => ({
+  ({ MinisiteContainer: { crud: { about }, edit } }) => ({
     data: {
       tagline: about.tagline,
       aboutUs: about.aboutUs,

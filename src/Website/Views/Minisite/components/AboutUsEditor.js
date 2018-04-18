@@ -12,6 +12,7 @@ class AboutUsEditor extends Component {
     aboutUs: initialValue.aboutUs,
     establishedYear: initialValue.establishedYear
   });
+
   state = { aboutUs: "" };
 
   modules = {
@@ -120,10 +121,7 @@ class AboutUsEditor extends Component {
 export default connect(
   ({
     auth,
-    MinisiteContainer: {
-      crud: { id, username },
-      edit: { aboutUsLoading }
-    }
+    MinisiteContainer: { crud: { id, username }, edit: { aboutUsLoading } }
   }) => ({
     loading: aboutUsLoading,
     id,

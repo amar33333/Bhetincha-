@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import FileBase64 from "react-file-base64";
+import FileInputComponent from "react-file-input-previews-base64";
 
 import "../minisite.css";
 
@@ -10,19 +10,23 @@ import { handleCoverPhotoChange } from "../actions";
 class CoverPhoto extends Component {
   renderUploadOverlay = () => (
     <div className="minisite_banner__img__change__overlay">
-      <span className="fa fa-camera">
-        <FileBase64
-          onDone={file =>
-            this.props.handleCoverPhotoChange({
-              id: this.props.id,
-              access_token: this.props.cookies.token_data.access_token,
-              username: this.props.username,
-              data: { cover_photo: file.base64 }
-            })
-          }
-        />
-        {/* <strong> Upload New Banner</strong> */}
-      </span>
+      <FileInputComponent
+        labelText=""
+        multiple={false}
+        imagePreview={false}
+        labelStyle={{ display: "none" }}
+        parentStyle={{ margin: 0 }}
+        buttonComponent={<span className="fa fa-camera" />}
+        callbackFunction={file =>
+          this.props.handleCoverPhotoChange({
+            id: this.props.id,
+            access_token: this.props.cookies.token_data.access_token,
+            username: this.props.username,
+            data: { cover_photo: file.base64 }
+          })
+        }
+        accept="image/*"
+      />
     </div>
   );
 
@@ -43,10 +47,7 @@ class CoverPhoto extends Component {
 export default connect(
   ({
     auth: { cookies },
-    MinisiteContainer: {
-      crud: { cover_photo, id, username },
-      edit
-    }
+    MinisiteContainer: { crud: { cover_photo, id, username }, edit }
   }) => ({
     cover_photo,
     id,
