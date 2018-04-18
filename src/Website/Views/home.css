@@ -261,6 +261,21 @@ input.main-nav-search::placeholder {
   border-top: 1px rgb(146, 144, 144) solid;
 }
 
+.bottom-footer__home {
+  bottom: 0;
+  position: fixed;
+  z-index: 150;
+  width: 100%;
+  font-size: 0.7rem;
+  _position: absolute;
+  _top: expression(
+    eval(
+      document.documentElement.scrollTop +
+        (document.documentElement.clientHeight-this.offsetHeight)
+    )
+  );
+}
+
 .footer-dark {
   background-color: rgb(41, 39, 39);
   color: rgb(146, 144, 144);
