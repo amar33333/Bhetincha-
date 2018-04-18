@@ -1,5 +1,3 @@
-import moment from "moment";
-
 import { onLogin, onRegister, onUserGet } from "../Common/utils/serverCall";
 import {
   FETCH_USER,
@@ -39,9 +37,9 @@ export const onSubmit = ({ username, password, history }) => dispatch => {
         .then(userData => {
           const initialDate = new Date();
 
-          let expiryDate = moment(initialDate)
-            .add(10, "h")
-            .toDate();
+          let expiryDate = new Date(
+            initialDate.valueOf() + 1000 * 60 * 60 * 10
+          );
 
           console.log("expire date: ", expiryDate);
 

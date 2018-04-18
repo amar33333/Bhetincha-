@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { Container, Row } from "reactstrap";
 import { Link } from "react-router-dom";
-import moment from "moment";
 
 import { DEVELOPER, OWNER } from "../../config/CONSTANTS";
 
@@ -32,8 +31,8 @@ class BottomFooter extends Component {
           </Row>
           <div className="bottom-footer__meta">
             <p>
-              &copy; {moment().year()}, {OWNER}. All rights reserved | Powered
-              by{" "}
+              &copy; {new Date().getFullYear()}, {OWNER}. All rights reserved |
+              Powered by{" "}
               <a
                 href="http://techkunja.com.np"
                 rel="noopener noreferrer"

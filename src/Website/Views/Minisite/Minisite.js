@@ -34,7 +34,7 @@ class Minisite extends Component {
     return (
       <div>
         <MainNavbar />
-        <BusinessNav businessName={this.props.data.business_name} />
+        <BusinessNav businessName={this.props.match.params.businessName} />
         <CoverPhoto />
         <div className="body-wrapper">
           <AboutUs />
