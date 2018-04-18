@@ -11,9 +11,42 @@ import {
   USER_GROUPS_URL,
   USERS_URL
 } from "./ADMIN_API";
+
+import {
+  PAYMENT_METHOD_URL,
+  COMPANY_TYPE_URL
+} from "../../Business/config/BUSINESS_API";
+
 import axios from "axios";
 
-export const onIndustryPost = ({ industry }) =>
+export const onCompanyTypePost = ({ company_type, access_token }) => {
+  return axios({
+    method: "post",
+    url: COMPANY_TYPE_URL,
+    data: {
+      name: company_type
+    },
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+};
+
+export const onPaymentMethodPost = ({ payment_method, access_token }) =>
+  axios({
+    method: "post",
+    url: PAYMENT_METHOD_URL,
+    data: {
+      name: payment_method
+    },
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
+export const onIndustryPost = ({ industry, access_token }) =>
   axios({
     method: "post",
     url: INDUSTRY_URL,
@@ -21,20 +54,42 @@ export const onIndustryPost = ({ industry }) =>
       name: industry
     },
     headers: {
-      "Content-Type": "application/json"
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
     }
   });
 
-export const onIndustryGet = () =>
+export const onIndustryGet = ({ access_token }) =>
   axios({
     method: "get",
     url: INDUSTRY_URL,
     headers: {
-      "Content-Type": "application/json"
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
     }
   });
 
-export const onCategoryPost = ({ category, industry }) =>
+export const onIndustryEachGet = ({ id, access_token }) =>
+  axios({
+    method: "get",
+    url: `${INDUSTRY_URL}${id}/`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
+export const onCategoryEachGet = ({ id, access_token }) =>
+  axios({
+    method: "get",
+    url: `${CATEGORY_URL}${id}/`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
+export const onCategoryPost = ({ category, industry, access_token }) =>
   axios({
     method: "post",
     url: CATEGORY_URL,
@@ -43,39 +98,60 @@ export const onCategoryPost = ({ category, industry }) =>
       industry
     },
     headers: {
-      "Content-Type": "application/json"
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
     }
   });
 
-export const onCategoryGet = () =>
+export const onCategoryGet = ({ access_token }) =>
   axios({
     method: "get",
     url: CATEGORY_URL,
     headers: {
-      "Content-Type": "application/json"
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
     }
   });
 
-export const onSubCategoryPost = ({ category, extraSection, subCategory }) =>
-  axios({
+export const onSubCategoryPost = ({
+  category,
+  extraSection,
+  subCategory,
+  access_token
+}) => {
+  const extra_section = extraSection.map(eachValue => eachValue.value);
+
+  return axios({
     method: "post",
     url: SUB_CATEGORY_URL,
     data: {
       category: category,
-      extra_section: extraSection,
+      extra_section,
       name: subCategory
     },
     headers: {
-      "Content-Type": "application/json"
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
     }
   });
+};
 
-export const onExtraSectionGet = () =>
+export const onSubCategoryEachGet = ({ id, access_token }) =>
+  axios({
+    method: "get",
+    url: `${SUB_CATEGORY_URL}${id}/`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+export const onExtraSectionGet = ({ access_token }) =>
   axios({
     method: "get",
     url: EXTRA_SECTION_GET_URL,
     headers: {
-      "Content-Type": "application/json"
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
     }
   });
 
@@ -102,6 +178,16 @@ export const onCountryGet = ({ access_token }) =>
     }
   });
 
+export const onCountryEachGet = ({ id, access_token }) =>
+  axios({
+    method: "get",
+    url: `${COUNTRY_URL}${id}/`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
 export const onStatePost = ({ state, country, access_token }) =>
   axios({
     method: "post",
@@ -120,6 +206,16 @@ export const onStateGet = ({ access_token }) =>
   axios({
     method: "get",
     url: STATE_URL,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
+export const onStateEachGet = ({ id, access_token }) =>
+  axios({
+    method: "get",
+    url: `${STATE_URL}${id}/`,
     headers: {
       "Content-Type": "application/json",
       Authorization: "Bearer " + access_token
@@ -156,6 +252,16 @@ export const onDistrictGet = ({ access_token }) =>
     }
   });
 
+export const onDistrictEachGet = ({ id, access_token }) =>
+  axios({
+    method: "get",
+    url: `${DISTRICT_URL}${id}/`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
 export const onCityPost = ({ district, city, access_token }) =>
   axios({
     method: "post",
@@ -174,6 +280,16 @@ export const onCityGet = ({ access_token }) =>
   axios({
     method: "get",
     url: CITY_URL,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
+export const onCityEachGet = ({ id, access_token }) =>
+  axios({
+    method: "get",
+    url: `${CITY_URL}${id}/`,
     headers: {
       "Content-Type": "application/json",
       Authorization: "Bearer " + access_token

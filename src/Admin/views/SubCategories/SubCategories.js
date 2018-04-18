@@ -25,9 +25,13 @@ import {
 class SubCategories extends Component {
   state = { subCategory: "", category: "", extraSection: [] };
 
+  access_token = this.props.cookies
+    ? this.props.cookies.token_data.access_token
+    : null;
+
   componentWillMount() {
-    this.props.onCategoryList();
-    this.props.onExtraSectionList();
+    this.props.onCategoryList({ access_token: this.access_token });
+    this.props.onExtraSectionList({ access_token: this.access_token });
   }
 
   componentWillUnmount() {
@@ -40,9 +44,7 @@ class SubCategories extends Component {
   };
 
   handleSelectChange = (key, value) => {
-    this.setState({ [key]: value }, () => {
-      console.log("print stte: ", this.state);
-    });
+    this.setState({ [key]: value }, () => {});
   };
 
   onFormSubmit = event => {
@@ -51,14 +53,13 @@ class SubCategories extends Component {
     this.props.onSubCategorySubmit({
       category: category.value,
       extraSection: extraSection,
-      subCategory
+      subCategory,
+      access_token: this.access_token
     });
     this.setState({ subCategory: "", category: "", extraSection: [] });
   };
 
   render() {
-    // console.log("subcategories: ", this.props);
-
     const categories = this.props.categories.data
       ? this.props.categories.data.map(category => {
           return { value: category.id, label: category.name };
@@ -70,8 +71,6 @@ class SubCategories extends Component {
           return { value: extra_section, label: extra_section };
         })
       : null;
-
-    // console.log("extasd: ", extra_sections);
 
     const { category } = this.state;
     const valueCategory = category && category.value;
@@ -138,9 +137,10 @@ class SubCategories extends Component {
 }
 
 export default connect(
-  ({ AdminContainer: { categories, extra_sections } }) => ({
+  ({ AdminContainer: { categories, extra_sections }, auth }) => ({
     categories,
-    extra_sections
+    extra_sections,
+    ...auth
   }),
   {
     onCategoryList,

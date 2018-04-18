@@ -1,12 +1,12 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
+import { MAIN_URL } from "../config/MINISITE_API";
 
 import {
   Collapse,
   Navbar,
   NavbarToggler,
-  NavbarBrand,
   Nav,
   NavItem,
   NavLink,
@@ -24,9 +24,13 @@ class BusinessNav extends Component {
     return (
       <div>
         <Navbar color="faded" light expand="md">
-          <Link to={`/${this.props.businessName}`} className="navbar-brand">
+          <Link
+            // to={`/new`}
+            to={`/${this.props.businessName}`}
+            className="navbar-brand"
+          >
             <img
-              src={this.props.logo}
+              src={`${MAIN_URL}${this.props.logo}`}
               alt="brand-logo"
               className="main_nav__brand-logo"
             />
@@ -36,6 +40,7 @@ class BusinessNav extends Component {
             <Nav className="ml-5" navbar>
               <NavItem active>
                 <Link
+                  // to={`/test01`}
                   to={`/${this.props.businessName}`}
                   className="nav-link minisite_business__nav__item"
                 >
@@ -63,7 +68,7 @@ class BusinessNav extends Component {
             this.props.businessName ===
               this.props.cookies.user_data.username && (
               <Button color="primary" onClick={this.props.onEditMainClicked}>
-                {this.props.minisite.edit.main ? "View" : "Edit"}
+                {this.props.mainEdit ? "Preview" : "Edit Data"}
               </Button>
             )}
         </Navbar>
@@ -73,9 +78,10 @@ class BusinessNav extends Component {
 }
 
 export default connect(
-  ({ MinisiteContainer: { minisite }, auth: { cookies } }) => ({
+  ({ MinisiteContainer: { edit, crud }, auth: { cookies } }) => ({
     cookies,
-    minisite
+    mainEdit: edit.main,
+    logo: crud.logo
   }),
   { onEditMainClicked }
 )(BusinessNav);

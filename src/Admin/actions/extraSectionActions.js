@@ -6,8 +6,10 @@ import {
   UNMOUNT_EXTRA_SECTION
 } from "./types";
 
-export const onExtraSectionList = () => dispatch => {
-  onExtraSectionGet()
+export const onExtraSectionList = ({ access_token }) => dispatch => {
+  onExtraSectionGet({
+    access_token
+  })
     .then(response =>
       dispatch({ type: FETCH_EXTRA_SECTION_FULFILLED, payload: response.data })
     )

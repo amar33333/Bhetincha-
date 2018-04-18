@@ -15,6 +15,9 @@ import {
   States
 } from "../views/GeneralSetup";
 
+import CompanyType from "./CompanyType/CompanyType";
+import PaymentMethod from "./PaymentMethod/PaymentMethod";
+
 export {
   Dashboard,
   ManageUsers,
@@ -29,5 +32,7 @@ export {
   Cities,
   Countries,
   Districts,
-  States
+  States,
+  CompanyType,
+  PaymentMethod
 };
