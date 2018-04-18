@@ -3,4 +3,6 @@ import BusinessNav from "./BusinessNav";
 import Gallery from "./Gallery";
 import AboutUs from "./AboutUs";
 import CoverPhoto from "./CoverPhoto";
-export { BusinessFooter, BusinessNav, AboutUs, CoverPhoto, Gallery };
+import MainPage from "./MainPage";
+
+export { BusinessFooter, BusinessNav, AboutUs, CoverPhoto, Gallery, MainPage };

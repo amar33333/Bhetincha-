@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import { Container, Row, Col } from "reactstrap";
-import { BottomFooter } from "../../../components";
 
 class BusinessFooter extends Component {
   render() {
@@ -80,7 +79,6 @@ class BusinessFooter extends Component {
               </Row>
             </Col>
           </Row>
-          <BottomFooter theme={this.props.theme} />
         </Container>
       </div>
     );

@@ -1,14 +1,14 @@
 import React, { Component } from "react";
-import { MainNavbar } from "../../components";
 import { connect } from "react-redux";
-import { BusinessNav, BusinessFooter, AboutUs, CoverPhoto } from "./components";
-import { Loading } from "../../../Common/pages";
-
 import "./minisite.css";
 
+import { Loading } from "../../../Common/pages";
+import { BusinessNav, BusinessFooter } from "./components";
+import MinisiteRoutes from "./config/routes";
 import withReducer from "../../../config/withReducer";
-import { onBusinessGet } from "./actions";
 import reducers from "./reducers";
+
+import { onBusinessGet } from "./actions";
 
 class Minisite extends Component {
   getBusiness = () => {
@@ -30,15 +30,14 @@ class Minisite extends Component {
   }
 
   render() {
-    if (this.props.mainLoading) return <Loading />;
     return (
       <div>
-        <MainNavbar />
         <BusinessNav businessName={this.props.match.params.businessName} />
-        <CoverPhoto />
-        <div className="body-wrapper">
-          <AboutUs />
-        </div>
+        {this.props.mainLoading ? (
+          <Loading />
+        ) : (
+          <MinisiteRoutes params={this.props.match.params} />
+        )}
         <BusinessFooter theme="dark" />
       </div>
     );
@@ -47,10 +46,8 @@ class Minisite extends Component {
 
 export default withReducer("MinisiteContainer", reducers)(
   connect(
-    ({ MinisiteContainer: { edit, crud } }) => ({
-      mainEdit: edit.main,
-      mainLoading: edit.mainLoading,
-      data: crud
+    ({ MinisiteContainer: { edit } }) => ({
+      mainLoading: edit.mainLoading
     }),
     { onBusinessGet }
   )(Minisite)

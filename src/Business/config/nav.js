@@ -4,7 +4,7 @@ const items = {
   items: [
     {
       name: "Dashboard",
-      url: `/${ROUTE_PARAMS_BUSINESS_NAME}/dashboard`,
+      url: `/${ROUTE_PARAMS_BUSINESS_NAME}/dashboard/home`,
       icon: "icon-speedometer",
       permission: "CAN_VIEW_DASHBOARD"
     },
@@ -14,7 +14,7 @@ const items = {
     },
     {
       name: "Business Detail",
-      url: `/${ROUTE_PARAMS_BUSINESS_NAME}/business-detail`,
+      url: `/${ROUTE_PARAMS_BUSINESS_NAME}/dashboard/business-detail`,
       icon: "fa fa-map-o",
       permission: "CAN_VIEW_USERS"
     }

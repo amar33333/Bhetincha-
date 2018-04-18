@@ -3,7 +3,6 @@ import DynamicImport from "../Common/utils/DynamicImport";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import { Login, Register, Page404, Page500, Loading } from "../Common/pages";
 import Website from "../Website";
-import { Gallery } from "../Website/Views/Minisite/components";
 
 import Logout from "../Common/utils/Logout";
 import {
@@ -40,9 +39,13 @@ class MainRoute extends Component {
           <Route exact path="/404" name="Page 404" component={Page404} />
           <Route exact path="/500" name="Page 500" component={Page500} />
           <Route path="/admin" name="Admin" component={AsyncAdmin} />
-          <Route path="/gallery" name="Gallery" component={Gallery} />
           <Route
-            path={`/${ROUTE_PARAMS_BUSINESS_NAME}/${ROUTE_PARAMS_BUSINESS_ROUTE}`}
+            path={`/:${ROUTE_PARAMS_BUSINESS_NAME}/dashboard`}
+            name="Business Dashboard"
+            component={AsyncBusiness}
+          />
+          <Route
+            path={`/:${ROUTE_PARAMS_BUSINESS_NAME}/dashboard/:${ROUTE_PARAMS_BUSINESS_ROUTE}`}
             name="Business Dashboard"
             component={AsyncBusiness}
           />

@@ -40,7 +40,6 @@ class BusinessNav extends Component {
             <Nav className="ml-5" navbar>
               <NavItem active>
                 <Link
-                  // to={`/test01`}
                   to={`/${this.props.businessName}`}
                   className="nav-link minisite_business__nav__item"
                 >
@@ -53,12 +52,12 @@ class BusinessNav extends Component {
                 </NavLink>
               </NavItem>
               <NavItem>
-                <NavLink
-                  href="/gallery"
-                  className="minisite_business__nav__item"
+                <Link
+                  to={`/${this.props.businessName}/gallery`}
+                  className="nav-link minisite_business__nav__item"
                 >
                   Gallery
-                </NavLink>
+                </Link>
               </NavItem>
               <NavItem>
                 <NavLink href="#" className="minisite_business__nav__item">
