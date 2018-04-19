@@ -7,17 +7,28 @@ import Website from "../Website";
 import Logout from "../Common/utils/Logout";
 import {
   ROUTE_PARAMS_BUSINESS_NAME,
-  ROUTE_PARAMS_BUSINESS_ROUTE
+  ROUTE_PARAMS_BUSINESS_ROUTE,
+  USER_GROUP_BUSINESS,
+  USER_GROUP_ADMIN
+  // USER_GROUP_INDIVIDUAL
 } from "./CONSTANTS";
 
 const AsyncAdmin = props => (
-  <DynamicImport history={props.history} load={() => import("../Admin")}>
+  <DynamicImport
+    history={props.history}
+    group={USER_GROUP_ADMIN}
+    load={() => import("../Admin")}
+  >
     {Component => (Component === null ? <Loading /> : <Component {...props} />)}
   </DynamicImport>
 );
 
 const AsyncBusiness = props => (
-  <DynamicImport history={props.history} load={() => import("../Business")}>
+  <DynamicImport
+    history={props.history}
+    group={USER_GROUP_BUSINESS}
+    load={() => import("../Business")}
+  >
     {Component => (Component === null ? <Loading /> : <Component {...props} />)}
   </DynamicImport>
 );
