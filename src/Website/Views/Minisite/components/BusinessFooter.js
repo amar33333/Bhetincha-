@@ -5,7 +5,7 @@ import { Container, Row, Col } from "reactstrap";
 class BusinessFooter extends Component {
   render() {
     return (
-      <div className={`footer footer-${this.props.theme} p-3`}>
+      <div id="contact-us" className={`footer footer-${this.props.theme} p-3`}>
         <Container>
           <Row>
             <Col xs="12" md="4">
