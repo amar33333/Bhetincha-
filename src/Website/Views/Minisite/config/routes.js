@@ -8,7 +8,6 @@ import {
 
 class MinisiteRoute extends Component {
   render() {
-    console.log(this.props.params);
     const businessName = this.props.params[ROUTE_PARAMS_BUSINESS_NAME];
     const minisiteBusinessRoute = this.props.params[
       ROUTE_PARAMS_MINISITE_BUSINESS_ROUTE

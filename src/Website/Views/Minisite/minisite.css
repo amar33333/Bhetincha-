@@ -4,6 +4,10 @@
   overflow: hidden;
 }
 
+.active-check {
+  font-weight: bold;
+  color: red;
+}
 .minisite_banner__img {
   display: block;
   object-fit: cover;

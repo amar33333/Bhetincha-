@@ -34,7 +34,7 @@ class AboutUs extends Component {
   render() {
     const AsyncEditor = this.state.AsyncEditor;
     return (
-      <Container>
+      <Container id="about-us">
         <Row>
           <Col xs="12" md="12" className="minisite_heading__text_wrapper">
             <h3 className="minisite_heading__text">About us</h3>

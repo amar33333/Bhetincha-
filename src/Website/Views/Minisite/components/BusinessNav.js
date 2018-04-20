@@ -1,7 +1,9 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
+import { NavHashLink } from "react-router-hash-link";
 import { MAIN_URL } from "../config/MINISITE_API";
+import "../minisite.css";
 
 import {
   Collapse,
@@ -9,7 +11,6 @@ import {
   NavbarToggler,
   Nav,
   NavItem,
-  NavLink,
   Button
 } from "reactstrap";
 
@@ -24,11 +25,7 @@ class BusinessNav extends Component {
     return (
       <div>
         <Navbar color="faded" light expand="md">
-          <Link
-            // to={`/new`}
-            to={`/${this.props.businessName}`}
-            className="navbar-brand"
-          >
+          <Link to={`/${this.props.businessName}`} className="navbar-brand">
             <img
               src={`${MAIN_URL}${this.props.logo}`}
               alt="brand-logo"
@@ -38,7 +35,7 @@ class BusinessNav extends Component {
           <NavbarToggler onClick={this.toggle} />
           <Collapse isOpen={this.state.isOpen} navbar>
             <Nav className="ml-5" navbar>
-              <NavItem active>
+              <NavItem>
                 <Link
                   to={`/${this.props.businessName}`}
                   className="nav-link minisite_business__nav__item"
@@ -47,9 +44,13 @@ class BusinessNav extends Component {
                 </Link>
               </NavItem>
               <NavItem>
-                <NavLink href="#" className="minisite_business__nav__item">
+                <NavHashLink
+                  to={`/${this.props.businessName}#about-us`}
+                  className="nav-link minisite_business__nav__item"
+                  smooth
+                >
                   About
-                </NavLink>
+                </NavHashLink>
               </NavItem>
               <NavItem>
                 <Link
@@ -60,9 +61,13 @@ class BusinessNav extends Component {
                 </Link>
               </NavItem>
               <NavItem>
-                <NavLink href="#" className="minisite_business__nav__item">
+                <NavHashLink
+                  to={`/${this.props.businessName}#contact-us`}
+                  className="nav-link minisite_business__nav__item"
+                  smooth
+                >
                   Contact
-                </NavLink>
+                </NavHashLink>
               </NavItem>
             </Nav>
           </Collapse>
