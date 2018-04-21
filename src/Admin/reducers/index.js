@@ -6,6 +6,7 @@ import ExtraSectionReducer from "./extraSectionReducer";
 import generalSetupReducer from "./generalSetupReducer";
 import userReducer from "./userReducer";
 import BusinessReducer from "./businessReducer";
+import dashboard from "./dashboardReducer";
 
 const createReducer = combineReducers({
   industries: IndustryReducer,
@@ -14,7 +15,9 @@ const createReducer = combineReducers({
   extra_sections: ExtraSectionReducer,
   general_setup: generalSetupReducer,
   user_reducer: userReducer,
-  business_reducer: BusinessReducer
+  business_reducer: BusinessReducer,
+
+  dashboard
 });
 
 export default createReducer;

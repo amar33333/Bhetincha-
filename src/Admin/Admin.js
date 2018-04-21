@@ -12,6 +12,7 @@ import nav from "./config/nav";
 import AdminRoute from "./config/routes";
 import withReducer from "../config/withReducer";
 import adminReducers from "./reducers";
+import dashboardEpics from "./epics/dashboardEpics";
 
 // Import Main styles for this application
 
@@ -55,4 +56,6 @@ class Admin extends Component {
   }
 }
 
-export default withReducer("AdminContainer", adminReducers)(Admin);
+export default withReducer("AdminContainer", adminReducers, dashboardEpics)(
+  Admin
+);
