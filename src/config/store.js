@@ -1,10 +1,7 @@
 import { applyMiddleware, createStore, compose } from "redux";
-// import { createEpicMiddleware } from "redux-observable";
 import thunkMiddleware from "redux-thunk";
+import addNewEpic, { epicMiddleware } from "../epics";
 import createReducer from "../reducers";
-import addNewEpics, { epicMiddleware } from "../Website/epics";
-// import addNewEpics from "../Website/epics";
-// addNewEpics(newEpic);
 
 // Middleware configuration
 const middleware = [thunkMiddleware, epicMiddleware];
@@ -28,11 +25,11 @@ const store = createStore(
 
 // Extra functionality to the store
 store.asyncReducers = {};
-store.injectReducer = (key, reducer, newEpic) => {
+store.injectRepics = (key, reducer, newEpic) => {
   if (!store.getState()[key]) {
     store.asyncReducers[key] = reducer;
     store.replaceReducer(createReducer(store.asyncReducers));
-    addNewEpics(newEpic);
+    newEpic && addNewEpic(newEpic);
   }
 };
 

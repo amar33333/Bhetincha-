@@ -1,5 +1,5 @@
-// import addEpic from "../../Website/epics";
-// import dashboardEpics from "./dashboardEpics";
-// // import * as Actions from "../actions";
+import { combineEpics } from "redux-observable";
 
-// addEpic(dashboardEpics[0]);
+import * as dashboard from "./dashboardEpics";
+
+export default combineEpics(...Object.values(dashboard));

@@ -5,7 +5,7 @@ import "./minisite.css";
 import { Loading } from "../../../Common/pages";
 import { BusinessNav, BusinessFooter } from "./components";
 import MinisiteRoutes from "./config/routes";
-import withReducer from "../../../config/withReducer";
+import withRepics from "../../../config/withRepics";
 import reducers from "./reducers";
 import { ROUTE_PARAMS_BUSINESS_NAME } from "../../../config/CONSTANTS";
 
@@ -47,7 +47,7 @@ class Minisite extends Component {
   }
 }
 
-export default withReducer("MinisiteContainer", reducers)(
+export default withRepics("MinisiteContainer", reducers)(
   connect(
     ({ MinisiteContainer: { edit } }) => ({
       mainLoading: edit.mainLoading

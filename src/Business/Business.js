@@ -10,7 +10,7 @@ import {
 import nav from "./config/nav";
 
 import BusinessRoute from "./config/routes";
-import withReducer from "../config/withReducer";
+import withRepics from "../config/withRepics";
 import businessReducers from "./reducers";
 
 import { ROUTE_PARAMS_BUSINESS_NAME } from "../config/CONSTANTS";
@@ -109,4 +109,4 @@ class Business extends Component {
   }
 }
 
-export default withReducer("BusinessContainer", businessReducers)(Business);
+export default withRepics("BusinessContainer", businessReducers)(Business);

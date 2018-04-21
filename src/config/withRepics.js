@@ -1,11 +1,9 @@
 import React from "react";
 import { object } from "prop-types";
-// import addNewEpics from "../Website/epics";
 
 export default (key, reducer, newEpic) => WrappedComponent => {
   const Extended = (props, context) => {
-    context.store.injectReducer(key, reducer, newEpic);
-    // addNewEpics(newEpic);
+    context.store.injectRepics(key, reducer, newEpic);
     return <WrappedComponent {...props} />;
   };
 
