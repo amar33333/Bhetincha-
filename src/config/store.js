@@ -1,9 +1,11 @@
 import { applyMiddleware, createStore, compose } from "redux";
+import { createEpicMiddleware } from "redux-observable";
 import thunkMiddleware from "redux-thunk";
 import createReducer from "../reducers";
+import { pingEpic } from "../Website/epics";
 
 // Middleware configuration
-const middleware = [thunkMiddleware];
+const middleware = [thunkMiddleware, createEpicMiddleware(pingEpic)];
 
 // Store Enhancers
 const enhancers = [];
