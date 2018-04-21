@@ -11,35 +11,46 @@ class Gallery extends Component {
       photos: photos,
       selected: false
     };
-    this.toggleSelected = this.toggleSelected.bind(this);
-    this.renderViewer = this.renderViewer.bind(this);
   }
 
-  toggleSelected() {
+  toggleSelected = () => {
     this.setState({
       selected: !this.state.selected
     });
-  }
+  };
 
-  renderViewer = () => {
+  renderViewer = SelectedImage => {
     return (
-      <div className="image-viewer__wrapper">
-        <ImageGallery items={photos} />
+      <div>
+        <div className="image-viewer__wrapper">
+          <ImageGallery items={photos} />
+        </div>
+        <div
+          className="minisite_gallery__slider__close__overlay"
+          onClick={this.toggleSelected}
+        >
+          <i className="fa fa-close" />
+        </div>
       </div>
+    );
+  };
+
+  renderGallery = () => {
+    return (
+      <PhotoGallery
+        photos={this.state.photos}
+        columns={6}
+        margin={10}
+        onClick={this.toggleSelected}
+        ImageComponent={SelectedImage}
+      />
     );
   };
 
   render() {
     return (
       <div className="gallery-wrapper">
-        <PhotoGallery
-          photos={this.state.photos}
-          columns={6}
-          margin={10}
-          onClick={this.toggleSelected}
-          ImageComponent={SelectedImage}
-        />
-        {this.state.selected ? this.renderViewer() : ""}
+        {this.state.selected ? this.renderViewer() : this.renderGallery()}
       </div>
     );
   }
