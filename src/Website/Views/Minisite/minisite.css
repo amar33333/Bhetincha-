@@ -84,3 +84,18 @@
   font-size: 1.3rem;
   margin-left: 1.2rem;
 }
+
+.gallery-wrapper {
+  position: relative;
+  padding: 20px;
+}
+
+.image-viewer__wrapper {
+  position: absolute;
+  width: 100%;
+  top: 0;
+}
+
+.viewer__img {
+  max-width: 60% !important;
+}

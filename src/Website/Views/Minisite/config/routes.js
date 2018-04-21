@@ -19,6 +19,7 @@ class MinisiteRoute extends Component {
           name="Minisite-Gallery"
           component={Gallery}
         />
+
         <Redirect
           from={`/${businessName}/${minisiteBusinessRoute}`}
           to={`/${businessName}`}
