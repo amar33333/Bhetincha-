@@ -1,5 +1,3 @@
-import "rxjs";
-
 export const pingEpic = action$ =>
   action$
     .ofType("PING")
