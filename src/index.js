@@ -3,7 +3,7 @@ import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
 import Raven from "raven-js";
 
-import initializeStore from "./config/store";
+import store from "./config/store";
 import App from "./App";
 import registerServiceWorker from "./registerServiceWorker";
 
@@ -14,7 +14,7 @@ if (process.env.NODE_ENV === "production") {
 }
 
 ReactDOM.render(
-  <Provider store={initializeStore()}>
+  <Provider store={store}>
     <App />
   </Provider>,
   document.getElementById("root")

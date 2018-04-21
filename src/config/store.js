@@ -1,30 +1,34 @@
-import { applyMiddleware, createStore } from "redux";
+import { applyMiddleware, createStore, compose } from "redux";
 import thunkMiddleware from "redux-thunk";
-import { createLogger } from "redux-logger";
 import createReducer from "../reducers";
 
-const loggerMiddleware = createLogger();
+// Middleware configuration
+const middleware = [thunkMiddleware];
 
-export default () => {
-  const createStoreWithMiddleware = applyMiddleware(
-    thunkMiddleware,
-    loggerMiddleware
-  )(createStore);
+// Store Enhancers
+const enhancers = [];
 
-  const store = createStoreWithMiddleware(
-    createReducer(),
-
-    // This must only be in the production
+if (process.env.NODE_ENV === "development") {
+  const { logger } = require("redux-logger");
+  middleware.push(logger);
+  enhancers.push(
     window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
   );
+}
 
-  store.asyncReducers = {};
-  store.injectReducer = (key, reducer) => {
-    // console.log("this is store ", );
-    if (!store.getState()[key]) {
-      store.asyncReducers[key] = reducer;
-      store.replaceReducer(createReducer(store.asyncReducers));
-    }
-  };
-  return store;
+//store instantiation
+const store = createStore(
+  createReducer(),
+  compose(applyMiddleware(...middleware), ...enhancers)
+);
+
+// Extra functionality to the store
+store.asyncReducers = {};
+store.injectReducer = (key, reducer) => {
+  if (!store.getState()[key]) {
+    store.asyncReducers[key] = reducer;
+    store.replaceReducer(createReducer(store.asyncReducers));
+  }
 };
+
+export default store;
