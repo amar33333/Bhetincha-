@@ -55,6 +55,9 @@ export default function(state = INITIAL_STATE, action) {
     case FETCH_INDUSTRY_REJECTED:
       return { ...state, loading: false, statusClass: "rejected" };
 
+    case FETCH_INDUSTRY_EACH_PENDING:
+      return { ...state, loading: true, statusClass: "pending" };
+
     case FETCH_INDUSTRY_EACH_FULFILLED:
       console.log("inside: ", action);
       return {
