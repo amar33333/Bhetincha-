@@ -86,7 +86,16 @@
 }
 
 .gallery-wrapper {
-  position: relative;
+  /* position: relative; */
   min-height: 80vh !important;
   padding: 20px;
+}
+
+.gallery-list {
+  position: relative;
+}
+.gallery_upload {
+  padding: 75px;
+  background-color: rgba(104, 100, 107, 0.829);
+  color: white;
 }
