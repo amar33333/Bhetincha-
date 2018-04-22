@@ -214,10 +214,7 @@ app-root {
     }
   }
 }
-
 // Breadcrumb
-}
-
 .breadcrumb-fixed {
   .main {
     $breadcrumb-height: 2 * $breadcrumb-padding-y + $font-size-base + 1.5 *
@@ -269,10 +266,7 @@ app-root {
     }
   }
 }
-
 // Footer
-}
-
 .footer-fixed {
   .app-footer {
     position: fixed;
@@ -286,10 +280,7 @@ app-root {
     margin-bottom: $footer-height;
   }
 }
-
 // Animations
-}
-
 .app-header,
 .app-footer,
 .sidebar,
@@ -306,10 +297,7 @@ app-root {
   transition: left $layout-transition-speed, right $layout-transition-speed,
     width $layout-transition-speed;
 }
-
 // Mobile layout
-}
-
 @include media-breakpoint-down(md) {
   .app-header.navbar {
     position: fixed !important;
@@ -334,7 +322,6 @@ app-root {
   .app-body {
     margin-top: $navbar-height;
   }
-
   .breadcrumb-fixed {
     .main:nth-child(2) .breadcrumb {
       right: auto;
@@ -363,21 +350,19 @@ app-root {
   }
   // .aside-menu {
   // margin-right: - $aside-menu-width;
+}
+.sidebar-hidden {
+  .sidebar {
+    margin-left: -$mobile-sidebar-width;
   }
-
-  .sidebar-hidden {
-    .sidebar {
-      margin-left: -$mobile-sidebar-width;
-    }
+}
+.sidebar-mobile-show {
+  .sidebar {
+    width: $mobile-sidebar-width;
+    margin-left: 0;
   }
-  .sidebar-mobile-show {
-    .sidebar {
-      width: $mobile-sidebar-width;
-      margin-left: 0;
-    }
-    .main {
-      margin-right: -$mobile-sidebar-width !important;
-      margin-left: $mobile-sidebar-width !important;
-    }
+  .main {
+    margin-right: -$mobile-sidebar-width !important;
+    margin-left: $mobile-sidebar-width !important;
   }
 }
