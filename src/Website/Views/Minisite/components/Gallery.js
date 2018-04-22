@@ -53,9 +53,9 @@ class Gallery extends Component {
     );
   };
 
-  render() {
+  renderAddNewGallery = () => {
     return (
-      <div className="gallery-wrapper">
+      <div>
         <p> Create New Album: </p>
         <form
           action=""
@@ -77,6 +77,35 @@ class Gallery extends Component {
             }
           />
         </form>
+      </div>
+    );
+  };
+
+  render() {
+    return (
+      <div className="gallery-wrapper">
+        {this.props.mainEdit && this.renderAddNewGallery()}
+        {/* <p> Create New Album: </p>
+         <form
+          action=""
+          onSubmit={event => {
+            event.preventDefault();
+            this.props.createNewAlbum({
+              id: this.props.id,
+              access_token: this.props.cookies.token_data.access_token,
+              username: this.props.username,
+              data: { albums: { name: this.state.newAlbumName } }
+            });
+          }}
+        >
+          <input
+            placeholder="Album Name"
+            value={this.state.newAlbumName}
+            onChange={event =>
+              this.setState({ newAlbumName: event.target.value })
+            }
+          />
+        </form> */}
         {this.props.albums.map(album => (
           <div className="albums" key={album.albumID}>
             <p>{album.name}</p>
