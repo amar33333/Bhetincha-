@@ -95,7 +95,6 @@ button {
       $btn-border-radius-lg
     );
   }
-
   &.btn-sm {
     @include button-social-size(
       $input-btn-padding-y-sm,
@@ -106,19 +105,15 @@ button {
     );
   }
 }
-
 .btn-facebook {
   $color: $facebook;
-
   background: $color;
   &::before {
     content: "\f09a";
     background: darken($color, 5%);
   }
-
   &:hover {
     background: darken($color, 5%);
-
     &::before {
       background: darken($color, 10%);
     }
@@ -163,7 +158,6 @@ button {
 
 .btn-flickr {
   $color: $flickr;
-
   background: $color;
   &::before {
     content: "\f16e";
@@ -199,7 +193,6 @@ button {
 
 .btn-xing {
   $color: $xing;
-
   background: $color;
   &::before {
     content: "\f168";
@@ -217,7 +210,6 @@ button {
 
 .btn-github {
   $color: $github;
-
   background: $color;
   &::before {
     content: "\f09b";
@@ -271,7 +263,6 @@ button {
 
 .btn-stack-overflow {
   $color: $stack-overflow;
-
   background: $color;
   &::before {
     content: "\f16c";
@@ -289,7 +280,6 @@ button {
 
 .btn-css3 {
   $color: $css3;
-
   background: $color;
   &::before {
     content: "\f13c";
@@ -307,7 +297,6 @@ button {
 
 .btn-youtube {
   $color: $youtube;
-
   background: $color;
   &::before {
     content: "\f167";
@@ -343,7 +332,6 @@ button {
 
 .btn-google-plus {
   $color: $google-plus;
-
   background: $color;
   &::before {
     content: "\f0d5";
@@ -361,7 +349,6 @@ button {
 
 .btn-instagram {
   $color: $instagram;
-
   background: $color;
   &::before {
     content: "\f16d";
@@ -397,7 +384,6 @@ button {
 
 .btn-vk {
   $color: $vk;
-
   background: $color;
   &::before {
     content: "\f189";
@@ -415,7 +401,6 @@ button {
 
 .btn-yahoo {
   $color: $yahoo;
-
   background: $color;
   &::before {
     content: "\f19e";
@@ -433,7 +418,6 @@ button {
 
 .btn-behance {
   $color: $behance;
-
   background: $color;
   &::before {
     content: "\f1b4";
@@ -505,7 +489,6 @@ button {
 
 .btn-vine {
   $color: $vine;
-
   background: $color;
   &::before {
     content: "\f1ca";
@@ -523,7 +506,6 @@ button {
 
 .btn-foursquare {
   $color: $foursquare;
-
   background: $color;
   &::before {
     content: "\f180";
@@ -541,7 +523,6 @@ button {
 
 .btn-vimeo {
   $color: $vimeo;
-
   background: $color;
   &::before {
     content: "\f194";

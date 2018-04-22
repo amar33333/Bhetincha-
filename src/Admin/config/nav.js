@@ -50,6 +50,12 @@ const items = {
       name: "Business"
     },
     {
+      name: "Add Business",
+      url: "/admin/add-business",
+      icon: "fa fa-industry",
+      permission: "CAN_VIEW_USERS"
+    },
+    {
       name: "Industry",
       url: "/admin/industry",
       icon: "fa fa-industry",

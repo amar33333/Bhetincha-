@@ -1,4 +1,9 @@
-import { onCategoryPost, onCategoryGet } from "../config/adminServerCall";
+import {
+  onCategoryPost,
+  onCategoryGet,
+  onCategoryEachGet
+} from "../config/adminServerCall";
+
 import {
   CREATE_CATEGORY_FULFILLED,
   CREATE_CATEGORY_REJECTED,
@@ -6,8 +11,13 @@ import {
   FETCH_CATEGORY_FULFILLED,
   FETCH_CATEGORY_REJECTED,
   FETCH_CATEGORY_PENDING,
+  FETCH_CATEGORY_EACH_FULFILLED,
+  FETCH_CATEGORY_EACH_REJECTED,
+  FETCH_CATEGORY_EACH_PENDING,
   UNMOUNT_CATEGORY
 } from "./types";
+
+import { UNMOUNT_SUB_CATEGORY } from "../../Business/actions/types";
 
 export const onCategorySubmit = ({
   category,
@@ -41,7 +51,26 @@ export const onCategoryList = ({ access_token }) => dispatch => {
   dispatch({ type: FETCH_CATEGORY_PENDING });
 };
 
+export const onCategoryEachList = ({ id, access_token }) => dispatch => {
+  onCategoryEachGet({ id, access_token })
+    .then(response => {
+      dispatch({ type: FETCH_CATEGORY_EACH_FULFILLED, payload: response.data });
+    })
+    .catch(error =>
+      dispatch({ type: FETCH_CATEGORY_EACH_REJECTED, payload: error })
+    );
+
+  dispatch({ type: FETCH_CATEGORY_EACH_PENDING });
+};
+
 export const onUnmountCategory = () => ({
   type: UNMOUNT_CATEGORY,
   payload: null
 });
+
+export const onUnmountSubCategories = () => {
+  return {
+    type: UNMOUNT_SUB_CATEGORY,
+    payload: null
+  };
+};

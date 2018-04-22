@@ -73,16 +73,13 @@ $theme-colors: (
   gray-900: $gray-900
 );
 // Options
-
 // Quickly modify global styling by enabling or disabling optional features.
 $enable-transitions: true;
 $enable-rounded: false;
 // Body
-
 // Settings for the `<body>` element.
 $body-bg: #e4e5e6;
 // Typography
-
 // Font, line-height, and color for body text, headings, and more.
 $font-size-base: 0.875rem;
 // Breadcrumbs

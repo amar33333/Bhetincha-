@@ -211,99 +211,77 @@
     }
   }
 }
-
 @mixin switch-variant($color) {
   > .switch-input:checked ~ .switch-label {
     background: $color !important;
     border-color: darken($color, 10%);
   }
-
   > .switch-input:checked ~ .switch-handle {
     border-color: darken($color, 10%);
   }
 }
-
 @mixin switch-outline-variant($color) {
   > .switch-input:checked ~ .switch-label {
     background: #fff !important;
     border-color: $color;
-
     &::after {
       color: $color;
     }
   }
-
   > .switch-input:checked ~ .switch-handle {
     border-color: $color;
   }
 }
-
 @mixin switch-outline-alt-variant($color) {
   > .switch-input:checked ~ .switch-label {
     background: #fff !important;
     border-color: $color;
-
     &::after {
       color: $color;
     }
   }
-
   > .switch-input:checked ~ .switch-handle {
     background: $color !important;
     border-color: $color;
   }
 }
-
 $switch-lg-width: 48px;
 $switch-lg-height: 28px;
 $switch-lg-font-size: 12px;
-
 $switch-width: 40px;
 $switch-height: 24px;
 $switch-font-size: 10px;
-
 $handle-margin: 2px;
-
 $switch-sm-width: 32px;
 $switch-sm-height: 20px;
 $switch-sm-font-size: 8px;
-
 $switch-xs-width: 24px;
 $switch-xs-height: 16px;
 $switch-xs-font-size: 7px;
-
 $switch-text-lg-width: 56px;
 $switch-text-lg-height: 28px;
 $switch-text-lg-font-size: 12px;
-
 $switch-text-width: 48px;
 $switch-text-height: 24px;
 $switch-text-font-size: 10px;
-
 $switch-text-sm-width: 40px;
 $switch-text-sm-height: 20px;
 $switch-text-sm-font-size: 8px;
-
 $switch-text-xs-width: 32px;
 $switch-text-xs-height: 16px;
 $switch-text-xs-font-size: 7px;
-
 $switch-icon-lg-width: 56px;
 $switch-icon-lg-height: 28px;
 $switch-icon-lg-font-size: 12px;
-
 $switch-icon-width: 48px;
 $switch-icon-height: 24px;
 $switch-icon-font-size: 10px;
-
 $switch-icon-sm-width: 40px;
 $switch-icon-sm-height: 20px;
 $switch-icon-sm-font-size: 8px;
-
 $switch-icon-xs-width: 32px;
 $switch-icon-xs-height: 16px;
 $switch-icon-xs-font-size: 7px;
-
 .switch.switch-default {
   @include switch(
     "default",
@@ -323,7 +301,6 @@ $switch-icon-xs-font-size: 7px;
     $handle-margin
   );
 }
-
 .switch.switch-icon {
   @include switch(
     "icon",
@@ -333,18 +310,15 @@ $switch-icon-xs-font-size: 7px;
     $handle-margin
   );
 }
-
 .switch.switch-3d {
   @include switch("ddd", $switch-width, $switch-height, $switch-font-size, 0);
 }
-
-//pills style
+// pills style
 .switch-pill {
   .switch-label,
   .switch-handle {
     border-radius: 50em !important;
   }
-
   .switch-label::before {
     right: 2px !important;
   }
@@ -352,17 +326,14 @@ $switch-icon-xs-font-size: 7px;
     left: 2px !important;
   }
 }
-
 @each $color, $value in $theme-colors {
-  //normal style
+  // normal style
   .switch-#{$color} {
     @include switch-variant($value);
-  }
-  //outline style
+  } // outline style
   .switch-#{$color}-outline {
     @include switch-outline-variant($value);
-  }
-  //outline alternative style
+  } // outline alternative style
   .switch-#{$color}-outline-alt {
     @include switch-outline-alt-variant($value);
   }

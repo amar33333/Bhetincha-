@@ -134,7 +134,6 @@
       }
     }
   }
-
   // Sidebar Menu
   .sidebar {
     .sidebar-nav {
@@ -170,7 +169,6 @@
       }
     }
   }
-
   .sidebar-minimized .sidebar {
     .nav-link {
       padding-right: 0;
@@ -193,90 +191,75 @@
       }
     }
   }
-
   // Horizontal bars
   .horizontal-bars {
     li {
       .bars {
         padding-right: 100px;
         padding-left: 0;
-
         .progress:first-child {
           margin-bottom: 2px;
         }
       }
     }
-
     &.type-2 {
       li {
         i {
           margin-right: 5px;
           margin-left: $spacer;
         }
-
         .value {
           float: left;
           font-weight: 600;
         }
-
         .bars {
           padding: 0;
         }
       }
     }
   }
-
   // Icon list
   .icons-list {
     li {
       position: relative;
       height: 40px;
       vertical-align: middle;
-
       i {
         float: right;
       }
-
       .desc {
         margin-right: 50px;
         margin-left: 0;
       }
-
       .value {
         right: auto;
         left: 45px;
         text-align: left;
-
         strong {
           display: block;
           margin-top: -3px;
         }
       }
-
       .actions {
         right: auto;
         left: 10px;
       }
     }
   }
-
   // Callouts
   .callout {
     border: 0 solid $border-color;
     border-right-width: 0.25rem;
-
     @each $color, $value in $theme-colors {
       &.callout-#{$color} {
         border-right-color: $value;
       }
     }
-
     .chart-wrapper {
       left: 0;
       float: left;
     }
   }
-
   .callout-default {
     border-right-color: $text-muted;
   }
