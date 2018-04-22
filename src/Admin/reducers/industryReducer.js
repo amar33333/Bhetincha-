@@ -5,6 +5,9 @@ import {
   CREATE_INDUSTRY_PENDING,
   CREATE_INDUSTRY_FULFILLED,
   CREATE_INDUSTRY_REJECTED,
+  FETCH_INDUSTRY_EACH_FULFILLED,
+  FETCH_INDUSTRY_EACH_REJECTED,
+  FETCH_INDUSTRY_EACH_PENDING,
   UNMOUNT_INDUSTRY
 } from "../actions/types";
 
@@ -50,6 +53,18 @@ export default function(state = INITIAL_STATE, action) {
       };
 
     case FETCH_INDUSTRY_REJECTED:
+      return { ...state, loading: false, statusClass: "rejected" };
+
+    case FETCH_INDUSTRY_EACH_FULFILLED:
+      console.log("inside: ", action);
+      return {
+        ...state,
+        industryData: action.payload,
+        loading: false,
+        statusClass: "fulfilled"
+      };
+
+    case FETCH_INDUSTRY_EACH_REJECTED:
       return { ...state, loading: false, statusClass: "rejected" };
 
     default:

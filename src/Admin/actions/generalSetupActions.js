@@ -8,7 +8,11 @@ import {
   onStateGet,
   onAreaGet,
   onDistrictGet,
-  onCityGet
+  onCityGet,
+  onCountryEachGet,
+  onStateEachGet,
+  onDistrictEachGet,
+  onCityEachGet
 } from "../config/adminServerCall";
 import {
   // AREA
@@ -20,21 +24,33 @@ import {
   CREATE_COUNTRY_FULFILLED,
   CREATE_COUNTRY_REJECTED,
   CREATE_COUNTRY_PENDING,
+  FETCH_COUNTRY_EACH_FULFILLED,
+  FETCH_COUNTRY_EACH_REJECTED,
+  FETCH_COUNTRY_EACH_PENDING,
 
   // STATE
   CREATE_STATE_FULFILLED,
   CREATE_STATE_REJECTED,
   CREATE_STATE_PENDING,
+  FETCH_STATE_EACH_FULFILLED,
+  FETCH_STATE_EACH_REJECTED,
+  FETCH_STATE_EACH_PENDING,
 
   // DISTRICT
   CREATE_DISTRICT_FULFILLED,
   CREATE_DISTRICT_REJECTED,
   CREATE_DISTRICT_PENDING,
+  FETCH_DISTRICT_EACH_FULFILLED,
+  FETCH_DISTRICT_EACH_REJECTED,
+  FETCH_DISTRICT_EACH_PENDING,
 
   // CITY
   CREATE_CITY_FULFILLED,
   CREATE_CITY_REJECTED,
   CREATE_CITY_PENDING,
+  FETCH_CITY_EACH_FULFILLED,
+  FETCH_CITY_EACH_REJECTED,
+  FETCH_CITY_EACH_PENDING,
   FETCH_AREA_FULFILLED,
   FETCH_AREA_PENDING,
   FETCH_AREA_REJECTED,
@@ -53,8 +69,8 @@ import {
 
   // UNMOUNT
   UNMOUNT_AREA,
-  UNMOUNT_COUNTRY,
-  UNMOUNT_STATES,
+  // UNMOUNT_COUNTRY,
+  // UNMOUNT_STATES,
   UNMOUNT_DISTRICT,
   UNMOUNT_CITY
 } from "./types";
@@ -168,6 +184,75 @@ export const onAreaList = ({ access_token }) => dispatch => {
     .catch(error => dispatch({ type: FETCH_AREA_REJECTED, payload: error }));
 
   dispatch({ type: FETCH_AREA_PENDING });
+};
+
+export const onCountryEachList = ({ id, access_token }) => dispatch => {
+  onCountryEachGet({ id, access_token })
+    .then(response =>
+      dispatch({ type: FETCH_COUNTRY_EACH_FULFILLED, payload: response.data })
+    )
+    .catch(error =>
+      dispatch({ type: FETCH_COUNTRY_EACH_REJECTED, payload: error })
+    );
+
+  dispatch({ type: FETCH_COUNTRY_EACH_PENDING });
+};
+
+export const onStateEachList = ({ id, access_token }) => dispatch => {
+  onStateEachGet({ id, access_token })
+    .then(response =>
+      dispatch({ type: FETCH_STATE_EACH_FULFILLED, payload: response.data })
+    )
+    .catch(error =>
+      dispatch({ type: FETCH_STATE_EACH_REJECTED, payload: error })
+    );
+
+  dispatch({ type: FETCH_STATE_EACH_PENDING });
+};
+
+export const onDistrictEachList = ({ id, access_token }) => dispatch => {
+  onDistrictEachGet({ id, access_token })
+    .then(response =>
+      dispatch({ type: FETCH_DISTRICT_EACH_FULFILLED, payload: response.data })
+    )
+    .catch(error =>
+      dispatch({ type: FETCH_DISTRICT_EACH_REJECTED, payload: error })
+    );
+
+  dispatch({ type: FETCH_DISTRICT_EACH_PENDING });
+};
+
+export const onCityEachList = ({ id, access_token }) => dispatch => {
+  onCityEachGet({ id, access_token })
+    .then(response =>
+      dispatch({ type: FETCH_CITY_EACH_FULFILLED, payload: response.data })
+    )
+    .catch(error =>
+      dispatch({ type: FETCH_CITY_EACH_REJECTED, payload: error })
+    );
+
+  dispatch({ type: FETCH_CITY_EACH_PENDING });
+};
+
+export const onUnmountDistrict = () => {
+  return {
+    type: UNMOUNT_DISTRICT,
+    payload: null
+  };
+};
+
+export const onUnmountCity = () => {
+  return {
+    type: UNMOUNT_CITY,
+    payload: null
+  };
+};
+
+export const onUnmountArea = () => {
+  return {
+    type: UNMOUNT_AREA,
+    payload: null
+  };
 };
 
 // export const onUnmountArea = () => ({
