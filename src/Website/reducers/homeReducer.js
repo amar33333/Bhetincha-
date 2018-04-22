@@ -2,10 +2,7 @@ import { TOGGLE_LOGIN_MODAL, TOGGLE_REGISTER_MODAL } from "../actions/types";
 
 const INITIAL_STATE = {
   loginModal: false,
-  registerModal: false,
-
-  // test
-  isPinging: false
+  registerModal: false
 };
 
 export default function(state = INITIAL_STATE, action) {
@@ -15,12 +12,6 @@ export default function(state = INITIAL_STATE, action) {
 
     case TOGGLE_REGISTER_MODAL:
       return { ...state, registerModal: !state.registerModal };
-
-    case "PING":
-      return { ...state, isPinging: true };
-
-    case "PONG":
-      return { ...state, isPinging: false };
 
     default:
       return state;

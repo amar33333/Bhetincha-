@@ -24,44 +24,22 @@ export default function(state = INITIAL_STATE, action) {
       return { ...state, ...action.payload };
 
     case FETCH_USER_PENDING:
-      return {
-        ...state,
-        loading: true
-      };
+      return { ...state, loading: true };
 
     case FETCH_USER_FULFILLED:
-      return {
-        ...state,
-        ...action.payload,
-        loading: false,
-        error: false
-      };
+      return { ...state, ...action.payload, loading: false, error: false };
 
     case FETCH_USER_REJECTED:
-      return {
-        ...state,
-        loading: false,
-        error: true
-      };
+      return { ...state, loading: false, error: true };
 
     case CREATE_USER_PENDING:
-      return {
-        ...state,
-        loading: true
-      };
+      return { ...state, loading: true };
 
     case CREATE_USER_FULFILLED:
-      return {
-        ...state,
-        data: action.payload.data,
-        loading: false
-      };
+      return { ...state, data: action.payload, loading: false };
 
     case CREATE_USER_REJECTED:
-      return {
-        ...state,
-        loading: false
-      };
+      return { ...state, loading: false };
 
     default:
       return state;

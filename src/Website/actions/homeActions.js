@@ -7,6 +7,3 @@ export const toggleLoginModal = () => ({
 export const toggleRegisterModal = () => ({
   type: TOGGLE_REGISTER_MODAL
 });
-
-// test
-export const ping = () => ({ type: "PING" });

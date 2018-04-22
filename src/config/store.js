@@ -1,6 +1,6 @@
 import { applyMiddleware, createStore, compose } from "redux";
 import thunkMiddleware from "redux-thunk";
-import addNewEpic, { epicMiddleware } from "../epics";
+import addNewEpic, { epicMiddleware } from "./epics";
 import createReducer from "../reducers";
 
 // Middleware configuration

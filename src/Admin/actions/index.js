@@ -6,4 +6,4 @@ export * from "./generalSetupActions";
 export * from "./userActions";
 export * from "./businessActions";
 
-export * from "./dashboardActions";
+export default [];

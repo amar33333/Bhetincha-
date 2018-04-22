@@ -5,14 +5,14 @@ import {
   REGISTER_URL,
   GET_USER_INFO_URL
 } from "./API";
-import axios from "axios";
 import querystring from "querystring";
+import { ajax } from "rxjs/observable/dom/ajax";
 
 export const onLogin = ({ username, password }) =>
-  axios({
-    method: "post",
+  ajax({
+    method: "POST",
     url: O_TOKEN_URL,
-    data: querystring.stringify({
+    body: querystring.stringify({
       client_id: CLIENT_ID,
       client_secret: CLIENT_SECRET,
       grant_type: "password",
@@ -25,8 +25,8 @@ export const onLogin = ({ username, password }) =>
   });
 
 export const onUserGet = ({ access_token }) =>
-  axios({
-    method: "get",
+  ajax({
+    method: "GET",
     url: GET_USER_INFO_URL,
     headers: {
       "Content-Type": "application/json",
@@ -34,31 +34,11 @@ export const onUserGet = ({ access_token }) =>
     }
   });
 
-// export const onRegister = ({ username, password, email, business_name }) =>
-//   // console.log("asdasd: ", username, password, email, business_name);
-//   axios({
-//     method: "post",
-//     url: REGISTER_URL,
-//     data: querystring.stringify({
-//       client_id: CLIENT_ID,
-//       client_secret: CLIENT_SECRET,
-//       grant_type: "password",
-//       username,
-//       password,
-//       email,
-//       business_name
-//     }),
-//     headers: {
-//       "Content-Type": "application/x-www-form-urlencoded"
-//     }
-//   });
-
 export const onRegister = ({ username, password, email, business_name }) =>
-  // console.log("asdasd: ", username, password, email, business_name);
-  axios({
+  ajax({
     method: "post",
     url: REGISTER_URL,
-    data: {
+    body: {
       username,
       password,
       email,

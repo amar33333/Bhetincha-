@@ -12,7 +12,7 @@ import {
 } from "reactstrap";
 
 import { connect } from "react-redux";
-import { onSubmit, onRequestLoginData } from "../../../../actions";
+import { onSubmit } from "../../../../actions";
 
 class LoginModal extends Component {
   state = { username: "", password: "" };
@@ -141,6 +141,4 @@ const mapStateToProps = ({ auth }) => {
   return { ...auth };
 };
 
-export default connect(mapStateToProps, { onSubmit, onRequestLoginData })(
-  LoginModal
-);
+export default connect(mapStateToProps, { onSubmit })(LoginModal);

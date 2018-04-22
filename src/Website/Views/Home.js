@@ -16,8 +16,7 @@ import { Avatar } from "../components";
 import {
   toggleLoginModal,
   toggleRegisterModal,
-  onSearchQuerySubmit,
-  ping
+  onSearchQuerySubmit
 } from "../actions";
 
 import { BottomFooter } from "../components";
@@ -95,11 +94,6 @@ class Home extends Component {
             </Col>
           </Row>
 
-          {/* Test */}
-          <div>
-            <h1> is pinging: {this.props.isPinging.toString()}</h1>
-            <button onClick={this.props.ping}>Start PING</button>
-          </div>
           <Form onSubmit={this.onSearchQuerySubmit}>
             <Row>
               <Col xs="12" className="home-page__searchbar ">
@@ -146,7 +140,6 @@ export default connect(
   {
     toggleLoginModal,
     toggleRegisterModal,
-    onSearchQuerySubmit,
-    ping
+    onSearchQuerySubmit
   }
 )(Home);

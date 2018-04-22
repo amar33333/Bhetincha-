@@ -9,10 +9,11 @@ import {
 } from "../Common/components";
 import nav from "./config/nav";
 
+import { combineEpics } from "redux-observable";
 import AdminRoute from "./config/routes";
 import withRepics from "../config/withRepics";
 import adminReducers from "./reducers";
-import adminEpics from "./epics";
+import adminEpics from "./config/epics";
 
 // Import Main styles for this application
 
@@ -56,4 +57,8 @@ class Admin extends Component {
   }
 }
 
-export default withRepics("AdminContainer", adminReducers, adminEpics)(Admin);
+export default withRepics(
+  "AdminContainer",
+  adminReducers,
+  combineEpics(...adminEpics)
+)(Admin);

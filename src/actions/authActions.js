@@ -1,6 +1,5 @@
-import { onLogin, onRegister, onUserGet } from "../Common/utils/serverCall";
+import { Observable } from "rxjs/Observable";
 import {
-  FETCH_USER,
   FETCH_USER_FULFILLED,
   FETCH_USER_REJECTED,
   FETCH_USER_PENDING,
@@ -22,96 +21,77 @@ import {
 } from "../config/CONSTANTS";
 
 import CookiesProvider from "../Common/utils/CookiesProvider";
+import { onLogin, onRegister, onUserGet } from "../Common/utils/serverCall";
+
+const epics = [];
 
 export const loadCookies = () => ({
   type: COOKIES_LOAD_FULFILLED,
-  payload: {
-    cookies: CookiesProvider.getAllCookies()
-  }
+  payload: { cookies: CookiesProvider.getAllCookies() }
 });
 
-export const onSubmit = ({ username, password, history }) => dispatch => {
-  onLogin({ username, password })
-    .then(response => {
-      onUserGet({ access_token: response.data.access_token })
-        .then(userData => {
-          const initialDate = new Date();
+export const onSubmit = payload => ({
+  type: FETCH_USER_PENDING,
+  payload
+});
 
-          let expiryDate = new Date(
-            initialDate.valueOf() + 1000 * 60 * 60 * 10
-          );
+epics.push(action$ =>
+  action$.ofType(FETCH_USER_PENDING).mergeMap(action => {
+    const { username, password, history } = action.payload;
+    const expiryDate = new Date(new Date().valueOf() + 1000 * 60 * 60 * 10);
 
-          console.log("expire date: ", expiryDate);
+    return onLogin({ username, password })
+      .mergeMap(({ response }) => {
+        CookiesProvider.setCookies("token_data", response, "/", expiryDate);
+        return onUserGet({ access_token: response.access_token });
+      })
+      .concatMap(({ response }) => {
+        CookiesProvider.setCookies("user_data", response, "/", expiryDate);
 
-          CookiesProvider.setCookies(
-            "token_data",
-            response.data,
-            "/",
-            expiryDate
-          );
+        switch (response.groups[0].name) {
+          case USER_GROUP_BUSINESS:
+            history.push(`/${response.username}`);
+            break;
+          case USER_GROUP_INDIVIDUAL:
+            // history.push("/");
+            break;
+          default:
+            history.push(`/admin`);
+        }
 
-          console.log("authactions: ", CookiesProvider.getTokenData());
-
-          CookiesProvider.setCookies(
-            "user_data",
-            userData.data,
-            "/",
-            expiryDate
-          );
-          dispatch({
+        return [
+          { type: TOGGLE_LOGIN_MODAL },
+          {
             type: FETCH_USER_FULFILLED,
-            payload: {
-              cookies: CookiesProvider.getAllCookies()
-            }
-          });
-          dispatch({ type: TOGGLE_LOGIN_MODAL });
-          // if (userData.data.username === "admin") history.push("/admin");
-
-          // else
-          switch (userData.data.groups[0].name) {
-            case USER_GROUP_BUSINESS:
-              history.push(`/${userData.data.username}`);
-              break;
-
-            case USER_GROUP_INDIVIDUAL:
-              // history.push("/");
-              break;
-
-            default:
-              history.push(`/admin`);
+            payload: { cookies: CookiesProvider.getAllCookies() }
           }
-        })
-        .catch(error => {
-          dispatch({ type: FETCH_USER_REJECTED, payload: error });
-        });
-    })
-    .catch(error => dispatch({ type: FETCH_USER_REJECTED, payload: error }));
+        ];
+      })
+      .catch(ajaxError => Observable.of({ type: FETCH_USER_REJECTED }));
+  })
+);
 
-  dispatch({ type: FETCH_USER_PENDING });
-};
-
-export const onRequestLoginData = ({ username, password }) => ({
-  type: FETCH_USER,
-  payload: onLogin({ username, password })
+export const onRegisterSubmit = payload => ({
+  type: CREATE_USER_PENDING,
+  payload
 });
 
-export const onRegisterSubmit = ({
-  username,
-  password,
-  business_name,
-  email
-}) => dispatch => {
-  onRegister({ username, password, business_name, email })
-    .then(response => {
-      dispatch({ type: CREATE_USER_FULFILLED, payload: response.data });
-      dispatch({ type: TOGGLE_REGISTER_MODAL });
-    })
-    .catch(error => dispatch({ type: CREATE_USER_REJECTED, payload: error }));
-
-  dispatch({ type: CREATE_USER_PENDING });
-};
+epics.push(action$ =>
+  action$
+    .ofType(CREATE_USER_PENDING)
+    .mergeMap(action => onRegister({ ...action.payload }))
+    .concatMap(({ response }) => [
+      { type: TOGGLE_REGISTER_MODAL },
+      { type: CREATE_USER_FULFILLED, payload: response }
+    ])
+    .catch(ajaxError =>
+      Observable.of({ type: CREATE_USER_REJECTED, payload: ajaxError })
+    )
+);
 
 export const onLogout = () => ({
   type: LOGOUT_USER,
   payload: null
 });
+
+export default epics;
