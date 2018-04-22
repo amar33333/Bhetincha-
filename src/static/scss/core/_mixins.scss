@@ -1,4 +1,10 @@
-@mixin button-social-size($padding-y, $padding-x, $font-size, $line-height, $border-radius) {
+@mixin button-social-size(
+  $padding-y,
+  $padding-x,
+  $font-size,
+  $line-height,
+  $border-radius
+) {
   padding: $padding-y $padding-x;
   font-size: $font-size;
   line-height: $line-height;
@@ -99,7 +105,10 @@
 
 @mixin bg-variant($parent, $color) {
   #{$parent} {
-    @include border-radius($card-border-radius-inner $card-border-radius-inner $card-border-radius-inner $card-border-radius-inner);
+    @include border-radius(
+      $card-border-radius-inner $card-border-radius-inner
+        $card-border-radius-inner $card-border-radius-inner
+    );
     color: #fff !important;
     background-color: $color !important;
   }
