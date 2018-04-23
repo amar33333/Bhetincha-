@@ -95,7 +95,37 @@
   position: relative;
 }
 .gallery_upload {
-  padding: 75px;
-  background-color: rgba(104, 100, 107, 0.829);
+  padding-top: 50px;
+  padding-bottom: 50px;
+  padding-right: 20px;
+  padding-left: 20px;
+
+  background-color: #151b1ec4;
   color: white;
+}
+.upload-camera {
+  margin-top: 10px;
+  font-size: 3rem;
+}
+
+.album-title {
+  margin-bottom: 15px;
+}
+.album-title p {
+  margin-bottom: 0px;
+  font-weight: bold;
+  font-size: 1.2rem;
+  text-transform: uppercase;
+}
+.album-title p:after {
+  content: "";
+  display: inline-block;
+  width: 30px;
+  margin-left: 5px;
+  margin-bottom: 0.3rem;
+  border-bottom: 2px solid #000;
+}
+
+#ReactGridGallery img {
+  object-fit: cover;
 }

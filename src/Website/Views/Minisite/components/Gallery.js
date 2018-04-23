@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import GalleryGrid from "react-grid-gallery";
 import FileInputComponent from "react-file-input-previews-base64";
 import { connect } from "react-redux";
+import { Container, Card, CardBody, CardHeader, Input } from "reactstrap";
 
 import { handleGalleryPhotoUpload, createNewAlbum } from "../actions";
 
@@ -20,7 +21,7 @@ class Gallery extends Component {
         <FileInputComponent
           imagePreview={false}
           parentStyle={{ marginTop: "0px" }}
-          // labelText="Select file"
+          // labelText="Maximum total size is 25MB"
           labelStyle={{ display: "none" }}
           multiple={true}
           callbackFunction={photos =>
@@ -44,7 +45,11 @@ class Gallery extends Component {
                   style={{ textShadow: "0 1px 0 rgba(0, 0, 0, 0.1)" }}
                 />
               ) : (
-                <i className="fa fa-camera" />
+                <div>
+                  <span>Maximum upload size: 25MB</span>
+                  <br />
+                  <i className="fa fa-camera upload-camera" />
+                </div>
               )}
             </button>
           }
@@ -56,27 +61,35 @@ class Gallery extends Component {
   renderAddNewGallery = () => {
     return (
       <div>
-        <p> Create New Album: </p>
-        <form
-          action=""
-          onSubmit={event => {
-            event.preventDefault();
-            this.props.createNewAlbum({
-              id: this.props.id,
-              access_token: this.props.cookies.token_data.access_token,
-              username: this.props.username,
-              data: { albums: { name: this.state.newAlbumName } }
-            });
-          }}
-        >
-          <input
-            placeholder="Album Name"
-            value={this.state.newAlbumName}
-            onChange={event =>
-              this.setState({ newAlbumName: event.target.value })
-            }
-          />
-        </form>
+        <Container>
+          <Card>
+            <CardHeader style={{ backgroundColor: "#21a8d8", color: "#fff" }}>
+              <strong>Create New Album</strong>
+            </CardHeader>
+            <CardBody>
+              <form
+                action=""
+                onSubmit={event => {
+                  event.preventDefault();
+                  this.props.createNewAlbum({
+                    id: this.props.id,
+                    access_token: this.props.cookies.token_data.access_token,
+                    username: this.props.username,
+                    data: { albums: { name: this.state.newAlbumName } }
+                  });
+                }}
+              >
+                <Input
+                  placeholder="Album Name"
+                  value={this.state.newAlbumName}
+                  onChange={event =>
+                    this.setState({ newAlbumName: event.target.value })
+                  }
+                />
+              </form>
+            </CardBody>
+          </Card>
+        </Container>
       </div>
     );
   };
@@ -107,29 +120,39 @@ class Gallery extends Component {
           />
         </form> */}
         {this.props.albums.map(album => (
-          <div className="albums" key={album.albumID}>
-            <p>{album.name}</p>
-            <div className="gallery-list">
-              <GalleryGrid
-                images={album.photos.map(photo => ({
-                  src: `${MAIN_URL}${photo.photoURL}`,
-                  thumbnail: `${MAIN_URL}${photo.photoURL}`,
-                  thumbnailWidth: 320,
-                  thumbnailHeight: 174,
-                  caption: photo.name,
-                  showLightboxThumbnails: true,
-                  // isSelected: true,
-                  onSelectImage: () => {
-                    console.log(this);
-                  },
-                  enableImageSelection: true,
-                  id: photo.photoID
-                }))}
-                backdropClosesModal={true}
-              />
-            </div>
-            {this.props.mainEdit && this.renderGalleryUpload(album.albumID)}
-          </div>
+          <Container>
+            <Card>
+              <CardBody>
+                <div className="album-title">
+                  <p className="album-title">{album.name}</p>
+                  <small>Updated at March 2018</small>
+                </div>
+                <div className="albums" key={album.albumID}>
+                  <div className="gallery-list">
+                    <GalleryGrid
+                      images={album.photos.map(photo => ({
+                        src: `${MAIN_URL}${photo.photoURL}`,
+                        thumbnail: `${MAIN_URL}${photo.photoURL}`,
+                        thumbnailWidth: 320,
+                        thumbnailHeight: 174,
+                        caption: photo.name,
+                        showLightboxThumbnails: true,
+                        // isSelected: true,
+                        onSelectImage: () => {
+                          console.log(this);
+                        },
+                        enableImageSelection: true,
+                        id: photo.photoID
+                      }))}
+                      backdropClosesModal={true}
+                    />
+                  </div>
+                  {this.props.mainEdit &&
+                    this.renderGalleryUpload(album.albumID)}
+                </div>
+              </CardBody>
+            </Card>
+          </Container>
         ))}
       </div>
     );

@@ -13,6 +13,7 @@
     "querystring": "^0.2.0",
     "raven-js": "^3.24.1",
     "react": "^16.3.1",
+    "react-autosuggest": "^9.3.4",
     "react-chartjs-2": "2.7.0",
     "react-dom": "^16.3.1",
     "react-file-base64": "^1.0.3",
