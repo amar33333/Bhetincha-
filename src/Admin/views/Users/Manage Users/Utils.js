@@ -21,9 +21,7 @@ const newPerson = () => {
     status:
       statusChance > 0.66
         ? "relationship"
-        : statusChance > 0.33
-          ? "complicated"
-          : "single"
+        : statusChance > 0.33 ? "complicated" : "single"
   };
 };
 

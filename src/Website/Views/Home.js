@@ -93,7 +93,6 @@ class Home extends Component {
               <img alt="logo" src={logo} className="home-page__logo" />
             </Col>
           </Row>
-
           <Form onSubmit={this.onSearchQuerySubmit}>
             <Row>
               <Col xs="12" className="home-page__searchbar ">

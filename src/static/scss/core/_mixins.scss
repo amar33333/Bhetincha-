@@ -1,10 +1,15 @@
-@mixin button-social-size($padding-y, $padding-x, $font-size, $line-height, $border-radius) {
+@mixin button-social-size(
+  $padding-y,
+  $padding-x,
+  $font-size,
+  $line-height,
+  $border-radius
+) {
   padding: $padding-y $padding-x;
   font-size: $font-size;
   line-height: $line-height;
   border: 0;
   @include border-radius($border-radius);
-
   &::before {
     width: ($padding-y * 2) + ($font-size * $line-height);
     height: ($padding-y * 2) + ($font-size * $line-height);
@@ -13,27 +18,22 @@
     line-height: $line-height;
     @include border-radius($border-radius);
   }
-
   span {
     margin-left: ($padding-y * 2) + ($font-size * $line-height);
   }
-
   &.icon {
     width: ($padding-y * 2) + ($font-size * $line-height);
     height: ($padding-y * 2) + ($font-size * $line-height);
   }
 }
-
 @mixin avatar($width, $status-width) {
   position: relative;
   display: inline-block;
   width: $width;
-
   .img-avatar {
     width: $width;
     height: $width;
   }
-
   .avatar-status {
     position: absolute;
     right: 0;
@@ -45,7 +45,6 @@
     border-radius: 50em;
   }
 }
-
 @mixin borders($borders) {
   @each $border in $borders {
     $direction: nth($border, 1);
@@ -77,10 +76,8 @@
     }
   }
 }
-
 @mixin sidebar-width($borders, $width) {
   $sidebar-width: $width;
-
   @each $border in $borders {
     $direction: nth($border, 1);
     @if $direction == "all" {
@@ -96,10 +93,12 @@
     width: $sidebar-width;
   }
 }
-
 @mixin bg-variant($parent, $color) {
   #{$parent} {
-    @include border-radius($card-border-radius-inner $card-border-radius-inner $card-border-radius-inner $card-border-radius-inner);
+    @include border-radius(
+      $card-border-radius-inner $card-border-radius-inner
+        $card-border-radius-inner $card-border-radius-inner
+    );
     color: #fff !important;
     background-color: $color !important;
   }
@@ -109,7 +108,6 @@
     }
   }
 }
-
 @mixin card-accent-variant($color) {
   border-top-width: 2px;
   border-top-color: $color;

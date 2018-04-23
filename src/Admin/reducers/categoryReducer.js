@@ -2,6 +2,9 @@ import {
   FETCH_CATEGORY_FULFILLED,
   FETCH_CATEGORY_PENDING,
   FETCH_CATEGORY_REJECTED,
+  FETCH_CATEGORY_EACH_FULFILLED,
+  FETCH_CATEGORY_EACH_REJECTED,
+  FETCH_CATEGORY_EACH_PENDING,
   UNMOUNT_CATEGORY
 } from "../actions/types";
 
@@ -32,6 +35,21 @@ export default function(state = INITIAL_STATE, action) {
 
     case FETCH_CATEGORY_REJECTED:
       return { ...state, loading: false, statusClass: "rejected" };
+
+    case FETCH_CATEGORY_EACH_PENDING:
+      return { ...state, loading: true };
+
+    case FETCH_CATEGORY_EACH_FULFILLED:
+      console.log("category reducer: ", action);
+      return {
+        ...state,
+        categoryData: action.payload,
+        loading: false,
+        statusClass: "fulfilled"
+      };
+
+    case FETCH_CATEGORY_EACH_REJECTED:
+      return { ...state, loading: false };
 
     default:
       return state;

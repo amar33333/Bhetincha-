@@ -1,0 +1,6 @@
+{
+  "name": "Business Admin Detail",
+  "version": "0.0.0",
+  "private": true,
+  "main": "./BusinessAdminDetail.js"
+}

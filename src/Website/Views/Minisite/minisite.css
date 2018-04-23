@@ -86,16 +86,16 @@
 }
 
 .gallery-wrapper {
-  position: relative;
+  /* position: relative; */
+  min-height: 80vh !important;
   padding: 20px;
 }
 
-.image-viewer__wrapper {
-  position: absolute;
-  width: 100%;
-  top: 0;
+.gallery-list {
+  position: relative;
 }
-
-.viewer__img {
-  max-width: 60% !important;
+.gallery_upload {
+  padding: 75px;
+  background-color: rgba(104, 100, 107, 0.829);
+  color: white;
 }

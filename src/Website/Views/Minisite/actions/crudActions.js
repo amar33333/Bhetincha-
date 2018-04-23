@@ -1,6 +1,7 @@
 import {
   onBusinessEachGet,
-  onBusinessEachPut
+  onBusinessEachPut,
+  onBusinessEachAlbumEachPhotos
 } from "../../../../Business/config/businessServerCall";
 
 import {
@@ -13,7 +14,13 @@ import {
   FETCH_BUSINESS_REJECTED,
   UPDATE_COVER_PHOTO_PENDING,
   UPDATE_COVER_PHOTO_FULFILLED,
-  UPDATE_COVER_PHOTO_REJECTED
+  UPDATE_COVER_PHOTO_REJECTED,
+  UPLOAD_GALLERY_PHOTO_FULFILLED,
+  UPLOAD_GALLERY_PHOTO_PENDING,
+  UPLOAD_GALLERY_PHOTO_REJECTED,
+  CREATE_NEW_ALBUM_PENDING,
+  CREATE_NEW_ALBUM_FULFILLED,
+  CREATE_NEW_ALBUM_REJECTED
 } from "./types";
 
 export const handleAboutUsSave = ({
@@ -27,8 +34,8 @@ export const handleAboutUsSave = ({
     .then(response => {
       response.data.msg === "success" &&
         onBusinessEachGet({ username })
-          .then(response => {
-            const data = response.data;
+          .then(innerResponse => {
+            const data = innerResponse.data;
             const payload = {};
             if (data.about) payload.about = data.about;
 
@@ -51,8 +58,8 @@ export const handleCoverPhotoChange = ({
     .then(response => {
       response.data.msg === "success" &&
         onBusinessEachGet({ username })
-          .then(response => {
-            const data = response.data;
+          .then(innerResponse => {
+            const data = innerResponse.data;
             const payload = {};
             if (data.cover_photo) payload.cover_photo = data.cover_photo;
 
@@ -61,6 +68,73 @@ export const handleCoverPhotoChange = ({
           .catch(error => dispatch({ type: UPDATE_COVER_PHOTO_REJECTED }));
     })
     .catch(error => dispatch({ type: UPDATE_COVER_PHOTO_REJECTED }));
+};
+
+export const createNewAlbum = ({
+  data,
+  id,
+  username,
+  access_token
+}) => dispatch => {
+  dispatch({ type: CREATE_NEW_ALBUM_PENDING });
+  onBusinessEachPut({
+    id,
+    access_token,
+    data
+  })
+    .then(response => {
+      response.data.msg === "success" &&
+        onBusinessEachGet({ username })
+          .then(innerResponse => {
+            const data = innerResponse.data;
+            const payload = {};
+            payload.albums = data.albums;
+
+            dispatch({
+              type: CREATE_NEW_ALBUM_FULFILLED,
+              payload
+            });
+          })
+          .catch(error => dispatch({ type: CREATE_NEW_ALBUM_REJECTED }));
+    })
+    .catch(error => dispatch({ type: CREATE_NEW_ALBUM_REJECTED }));
+};
+
+export const handleGalleryPhotoUpload = ({
+  photos,
+  business_id,
+  album_id,
+  username,
+  access_token
+}) => dispatch => {
+  dispatch({ type: UPLOAD_GALLERY_PHOTO_PENDING, payload: album_id });
+  onBusinessEachAlbumEachPhotos({
+    business_id,
+    album_id,
+    access_token,
+    data: {
+      photos: photos.map(photo => ({
+        name: photo.name,
+        data: photo.base64
+      }))
+    }
+  })
+    .then(response => {
+      response.data.msg === "success" &&
+        onBusinessEachGet({ username })
+          .then(innerResponse => {
+            const data = innerResponse.data;
+            const payload = {};
+            payload.albums = data.albums;
+
+            dispatch({
+              type: UPLOAD_GALLERY_PHOTO_FULFILLED,
+              payload
+            });
+          })
+          .catch(error => dispatch({ type: UPLOAD_GALLERY_PHOTO_REJECTED }));
+    })
+    .catch(error => dispatch({ type: UPLOAD_GALLERY_PHOTO_REJECTED }));
 };
 
 export const onBusinessGet = ({ username, history }) => dispatch => {
@@ -74,10 +148,14 @@ export const onBusinessGet = ({ username, history }) => dispatch => {
       payload.cover_photo = data.cover_photo;
       payload.logo = data.logo;
       payload.id = data.id;
+      payload.albums = data.albums;
 
       if (data.about) payload.about = data.about;
 
-      dispatch({ type: FETCH_BUSINESS_FULFILLED, payload });
+      dispatch({
+        type: FETCH_BUSINESS_FULFILLED,
+        payload
+      });
     })
     .catch(error => {
       history.replace("/404");

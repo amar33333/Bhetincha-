@@ -1,7 +1,8 @@
 import {
   BUSINESS_URL,
   PAYMENT_METHOD_URL,
-  COMPANY_TYPE_URL
+  COMPANY_TYPE_URL,
+  ALBUM_URL
 } from "./BUSINESS_API";
 import axios from "axios";
 
@@ -110,6 +111,22 @@ export const onBusinessEachPut = ({ id, access_token, data }) =>
   axios({
     method: "PUT",
     url: `${BUSINESS_URL}${id}/`,
+    data,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
+export const onBusinessEachAlbumEachPhotos = ({
+  business_id,
+  album_id,
+  access_token,
+  data
+}) =>
+  axios({
+    method: "POST",
+    url: `${ALBUM_URL}${business_id}/${album_id}/`,
     data,
     headers: {
       "Content-Type": "application/json",
