@@ -5,7 +5,8 @@ import {
 } from "../actions/types";
 
 const INITIAL_STATE = {
-  loading: false
+  loading: false,
+  data: []
 };
 
 export default function(state = INITIAL_STATE, action) {
@@ -18,9 +19,10 @@ export default function(state = INITIAL_STATE, action) {
       };
 
     case SEARCH_QUERY_FULFILLED:
+      console.log("asdf", action.payload);
       return {
         ...state,
-        data: action.payload,
+        data: action.payload.hits.map(hit => ({ ...hit._source })),
         loading: false
       };
 

@@ -14,7 +14,7 @@ import {
 } from "../actions/types";
 
 const INITIAL_STATE = {
-  main: true,
+  main: false,
   mainLoading: true,
   aboutUs: false,
   aboutUsLoading: false,

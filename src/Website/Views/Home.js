@@ -1,8 +1,10 @@
 import React, { Component } from "react";
 // import { Link } from "react-router-dom";
-import { Container, Button, Col, Row, Input, Form } from "reactstrap";
-import LaddaButton, { S, EXPAND_RIGHT } from "react-ladda";
+import { Container, Button, Col, Row, Input } from "reactstrap";
+import { Link } from "react-router-dom";
+// import LaddaButton, { S, EXPAND_RIGHT } from "react-ladda";
 import { connect } from "react-redux";
+// import Select from "react-select";
 
 import logo from "../../static/img/logo.png";
 import "./home.css";
@@ -78,11 +80,11 @@ class Home extends Component {
     );
 
   render() {
-    const result = this.props.search_result.data
-      ? this.props.search_result.data.hits.hits.length !== 0
-        ? this.props.search_result.data.hits.hits[0]._source.name
-        : "Data Not Found"
-      : "";
+    // const result = this.props.search_result.data
+    //   ? this.props.search_result.data.hits.hits.length !== 0
+    //     ? this.props.search_result.data.hits.hits[0]._source.name
+    //     : "Data Not Found"
+    //   : "";
 
     return (
       <div className="body-wrapper">
@@ -93,36 +95,57 @@ class Home extends Component {
               <img alt="logo" src={logo} className="home-page__logo" />
             </Col>
           </Row>
-          <Form onSubmit={this.onSearchQuerySubmit}>
-            <Row>
-              <Col xs="12" className="home-page__searchbar ">
-                <Input
-                  autoFocus
-                  //fluid // warning says this is not a boolean
-                  className="home-page__searchbar__input centered"
-                  icon="search"
-                  placeholder="Search anything..."
-                  value={this.state.query}
-                  onChange={this.onChange}
-                />
-              </Col>
-            </Row>
-            <Row>
-              <Col xs="12" className="centered">
-                <LaddaButton
-                  loading={this.props.search_result.loading}
-                  data-size={S}
-                  data-style={EXPAND_RIGHT}
-                  className="mt-3"
-                >
-                  अवश्य भेटिन्छ
-                </LaddaButton>
-              </Col>
-            </Row>
-          </Form>
+          {/* <Form onSubmit={this.onSearchQuerySubmit}> */}
           <Row>
-            <Col className="centered">{result}</Col>
+            <Col xs="12" className="home-page__searchbar ">
+              <Input
+                autoFocus
+                //fluid // warning says this is not a boolean
+                className="home-page__searchbar__input centered"
+                icon="search"
+                placeholder="Search anything..."
+                value={this.state.query}
+                onChange={event => {
+                  this.setState({ query: event.target.value });
+                  this.props.onSearchQuerySubmit({ query: event.target.value });
+                }}
+              />
+            </Col>
           </Row>
+          {this.props.search_result.loading && (
+            <Row>
+              <Col className="centered">Loading</Col>
+            </Row>
+          )}
+          {this.state.query &&
+            this.props.search_result.data.length === 0 && (
+              <Row>
+                <Col className="centered">Not Found</Col>
+              </Row>
+            )}
+          {/* <Row>
+            <Col xs="12" className="centered">
+              <LaddaButton
+                loading={this.props.search_result.loading}
+                data-size={S}
+                data-style={EXPAND_RIGHT}
+                className="mt-3"
+              >
+                अवश्य भेटिन्छ
+              </LaddaButton>
+            </Col>
+          </Row> */}
+          {/* </Form> */}
+          {this.props.search_result.data.map(result => (
+            <Link to={`/${result.user}`} key={result.user}>
+              <Row>
+                <Col className="centered">{result.business_name}</Col>
+              </Row>
+            </Link>
+          ))}
+          {/* <Row>
+            <Col className="centered">{result}</Col>
+          </Row> */}
         </Container>
         <BottomFooter theme="light" extraClass="bottom-footer__home" />
       </div>
