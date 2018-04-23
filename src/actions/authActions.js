@@ -48,27 +48,37 @@ epics.push(action$ =>
       .concatMap(({ response }) => {
         CookiesProvider.setCookies("user_data", response, "/", expiryDate);
 
-        switch (response.groups[0].name) {
-          case USER_GROUP_BUSINESS:
-            history.push(`/${response.username}`);
-            break;
-          case USER_GROUP_INDIVIDUAL:
-            // history.push("/");
-            break;
-          default:
-            history.push(`/admin`);
-        }
-
         return [
           { type: TOGGLE_LOGIN_MODAL },
           {
             type: FETCH_USER_FULFILLED,
-            payload: { cookies: CookiesProvider.getAllCookies() }
+            payload: { cookies: CookiesProvider.getAllCookies() },
+            history
           }
         ];
       })
       .catch(ajaxError => Observable.of({ type: FETCH_USER_REJECTED }));
   })
+);
+
+epics.push((action$, { getState }) =>
+  action$
+    .ofType(FETCH_USER_FULFILLED)
+    .do(action => {
+      const { groups, username } = getState().auth.cookies.user_data;
+      const history = action.history;
+      switch (groups[0].name) {
+        case USER_GROUP_BUSINESS:
+          history.push(`/${username}`);
+          break;
+        case USER_GROUP_INDIVIDUAL:
+          // history.push("/");
+          break;
+        default:
+          history.push("/admin");
+      }
+    })
+    .ignoreElements()
 );
 
 export const onRegisterSubmit = payload => ({
