@@ -4,15 +4,14 @@ import { Link } from "react-router-dom";
 import Autosuggest from "react-autosuggest";
 
 class AutoSuggestion extends Component {
-  state = { value: "" };
-
-  componentDidMount() {
-    console.log(this.props.valueKey);
-  }
+  state = { value: "", selected: false };
 
   onSuggestionsClearRequested = () => {};
 
-  getSuggestionValue = suggestion => suggestion[this.props.valueKey];
+  getSuggestionValue = suggestion => {
+    this.setState({ selected: true });
+    return suggestion[this.props.valueKey];
+  };
 
   renderSuggestion = suggestion => <div>{suggestion[this.props.valueKey]}</div>;
 
@@ -28,16 +27,20 @@ class AutoSuggestion extends Component {
         onSuggestionsClearRequested={this.onSuggestionsClearRequested}
         getSuggestionValue={this.getSuggestionValue}
         renderSuggestion={this.renderSuggestion}
-        onSuggestionSelected={() => console.log("select vayo")}
+        onSuggestionSelected={(event, { suggestion }) => {
+          this.state.selected && this.props.onSearchItemSelected(suggestion);
+        }}
         renderInputComponent={inputProps => (
           <div>
             <form
               onSubmit={event => {
                 event.preventDefault();
-                console.log("enter press vayo");
+                this.state.selected
+                  ? this.setState({ selected: false })
+                  : this.props.onSearchComplete(this.state.value);
               }}
             >
-              <Input
+              <input
                 {...inputProps}
                 autoFocus
                 style={{
@@ -49,7 +52,7 @@ class AutoSuggestion extends Component {
           </div>
         )}
         inputProps={{
-          placeholder: "Search anything...",
+          placeholder: this.props.placeholder,
           value: this.state.value,
           onChange: (event, { newValue }) => this.setState({ value: newValue })
         }}

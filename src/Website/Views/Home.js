@@ -4,7 +4,6 @@ import { Container, Button, Col, Row, Input } from "reactstrap";
 import { Link } from "react-router-dom";
 // import LaddaButton, { S, EXPAND_RIGHT } from "react-ladda";
 import { connect } from "react-redux";
-import Autosuggest from "react-autosuggest";
 
 import logo from "../../static/img/logo.png";
 import "./home.css";
@@ -81,17 +80,40 @@ class Home extends Component {
           <Row className="centered">
             <Col xs="12" md="8" className="home-page__searchbar ">
               <AutoSuggestion
+                placeholder="Search anything..."
                 valueKey="business_name"
                 suggestions={this.props.search_result.data}
                 onSuggestionsFetchRequested={this.props.onSearchQuerySubmit}
+                onSearchItemSelected={business => {
+                  this.props.history.push(`/${business.user}`);
+                }}
+                onSearchComplete={keyword => {
+                  this.props.history.push({
+                    pathname: "/businesses",
+                    search: `?query=${keyword}`
+                    // state: { detail: response.data }
+                  });
+                }}
               />
             </Col>
           </Row>
           {/* <Row>
+          <Row>
             <AutoSuggestion
+              placeholder="Search anything..."
               valueKey="business_name"
               suggestions={this.props.search_result.data}
               onSuggestionsFetchRequested={this.props.onSearchQuerySubmit}
+              onSearchItemSelected={business => {
+                this.props.history.push(`/${business.user}`);
+              }}
+              onSearchComplete={keyword => {
+                this.props.history.push({
+                  pathname: "/businesses",
+                  search: `?query=${keyword}`
+                  // state: { detail: response.data }
+                });
+              }}
             />
           </Row> */}
         </Container>

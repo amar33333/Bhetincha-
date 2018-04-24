@@ -103,7 +103,7 @@ input.main-nav-search::placeholder {
 }
 .home-page__searchbar {
   /* display: flex; */
-  text-align: center;
+  /* text-align: center; */
   justify-content: center;
   align-items: center;
   margin-top: 30px;
@@ -137,6 +137,9 @@ input.main-nav-search::placeholder {
   z-index: 2;
 }
 
+.react-autosuggest__suggestions-list li {
+  color: rgb(22, 22, 114);
+}
 .home-page__logo {
   margin-top: 10%;
   width: 50%;
