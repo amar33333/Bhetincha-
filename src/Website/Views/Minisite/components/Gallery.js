@@ -137,14 +137,24 @@ class Gallery extends Component {
                         thumbnailHeight: 174,
                         caption: photo.name,
                         showLightboxThumbnails: true,
+                        // customOverlay: (
+                        //   <button
+                        //     id="kxa"
+                        //     style={{ pointerEvents: "auto" }}
+                        //     onClick={() => console.log("k xa hatti")}
+                        //   >
+                        //     hello
+                        //   </button>
+                        // ),
+
                         // isSelected: true,
-                        onSelectImage: () => {
-                          console.log(this);
-                        },
-                        enableImageSelection: true,
+                        // onSelectImage: () => {
+                        //   console.log("hello");
+                        // },
                         id: photo.photoID
                       }))}
                       backdropClosesModal={true}
+                      enableImageSelection={true}
                     />
                   </div>
                   {this.props.mainEdit &&

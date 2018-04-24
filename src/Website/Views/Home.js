@@ -23,107 +23,22 @@ import {
 
 import { BottomFooter } from "../components";
 
-const languages = [
-  {
-    name: "C",
-    year: 1972
-  },
-  {
-    name: "C#",
-    year: 2000
-  },
-  {
-    name: "C++",
-    year: 1983
-  },
-  {
-    name: "Clojure",
-    year: 2007
-  },
-  {
-    name: "Elm",
-    year: 2012
-  },
-  {
-    name: "Go",
-    year: 2009
-  },
-  {
-    name: "Haskell",
-    year: 1990
-  },
-  {
-    name: "Java",
-    year: 1995
-  },
-  {
-    name: "Javascript",
-    year: 1995
-  },
-  {
-    name: "Perl",
-    year: 1987
-  },
-  {
-    name: "PHP",
-    year: 1995
-  },
-  {
-    name: "Python",
-    year: 1991
-  },
-  {
-    name: "Ruby",
-    year: 1995
-  },
-  {
-    name: "Scala",
-    year: 2003
-  }
-];
-
 class Home extends Component {
   constructor(props) {
     super(props);
     this.state = {
       query: "",
       result: "",
-      value: "",
-      suggestions: []
+      value: ""
     };
   }
 
-  // testing auto suggestions
-
-  onChanges = (event, { newValue }) => {
-    this.setState({
-      value: newValue
-    });
-  };
-
-  // Autosuggest will call this function every time you need to update suggestions.
-  // You already implemented this logic above, so just use it.
-  onSuggestionsFetchRequested = ({ value }) => {
-    this.setState({
-      suggestions: this.getSuggestions(value)
-    });
-  };
-
   // Autosuggest will call this function every time you need to clear suggestions.
   onSuggestionsClearRequested = () => {
+    console.log("cleared");
     this.setState({
       suggestions: []
     });
-  };
-  onSuggestionsFetchRequested;
-  // testing auto suggestions
-
-  onChange = event => this.setState({ query: event.target.value });
-
-  onSearchQuerySubmit = event => {
-    event.preventDefault();
-    const { query } = this.state;
-    this.props.onSearchQuerySubmit({ query });
   };
 
   renderLoginRegister = () =>
@@ -168,45 +83,15 @@ class Home extends Component {
       </div>
     );
 
-  // Teach Autosuggest how to calculate suggestions for any given input value.
-  getSuggestions = value => {
-    const inputValue = value.trim().toLowerCase();
-    const inputLength = inputValue.length;
-
-    return inputLength === 0
-      ? []
-      : languages.filter(
-          lang => lang.name.toLowerCase().slice(0, inputLength) === inputValue
-        );
+  getSuggestionValue = suggestion => {
+    console.log("get yo hai");
+    return suggestion.business_name;
   };
 
-  // When suggestion is clicked, Autosuggest needs to populate the input
-  // based on the clicked suggestion. Teach Autosuggest how to calculate the
-  // input value for every given suggestion.
-  getSuggestionValue = suggestion => suggestion.name;
-
   // Use your imagination to render suggestions.
-  renderSuggestion = suggestion => <div>{suggestion.name}</div>;
+  renderSuggestion = suggestion => <div>{suggestion.business_name}</div>;
 
   render() {
-    // const result = this.props.search_result.data
-    //   ? this.props.search_result.data.hits.hits.length !== 0
-    //     ? this.props.search_result.data.hits.hits[0]._source.name
-    //     : "Data Not Found"
-    //   : "";
-
-    // testing auto suggest
-
-    const { value, suggestions } = this.state;
-
-    // Autosuggest will pass through all these props to the input.
-    const inputProps = {
-      placeholder: "Search",
-      value,
-      onChange: this.onChanges
-    };
-    //testing auto suggest
-
     return (
       <div className="body-wrapper">
         {this.renderLoginRegister()}
@@ -220,7 +105,7 @@ class Home extends Component {
           <Row>
             <Col xs="12" className="home-page__searchbar ">
               <Input
-                autoFocus
+                // autoFocus
                 //fluid // warning says this is not a boolean
                 className="home-page__searchbar__input centered"
                 icon="search"
@@ -269,13 +154,51 @@ class Home extends Component {
           </Row> */}
           {/* </Row> */}
           <Row>
-            <Autosuggest
+            {/* <Autosuggest
               suggestions={suggestions}
               onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
               onSuggestionsClearRequested={this.onSuggestionsClearRequested}
               getSuggestionValue={this.getSuggestionValue}
               renderSuggestion={this.renderSuggestion}
               inputProps={inputProps}
+            /> */}
+            <Autosuggest
+              // onKeyDown={() => console.log("key down")}
+              suggestions={this.props.search_result.data}
+              onSuggestionsFetchRequested={({ value }) => {
+                console.log(value);
+                this.props.onSearchQuerySubmit({ query: value });
+              }}
+              onSuggestionsClearRequested={this.onSuggestionsClearRequested}
+              getSuggestionValue={this.getSuggestionValue}
+              renderSuggestion={this.renderSuggestion}
+              onSuggestionSelected={() => console.log("select vayo")}
+              renderInputComponent={inputProps => (
+                <div>
+                  <form
+                    onSubmit={event => {
+                      event.preventDefault();
+                      console.log("enter press vayo");
+                    }}
+                  >
+                    <Input
+                      {...inputProps}
+                      // onKeyDown={() => console.log("key down vayo")}
+                      autoFocus
+                      style={{
+                        border: "1px solid #aaa",
+                        borderRadius: "0px"
+                      }}
+                    />
+                  </form>
+                </div>
+              )}
+              inputProps={{
+                placeholder: "Search for business",
+                value: this.state.value,
+                onChange: (event, { newValue }) =>
+                  this.setState({ value: newValue })
+              }}
             />
           </Row>
         </Container>
