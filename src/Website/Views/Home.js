@@ -78,29 +78,22 @@ class Home extends Component {
               <img alt="logo" src={logo} className="home-page__logo" />
             </Col>
           </Row>
-          {/* <Row>
-            <Col xs="12" className="home-page__searchbar ">
-              <Input
-                // autoFocus
-                //fluid // warning says this is not a boolean
-                className="home-page__searchbar__input centered"
-                icon="search"
-                placeholder="Search anything..."
-                value={this.state.query}
-                onChange={event => {
-                  this.setState({ query: event.target.value });
-                  this.props.onSearchQuerySubmit({ query: event.target.value });
-                }}
+          <Row className="centered">
+            <Col xs="12" md="8" className="home-page__searchbar ">
+              <AutoSuggestion
+                valueKey="business_name"
+                suggestions={this.props.search_result.data}
+                onSuggestionsFetchRequested={this.props.onSearchQuerySubmit}
               />
             </Col>
-          </Row> */}
-          <Row>
+          </Row>
+          {/* <Row>
             <AutoSuggestion
               valueKey="business_name"
               suggestions={this.props.search_result.data}
               onSuggestionsFetchRequested={this.props.onSearchQuerySubmit}
             />
-          </Row>
+          </Row> */}
         </Container>
         <BottomFooter theme="light" extraClass="bottom-footer__home" />
       </div>
