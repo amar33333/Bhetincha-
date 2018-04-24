@@ -20,7 +20,6 @@ class AutoSuggestion extends Component {
       <Autosuggest
         suggestions={this.props.suggestions}
         onSuggestionsFetchRequested={({ value }) => {
-          console.log(value);
           value.length > 0 &&
             this.props.onSuggestionsFetchRequested({ query: value });
         }}
@@ -28,7 +27,8 @@ class AutoSuggestion extends Component {
         getSuggestionValue={this.getSuggestionValue}
         renderSuggestion={this.renderSuggestion}
         onSuggestionSelected={(event, { suggestion }) => {
-          this.state.selected && this.props.onSearchItemSelected(suggestion);
+          (event.type === "click" || this.state.selected) &&
+            this.props.onSearchItemSelected(suggestion);
         }}
         renderInputComponent={inputProps => (
           <div>
