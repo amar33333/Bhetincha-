@@ -1,8 +1,5 @@
 import React, { Component } from "react";
-// import { Link } from "react-router-dom";
 import { Container, Button, Col, Row, Input } from "reactstrap";
-import { Link } from "react-router-dom";
-// import LaddaButton, { S, EXPAND_RIGHT } from "react-ladda";
 import { connect } from "react-redux";
 
 import logo from "../../static/img/logo.png";
@@ -97,25 +94,6 @@ class Home extends Component {
               />
             </Col>
           </Row>
-          {/* <Row>
-          <Row>
-            <AutoSuggestion
-              placeholder="Search anything..."
-              valueKey="business_name"
-              suggestions={this.props.search_result.data}
-              onSuggestionsFetchRequested={this.props.onSearchQuerySubmit}
-              onSearchItemSelected={business => {
-                this.props.history.push(`/${business.user}`);
-              }}
-              onSearchComplete={keyword => {
-                this.props.history.push({
-                  pathname: "/businesses",
-                  search: `?query=${keyword}`
-                  // state: { detail: response.data }
-                });
-              }}
-            />
-          </Row> */}
         </Container>
         <BottomFooter theme="light" extraClass="bottom-footer__home" />
       </div>
