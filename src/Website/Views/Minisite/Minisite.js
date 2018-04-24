@@ -32,7 +32,7 @@ class Minisite extends Component {
   }
 
   componentWillUnmount() {
-    this.clearBusiness();
+    this.props.clearBusiness();
   }
 
   render() {
