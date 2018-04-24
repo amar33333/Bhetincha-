@@ -4,7 +4,8 @@ body {
 
 .body-wrapper {
   position: relative;
-  min-height: 100%;
+  /* min-height: 100%; */
+  min-height: 70vh;
   background-color: rgb(255, 255, 255) !important;
   margin-top: 0px !important;
   padding: 15px;
@@ -428,4 +429,14 @@ input.main-nav-search::placeholder {
 
 .react-autosuggest__suggestion--highlighted {
   background-color: #ddd;
+}
+
+/* Result list */
+.result-header__text {
+  color: rgb(36, 36, 206);
+}
+
+.result-page__thumbnail {
+  width: 70px;
+  object-fit: cover;
 }
