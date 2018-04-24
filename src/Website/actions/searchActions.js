@@ -19,37 +19,15 @@ epics.push(action$ =>
   action$
     .ofType(SEARCH_QUERY)
     .debounceTime(250)
-    .map(action => ({ type: SEARCH_QUERY_PENDING, payload: action.payload }))
+    .mergeMap(action =>
+      onSearch(action.payload)
+        .map(({ response }) => ({
+          type: SEARCH_QUERY_FULFILLED,
+          payload: response.hits
+        }))
+        .catch(ajaxError => Observable.of({ type: SEARCH_QUERY_REJECTED }))
+        .startWith({ type: SEARCH_QUERY_PENDING })
+    )
 );
-
-epics.push(action$ =>
-  action$
-    .ofType(SEARCH_QUERY_PENDING)
-    .mergeMap(action => onSearch(action.payload))
-    .map(({ response }) => ({
-      type: SEARCH_QUERY_FULFILLED,
-      payload: response.hits
-    }))
-    .catch(ajaxError => Observable.of({ type: SEARCH_QUERY_REJECTED }))
-);
-
-// dispatch => {
-//   onSearch({ query })
-//     .then(searchResponse => {
-//       console.log("searchreaspo: ", searchResponse);
-//       dispatch({
-//         type: SEARCH_QUERY_FULFILLED,
-//         payload: searchResponse.data
-//       });
-//     })
-//     .catch(searchError => {
-//       console.log("search eeror: ", searchError);
-
-//       dispatch({ type: SEARCH_QUERY_REJECTED, payload: searchError });
-//     });
-
-//   dispatch({ type: SEARCH_QUERY_PENDING });
-// };
-// //
 
 export default epics;

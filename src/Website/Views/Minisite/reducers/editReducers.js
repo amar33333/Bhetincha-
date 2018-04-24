@@ -10,7 +10,8 @@ import {
   UPLOAD_GALLERY_PHOTO_PENDING,
   UPLOAD_GALLERY_PHOTO_FULFILLED,
   UPLOAD_GALLERY_PHOTO_REJECTED,
-  CREATE_NEW_ALBUM_FULFILLED
+  CREATE_NEW_ALBUM_FULFILLED,
+  CLEAR_MINISITE_DATA
 } from "../actions/types";
 
 const INITIAL_STATE = {
@@ -75,6 +76,9 @@ export default function(state = INITIAL_STATE, action) {
           loading: false
         }))
       };
+
+    case CLEAR_MINISITE_DATA:
+      return { ...INITIAL_STATE };
 
     default:
       return state;

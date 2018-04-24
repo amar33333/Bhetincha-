@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import "./minisite.css";
+import { combineEpics } from "redux-observable";
 
 import { Loading } from "../../../Common/pages";
 import { BusinessNav, BusinessFooter } from "./components";
@@ -9,7 +10,7 @@ import withRepics from "../../../config/withRepics";
 import reducers from "./reducers";
 import { ROUTE_PARAMS_BUSINESS_NAME } from "../../../config/CONSTANTS";
 
-import { onBusinessGet } from "./actions";
+import minisiteEpics, { onBusinessGet, clearBusiness } from "./actions";
 
 class Minisite extends Component {
   getBusiness = () => {
@@ -30,6 +31,10 @@ class Minisite extends Component {
       this.getBusiness();
   }
 
+  componentWillUnmount() {
+    this.clearBusiness();
+  }
+
   render() {
     return (
       <div>
@@ -47,11 +52,15 @@ class Minisite extends Component {
   }
 }
 
-export default withRepics("MinisiteContainer", reducers)(
+export default withRepics(
+  "MinisiteContainer",
+  reducers,
+  combineEpics(...minisiteEpics)
+)(
   connect(
     ({ MinisiteContainer: { edit } }) => ({
       mainLoading: edit.mainLoading
     }),
-    { onBusinessGet }
+    { onBusinessGet, clearBusiness }
   )(Minisite)
 );
