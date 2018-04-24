@@ -51,30 +51,38 @@ class SubBusinessAlbumsWrapper extends Component {
           key={this.state.albumComponentList.length}
           id={this.state.albumComponentList.length}
           onValueChange={(value, id) => {
-            console.log("value album: ", value, id);
-            console.log("albus len: ", albums.length);
+            console.log("albus len: ", albums.length + 1);
+            console.log("albums itselg: ", albums);
+
             console.log(
               "albumlist len: ",
               this.state.albumComponentList.length
             );
             albums =
-              albums.length <= this.state.albumComponentList.length - 2
+              albums.length + 1 <= this.state.albumComponentList.length
                 ? [...this.state.albums]
                 : albums;
 
-            this.setState({
-              albums: this.state.albums.map((album, index) => {
-                if (id === Number(album.key)) {
-                  console.log("found in id: ", id);
-                  return { ...album, name: value.album };
-                }
-                return album;
-              })
-            });
+            {
+              /* if (albums.length + 1 <= this.state.albumComponentList.length) {
+              console.log("satisfied: ", this.state.albums);
+              albums = [...this.state.albums];
+            } else {
+              console.log("NOT - satisfied: ", this.state.albums);
+            } */
+            }
 
-            this.setState({
-              albums: [...albums, { name: value.album, key: id }]
-            });
+            if (albums[id]) {
+              albums[id].name = value.album;
+              console.log("satisfied albums ste: ", albums);
+
+              this.setState({ albums: albums });
+            } else {
+              this.setState({
+                albums: [...albums, { name: value.album, key: id }]
+              });
+              console.log("else  albums ste: ", albums);
+            }
           }}
           onDelete={id => {
             albums.splice(id, 1);
@@ -92,7 +100,7 @@ class SubBusinessAlbumsWrapper extends Component {
   };
 
   render() {
-    console.log("render state: ", this.state);
+    console.log("render state: ", this.state.albums);
     return (
       <div className="animated fadeIn">
         <Card>
