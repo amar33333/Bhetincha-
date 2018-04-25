@@ -11,7 +11,7 @@ import SubBusinessLogo from "./SubBusinessLogo";
 import SubBusinessCoverImage from "./SubBusinessCoverImage";
 import SubBusinessContact from "./SubBusinessContact";
 import SubBusinessAbout from "./SubBusinessAbout";
-import SubBusinessAlbumsWrapper from "./SubBusinessAlbumsWrapper";
+import SubBusinessBranchWrapper from "./SubBusinessBranchWrapper";
 
 class BusinessAdminDetail extends Component {
   constructor(props) {
@@ -85,7 +85,7 @@ class BusinessAdminDetail extends Component {
                     this.propsData = { ...this.propsData, ...value };
                   }}
                 />
-                <SubBusinessAlbumsWrapper
+                <SubBusinessBranchWrapper
                   onSubmit={value => {
                     this.propsData = { ...this.propsData, ...value };
                     console.log("albumprops: ", this.propsData);

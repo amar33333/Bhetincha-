@@ -8,3 +8,5 @@ export const USER_GROUP_ADMIN = "ADMINYO";
 
 export const DEVELOPER = "Tech Kunja";
 export const OWNER = "Bhetincha.com";
+
+export const ON_KEY_PRESS_ENTER = 13;

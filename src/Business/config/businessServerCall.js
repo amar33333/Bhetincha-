@@ -18,6 +18,8 @@ export const onBusinessPost = ({ data, access_token }) => {
   console.log("sub_category_list: ", sub_category_list);
   console.log("payment_methods_list: ", payment_methods_list);
 
+  console.log("final: data: ", data);
+
   const server_format_data = {
     business_name: data.business_name,
     username: data.username,
@@ -42,6 +44,7 @@ export const onBusinessPost = ({ data, access_token }) => {
         // visibleToPublic: "false"
       }
     },
+    branchAddress: data.branchs,
     // branchAddress: [
     //   {
     //     otherLandlineNumber: ["9849477523", "9843047233"],

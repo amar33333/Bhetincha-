@@ -1,14 +1,6 @@
 import React, { Component } from "react";
 
-import {
-  Row,
-  Col,
-  Button,
-  Card,
-  CardHeader,
-  CardBody,
-  Input
-} from "reactstrap";
+import { Row, Col, Button, Card, CardHeader, CardBody } from "reactstrap";
 
 import SubBusinessAlbum from "./SubBusinessAlbum";
 
@@ -26,11 +18,6 @@ class SubBusinessAlbumsWrapper extends Component {
     if (this.props.onSubmit) this.props.onSubmit({ albums: nextState.albums });
   }
 
-  onChange = (key, event) =>
-    this.setState({ [key]: event.target.value }, () =>
-      console.log("ablu stat: ", this.state)
-    );
-
   clearState = () => {
     this.setState({
       albumComponentList: [],
@@ -39,59 +26,77 @@ class SubBusinessAlbumsWrapper extends Component {
   };
 
   onAlbumAdd = () => {
-    // this.setState(
-    //   { albums: [...this.state.albums, { name: this.state.album }] },
-    //   () => console.log("ablu ssubmit: ", this.state)
-    // );
-    let albums = [...this.state.albums];
     this.setState({
       albumComponentList: [
         ...this.state.albumComponentList,
         <SubBusinessAlbum
-          key={this.state.albumComponentList.length}
-          id={this.state.albumComponentList.length}
+          key={new Date().getTime()}
+          id={new Date().getTime()}
           onValueChange={(value, id) => {
-            console.log("albus len: ", albums.length + 1);
-            console.log("albums itselg: ", albums);
+            let albums = [...this.state.albums];
+            let index = null;
 
-            console.log(
-              "albumlist len: ",
-              this.state.albumComponentList.length
-            );
-            albums =
-              albums.length + 1 <= this.state.albumComponentList.length
-                ? [...this.state.albums]
-                : albums;
+            albums.map((album, i) => {
+              console.log("key: ", album.key, "id: ", id);
+              if (id === Number(album.key)) {
+                console.log("index: ", i);
+                index = i;
+              }
+            });
+            console.log("index: ", index);
+
+            if (albums.length > 0 && index !== null) {
+              console.log("edit ran: ", value);
+
+              albums[index].name = value.album;
+
+              this.setState({ albums });
+            } else {
+              console.log("new add ran");
+
+              this.setState(
+                {
+                  albums: [...this.state.albums, { name: value.album, key: id }]
+                },
+                () => {
+                  console.log("else monitor state: ", this.state.albums);
+                  this.onAlbumAdd();
+                }
+              );
+            }
 
             {
-              /* if (albums.length + 1 <= this.state.albumComponentList.length) {
-              console.log("satisfied: ", this.state.albums);
-              albums = [...this.state.albums];
-            } else {
-              console.log("NOT - satisfied: ", this.state.albums);
-            } */
+              /* this.setState({
+              albums: this.state.albums.filter(album => {
+                if (id === Number(album.key))
+                  return { ...album, name: value.album, key: id };
+                else {
+                  // cant call this one Aye...
+                  // this.onAlbumAdd();
+                  return [...this.state.albums, { name: value.album, key: id }];
+                }
+              })
+            }); */
             }
 
-            if (albums[id]) {
-              albums[id].name = value.album;
-              console.log("satisfied albums ste: ", albums);
-
-              this.setState({ albums: albums });
-            } else {
-              this.setState({
-                albums: [...albums, { name: value.album, key: id }]
-              });
-              console.log("else  albums ste: ", albums);
-            }
+            /* this.setState(
+              {
+                albums: [...this.state.albums, { name: value.album, key: id }]
+              },
+              () => {
+                console.log("else monitor state: ", this.state.albums);
+                this.onAlbumAdd();
+              }
+            ); */
           }}
           onDelete={id => {
-            albums.splice(id, 1);
-
             this.setState({
               albumComponentList: this.state.albumComponentList.filter(
                 albumList => id !== Number(albumList.key)
               ),
-              albums: albums
+              albums: this.state.albums.filter(
+                album => id !== Number(album.key)
+              )
             });
           }}
         />
@@ -99,8 +104,76 @@ class SubBusinessAlbumsWrapper extends Component {
     });
   };
 
+  // onAlbumAdd = () => {
+  //   // this.setState(
+  //   //   { albums: [...this.state.albums, { name: this.state.album }] },
+  //   //   () => console.log("ablu ssubmit: ", this.state)
+  //   // );
+  //   let albums = [...this.state.albums];
+  //   this.setState({
+  //     albumComponentList: [
+  //       ...this.state.albumComponentList,
+  //       <SubBusinessAlbum
+  //         key={this.state.albumComponentList.length}
+  //         id={this.state.albumComponentList.length}
+  //         onValueChange={(value, id) => {
+  //           console.log("albus len: ", albums.length + 1);
+
+  //           console.log(
+  //             "albumlist len: ",
+  //             this.state.albumComponentList.length
+  //           );
+
+  //           console.log("befor album: ", albums);
+
+  //           // albums =
+  //           //   albums.length + 1 <= this.state.albumComponentList.length
+  //           //     ? [...this.state.albums]
+  //           //     : albums;
+
+  //           if (albums[id]) {
+  //             albums[id].name = value.album;
+  //             console.log("if satisfied albums ste: ", albums);
+
+  //             this.setState({ albums: albums });
+  //           } else {
+  //             this.setState(
+  //               {
+  //                 albums: [...albums, { name: value.album, key: id }]
+  //               },
+  //               () => console.log("else monitor state: ", this.state.albums)
+  //             );
+  //             console.log("else  albums ste: ", albums);
+  //           }
+
+  //           if (albums.length + 1 <= this.state.albumComponentList.length) {
+  //             console.log("before if satisfied: ", albums);
+  //             albums = [...this.state.albums];
+  //             console.log("after if satisfied album : ", albums);
+  //           } else {
+  //             console.log("NOT - satisfied: ", albums);
+  //           }
+  //         }}
+  //         onDelete={id => {
+  //           {
+  //             /* albums.splice(id, 1);
+  //           console.log("album splice: ", albums); */
+  //           }
+
+  //           this.setState({
+  //             albumComponentList: this.state.albumComponentList.filter(
+  //               albumList => id !== Number(albumList.key)
+  //             ),
+  //             albums: albums.filter(album => id !== Number(album.key))
+  //           });
+  //         }}
+  //       />
+  //     ]
+  //   });
+  // };
+
   render() {
-    console.log("render state: ", this.state.albums);
+    console.log("render state: ", this.state);
     return (
       <div className="animated fadeIn">
         <Card>
