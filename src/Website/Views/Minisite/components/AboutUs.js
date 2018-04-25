@@ -26,7 +26,7 @@ class AboutUs extends Component {
   );
 
   renderEditor = () => {
-    import("./AboutUsEditor").then(module =>
+    import("./AboutUsEdit").then(module =>
       this.setState({ AsyncEditor: module.default })
     );
   };

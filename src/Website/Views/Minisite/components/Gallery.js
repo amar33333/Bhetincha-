@@ -10,7 +10,89 @@ import { MAIN_URL } from "../config/MINISITE_API";
 import FontAwesome from "react-fontawesome";
 
 class Gallery extends Component {
+  static getDerivedStateFromProps = nextProps => ({
+    albums: nextProps.albums.map(album => ({
+      ...album,
+      photos: album.photos.map(photo => ({
+        src: `${MAIN_URL}${photo.photoURL}`,
+        thumbnail: `${MAIN_URL}${photo.photoURL}`,
+        thumbnailWidth: 320,
+        thumbnailHeight: 174,
+        caption: photo.name,
+        showLightboxThumbnails: true,
+        photoID: photo.photoID,
+        isSelected: false
+      }))
+    }))
+  });
+
   state = { newAlbumName: "" };
+
+  onSelectImage = (albumID, index, image) =>
+    this.setState({
+      albums: this.state.albums.map(
+        album =>
+          album.albumID !== albumID
+            ? album
+            : {
+                ...album,
+                photos: album.photos.map(
+                  photo =>
+                    photo.photoID !== image.photoID
+                      ? photo
+                      : { ...photo, isSelected: !image.isSelected }
+                )
+              }
+      )
+    });
+
+  renderAddNewGallery = () => {
+    return (
+      <div>
+        <Container>
+          <Card>
+            <CardHeader style={{ backgroundColor: "#21a8d8", color: "#fff" }}>
+              <strong>Create New Album</strong>
+            </CardHeader>
+            <CardBody>
+              <form
+                action=""
+                onSubmit={event => {
+                  event.preventDefault();
+                  this.props.createNewAlbum({
+                    id: this.props.id,
+                    access_token: this.props.cookies.token_data.access_token,
+                    username: this.props.username,
+                    data: { albums: { name: this.state.newAlbumName } }
+                  });
+                }}
+              >
+                <Input
+                  placeholder="Album Name"
+                  value={this.state.newAlbumName}
+                  onChange={event =>
+                    this.setState({ newAlbumName: event.target.value })
+                  }
+                />
+              </form>
+            </CardBody>
+          </Card>
+        </Container>
+      </div>
+    );
+  };
+
+  renderDeleteButton = album => {
+    const selectedLength = album.photos.filter(photo => photo.isSelected)
+      .length;
+    if (selectedLength > 0) {
+      return (
+        <button onClick={() => console.log("delete pressed")}>
+          {`Delete ${selectedLength} Items`}
+        </button>
+      );
+    }
+  };
 
   renderGalleryUpload = albumID => {
     const loading = this.props.galleryLoading.filter(
@@ -58,42 +140,6 @@ class Gallery extends Component {
     );
   };
 
-  renderAddNewGallery = () => {
-    return (
-      <div>
-        <Container>
-          <Card>
-            <CardHeader style={{ backgroundColor: "#21a8d8", color: "#fff" }}>
-              <strong>Create New Album</strong>
-            </CardHeader>
-            <CardBody>
-              <form
-                action=""
-                onSubmit={event => {
-                  event.preventDefault();
-                  this.props.createNewAlbum({
-                    id: this.props.id,
-                    access_token: this.props.cookies.token_data.access_token,
-                    username: this.props.username,
-                    data: { albums: { name: this.state.newAlbumName } }
-                  });
-                }}
-              >
-                <Input
-                  placeholder="Album Name"
-                  value={this.state.newAlbumName}
-                  onChange={event =>
-                    this.setState({ newAlbumName: event.target.value })
-                  }
-                />
-              </form>
-            </CardBody>
-          </Card>
-        </Container>
-      </div>
-    );
-  };
-
   render() {
     return (
       <div className="gallery-wrapper">
@@ -119,42 +165,25 @@ class Gallery extends Component {
             }
           />
         </form> */}
-        {this.props.albums.map(album => (
-          <Container>
+        {this.state.albums.map(album => (
+          <Container key={album.albumID}>
             <Card>
               <CardBody>
                 <div className="album-title">
                   <p className="album-title">{album.name}</p>
+                  {this.renderDeleteButton(album)}
                   <small>Updated at March 2018</small>
                 </div>
-                <div className="albums" key={album.albumID}>
+                <div className="albums">
                   <div className="gallery-list">
                     <GalleryGrid
-                      images={album.photos.map(photo => ({
-                        src: `${MAIN_URL}${photo.photoURL}`,
-                        thumbnail: `${MAIN_URL}${photo.photoURL}`,
-                        thumbnailWidth: 320,
-                        thumbnailHeight: 174,
-                        caption: photo.name,
-                        showLightboxThumbnails: true,
-                        // customOverlay: (
-                        //   <button
-                        //     id="kxa"
-                        //     style={{ pointerEvents: "auto" }}
-                        //     onClick={() => console.log("k xa hatti")}
-                        //   >
-                        //     hello
-                        //   </button>
-                        // ),
-
-                        // isSelected: true,
-                        // onSelectImage: () => {
-                        //   console.log("hello");
-                        // },
-                        id: photo.photoID
-                      }))}
+                      images={album.photos}
                       backdropClosesModal={true}
                       enableImageSelection={true}
+                      onSelectImage={this.onSelectImage.bind(
+                        this,
+                        album.albumID
+                      )}
                     />
                   </div>
                   {this.props.mainEdit &&

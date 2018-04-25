@@ -1,7 +1,12 @@
+import { Observable } from "rxjs/Observable";
 import {
   onBusinessEachGet,
   onBusinessEachPut,
-  onBusinessEachAlbumEachPhotos
+  onBusinessEachAlbumEachPhotos,
+  onBusinessEachGetAjax,
+  onBusinessEachPutAjax,
+  onBusinessEachAlbumEachPhotosAjax,
+  onBusinessEachAlbumEachPhotosDelete
 } from "../../../../Business/config/businessServerCall";
 
 import {
@@ -12,6 +17,7 @@ import {
   FETCH_BUSINESS_PENDING,
   FETCH_BUSINESS_FULFILLED,
   FETCH_BUSINESS_REJECTED,
+  FETCH_PART_BUSINESS,
   UPDATE_COVER_PHOTO_PENDING,
   UPDATE_COVER_PHOTO_FULFILLED,
   UPDATE_COVER_PHOTO_REJECTED,
@@ -20,32 +26,45 @@ import {
   UPLOAD_GALLERY_PHOTO_REJECTED,
   CREATE_NEW_ALBUM_PENDING,
   CREATE_NEW_ALBUM_FULFILLED,
-  CREATE_NEW_ALBUM_REJECTED
+  CREATE_NEW_ALBUM_REJECTED,
+  CLEAR_MINISITE_DATA
 } from "./types";
 
-export const handleAboutUsSave = ({
-  id,
-  access_token,
-  data,
-  username
-}) => dispatch => {
-  dispatch({ type: UPDATE_ABOUT_PENDING });
-  onBusinessEachPut({ id, access_token, data })
-    .then(response => {
-      response.data.msg === "success" &&
-        onBusinessEachGet({ username })
-          .then(innerResponse => {
-            const data = innerResponse.data;
-            const payload = {};
-            if (data.about) payload.about = data.about;
+const epics = [];
 
-            dispatch({ type: TOGGLE_EDIT_ABOUT_US });
-            dispatch({ type: UPDATE_ABOUT_FULFILLED, payload });
-          })
-          .catch(error => dispatch({ type: UPDATE_ABOUT_REJECTED }));
+export const handleAboutUsSave = payload => ({
+  type: UPDATE_ABOUT_PENDING,
+  payload,
+  updates: ["about"]
+});
+
+epics.push((action$, { getState }) =>
+  action$.ofType(UPDATE_ABOUT_PENDING).mergeMap(action => {
+    const { payload, updates } = action;
+    const globalState = getState();
+    return onBusinessEachPutAjax({
+      ...payload,
+      access_token: globalState.auth.cookies.token_data.access_token,
+      id: globalState.MinisiteContainer.crud.id
     })
-    .catch(error => dispatch({ type: UPDATE_ABOUT_REJECTED }));
-};
+      .map(
+        ({ response }) =>
+          response.msg === "success"
+            ? {
+                type: FETCH_PART_BUSINESS,
+                updates,
+                onSuccess: payload => [
+                  { type: UPDATE_ABOUT_FULFILLED, payload },
+                  { type: TOGGLE_EDIT_ABOUT_US }
+                ],
+                FAILED: UPDATE_ABOUT_REJECTED,
+                username: globalState.auth.cookies.user_data.username
+              }
+            : { type: UPDATE_ABOUT_REJECTED }
+      )
+      .catch(ajaxError => Observable.of({ type: UPDATE_ABOUT_REJECTED }));
+  })
+);
 
 export const handleCoverPhotoChange = ({
   id,
@@ -137,28 +156,51 @@ export const handleGalleryPhotoUpload = ({
     .catch(error => dispatch({ type: UPLOAD_GALLERY_PHOTO_REJECTED }));
 };
 
-export const onBusinessGet = ({ username, history }) => dispatch => {
-  dispatch({ type: FETCH_BUSINESS_PENDING });
-  onBusinessEachGet({ username })
-    .then(response => {
-      const data = response.data;
-      const payload = {};
-      payload.business_name = data.business_name;
-      payload.username = data.username;
-      payload.cover_photo = data.cover_photo;
-      payload.logo = data.logo;
-      payload.id = data.id;
-      payload.albums = data.albums;
+epics.push(action$ =>
+  action$.ofType(FETCH_PART_BUSINESS).mergeMap(action => {
+    const { username, updates, onSuccess, FAILED } = action;
+    return onBusinessEachGetAjax({ username })
+      .concatMap(({ response }) => {
+        const payload = {};
+        updates.forEach(key => {
+          if (response[key]) payload[key] = response[key];
+        });
+        return onSuccess(payload);
+      })
+      .catch(ajaxError => Observable.of({ type: FAILED }));
+  })
+);
 
-      if (data.about) payload.about = data.about;
+export const onBusinessGet = payload => ({
+  type: FETCH_BUSINESS_PENDING,
+  payload
+});
 
-      dispatch({
-        type: FETCH_BUSINESS_FULFILLED,
-        payload
-      });
-    })
-    .catch(error => {
-      history.replace("/404");
-      dispatch({ type: FETCH_BUSINESS_REJECTED });
-    });
-};
+epics.push(action$ =>
+  action$.ofType(FETCH_BUSINESS_PENDING).mergeMap(action => {
+    const { username, history } = action.payload;
+    return onBusinessEachGetAjax({ username })
+      .map(({ response }) => {
+        const payload = {};
+        payload.business_name = response.business_name;
+        payload.username = response.username;
+        payload.cover_photo = response.cover_photo;
+        payload.logo = response.logo;
+        payload.id = response.id;
+        payload.albums = response.albums;
+
+        if (response.about) payload.about = response.about;
+
+        return { type: FETCH_BUSINESS_FULFILLED, payload };
+      })
+      .catch(ajaxError => {
+        history.replace("/404");
+        return Observable.of({ type: FETCH_BUSINESS_REJECTED });
+      })
+      .startWith({ type: CLEAR_MINISITE_DATA });
+  })
+);
+
+export const clearBusiness = () => ({ type: CLEAR_MINISITE_DATA });
+
+export default epics;

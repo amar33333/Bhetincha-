@@ -5,6 +5,7 @@ import {
   ALBUM_URL
 } from "./BUSINESS_API";
 import axios from "axios";
+import { ajax } from "rxjs/observable/dom/ajax";
 
 export const onBusinessPost = ({ data, access_token }) => {
   const sub_category_list = data.sub_category.map(
@@ -110,11 +111,31 @@ export const onBusinessEachGet = ({ username }) =>
     }
   });
 
+export const onBusinessEachGetAjax = ({ username }) =>
+  ajax({
+    method: "GET",
+    url: `${BUSINESS_URL}${username}`,
+    headers: {
+      "Content-Type": "application/json"
+    }
+  });
+
 export const onBusinessEachPut = ({ id, access_token, data }) =>
   axios({
     method: "PUT",
     url: `${BUSINESS_URL}${id}/`,
     data,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
+export const onBusinessEachPutAjax = ({ id, access_token, body }) =>
+  ajax({
+    method: "PUT",
+    url: `${BUSINESS_URL}${id}/`,
+    body,
     headers: {
       "Content-Type": "application/json",
       Authorization: "Bearer " + access_token
@@ -131,6 +152,38 @@ export const onBusinessEachAlbumEachPhotos = ({
     method: "POST",
     url: `${ALBUM_URL}${business_id}/${album_id}/`,
     data,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
+export const onBusinessEachAlbumEachPhotosAjax = ({
+  business_id,
+  album_id,
+  access_token,
+  body
+}) =>
+  ajax({
+    method: "POST",
+    url: `${ALBUM_URL}${business_id}/${album_id}/`,
+    body,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
+export const onBusinessEachAlbumEachPhotosDelete = ({
+  business_id,
+  album_id,
+  access_token,
+  body
+}) =>
+  ajax({
+    method: "DELETE",
+    url: `${ALBUM_URL}${business_id}/${album_id}/`,
+    body,
     headers: {
       "Content-Type": "application/json",
       Authorization: "Bearer " + access_token

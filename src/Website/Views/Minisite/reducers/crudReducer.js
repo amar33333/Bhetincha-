@@ -3,7 +3,8 @@ import {
   FETCH_BUSINESS_FULFILLED,
   UPDATE_COVER_PHOTO_FULFILLED,
   UPLOAD_GALLERY_PHOTO_FULFILLED,
-  CREATE_NEW_ALBUM_FULFILLED
+  CREATE_NEW_ALBUM_FULFILLED,
+  CLEAR_MINISITE_DATA
 } from "../actions/types";
 
 const INITIAL_STATE = {
@@ -33,6 +34,9 @@ export default function(state = INITIAL_STATE, action) {
     case UPLOAD_GALLERY_PHOTO_FULFILLED:
     case CREATE_NEW_ALBUM_FULFILLED:
       return { ...state, ...action.payload };
+
+    case CLEAR_MINISITE_DATA:
+      return { ...INITIAL_STATE };
 
     default:
       return state;

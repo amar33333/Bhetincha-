@@ -62,7 +62,7 @@ class BusinessNav extends Component {
               </NavItem>
               <NavItem>
                 <NavHashLink
-                  to={`/${this.props.businessName}#contact-us`}
+                  to={`#contact-us`}
                   className="nav-link minisite_business__nav__item"
                   smooth
                 >
