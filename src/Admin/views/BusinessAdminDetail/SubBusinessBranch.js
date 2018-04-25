@@ -212,7 +212,7 @@ class SubBusinessBranch extends Component {
     return (
       <Card>
         <CardHeader>
-          <strong>Business Branch - {this.props.id + 1} Address</strong>
+          <strong>Business Branch - {this.props.id} Address</strong>
           <Button
             color="primary"
             onClick={this.onDelete}

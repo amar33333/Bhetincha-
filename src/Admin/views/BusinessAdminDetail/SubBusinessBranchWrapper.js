@@ -61,11 +61,11 @@ class SubBusinessBranchWrapper extends Component {
               branchs[index].branch_post_box = value.branch_post_box;
               branchs[index].branch_area = value.branch_area.value;
 
-              branchs[index].branch_city = value.branch_city;
-              branchs[index].branch_country = value.branch_country;
-              branchs[index].branch_district = value.branch_district;
-              branchs[index].branch_state = value.branch_state;
-              branchs[index].branch_toll_free = value.branch_toll_free;
+              branchs[index].branch_city = value.branch_city.value;
+              branchs[index].branch_country = value.branch_country.value;
+              branchs[index].branch_district = value.branch_district.value;
+              branchs[index].branch_state = value.branch_state.value;
+              branchs[index].branch_toll_free = value.branch_toll_free.value;
 
               this.setState({ branchs });
             } else {
@@ -75,7 +75,15 @@ class SubBusinessBranchWrapper extends Component {
                 {
                   branchs: [
                     ...this.state.branchs,
-                    { ...value, branch_area: value.branch_area.value, key: id }
+                    {
+                      ...value,
+                      branch_area: value.branch_area.value,
+                      branch_city: value.branch_city.value,
+                      branch_country: value.branch_country.value,
+                      branch_state: value.branch_state.value,
+                      branch_district: value.branch_district.value,
+                      key: id
+                    }
                   ]
                 },
                 () => {

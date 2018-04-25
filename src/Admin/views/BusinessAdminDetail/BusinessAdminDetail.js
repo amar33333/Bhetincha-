@@ -85,12 +85,12 @@ class BusinessAdminDetail extends Component {
                     this.propsData = { ...this.propsData, ...value };
                   }}
                 />
-                <SubBusinessBranchWrapper
+                {/* <SubBusinessBranchWrapper
                   onSubmit={value => {
                     this.propsData = { ...this.propsData, ...value };
                     console.log("albumprops: ", this.propsData);
                   }}
-                />
+                /> */}
                 <SubBusinessLogo
                   onSubmit={value => {
                     this.propsData = { ...this.propsData, ...value };
