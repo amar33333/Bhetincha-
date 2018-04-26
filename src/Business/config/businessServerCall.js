@@ -6,6 +6,7 @@ import {
 } from "./BUSINESS_API";
 import axios from "axios";
 import { ajax } from "rxjs/observable/dom/ajax";
+import querystring from "querystring";
 
 export const onBusinessPost = ({ data, access_token }) => {
   const sub_category_list = data.sub_category.map(
@@ -97,6 +98,16 @@ export const onBusinessAllGet = ({ access_token }) =>
   axios({
     method: "get",
     url: BUSINESS_URL,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
+export const onBusinessAllGetAjax = ({ access_token, params }) =>
+  ajax({
+    method: "GET",
+    url: `${BUSINESS_URL}?${querystring.stringify(params)}`,
     headers: {
       "Content-Type": "application/json",
       Authorization: "Bearer " + access_token
