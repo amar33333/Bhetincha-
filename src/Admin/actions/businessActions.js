@@ -1,3 +1,4 @@
+import { Observable } from "rxjs/Observable";
 import {
   onCompanyTypePost,
   onPaymentMethodPost
@@ -6,7 +7,8 @@ import {
 import {
   onBusinessPost,
   onCompanyTypeGet,
-  onPaymentMethodsGet
+  onPaymentMethodsGet,
+  onBusinessAllGetAjax
 } from "../../Business/config/businessServerCall";
 
 import {
@@ -29,6 +31,30 @@ import {
   FETCH_COMPANY_TYPE_REJECTED,
   FETCH_COMPANY_TYPE_PENDING
 } from "./types";
+
+const epics = [];
+
+export const onBusinessAllGet = payload => ({
+  type: FETCH_BUSINESS_PENDING,
+  payload
+});
+
+epics.push((action$, { getState }) =>
+  action$
+    .ofType(FETCH_BUSINESS_PENDING)
+    .mergeMap(({ payload }) => {
+      console.log(getState().auth.cookies.token_data.access_token);
+      return onBusinessAllGetAjax({
+        access_token: getState().auth.cookies.token_data.access_token,
+        params: payload
+      });
+    })
+    .map(({ response }) => ({
+      type: FETCH_BUSINESS_FULFILLED,
+      payload: response
+    }))
+    .catch(ajaxError => Observable.of({ type: FETCH_BUSINESS_REJECTED }))
+);
 
 export const onBusinessCreate = ({ data, access_token }) => dispatch => {
   onBusinessPost({ data, access_token })
@@ -105,3 +131,5 @@ export const onPaymentMethodsList = ({ access_token }) => dispatch => {
     );
   dispatch({ type: FETCH_PAYMENT_METHODS_PENDING });
 };
+
+export default epics;
