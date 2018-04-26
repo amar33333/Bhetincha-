@@ -66,8 +66,8 @@ class Categories extends Component {
 
   render() {
     // console.log("cqeqweL: ", this.props);
-    const industries = this.props.industries.data
-      ? this.props.industries.data.map(industry => {
+    const industries = this.props.industries.industries
+      ? this.props.industries.industries.map(industry => {
           return { value: industry.id, label: industry.name };
         })
       : null;

@@ -13,10 +13,6 @@ class SubBusinessCoverImage extends Component {
     };
   }
 
-  componentWillUpdate(nextProps, nextState) {
-    if (this.props.onSubmit) this.props.onSubmit(nextState);
-  }
-
   // Callback~
   getFiles = (key, files) => {
     this.setState({ [key]: files }, () => {
@@ -29,6 +25,8 @@ class SubBusinessCoverImage extends Component {
       business_cover_image: ""
     });
   };
+
+  getState = () => this.state;
 
   render() {
     return (

@@ -25,10 +25,6 @@ class SubBusinessAbout extends Component {
     };
   }
 
-  componentWillUpdate(nextProps, nextState) {
-    if (this.props.onSubmit) this.props.onSubmit(nextState);
-  }
-
   onChange = (key, event) => this.setState({ [key]: event.target.value });
 
   handleSelectChange = (key, value) => {
@@ -43,6 +39,8 @@ class SubBusinessAbout extends Component {
       company_type: ""
     });
   };
+
+  getState = () => this.state;
 
   render() {
     const companyTypes = this.props.company_types

@@ -27,7 +27,6 @@ import SubBusinessLogo from "./SubBusinessLogo";
 import SubBusinessCoverImage from "./SubBusinessCoverImage";
 import SubBusinessAbout from "./SubBusinessAbout";
 import SubBusinessBranchWrapper from "./SubBusinessBranchWrapper";
-// import SubBusinessContact from "./SubBusinessContact";
 
 class BusinessAdminDetail extends Component {
   constructor(props) {
@@ -49,12 +48,22 @@ class BusinessAdminDetail extends Component {
 
   onFormSubmit = event => {
     event.preventDefault();
+
+    this.propsData = {
+      ...this.subBusinessAdminDetailRef.getState(),
+      ...this.subBusinessAboutRef.getState(),
+      ...this.subBusinessBranchWrapperRef.getState(),
+      // ...this.subBusinessContactRef.getState(),
+      ...this.subBusinessCoverImageRef.getState(),
+      ...this.subBusinessLogoRef.getState(),
+      ...this.subBusinessPrimaryAddressRef.getState()
+    };
+
     console.log("this propsData: ", this.propsData);
     this.props.onBusinessCreate({
       data: this.propsData,
       access_token: this.access_token
     });
-
     // this.subBusinessAdminDetailRef.clearState();
     // this.subBusinessAboutRef.clearState();
     // this.subBusinessBranchWrapperRef.clearState();
@@ -105,55 +114,22 @@ class BusinessAdminDetail extends Component {
                 <SubBusinessDetails
                   ref={ref => (this.subBusinessAdminDetailRef = ref)}
                   {...this.props}
-                  /* data={this.props.data}
-                  industryData={this.props.industryData}
-                  subCategories={this.props.subCategories}
-                  paymentMethods={this.props.paymentMethods} */
-                  onSubmit={value => {
-                    this.propsData = { ...this.propsData, ...value };
-                  }}
                 />
                 <SubBusinessPrimaryAddress
                   ref={ref => (this.subBusinessPrimaryAddressRef = ref)}
                   {...this.props}
-                  onSubmit={(value, contacts) => {
-                    this.propsData = {
-                      ...this.propsData,
-                      ...value,
-                      ...contacts
-                    };
-                    console.log(
-                      "Primary adress busines detail: ",
-                      this.propsData
-                    );
-                  }}
                 />
                 <SubBusinessBranchWrapper
                   ref={ref => (this.subBusinessBranchWrapperRef = ref)}
                   {...this.props}
-                  onSubmit={value => {
-                    this.propsData = { ...this.propsData, ...value };
-                    console.log("Branch data busines detail: ", this.propsData);
-                  }}
                 />
-                <SubBusinessLogo
-                  ref={ref => (this.subBusinessLogoRef = ref)}
-                  onSubmit={value => {
-                    this.propsData = { ...this.propsData, ...value };
-                  }}
-                />
+                <SubBusinessLogo ref={ref => (this.subBusinessLogoRef = ref)} />
                 <SubBusinessCoverImage
                   ref={ref => (this.subBusinessCoverImageRef = ref)}
-                  onSubmit={value => {
-                    this.propsData = { ...this.propsData, ...value };
-                  }}
                 />
                 <SubBusinessAbout
                   ref={ref => (this.subBusinessAboutRef = ref)}
                   company_types={this.props.company_types}
-                  onSubmit={value => {
-                    this.propsData = { ...this.propsData, ...value };
-                  }}
                 />
                 <Row>
                   <Col xs="12">
