@@ -1,4 +1,5 @@
 import industryEpics from "./industryActions";
+import businessEpics from "./businessActions";
 
 export * from "./industryActions";
 export * from "./categoryActions";
@@ -8,4 +9,4 @@ export * from "./generalSetupActions";
 export * from "./userActions";
 export * from "./businessActions";
 
-export default [...industryEpics];
+export default [...industryEpics, ...businessEpics];

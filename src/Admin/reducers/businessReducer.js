@@ -10,16 +10,32 @@ import {
   FETCH_PAYMENT_METHODS_PENDING,
   FETCH_COMPANY_TYPE_FULFILLED,
   FETCH_COMPANY_TYPE_REJECTED,
-  FETCH_COMPANY_TYPE_PENDING
+  FETCH_COMPANY_TYPE_PENDING,
+  FETCH_BUSINESS_FULFILLED,
+  FETCH_BUSINESS_PENDING,
+  FETCH_BUSINESS_REJECTED
 } from "../actions/types";
 
 const INITIAL_STATE = {
   loading: false,
-  statusClass: ""
+  statusClass: "",
+  businesses: [],
+  page: 1,
+  rows: 20,
+  pages: 3
 };
 
 export default function(state = INITIAL_STATE, action) {
   switch (action.type) {
+    case FETCH_BUSINESS_FULFILLED:
+      return {
+        ...state,
+        businesses: action.payload.data,
+        page: action.payload.page,
+        rows: action.payload.rows,
+        pages: action.payload.pages
+      };
+
     case CREATE_PAYMENT_METHODS_PENDING:
       return { ...state, loading: true, statusClass: "pending" };
 

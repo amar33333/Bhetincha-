@@ -9,7 +9,8 @@ import {
   FormGroup,
   Card,
   CardHeader,
-  CardBody
+  CardBody,
+  Collapse
 } from "reactstrap";
 
 class SubBusinessContact extends Component {
@@ -24,6 +25,11 @@ class SubBusinessContact extends Component {
       department: ""
     };
   }
+  toggleCollapse = () => {
+    this.setState({
+      collapse: !this.state.collapse
+    });
+  };
 
   // componentWillUpdate(nextProps, nextState) {
   //   if (nextState.add && this.props.onValueChange) {
@@ -59,16 +65,48 @@ class SubBusinessContact extends Component {
       <div className="animated fadeIn">
         <Card>
           <CardHeader>
-            <strong>
-              Contact Person Detail - {this.props.serial_num + 1}{" "}
-            </strong>
-            <Button
-              color="primary"
-              onClick={this.onDelete}
-              style={{ float: "right" }}
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "space-between",
+                alignItems: "center"
+              }}
             >
-              DELETE
-            </Button>
+              <strong>
+                Contact Person Detail - {this.props.serial_num + 1}{" "}
+              </strong>
+              <Button
+                color="danger"
+                onClick={this.onDelete}
+                style={{ float: "right" }}
+              >
+                DELETE
+              </Button>
+              <Button
+                color="primary"
+                onClick={this.toggleCollapse}
+                style={{
+                  marginBottom: "0rem",
+                  backgroundColor: "rgb(230, 228, 241)",
+                  color: "black",
+                  fontSize: "1.3rem",
+                  border: "1px solid #2e219036",
+                  borderRadius: "50%",
+                  height: "30px",
+                  width: "30px",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center"
+                }}
+              >
+                {this.state.collapse ? (
+                  <i className="fa fa-angle-up" />
+                ) : (
+                  <i className="fa fa-angle-down" />
+                )}
+              </Button>
+            </div>
           </CardHeader>
           <CardBody>
             <Row>
