@@ -17,10 +17,11 @@ class SubBusinessContact extends Component {
     super(props);
 
     this.state = {
-      contact_person_name: "",
-      contact_person_email: "",
-      contact_person_designation: "",
-      contact_person_mobile_number: ""
+      name: "",
+      email: "",
+      designation: "",
+      mobileNumber: "",
+      department: ""
     };
   }
 
@@ -43,10 +44,11 @@ class SubBusinessContact extends Component {
 
   clearState = () => {
     this.setState({
-      contact_person_name: "",
-      contact_person_email: "",
-      contact_person_designation: "",
-      contact_person_mobile_number: ""
+      name: "",
+      email: "",
+      designation: "",
+      mobileNumber: "",
+      department: ""
     });
   };
 
@@ -76,9 +78,19 @@ class SubBusinessContact extends Component {
                   <Input
                     required
                     type="text"
-                    value={this.state.contact_person_name}
+                    value={this.state.name}
                     onKeyDown={this._handleKeyPress}
-                    onChange={this.onChange.bind(this, "contact_person_name")}
+                    onChange={this.onChange.bind(this, "name")}
+                  />
+                </FormGroup>
+                <FormGroup>
+                  <Label for="Deparment">Department</Label>
+                  <Input
+                    required
+                    type="text"
+                    value={this.state.department}
+                    onKeyDown={this._handleKeyPress}
+                    onChange={this.onChange.bind(this, "department")}
                   />
                 </FormGroup>
                 <FormGroup>
@@ -86,9 +98,9 @@ class SubBusinessContact extends Component {
                   <Input
                     required
                     type="email"
-                    value={this.state.contact_person_email}
+                    value={this.state.email}
                     onKeyDown={this._handleKeyPress}
-                    onChange={this.onChange.bind(this, "contact_person_email")}
+                    onChange={this.onChange.bind(this, "email")}
                   />
                 </FormGroup>
                 <FormGroup>
@@ -96,12 +108,9 @@ class SubBusinessContact extends Component {
                   <Input
                     required
                     type="text"
-                    value={this.state.contact_person_designation}
+                    value={this.state.designation}
                     onKeyDown={this._handleKeyPress}
-                    onChange={this.onChange.bind(
-                      this,
-                      "contact_person_designation"
-                    )}
+                    onChange={this.onChange.bind(this, "designation")}
                   />
                 </FormGroup>
                 <FormGroup>
@@ -109,12 +118,9 @@ class SubBusinessContact extends Component {
                   <Input
                     required
                     type="text"
-                    value={this.state.contact_person_mobile_number}
+                    value={this.state.mobileNumber}
                     onKeyDown={this._handleKeyPress}
-                    onChange={this.onChange.bind(
-                      this,
-                      "contact_person_mobile_number"
-                    )}
+                    onChange={this.onChange.bind(this, "mobileNumber")}
                   />
                 </FormGroup>
               </Col>

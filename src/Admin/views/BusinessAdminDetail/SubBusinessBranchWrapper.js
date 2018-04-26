@@ -89,13 +89,13 @@ class SubBusinessBranchWrapper extends Component {
               branchs[index].branch_state = value.branch_state.value;
               branchs[index].branch_toll_free = value.branch_toll_free;
 
-              branchs[index].contacts = contacts.contacts;
+              branchs[index].contactPerson = contacts.contactPerson;
               console.log("update branch: ", [...branchs, ...contacts]);
               this.setState({ branchs }, () =>
                 console.log("immediate branch conta: ", this.state.branchs)
               );
             } else {
-              console.log("new add ran  brnach");
+              console.log("new add ran  brnach: ", contacts);
 
               this.setState(
                 {

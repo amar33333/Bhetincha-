@@ -10,18 +10,18 @@ class SubBusinessContactWrapper extends Component {
 
     this.state = {
       contactComponentList: [],
-      contacts: []
+      contactPerson: []
     };
   }
 
   clearState = () => {
     this.setState({
       contactComponentList: [],
-      contacts: []
+      contactPerson: []
     });
   };
 
-  getState = () => ({ contacts: this.state.contacts });
+  getState = () => ({ contactPerson: this.state.contactPerson });
 
   onContactAdd = () => {
     this.setState({
@@ -34,10 +34,10 @@ class SubBusinessContactWrapper extends Component {
           id={new Date().getTime()}
           serial_num={this.state.contactComponentList.length}
           onAdd={(value, id) => {
-            let contacts = [...this.state.contacts];
+            let contactPerson = [...this.state.contactPerson];
             let index = null;
 
-            contacts.map((contact, i) => {
+            contactPerson.map((contact, i) => {
               console.log("key: ", contact.key, "id: ", id);
               if (id === Number(contact.key)) {
                 console.log("index: ", i);
@@ -46,24 +46,23 @@ class SubBusinessContactWrapper extends Component {
             });
             console.log("index: ", index);
 
-            if (contacts.length > 0 && index !== null) {
+            if (contactPerson.length > 0 && index !== null) {
               console.log("edit ran: ", value);
 
-              contacts[index].contact_person_name = value.contact_person_name;
-              contacts[index].contact_person_email = value.contact_person_email;
-              contacts[index].contact_person_designation =
-                value.contact_person_designation;
-              contacts[index].contact_person_mobile_number =
-                value.contact_person_mobile_number;
+              contactPerson[index].name = value.name;
+              contactPerson[index].email = value.email;
+              contactPerson[index].designation = value.designation;
+              contactPerson[index].department = value.department;
+              contactPerson[index].mobileNumber = value.mobileNumber;
 
-              this.setState({ contacts });
+              this.setState({ contactPerson });
             } else {
               console.log("new add ran");
 
               this.setState(
                 {
-                  contacts: [
-                    ...this.state.contacts,
+                  contactPerson: [
+                    ...this.state.contactPerson,
                     {
                       ...value,
                       key: id
@@ -71,17 +70,17 @@ class SubBusinessContactWrapper extends Component {
                   ]
                 },
                 () => {
-                  console.log("else monitor state: ", this.state.contacts);
+                  console.log("else monitor state: ", this.state.contactPerson);
                   this.onContactAdd();
                 }
               );
             }
           }}
           /* onValueChange={(value, id) => {
-            let contacts = [...this.state.contacts];
+            let contactPerson = [...this.state.contactPerson];
             let index = null;
 
-            contacts.map((contact, i) => {
+            contactPerson.map((contact, i) => {
               console.log("key: ", contact.key, "id: ", id);
               if (id === Number(contact.key)) {
                 console.log("index: ", i);
@@ -90,24 +89,24 @@ class SubBusinessContactWrapper extends Component {
             });
             console.log("index: ", index);
 
-            if (contacts.length > 0 && index !== null) {
+            if (contactPerson.length > 0 && index !== null) {
               console.log("edit ran: ", value);
 
-              contacts[index].contact_person_name = value.contact_person_name;
-              contacts[index].contact_person_email = value.contact_person_email;
-              contacts[index].contact_person_designation =
-                value.contact_person_designation;
-              contacts[index].contact_person_mobile_number =
-                value.contact_person_mobile_number;
+              contactPerson[index].name = value.name;
+              contactPerson[index].email = value.email;
+              contactPerson[index].designation =
+                value.designation;
+              contactPerson[index].mobile_number =
+                value.mobile_number;
 
-              this.setState({ contacts });
+              this.setState({ contactPerson });
             } else {
               console.log("new add ran");
 
               this.setState(
                 {
-                  contacts: [
-                    ...this.state.contacts,
+                  contactPerson: [
+                    ...this.state.contactPerson,
                     {
                       ...value,
                       key: id
@@ -115,7 +114,7 @@ class SubBusinessContactWrapper extends Component {
                   ]
                 },
                 () => {
-                  console.log("else monitor state: ", this.state.contacts);
+                  console.log("else monitor state: ", this.state.contactPerson);
                   this.onContactAdd();
                 }
               );
@@ -126,7 +125,7 @@ class SubBusinessContactWrapper extends Component {
               contactComponentList: this.state.contactComponentList.filter(
                 contactList => id !== Number(contactList.key)
               ),
-              contacts: this.state.contacts.filter(
+              contactPerson: this.state.contactPerson.filter(
                 contact => id !== Number(contact.key)
               )
             });
@@ -137,7 +136,7 @@ class SubBusinessContactWrapper extends Component {
   };
 
   render() {
-    console.log("render state contacts: ", this.state.contacts);
+    console.log("render state contactPerson: ", this.state.contactPerson);
     return (
       <div className="animated fadeIn">
         <Card>

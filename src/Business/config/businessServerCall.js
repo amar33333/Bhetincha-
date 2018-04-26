@@ -37,7 +37,7 @@ export const onBusinessPost = ({ data, access_token }) => {
       landlineNumber: data.landline,
       email: data.business_email,
       area: data.primary_area.value,
-      contacts: data.contacts
+      contactPerson: data.contactPerson
       // contactPerson: {
       //   name: data.contact_person_name,
       //   designation: data.contact_person_designation,
