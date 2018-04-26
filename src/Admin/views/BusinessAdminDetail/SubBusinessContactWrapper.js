@@ -18,7 +18,8 @@ class SubBusinessContactWrapper extends Component {
 
     this.state = {
       contactComponentList: [],
-      contactPerson: []
+      contactPerson: [],
+      collapse: false
     };
   }
   toggleCollapse = () => {
