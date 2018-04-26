@@ -18,6 +18,7 @@ import {
 import CompanyType from "./CompanyType/CompanyType";
 import PaymentMethod from "./PaymentMethod/PaymentMethod";
 import BusinessAdminDetail from "./BusinessAdminDetail";
+import BusinessList from "./BusinessAdminDetail/BusinessList";
 
 export {
   Dashboard,
@@ -36,5 +37,6 @@ export {
   States,
   CompanyType,
   PaymentMethod,
-  BusinessAdminDetail
+  BusinessAdminDetail,
+  BusinessList
 };

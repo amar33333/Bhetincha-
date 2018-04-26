@@ -26,7 +26,9 @@ import {
 
 class Industry extends Component {
   static getDerivedStateFromProps = (nextProps, prevState) =>
-    !nextProps.loading && prevState.industrySubmit ? { industry: "" } : null;
+    !nextProps.loading && prevState.industrySubmit
+      ? { industry: "", industrySubmit: false }
+      : null;
 
   state = { industry: "", industrySubmit: false };
 
@@ -67,7 +69,8 @@ class Industry extends Component {
     const id = filter.pivotId || filter.id;
     if (row[id] !== null) {
       return row[id] !== undefined
-        ? String(row[id].toLowerCase()).startsWith(filter.value.toLowerCase())
+        ? String(row[id].toLowerCase()).indexOf(filter.value.toLowerCase()) !==
+            -1
         : true;
     }
   };
