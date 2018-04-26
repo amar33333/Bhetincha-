@@ -40,8 +40,7 @@ class SubBusinessBranch extends Component {
       branch_address_line_1: "",
       branch_address_line_2: "",
       branch_post_box: "",
-      branch_toll_free: "",
-      add: false
+      branch_toll_free: ""
     };
 
     this.propsData = {};
@@ -55,20 +54,19 @@ class SubBusinessBranch extends Component {
     this.props.onCountryList({ access_token: this.access_token });
   }
 
-  componentWillUpdate(nextProps, nextState) {
-    if (nextState.add && this.props.onValueChange) {
-      console.log("willUpdate called: ", nextState);
-      this.props.onValueChange(nextState, this.props.id, this.propsData);
-      this.setState({ add: false });
-    } else {
-      // console.log(" NOO willUpdate: ", nextState);
-    }
-  }
+  // componentWillUpdate(nextProps, nextState) {
+  //   if (nextState.add && this.props.onValueChange) {
+  //     console.log("willUpdate called: ", nextState);
+  //     this.props.onValueChange(nextState, this.props.id, this.propsData);
+  //     this.setState({ add: false });
+  //   } else {
+  //     // console.log(" NOO willUpdate: ", nextState);
+  //   }
+  // }
 
   onChange = (key, event) => this.setState({ [key]: event.target.value });
 
   handleSelectChange = (key, value) => {
-    console.log("vavas: ", key, value);
     this.setState({ [key]: value });
 
     if (key === "branch_country") {
@@ -152,6 +150,11 @@ class SubBusinessBranch extends Component {
     });
   };
 
+  // getState = () => ({
+  //   ...this.state,
+  //   ...this.subBusinessContactWrapperRef2.getState()
+  // });
+
   _handleKeyPress = event => {
     if (event.keyCode === ON_KEY_PRESS_ENTER) {
       console.log("enter entered");
@@ -169,7 +172,6 @@ class SubBusinessBranch extends Component {
         })
       : null;
 
-    console.log("countryData branch: ", this.props.countryData);
     states = this.props.countryData
       ? this.props.countryData.states.map(state => {
           return { value: state.id, label: state.name };
@@ -388,15 +390,22 @@ class SubBusinessBranch extends Component {
             </Col>
           </Row>
           <SubBusinessContactWrapper
-            onSubmit={value => {
+            ref={ref => (this.subBusinessContactWrapperRef2 = ref)}
+            /* onSubmit={value => {
               this.propsData = { ...this.propsData, ...value };
-            }}
+            }} */
           />
           <Row style={{ marginBottom: 15 }}>
             <Col xs="6" md="6">
               <Button
                 color="primary"
-                onClick={() => this.setState({ add: true })}
+                onClick={() =>
+                  this.props.onAdd(
+                    this.state,
+                    this.props.id,
+                    this.subBusinessContactWrapperRef2.getState()
+                  )
+                }
               >
                 ADD
               </Button>

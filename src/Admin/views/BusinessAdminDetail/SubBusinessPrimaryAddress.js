@@ -38,9 +38,7 @@ class SubBusinessPrimaryAddress extends Component {
       address_line_1: "",
       address_line_2: "",
       post_box: "",
-      toll_free: "",
-
-      contacts: []
+      toll_free: ""
     };
 
     this.propsData = {};
@@ -49,18 +47,18 @@ class SubBusinessPrimaryAddress extends Component {
       : null;
   }
 
-  componentWillUpdate(nextProps, nextState) {
-    console.log("this.props contact: ", this.propsData);
-    if (this.props.onSubmit) this.props.onSubmit(nextState, this.propsData);
-  }
+  // componentWillUpdate(nextProps, nextState) {
+  //   console.log("this.props contact: ", this.propsData);
+  //   if (this.props.onSubmit) this.props.onSubmit(nextState, this.propsData);
+  // }
 
-  propsDataCallback = value => {
-    console.log("contact ;", value.contacts);
-    // this.setState({ contacts: value.contacts });
+  // propsDataCallback = value => {
+  //   console.log("contact ;", value.contacts);
+  //   this.setState({ contacts: value.contacts });
 
-    // this.propsData = { ...this.propsData, ...value };
-    console.log("props contact ; ", this.propsData);
-  };
+  //   this.propsData = { ...this.propsData, ...value };
+  //   console.log("props contact ; ", this.propsData);
+  // };
 
   onChange = (key, event) => this.setState({ [key]: event.target.value });
 
@@ -142,6 +140,11 @@ class SubBusinessPrimaryAddress extends Component {
       toll_free: ""
     });
   };
+
+  getState = () => ({
+    ...this.state,
+    ...this.subBusinessContactWrapperRef.getState()
+  });
 
   render() {
     //PRIMARY ADDRESS
@@ -377,7 +380,10 @@ class SubBusinessPrimaryAddress extends Component {
                 </FormGroup>
               </Col>
             </Row>
-            <SubBusinessContactWrapper onSubmit={this.propsDataCallback} />
+            <SubBusinessContactWrapper
+              ref={ref => (this.subBusinessContactWrapperRef = ref)}
+              /* onSubmit={this.propsDataCallback} */
+            />
           </CardBody>
         </Card>
       </div>

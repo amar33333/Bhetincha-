@@ -14,20 +14,14 @@ class SubBusinessContactWrapper extends Component {
     };
   }
 
-  componentWillUpdate(nextProps, nextState) {
-    console.log("contacts hai wrap: ", nextState);
-    if (this.props.onSubmit)
-      this.props.onSubmit({ contacts: nextState.contacts });
-  }
-
   clearState = () => {
     this.setState({
       contactComponentList: [],
       contacts: []
     });
-    // console.log("branchredf: ", this.subBusinessContactRef);
-    // this.subBusinessContactRef.clearState();
   };
+
+  getState = () => ({ contacts: this.state.contacts });
 
   onContactAdd = () => {
     this.setState({
@@ -39,7 +33,7 @@ class SubBusinessContactWrapper extends Component {
           key={new Date().getTime()}
           id={new Date().getTime()}
           serial_num={this.state.contactComponentList.length}
-          onValueChange={(value, id) => {
+          onAdd={(value, id) => {
             let contacts = [...this.state.contacts];
             let index = null;
 
@@ -83,6 +77,50 @@ class SubBusinessContactWrapper extends Component {
               );
             }
           }}
+          /* onValueChange={(value, id) => {
+            let contacts = [...this.state.contacts];
+            let index = null;
+
+            contacts.map((contact, i) => {
+              console.log("key: ", contact.key, "id: ", id);
+              if (id === Number(contact.key)) {
+                console.log("index: ", i);
+                index = i;
+              }
+            });
+            console.log("index: ", index);
+
+            if (contacts.length > 0 && index !== null) {
+              console.log("edit ran: ", value);
+
+              contacts[index].contact_person_name = value.contact_person_name;
+              contacts[index].contact_person_email = value.contact_person_email;
+              contacts[index].contact_person_designation =
+                value.contact_person_designation;
+              contacts[index].contact_person_mobile_number =
+                value.contact_person_mobile_number;
+
+              this.setState({ contacts });
+            } else {
+              console.log("new add ran");
+
+              this.setState(
+                {
+                  contacts: [
+                    ...this.state.contacts,
+                    {
+                      ...value,
+                      key: id
+                    }
+                  ]
+                },
+                () => {
+                  console.log("else monitor state: ", this.state.contacts);
+                  this.onContactAdd();
+                }
+              );
+            }
+          }} */
           onDelete={id => {
             this.setState({
               contactComponentList: this.state.contactComponentList.filter(

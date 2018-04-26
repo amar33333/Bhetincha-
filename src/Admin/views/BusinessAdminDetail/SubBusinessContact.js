@@ -20,20 +20,19 @@ class SubBusinessContact extends Component {
       contact_person_name: "",
       contact_person_email: "",
       contact_person_designation: "",
-      contact_person_mobile_number: "",
-      add: false
+      contact_person_mobile_number: ""
     };
   }
 
-  componentWillUpdate(nextProps, nextState) {
-    if (nextState.add && this.props.onValueChange) {
-      console.log("willUpdate called: ", nextState);
-      this.props.onValueChange(nextState, this.props.id);
-      this.setState({ add: false });
-    } else {
-      // console.log(" NOO willUpdate: ", nextState);
-    }
-  }
+  // componentWillUpdate(nextProps, nextState) {
+  //   if (nextState.add && this.props.onValueChange) {
+  //     console.log("willUpdate called: ", nextState);
+  //     this.props.onValueChange(nextState, this.props.id);
+  //     this.setState({ add: false });
+  //   } else {
+  //     // console.log(" NOO willUpdate: ", nextState);
+  //   }
+  // }
 
   onChange = (key, event) => this.setState({ [key]: event.target.value });
 
@@ -50,6 +49,8 @@ class SubBusinessContact extends Component {
       contact_person_mobile_number: ""
     });
   };
+
+  getState = () => this.state;
 
   render() {
     return (
@@ -122,7 +123,7 @@ class SubBusinessContact extends Component {
               <Col xs="6" md="6">
                 <Button
                   color="primary"
-                  onClick={() => this.setState({ add: true })}
+                  onClick={() => this.props.onAdd(this.state, this.props.id)}
                 >
                   ADD
                 </Button>

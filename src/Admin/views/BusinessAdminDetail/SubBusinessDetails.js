@@ -36,10 +36,6 @@ class SubBusinessDetail extends Component {
       : null;
   }
 
-  componentWillUpdate(nextProps, nextState) {
-    if (this.props.onSubmit) this.props.onSubmit(nextState);
-  }
-
   onChange = (key, event) => this.setState({ [key]: event.target.value });
 
   handleSelectChange = (key, value) => {
@@ -79,6 +75,8 @@ class SubBusinessDetail extends Component {
       payment_method: []
     });
   };
+
+  getState = () => this.state;
 
   render() {
     const industries = this.props.industries

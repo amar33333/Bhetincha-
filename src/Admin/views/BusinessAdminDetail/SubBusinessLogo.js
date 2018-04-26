@@ -13,10 +13,6 @@ class SubBusinessLogo extends Component {
     };
   }
 
-  componentWillUpdate(nextProps, nextState) {
-    if (this.props.onSubmit) this.props.onSubmit(nextState);
-  }
-
   // Callback~
   getFiles = (key, files) => {
     this.setState({ [key]: files }, () => {
@@ -29,6 +25,8 @@ class SubBusinessLogo extends Component {
       business_logo: ""
     });
   };
+
+  getState = () => this.state;
 
   render() {
     return (

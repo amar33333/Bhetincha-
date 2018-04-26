@@ -14,10 +14,10 @@ class SubBusinessBranchWrapper extends Component {
     };
   }
 
-  componentWillUpdate(nextProps, nextState) {
-    if (this.props.onSubmit)
-      this.props.onSubmit({ branchs: nextState.branchs });
-  }
+  // componentWillUpdate(nextProps, nextState) {
+  //   if (this.props.onSubmit)
+  //     this.props.onSubmit({ branchs: nextState.branchs });
+  // }
 
   componentWillReceiveProps(nextProps, nextState) {
     this.setState({
@@ -41,31 +41,35 @@ class SubBusinessBranchWrapper extends Component {
     // this.subBusinessBranchRef.clearState();
   };
 
+  getState = () => ({ branchs: this.state.branchs });
+
   onBranchAddressAdd = () => {
+    console.log("onasd branch added");
     this.setState({
       branchComponentList: [
         ...this.state.branchComponentList,
         <SubBusinessBranch
-          ref={ref => (this.subBusinessBranchRef = ref)}
+          /* ref={ref => (this.subBusinessBranchRef = ref)} */
           {...this.props}
           key={new Date().getTime()}
           id={new Date().getTime()}
           serial_num={this.state.branchComponentList.length}
-          onValueChange={(value, id, contacts) => {
+          onAdd={(value, id, contacts) => {
+            console.log("branch wrapper: ", value, id, contacts);
             let branchs = [...this.state.branchs];
             let index = null;
 
             branchs.map((branch, i) => {
-              console.log("key: ", branch.key, "id: ", id);
+              console.log("key BRANCH: ", branch.key, "id BRANCH: ", id);
               if (id === Number(branch.key)) {
-                console.log("index: ", i);
+                console.log("index BRNACH: ", i);
                 index = i;
               }
             });
-            console.log("index: ", index);
+            console.log("index BRNAHC: ", index);
 
             if (branchs.length > 0 && index !== null) {
-              console.log("edit ran: ", value);
+              console.log("edit ran BRNAHC: ", contacts);
 
               branchs[index].branch_address_line_1 =
                 value.branch_address_line_1;
@@ -83,11 +87,15 @@ class SubBusinessBranchWrapper extends Component {
               branchs[index].branch_country = value.branch_country.value;
               branchs[index].branch_district = value.branch_district.value;
               branchs[index].branch_state = value.branch_state.value;
-              branchs[index].branch_toll_free = value.branch_toll_free.value;
+              branchs[index].branch_toll_free = value.branch_toll_free;
 
-              this.setState({ branchs });
+              branchs[index].contacts = contacts.contacts;
+              console.log("update branch: ", [...branchs, ...contacts]);
+              this.setState({ branchs }, () =>
+                console.log("immediate branch conta: ", this.state.branchs)
+              );
             } else {
-              console.log("new add ran");
+              console.log("new add ran  brnach");
 
               this.setState(
                 {
