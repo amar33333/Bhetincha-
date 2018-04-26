@@ -3,8 +3,11 @@ import GalleryGrid from "react-grid-gallery";
 import FileInputComponent from "react-file-input-previews-base64";
 import { connect } from "react-redux";
 import { Container, Card, CardBody, CardHeader, Input } from "reactstrap";
+import AvatarEditor from "react-avatar-editor";
 
 import { handleGalleryPhotoUpload, createNewAlbum } from "../actions";
+
+import image from "../../../../static/img/banner.jpg";
 
 import { MAIN_URL } from "../config/MINISITE_API";
 import FontAwesome from "react-fontawesome";
@@ -86,6 +89,7 @@ class Gallery extends Component {
                     this.setState({ newAlbumName: event.target.value })
                   }
                 />
+                <small>Type Album name and Press Enter.</small>
               </form>
             </CardBody>
           </Card>
@@ -98,34 +102,32 @@ class Gallery extends Component {
     return (
       <div className="gallery-wrapper">
         {this.props.mainEdit && this.renderAddNewGallery()}
-        {/* <p> Create New Album: </p>
-         <form
-          action=""
-          onSubmit={event => {
-            event.preventDefault();
-            this.props.createNewAlbum({
-              id: this.props.id,
-              access_token: this.props.cookies.token_data.access_token,
-              username: this.props.username,
-              data: { albums: { name: this.state.newAlbumName } }
-            });
-          }}
-        >
-          <input
-            placeholder="Album Name"
-            value={this.state.newAlbumName}
-            onChange={event =>
-              this.setState({ newAlbumName: event.target.value })
-            }
+        {/* <div>
+          <AvatarEditor
+            image={image}
+            width={1200}
+            height={400}
+            border={10}
+            color={[255, 255, 255, 0.6]} // RGBA
+            scale={1.3}
+            rotate={0}
           />
-        </form> */}
+        </div> */}
         {this.props.albums.map(album => (
           <Container>
             <Card>
               <CardBody>
                 <div className="album-title">
                   <p className="album-title">{album.name}</p>
-                  <small>Updated at March 2018</small>
+                  <small>
+                    {album.photos.length === 0
+                      ? `Created at: ${new Date(
+                          album.created_date
+                        ).toDateString()}`
+                      : `Updated at: ${new Date(
+                          album.updated_date
+                        ).toDateString()}`}
+                  </small>
                 </div>
                 <div className="albums" key={album.albumID}>
                   <div className="gallery-list">

@@ -3,7 +3,6 @@ import { connect } from "react-redux";
 import LaddaButton, { S, EXPAND_RIGHT } from "react-ladda";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
-
 import { handleAboutUsSave } from "../actions";
 
 class AboutUsEditor extends Component {
