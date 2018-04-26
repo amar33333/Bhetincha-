@@ -18,7 +18,8 @@ import {
   States,
   CompanyType,
   PaymentMethod,
-  BusinessAdminDetail
+  BusinessAdminDetail,
+  BusinessList
 } from "../views";
 
 class AdminRoute extends Component {
@@ -67,6 +68,12 @@ class AdminRoute extends Component {
           path="/admin/add-business"
           name="Add Business"
           component={BusinessAdminDetail}
+          permission="CAN_VIEW_DASHBOARD"
+        />
+        <Route
+          path="/admin/list-business"
+          name="List Business"
+          component={BusinessList}
           permission="CAN_VIEW_DASHBOARD"
         />
         <Route

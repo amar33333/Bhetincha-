@@ -56,6 +56,12 @@ const items = {
       permission: "CAN_VIEW_USERS"
     },
     {
+      name: "List Business",
+      url: "/admin/list-business",
+      icon: "fa fa-industry",
+      permission: "CAN_VIEW_USERS"
+    },
+    {
       name: "Industry",
       url: "/admin/industry",
       icon: "fa fa-industry",
