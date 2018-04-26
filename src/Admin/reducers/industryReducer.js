@@ -13,7 +13,10 @@ import {
 
 const INITIAL_STATE = {
   loading: false,
-  statusClass: ""
+  error: "",
+  fetchLoading: false,
+  fetchError: "",
+  industries: []
 };
 
 export default function(state = INITIAL_STATE, action) {
@@ -22,42 +25,29 @@ export default function(state = INITIAL_STATE, action) {
       return {
         ...state,
         data: action.payload,
-        loading: false,
-        statusClass: "fulfilled"
+        loading: false
       };
 
     case CREATE_INDUSTRY_PENDING:
       return { ...state, loading: true };
 
-    case CREATE_INDUSTRY_FULFILLED:
-      return {
-        ...state,
-        ...action.payload.data,
-        loading: false
-      };
-
     case CREATE_INDUSTRY_REJECTED:
+    case CREATE_INDUSTRY_FULFILLED:
       return { ...state, loading: false };
 
     case FETCH_INDUSTRY_PENDING:
-      return { ...state, loading: true };
+      return { ...state, fetchLoading: true };
 
     case FETCH_INDUSTRY_FULFILLED:
-      // console.log("fuludids");
-      return {
-        ...state,
-        industries: action.payload,
-        loading: false
-      };
+      return { ...state, industries: action.payload, fetchLoading: false };
 
     case FETCH_INDUSTRY_REJECTED:
-      return { ...state, loading: false };
+      return { ...state, fetchLoading: false };
 
     case FETCH_INDUSTRY_EACH_PENDING:
       return { ...state, loading: true };
 
     case FETCH_INDUSTRY_EACH_FULFILLED:
-      console.log("inside: ", action);
       return {
         ...state,
         industryData: action.payload,

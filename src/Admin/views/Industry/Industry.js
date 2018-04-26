@@ -20,123 +20,69 @@ import "react-table/react-table.css";
 import {
   onIndustrySubmit,
   onIndustryList,
-  onUnmountIndustry
+  onUnmountIndustry,
+  onIndustryDelete
 } from "../../actions";
 
 class Industry extends Component {
-  state = {
-    industry: "",
-    data: [],
-    pages: null,
-    loading: true
+  static getDerivedStateFromProps = (nextProps, prevState) =>
+    !nextProps.loading && prevState.industrySubmit ? { industry: "" } : null;
+
+  state = { industry: "", industrySubmit: false };
+
+  columns = [
+    { Header: "S.N", accessor: "id" },
+    { Header: "Industry", accessor: "name" },
+    {
+      Header: "Edit",
+      id: "edit",
+      accessor: "id",
+      filterable: false,
+      sortable: false,
+      Cell: ({ value }) => (
+        <button onClick={event => console.log("Edit clicked for id: ", value)}>
+          Edit
+        </button>
+      )
+    },
+    {
+      Header: "Delete",
+      id: "delete",
+      accessor: "id",
+      filterable: false,
+      sortable: false,
+      Cell: ({ value }) => (
+        <button onClick={event => this.props.onIndustryDelete({ id: value })}>
+          Delete
+        </button>
+      )
+    }
+  ];
+
+  componentDidMount = () => this.props.onIndustryList();
+
+  componentWillUnmount = () => this.props.onUnmountIndustry();
+
+  filterCaseInsensitive = (filter, row) => {
+    const id = filter.pivotId || filter.id;
+    if (row[id] !== null) {
+      return row[id] !== undefined
+        ? String(row[id].toLowerCase()).startsWith(filter.value.toLowerCase())
+        : true;
+    }
   };
 
-  access_token = this.props.cookies
-    ? this.props.cookies.token_data.access_token
-    : null;
-
-  componentWillMount() {
-    this.props.onIndustryList({ access_token: this.access_token });
-  }
-
-  componentWillUnmount() {
-    this.props.onUnmountIndustry();
-  }
+  onChange = (key, event) => this.setState({ [key]: event.target.value });
 
   onFormSubmit = event => {
     event.preventDefault();
     const { industry } = this.state;
-    this.props.onIndustrySubmit({ industry, access_token: this.access_token });
-    this.setState({ industry: "" });
+    this.setState({ industrySubmit: true }, () =>
+      this.props.onIndustrySubmit({ industry })
+    );
   };
-
-  onChange = (key, event) => {
-    this.setState({ [key]: event.target.value });
-  };
-
-  // requestData = (pageSize, page, sorted, filtered) => {
-  //   return new Promise((resolve, reject) => {
-  //     // if (this.props.industries.data) {
-  //     // console.log("data received");
-
-  //     const industries = this.props.industries.data
-  //       ? this.props.industries.data.map(industry => {
-  //           return { id: industry.id, name: industry.name };
-  //         })
-  //       : null;
-  //     console.log("indsutie : ", industries);
-
-  //     // You must return an object containing the rows of the current page, and optionally the total pages number.
-  //     const res = {
-  //       rows: industries,
-  //       pages: Math.ceil(industries.length / pageSize)
-  //     };
-
-  //     resolve(res);
-  //     // } else {
-  //     //   console.log("no data received");
-  //     //   reject();
-  //     // }
-  //   });
-  // };
-
-  fetchData(state, instance) {
-    // this.setState({ loading: true });
-    // this.requestData(state.pageSize, state.page, state.sorted, state.filtered)
-    //   .then(response => {
-    //     console.log("fetch positive");
-    //     // Now just get the rows of data to your React Table (and update anything else like total pages or loading)
-    //     this.setState({
-    //       data: response.rows,
-    //       pages: response.pages,
-    //       loading: false
-    //     });
-    //   })
-    //   .catch(error => {
-    //     console.log("fetch erro");
-    //   });
-    // console.log("industry list ", this.props);
-    // if (this.props.industries.data) {
-    //   const industries = this.props.industries.data
-    //     ? this.props.industries.data.map(industry => {
-    //         return { id: industry.id, name: industry.name };
-    //       })
-    //     : null;
-    //   console.log("indsutie : ", industries);
-    //   const pages = Math.ceil(industries.length / state.page);
-    // Whenever the table model changes, or the user sorts or changes pages, this method gets called and passed the current table model.
-    // You can set the `loading` prop of the table to true to use the built-in one or show you're own loading bar if you want.
-    // Request the data however you want.  Here, we'll use our mocked service we created earlier
-    // Now just get the rows of data to your React Table (and update anything else like total pages or loading)
-    //   this.setState({
-    //     data: industries,
-    //     pages: pages,
-    //     loading: false
-    //   });
-    // } else {
-    //   console.log("no data");
-    // }
-  }
 
   render() {
-    console.log("industry list ", this.props);
-    // console.log("data: ", data);
-    const industries = this.props.industries.data
-      ? this.props.industries.data.map((industry, id) => {
-          return { id: ++id, name: industry.name };
-        })
-      : [];
-    console.log("indsutie : ", industries);
-    // const pages = Math.ceil(industries.length / )
-    const { loading } = this.state;
-    console.log("loading: ", loading);
-
-    if (industries.length !== 0 && this.state.loading) {
-      console.log("set to: ", this.state.loading);
-      this.setState({ loading: false });
-    } else {
-      console.log("set to: ", this.state.loading);
-    }
     return (
       <div>
         <Row className="hr-centered">
@@ -156,6 +102,7 @@ class Industry extends Component {
                       </InputGroupAddon>
                       <Input
                         autoFocus
+                        disabled={this.props.loading}
                         required
                         type="text"
                         placeholder="Type Industry Name"
@@ -164,10 +111,7 @@ class Industry extends Component {
                       />
                     </InputGroup>
                   </FormGroup>
-                  <Button
-                    color="primary"
-                    //onClick={() => this.onLoginBtnClick()}
-                  >
+                  <Button color="primary">
                     <span className="fa fa-plus" /> Add
                   </Button>
                 </Form>
@@ -177,32 +121,20 @@ class Industry extends Component {
         </Row>
 
         <ReactTable
-          columns={[
-            {
-              Header: "S.N",
-              accessor: "id"
-            },
-            {
-              Header: "Industry",
-              accessor: "name"
-            }
-          ]}
-          manual // Forces table not to paginate or sort automatically, so we can handle it server-side
-          data={industries}
-          pages={5} // Display the total number of pages
-          loading={loading} // Display the loading overlay when we need it
-          //onFetchData={this.fetchData.bind(this)} // Request new data when things change
-          filterable
+          columns={this.columns}
+          data={this.props.industries}
+          loading={this.props.fetchLoading}
           defaultPageSize={10}
+          filterable
+          defaultFilterMethod={this.filterCaseInsensitive}
           className="-striped -highlight"
         />
-        <br />
       </div>
     );
   }
 }
 
 export default connect(
-  ({ AdminContainer: { industries }, auth }) => ({ industries, ...auth }),
-  { onIndustrySubmit, onIndustryList, onUnmountIndustry }
+  ({ AdminContainer: { industries } }) => ({ ...industries }),
+  { onIndustrySubmit, onIndustryList, onUnmountIndustry, onIndustryDelete }
 )(Industry);

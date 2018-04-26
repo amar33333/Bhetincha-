@@ -19,6 +19,8 @@ import {
 
 import axios from "axios";
 
+import { ajax } from "rxjs/observable/dom/ajax";
+
 export const onCompanyTypePost = ({ company_type, access_token }) => {
   return axios({
     method: "post",
@@ -72,6 +74,49 @@ export const onIndustryGet = ({ access_token }) =>
 export const onIndustryEachGet = ({ id, access_token }) =>
   axios({
     method: "get",
+    url: `${INDUSTRY_URL}${id}/`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
+export const onIndustryPostAjax = ({ industry, access_token }) =>
+  ajax({
+    method: "POST",
+    url: INDUSTRY_URL,
+    body: {
+      name: industry
+    },
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
+export const onIndustryGetAjax = ({ access_token }) =>
+  ajax({
+    method: "GET",
+    url: INDUSTRY_URL,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
+export const onIndustryEachGetAjax = ({ id, access_token }) =>
+  ajax({
+    method: "GET",
+    url: `${INDUSTRY_URL}${id}/`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
+export const onIndustryEachDeleteAjax = ({ id, access_token }) =>
+  ajax({
+    method: "DELETE",
     url: `${INDUSTRY_URL}${id}/`,
     headers: {
       "Content-Type": "application/json",
