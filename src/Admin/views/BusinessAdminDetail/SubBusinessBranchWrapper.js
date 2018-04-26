@@ -19,11 +19,26 @@ class SubBusinessBranchWrapper extends Component {
       this.props.onSubmit({ branchs: nextState.branchs });
   }
 
+  componentWillReceiveProps(nextProps, nextState) {
+    this.setState({
+      branchComponentList: this.state.branchComponentList.map(
+        branchComponent => {
+          return {
+            ...branchComponent,
+            props: { ...branchComponent.props, ...nextProps }
+          };
+        }
+      )
+    });
+  }
+
   clearState = () => {
     this.setState({
       branchComponentList: [],
       branchs: []
     });
+    // console.log("branchredf: ", this.subBusinessBranchRef);
+    // this.subBusinessBranchRef.clearState();
   };
 
   onBranchAddressAdd = () => {
@@ -31,9 +46,12 @@ class SubBusinessBranchWrapper extends Component {
       branchComponentList: [
         ...this.state.branchComponentList,
         <SubBusinessBranch
+          ref={ref => (this.subBusinessBranchRef = ref)}
+          {...this.props}
           key={new Date().getTime()}
           id={new Date().getTime()}
-          onValueChange={(value, id) => {
+          serial_num={this.state.branchComponentList.length}
+          onValueChange={(value, id, contacts) => {
             let branchs = [...this.state.branchs];
             let index = null;
 
@@ -82,7 +100,8 @@ class SubBusinessBranchWrapper extends Component {
                       branch_country: value.branch_country.value,
                       branch_state: value.branch_state.value,
                       branch_district: value.branch_district.value,
-                      key: id
+                      key: id,
+                      ...contacts
                     }
                   ]
                 },
@@ -108,74 +127,8 @@ class SubBusinessBranchWrapper extends Component {
     });
   };
 
-  // onBranchAddressAdd = () => {
-  //   // this.setState(
-  //   //   { branchs: [...this.state.branchs, { name: this.state.album }] },
-  //   //   () => console.log("ablu ssubmit: ", this.state)
-  //   // );
-  //   let branchs = [...this.state.branchs];
-  //   this.setState({
-  //     branchComponentList: [
-  //       ...this.state.branchComponentList,
-  //       <SubBusinessBranch
-  //         key={this.state.branchComponentList.length}
-  //         id={this.state.branchComponentList.length}
-  //         onValueChange={(value, id) => {
-  //           console.log("branchL: ", value, id);
-  //           branchs =
-  //             branchs.length + 1 <= this.state.branchComponentList.length
-  //               ? [...this.state.branchs]
-  //               : branchs;
-
-  //           if (branchs[id]) {
-  //             branchs[id].branch_address_line_1 = value.branch_address_line_1;
-  //             branchs[id].branch_address_line_2 = value.branch_address_line_2;
-  //             branchs[id].branch_house_no = value.branch_house_no;
-  //             branchs[id].branch_landline = value.branch_landline;
-  //             branchs[id].branch_landmark = value.branch_landmark;
-  //             branchs[id].branch_other_landline_number =
-  //               value.branch_other_landline_number;
-  //             branchs[id].branch_post_box = value.branch_post_box;
-  //             branchs[id].branch_area = value.branch_area.value;
-
-  //             branchs[id].branch_city = value.branch_city;
-  //             branchs[id].branch_country = value.branch_country;
-  //             branchs[id].branch_district = value.branch_district;
-  //             branchs[id].branch_state = value.branch_state;
-  //             branchs[id].branch_toll_free = value.branch_toll_free;
-  //             console.log("satisfied branchs ste: ", branchs);
-
-  //             this.setState({ branchs: branchs });
-  //           } else {
-  //             this.setState({
-  //               branchs: [
-  //                 ...branchs,
-  //                 {
-  //                   ...value,
-  //                   key: id
-  //                 }
-  //               ]
-  //             });
-  //             console.log("else  branchs ste: ", branchs);
-  //           }
-  //         }}
-  //         onDelete={id => {
-  //           branchs.splice(id, 1);
-
-  //           this.setState({
-  //             branchComponentList: this.state.branchComponentList.filter(
-  //               branchList => id !== Number(branchList.key)
-  //             ),
-  //             branchs: branchs
-  //           });
-  //         }}
-  //       />
-  //     ]
-  //   });
-  // };
-
   render() {
-    // console.log("render state: ", this.state.branchs);
+    console.log("render state branchs: ", this.state);
     return (
       <div className="animated fadeIn">
         <Card>

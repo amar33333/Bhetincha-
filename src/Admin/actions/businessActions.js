@@ -19,6 +19,9 @@ import {
   FETCH_BUSINESS_FULFILLED,
   FETCH_BUSINESS_REJECTED,
   FETCH_BUSINESS_PENDING,
+  CREATE_BUSINESS_FULFILLED,
+  CREATE_BUSINESS_REJECTED,
+  CREATE_BUSINESS_PENDING,
   FETCH_PAYMENT_METHODS_FULFILLED,
   FETCH_PAYMENT_METHODS_REJECTED,
   FETCH_PAYMENT_METHODS_PENDING,
@@ -30,12 +33,12 @@ import {
 export const onBusinessCreate = ({ data, access_token }) => dispatch => {
   onBusinessPost({ data, access_token })
     .then(response =>
-      dispatch({ type: FETCH_BUSINESS_FULFILLED, payload: response.data })
+      dispatch({ type: CREATE_BUSINESS_FULFILLED, payload: response.data })
     )
     .catch(error =>
-      dispatch({ type: FETCH_BUSINESS_REJECTED, payload: error })
+      dispatch({ type: CREATE_BUSINESS_REJECTED, payload: error })
     );
-  dispatch({ type: FETCH_BUSINESS_PENDING });
+  dispatch({ type: CREATE_BUSINESS_PENDING });
 };
 
 export const onCompanyTypeSubmit = ({

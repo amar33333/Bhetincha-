@@ -37,13 +37,14 @@ export const onBusinessPost = ({ data, access_token }) => {
       landlineNumber: data.landline,
       email: data.business_email,
       area: data.primary_area.value,
-      contactPerson: {
-        name: data.contact_person_name,
-        designation: data.contact_person_designation,
-        email: data.contact_person_email,
-        mobileNumber: data.contact_person_mobile_number
-        // visibleToPublic: "false"
-      }
+      contacts: data.contacts
+      // contactPerson: {
+      //   name: data.contact_person_name,
+      //   designation: data.contact_person_designation,
+      //   email: data.contact_person_email,
+      //   mobileNumber: data.contact_person_mobile_number
+      //   // visibleToPublic: "false"
+      // }
     },
     branchAddress: data.branchs,
     // branchAddress: [

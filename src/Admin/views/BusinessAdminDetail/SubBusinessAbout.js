@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { connect } from "react-redux";
 
 import {
   Row,
@@ -14,8 +13,6 @@ import {
 
 import Select from "react-select";
 
-import { onCompanyTypeList } from "../../actions";
-
 class SubBusinessAbout extends Component {
   constructor(props) {
     super(props);
@@ -26,14 +23,6 @@ class SubBusinessAbout extends Component {
       established_year: "",
       company_type: ""
     };
-
-    this.access_token = this.props.cookies
-      ? this.props.cookies.token_data.access_token
-      : null;
-  }
-
-  componentWillMount() {
-    this.props.onCompanyTypeList({ access_token: this.access_token });
   }
 
   componentWillUpdate(nextProps, nextState) {
@@ -133,12 +122,4 @@ class SubBusinessAbout extends Component {
   }
 }
 
-export default connect(
-  ({ AdminContainer: { business_reducer }, auth }) => ({
-    ...business_reducer,
-    ...auth
-  }),
-  {
-    onCompanyTypeList
-  }
-)(SubBusinessAbout);
+export default SubBusinessAbout;

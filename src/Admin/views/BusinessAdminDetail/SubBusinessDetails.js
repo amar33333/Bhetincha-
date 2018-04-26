@@ -1,7 +1,5 @@
 import React, { Component } from "react";
 
-import { connect } from "react-redux";
-
 import Select from "react-select";
 
 import {
@@ -14,14 +12,6 @@ import {
   Label,
   FormGroup
 } from "reactstrap";
-
-import {
-  onIndustryList,
-  onIndustryEachList,
-  onCategoryEachList,
-  onUnmountSubCategories,
-  onPaymentMethodsList
-} from "../../actions";
 
 class SubBusinessDetail extends Component {
   constructor(props) {
@@ -44,12 +34,6 @@ class SubBusinessDetail extends Component {
     this.access_token = this.props.cookies
       ? this.props.cookies.token_data.access_token
       : null;
-  }
-
-  componentWillMount() {
-    console.log("acces: ", this.access_token);
-    this.props.onIndustryList({ access_token: this.access_token });
-    this.props.onPaymentMethodsList({ access_token: this.access_token });
   }
 
   componentWillUpdate(nextProps, nextState) {
@@ -97,8 +81,8 @@ class SubBusinessDetail extends Component {
   };
 
   render() {
-    const industries = this.props.data
-      ? this.props.data.map(industry => {
+    const industries = this.props.industries
+      ? this.props.industries.map(industry => {
           return { value: industry.id, label: industry.name };
         })
       : null;
@@ -323,19 +307,4 @@ class SubBusinessDetail extends Component {
   }
 }
 
-export default connect(
-  ({ AdminContainer: { business_reducer, industries, categories }, auth }) => ({
-    ...auth,
-    ...business_reducer,
-    ...industries,
-    ...categories
-  }),
-  {
-    onIndustryList,
-    onIndustryEachList,
-    onCategoryEachList,
-    onUnmountSubCategories,
-
-    onPaymentMethodsList
-  }
-)(SubBusinessDetail);
+export default SubBusinessDetail;

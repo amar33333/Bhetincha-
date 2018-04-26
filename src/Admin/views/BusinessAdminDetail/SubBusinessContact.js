@@ -1,8 +1,16 @@
 import React, { Component } from "react";
 
-import { Card, CardHeader, CardBody } from "reactstrap";
-
-import { Row, Col, Input, Label, FormGroup } from "reactstrap";
+import {
+  Button,
+  Row,
+  Col,
+  Input,
+  Label,
+  FormGroup,
+  Card,
+  CardHeader,
+  CardBody
+} from "reactstrap";
 
 class SubBusinessContact extends Component {
   constructor(props) {
@@ -12,15 +20,27 @@ class SubBusinessContact extends Component {
       contact_person_name: "",
       contact_person_email: "",
       contact_person_designation: "",
-      contact_person_mobile_number: ""
+      contact_person_mobile_number: "",
+      add: false
     };
   }
 
   componentWillUpdate(nextProps, nextState) {
-    if (this.props.onSubmit) this.props.onSubmit(nextState);
+    if (nextState.add && this.props.onValueChange) {
+      console.log("willUpdate called: ", nextState);
+      this.props.onValueChange(nextState, this.props.id);
+      this.setState({ add: false });
+    } else {
+      // console.log(" NOO willUpdate: ", nextState);
+    }
   }
 
   onChange = (key, event) => this.setState({ [key]: event.target.value });
+
+  onDelete = () => {
+    this.clearState();
+    this.props.onDelete(this.props.id);
+  };
 
   clearState = () => {
     this.setState({
@@ -36,7 +56,16 @@ class SubBusinessContact extends Component {
       <div className="animated fadeIn">
         <Card>
           <CardHeader>
-            <strong>Contact Person Details</strong>
+            <strong>
+              Contact Person Detail - {this.props.serial_num + 1}{" "}
+            </strong>
+            <Button
+              color="primary"
+              onClick={this.onDelete}
+              style={{ float: "right" }}
+            >
+              DELETE
+            </Button>
           </CardHeader>
           <CardBody>
             <Row>
@@ -87,11 +116,21 @@ class SubBusinessContact extends Component {
                     )}
                   />
                 </FormGroup>
-                {/* <FormGroup check>
-                          <Label for="visible_to_public" check>
-                            <Input type="checkbox" /> Visible To Public
-                          </Label>
-                        </FormGroup> */}
+              </Col>
+            </Row>
+            <Row style={{ marginBottom: 15 }}>
+              <Col xs="6" md="6">
+                <Button
+                  color="primary"
+                  onClick={() => this.setState({ add: true })}
+                >
+                  ADD
+                </Button>
+              </Col>
+              <Col xs="6" md="6">
+                <Button color="primary" onClick={this.onDelete}>
+                  DELETE
+                </Button>
               </Col>
             </Row>
           </CardBody>

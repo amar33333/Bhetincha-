@@ -27,48 +27,45 @@ export default function(state = INITIAL_STATE, action) {
       };
 
     case CREATE_INDUSTRY_PENDING:
-      return { ...state, loading: true, statusClass: "pending" };
+      return { ...state, loading: true };
 
     case CREATE_INDUSTRY_FULFILLED:
       return {
         ...state,
         ...action.payload.data,
-        loading: false,
-        statusClass: "fulfilled"
+        loading: false
       };
 
     case CREATE_INDUSTRY_REJECTED:
-      return { ...state, loading: false, statusClass: "rejected" };
+      return { ...state, loading: false };
 
     case FETCH_INDUSTRY_PENDING:
-      return { ...state, loading: true, statusClass: "pending" };
+      return { ...state, loading: true };
 
     case FETCH_INDUSTRY_FULFILLED:
       // console.log("fuludids");
       return {
         ...state,
-        data: action.payload,
-        loading: false,
-        statusClass: "fulfilled"
+        industries: action.payload,
+        loading: false
       };
 
     case FETCH_INDUSTRY_REJECTED:
-      return { ...state, loading: false, statusClass: "rejected" };
+      return { ...state, loading: false };
 
     case FETCH_INDUSTRY_EACH_PENDING:
-      return { ...state, loading: true, statusClass: "pending" };
+      return { ...state, loading: true };
 
     case FETCH_INDUSTRY_EACH_FULFILLED:
       console.log("inside: ", action);
       return {
         ...state,
         industryData: action.payload,
-        loading: false,
-        statusClass: "fulfilled"
+        loading: false
       };
 
     case FETCH_INDUSTRY_EACH_REJECTED:
-      return { ...state, loading: false, statusClass: "rejected" };
+      return { ...state, loading: false };
 
     default:
       return state;

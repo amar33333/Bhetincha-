@@ -1,7 +1,5 @@
 import React, { Component } from "react";
 
-import { connect } from "react-redux";
-
 import Select from "react-select";
 
 import {
@@ -15,16 +13,13 @@ import {
   FormGroup
 } from "reactstrap";
 
-import {
-  onCountryList,
-  onCountryEachList,
-  onStateEachList,
-  onDistrictEachList,
-  onCityEachList,
-  onUnmountArea,
-  onUnmountCity,
-  onUnmountDistrict
-} from "../../actions";
+import SubBusinessContactWrapper from "./SubBusinessContactWrapper.js";
+
+let countries = null;
+let states = null;
+let districts = null;
+let cities = null;
+let areas = null;
 
 class SubBusinessPrimaryAddress extends Component {
   constructor(props) {
@@ -43,26 +38,33 @@ class SubBusinessPrimaryAddress extends Component {
       address_line_1: "",
       address_line_2: "",
       post_box: "",
-      toll_free: ""
+      toll_free: "",
+
+      contacts: []
     };
 
+    this.propsData = {};
     this.access_token = this.props.cookies
       ? this.props.cookies.token_data.access_token
       : null;
   }
 
-  componentWillMount() {
-    this.props.onCountryList({ access_token: this.access_token });
+  componentWillUpdate(nextProps, nextState) {
+    console.log("this.props contact: ", this.propsData);
+    if (this.props.onSubmit) this.props.onSubmit(nextState, this.propsData);
   }
 
-  componentWillUpdate(nextProps, nextState) {
-    if (this.props.onSubmit) this.props.onSubmit(nextState);
-  }
+  propsDataCallback = value => {
+    console.log("contact ;", value.contacts);
+    // this.setState({ contacts: value.contacts });
+
+    // this.propsData = { ...this.propsData, ...value };
+    console.log("props contact ; ", this.propsData);
+  };
 
   onChange = (key, event) => this.setState({ [key]: event.target.value });
 
   handleSelectChange = (key, value) => {
-    console.log("vavas: ", key, value);
     this.setState({ [key]: value });
 
     if (key === "primary_country") {
@@ -77,9 +79,12 @@ class SubBusinessPrimaryAddress extends Component {
         id: value.value,
         access_token: this.access_token
       });
-      this.props.onUnmountDistrict();
-      this.props.onUnmountCity();
-      this.props.onUnmountArea();
+      districts = null;
+      cities = null;
+      areas = null;
+      // this.props.onUnmountDistrict();
+      // this.props.onUnmountCity();
+      // this.props.onUnmountArea();
     } else if (key === "primary_state") {
       this.setState({
         primary_district: "",
@@ -91,8 +96,10 @@ class SubBusinessPrimaryAddress extends Component {
         id: value.value,
         access_token: this.access_token
       });
-      this.props.onUnmountCity();
-      this.props.onUnmountArea();
+      cities = null;
+      areas = null;
+      // this.props.onUnmountCity();
+      // this.props.onUnmountArea();
     } else if (key === "primary_district") {
       this.setState({
         primary_city: "",
@@ -103,7 +110,8 @@ class SubBusinessPrimaryAddress extends Component {
         id: value.value,
         access_token: this.access_token
       });
-      this.props.onUnmountArea();
+      areas = null;
+      // this.props.onUnmountArea();
     } else if (key === "primary_city") {
       this.setState({
         primary_area: ""
@@ -137,31 +145,32 @@ class SubBusinessPrimaryAddress extends Component {
 
   render() {
     //PRIMARY ADDRESS
-    const countries = this.props.countries
+    countries = this.props.countries
       ? this.props.countries.map(industry => {
           return { value: industry.id, label: industry.name };
         })
       : null;
 
-    const states = this.props.countryData
+    console.log("countryData branch: ", this.props.countryData);
+    states = this.props.countryData
       ? this.props.countryData.states.map(state => {
           return { value: state.id, label: state.name };
         })
       : null;
 
-    const districts = this.props.stateData
+    districts = this.props.stateData
       ? this.props.stateData.districts.map(district => {
           return { value: district.id, label: district.name };
         })
       : null;
 
-    const cities = this.props.districtData
+    cities = this.props.districtData
       ? this.props.districtData.cities.map(city => {
           return { value: city.id, label: city.name };
         })
       : null;
 
-    const areas = this.props.cityData
+    areas = this.props.cityData
       ? this.props.cityData.areas.map(area => {
           return { value: area.id, label: area.name };
         })
@@ -368,6 +377,7 @@ class SubBusinessPrimaryAddress extends Component {
                 </FormGroup>
               </Col>
             </Row>
+            <SubBusinessContactWrapper onSubmit={this.propsDataCallback} />
           </CardBody>
         </Card>
       </div>
@@ -375,20 +385,4 @@ class SubBusinessPrimaryAddress extends Component {
   }
 }
 
-export default connect(
-  ({ AdminContainer: { general_setup }, auth }) => ({
-    ...auth,
-    ...general_setup
-  }),
-  {
-    onCountryList,
-    onCountryEachList,
-    onStateEachList,
-    onDistrictEachList,
-    onCityEachList,
-
-    onUnmountArea,
-    onUnmountCity,
-    onUnmountDistrict
-  }
-)(SubBusinessPrimaryAddress);
+export default SubBusinessPrimaryAddress;

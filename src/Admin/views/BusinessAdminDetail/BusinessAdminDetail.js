@@ -3,15 +3,31 @@ import { connect } from "react-redux";
 
 import { Row, Col, Card, CardHeader, CardBody, Button } from "reactstrap";
 
-import { onBusinessCreate } from "../../actions";
+import {
+  onBusinessCreate,
+  onIndustryList,
+  onIndustryEachList,
+  onCategoryEachList,
+  onUnmountSubCategories,
+  onCountryList,
+  onCountryEachList,
+  onStateEachList,
+  onDistrictEachList,
+  onCityEachList,
+  onUnmountArea,
+  onUnmountCity,
+  onUnmountDistrict,
+  onPaymentMethodsList,
+  onCompanyTypeList
+} from "../../actions";
 
 import SubBusinessDetails from "./SubBusinessDetails";
 import SubBusinessPrimaryAddress from "./SubBusinessPrimaryAddress";
 import SubBusinessLogo from "./SubBusinessLogo";
 import SubBusinessCoverImage from "./SubBusinessCoverImage";
-import SubBusinessContact from "./SubBusinessContact";
 import SubBusinessAbout from "./SubBusinessAbout";
 import SubBusinessBranchWrapper from "./SubBusinessBranchWrapper";
+// import SubBusinessContact from "./SubBusinessContact";
 
 class BusinessAdminDetail extends Component {
   constructor(props) {
@@ -24,6 +40,13 @@ class BusinessAdminDetail extends Component {
     this.propsData = {};
   }
 
+  componentWillMount() {
+    this.props.onCompanyTypeList({ access_token: this.access_token });
+    this.props.onIndustryList({ access_token: this.access_token });
+    this.props.onPaymentMethodsList({ access_token: this.access_token });
+    this.props.onCountryList({ access_token: this.access_token });
+  }
+
   onFormSubmit = event => {
     event.preventDefault();
     console.log("this propsData: ", this.propsData);
@@ -31,8 +54,14 @@ class BusinessAdminDetail extends Component {
       data: this.propsData,
       access_token: this.access_token
     });
-    console.log("this chidl ", this.child);
-    // this.child.clearState();
+
+    // this.subBusinessAdminDetailRef.clearState();
+    // this.subBusinessAboutRef.clearState();
+    // this.subBusinessBranchWrapperRef.clearState();
+    // this.subBusinessContactRef.clearState();
+    // this.subBusinessCoverImageRef.clearState();
+    // this.subBusinessLogoRef.clearState();
+    // this.subBusinessPrimaryAddressRef.clearState();
   };
 
   _handleKeyPress = event => {
@@ -63,6 +92,7 @@ class BusinessAdminDetail extends Component {
   };
 
   render() {
+    console.log("busines admin props: ", this.props);
     return (
       <div className="animated fadeIn">
         <Col>
@@ -73,52 +103,62 @@ class BusinessAdminDetail extends Component {
             <CardBody>
               <form onSubmit={this.onFormSubmit}>
                 <SubBusinessDetails
-                  ref={instance => {
-                    this.child = instance;
-                  }}
+                  ref={ref => (this.subBusinessAdminDetailRef = ref)}
+                  {...this.props}
+                  /* data={this.props.data}
+                  industryData={this.props.industryData}
+                  subCategories={this.props.subCategories}
+                  paymentMethods={this.props.paymentMethods} */
                   onSubmit={value => {
                     this.propsData = { ...this.propsData, ...value };
                   }}
                 />
                 <SubBusinessPrimaryAddress
-                  onSubmit={value => {
-                    this.propsData = { ...this.propsData, ...value };
+                  ref={ref => (this.subBusinessPrimaryAddressRef = ref)}
+                  {...this.props}
+                  onSubmit={(value, contacts) => {
+                    this.propsData = {
+                      ...this.propsData,
+                      ...value,
+                      ...contacts
+                    };
+                    console.log(
+                      "Primary adress busines detail: ",
+                      this.propsData
+                    );
                   }}
                 />
-                {/* <SubBusinessBranchWrapper
+                <SubBusinessBranchWrapper
+                  ref={ref => (this.subBusinessBranchWrapperRef = ref)}
+                  {...this.props}
                   onSubmit={value => {
                     this.propsData = { ...this.propsData, ...value };
-                    console.log("albumprops: ", this.propsData);
+                    console.log("Branch data busines detail: ", this.propsData);
                   }}
-                /> */}
+                />
                 <SubBusinessLogo
+                  ref={ref => (this.subBusinessLogoRef = ref)}
                   onSubmit={value => {
                     this.propsData = { ...this.propsData, ...value };
                   }}
                 />
                 <SubBusinessCoverImage
-                  onSubmit={value => {
-                    this.propsData = { ...this.propsData, ...value };
-                  }}
-                />
-                <SubBusinessContact
+                  ref={ref => (this.subBusinessCoverImageRef = ref)}
                   onSubmit={value => {
                     this.propsData = { ...this.propsData, ...value };
                   }}
                 />
                 <SubBusinessAbout
+                  ref={ref => (this.subBusinessAboutRef = ref)}
+                  company_types={this.props.company_types}
                   onSubmit={value => {
                     this.propsData = { ...this.propsData, ...value };
                   }}
                 />
                 <Row>
                   <Col xs="12">
-                    <Button
-                      color="primary"
-                      onKeyDown={this._handleKeyPress}
-                      size="lg"
-                    >
-                      Submit
+                    <Button color="primary" size="lg">
+                      SUBMIT
                     </Button>
                   </Col>
                 </Row>
@@ -132,10 +172,33 @@ class BusinessAdminDetail extends Component {
 }
 
 export default connect(
-  ({ auth }) => ({
-    ...auth
+  ({
+    AdminContainer: { business_reducer, industries, categories, general_setup },
+    auth
+  }) => ({
+    ...business_reducer,
+    ...industries,
+    ...categories,
+    ...auth,
+    ...general_setup
   }),
   {
-    onBusinessCreate
+    onBusinessCreate,
+    onIndustryList,
+    onIndustryEachList,
+    onCategoryEachList,
+    onUnmountSubCategories,
+    onCountryList,
+    onCountryEachList,
+    onStateEachList,
+    onDistrictEachList,
+    onCityEachList,
+
+    onUnmountArea,
+    onUnmountCity,
+    onUnmountDistrict,
+
+    onPaymentMethodsList,
+    onCompanyTypeList
   }
 )(BusinessAdminDetail);

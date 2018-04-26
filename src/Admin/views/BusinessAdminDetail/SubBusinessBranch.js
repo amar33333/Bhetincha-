@@ -1,7 +1,5 @@
 import React, { Component } from "react";
 
-import { connect } from "react-redux";
-
 import Select from "react-select";
 
 import {
@@ -16,18 +14,14 @@ import {
   FormGroup
 } from "reactstrap";
 
-import {
-  onCountryList,
-  onCountryEachList,
-  onStateEachList,
-  onDistrictEachList,
-  onCityEachList,
-  onUnmountArea,
-  onUnmountCity,
-  onUnmountDistrict
-} from "../../actions";
-
+import SubBusinessContactWrapper from "./SubBusinessContactWrapper";
 import { ON_KEY_PRESS_ENTER } from "../../../config/CONSTANTS";
+
+let countries = null;
+let states = null;
+let districts = null;
+let cities = null;
+let areas = null;
 
 class SubBusinessBranch extends Component {
   constructor(props) {
@@ -47,8 +41,10 @@ class SubBusinessBranch extends Component {
       branch_address_line_2: "",
       branch_post_box: "",
       branch_toll_free: "",
-      key_press: null
+      add: false
     };
+
+    this.propsData = {};
 
     this.access_token = this.props.cookies
       ? this.props.cookies.token_data.access_token
@@ -60,15 +56,12 @@ class SubBusinessBranch extends Component {
   }
 
   componentWillUpdate(nextProps, nextState) {
-    if (
-      nextState.key_press === ON_KEY_PRESS_ENTER &&
-      this.props.onValueChange
-    ) {
+    if (nextState.add && this.props.onValueChange) {
       console.log("willUpdate called: ", nextState);
-      this.props.onValueChange(nextState, this.props.id);
-      this.setState({ key_press: null });
+      this.props.onValueChange(nextState, this.props.id, this.propsData);
+      this.setState({ add: false });
     } else {
-      console.log(" NOO willUpdate: ", nextState);
+      // console.log(" NOO willUpdate: ", nextState);
     }
   }
 
@@ -90,9 +83,12 @@ class SubBusinessBranch extends Component {
         id: value.value,
         access_token: this.access_token
       });
-      this.props.onUnmountDistrict();
-      this.props.onUnmountCity();
-      this.props.onUnmountArea();
+      districts = null;
+      cities = null;
+      areas = null;
+      // this.props.onUnmountDistrict();
+      // this.props.onUnmountCity();
+      // this.props.onUnmountArea();
     } else if (key === "branch_state") {
       this.setState({
         branch_district: "",
@@ -104,8 +100,10 @@ class SubBusinessBranch extends Component {
         id: value.value,
         access_token: this.access_token
       });
-      this.props.onUnmountCity();
-      this.props.onUnmountArea();
+      cities = null;
+      areas = null;
+      // this.props.onUnmountCity();
+      // this.props.onUnmountArea();
     } else if (key === "branch_district") {
       this.setState({
         branch_city: "",
@@ -116,7 +114,8 @@ class SubBusinessBranch extends Component {
         id: value.value,
         access_token: this.access_token
       });
-      this.props.onUnmountArea();
+      areas = null;
+      // this.props.onUnmountArea();
     } else if (key === "branch_city") {
       this.setState({
         branch_area: ""
@@ -164,31 +163,32 @@ class SubBusinessBranch extends Component {
 
   render() {
     //branch ADDRESS
-    const countries = this.props.countries
+    countries = this.props.countries
       ? this.props.countries.map(industry => {
           return { value: industry.id, label: industry.name };
         })
       : null;
 
-    const states = this.props.countryData
+    console.log("countryData branch: ", this.props.countryData);
+    states = this.props.countryData
       ? this.props.countryData.states.map(state => {
           return { value: state.id, label: state.name };
         })
       : null;
 
-    const districts = this.props.stateData
+    districts = this.props.stateData
       ? this.props.stateData.districts.map(district => {
           return { value: district.id, label: district.name };
         })
       : null;
 
-    const cities = this.props.districtData
+    cities = this.props.districtData
       ? this.props.districtData.cities.map(city => {
           return { value: city.id, label: city.name };
         })
       : null;
 
-    const areas = this.props.cityData
+    areas = this.props.cityData
       ? this.props.cityData.areas.map(area => {
           return { value: area.id, label: area.name };
         })
@@ -212,7 +212,7 @@ class SubBusinessBranch extends Component {
     return (
       <Card>
         <CardHeader>
-          <strong>Business Branch - {this.props.id} Address</strong>
+          <strong>Business Branch - {this.props.serial_num + 1} Address</strong>
           <Button
             color="primary"
             onClick={this.onDelete}
@@ -383,12 +383,24 @@ class SubBusinessBranch extends Component {
                   type="text"
                   value={this.state.branch_toll_free}
                   onChange={this.onChange.bind(this, "branch_toll_free")}
-                  onKeyDown={this._handleKeyPress}
                 />
               </FormGroup>
             </Col>
           </Row>
+          <SubBusinessContactWrapper
+            onSubmit={value => {
+              this.propsData = { ...this.propsData, ...value };
+            }}
+          />
           <Row style={{ marginBottom: 15 }}>
+            <Col xs="6" md="6">
+              <Button
+                color="primary"
+                onClick={() => this.setState({ add: true })}
+              >
+                ADD
+              </Button>
+            </Col>
             <Col xs="6" md="6">
               <Button color="primary" onClick={this.onDelete}>
                 DELETE
@@ -400,20 +412,5 @@ class SubBusinessBranch extends Component {
     );
   }
 }
-export default connect(
-  ({ AdminContainer: { general_setup }, auth }) => ({
-    ...auth,
-    ...general_setup
-  }),
-  {
-    onCountryList,
-    onCountryEachList,
-    onStateEachList,
-    onDistrictEachList,
-    onCityEachList,
 
-    onUnmountArea,
-    onUnmountCity,
-    onUnmountDistrict
-  }
-)(SubBusinessBranch);
+export default SubBusinessBranch;
