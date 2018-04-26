@@ -1,6 +1,14 @@
 import React, { Component } from "react";
 
-import { Row, Col, Button, Card, CardHeader, CardBody } from "reactstrap";
+import {
+  Row,
+  Col,
+  Button,
+  Card,
+  CardHeader,
+  CardBody,
+  Collapse
+} from "reactstrap";
 
 import SubBusinessContact from "./SubBusinessContact";
 
@@ -10,10 +18,15 @@ class SubBusinessContactWrapper extends Component {
 
     this.state = {
       contactComponentList: [],
-      contacts: []
+      contacts: [],
+      collapse: true
     };
   }
-
+  toggleCollapse = () => {
+    this.setState({
+      collapse: !this.state.collapse
+    });
+  };
   clearState = () => {
     this.setState({
       contactComponentList: [],
@@ -142,18 +155,52 @@ class SubBusinessContactWrapper extends Component {
       <div className="animated fadeIn">
         <Card>
           <CardHeader>
-            <strong>Contact Person Details</strong>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "space-between",
+                alignItems: "center"
+              }}
+            >
+              <strong>Contact Person Details</strong>
+              <Button
+                color="primary"
+                onClick={this.toggleCollapse}
+                style={{
+                  marginBottom: "0rem",
+                  backgroundColor: "rgb(230, 228, 241)",
+                  color: "black",
+                  fontSize: "1.3rem",
+                  border: "1px solid #2e219036",
+                  borderRadius: "50%",
+                  height: "30px",
+                  width: "30px",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center"
+                }}
+              >
+                {this.state.collapse ? (
+                  <i className="fa fa-angle-up" />
+                ) : (
+                  <i className="fa fa-angle-down" />
+                )}
+              </Button>
+            </div>
           </CardHeader>
-          <CardBody>
-            {this.state.contactComponentList}
-            <Row style={{ marginTop: 15 }}>
-              <Col xs="6" md="6">
-                <Button color="primary" onClick={this.onContactAdd}>
-                  Add New Contact
-                </Button>
-              </Col>
-            </Row>
-          </CardBody>
+          <Collapse isOpen={this.state.collapse}>
+            <CardBody>
+              {this.state.contactComponentList}
+              <Row style={{ marginTop: 15 }}>
+                <Col xs="6" md="6">
+                  <Button color="primary" onClick={this.onContactAdd}>
+                    Add New Contact
+                  </Button>
+                </Col>
+              </Row>
+            </CardBody>
+          </Collapse>
         </Card>
       </div>
     );

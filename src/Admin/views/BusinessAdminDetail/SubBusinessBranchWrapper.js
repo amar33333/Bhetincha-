@@ -1,6 +1,14 @@
 import React, { Component } from "react";
 
-import { Row, Col, Button, Card, CardHeader, CardBody } from "reactstrap";
+import {
+  Row,
+  Col,
+  Button,
+  Card,
+  CardHeader,
+  CardBody,
+  Collapse
+} from "reactstrap";
 
 import SubBusinessBranch from "./SubBusinessBranch";
 
@@ -10,10 +18,15 @@ class SubBusinessBranchWrapper extends Component {
 
     this.state = {
       branchComponentList: [],
-      branchs: []
+      branchs: [],
+      collapse: false
     };
   }
-
+  toggleCollapse = () => {
+    this.setState({
+      collapse: !this.state.collapse
+    });
+  };
   // componentWillUpdate(nextProps, nextState) {
   //   if (this.props.onSubmit)
   //     this.props.onSubmit({ branchs: nextState.branchs });
@@ -141,18 +154,52 @@ class SubBusinessBranchWrapper extends Component {
       <div className="animated fadeIn">
         <Card>
           <CardHeader>
-            <strong>Business Branch Address</strong>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "space-between",
+                alignItems: "center"
+              }}
+            >
+              <strong>Business Branch Address</strong>
+              <Button
+                color="primary"
+                onClick={this.toggleCollapse}
+                style={{
+                  marginBottom: "0rem",
+                  backgroundColor: "rgb(230, 228, 241)",
+                  color: "black",
+                  fontSize: "1.3rem",
+                  border: "1px solid #2e219036",
+                  borderRadius: "50%",
+                  height: "30px",
+                  width: "30px",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center"
+                }}
+              >
+                {this.state.collapse ? (
+                  <i className="fa fa-angle-up" />
+                ) : (
+                  <i className="fa fa-angle-down" />
+                )}
+              </Button>
+            </div>
           </CardHeader>
-          <CardBody>
-            {this.state.branchComponentList}
-            <Row style={{ marginTop: 15 }}>
-              <Col xs="6" md="6">
-                <Button color="primary" onClick={this.onBranchAddressAdd}>
-                  Add New Branch
-                </Button>
-              </Col>
-            </Row>
-          </CardBody>
+          <Collapse isOpen={this.state.collapse}>
+            <CardBody>
+              {this.state.branchComponentList}
+              <Row style={{ marginTop: 15 }}>
+                <Col xs="6" md="6">
+                  <Button color="primary" onClick={this.onBranchAddressAdd}>
+                    Add New Branch
+                  </Button>
+                </Col>
+              </Row>
+            </CardBody>
+          </Collapse>
         </Card>
       </div>
     );

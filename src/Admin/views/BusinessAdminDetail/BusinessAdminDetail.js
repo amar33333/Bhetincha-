@@ -109,6 +109,7 @@ class BusinessAdminDetail extends Component {
             <CardHeader>
               <strong>Add New Business</strong>
             </CardHeader>
+
             <CardBody>
               <form onSubmit={this.onFormSubmit}>
                 <SubBusinessDetails
