@@ -23,7 +23,7 @@ class SubBusinessContact extends Component {
       designation: "",
       mobileNumber: "",
       department: "",
-      collapse: false
+      collapse: true
     };
   }
   toggleCollapse = () => {
