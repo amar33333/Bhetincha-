@@ -19,17 +19,26 @@ import {
 const INITIAL_STATE = {
   loading: false,
   statusClass: "",
+
   businesses: [],
   page: 1,
   rows: 20,
-  pages: 3
+  pages: 3,
+  fetchLoading: false
 };
 
 export default function(state = INITIAL_STATE, action) {
   switch (action.type) {
+    case FETCH_BUSINESS_PENDING:
+      return { ...state, fetchLoading: true };
+
+    case FETCH_BUSINESS_REJECTED:
+      return { ...state, fetchLoading: false };
+
     case FETCH_BUSINESS_FULFILLED:
       return {
         ...state,
+        fetchLoading: false,
         businesses: action.payload.data,
         page: action.payload.page,
         rows: action.payload.rows,
