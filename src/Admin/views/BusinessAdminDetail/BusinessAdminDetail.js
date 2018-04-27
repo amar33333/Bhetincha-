@@ -1,7 +1,15 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 
-import { Row, Col, Card, CardHeader, CardBody, Button } from "reactstrap";
+import {
+  Row,
+  Col,
+  Card,
+  CardHeader,
+  CardBody,
+  Button,
+  Collapse
+} from "reactstrap";
 
 import {
   onBusinessCreate,
@@ -109,7 +117,6 @@ class BusinessAdminDetail extends Component {
             <CardHeader>
               <strong>Add New Business</strong>
             </CardHeader>
-
             <CardBody>
               <form onSubmit={this.onFormSubmit}>
                 <SubBusinessDetails

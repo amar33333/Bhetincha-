@@ -219,7 +219,7 @@ class SubBusinessBranch extends Component {
 
     return (
       <Card>
-        <CardHeader>
+        <CardHeader onClick={this.toggleCollapse}>
           <div
             style={{
               display: "flex",

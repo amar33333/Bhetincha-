@@ -228,7 +228,7 @@ class SubBusinessPrimaryAddress extends Component {
     return (
       <div className="animated fadeIn">
         <Card>
-          <CardHeader>
+          <CardHeader onClick={this.toggleCollapse}>
             <div
               style={{
                 display: "flex",

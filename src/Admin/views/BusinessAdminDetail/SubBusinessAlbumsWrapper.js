@@ -177,7 +177,7 @@ class SubBusinessAlbumsWrapper extends Component {
     return (
       <div className="animated fadeIn">
         <Card>
-          <CardHeader>
+          <CardHeader onClick={this.toggleCollapse}>
             <strong>Add Albums Name</strong>
           </CardHeader>
           <CardBody>

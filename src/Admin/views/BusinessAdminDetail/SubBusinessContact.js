@@ -65,7 +65,7 @@ class SubBusinessContact extends Component {
     return (
       <div className="animated fadeIn">
         <Card>
-          <CardHeader>
+          <CardHeader onClick={this.toggleCollapge}>
             <div
               style={{
                 display: "flex",
