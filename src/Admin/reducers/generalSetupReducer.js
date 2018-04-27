@@ -112,9 +112,17 @@ export default function(state = INITIAL_STATE, action) {
       return { ...state, loading: true };
 
     case FETCH_COUNTRY_EACH_FULFILLED:
+      const countries = state.countries;
+      const country_data = action.payload;
+
       return {
         ...state,
-        countryData: action.payload,
+        countries: countries.map(country => {
+          if (country.id === country_data.id) {
+            return { ...country, states: country_data.states };
+          }
+          return country;
+        }),
         loading: false,
         statusClass: "fulfilled"
       };
@@ -126,6 +134,21 @@ export default function(state = INITIAL_STATE, action) {
       return { ...state, loading: true };
 
     case FETCH_STATE_EACH_FULFILLED:
+      // const countries = state.countries;
+      // const country_data = action.payload;
+
+      // return {
+      //   ...state,
+      //   countries: countries.map(country => {
+      //     if (country.id === country_data.id) {
+      //       return { ...country, states: country_data.states };
+      //     }
+      //     return country;
+      //   }),
+      //   loading: false,
+      //   statusClass: "fulfilled"
+      // };
+
       return {
         ...state,
         stateData: action.payload,

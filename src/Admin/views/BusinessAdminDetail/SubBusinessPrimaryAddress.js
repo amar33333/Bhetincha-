@@ -62,6 +62,7 @@ class SubBusinessPrimaryAddress extends Component {
   //   this.propsData = { ...this.propsData, ...value };
   //   console.log("props contact ; ", this.propsData);
   // };
+
   toggleCollapse = () => {
     this.setState({
       collapse: !this.state.collapse
@@ -156,17 +157,40 @@ class SubBusinessPrimaryAddress extends Component {
   render() {
     //PRIMARY ADDRESS
     countries = this.props.countries
-      ? this.props.countries.map(industry => {
-          return { value: industry.id, label: industry.name };
-        })
+      ? this.props.countries.map(country => ({
+          value: country.id,
+          label: country.name
+        }))
       : null;
 
-    console.log("countryData branch: ", this.props.countryData);
-    states = this.props.countryData
-      ? this.props.countryData.states.map(state => {
-          return { value: state.id, label: state.name };
-        })
-      : null;
+    // states = this.props.countries
+    //   ? this.props.countries.map(
+    //       country =>
+    //         country.states && country.id === this.state.primary_country.value
+    //           ? country.states.map(state => {
+    //               console.log("estate: ", state);
+    //               return {
+    //                 value: state.id,
+    //                 label: state.name
+    //               };
+    //             })
+    //           : null
+    //     )
+    //   : null;
+
+    if (this.props.countries) {
+      this.props.countries.map(country => {
+        if (country.states && country.id === this.state.primary_country.value) {
+          states = country.states.map(state => {
+            return {
+              value: state.id,
+              label: state.name
+            };
+          });
+        }
+        return country;
+      });
+    }
 
     districts = this.props.stateData
       ? this.props.stateData.districts.map(district => {
