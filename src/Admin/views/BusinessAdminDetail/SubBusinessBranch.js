@@ -11,7 +11,8 @@ import {
   CardBody,
   Input,
   Label,
-  FormGroup
+  FormGroup,
+  Collapse
 } from "reactstrap";
 
 import SubBusinessContactWrapper from "./SubBusinessContactWrapper";
@@ -40,7 +41,8 @@ class SubBusinessBranch extends Component {
       branch_address_line_1: "",
       branch_address_line_2: "",
       branch_post_box: "",
-      branch_toll_free: ""
+      branch_toll_free: "",
+      collapse: true
     };
 
     this.propsData = {};
@@ -49,7 +51,11 @@ class SubBusinessBranch extends Component {
       ? this.props.cookies.token_data.access_token
       : null;
   }
-
+  toggleCollapse = () => {
+    this.setState({
+      collapse: !this.state.collapse
+    });
+  };
   componentWillMount() {
     this.props.onCountryList({ access_token: this.access_token });
   }
@@ -213,210 +219,249 @@ class SubBusinessBranch extends Component {
 
     return (
       <Card>
-        <CardHeader>
-          <strong>Business Branch - {this.props.serial_num + 1} Address</strong>
-          <Button
-            color="primary"
-            onClick={this.onDelete}
-            style={{ float: "right" }}
+        <CardHeader onClick={this.toggleCollapse}>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "space-between",
+              alignItems: "center"
+            }}
           >
-            DELETE
-          </Button>
+            <strong>
+              Business Branch - {this.props.serial_num + 1} Address
+            </strong>
+            <Button
+              color="danger"
+              onClick={this.onDelete}
+              style={{ float: "right" }}
+            >
+              DELETE
+            </Button>
+            <Button
+              color="primary"
+              onClick={this.toggleCollapse}
+              style={{
+                marginBottom: "0rem",
+                backgroundColor: "rgb(230, 228, 241)",
+                color: "black",
+                fontSize: "1.3rem",
+                border: "1px solid #2e219036",
+                borderRadius: "50%",
+                height: "30px",
+                width: "30px",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center"
+              }}
+            >
+              {this.state.collapse ? (
+                <i className="fa fa-angle-up" />
+              ) : (
+                <i className="fa fa-angle-down" />
+              )}
+            </Button>
+          </div>
         </CardHeader>
-        <CardBody>
-          <Row>
-            <Col xs="12" md="12">
-              <FormGroup>
-                <Label for="group">Country</Label>
-                <Select
-                  required
-                  name="Country"
-                  placeholder="Select a Country"
-                  noResultsText="No Data Found"
-                  value={valueBranchCountry}
-                  onChange={this.handleSelectChange.bind(
-                    this,
-                    "branch_country"
-                  )}
-                  options={countries}
-                />
-              </FormGroup>
-            </Col>
-          </Row>
-          <Row>
-            <Col xs="12" md="12">
-              <FormGroup>
-                <Label for="group">State</Label>
-                <Select
-                  required
-                  name="State"
-                  placeholder="Select a State"
-                  noResultsText="No Data Found"
-                  value={valueBranchState}
-                  onChange={this.handleSelectChange.bind(this, "branch_state")}
-                  options={states}
-                />
-              </FormGroup>
-            </Col>
-          </Row>
-          <Row>
-            <Col xs="12" md="12">
-              <FormGroup>
-                <Label for="group">District</Label>
-                <Select
-                  required
-                  name="District"
-                  placeholder="Select a District"
-                  noResultsText="No Data Found"
-                  value={valueBranchDistrict}
-                  onChange={this.handleSelectChange.bind(
-                    this,
-                    "branch_district"
-                  )}
-                  options={districts}
-                />
-              </FormGroup>
-            </Col>
-          </Row>
-          <Row>
-            <Col xs="12" md="12">
-              <FormGroup>
-                <Label for="group">City</Label>
-                <Select
-                  required
-                  name="City"
-                  placeholder="Select a City"
-                  noResultsText="No Data Found"
-                  value={valueBranchCity}
-                  onChange={this.handleSelectChange.bind(this, "branch_city")}
-                  options={cities}
-                />
-              </FormGroup>
-            </Col>
-          </Row>
-          <Row>
-            <Col xs="12" md="12">
-              <FormGroup>
-                <Label for="group">Area</Label>
-                <Select
-                  required
-                  name="Area"
-                  placeholder="Select an Area"
-                  noResultsText="No Data Found"
-                  value={valueBranchArea}
-                  onChange={this.handleSelectChange.bind(this, "branch_area")}
-                  options={areas}
-                />
-              </FormGroup>
-            </Col>
-          </Row>
-          <Row>
-            <Col xs="6" md="6">
-              <FormGroup>
-                <Label for="bname">Branch Landline Number</Label>
-                <Input
-                  required
-                  type="text"
-                  value={this.state.branch_landline}
-                  onChange={this.onChange.bind(this, "branch_landline")}
-                />
-              </FormGroup>
-              <FormGroup>
-                <Label for="bname">Other Branch LandLine Number</Label>
-                <Input
-                  required
-                  type="text"
-                  value={this.state.branch_other_landline_number}
-                  onChange={this.onChange.bind(
-                    this,
-                    "branch_other_landline_number"
-                  )}
-                />
-              </FormGroup>
-              <FormGroup>
-                <Label for="bname">House No.</Label>
-                <Input
-                  required
-                  type="text"
-                  value={this.state.branch_house_no}
-                  onChange={this.onChange.bind(this, "branch_house_no")}
-                />
-              </FormGroup>
-              <FormGroup>
-                <Label for="bname">Branch Landmark</Label>
-                <Input
-                  required
-                  type="text"
-                  value={this.state.branch_landmark}
-                  onChange={this.onChange.bind(this, "branch_landmark")}
-                />
-              </FormGroup>
-              <FormGroup>
-                <Label for="bname">Address Line 1</Label>
-                <Input
-                  required
-                  type="text"
-                  value={this.state.branch_address_line_1}
-                  onChange={this.onChange.bind(this, "branch_address_line_1")}
-                />
-              </FormGroup>
-              <FormGroup>
-                <Label for="bname">Address Line 2</Label>
-                <Input
-                  required
-                  type="text"
-                  value={this.state.branch_address_line_2}
-                  onChange={this.onChange.bind(this, "branch_address_line_2")}
-                />
-              </FormGroup>
-              <FormGroup>
-                <Label for="bname">Post Box No.</Label>
-                <Input
-                  required
-                  type="text"
-                  value={this.state.branch_post_box}
-                  onChange={this.onChange.bind(this, "branch_post_box")}
-                />
-              </FormGroup>
-              <FormGroup>
-                <Label for="bname">Toll Free No.</Label>
-                <Input
-                  required
-                  type="text"
-                  value={this.state.branch_toll_free}
-                  onChange={this.onChange.bind(this, "branch_toll_free")}
-                />
-              </FormGroup>
-            </Col>
-          </Row>
-          <SubBusinessContactWrapper
-            ref={ref => (this.subBusinessContactWrapperRef2 = ref)}
-            /* onSubmit={value => {
+        <Collapse isOpen={this.state.collapse}>
+          <CardBody>
+            <Row>
+              <Col xs="12" md="12">
+                <FormGroup>
+                  <Label for="group">Country</Label>
+                  <Select
+                    required
+                    name="Country"
+                    placeholder="Select a Country"
+                    noResultsText="No Data Found"
+                    value={valueBranchCountry}
+                    onChange={this.handleSelectChange.bind(
+                      this,
+                      "branch_country"
+                    )}
+                    options={countries}
+                  />
+                </FormGroup>
+              </Col>
+            </Row>
+            <Row>
+              <Col xs="12" md="12">
+                <FormGroup>
+                  <Label for="group">State</Label>
+                  <Select
+                    required
+                    name="State"
+                    placeholder="Select a State"
+                    noResultsText="No Data Found"
+                    value={valueBranchState}
+                    onChange={this.handleSelectChange.bind(
+                      this,
+                      "branch_state"
+                    )}
+                    options={states}
+                  />
+                </FormGroup>
+              </Col>
+            </Row>
+            <Row>
+              <Col xs="12" md="12">
+                <FormGroup>
+                  <Label for="group">District</Label>
+                  <Select
+                    required
+                    name="District"
+                    placeholder="Select a District"
+                    noResultsText="No Data Found"
+                    value={valueBranchDistrict}
+                    onChange={this.handleSelectChange.bind(
+                      this,
+                      "branch_district"
+                    )}
+                    options={districts}
+                  />
+                </FormGroup>
+              </Col>
+            </Row>
+            <Row>
+              <Col xs="12" md="12">
+                <FormGroup>
+                  <Label for="group">City</Label>
+                  <Select
+                    required
+                    name="City"
+                    placeholder="Select a City"
+                    noResultsText="No Data Found"
+                    value={valueBranchCity}
+                    onChange={this.handleSelectChange.bind(this, "branch_city")}
+                    options={cities}
+                  />
+                </FormGroup>
+              </Col>
+            </Row>
+            <Row>
+              <Col xs="12" md="12">
+                <FormGroup>
+                  <Label for="group">Area</Label>
+                  <Select
+                    required
+                    name="Area"
+                    placeholder="Select an Area"
+                    noResultsText="No Data Found"
+                    value={valueBranchArea}
+                    onChange={this.handleSelectChange.bind(this, "branch_area")}
+                    options={areas}
+                  />
+                </FormGroup>
+              </Col>
+            </Row>
+            <Row>
+              <Col xs="6" md="6">
+                <FormGroup>
+                  <Label for="bname">Branch Landline Number</Label>
+                  <Input
+                    required
+                    type="text"
+                    value={this.state.branch_landline}
+                    onChange={this.onChange.bind(this, "branch_landline")}
+                  />
+                </FormGroup>
+                <FormGroup>
+                  <Label for="bname">Other Branch LandLine Number</Label>
+                  <Input
+                    required
+                    type="text"
+                    value={this.state.branch_other_landline_number}
+                    onChange={this.onChange.bind(
+                      this,
+                      "branch_other_landline_number"
+                    )}
+                  />
+                </FormGroup>
+                <FormGroup>
+                  <Label for="bname">House No.</Label>
+                  <Input
+                    required
+                    type="text"
+                    value={this.state.branch_house_no}
+                    onChange={this.onChange.bind(this, "branch_house_no")}
+                  />
+                </FormGroup>
+                <FormGroup>
+                  <Label for="bname">Branch Landmark</Label>
+                  <Input
+                    required
+                    type="text"
+                    value={this.state.branch_landmark}
+                    onChange={this.onChange.bind(this, "branch_landmark")}
+                  />
+                </FormGroup>
+                <FormGroup>
+                  <Label for="bname">Address Line 1</Label>
+                  <Input
+                    required
+                    type="text"
+                    value={this.state.branch_address_line_1}
+                    onChange={this.onChange.bind(this, "branch_address_line_1")}
+                  />
+                </FormGroup>
+                <FormGroup>
+                  <Label for="bname">Address Line 2</Label>
+                  <Input
+                    required
+                    type="text"
+                    value={this.state.branch_address_line_2}
+                    onChange={this.onChange.bind(this, "branch_address_line_2")}
+                  />
+                </FormGroup>
+                <FormGroup>
+                  <Label for="bname">Post Box No.</Label>
+                  <Input
+                    required
+                    type="text"
+                    value={this.state.branch_post_box}
+                    onChange={this.onChange.bind(this, "branch_post_box")}
+                  />
+                </FormGroup>
+                <FormGroup>
+                  <Label for="bname">Toll Free No.</Label>
+                  <Input
+                    required
+                    type="text"
+                    value={this.state.branch_toll_free}
+                    onChange={this.onChange.bind(this, "branch_toll_free")}
+                  />
+                </FormGroup>
+              </Col>
+            </Row>
+            <SubBusinessContactWrapper
+              ref={ref => (this.subBusinessContactWrapperRef2 = ref)}
+              /* onSubmit={value => {
               this.propsData = { ...this.propsData, ...value };
             }} */
-          />
-          <Row style={{ marginBottom: 15 }}>
-            <Col xs="6" md="6">
-              <Button
-                color="primary"
-                onClick={() =>
-                  this.props.onAdd(
-                    this.state,
-                    this.props.id,
-                    this.subBusinessContactWrapperRef2.getState()
-                  )
-                }
-              >
-                ADD
-              </Button>
-            </Col>
-            <Col xs="6" md="6">
-              <Button color="primary" onClick={this.onDelete}>
-                DELETE
-              </Button>
-            </Col>
-          </Row>
-        </CardBody>
+            />
+            <Row style={{ marginBottom: 15 }}>
+              <Col xs="6" md="6">
+                <Button
+                  color="primary"
+                  onClick={() =>
+                    this.props.onAdd(
+                      this.state,
+                      this.props.id,
+                      this.subBusinessContactWrapperRef2.getState()
+                    )
+                  }
+                >
+                  ADD
+                </Button>
+              </Col>
+              <Col xs="6" md="6">
+                <Button color="primary" onClick={this.onDelete}>
+                  DELETE
+                </Button>
+              </Col>
+            </Row>
+          </CardBody>
+        </Collapse>
       </Card>
     );
   }

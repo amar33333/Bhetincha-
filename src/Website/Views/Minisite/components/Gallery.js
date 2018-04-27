@@ -238,10 +238,7 @@ class Gallery extends Component {
 export default connect(
   ({
     auth: { cookies },
-    MinisiteContainer: {
-      crud: { cover_photo, id, username, albums },
-      edit
-    }
+    MinisiteContainer: { crud: { cover_photo, id, username, albums }, edit }
   }) => ({
     id,
     username,
