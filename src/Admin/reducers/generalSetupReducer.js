@@ -14,15 +14,18 @@ import {
   FETCH_COUNTRY_FULFILLED,
   FETCH_COUNTRY_PENDING,
   FETCH_COUNTRY_REJECTED,
+  FETCH_COUNTRY_EACH_FULFILLED,
+  FETCH_COUNTRY_EACH_REJECTED,
+  FETCH_COUNTRY_EACH_PENDING,
   FETCH_DISTRICT_EACH_FULFILLED,
   FETCH_DISTRICT_EACH_REJECTED,
   FETCH_DISTRICT_EACH_PENDING,
   FETCH_STATE_EACH_FULFILLED,
   FETCH_STATE_EACH_REJECTED,
   FETCH_STATE_EACH_PENDING,
-  FETCH_COUNTRY_EACH_FULFILLED,
-  FETCH_COUNTRY_EACH_REJECTED,
-  FETCH_COUNTRY_EACH_PENDING,
+  FETCH_ADDRESS_TREE_FULFILLED,
+  FETCH_ADDRESS_TREE_REJECTED,
+  FETCH_ADDRESS_TREE_PENDING,
   FETCH_CITY_EACH_FULFILLED,
   FETCH_CITY_EACH_REJECTED,
   FETCH_CITY_EACH_PENDING,
@@ -112,17 +115,9 @@ export default function(state = INITIAL_STATE, action) {
       return { ...state, loading: true };
 
     case FETCH_COUNTRY_EACH_FULFILLED:
-      const countries = state.countries;
-      const country_data = action.payload;
-
       return {
         ...state,
-        countries: countries.map(country => {
-          if (country.id === country_data.id) {
-            return { ...country, states: country_data.states };
-          }
-          return country;
-        }),
+        countryData: action.payload,
         loading: false,
         statusClass: "fulfilled"
       };
@@ -130,25 +125,84 @@ export default function(state = INITIAL_STATE, action) {
     case FETCH_COUNTRY_EACH_REJECTED:
       return { ...state, loading: false };
 
+    case FETCH_ADDRESS_TREE_PENDING:
+      return { ...state, loading: true };
+
+    case FETCH_ADDRESS_TREE_FULFILLED:
+      const countries = state.countries;
+      const payload = action.payload;
+
+      return {
+        ...state,
+        countries: countries.map(country => {
+          // country.states method added ... remove that if error
+          if (payload.id === country.id) {
+            // console.log("country satisfied: ", {
+            //   ...country,
+            //   states: payload.states
+            // });
+
+            return country.states
+              ? { ...country }
+              : { ...country, states: payload.states };
+          } else {
+            if (country.states) {
+              return {
+                ...country,
+                states: country.states.map(state => {
+                  if (payload.id === state.id && !state.districts) {
+                    return state.districts
+                      ? { ...state }
+                      : { ...state, districts: payload.districts };
+                  } else {
+                    if (state.districts) {
+                      return {
+                        ...state,
+                        districts: state.districts.map(district => {
+                          if (payload.id === district.id && !district.cities) {
+                            return district.cities
+                              ? { ...district }
+                              : { ...district, cities: payload.cities };
+                          } else {
+                            if (district.cities) {
+                              return {
+                                ...district,
+                                cities: district.cities.map(city => {
+                                  if (payload.id === city.id && !city.areas) {
+                                    return city.areas
+                                      ? { ...city }
+                                      : { ...city, areas: payload.areas };
+                                  } else {
+                                    return city;
+                                  }
+                                })
+                              };
+                            }
+                            return district;
+                          }
+                        })
+                      };
+                    }
+                    // console.log("staes not satisfied: ", state);
+                    return state;
+                  }
+                })
+              };
+            }
+            return country;
+          }
+        }),
+        loading: false,
+        statusClass: "fulfilled"
+      };
+
+    case FETCH_ADDRESS_TREE_REJECTED:
+      return { ...state, loading: false };
+
     case FETCH_STATE_EACH_PENDING:
       return { ...state, loading: true };
 
     case FETCH_STATE_EACH_FULFILLED:
-      // const countries = state.countries;
-      // const country_data = action.payload;
-
-      // return {
-      //   ...state,
-      //   countries: countries.map(country => {
-      //     if (country.id === country_data.id) {
-      //       return { ...country, states: country_data.states };
-      //     }
-      //     return country;
-      //   }),
-      //   loading: false,
-      //   statusClass: "fulfilled"
-      // };
-
       return {
         ...state,
         stateData: action.payload,

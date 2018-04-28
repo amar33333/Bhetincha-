@@ -15,6 +15,10 @@ import {
   onCityEachGet
 } from "../config/adminServerCall";
 import {
+  FETCH_ADDRESS_TREE_FULFILLED,
+  FETCH_ADDRESS_TREE_REJECTED,
+  FETCH_ADDRESS_TREE_PENDING,
+
   // AREA
   CREATE_AREA_FULFILLED,
   CREATE_AREA_REJECTED,
@@ -24,33 +28,21 @@ import {
   CREATE_COUNTRY_FULFILLED,
   CREATE_COUNTRY_REJECTED,
   CREATE_COUNTRY_PENDING,
-  FETCH_COUNTRY_EACH_FULFILLED,
-  FETCH_COUNTRY_EACH_REJECTED,
-  FETCH_COUNTRY_EACH_PENDING,
 
   // STATE
   CREATE_STATE_FULFILLED,
   CREATE_STATE_REJECTED,
   CREATE_STATE_PENDING,
-  FETCH_STATE_EACH_FULFILLED,
-  FETCH_STATE_EACH_REJECTED,
-  FETCH_STATE_EACH_PENDING,
 
   // DISTRICT
   CREATE_DISTRICT_FULFILLED,
   CREATE_DISTRICT_REJECTED,
   CREATE_DISTRICT_PENDING,
-  FETCH_DISTRICT_EACH_FULFILLED,
-  FETCH_DISTRICT_EACH_REJECTED,
-  FETCH_DISTRICT_EACH_PENDING,
 
   // CITY
   CREATE_CITY_FULFILLED,
   CREATE_CITY_REJECTED,
   CREATE_CITY_PENDING,
-  FETCH_CITY_EACH_FULFILLED,
-  FETCH_CITY_EACH_REJECTED,
-  FETCH_CITY_EACH_PENDING,
   FETCH_AREA_FULFILLED,
   FETCH_AREA_PENDING,
   FETCH_AREA_REJECTED,
@@ -66,6 +58,18 @@ import {
   FETCH_COUNTRY_FULFILLED,
   FETCH_COUNTRY_PENDING,
   FETCH_COUNTRY_REJECTED,
+  FETCH_COUNTRY_EACH_FULFILLED,
+  FETCH_COUNTRY_EACH_REJECTED,
+  FETCH_COUNTRY_EACH_PENDING,
+  FETCH_DISTRICT_EACH_FULFILLED,
+  FETCH_DISTRICT_EACH_REJECTED,
+  FETCH_DISTRICT_EACH_PENDING,
+  FETCH_STATE_EACH_FULFILLED,
+  FETCH_STATE_EACH_REJECTED,
+  FETCH_STATE_EACH_PENDING,
+  FETCH_CITY_EACH_FULFILLED,
+  FETCH_CITY_EACH_REJECTED,
+  FETCH_CITY_EACH_PENDING,
 
   // UNMOUNT
   UNMOUNT_AREA,
@@ -184,6 +188,64 @@ export const onAreaList = ({ access_token }) => dispatch => {
     .catch(error => dispatch({ type: FETCH_AREA_REJECTED, payload: error }));
 
   dispatch({ type: FETCH_AREA_PENDING });
+};
+
+export const onAddressTreeList = ({
+  id,
+  access_token,
+  ADDRESS_KEY
+}) => dispatch => {
+  console.log("address key: ", ADDRESS_KEY);
+  if (ADDRESS_KEY === "branch_country" || ADDRESS_KEY === "primary_country") {
+    console.log("addreskey: ", ADDRESS_KEY);
+    onCountryEachGet({ id, access_token })
+      .then(response =>
+        dispatch({
+          type: FETCH_ADDRESS_TREE_FULFILLED,
+          payload: response.data
+        })
+      )
+      .catch(error =>
+        dispatch({ type: FETCH_ADDRESS_TREE_REJECTED, payload: error })
+      );
+  } else if (ADDRESS_KEY === "branch_state" || ADDRESS_KEY === "primary_state")
+    onStateEachGet({ id, access_token })
+      .then(response =>
+        dispatch({
+          type: FETCH_ADDRESS_TREE_FULFILLED,
+          payload: response.data
+        })
+      )
+      .catch(error =>
+        dispatch({ type: FETCH_ADDRESS_TREE_REJECTED, payload: error })
+      );
+  else if (
+    ADDRESS_KEY === "branch_district" ||
+    ADDRESS_KEY === "primary_district"
+  )
+    onDistrictEachGet({ id, access_token })
+      .then(response =>
+        dispatch({
+          type: FETCH_ADDRESS_TREE_FULFILLED,
+          payload: response.data
+        })
+      )
+      .catch(error =>
+        dispatch({ type: FETCH_ADDRESS_TREE_REJECTED, payload: error })
+      );
+  else if (ADDRESS_KEY === "branch_city" || ADDRESS_KEY === "primary_city")
+    onCityEachGet({ id, access_token })
+      .then(response =>
+        dispatch({
+          type: FETCH_ADDRESS_TREE_FULFILLED,
+          payload: response.data
+        })
+      )
+      .catch(error =>
+        dispatch({ type: FETCH_ADDRESS_TREE_REJECTED, payload: error })
+      );
+
+  dispatch({ type: FETCH_ADDRESS_TREE_PENDING });
 };
 
 export const onCountryEachList = ({ id, access_token }) => dispatch => {

@@ -32,6 +32,7 @@ class SubBusinessContactWrapper extends Component {
       contactComponentList: [],
       contactPerson: []
     });
+    if (this.subBusinessContactRef) this.subBusinessContactRef.clearState();
   };
 
   getState = () => ({ contactPerson: this.state.contactPerson });
@@ -51,16 +52,22 @@ class SubBusinessContactWrapper extends Component {
             let index = null;
 
             contactPerson.map((contact, i) => {
-              console.log("key: ", contact.key, "id: ", id);
+              {
+                /* console.log("key: ", contact.key, "id: ", id); */
+              }
               if (id === Number(contact.key)) {
-                console.log("index: ", i);
+                {
+                  /* console.log("index: ", i); */
+                }
                 index = i;
               }
             });
             console.log("index: ", index);
 
             if (contactPerson.length > 0 && index !== null) {
-              console.log("edit ran: ", value);
+              {
+                /* console.log("edit ran: ", value); */
+              }
 
               contactPerson[index].name = value.name;
               contactPerson[index].email = value.email;
@@ -70,7 +77,9 @@ class SubBusinessContactWrapper extends Component {
 
               this.setState({ contactPerson });
             } else {
-              console.log("new add ran");
+              {
+                /* console.log("new add ran"); */
+              }
 
               this.setState(
                 {
@@ -83,7 +92,9 @@ class SubBusinessContactWrapper extends Component {
                   ]
                 },
                 () => {
-                  console.log("else monitor state: ", this.state.contactPerson);
+                  {
+                    /* console.log("else monitor state: ", this.state.contactPerson); */
+                  }
                   this.onContactAdd();
                 }
               );
@@ -149,7 +160,7 @@ class SubBusinessContactWrapper extends Component {
   };
 
   render() {
-    console.log("render state contactPerson: ", this.state.contactPerson);
+    // console.log("render state contactPerson: ", this.state.contactPerson);
     return (
       <div className="animated fadeIn">
         <Card>

@@ -17,11 +17,11 @@ import {
 
 import SubBusinessContactWrapper from "./SubBusinessContactWrapper.js";
 
-let countries = null;
-let states = null;
-let districts = null;
-let cities = null;
-let areas = null;
+let countries = [];
+let states = [];
+let districts = [];
+let cities = [];
+let areas = [];
 
 class SubBusinessPrimaryAddress extends Component {
   constructor(props) {
@@ -80,14 +80,14 @@ class SubBusinessPrimaryAddress extends Component {
         primary_city: "",
         primary_area: ""
       });
-
-      this.props.onCountryEachList({
-        id: value.value,
-        access_token: this.access_token
+      this.props.onAddressTreeList({
+        id: value.id,
+        access_token: this.access_token,
+        ADDRESS_KEY: key
       });
-      districts = null;
-      cities = null;
-      areas = null;
+      districts = [];
+      cities = [];
+      areas = [];
       // this.props.onUnmountDistrict();
       // this.props.onUnmountCity();
       // this.props.onUnmountArea();
@@ -98,12 +98,13 @@ class SubBusinessPrimaryAddress extends Component {
         primary_area: ""
       });
 
-      this.props.onStateEachList({
-        id: value.value,
-        access_token: this.access_token
+      this.props.onAddressTreeList({
+        id: value.id,
+        access_token: this.access_token,
+        ADDRESS_KEY: key
       });
-      cities = null;
-      areas = null;
+      cities = [];
+      areas = [];
       // this.props.onUnmountCity();
       // this.props.onUnmountArea();
     } else if (key === "primary_district") {
@@ -112,20 +113,22 @@ class SubBusinessPrimaryAddress extends Component {
         primary_area: ""
       });
 
-      this.props.onDistrictEachList({
-        id: value.value,
-        access_token: this.access_token
+      this.props.onAddressTreeList({
+        id: value.id,
+        access_token: this.access_token,
+        ADDRESS_KEY: key
       });
-      areas = null;
+      areas = [];
       // this.props.onUnmountArea();
     } else if (key === "primary_city") {
       this.setState({
         primary_area: ""
       });
 
-      this.props.onCityEachList({
-        id: value.value,
-        access_token: this.access_token
+      this.props.onAddressTreeList({
+        id: value.id,
+        access_token: this.access_token,
+        ADDRESS_KEY: key
       });
       // this.props.onUnmountSubCategories();
     }
@@ -147,6 +150,8 @@ class SubBusinessPrimaryAddress extends Component {
       post_box: "",
       toll_free: ""
     });
+
+    this.subBusinessContactWrapperRef.clearState();
   };
 
   getState = () => ({
@@ -156,12 +161,131 @@ class SubBusinessPrimaryAddress extends Component {
 
   render() {
     //PRIMARY ADDRESS
-    countries = this.props.countries
-      ? this.props.countries.map(country => ({
-          value: country.id,
-          label: country.name
-        }))
-      : null;
+
+    countries = this.props.countries;
+
+    try {
+      states = this.props.countries
+        ? this.props.countries.find(
+            country =>
+              country.states && country.id === this.state.primary_country.id
+          ).states
+        : [];
+    } catch (error) {
+      states = [];
+    }
+
+    console.log("states found: ", states);
+
+    try {
+      if (this.props.countries) {
+        this.props.countries.map(country => {
+          if (country.states) {
+            country.states.map(state => {
+              if (state.districts && state.id === this.state.primary_state.id) {
+                districts = state.districts;
+              }
+            });
+          }
+        });
+      }
+    } catch (error) {
+      districts = [];
+    }
+
+    console.log("districts found: ", districts);
+
+    try {
+      if (this.props.countries) {
+        this.props.countries.map(country => {
+          if (country.states) {
+            country.states.map(state => {
+              if (state.districts) {
+                state.districts.map(district => {
+                  if (
+                    district.cities &&
+                    district.id === this.state.primary_district.id
+                  ) {
+                    cities = district.cities;
+                  }
+                });
+              }
+            });
+          }
+        });
+      }
+    } catch (error) {
+      cities = [];
+    }
+
+    console.log("cities found: ", cities);
+
+    try {
+      if (this.props.countries) {
+        this.props.countries.map(country => {
+          if (country.states) {
+            country.states.map(state => {
+              if (state.districts) {
+                state.districts.map(district => {
+                  if (district.cities) {
+                    district.cities.map(city => {
+                      if (
+                        city.areas &&
+                        city.id === this.state.primary_city.id
+                      ) {
+                        areas = city.areas;
+                      }
+                    });
+                  }
+                });
+              }
+            });
+          }
+        });
+      }
+    } catch (error) {
+      areas = [];
+    }
+
+    console.log("areas found: ", areas);
+
+    // try {
+    //   if (this.props.countries) {
+    //     states = this.props.countries.find(country => {
+    //       if (country.states) {
+    //         districts = country.states.find(state => {
+    //           if (state.districts) {
+    //             cities = state.districts.find(district => {
+    //               if (district.cities) {
+    //                 areas = district.cities.find(city => {
+    //                   return (
+    //                     city.areas && city.id === this.state.primary_city.id
+    //                   );
+    //                 }).areas;
+    //               }
+    //             }).cities;
+    //           }
+    //         }).districts;
+    //       }
+    //     }).states;
+    //   }
+    // } catch (error) {
+    //   states = [];
+    //   districts = [];
+    //   cities = [];
+    //   areas = [];
+    // }
+    // console.log("states found: ", states);
+    // console.log("districts found: ", districts);
+    // console.log("cities found: ", cities);
+    // console.log("areas found: ", areas);
+
+    // countries = this.props.countries
+    //   ? this.props.countries.map(country => ({
+    //       value: country.id,
+    //       label: country.name
+    //     }))
+    //   : null;
 
     // states = this.props.countries
     //   ? this.props.countries.map(
@@ -178,52 +302,48 @@ class SubBusinessPrimaryAddress extends Component {
     //     )
     //   : null;
 
-    if (this.props.countries) {
-      this.props.countries.map(country => {
-        if (country.states && country.id === this.state.primary_country.value) {
-          states = country.states.map(state => {
-            return {
-              value: state.id,
-              label: state.name
-            };
-          });
-        }
-        return country;
-      });
-    }
+    // if (this.props.countries) {
+    //   this.props.countries.map(country => {
+    //     if (country.states && country.id === this.state.primary_country.id) {
+    //       states = country.states;
+    //     } else states = [];
+    //   });
+    // }
 
-    districts = this.props.stateData
-      ? this.props.stateData.districts.map(district => {
-          return { value: district.id, label: district.name };
-        })
-      : null;
+    // console.log("states: ", states);
 
-    cities = this.props.districtData
-      ? this.props.districtData.cities.map(city => {
-          return { value: city.id, label: city.name };
-        })
-      : null;
+    // districts = this.props.stateData
+    //   ? this.props.stateData.districts.map(district => {
+    //       return { value: district.id, label: district.name };
+    //     })
+    //   : null;
 
-    areas = this.props.cityData
-      ? this.props.cityData.areas.map(area => {
-          return { value: area.id, label: area.name };
-        })
-      : null;
+    // cities = this.props.districtData
+    //   ? this.props.districtData.cities.map(city => {
+    //       return { value: city.id, label: city.name };
+    //     })
+    //   : null;
+
+    // areas = this.props.cityData
+    //   ? this.props.cityData.areas.map(area => {
+    //       return { value: area.id, label: area.name };
+    //     })
+    //   : null;
 
     const { primary_country } = this.state;
-    const valuePrimaryCountry = primary_country && primary_country.value;
+    const valuePrimaryCountry = primary_country && primary_country.id;
 
     const { primary_state } = this.state;
-    const valuePrimaryState = primary_state && primary_state.value;
+    const valuePrimaryState = primary_state && primary_state.id;
 
     const { primary_district } = this.state;
-    const valuePrimaryDistrict = primary_district && primary_district.value;
+    const valuePrimaryDistrict = primary_district && primary_district.id;
 
     const { primary_city } = this.state;
-    const valuePrimaryCity = primary_city && primary_city.value;
+    const valuePrimaryCity = primary_city && primary_city.id;
 
     const { primary_area } = this.state;
-    const valuePrimaryArea = primary_area && primary_area.value;
+    const valuePrimaryArea = primary_area && primary_area.id;
 
     return (
       <div className="animated fadeIn">
@@ -280,6 +400,8 @@ class SubBusinessPrimaryAddress extends Component {
                         "primary_country"
                       )}
                       options={countries}
+                      valueKey="id"
+                      labelKey="name"
                     />
                   </FormGroup>
                 </Col>
@@ -299,6 +421,8 @@ class SubBusinessPrimaryAddress extends Component {
                         "primary_state"
                       )}
                       options={states}
+                      valueKey="id"
+                      labelKey="name"
                     />
                   </FormGroup>
                 </Col>
@@ -318,6 +442,8 @@ class SubBusinessPrimaryAddress extends Component {
                         "primary_district"
                       )}
                       options={districts}
+                      valueKey="id"
+                      labelKey="name"
                     />
                   </FormGroup>
                 </Col>
@@ -337,6 +463,8 @@ class SubBusinessPrimaryAddress extends Component {
                         "primary_city"
                       )}
                       options={cities}
+                      valueKey="id"
+                      labelKey="name"
                     />
                   </FormGroup>
                 </Col>
@@ -356,6 +484,8 @@ class SubBusinessPrimaryAddress extends Component {
                         "primary_area"
                       )}
                       options={areas}
+                      valueKey="id"
+                      labelKey="name"
                     />
                   </FormGroup>
                 </Col>

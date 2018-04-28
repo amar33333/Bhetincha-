@@ -59,7 +59,8 @@ class SubBusinessContact extends Component {
     });
   };
 
-  getState = () => this.state;
+  //no need callback function is used
+  // getState = () => this.state;
 
   render() {
     return (
