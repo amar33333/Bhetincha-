@@ -26,7 +26,8 @@ import {
   onUnmountCity,
   onUnmountDistrict,
   onPaymentMethodsList,
-  onCompanyTypeList
+  onCompanyTypeList,
+  onAddressTreeList
 } from "../../actions";
 
 import SubBusinessDetails from "./SubBusinessDetails";
@@ -61,24 +62,21 @@ class BusinessAdminDetail extends Component {
       ...this.subBusinessAdminDetailRef.getState(),
       ...this.subBusinessAboutRef.getState(),
       ...this.subBusinessBranchWrapperRef.getState(),
-      // ...this.subBusinessContactRef.getState(),
       ...this.subBusinessCoverImageRef.getState(),
       ...this.subBusinessLogoRef.getState(),
       ...this.subBusinessPrimaryAddressRef.getState()
     };
 
-    console.log("this propsData: ", this.propsData);
     this.props.onBusinessCreate({
       data: this.propsData,
       access_token: this.access_token
     });
-    // this.subBusinessAdminDetailRef.clearState();
-    // this.subBusinessAboutRef.clearState();
-    // this.subBusinessBranchWrapperRef.clearState();
-    // this.subBusinessContactRef.clearState();
-    // this.subBusinessCoverImageRef.clearState();
-    // this.subBusinessLogoRef.clearState();
-    // this.subBusinessPrimaryAddressRef.clearState();
+    this.subBusinessAdminDetailRef.clearState();
+    this.subBusinessAboutRef.clearState();
+    this.subBusinessBranchWrapperRef.clearState();
+    this.subBusinessCoverImageRef.clearState();
+    this.subBusinessLogoRef.clearState();
+    this.subBusinessPrimaryAddressRef.clearState();
   };
 
   _handleKeyPress = event => {
@@ -109,7 +107,7 @@ class BusinessAdminDetail extends Component {
   };
 
   render() {
-    console.log("busines admin props: ", this.props);
+    // console.log("busines admin props: ", this.props);
     return (
       <div className="animated fadeIn">
         <Col>
@@ -183,6 +181,7 @@ export default connect(
     onUnmountDistrict,
 
     onPaymentMethodsList,
-    onCompanyTypeList
+    onCompanyTypeList,
+    onAddressTreeList
   }
 )(BusinessAdminDetail);

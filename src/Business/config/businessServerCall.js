@@ -37,7 +37,7 @@ export const onBusinessPost = ({ data, access_token }) => {
       tollFreeNumber: data.toll_free,
       landlineNumber: data.landline,
       email: data.business_email,
-      area: data.primary_area.value,
+      area: data.primary_area.id,
       contactPerson: data.contactPerson
       // contactPerson: {
       //   name: data.contact_person_name,

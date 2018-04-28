@@ -18,11 +18,11 @@ import {
 import SubBusinessContactWrapper from "./SubBusinessContactWrapper";
 import { ON_KEY_PRESS_ENTER } from "../../../config/CONSTANTS";
 
-let countries = null;
-let states = null;
-let districts = null;
-let cities = null;
-let areas = null;
+let countries = [];
+let states = [];
+let districts = [];
+let cities = [];
+let areas = [];
 
 class SubBusinessBranch extends Component {
   constructor(props) {
@@ -56,9 +56,9 @@ class SubBusinessBranch extends Component {
       collapse: !this.state.collapse
     });
   };
-  componentWillMount() {
-    this.props.onCountryList({ access_token: this.access_token });
-  }
+  // componentWillMount() {
+  //   this.props.onCountryList({ access_token: this.access_token });
+  // }
 
   // componentWillUpdate(nextProps, nextState) {
   //   if (nextState.add && this.props.onValueChange) {
@@ -82,14 +82,14 @@ class SubBusinessBranch extends Component {
         branch_city: "",
         branch_area: ""
       });
-
-      this.props.onCountryEachList({
-        id: value.value,
-        access_token: this.access_token
+      this.props.onAddressTreeList({
+        id: value.id,
+        access_token: this.access_token,
+        ADDRESS_KEY: key
       });
-      districts = null;
-      cities = null;
-      areas = null;
+      districts = [];
+      cities = [];
+      areas = [];
       // this.props.onUnmountDistrict();
       // this.props.onUnmountCity();
       // this.props.onUnmountArea();
@@ -100,12 +100,13 @@ class SubBusinessBranch extends Component {
         branch_area: ""
       });
 
-      this.props.onStateEachList({
-        id: value.value,
-        access_token: this.access_token
+      this.props.onAddressTreeList({
+        id: value.id,
+        access_token: this.access_token,
+        ADDRESS_KEY: key
       });
-      cities = null;
-      areas = null;
+      cities = [];
+      areas = [];
       // this.props.onUnmountCity();
       // this.props.onUnmountArea();
     } else if (key === "branch_district") {
@@ -114,20 +115,22 @@ class SubBusinessBranch extends Component {
         branch_area: ""
       });
 
-      this.props.onDistrictEachList({
-        id: value.value,
-        access_token: this.access_token
+      this.props.onAddressTreeList({
+        id: value.id,
+        access_token: this.access_token,
+        ADDRESS_KEY: key
       });
-      areas = null;
+      areas = [];
       // this.props.onUnmountArea();
     } else if (key === "branch_city") {
       this.setState({
         branch_area: ""
       });
 
-      this.props.onCityEachList({
-        id: value.value,
-        access_token: this.access_token
+      this.props.onAddressTreeList({
+        id: value.id,
+        access_token: this.access_token,
+        ADDRESS_KEY: key
       });
       // this.props.onUnmountSubCategories();
     }
@@ -154,11 +157,14 @@ class SubBusinessBranch extends Component {
       branch_post_box: "",
       branch_toll_free: ""
     });
+
+    this.subBusinessBranchContactWrapperRef.clearState();
   };
 
+  // not used... instead callback function is used
   // getState = () => ({
   //   ...this.state,
-  //   ...this.subBusinessContactWrapperRef2.getState()
+  //   ...this.subBusinessBranchContactWrapperRef.getState()
   // });
 
   _handleKeyPress = event => {
@@ -172,50 +178,104 @@ class SubBusinessBranch extends Component {
 
   render() {
     //branch ADDRESS
-    countries = this.props.countries
-      ? this.props.countries.map(industry => {
-          return { value: industry.id, label: industry.name };
-        })
-      : null;
 
-    states = this.props.countryData
-      ? this.props.countryData.states.map(state => {
-          return { value: state.id, label: state.name };
-        })
-      : null;
+    countries = this.props.countries;
 
-    districts = this.props.stateData
-      ? this.props.stateData.districts.map(district => {
-          return { value: district.id, label: district.name };
-        })
-      : null;
+    try {
+      states = this.props.countries
+        ? this.props.countries.find(
+            country =>
+              country.states && country.id === this.state.branch_country.id
+          ).states
+        : [];
+    } catch (error) {
+      states = [];
+    }
 
-    cities = this.props.districtData
-      ? this.props.districtData.cities.map(city => {
-          return { value: city.id, label: city.name };
-        })
-      : null;
+    console.log("states found: ", states);
 
-    areas = this.props.cityData
-      ? this.props.cityData.areas.map(area => {
-          return { value: area.id, label: area.name };
-        })
-      : null;
+    try {
+      if (this.props.countries) {
+        this.props.countries.map(country => {
+          if (country.states) {
+            country.states.map(state => {
+              if (state.districts && state.id === this.state.branch_state.id) {
+                districts = state.districts;
+              }
+            });
+          }
+        });
+      }
+    } catch (error) {
+      districts = [];
+    }
+
+    console.log("districts found: ", districts);
+
+    try {
+      if (this.props.countries) {
+        this.props.countries.map(country => {
+          if (country.states) {
+            country.states.map(state => {
+              if (state.districts) {
+                state.districts.map(district => {
+                  if (
+                    district.cities &&
+                    district.id === this.state.branch_district.id
+                  ) {
+                    cities = district.cities;
+                  }
+                });
+              }
+            });
+          }
+        });
+      }
+    } catch (error) {
+      cities = [];
+    }
+
+    console.log("cities found: ", cities);
+
+    try {
+      if (this.props.countries) {
+        this.props.countries.map(country => {
+          if (country.states) {
+            country.states.map(state => {
+              if (state.districts) {
+                state.districts.map(district => {
+                  if (district.cities) {
+                    district.cities.map(city => {
+                      if (city.areas && city.id === this.state.branch_city.id) {
+                        areas = city.areas;
+                      }
+                    });
+                  }
+                });
+              }
+            });
+          }
+        });
+      }
+    } catch (error) {
+      areas = [];
+    }
+    console.log("areas found: ", areas);
 
     const { branch_country } = this.state;
-    const valueBranchCountry = branch_country && branch_country.value;
+    const valueBranchCountry = branch_country && branch_country.id;
 
     const { branch_state } = this.state;
-    const valueBranchState = branch_state && branch_state.value;
+    const valueBranchState = branch_state && branch_state.id;
 
     const { branch_district } = this.state;
-    const valueBranchDistrict = branch_district && branch_district.value;
+    const valueBranchDistrict = branch_district && branch_district.id;
 
     const { branch_city } = this.state;
-    const valueBranchCity = branch_city && branch_city.value;
+    const valueBranchCity = branch_city && branch_city.id;
 
     const { branch_area } = this.state;
-    const valueBranchArea = branch_area && branch_area.value;
+    const valueBranchArea = branch_area && branch_area.id;
 
     return (
       <Card>
@@ -280,6 +340,8 @@ class SubBusinessBranch extends Component {
                       "branch_country"
                     )}
                     options={countries}
+                    valueKey="id"
+                    labelKey="name"
                   />
                 </FormGroup>
               </Col>
@@ -299,6 +361,8 @@ class SubBusinessBranch extends Component {
                       "branch_state"
                     )}
                     options={states}
+                    valueKey="id"
+                    labelKey="name"
                   />
                 </FormGroup>
               </Col>
@@ -318,6 +382,8 @@ class SubBusinessBranch extends Component {
                       "branch_district"
                     )}
                     options={districts}
+                    valueKey="id"
+                    labelKey="name"
                   />
                 </FormGroup>
               </Col>
@@ -334,6 +400,8 @@ class SubBusinessBranch extends Component {
                     value={valueBranchCity}
                     onChange={this.handleSelectChange.bind(this, "branch_city")}
                     options={cities}
+                    valueKey="id"
+                    labelKey="name"
                   />
                 </FormGroup>
               </Col>
@@ -350,6 +418,8 @@ class SubBusinessBranch extends Component {
                     value={valueBranchArea}
                     onChange={this.handleSelectChange.bind(this, "branch_area")}
                     options={areas}
+                    valueKey="id"
+                    labelKey="name"
                   />
                 </FormGroup>
               </Col>
@@ -434,7 +504,7 @@ class SubBusinessBranch extends Component {
               </Col>
             </Row>
             <SubBusinessContactWrapper
-              ref={ref => (this.subBusinessContactWrapperRef2 = ref)}
+              ref={ref => (this.subBusinessBranchContactWrapperRef = ref)}
               /* onSubmit={value => {
               this.propsData = { ...this.propsData, ...value };
             }} */
@@ -447,7 +517,7 @@ class SubBusinessBranch extends Component {
                     this.props.onAdd(
                       this.state,
                       this.props.id,
-                      this.subBusinessContactWrapperRef2.getState()
+                      this.subBusinessBranchContactWrapperRef.getState()
                     )
                   }
                 >

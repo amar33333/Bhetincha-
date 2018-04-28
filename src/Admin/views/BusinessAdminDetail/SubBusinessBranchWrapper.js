@@ -50,39 +50,48 @@ class SubBusinessBranchWrapper extends Component {
       branchComponentList: [],
       branchs: []
     });
-    // console.log("branchredf: ", this.subBusinessBranchRef);
-    // this.subBusinessBranchRef.clearState();
+    if (this.subBusinessBranchRef) this.subBusinessBranchRef.clearState();
   };
 
   getState = () => ({ branchs: this.state.branchs });
 
   onBranchAddressAdd = () => {
-    console.log("onasd branch added");
+    // console.log("onasd branch added");
     this.setState({
       branchComponentList: [
         ...this.state.branchComponentList,
         <SubBusinessBranch
-          /* ref={ref => (this.subBusinessBranchRef = ref)} */
+          ref={ref => (this.subBusinessBranchRef = ref)}
           {...this.props}
           key={new Date().getTime()}
           id={new Date().getTime()}
           serial_num={this.state.branchComponentList.length}
           onAdd={(value, id, contacts) => {
-            console.log("branch wrapper: ", value, id, contacts);
+            {
+              /* console.log("branch wrapper: ", value, id, contacts); */
+            }
             let branchs = [...this.state.branchs];
             let index = null;
 
             branchs.map((branch, i) => {
-              console.log("key BRANCH: ", branch.key, "id BRANCH: ", id);
+              {
+                /* console.log("key BRANCH: ", branch.key, "id BRANCH: ", id); */
+              }
               if (id === Number(branch.key)) {
-                console.log("index BRNACH: ", i);
+                {
+                  /* console.log("index BRNACH: ", i); */
+                }
                 index = i;
               }
             });
-            console.log("index BRNAHC: ", index);
+            {
+              /* console.log("index BRNAHC: ", index); */
+            }
 
             if (branchs.length > 0 && index !== null) {
-              console.log("edit ran BRNAHC: ", contacts);
+              {
+                /* console.log("edit ran BRNAHC: ", contacts); */
+              }
 
               branchs[index].branch_address_line_1 =
                 value.branch_address_line_1;
@@ -94,21 +103,23 @@ class SubBusinessBranchWrapper extends Component {
               branchs[index].branch_other_landline_number =
                 value.branch_other_landline_number;
               branchs[index].branch_post_box = value.branch_post_box;
-              branchs[index].branch_area = value.branch_area.value;
+              branchs[index].branch_area = value.branch_area.id;
 
-              branchs[index].branch_city = value.branch_city.value;
-              branchs[index].branch_country = value.branch_country.value;
-              branchs[index].branch_district = value.branch_district.value;
-              branchs[index].branch_state = value.branch_state.value;
+              branchs[index].branch_city = value.branch_city.id;
+              branchs[index].branch_country = value.branch_country.id;
+              branchs[index].branch_district = value.branch_district.id;
+              branchs[index].branch_state = value.branch_state.id;
               branchs[index].branch_toll_free = value.branch_toll_free;
 
               branchs[index].contactPerson = contacts.contactPerson;
               console.log("update branch: ", [...branchs, ...contacts]);
-              this.setState({ branchs }, () =>
-                console.log("immediate branch conta: ", this.state.branchs)
-              );
+              this.setState({ branchs }, () => {
+                /* console.log("immediate branch conta: ", this.state.branchs) */
+              });
             } else {
-              console.log("new add ran  brnach: ", contacts);
+              {
+                /* console.log("new add ran  brnach: ", contacts); */
+              }
 
               this.setState(
                 {
@@ -116,18 +127,20 @@ class SubBusinessBranchWrapper extends Component {
                     ...this.state.branchs,
                     {
                       ...value,
-                      branch_area: value.branch_area.value,
-                      branch_city: value.branch_city.value,
-                      branch_country: value.branch_country.value,
-                      branch_state: value.branch_state.value,
-                      branch_district: value.branch_district.value,
+                      branch_area: value.branch_area.id,
+                      branch_city: value.branch_city.id,
+                      branch_country: value.branch_country.id,
+                      branch_state: value.branch_state.id,
+                      branch_district: value.branch_district.id,
                       key: id,
                       ...contacts
                     }
                   ]
                 },
                 () => {
-                  console.log("else monitor state: ", this.state.branchs);
+                  {
+                    /* console.log("else monitor state: ", this.state.branchs); */
+                  }
                   this.onBranchAddressAdd();
                 }
               );
@@ -149,7 +162,7 @@ class SubBusinessBranchWrapper extends Component {
   };
 
   render() {
-    console.log("render state branchs: ", this.state);
+    // console.log("render state branchs: ", this.state);
     return (
       <div className="animated fadeIn">
         <Card>
