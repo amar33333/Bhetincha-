@@ -1,5 +1,8 @@
 import React, { Component } from "react";
 import { Container } from "reactstrap";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 import {
   Header,
   Sidebar,
@@ -40,6 +43,7 @@ class Admin extends Component {
   render() {
     return (
       <div className="app">
+        <ToastContainer hideProgressBar />
         <Header />
         <div className="app-body">
           <Sidebar {...this.props} nav={nav.items} />

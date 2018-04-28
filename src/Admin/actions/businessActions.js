@@ -1,4 +1,5 @@
 import { Observable } from "rxjs/Observable";
+import { toast } from "react-toastify";
 import {
   onCompanyTypePost,
   onPaymentMethodPost
@@ -40,20 +41,23 @@ export const onBusinessAllGet = payload => ({
 });
 
 epics.push((action$, { getState }) =>
-  action$
-    .ofType(FETCH_BUSINESS_PENDING)
-    .mergeMap(({ payload }) => {
-      console.log(getState().auth.cookies.token_data.access_token);
-      return onBusinessAllGetAjax({
-        access_token: getState().auth.cookies.token_data.access_token,
-        params: payload
-      });
+  action$.ofType(FETCH_BUSINESS_PENDING).mergeMap(({ payload }) =>
+    onBusinessAllGetAjax({
+      access_token: getState().auth.cookies.token_data.access_token,
+      params: payload
     })
-    .map(({ response }) => ({
-      type: FETCH_BUSINESS_FULFILLED,
-      payload: response
-    }))
-    .catch(ajaxError => Observable.of({ type: FETCH_BUSINESS_REJECTED }))
+      .map(({ response }) => {
+        toast.success("Businesses fetched successfully!");
+        return {
+          type: FETCH_BUSINESS_FULFILLED,
+          payload: response
+        };
+      })
+      .catch(ajaxError => {
+        toast.error("Error Fetching Businesses");
+        return Observable.of({ type: FETCH_BUSINESS_REJECTED });
+      })
+  )
 );
 
 export const onBusinessCreate = ({ data, access_token }) => dispatch => {

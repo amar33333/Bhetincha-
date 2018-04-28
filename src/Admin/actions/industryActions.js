@@ -1,4 +1,5 @@
 import { Observable } from "rxjs/Observable";
+import { toast } from "react-toastify";
 
 import {
   onIndustryPost,
@@ -40,36 +41,39 @@ epics.push((action$, { getState }) =>
 
     return onIndustryPostAjax({ industry, access_token })
       .concatMap(({ response }) => {
-        if (response.msg === "success")
+        if (response.msg === "success") {
+          toast.success("Industry added successfully!");
           return [
             { type: CREATE_INDUSTRY_FULFILLED },
             { type: FETCH_INDUSTRY_PENDING }
           ];
-        else {
-          throw new Error("Message is not success");
+        } else {
+          throw new Error(response.msg[Object.keys(response.msg)[0]][0]);
         }
       })
-      .catch(ajaxError =>
-        Observable.of({ type: CREATE_INDUSTRY_REJECTED, payload: ajaxError })
-      );
+      .catch(ajaxError => {
+        toast.error(ajaxError.toString());
+        return Observable.of({
+          type: CREATE_INDUSTRY_REJECTED,
+          payload: ajaxError
+        });
+      });
   })
 );
 
 export const onIndustryList = () => ({ type: FETCH_INDUSTRY_PENDING });
 
 epics.push((action$, { getState }) =>
-  action$
-    .ofType(FETCH_INDUSTRY_PENDING)
-    .mergeMap(action =>
-      onIndustryGetAjax({
-        access_token: getState().auth.cookies.token_data.access_token
-      })
-    )
-    .map(({ response }) => ({
-      type: FETCH_INDUSTRY_FULFILLED,
-      payload: response
-    }))
-    .catch(ajaxError => Observable.of({ type: FETCH_INDUSTRY_REJECTED }))
+  action$.ofType(FETCH_INDUSTRY_PENDING).mergeMap(action =>
+    onIndustryGetAjax({
+      access_token: getState().auth.cookies.token_data.access_token
+    })
+      .map(({ response }) => ({
+        type: FETCH_INDUSTRY_FULFILLED,
+        payload: response
+      }))
+      .catch(ajaxError => Observable.of({ type: FETCH_INDUSTRY_REJECTED }))
+  )
 );
 
 export const onIndustryDelete = payload => ({
@@ -78,19 +82,24 @@ export const onIndustryDelete = payload => ({
 });
 
 epics.push((action$, { getState }) =>
-  action$
-    .ofType(DELETE_INDUSTRY_PENDING)
-    .mergeMap(({ payload }) =>
-      onIndustryEachDeleteAjax({
-        id: payload.id,
-        access_token: getState().auth.cookies.token_data.access_token
+  action$.ofType(DELETE_INDUSTRY_PENDING).mergeMap(({ payload }) =>
+    onIndustryEachDeleteAjax({
+      id: payload.id,
+      access_token: getState().auth.cookies.token_data.access_token
+    })
+      .concatMap(() => {
+        toast.success("Deleted Successfully!");
+        return [
+          { type: FETCH_INDUSTRY_PENDING },
+          { type: DELETE_INDUSTRY_FULFILLED }
+        ];
       })
-    )
-    .concatMap(() => [
-      { type: FETCH_INDUSTRY_PENDING },
-      { type: DELETE_INDUSTRY_FULFILLED }
-    ])
-    .catch(ajaxError => Observable.of({ type: DELETE_INDUSTRY_REJECTED }))
+      .catch(ajaxError => {
+        toast.error("Error Deleting Industry");
+        console.log(ajaxError);
+        return Observable.of({ type: DELETE_INDUSTRY_REJECTED });
+      })
+  )
 );
 
 export const onIndustryEachList = ({ id, access_token }) => dispatch => {
