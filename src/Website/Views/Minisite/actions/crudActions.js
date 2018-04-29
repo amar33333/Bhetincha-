@@ -58,7 +58,7 @@ epics.push((action$, { getState }) =>
                   { type: TOGGLE_EDIT_ABOUT_US }
                 ],
                 FAILED: UPDATE_ABOUT_REJECTED,
-                username: globalState.auth.cookies.user_data.username
+                slug: globalState.auth.cookies.user_data.slug
               }
             : { type: UPDATE_ABOUT_REJECTED }
       )
@@ -158,8 +158,8 @@ export const handleGalleryPhotoUpload = ({
 
 epics.push(action$ =>
   action$.ofType(FETCH_PART_BUSINESS).mergeMap(action => {
-    const { username, updates, onSuccess, FAILED } = action;
-    return onBusinessEachGetAjax({ username })
+    const { slug, updates, onSuccess, FAILED } = action;
+    return onBusinessEachGetAjax({ slug })
       .concatMap(({ response }) => {
         const payload = {};
         updates.forEach(key => {
@@ -178,8 +178,8 @@ export const onBusinessGet = payload => ({
 
 epics.push(action$ =>
   action$.ofType(FETCH_BUSINESS_PENDING).mergeMap(action => {
-    const { username, history } = action.payload;
-    return onBusinessEachGetAjax({ username })
+    const { slug, history } = action.payload;
+    return onBusinessEachGetAjax({ slug })
       .map(({ response }) => {
         const payload = {};
         payload.business_name = response.business_name;
@@ -188,6 +188,7 @@ epics.push(action$ =>
         payload.logo = response.logo;
         payload.id = response.id;
         payload.albums = response.albums;
+        payload.slug = response.slug;
 
         if (response.about) payload.about = response.about;
 

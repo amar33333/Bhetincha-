@@ -1,5 +1,6 @@
 import industryEpics from "./industryActions";
 import businessEpics from "./businessActions";
+import filterBusinessEpics from "./filterBusinessActions";
 
 export * from "./industryActions";
 export * from "./categoryActions";
@@ -10,4 +11,4 @@ export * from "./userActions";
 export * from "./businessActions";
 export * from "./filterBusinessActions";
 
-export default [...industryEpics, ...businessEpics];
+export default [...industryEpics, ...businessEpics, ...filterBusinessEpics];

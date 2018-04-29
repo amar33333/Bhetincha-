@@ -26,8 +26,6 @@ const INITIAL_STATE = {
   company_types: [],
 
   businesses: [],
-  page: 1,
-  rows: 20,
   pages: 3,
   fetchLoading: false
 };
@@ -45,8 +43,6 @@ export default function(state = INITIAL_STATE, action) {
         ...state,
         fetchLoading: false,
         businesses: action.payload.data,
-        page: action.payload.page,
-        rows: action.payload.rows,
         pages: action.payload.pages
       };
 

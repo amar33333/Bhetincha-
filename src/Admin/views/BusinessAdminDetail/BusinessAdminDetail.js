@@ -58,6 +58,7 @@ class BusinessAdminDetail extends Component {
   onFormSubmit = event => {
     event.preventDefault();
 
+    console.log("onformsubmit");
     this.propsData = {
       ...this.subBusinessAdminDetailRef.getState(),
       ...this.subBusinessAboutRef.getState(),
