@@ -33,6 +33,16 @@ class SubBusinessLogo extends Component {
 
   getState = () => this.state;
 
+  displayImage = () =>
+    this.props.edit ? (
+      <img
+        alt=""
+        width="100"
+        height="100"
+        src={`http://159.65.150.212:8025${this.props.imagePath}`}
+      />
+    ) : null;
+
   render() {
     return (
       <div className="animated fadeIn">
@@ -74,6 +84,8 @@ class SubBusinessLogo extends Component {
           </CardHeader>
           <Collapse isOpen={this.state.collapse}>
             <CardBody>
+              {this.displayImage()}
+
               <FileBase64
                 required
                 multiple={false}

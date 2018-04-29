@@ -13,7 +13,10 @@ import {
   FETCH_COMPANY_TYPE_PENDING,
   FETCH_BUSINESS_FULFILLED,
   FETCH_BUSINESS_PENDING,
-  FETCH_BUSINESS_REJECTED
+  FETCH_BUSINESS_REJECTED,
+  FETCH_BUSINESS_EACH_FULFILLED,
+  FETCH_BUSINESS_EACH_REJECTED,
+  FETCH_BUSINESS_EACH_PENDING
 } from "../actions/types";
 
 const INITIAL_STATE = {
@@ -45,6 +48,18 @@ export default function(state = INITIAL_STATE, action) {
         page: action.payload.page,
         rows: action.payload.rows,
         pages: action.payload.pages
+      };
+
+    case FETCH_BUSINESS_EACH_PENDING:
+      return { ...state, fetchLoading: true };
+
+    case FETCH_BUSINESS_EACH_REJECTED:
+      return { ...state, fetchLoading: false };
+
+    case FETCH_BUSINESS_EACH_FULFILLED:
+      return {
+        ...state,
+        businessData: action.payload
       };
 
     case CREATE_PAYMENT_METHODS_PENDING:
