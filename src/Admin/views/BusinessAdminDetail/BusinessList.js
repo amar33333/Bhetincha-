@@ -70,7 +70,7 @@ class BusinessList extends Component {
     ],
     SubComponent: row => {
       const data = row.original;
-      return <BusinessEdit data={data} />;
+      return <BusinessEdit username={data.slug} />;
     },
     pageSizeOptions: [5, 10, 20, 25, 50, 100],
     manual: true,

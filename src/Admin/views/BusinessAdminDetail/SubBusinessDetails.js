@@ -22,11 +22,11 @@ class SubBusinessDetail extends Component {
     this.state = {
       business_name: "",
       business_tagline: "",
-      first_name: "",
-      last_name: "",
-      username: "",
+      // first_name: "",
+      // last_name: "",
+      // username: "",
+      // password: "",
       business_email: "",
-      password: "",
       industry: "",
       category: "",
       sub_category: [],
@@ -38,6 +38,23 @@ class SubBusinessDetail extends Component {
       ? this.props.cookies.token_data.access_token
       : null;
   }
+
+  static getDerivedStateFromProps = nextProps =>
+    nextProps.edit
+      ? {
+          business_name: nextProps.business_name,
+          business_email: nextProps.business_email,
+          payment_method: nextProps.payment_method.map(each => ({
+            id: each,
+            name: each
+          })),
+          sub_category: nextProps.sub_categories.map(each => ({
+            id: each,
+            name: each
+          }))
+        }
+      : null;
+
   toggleCollapse = () => {
     this.setState({
       collapse: !this.state.collapse
@@ -72,11 +89,11 @@ class SubBusinessDetail extends Component {
     this.setState({
       business_name: "",
       business_tagline: "",
-      first_name: "",
-      last_name: "",
-      username: "",
+      // first_name: "",
+      // last_name: "",
+      // username: "",
+      // password: "",
       business_email: "",
-      password: "",
       industry: "",
       category: "",
       sub_category: [],
@@ -87,7 +104,8 @@ class SubBusinessDetail extends Component {
   getState = () => this.state;
 
   render() {
-    console.log("businessdetail props: ", this.props);
+    // console.log("businessdetail props: ", this.props);
+    // console.log("businessdetail states: ", this.state);
     const industries = this.props.industries;
 
     const categories = this.props.industryData
@@ -279,7 +297,7 @@ class SubBusinessDetail extends Component {
                   </FormGroup>
                 </Col>
               </Row>
-              <Row>
+              {/* <Row>
                 <Col xs="6" md="6">
                   <FormGroup>
                     <Label for="fname">First Name</Label>
@@ -333,7 +351,7 @@ class SubBusinessDetail extends Component {
                     />
                   </FormGroup>
                 </Col>
-              </Row>
+              </Row> */}
             </CardBody>
           </Collapse>
         </Card>

@@ -2,7 +2,15 @@ import React, { Component } from "react";
 
 import FileBase64 from "react-file-base64";
 
-import { Card, CardHeader, CardBody, Button, Collapse } from "reactstrap";
+import {
+  Row,
+  Col,
+  Card,
+  CardHeader,
+  CardBody,
+  Button,
+  Collapse
+} from "reactstrap";
 
 class SubBusinessCoverImage extends Component {
   constructor(props) {
@@ -33,6 +41,16 @@ class SubBusinessCoverImage extends Component {
   };
 
   getState = () => this.state;
+
+  displayImage = () =>
+    this.props.edit ? (
+      <img
+        alt=""
+        width="840"
+        height="360"
+        src={`http://159.65.150.212:8025${this.props.imagePath}`}
+      />
+    ) : null;
 
   render() {
     return (
@@ -75,11 +93,17 @@ class SubBusinessCoverImage extends Component {
           </CardHeader>
           <Collapse isOpen={this.state.collapse}>
             <CardBody>
-              <FileBase64
-                required
-                multiple={false}
-                onDone={this.getFiles.bind(this, "business_cover_image")}
-              />
+              {this.displayImage()}
+
+              <Row>
+                <Col>
+                  <FileBase64
+                    required
+                    multiple={false}
+                    onDone={this.getFiles.bind(this, "business_cover_image")}
+                  />
+                </Col>
+              </Row>
             </CardBody>
           </Collapse>
         </Card>

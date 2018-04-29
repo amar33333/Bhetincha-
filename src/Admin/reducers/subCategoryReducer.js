@@ -15,7 +15,7 @@ export default function(state = INITIAL_STATE, action) {
     case UNMOUNT_SUB_CATEGORY:
       return {
         ...state,
-        data: action.payload,
+        subCategories: action.payload,
         loading: false,
         statusClass: "fulfilled"
       };
@@ -25,7 +25,7 @@ export default function(state = INITIAL_STATE, action) {
     case FETCH_SUB_CATEGORY_FULFILLED:
       return {
         ...state,
-        data: action.payload,
+        subCategories: action.payload,
         loading: false,
         statusClass: "fulfilled"
       };
