@@ -33,7 +33,12 @@ class BusinessAdminDetail extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      globalCollapsed: true
+      businessAdminDetailCollapse: true,
+      businessAboutCollapse: true,
+      businessBranchWrapperCollapse: true,
+      businessCoverImageCollapse: true,
+      businessLogoCollapse: true,
+      businessPrimaryAddressCollapse: true
     };
 
     this.access_token = this.props.cookies
@@ -41,32 +46,6 @@ class BusinessAdminDetail extends Component {
       : null;
 
     this.propsData = {};
-  }
-
-  toggleGlobalCollapse = () => {
-    this.setState({
-      globalCollapsed: !this.state.globalCollapsed
-    });
-  };
-  getAllCollapsedState = () => {
-    if (
-      this.subBusinessAdminDetailRef.state.collapse ||
-      this.subBusinessAboutRef.state.collapse ||
-      this.subBusinessBranchWrapperRef.state.collapse ||
-      this.subBusinessCoverImageRef.state.collapse ||
-      this.subBusinessLogoRef.state.collapse ||
-      this.subBusinessPrimaryAddressRef.state.collapse
-    ) {
-      return true;
-    } else return false;
-  };
-
-  componentDidMount() {
-    if (this.getAllCollapsedState) {
-      this.setState({
-        globalCollapsed: !this.state.globalCollapsed
-      });
-    }
   }
 
   componentWillMount() {
@@ -127,6 +106,25 @@ class BusinessAdminDetail extends Component {
     }
   };
 
+  toggleCollapse = key => {
+    const updatedCollapseState = {};
+    [
+      "businessAboutCollapse",
+      "businessPrimaryAddressCollapse",
+      "businessLogoCollapse",
+      "businessCoverImageCollapse",
+      "businessBranchWrapperCollapse",
+      "businessAdminDetailCollapse"
+    ].forEach(collapse => {
+      if (collapse === key) {
+        updatedCollapseState[key] = !this.state[key];
+      } else {
+        updatedCollapseState[collapse] = true;
+      }
+    });
+    this.setState(updatedCollapseState);
+  };
+
   render() {
     // console.log("busines admin props: ", this.props);
     return (
@@ -139,30 +137,54 @@ class BusinessAdminDetail extends Component {
             <CardBody>
               <form onSubmit={this.onFormSubmit}>
                 <SubBusinessDetails
-                  globalCollapsed
+                  collapsed={this.state.businessAdminDetailCollapse}
+                  toggleCollapse={this.toggleCollapse.bind(
+                    this,
+                    "businessAdminDetailCollapse"
+                  )}
                   ref={ref => (this.subBusinessAdminDetailRef = ref)}
                   {...this.props}
                 />
                 <SubBusinessPrimaryAddress
-                  globalCollapsed
+                  collapsed={this.state.businessPrimaryAddressCollapse}
+                  toggleCollapse={this.toggleCollapse.bind(
+                    this,
+                    "businessPrimaryAddressCollapse"
+                  )}
                   ref={ref => (this.subBusinessPrimaryAddressRef = ref)}
                   {...this.props}
                 />
                 <SubBusinessBranchWrapper
-                  globalCollapsed
+                  collapsed={this.state.businessBranchWrapperCollapse}
+                  toggleCollapse={this.toggleCollapse.bind(
+                    this,
+                    "businessBranchWrapperCollapse"
+                  )}
                   ref={ref => (this.subBusinessBranchWrapperRef = ref)}
                   {...this.props}
                 />
                 <SubBusinessLogo
-                  globalCollapsed
+                  collapsed={this.state.businessLogoCollapse}
+                  toggleCollapse={this.toggleCollapse.bind(
+                    this,
+                    "businessLogoCollapse"
+                  )}
                   ref={ref => (this.subBusinessLogoRef = ref)}
                 />
                 <SubBusinessCoverImage
-                  globalCollapsed
+                  collapsed={this.state.businessCoverImageCollapse}
+                  toggleCollapse={this.toggleCollapse.bind(
+                    this,
+                    "businessCoverImageCollapse"
+                  )}
                   ref={ref => (this.subBusinessCoverImageRef = ref)}
                 />
                 <SubBusinessAbout
-                  globalCollapsed
+                  collapsed={this.state.businessAboutCollapse}
+                  toggleCollapse={this.toggleCollapse.bind(
+                    this,
+                    "businessAboutCollapse"
+                  )}
                   ref={ref => (this.subBusinessAboutRef = ref)}
                   company_types={this.props.company_types}
                 />

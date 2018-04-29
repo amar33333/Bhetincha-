@@ -23,8 +23,8 @@ class SubBusinessAbout extends Component {
       about_us_tagline: "",
       about_us: "",
       established_year: "",
-      company_type: [],
-      collapse: false
+      company_type: []
+      // collapsed: true
     };
   }
 
@@ -48,11 +48,11 @@ class SubBusinessAbout extends Component {
         }
       : null;
 
-  toggleCollapse = () => {
-    this.setState({
-      collapse: !this.state.collapse
-    });
-  };
+  // toggleCollapse = () => {
+  //   this.setState({
+  //     collapsed: !this.state.collapsed
+  //   });
+  // };
   onChange = (key, event) => this.setState({ [key]: event.target.value });
 
   handleSelectChange = (key, value) => {
@@ -79,7 +79,7 @@ class SubBusinessAbout extends Component {
     return (
       <div className="animated fadeIn">
         <Card>
-          <CardHeader onClick={this.toggleCollapse}>
+          <CardHeader onClick={this.props.toggleCollapse}>
             <div
               style={{
                 display: "flex",
@@ -91,7 +91,7 @@ class SubBusinessAbout extends Component {
               <strong>About Us</strong>
               <Button
                 color="primary"
-                onClick={this.toggleCollapse}
+                onClick={this.props.toggleCollapse}
                 style={{
                   marginBottom: "0rem",
                   backgroundColor: "rgb(230, 228, 241)",
@@ -106,7 +106,7 @@ class SubBusinessAbout extends Component {
                   alignItems: "center"
                 }}
               >
-                {this.state.collapse ? (
+                {!this.props.collapsed ? (
                   <i className="fa fa-angle-up" />
                 ) : (
                   <i className="fa fa-angle-down" />
@@ -114,7 +114,7 @@ class SubBusinessAbout extends Component {
               </Button>
             </div>
           </CardHeader>
-          <Collapse isOpen={this.state.collapse}>
+          <Collapse isOpen={!this.props.collapsed}>
             <CardBody>
               <Row>
                 <Col xs="12" md="12">

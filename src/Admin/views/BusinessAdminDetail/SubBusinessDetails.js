@@ -30,8 +30,8 @@ class SubBusinessDetail extends Component {
       industry: "",
       category: "",
       sub_category: [],
-      payment_method: [],
-      collapse: false
+      payment_method: []
+      // collapsed: true
     };
 
     this.access_token = this.props.cookies
@@ -55,11 +55,11 @@ class SubBusinessDetail extends Component {
         }
       : null;
 
-  toggleCollapse = () => {
-    this.setState({
-      collapse: !this.state.collapse
-    });
-  };
+  // toggleCollapse = () => {
+  //   this.setState({
+  //     collapsed: !this.state.collapsed
+  //   });
+  // };
 
   onChange = (key, event) => this.setState({ [key]: event.target.value });
 
@@ -133,7 +133,7 @@ class SubBusinessDetail extends Component {
     return (
       <div className="animated fadeIn">
         <Card>
-          <CardHeader onClick={this.toggleCollapse}>
+          <CardHeader onClick={this.props.toggleCollapse}>
             <div
               style={{
                 display: "flex",
@@ -160,7 +160,7 @@ class SubBusinessDetail extends Component {
                   alignItems: "center"
                 }}
               >
-                {this.state.collapse ? (
+                {!this.props.collapsed ? (
                   <i className="fa fa-angle-up" />
                 ) : (
                   <i className="fa fa-angle-down" />
@@ -168,7 +168,7 @@ class SubBusinessDetail extends Component {
               </Button>
             </div>
           </CardHeader>
-          <Collapse isOpen={this.state.collapse}>
+          <Collapse isOpen={!this.props.collapsed}>
             <CardBody>
               <Row>
                 <Col xs="12" md="12">
