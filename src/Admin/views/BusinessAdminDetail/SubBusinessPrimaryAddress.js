@@ -73,7 +73,7 @@ class SubBusinessPrimaryAddress extends Component {
   handleSelectChange = (key, value) => {
     this.setState({ [key]: value });
 
-    if (key === "primary_country") {
+    if (key === "primary_country" && value) {
       this.setState({
         primary_state: "",
         primary_district: "",
@@ -91,7 +91,7 @@ class SubBusinessPrimaryAddress extends Component {
       // this.props.onUnmountDistrict();
       // this.props.onUnmountCity();
       // this.props.onUnmountArea();
-    } else if (key === "primary_state") {
+    } else if (key === "primary_state" && value) {
       this.setState({
         primary_district: "",
         primary_city: "",
@@ -107,7 +107,7 @@ class SubBusinessPrimaryAddress extends Component {
       areas = [];
       // this.props.onUnmountCity();
       // this.props.onUnmountArea();
-    } else if (key === "primary_district") {
+    } else if (key === "primary_district" && value) {
       this.setState({
         primary_city: "",
         primary_area: ""
@@ -120,7 +120,7 @@ class SubBusinessPrimaryAddress extends Component {
       });
       areas = [];
       // this.props.onUnmountArea();
-    } else if (key === "primary_city") {
+    } else if (key === "primary_city" && value) {
       this.setState({
         primary_area: ""
       });

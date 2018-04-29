@@ -5,6 +5,9 @@ import ReactTable from "react-table";
 import Select from "react-select";
 
 import { onBusinessAllGet, onIndustryList } from "../../actions";
+
+import BusinessEdit from "./BusinessEdit";
+
 class BusinessList extends Component {
   static getDerivedStateFromProps = nextProps => ({
     params: { rows: nextProps.rows, page: nextProps.page }
@@ -67,14 +70,7 @@ class BusinessList extends Component {
     ],
     SubComponent: row => {
       const data = row.original;
-      return (
-        <div style={{ padding: "10px", background: "white" }}>
-          Edit Your Data Here...
-          <p>Name</p>
-          {data.business_name}
-          <h6>Save</h6>
-        </div>
-      );
+      return <BusinessEdit data={data} />;
     },
     pageSizeOptions: [5, 10, 20, 25, 50, 100],
     manual: true,

@@ -49,20 +49,20 @@ class SubBusinessDetail extends Component {
   handleSelectChange = (key, value) => {
     console.log("vavas: ", key, value);
     this.setState({ [key]: value });
-    if (key === "industry") {
+    if (key === "industry" && value) {
       this.setState({ category: "", sub_category: [] });
 
       this.props.onIndustryEachList({
-        id: value.value,
+        id: value.id,
         access_token: this.access_token
       });
       this.props.onUnmountSubCategories();
-    } else if (key === "category") {
+    } else if (key === "category" && value) {
       this.setState({ sub_category: [] });
 
       console.log("detaiL : ", key, value);
       this.props.onCategoryEachList({
-        id: value.value,
+        id: value.id,
         access_token: this.access_token
       });
     }
@@ -87,40 +87,27 @@ class SubBusinessDetail extends Component {
   getState = () => this.state;
 
   render() {
-    const industries = this.props.industries
-      ? this.props.industries.map(industry => {
-          return { value: industry.id, label: industry.name };
-        })
-      : null;
+    console.log("businessdetail props: ", this.props);
+    const industries = this.props.industries;
 
-    const categories =
-      this.props.industryData && this.props.industryData.categories
-        ? this.props.industryData.categories.map(category => {
-            return { value: category.id, label: category.name };
-          })
-        : null;
+    const categories = this.props.industryData
+      ? this.props.industryData.categories
+      : [];
 
-    const subCategories =
-      this.props.categoryData && this.props.categoryData.subcategories
-        ? this.props.categoryData.subcategories.map(subCategory => {
-            return { value: subCategory.id, label: subCategory.name };
-          })
-        : null;
+    const subCategories = this.props.categoryData
+      ? this.props.categoryData.subcategories
+      : [];
 
-    const paymentMethods = this.props.payment_methods
-      ? this.props.payment_methods.map(paymentMethod => {
-          return { value: paymentMethod.id, label: paymentMethod.name };
-        })
-      : null;
+    const paymentMethods = this.props.payment_methods;
 
     const { payment_method } = this.state;
     const valuePaymentMethod = payment_method;
 
     const { category } = this.state;
-    const valueCategory = category && category.value;
+    const valueCategory = category && category.id;
 
     const { industry } = this.state;
-    const valueIndustry = industry && industry.value;
+    const valueIndustry = industry && industry.id;
 
     const { sub_category } = this.state;
     const valueSubCategory = sub_category;
@@ -206,6 +193,8 @@ class SubBusinessDetail extends Component {
                       value={valueIndustry}
                       onChange={this.handleSelectChange.bind(this, "industry")}
                       options={industries}
+                      valueKey="id"
+                      labelKey="name"
                     />
                   </FormGroup>
                 </Col>
@@ -222,6 +211,8 @@ class SubBusinessDetail extends Component {
                       value={valueCategory}
                       onChange={this.handleSelectChange.bind(this, "category")}
                       options={categories}
+                      valueKey="id"
+                      labelKey="name"
                     />
                   </FormGroup>
                 </Col>
@@ -244,6 +235,8 @@ class SubBusinessDetail extends Component {
                         "sub_category"
                       )}
                       options={subCategories}
+                      valueKey="id"
+                      labelKey="name"
                     />
                   </FormGroup>
                 </Col>
@@ -280,6 +273,8 @@ class SubBusinessDetail extends Component {
                         "payment_method"
                       )}
                       options={paymentMethods}
+                      valueKey="id"
+                      labelKey="name"
                     />
                   </FormGroup>
                 </Col>
