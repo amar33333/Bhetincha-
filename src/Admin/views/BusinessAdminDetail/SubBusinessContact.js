@@ -22,15 +22,21 @@ class SubBusinessContact extends Component {
       email: "",
       designation: "",
       mobileNumber: "",
-      department: "",
-      collapse: true
+      department: ""
+      // collapsed: false
     };
   }
-  toggleCollapse = () => {
-    this.setState({
-      collapse: !this.state.collapse
-    });
-  };
+  // toggleCollapse = () => {
+  //   this.setState({
+  //     collapsed: !this.state.collapsed
+  //   });
+  // };
+
+  componentDidMount() {
+    if (this.props.globalCollapsed) {
+      this.toggleCollapse();
+    }
+  }
 
   // componentWillUpdate(nextProps, nextState) {
   //   if (nextState.add && this.props.onValueChange) {
@@ -66,7 +72,7 @@ class SubBusinessContact extends Component {
     return (
       <div className="animated fadeIn">
         <Card>
-          <CardHeader onClick={this.toggleCollapge}>
+          <CardHeader onClick={this.props.toggleCollapge}>
             <div
               style={{
                 display: "flex",
@@ -87,7 +93,7 @@ class SubBusinessContact extends Component {
               </Button>
               <Button
                 color="primary"
-                onClick={this.toggleCollapse}
+                onClick={this.props.toggleCollapse}
                 style={{
                   marginBottom: "0rem",
                   backgroundColor: "rgb(230, 228, 241)",
@@ -102,7 +108,7 @@ class SubBusinessContact extends Component {
                   alignItems: "center"
                 }}
               >
-                {this.state.collapse ? (
+                {!this.props.collapsed ? (
                   <i className="fa fa-angle-up" />
                 ) : (
                   <i className="fa fa-angle-down" />
@@ -110,7 +116,7 @@ class SubBusinessContact extends Component {
               </Button>
             </div>
           </CardHeader>
-          <Collapse isOpen={this.state.collapse}>
+          <Collapse isOpen={!this.props.collapsed}>
             <CardBody>
               <Row>
                 <Col xs="12" md="12">

@@ -9,15 +9,15 @@ class SubBusinessLogo extends Component {
     super(props);
 
     this.state = {
-      business_logo: "",
-      collapse: false
+      business_logo: ""
+      // collapsed: true
     };
   }
-  toggleCollapse = () => {
-    this.setState({
-      collapse: !this.state.collapse
-    });
-  };
+  // toggleCollapse = () => {
+  //   this.setState({
+  //     collapsed: !this.state.collapsed
+  //   });
+  // };
   // Callback~
   getFiles = (key, files) => {
     this.setState({ [key]: files }, () => {
@@ -47,7 +47,7 @@ class SubBusinessLogo extends Component {
     return (
       <div className="animated fadeIn">
         <Card>
-          <CardHeader onClick={this.toggleCollapse}>
+          <CardHeader onClick={this.props.toggleCollapse}>
             <div
               style={{
                 display: "flex",
@@ -59,7 +59,7 @@ class SubBusinessLogo extends Component {
               <strong>Upload Business Logo</strong>
               <Button
                 color="primary"
-                onClick={this.toggleCollapse}
+                onClick={this.props.toggleCollapse}
                 style={{
                   marginBottom: "0rem",
                   backgroundColor: "rgb(230, 228, 241)",
@@ -74,7 +74,7 @@ class SubBusinessLogo extends Component {
                   alignItems: "center"
                 }}
               >
-                {this.state.collapse ? (
+                {!this.props.collapsed ? (
                   <i className="fa fa-angle-up" />
                 ) : (
                   <i className="fa fa-angle-down" />
@@ -82,7 +82,7 @@ class SubBusinessLogo extends Component {
               </Button>
             </div>
           </CardHeader>
-          <Collapse isOpen={this.state.collapse}>
+          <Collapse isOpen={!this.props.collapsed}>
             <CardBody>
               {this.displayImage()}
 

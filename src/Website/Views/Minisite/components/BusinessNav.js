@@ -72,8 +72,7 @@ class BusinessNav extends Component {
             </Nav>
           </Collapse>
           {this.props.cookies &&
-            this.props.businessName ===
-              this.props.cookies.user_data.username && (
+            this.props.businessName === this.props.cookies.user_data.slug && (
               <Button color="primary" onClick={this.props.onEditMainClicked}>
                 {this.props.mainEdit ? "Preview" : "Edit Data"}
               </Button>

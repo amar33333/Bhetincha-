@@ -1,20 +1,21 @@
 import {
-  SAVE_BUSINESS_LIST_PARAMS,
+  CLEAR_BUSINESS_NAME_SEARCH,
   BUSINESS_FILTER_ON_CHANGE,
-  CLEAR_BUSINESS_FILTER
+  CLEAR_BUSINESS_FILTER,
+  FETCH_BUSINESS_FULFILLED
 } from "../actions/types";
 
 const INITIAL_STATE = {
-  businessParams: {},
-
-  nameSearch: "",
-  industryFilter: null
+  q: "",
+  industry: null,
+  rows: 20,
+  page: 1
 };
 
 export default function(state = INITIAL_STATE, action) {
   switch (action.type) {
-    case SAVE_BUSINESS_LIST_PARAMS:
-      return { ...state, businessParams: action.payload };
+    case FETCH_BUSINESS_FULFILLED:
+      return { ...state, page: action.payload.page, rows: action.payload.rows };
 
     case BUSINESS_FILTER_ON_CHANGE:
       return { ...state, ...action.payload };
@@ -22,9 +23,13 @@ export default function(state = INITIAL_STATE, action) {
     case CLEAR_BUSINESS_FILTER:
       return {
         ...INITIAL_STATE,
-        nameSearch: state.nameSearch,
-        businessParams: state.businessParams
+        q: state.q,
+        rows: state.rows,
+        page: state.page
       };
+
+    case CLEAR_BUSINESS_NAME_SEARCH:
+      return { ...state, q: "" };
 
     default:
       return state;

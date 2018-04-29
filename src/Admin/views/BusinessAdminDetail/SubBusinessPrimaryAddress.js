@@ -40,8 +40,8 @@ class SubBusinessPrimaryAddress extends Component {
       address_line_1: "",
       address_line_2: "",
       post_box: "",
-      toll_free: "",
-      collapse: false
+      toll_free: ""
+      // collapsed: true
     };
 
     this.propsData = {};
@@ -63,11 +63,11 @@ class SubBusinessPrimaryAddress extends Component {
   //   console.log("props contact ; ", this.propsData);
   // };
 
-  toggleCollapse = () => {
-    this.setState({
-      collapse: !this.state.collapse
-    });
-  };
+  // toggleCollapse = () => {
+  //   this.setState({
+  //     collapsed: !this.state.collapsed
+  //   });
+  // };
   onChange = (key, event) => this.setState({ [key]: event.target.value });
 
   handleSelectChange = (key, value) => {
@@ -348,7 +348,7 @@ class SubBusinessPrimaryAddress extends Component {
     return (
       <div className="animated fadeIn">
         <Card>
-          <CardHeader onClick={this.toggleCollapse}>
+          <CardHeader onClick={this.props.toggleCollapse}>
             <div
               style={{
                 display: "flex",
@@ -360,7 +360,7 @@ class SubBusinessPrimaryAddress extends Component {
               <strong>Business Primary Address</strong>
               <Button
                 color="primary"
-                onClick={this.toggleCollapse}
+                onClick={this.props.toggleCollapse}
                 style={{
                   marginBottom: "0rem",
                   backgroundColor: "rgb(230, 228, 241)",
@@ -375,7 +375,7 @@ class SubBusinessPrimaryAddress extends Component {
                   alignItems: "center"
                 }}
               >
-                {this.state.collapse ? (
+                {!this.props.collapsed ? (
                   <i className="fa fa-angle-up" />
                 ) : (
                   <i className="fa fa-angle-down" />
@@ -383,7 +383,7 @@ class SubBusinessPrimaryAddress extends Component {
               </Button>
             </div>
           </CardHeader>
-          <Collapse isOpen={this.state.collapse}>
+          <Collapse isOpen={!this.props.collapsed}>
             <CardBody>
               <Row>
                 <Col xs="12" md="12">
