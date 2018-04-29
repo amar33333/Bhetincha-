@@ -67,11 +67,11 @@ epics.push((action$, { getState }) =>
     .do(action => {
       const history = action.history;
       // const { groups, username } = getState().auth.cookies.user_data;
-      const { groups, username } = action.payload.cookies.user_data;
+      const { groups, slug } = action.payload.cookies.user_data;
 
       switch (groups[0].name) {
         case USER_GROUP_BUSINESS:
-          history.push(`/${username}`);
+          history.push(`/${slug}`);
           break;
         case USER_GROUP_INDIVIDUAL:
           // history.push("/");

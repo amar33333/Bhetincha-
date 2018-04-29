@@ -123,10 +123,10 @@ export const onBusinessEachGet = ({ username }) =>
     }
   });
 
-export const onBusinessEachGetAjax = ({ username }) =>
+export const onBusinessEachGetAjax = ({ slug }) =>
   ajax({
     method: "GET",
-    url: `${BUSINESS_URL}${username}`,
+    url: `${BUSINESS_URL}${slug}`,
     headers: {
       "Content-Type": "application/json"
     }

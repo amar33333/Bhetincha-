@@ -24,7 +24,8 @@ class Avatar extends Component {
 
   static getDerivedStateFromProps = nextProps => ({
     group: nextProps.cookies.user_data.groups[0].name,
-    username: nextProps.cookies.user_data.username
+    username: nextProps.cookies.user_data.username,
+    slug: nextProps.cookies.user_data.slug
   });
 
   profileDropdowntoggle = () => this.setState({ isOpen: !this.state.isOpen });
@@ -42,7 +43,7 @@ class Avatar extends Component {
             <Link
               to={avatarItem.link.replace(
                 ROUTE_PARAMS_BUSINESS_NAME,
-                this.state.username
+                this.state.slug
               )}
             >
               <div

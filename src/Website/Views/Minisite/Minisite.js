@@ -15,7 +15,7 @@ import minisiteEpics, { onBusinessGet, clearBusiness } from "./actions";
 class Minisite extends Component {
   getBusiness = () => {
     this.props.onBusinessGet({
-      username: this.props.match.params[ROUTE_PARAMS_BUSINESS_NAME],
+      slug: this.props.match.params[ROUTE_PARAMS_BUSINESS_NAME],
       history: this.props.history
     });
   };
