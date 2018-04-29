@@ -114,14 +114,17 @@ export const onBusinessAllGetAjax = ({ access_token, params }) =>
     }
   });
 
-export const onBusinessEachGet = ({ username }) =>
-  axios({
+export const onBusinessEachGet = ({ username, access_token }) => {
+  console.log("url business each get: ", `${BUSINESS_URL}${username}/`);
+  return axios({
     method: "get",
-    url: `${BUSINESS_URL}${username}`,
+    url: `${BUSINESS_URL}${username}/`,
     headers: {
-      "Content-Type": "application/json"
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
     }
   });
+};
 
 export const onBusinessEachGetAjax = ({ slug }) =>
   ajax({

@@ -18,15 +18,21 @@ class SubBusinessBranchWrapper extends Component {
 
     this.state = {
       branchComponentList: [],
-      branchs: [],
-      collapse: false
+      branchs: []
+      // collapsed: true
     };
   }
-  toggleCollapse = () => {
-    this.setState({
-      collapse: !this.state.collapse
-    });
-  };
+  // toggleCollapse = () => {
+  //   this.setState({
+  //     collapsed: !this.state.collapsed
+  //   });
+  // };
+
+  // componentDidMount() {
+  //   if (this.props.globalCollapsed) {
+  //     this.toggleCollapse();
+  //   }
+  // }
   // componentWillUpdate(nextProps, nextState) {
   //   if (this.props.onSubmit)
   //     this.props.onSubmit({ branchs: nextState.branchs });
@@ -183,7 +189,7 @@ class SubBusinessBranchWrapper extends Component {
     return (
       <div className="animated fadeIn">
         <Card>
-          <CardHeader onClick={this.toggleCollapse}>
+          <CardHeader onClick={this.props.toggleCollapse}>
             <div
               style={{
                 display: "flex",
@@ -195,7 +201,7 @@ class SubBusinessBranchWrapper extends Component {
               <strong>Business Branch Address</strong>
               <Button
                 color="primary"
-                onClick={this.toggleCollapse}
+                onClick={this.props.toggleCollapse}
                 style={{
                   marginBottom: "0rem",
                   backgroundColor: "rgb(230, 228, 241)",
@@ -210,7 +216,7 @@ class SubBusinessBranchWrapper extends Component {
                   alignItems: "center"
                 }}
               >
-                {this.state.collapse ? (
+                {!this.props.collapsed ? (
                   <i className="fa fa-angle-up" />
                 ) : (
                   <i className="fa fa-angle-down" />
@@ -218,7 +224,7 @@ class SubBusinessBranchWrapper extends Component {
               </Button>
             </div>
           </CardHeader>
-          <Collapse isOpen={this.state.collapse}>
+          <Collapse isOpen={!this.props.collapsed}>
             <CardBody>
               {this.state.branchComponentList}
               <Row style={{ marginTop: 15 }}>

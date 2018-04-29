@@ -41,8 +41,8 @@ class SubBusinessBranch extends Component {
       branch_address_line_1: "",
       branch_address_line_2: "",
       branch_post_box: "",
-      branch_toll_free: "",
-      collapse: true
+      branch_toll_free: ""
+      // collapsed: true
     };
 
     this.propsData = {};
@@ -51,11 +51,11 @@ class SubBusinessBranch extends Component {
       ? this.props.cookies.token_data.access_token
       : null;
   }
-  toggleCollapse = () => {
-    this.setState({
-      collapse: !this.state.collapse
-    });
-  };
+  // toggleCollapse = () => {
+  //   this.setState({
+  //     collapsed: !this.state.collapsed
+  //   });
+  // };
   // componentWillMount() {
   //   this.props.onCountryList({ access_token: this.access_token });
   // }
@@ -279,7 +279,7 @@ class SubBusinessBranch extends Component {
 
     return (
       <Card>
-        <CardHeader onClick={this.toggleCollapse}>
+        <CardHeader onClick={this.props.toggleCollapse}>
           <div
             style={{
               display: "flex",
@@ -300,7 +300,7 @@ class SubBusinessBranch extends Component {
             </Button>
             <Button
               color="primary"
-              onClick={this.toggleCollapse}
+              onClick={this.props.toggleCollapse}
               style={{
                 marginBottom: "0rem",
                 backgroundColor: "rgb(230, 228, 241)",
@@ -315,7 +315,7 @@ class SubBusinessBranch extends Component {
                 alignItems: "center"
               }}
             >
-              {this.state.collapse ? (
+              {!this.props.collapsed ? (
                 <i className="fa fa-angle-up" />
               ) : (
                 <i className="fa fa-angle-down" />
@@ -323,7 +323,7 @@ class SubBusinessBranch extends Component {
             </Button>
           </div>
         </CardHeader>
-        <Collapse isOpen={this.state.collapse}>
+        <Collapse isOpen={!this.props.collapsed}>
           <CardBody>
             <Row>
               <Col xs="12" md="12">

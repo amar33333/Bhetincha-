@@ -1,15 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 
-import {
-  Row,
-  Col,
-  Card,
-  CardHeader,
-  CardBody,
-  Button,
-  Collapse
-} from "reactstrap";
+import { Row, Col, Card, CardHeader, CardBody, Button } from "reactstrap";
 
 import {
   onBusinessCreate,
@@ -40,6 +32,14 @@ import SubBusinessBranchWrapper from "./SubBusinessBranchWrapper";
 class BusinessAdminDetail extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      businessAdminDetailCollapse: true,
+      businessAboutCollapse: true,
+      businessBranchWrapperCollapse: true,
+      businessCoverImageCollapse: true,
+      businessLogoCollapse: true,
+      businessPrimaryAddressCollapse: true
+    };
 
     this.access_token = this.props.cookies
       ? this.props.cookies.token_data.access_token
@@ -106,6 +106,25 @@ class BusinessAdminDetail extends Component {
     }
   };
 
+  toggleCollapse = key => {
+    const updatedCollapseState = {};
+    [
+      "businessAboutCollapse",
+      "businessPrimaryAddressCollapse",
+      "businessLogoCollapse",
+      "businessCoverImageCollapse",
+      "businessBranchWrapperCollapse",
+      "businessAdminDetailCollapse"
+    ].forEach(collapse => {
+      if (collapse === key) {
+        updatedCollapseState[key] = !this.state[key];
+      } else {
+        updatedCollapseState[collapse] = true;
+      }
+    });
+    this.setState(updatedCollapseState);
+  };
+
   render() {
     // console.log("busines admin props: ", this.props);
     return (
@@ -118,22 +137,54 @@ class BusinessAdminDetail extends Component {
             <CardBody>
               <form onSubmit={this.onFormSubmit}>
                 <SubBusinessDetails
+                  collapsed={this.state.businessAdminDetailCollapse}
+                  toggleCollapse={this.toggleCollapse.bind(
+                    this,
+                    "businessAdminDetailCollapse"
+                  )}
                   ref={ref => (this.subBusinessAdminDetailRef = ref)}
                   {...this.props}
                 />
                 <SubBusinessPrimaryAddress
+                  collapsed={this.state.businessPrimaryAddressCollapse}
+                  toggleCollapse={this.toggleCollapse.bind(
+                    this,
+                    "businessPrimaryAddressCollapse"
+                  )}
                   ref={ref => (this.subBusinessPrimaryAddressRef = ref)}
                   {...this.props}
                 />
                 <SubBusinessBranchWrapper
+                  collapsed={this.state.businessBranchWrapperCollapse}
+                  toggleCollapse={this.toggleCollapse.bind(
+                    this,
+                    "businessBranchWrapperCollapse"
+                  )}
                   ref={ref => (this.subBusinessBranchWrapperRef = ref)}
                   {...this.props}
                 />
-                <SubBusinessLogo ref={ref => (this.subBusinessLogoRef = ref)} />
+                <SubBusinessLogo
+                  collapsed={this.state.businessLogoCollapse}
+                  toggleCollapse={this.toggleCollapse.bind(
+                    this,
+                    "businessLogoCollapse"
+                  )}
+                  ref={ref => (this.subBusinessLogoRef = ref)}
+                />
                 <SubBusinessCoverImage
+                  collapsed={this.state.businessCoverImageCollapse}
+                  toggleCollapse={this.toggleCollapse.bind(
+                    this,
+                    "businessCoverImageCollapse"
+                  )}
                   ref={ref => (this.subBusinessCoverImageRef = ref)}
                 />
                 <SubBusinessAbout
+                  collapsed={this.state.businessAboutCollapse}
+                  toggleCollapse={this.toggleCollapse.bind(
+                    this,
+                    "businessAboutCollapse"
+                  )}
                   ref={ref => (this.subBusinessAboutRef = ref)}
                   company_types={this.props.company_types}
                 />
