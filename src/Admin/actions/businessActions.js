@@ -47,20 +47,42 @@ export const onBusinessAllGet = payload => ({
 epics.push((action$, { getState }) =>
   action$.ofType(FETCH_BUSINESS_PENDING).mergeMap(({ payload }) => {
     const toastId = toast("Fetching Businesses...", { autoClose: false });
+    const filterValue = getState().AdminContainer.filterBusiness;
+    const params = {};
+    params.rows = filterValue.rows;
+    params.page = filterValue.page;
+    params.q = filterValue.q;
+    params.industry = filterValue.industry
+      ? filterValue.industry.map(industry => industry.id)
+      : [];
+
+    if (payload) {
+      if (payload.rows) params.rows = payload.rows;
+      if (payload.page) params.page = payload.page;
+    }
+
     return onBusinessAllGetAjax({
       access_token: getState().auth.cookies.token_data.access_token,
-      params: payload
+      params
     })
       .map(({ response }) => {
-        toast.update(toastId, {
-          render: "Businesses fetched successfully!",
-          type: toast.TYPE.SUCCESS,
-          autoClose: 5000
-        });
-        return {
-          type: FETCH_BUSINESS_FULFILLED,
-          payload: response
-        };
+        if (
+          response !== null &&
+          typeof response === "object" &&
+          Array.isArray(response) === false
+        ) {
+          toast.update(toastId, {
+            render: "Businesses fetched successfully!",
+            type: toast.TYPE.SUCCESS,
+            autoClose: 5000
+          });
+          return {
+            type: FETCH_BUSINESS_FULFILLED,
+            payload: response
+          };
+        } else {
+          throw new Error("Error");
+        }
       })
       .catch(ajaxError => {
         toast.update(toastId, {
