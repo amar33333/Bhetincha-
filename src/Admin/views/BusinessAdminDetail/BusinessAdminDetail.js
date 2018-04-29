@@ -1,15 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 
-import {
-  Row,
-  Col,
-  Card,
-  CardHeader,
-  CardBody,
-  Button,
-  Collapse
-} from "reactstrap";
+import { Row, Col, Card, CardHeader, CardBody, Button } from "reactstrap";
 
 import {
   onBusinessCreate,
@@ -40,12 +32,41 @@ import SubBusinessBranchWrapper from "./SubBusinessBranchWrapper";
 class BusinessAdminDetail extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      globalCollapsed: true
+    };
 
     this.access_token = this.props.cookies
       ? this.props.cookies.token_data.access_token
       : null;
 
     this.propsData = {};
+  }
+
+  toggleGlobalCollapse = () => {
+    this.setState({
+      globalCollapsed: !this.state.globalCollapsed
+    });
+  };
+  getAllCollapsedState = () => {
+    if (
+      this.subBusinessAdminDetailRef.state.collapse ||
+      this.subBusinessAboutRef.state.collapse ||
+      this.subBusinessBranchWrapperRef.state.collapse ||
+      this.subBusinessCoverImageRef.state.collapse ||
+      this.subBusinessLogoRef.state.collapse ||
+      this.subBusinessPrimaryAddressRef.state.collapse
+    ) {
+      return true;
+    } else return false;
+  };
+
+  componentDidMount() {
+    if (this.getAllCollapsedState) {
+      this.setState({
+        globalCollapsed: !this.state.globalCollapsed
+      });
+    }
   }
 
   componentWillMount() {
@@ -118,22 +139,30 @@ class BusinessAdminDetail extends Component {
             <CardBody>
               <form onSubmit={this.onFormSubmit}>
                 <SubBusinessDetails
+                  globalCollapsed
                   ref={ref => (this.subBusinessAdminDetailRef = ref)}
                   {...this.props}
                 />
                 <SubBusinessPrimaryAddress
+                  globalCollapsed
                   ref={ref => (this.subBusinessPrimaryAddressRef = ref)}
                   {...this.props}
                 />
                 <SubBusinessBranchWrapper
+                  globalCollapsed
                   ref={ref => (this.subBusinessBranchWrapperRef = ref)}
                   {...this.props}
                 />
-                <SubBusinessLogo ref={ref => (this.subBusinessLogoRef = ref)} />
+                <SubBusinessLogo
+                  globalCollapsed
+                  ref={ref => (this.subBusinessLogoRef = ref)}
+                />
                 <SubBusinessCoverImage
+                  globalCollapsed
                   ref={ref => (this.subBusinessCoverImageRef = ref)}
                 />
                 <SubBusinessAbout
+                  globalCollapsed
                   ref={ref => (this.subBusinessAboutRef = ref)}
                   company_types={this.props.company_types}
                 />

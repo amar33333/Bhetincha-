@@ -25,6 +25,7 @@ class Avatar extends Component {
   static getDerivedStateFromProps = nextProps => ({
     group: nextProps.cookies.user_data.groups[0].name,
     username: nextProps.cookies.user_data.username
+    // slug: nextProps.cookies.user_data.slug
   });
 
   profileDropdowntoggle = () => this.setState({ isOpen: !this.state.isOpen });
