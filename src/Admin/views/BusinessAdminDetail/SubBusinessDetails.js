@@ -40,15 +40,15 @@ class SubBusinessDetail extends Component {
   }
 
   static getDerivedStateFromProps = nextProps =>
-    nextProps.edit
+    nextProps.businessData && nextProps.edit
       ? {
-          business_name: nextProps.business_name,
-          business_email: nextProps.business_email,
-          payment_method: nextProps.payment_method.map(each => ({
+          business_name: nextProps.businessData.business_name,
+          business_email: nextProps.businessData.business_email,
+          payment_method: nextProps.businessData.payment_method.map(each => ({
             id: each,
             name: each
           })),
-          sub_category: nextProps.sub_categories.map(each => ({
+          sub_category: nextProps.businessData.sub_categories.map(each => ({
             id: each,
             name: each
           }))
