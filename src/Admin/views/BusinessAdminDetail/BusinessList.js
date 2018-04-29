@@ -4,21 +4,24 @@ import { connect } from "react-redux";
 import ReactTable from "react-table";
 import Select from "react-select";
 
-import { onBusinessAllGet, onIndustryList } from "../../actions";
-
-import BusinessEdit from "./BusinessEdit";
+import {
+  onBusinessAllGet,
+  onIndustryList,
+  handleOnBusinessFilterChange,
+  saveParamsOnUnmount,
+  clearFilter
+} from "../../actions";
 
 class BusinessList extends Component {
   static getDerivedStateFromProps = (nextProps, prevState) => ({
-    params: { ...prevState.params, rows: nextProps.rows, page: nextProps.page }
+    params: {
+      ...prevState.params,
+      rows: nextProps.rows,
+      page: nextProps.page
+    }
   });
 
-  state = {
-    params: { rows: 1, page: 1 },
-    expanded: {},
-    nameSearch: "",
-    industryFilter: null
-  };
+  state = { params: { rows: 1, page: 1 } };
 
   tableProps = {
     columns: [
@@ -42,21 +45,19 @@ class BusinessList extends Component {
         Cell: props => <div>{props.value ? "Verified" : "Not Verified"}</div>
       },
       {
-        expander: true,
         Header: "Edit",
-        width: 65,
-        Expander: ({ isExpanded, ...rest }) => (
-          <div>
-            {isExpanded ? <span>&#x2299;</span> : <span>&#x2295;</span>}
-          </div>
+        accessor: "slug",
+        Cell: ({ value }) => (
+          <button
+            onClick={() =>
+              this.props.history.push(`/admin/list-business/${value}/edit`)
+            }
+          >
+            Edit
+          </button>
         ),
-        style: {
-          cursor: "pointer",
-          fontSize: 25,
-          padding: "0",
-          textAlign: "center",
-          userSelect: "none"
-        }
+        sortable: false,
+        filterable: false
       },
       {
         Header: "Delete",
@@ -68,10 +69,6 @@ class BusinessList extends Component {
         filterable: false
       }
     ],
-    SubComponent: row => {
-      const data = row.original;
-      return <BusinessEdit data={data} />;
-    },
     pageSizeOptions: [5, 10, 20, 25, 50, 100],
     manual: true,
     sortable: true
@@ -79,24 +76,27 @@ class BusinessList extends Component {
 
   componentDidMount = () => {
     this.props.onIndustryList();
-    this.onBusinessAllGet({});
+    this.onBusinessAllGet(this.props.businessParams);
   };
 
-  handleChange = (key, event) => this.setState({ [key]: event.target.value });
+  componentWillUnmount = () => {
+    this.props.saveParamsOnUnmount(this.state.params);
+  };
 
-  handleIndustryChange = industryFilter => this.setState({ industryFilter });
+  handleChange = (key, event) =>
+    this.props.handleOnBusinessFilterChange({ [key]: event.target.value });
 
-  handleRowExpanded = (newExpanded, index) =>
-    this.setState({ expanded: { [index]: newExpanded[index] } });
+  handleIndustryChange = industryFilter =>
+    this.props.handleOnBusinessFilterChange({ industryFilter });
 
   handleSearchKeywordCleared = () => {
-    this.setState({ nameSearch: "" });
+    this.props.handleOnBusinessFilterChange({ nameSearch: "" });
     this.state.params.q && this.onBusinessAllGet({ q: "" });
   };
 
   handleSearchKeywordSubmit = event => {
     event.preventDefault();
-    this.onBusinessAllGet({ q: this.state.nameSearch });
+    this.onBusinessAllGet({ q: this.props.nameSearch });
   };
 
   onBusinessAllGet = extraParams => {
@@ -105,7 +105,7 @@ class BusinessList extends Component {
   };
 
   onFilter = () => {
-    const { industryFilter } = this.state;
+    const { industryFilter } = this.props;
 
     const industry = industryFilter
       ? industryFilter.map(industry => industry.id)
@@ -115,12 +115,8 @@ class BusinessList extends Component {
   };
 
   onFilterCleared = () => {
-    this.setState(
-      {
-        industryFilter: null
-      },
-      this.onFilter
-    );
+    this.props.clearFilter();
+    this.onBusinessAllGet({ industry: [] });
   };
 
   render() {
@@ -139,7 +135,7 @@ class BusinessList extends Component {
             onChange={this.handleIndustryChange}
             options={this.props.industries}
             placeholder="--- All ---"
-            value={this.state.industryFilter}
+            value={this.props.industryFilter}
             valueKey="id"
           />
 
@@ -152,7 +148,7 @@ class BusinessList extends Component {
             <label>Search Name:</label>
             <input
               onChange={this.handleChange.bind(null, "nameSearch")}
-              value={this.state.nameSearch}
+              value={this.props.nameSearch}
             />
             <button>Search</button>
           </form>
@@ -186,17 +182,33 @@ class BusinessList extends Component {
 export default connect(
   ({
     AdminContainer: {
-      business_reducer: { businesses, page, rows, pages, fetchLoading },
+      business_reducer: {
+        businesses,
+        page,
+        rows,
+        pages,
+        fetchLoading,
+        businessParams
+      },
+      filterBusiness,
       industries
     }
   }) => ({
     industries: industries.industries,
     industryLoading: industries.loading,
     businesses,
+    businessParams,
     page,
     rows,
     pages,
-    fetchLoading
+    fetchLoading,
+    ...filterBusiness
   }),
-  { onBusinessAllGet, onIndustryList }
+  {
+    onBusinessAllGet,
+    onIndustryList,
+    saveParamsOnUnmount,
+    handleOnBusinessFilterChange,
+    clearFilter
+  }
 )(BusinessList);
