@@ -39,6 +39,20 @@ class SubBusinessDetail extends Component {
       : null;
   }
 
+  componentDidMount() {
+    if (this.state.industry) {
+      this.props.onIndustryEachList({
+        id: this.state.industry.id,
+        access_token: this.access_token
+      });
+    } else if (this.state.category) {
+      this.props.onCategoryEachList({
+        id: this.state.category.id,
+        access_token: this.access_token
+      });
+    }
+  }
+
   static getDerivedStateFromProps = nextProps =>
     nextProps.businessData && nextProps.edit
       ? {
@@ -104,7 +118,7 @@ class SubBusinessDetail extends Component {
   getState = () => this.state;
 
   render() {
-    // console.log("businessdetail props: ", this.props);
+    console.log("businessdetail props: ", this.props);
     // console.log("businessdetail states: ", this.state);
     const industries = this.props.industries;
 

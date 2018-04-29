@@ -24,9 +24,9 @@ export const onBusinessPost = ({ data, access_token }) => {
 
   const server_format_data = {
     business_name: data.business_name,
-    username: data.username,
-    email: data.business_email,
-    password: data.password,
+    // username: data.username,
+    // password: data.password,
+    business_email: data.business_email,
     address: {
       otherLandlineNumber: [data.other_landline_number],
       house_no: data.house_no,
@@ -37,6 +37,10 @@ export const onBusinessPost = ({ data, access_token }) => {
       tollFreeNumber: data.toll_free,
       landlineNumber: data.landline,
       email: data.business_email,
+      country: data.primary_country.id,
+      state: data.primary_state.id,
+      district: data.primary_district.id,
+      city: data.primary_city.id,
       area: data.primary_area.id,
       contactPerson: data.contactPerson
       // contactPerson: {
@@ -114,9 +118,8 @@ export const onBusinessAllGetAjax = ({ access_token, params }) =>
     }
   });
 
-export const onBusinessEachGet = ({ username, access_token }) => {
-  console.log("url business each get: ", `${BUSINESS_URL}${username}/`);
-  return axios({
+export const onBusinessEachGet = ({ username, access_token }) =>
+  axios({
     method: "get",
     url: `${BUSINESS_URL}${username}/`,
     headers: {
@@ -124,7 +127,6 @@ export const onBusinessEachGet = ({ username, access_token }) => {
       Authorization: "Bearer " + access_token
     }
   });
-};
 
 export const onBusinessEachGetAjax = ({ username }) =>
   ajax({

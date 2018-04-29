@@ -9,13 +9,16 @@ import {
   onCategoryEachList,
   onCategoryList,
   onIndustryList,
-  onBusinessEachList
+  onBusinessEachList,
+  onIndustryEachList,
+  onUnmountSubCategories
 } from "../../actions";
 
 import SubBusinessDetails from "./SubBusinessDetails";
 import SubBusinessAbout from "./SubBusinessAbout";
 import SubBusinessLogo from "./SubBusinessLogo";
 import SubBusinessCoverImage from "./SubBusinessCoverImage";
+import SubBusinessPrimaryAddress from "./SubBusinessPrimaryAddress";
 
 class BusinessEdit extends Component {
   access_token = this.props.cookies
@@ -27,7 +30,6 @@ class BusinessEdit extends Component {
     this.props.onPaymentMethodsList({ access_token: this.access_token });
     this.props.onIndustryList({ access_token: this.access_token });
     // this.props.onCategoryList({ access_token: this.access_token });
-    // this.props.onCategoryEachList({ access_token: this.access_token });
     this.props.onBusinessEachList({
       username: this.props.match.params.businessSlug,
       access_token: this.access_token
@@ -36,7 +38,7 @@ class BusinessEdit extends Component {
 
   render() {
     const data = this.props.businessData;
-    console.log("new props: ", this.props.businessData);
+    console.log("new props: ", this.props);
 
     let businessData = null;
     let about = null;
@@ -70,6 +72,16 @@ class BusinessEdit extends Component {
                   businessData={businessData}
                   payment_methods={this.props.paymentMethods}
                   industries={this.props.industries}
+                  onIndustryEachList={this.props.onIndustryEachList}
+                  onCategoryEachList={this.props.onCategoryEachList}
+                  onUnmountSubCategories={this.props.onUnmountSubCategories}
+                  cookies={this.props.cookies}
+                  industryData={this.props.industryData}
+                  edit
+                />
+                <SubBusinessPrimaryAddress
+                  ref={ref => (this.subBusinessPrimaryAddressRef = ref)}
+                  {...this.props}
                   edit
                 />
                 <SubBusinessAbout
@@ -118,6 +130,8 @@ export default connect(
     onIndustryList,
     onCategoryEachList,
     onCategoryList,
-    onBusinessEachList
+    onBusinessEachList,
+    onIndustryEachList,
+    onUnmountSubCategories
   }
 )(BusinessEdit);
