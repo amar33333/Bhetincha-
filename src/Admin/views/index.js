@@ -19,6 +19,7 @@ import CompanyType from "./CompanyType/CompanyType";
 import PaymentMethod from "./PaymentMethod/PaymentMethod";
 import BusinessAdminDetail from "./BusinessAdminDetail";
 import BusinessList from "./BusinessAdminDetail/BusinessList";
+import BusinessEdit from "./BusinessAdminDetail/BusinessEdit";
 
 export {
   Dashboard,
@@ -38,5 +39,6 @@ export {
   CompanyType,
   PaymentMethod,
   BusinessAdminDetail,
-  BusinessList
+  BusinessList,
+  BusinessEdit
 };

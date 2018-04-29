@@ -18,8 +18,6 @@ import SubBusinessLogo from "./SubBusinessLogo";
 import SubBusinessCoverImage from "./SubBusinessCoverImage";
 
 class BusinessEdit extends Component {
-  state = {};
-
   access_token = this.props.cookies
     ? this.props.cookies.token_data.access_token
     : null;
@@ -28,28 +26,35 @@ class BusinessEdit extends Component {
     this.props.onCompanyTypeList({ access_token: this.access_token });
     this.props.onPaymentMethodsList({ access_token: this.access_token });
     this.props.onIndustryList({ access_token: this.access_token });
-    this.props.onCategoryList({ access_token: this.access_token });
-    this.props.onCategoryEachList({ access_token: this.access_token });
+    // this.props.onCategoryList({ access_token: this.access_token });
+    // this.props.onCategoryEachList({ access_token: this.access_token });
     this.props.onBusinessEachList({
-      username: this.props.username,
+      username: this.props.match.params.businessSlug,
       access_token: this.access_token
     });
   }
 
-  static getDerivedStateFromProps = nextProps => ({
-    data: nextProps.businessData
-  });
-
   render() {
-    console.log("new props: ", this.props);
-    console.log("nextprops state: ", this.state);
+    const data = this.props.businessData;
+    console.log("new props: ", this.props.businessData);
 
-    const businessData = {
-      business_name: this.state.data.business_name,
-      business_email: this.state.data.email,
-      payment_method: this.state.data.paymentMethod,
-      sub_categories: this.state.data.sub_categories
-    };
+    let businessData = null;
+    let about = null;
+    let logo = null;
+    let cover_photo = null;
+
+    if (data) {
+      businessData = {
+        business_name: data.business_name,
+        business_email: data.email,
+        payment_method: data.paymentMethod,
+        sub_categories: data.sub_categories
+      };
+
+      about = data.about;
+      logo = data.logo;
+      cover_photo = data.cover_photo;
+    }
 
     return (
       <div className="animated fadeIn">
@@ -62,25 +67,25 @@ class BusinessEdit extends Component {
               <form onSubmit={this.onFormSubmit}>
                 <SubBusinessDetails
                   ref={ref => (this.subBusinessAdminDetailRef = ref)}
-                  {...businessData}
+                  businessData={businessData}
                   payment_methods={this.props.paymentMethods}
                   industries={this.props.industries}
                   edit
                 />
                 <SubBusinessAbout
                   ref={ref => (this.subBusinessAboutRef = ref)}
-                  {...this.state.data.about}
+                  about={about}
                   company_types={this.props.companyTypes}
                   edit
                 />
                 <SubBusinessLogo
                   ref={ref => (this.subBusinessLogoRef = ref)}
-                  imagePath={this.state.data.logo}
+                  imagePath={logo}
                   edit
                 />
                 <SubBusinessCoverImage
                   ref={ref => (this.subBusinessCoverImageRef = ref)}
-                  imagePath={this.state.data.cover_photo}
+                  imagePath={cover_photo}
                   edit
                 />
                 <Row>

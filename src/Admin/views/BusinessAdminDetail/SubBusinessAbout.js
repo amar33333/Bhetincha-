@@ -36,14 +36,14 @@ class SubBusinessAbout extends Component {
   // });
 
   static getDerivedStateFromProps = nextProps =>
-    nextProps.edit
+    nextProps.about && nextProps.edit
       ? {
-          about_us_tagline: nextProps.tagline,
-          about_us: nextProps.aboutUs,
+          about_us_tagline: nextProps.about.tagline,
+          about_us: nextProps.about.aboutUs,
           established_year: "",
           company_type: {
-            id: nextProps.companyType,
-            name: nextProps.companyType
+            id: nextProps.about.companyType,
+            name: nextProps.about.companyType
           }
         }
       : null;
