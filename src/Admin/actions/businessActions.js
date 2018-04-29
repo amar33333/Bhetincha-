@@ -41,23 +41,32 @@ export const onBusinessAllGet = payload => ({
 });
 
 epics.push((action$, { getState }) =>
-  action$.ofType(FETCH_BUSINESS_PENDING).mergeMap(({ payload }) =>
-    onBusinessAllGetAjax({
+  action$.ofType(FETCH_BUSINESS_PENDING).mergeMap(({ payload }) => {
+    const toastId = toast("Fetching Businesses...", { autoClose: false });
+    return onBusinessAllGetAjax({
       access_token: getState().auth.cookies.token_data.access_token,
       params: payload
     })
       .map(({ response }) => {
-        toast.success("Businesses fetched successfully!");
+        toast.update(toastId, {
+          render: "Businesses fetched successfully!",
+          type: toast.TYPE.SUCCESS,
+          autoClose: 5000
+        });
         return {
           type: FETCH_BUSINESS_FULFILLED,
           payload: response
         };
       })
       .catch(ajaxError => {
-        toast.error("Error Fetching Businesses");
+        toast.update(toastId, {
+          render: "Error Fetching Businesses",
+          type: toast.TYPE.ERROR,
+          autoClose: 5000
+        });
         return Observable.of({ type: FETCH_BUSINESS_REJECTED });
-      })
-  )
+      });
+  })
 );
 
 export const onBusinessCreate = ({ data, access_token }) => dispatch => {

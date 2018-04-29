@@ -6,8 +6,8 @@ import Select from "react-select";
 
 import { onBusinessAllGet, onIndustryList } from "../../actions";
 class BusinessList extends Component {
-  static getDerivedStateFromProps = nextProps => ({
-    params: { rows: nextProps.rows, page: nextProps.page }
+  static getDerivedStateFromProps = (nextProps, prevState) => ({
+    params: { ...prevState.params, rows: nextProps.rows, page: nextProps.page }
   });
 
   state = {
@@ -83,7 +83,7 @@ class BusinessList extends Component {
 
   componentDidMount = () => {
     this.props.onIndustryList();
-    this.onBusinessAllGet(this.state.params);
+    this.onBusinessAllGet({});
   };
 
   handleChange = (key, event) => this.setState({ [key]: event.target.value });
@@ -93,13 +93,39 @@ class BusinessList extends Component {
   handleRowExpanded = (newExpanded, index) =>
     this.setState({ expanded: { [index]: newExpanded[index] } });
 
-  handleSearchKeywordSubmit = event => {
-    event.preventDefault();
-    console.log("name search", this.state.nameSearch);
+  handleSearchKeywordCleared = () => {
+    this.setState({ nameSearch: "" });
+    this.state.params.q && this.onBusinessAllGet({ q: "" });
   };
 
-  onBusinessAllGet = extraParams =>
-    this.props.onBusinessAllGet({ ...this.state.params, ...extraParams });
+  handleSearchKeywordSubmit = event => {
+    event.preventDefault();
+    this.onBusinessAllGet({ q: this.state.nameSearch });
+  };
+
+  onBusinessAllGet = extraParams => {
+    const params = { ...this.state.params, ...extraParams };
+    this.setState({ params }, () => this.props.onBusinessAllGet(params));
+  };
+
+  onFilter = () => {
+    const { industryFilter } = this.state;
+
+    const industry = industryFilter
+      ? industryFilter.map(industry => industry.id)
+      : [];
+
+    this.onBusinessAllGet({ industry });
+  };
+
+  onFilterCleared = () => {
+    this.setState(
+      {
+        industryFilter: null
+      },
+      this.onFilter
+    );
+  };
 
   render() {
     return (
@@ -107,31 +133,36 @@ class BusinessList extends Component {
         Hello BusinessList
         <div>
           <p>Filter Stuff</p>
-          {/* TODO: Industry Filter */}
-          <h5>Industry Filter</h5>
+          <span>Industry Filter</span>
           <Select
-            autosize
-            multi
-            options={this.props.industries}
-            onChange={this.handleIndustryChange}
-            loading={this.props.industryLoading}
-            value={this.state.industryFilter}
+            // autosize
+            disabled={this.props.industryLoading}
+            isLoading={this.props.industryLoading}
             labelKey="name"
+            multi
+            onChange={this.handleIndustryChange}
+            options={this.props.industries}
+            placeholder="--- All ---"
+            value={this.state.industryFilter}
             valueKey="id"
           />
 
-          <button onClick={() => console.log("filter gaar")}>Filter</button>
+          <button onClick={this.onFilter}>Filter</button>
+          <button onClick={this.onFilterCleared}>Clear Filter</button>
         </div>
         <div>
           <h4>Search Stuff</h4>
           <form onSubmit={this.handleSearchKeywordSubmit}>
             <label>Search Name:</label>
             <input
-              value={this.state.nameSearch}
               onChange={this.handleChange.bind(null, "nameSearch")}
+              value={this.state.nameSearch}
             />
             <button>Search</button>
           </form>
+          <button onClick={this.handleSearchKeywordCleared}>
+            Clear Search
+          </button>
         </div>
         <ReactTable
           data={this.props.businesses}
