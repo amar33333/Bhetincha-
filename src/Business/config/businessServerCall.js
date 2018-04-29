@@ -10,11 +10,11 @@ import querystring from "querystring";
 
 export const onBusinessPost = ({ data, access_token }) => {
   const sub_category_list = data.sub_category.map(
-    sub_category => sub_category.value
+    sub_category => sub_category.id
   );
 
   const payment_methods_list = data.payment_method.map(
-    payment_method => payment_method.value
+    payment_method => payment_method.id
   );
 
   console.log("sub_category_list: ", sub_category_list);
@@ -73,7 +73,7 @@ export const onBusinessPost = ({ data, access_token }) => {
       tagline: data.about_us_tagline,
       aboutUs: data.about_us,
       // establishedYear: "2010-01-02T00:00:00Z",
-      companyType: data.company_type.value
+      companyType: data.company_type.id
     },
     logo: data.business_logo.base64,
     cover_photo: data.business_cover_image.base64,

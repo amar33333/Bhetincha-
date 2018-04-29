@@ -20,6 +20,8 @@ const INITIAL_STATE = {
   loading: false,
   statusClass: "",
 
+  company_types: [],
+
   businesses: [],
   page: 1,
   rows: 20,

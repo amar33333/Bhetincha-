@@ -23,10 +23,31 @@ class SubBusinessAbout extends Component {
       about_us_tagline: "",
       about_us: "",
       established_year: "",
-      company_type: "",
+      company_type: [],
       collapse: false
     };
   }
+
+  // static getDerivedStateFromProps = nextProps => ({
+  //   about_us_tagline: nextProps.tagline,
+  //   about_us: nextProps.aboutUs,
+  //   established_year: nextProps.aboutUs,
+  //   company_type: { id: nextProps.companyType, name: nextProps.companyType }
+  // });
+
+  static getDerivedStateFromProps = nextProps =>
+    nextProps.edit
+      ? {
+          about_us_tagline: nextProps.tagline,
+          about_us: nextProps.aboutUs,
+          established_year: "",
+          company_type: {
+            id: nextProps.companyType,
+            name: nextProps.companyType
+          }
+        }
+      : null;
+
   toggleCollapse = () => {
     this.setState({
       collapse: !this.state.collapse
@@ -50,14 +71,10 @@ class SubBusinessAbout extends Component {
   getState = () => this.state;
 
   render() {
-    const companyTypes = this.props.company_types
-      ? this.props.company_types.map(companyType => {
-          return { value: companyType.id, label: companyType.name };
-        })
-      : null;
+    const companyTypes = this.props.company_types;
 
     const { company_type } = this.state;
-    const valueCompanyType = company_type && company_type.value;
+    const valueCompanyType = company_type && company_type.id;
 
     return (
       <div className="animated fadeIn">
@@ -144,6 +161,8 @@ class SubBusinessAbout extends Component {
                         "company_type"
                       )}
                       options={companyTypes}
+                      valueKey="id"
+                      labelKey="name"
                     />
                   </FormGroup>
                   {/* <FormGroup check>

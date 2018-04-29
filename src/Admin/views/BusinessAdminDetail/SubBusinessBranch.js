@@ -75,7 +75,7 @@ class SubBusinessBranch extends Component {
   handleSelectChange = (key, value) => {
     this.setState({ [key]: value });
 
-    if (key === "branch_country") {
+    if (key === "branch_country" && value) {
       this.setState({
         branch_state: "",
         branch_district: "",
@@ -93,7 +93,7 @@ class SubBusinessBranch extends Component {
       // this.props.onUnmountDistrict();
       // this.props.onUnmountCity();
       // this.props.onUnmountArea();
-    } else if (key === "branch_state") {
+    } else if (key === "branch_state" && value) {
       this.setState({
         branch_district: "",
         branch_city: "",
@@ -109,7 +109,7 @@ class SubBusinessBranch extends Component {
       areas = [];
       // this.props.onUnmountCity();
       // this.props.onUnmountArea();
-    } else if (key === "branch_district") {
+    } else if (key === "branch_district" && value) {
       this.setState({
         branch_city: "",
         branch_area: ""
@@ -122,7 +122,7 @@ class SubBusinessBranch extends Component {
       });
       areas = [];
       // this.props.onUnmountArea();
-    } else if (key === "branch_city") {
+    } else if (key === "branch_city" && value) {
       this.setState({
         branch_area: ""
       });

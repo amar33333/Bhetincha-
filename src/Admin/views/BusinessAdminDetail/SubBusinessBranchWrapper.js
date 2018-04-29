@@ -32,9 +32,26 @@ class SubBusinessBranchWrapper extends Component {
   //     this.props.onSubmit({ branchs: nextState.branchs });
   // }
 
-  componentWillReceiveProps(nextProps, nextState) {
-    this.setState({
-      branchComponentList: this.state.branchComponentList.map(
+  /* TO BE DEPRECATED IN REACT 17.x 
+   * USE `getDerivedStateFromProps` instead.
+  */
+
+  // componentWillReceiveProps(nextProps, nextState) {
+  //   this.setState({
+  //     branchComponentList: this.state.branchComponentList.map(
+  //       branchComponent => {
+  //         return {
+  //           ...branchComponent,
+  //           props: { ...branchComponent.props, ...nextProps }
+  //         };
+  //       }
+  //     )
+  //   });
+  // }
+
+  static getDerivedStateFromProps = (nextProps, prevState) => {
+    return {
+      branchComponentList: prevState.branchComponentList.map(
         branchComponent => {
           return {
             ...branchComponent,
@@ -42,8 +59,8 @@ class SubBusinessBranchWrapper extends Component {
           };
         }
       )
-    });
-  }
+    };
+  };
 
   clearState = () => {
     this.setState({
