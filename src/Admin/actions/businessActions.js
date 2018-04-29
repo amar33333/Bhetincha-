@@ -9,7 +9,8 @@ import {
   onBusinessPost,
   onCompanyTypeGet,
   onPaymentMethodsGet,
-  onBusinessAllGetAjax
+  onBusinessAllGetAjax,
+  onBusinessEachGet
 } from "../../Business/config/businessServerCall";
 
 import {
@@ -22,6 +23,9 @@ import {
   FETCH_BUSINESS_FULFILLED,
   FETCH_BUSINESS_REJECTED,
   FETCH_BUSINESS_PENDING,
+  FETCH_BUSINESS_EACH_FULFILLED,
+  FETCH_BUSINESS_EACH_REJECTED,
+  FETCH_BUSINESS_EACH_PENDING,
   CREATE_BUSINESS_FULFILLED,
   CREATE_BUSINESS_REJECTED,
   CREATE_BUSINESS_PENDING,
@@ -78,6 +82,17 @@ export const onBusinessCreate = ({ data, access_token }) => dispatch => {
       dispatch({ type: CREATE_BUSINESS_REJECTED, payload: error })
     );
   dispatch({ type: CREATE_BUSINESS_PENDING });
+};
+
+export const onBusinessEachList = ({ username, access_token }) => dispatch => {
+  onBusinessEachGet({ username, access_token })
+    .then(response =>
+      dispatch({ type: FETCH_BUSINESS_EACH_FULFILLED, payload: response.data })
+    )
+    .catch(error =>
+      dispatch({ type: FETCH_BUSINESS_EACH_REJECTED, payload: error })
+    );
+  dispatch({ type: FETCH_BUSINESS_EACH_PENDING });
 };
 
 export const onCompanyTypeSubmit = ({
