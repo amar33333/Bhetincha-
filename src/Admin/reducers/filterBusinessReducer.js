@@ -7,7 +7,7 @@ import {
 
 const INITIAL_STATE = {
   q: "",
-  industry: null,
+  industry: "",
   rows: 20,
   page: 1
 };

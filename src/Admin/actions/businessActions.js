@@ -10,7 +10,8 @@ import {
   onCompanyTypeGet,
   onPaymentMethodsGet,
   onBusinessAllGetAjax,
-  onBusinessEachGet
+  onBusinessEachGet,
+  onBusinessEachDeleteAjax
 } from "../../Business/config/businessServerCall";
 
 import {
@@ -34,7 +35,10 @@ import {
   FETCH_PAYMENT_METHODS_PENDING,
   FETCH_COMPANY_TYPE_FULFILLED,
   FETCH_COMPANY_TYPE_REJECTED,
-  FETCH_COMPANY_TYPE_PENDING
+  FETCH_COMPANY_TYPE_PENDING,
+  DELETE_BUSINESS_FULFILLED,
+  DELETE_BUSINESS_PENDING,
+  DELETE_BUSINESS_REJECTED
 } from "./types";
 
 const epics = [];
@@ -92,6 +96,21 @@ epics.push((action$, { getState }) =>
         });
         return Observable.of({ type: FETCH_BUSINESS_REJECTED });
       });
+  })
+);
+
+export const onBusinessEachDelete = payload => ({
+  type: DELETE_BUSINESS_PENDING,
+  payload
+});
+
+epics.push((action$, { getState }) =>
+  action$.ofType(DELETE_BUSINESS_PENDING).mergeMap(action => {
+    const { id } = action.payload;
+    const { access_token } = getState().auth.cookies.token_data;
+    return onBusinessEachDeleteAjax({ id, access_token })
+      .mergeMap(({ response }) => console.log(response))
+      .catch(ajaxError => console.log(ajaxError));
   })
 );
 

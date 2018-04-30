@@ -24,7 +24,7 @@ export default function(state = INITIAL_STATE, action) {
     case UNMOUNT_INDUSTRY:
       return {
         ...state,
-        industries: action.payload,
+        industries: [],
         loading: false
       };
 

@@ -8,6 +8,8 @@ import SidebarFooter from "./SidebarFooter";
 import SidebarForm from "./SidebarForm";
 import SidebarHeader from "./SidebarHeader";
 import SidebarMinimizer from "./SidebarMinimizer";
+import Tooltip from "./Tooltip";
+import PopoverDelete from "./PopoverDelete";
 
 export {
   Aside,
@@ -19,5 +21,7 @@ export {
   SidebarFooter,
   SidebarForm,
   SidebarHeader,
-  SidebarMinimizer
+  SidebarMinimizer,
+  Tooltip,
+  PopoverDelete
 };

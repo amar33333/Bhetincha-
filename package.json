@@ -9,6 +9,7 @@
     "classnames": "^2.2.3",
     "flag-icon-css": "3.0.0",
     "font-awesome": "^4.7.0",
+    "moment": "^2.22.1",
     "prop-types": "^15.6.1",
     "querystring": "^0.2.0",
     "raven-js": "^3.24.1",

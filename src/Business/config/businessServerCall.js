@@ -137,6 +137,16 @@ export const onBusinessEachGetAjax = ({ slug }) =>
     }
   });
 
+export const onBusinessEachDeleteAjax = ({ id, access_token }) =>
+  ajax({
+    method: "DELETE",
+    url: `${BUSINESS_URL}${id}`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
 export const onBusinessEachPut = ({ id, access_token, data }) =>
   axios({
     method: "PUT",
