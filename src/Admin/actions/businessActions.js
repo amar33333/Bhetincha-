@@ -1,5 +1,6 @@
 import { Observable } from "rxjs/Observable";
 import { toast } from "react-toastify";
+import { NOTIFICATION_TIME } from "../../config/CONSTANTS";
 import {
   onCompanyTypePost,
   onPaymentMethodPost
@@ -56,6 +57,9 @@ epics.push((action$, { getState }) =>
     params.rows = filterValue.rows;
     params.page = filterValue.page;
     params.q = filterValue.q;
+    params.sort_by = filterValue.sort_by.map(
+      data => `${data.id}-${data.desc ? "desc" : "asc"}`
+    );
     params.industry = filterValue.industry
       ? filterValue.industry.map(industry => industry.id)
       : [];
@@ -78,7 +82,7 @@ epics.push((action$, { getState }) =>
           toast.update(toastId, {
             render: "Businesses fetched successfully!",
             type: toast.TYPE.SUCCESS,
-            autoClose: 5000
+            autoClose: NOTIFICATION_TIME
           });
           return {
             type: FETCH_BUSINESS_FULFILLED,
@@ -92,7 +96,7 @@ epics.push((action$, { getState }) =>
         toast.update(toastId, {
           render: "Error Fetching Businesses",
           type: toast.TYPE.ERROR,
-          autoClose: 5000
+          autoClose: NOTIFICATION_TIME
         });
         return Observable.of({ type: FETCH_BUSINESS_REJECTED });
       });
@@ -110,7 +114,10 @@ epics.push((action$, { getState }) =>
     const { access_token } = getState().auth.cookies.token_data;
     return onBusinessEachDeleteAjax({ id, access_token })
       .mergeMap(({ response }) => console.log(response))
-      .catch(ajaxError => console.log(ajaxError));
+      .catch(ajaxError => {
+        console.log(ajaxError);
+        return Observable.of({ type: DELETE_BUSINESS_REJECTED });
+      });
   })
 );
 

@@ -10,3 +10,5 @@ export const DEVELOPER = "Tech Kunja";
 export const OWNER = "Bhetincha.com";
 
 export const ON_KEY_PRESS_ENTER = 13;
+
+export const NOTIFICATION_TIME = 2000;

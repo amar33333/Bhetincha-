@@ -14,7 +14,8 @@ import {
   onFilterCleared,
   handleOnBusinessFilterChange,
   handleSearchKeywordCleared,
-  onUnmountIndustry
+  onUnmountIndustry,
+  handleSortChangeBusiness
 } from "../../actions";
 
 class BusinessList extends Component {
@@ -22,6 +23,7 @@ class BusinessList extends Component {
     columns: [
       {
         Header: "Business Name",
+        id: "name",
         accessor: "business_name",
         minWidth: 200,
         Cell: props => {
@@ -50,19 +52,25 @@ class BusinessList extends Component {
         Header: "Profile",
         accessor: "is_active",
         width: 110,
-        Cell: ({ value }) => <div>{value ? "Active" : "Not Active"}</div>
+        Cell: ({ value }) => <div>{value ? "Active" : "Not Active"}</div>,
+        sortable: false,
+        filterable: false
       },
       {
         Header: "Claimed",
         accessor: "claimed",
         width: 110,
-        Cell: ({ value }) => <div>{value ? "Claimed" : "Not Claimed"}</div>
+        Cell: ({ value }) => <div>{value ? "Claimed" : "Not Claimed"}</div>,
+        sortable: false,
+        filterable: false
       },
       {
         Header: "Verified",
         accessor: "verified",
         width: 110,
-        Cell: ({ value }) => <div>{value ? "Verified" : "Not Verified"}</div>
+        Cell: ({ value }) => <div>{value ? "Verified" : "Not Verified"}</div>,
+        sortable: false,
+        filterable: false
       },
       {
         Header: "Actions",
@@ -161,6 +169,7 @@ class BusinessList extends Component {
           className="-striped -highlight"
           data={this.props.businesses}
           defaultPageSize={this.props.rows}
+          defaultSorted={this.props.sort_by}
           loading={this.props.fetchLoading}
           onPageChange={pageIndex => {
             this.props.onBusinessAllGet({ page: ++pageIndex });
@@ -168,6 +177,14 @@ class BusinessList extends Component {
           onPageSizeChange={(pageSize, pageIndex) =>
             this.props.onBusinessAllGet({ page: ++pageIndex, rows: pageSize })
           }
+          onSortedChange={newSorted => {
+            this.props.handleSortChangeBusiness(newSorted);
+            // this.props.onBusinessAllGet({
+            //   sort_by: newSorted.map(
+            //     data => `${data.id}-${data.desc ? "desc" : "asc"}`
+            //   )
+            // });
+          }}
           page={this.props.page - 1}
           pages={this.props.pages}
           {...this.tableProps}
@@ -199,6 +216,7 @@ export default connect(
     onFilterCleared,
     handleOnBusinessFilterChange,
     handleSearchKeywordCleared,
+    handleSortChangeBusiness,
     onUnmountIndustry
   }
 )(BusinessList);

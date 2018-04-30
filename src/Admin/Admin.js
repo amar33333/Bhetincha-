@@ -11,6 +11,7 @@ import {
   Footer
 } from "../Common/components";
 import nav from "./config/nav";
+import { NOTIFICATION_TIME } from "../config/CONSTANTS";
 
 import { combineEpics } from "redux-observable";
 import AdminRoute from "./config/routes";
@@ -43,7 +44,7 @@ class Admin extends Component {
   render() {
     return (
       <div className="app">
-        <ToastContainer hideProgressBar />
+        <ToastContainer hideProgressBar autoClose={NOTIFICATION_TIME} />
         <Header />
         <div className="app-body">
           <Sidebar {...this.props} nav={nav.items} />
