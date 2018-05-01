@@ -150,23 +150,21 @@ class SubBusinessBranchWrapper extends Component {
                 /* console.log("edit ran BRNAHC: ", contacts); */
               }
 
-              branchs[index].branch_address_line_1 =
-                value.branch_address_line_1;
-              branchs[index].branch_address_line_2 =
-                value.branch_address_line_2;
-              branchs[index].branch_house_no = value.branch_house_no;
-              branchs[index].branch_landline = value.branch_landline;
-              branchs[index].branch_landmark = value.branch_landmark;
-              branchs[index].branch_other_landline_number =
-                value.branch_other_landline_number;
-              branchs[index].branch_post_box = value.branch_post_box;
-              branchs[index].branch_area = value.branch_area;
+              branchs[index].addressLine1 = value.addressLine1;
+              branchs[index].addressLine2 = value.addressLine2;
+              branchs[index].house_no = value.house_no;
+              branchs[index].landlineNumber = value.landlineNumber;
+              branchs[index].landmark = value.landmark;
+              branchs[index].otherLandlineNumber = value.otherLandlineNumber;
+              branchs[index].po_box = value.po_box;
+              branchs[index].area = value.area.id;
+              branchs[index].email = value.email;
 
-              branchs[index].branch_city = value.branch_city;
-              branchs[index].branch_country = value.branch_country;
-              branchs[index].branch_district = value.branch_district;
-              branchs[index].branch_state = value.branch_state;
-              branchs[index].branch_toll_free = value.branch_toll_free;
+              branchs[index].city = value.city.id;
+              branchs[index].country = value.country.id;
+              branchs[index].district = value.district.id;
+              branchs[index].state = value.state.id;
+              branchs[index].tollFreeNumber = value.tollFreeNumber;
 
               branchs[index].contactPerson = contacts.contactPerson;
               console.log("update branch: ", [...branchs, ...contacts]);
@@ -184,11 +182,11 @@ class SubBusinessBranchWrapper extends Component {
                     ...this.state.branchs,
                     {
                       ...value,
-                      branch_area: value.branch_area,
-                      branch_city: value.branch_city,
-                      branch_country: value.branch_country,
-                      branch_state: value.branch_state,
-                      branch_district: value.branch_district,
+                      area: value.area.id,
+                      city: value.city.id,
+                      country: value.country.id,
+                      state: value.state.id,
+                      district: value.district.id,
                       key: id,
                       ...contacts
                     }

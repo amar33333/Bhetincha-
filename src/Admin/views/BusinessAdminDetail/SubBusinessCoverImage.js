@@ -17,7 +17,7 @@ class SubBusinessCoverImage extends Component {
     super(props);
 
     this.state = {
-      business_cover_image: ""
+      cover_photo: ""
       // collapsed: true
     };
   }
@@ -36,11 +36,11 @@ class SubBusinessCoverImage extends Component {
 
   clearState = () => {
     this.setState({
-      business_cover_image: ""
+      cover_photo: ""
     });
   };
 
-  getState = () => this.state;
+  getState = () => (this.state ? this.state : null);
 
   displayImage = () =>
     this.props.edit ? (
@@ -99,7 +99,7 @@ class SubBusinessCoverImage extends Component {
                 <Col>
                   <FileBase64
                     multiple={false}
-                    onDone={this.getFiles.bind(this, "business_cover_image")}
+                    onDone={this.getFiles.bind(this, "cover_photo")}
                   />
                 </Col>
               </Row>
