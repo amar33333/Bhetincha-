@@ -10,7 +10,8 @@ import {
   onCompanyTypeGet,
   onPaymentMethodsGet,
   onBusinessAllGetAjax,
-  onBusinessEachGet
+  onBusinessEachGet,
+  onBusinessEachDeleteAjax
 } from "../../Business/config/businessServerCall";
 
 import {
@@ -34,7 +35,10 @@ import {
   FETCH_PAYMENT_METHODS_PENDING,
   FETCH_COMPANY_TYPE_FULFILLED,
   FETCH_COMPANY_TYPE_REJECTED,
-  FETCH_COMPANY_TYPE_PENDING
+  FETCH_COMPANY_TYPE_PENDING,
+  DELETE_BUSINESS_FULFILLED,
+  DELETE_BUSINESS_PENDING,
+  DELETE_BUSINESS_REJECTED
 } from "./types";
 
 const epics = [];
@@ -45,13 +49,15 @@ export const onBusinessAllGet = payload => ({
 });
 
 epics.push((action$, { getState }) =>
-  action$.ofType(FETCH_BUSINESS_PENDING).mergeMap(({ payload }) => {
-    const toastId = toast("Fetching Businesses...", { autoClose: false });
+  action$.ofType(FETCH_BUSINESS_PENDING).switchMap(({ payload }) => {
     const filterValue = getState().AdminContainer.filterBusiness;
     const params = {};
     params.rows = filterValue.rows;
     params.page = filterValue.page;
     params.q = filterValue.q;
+    params.sort_by = filterValue.sort_by.map(
+      data => `${data.id}-${data.desc ? "desc" : "asc"}`
+    );
     params.industry = filterValue.industry
       ? filterValue.industry.map(industry => industry.id)
       : [];
@@ -71,11 +77,7 @@ epics.push((action$, { getState }) =>
           typeof response === "object" &&
           Array.isArray(response) === false
         ) {
-          toast.update(toastId, {
-            render: "Businesses fetched successfully!",
-            type: toast.TYPE.SUCCESS,
-            autoClose: 5000
-          });
+          toast.success("Businesses fetched successfully!");
           return {
             type: FETCH_BUSINESS_FULFILLED,
             payload: response
@@ -85,12 +87,26 @@ epics.push((action$, { getState }) =>
         }
       })
       .catch(ajaxError => {
-        toast.update(toastId, {
-          render: "Error Fetching Businesses",
-          type: toast.TYPE.ERROR,
-          autoClose: 5000
-        });
+        toast.error("Error Fetching Businesses");
         return Observable.of({ type: FETCH_BUSINESS_REJECTED });
+      });
+  })
+);
+
+export const onBusinessEachDelete = payload => ({
+  type: DELETE_BUSINESS_PENDING,
+  payload
+});
+
+epics.push((action$, { getState }) =>
+  action$.ofType(DELETE_BUSINESS_PENDING).mergeMap(action => {
+    const { id } = action.payload;
+    const { access_token } = getState().auth.cookies.token_data;
+    return onBusinessEachDeleteAjax({ id, access_token })
+      .mergeMap(({ response }) => console.log(response))
+      .catch(ajaxError => {
+        console.log(ajaxError);
+        return Observable.of({ type: DELETE_BUSINESS_REJECTED });
       });
   })
 );

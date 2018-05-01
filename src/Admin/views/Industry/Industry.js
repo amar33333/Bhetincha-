@@ -15,6 +15,7 @@ import {
 } from "reactstrap";
 import { connect } from "react-redux";
 import ReactTable from "react-table";
+import { PopoverDelete } from "../../../Common/components";
 import "react-table/react-table.css";
 
 import {
@@ -33,30 +34,28 @@ class Industry extends Component {
   state = { industry: "", industrySubmit: false };
 
   columns = [
-    { Header: "S.N", accessor: "id" },
     { Header: "Industry", accessor: "name" },
     {
-      Header: "Edit",
+      Header: "Actions",
       id: "edit",
       accessor: "id",
       filterable: false,
       sortable: false,
+      width: 130,
       Cell: ({ value }) => (
-        <button onClick={event => console.log("Edit clicked for id: ", value)}>
-          Edit
-        </button>
-      )
-    },
-    {
-      Header: "Delete",
-      id: "delete",
-      accessor: "id",
-      filterable: false,
-      sortable: false,
-      Cell: ({ value }) => (
-        <button onClick={event => this.props.onIndustryDelete({ id: value })}>
-          Delete
-        </button>
+        <div>
+          <Button
+            color="secondary"
+            className="mr-l"
+            onClick={event => console.log("Edit clicked for id: ", value)}
+          >
+            Edit
+          </Button>
+          <PopoverDelete
+            id={`delete-${value}`}
+            onClick={() => this.props.onIndustryDelete({ id: value })}
+          />
+        </div>
       )
     }
   ];
@@ -127,6 +126,8 @@ class Industry extends Component {
           columns={this.columns}
           data={this.props.industries}
           loading={this.props.fetchLoading}
+          minRows={0}
+          multiSort={false}
           defaultPageSize={10}
           filterable
           defaultFilterMethod={this.filterCaseInsensitive}

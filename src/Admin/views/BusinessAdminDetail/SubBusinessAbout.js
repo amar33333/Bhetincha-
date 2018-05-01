@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { TimeInput } from "material-ui-time-picker";
 
 import {
   Row,
@@ -13,6 +14,8 @@ import {
   Button
 } from "reactstrap";
 
+import Days from "../../config/daysItems";
+
 import Select from "react-select";
 
 class SubBusinessAbout extends Component {
@@ -23,10 +26,60 @@ class SubBusinessAbout extends Component {
       about_us_tagline: "",
       about_us: "",
       established_year: "",
-      company_type: []
+      company_type: [],
+
+      sundayHoliday: Days[0].holiday,
+      sundayStart: "",
+      sundayEnd: "",
+
+      mondayHoliday: Days[1].holiday,
+      mondayStart: "",
+      mondayEnd: "",
+
+      tuesdayHoliday: Days[2].holiday,
+      tuesdayStart: "",
+      tuesdayEnd: "",
+
+      wednesdayHoliday: Days[3].holiday,
+      wednesdayStart: "",
+      wednesdayEnd: "",
+
+      thursdayHoliday: Days[4].holiday,
+      thursdayStart: "",
+      thursdayEnd: "",
+
+      fridayHoliday: Days[5].holiday,
+      fridayStart: "",
+      fridayEnd: "",
+
+      saturdayHoliday: Days[6].holiday,
+      saturdayStart: "",
+      saturdayEnd: ""
+
       // collapsed: true
     };
   }
+
+  toggleHoliday = day => {
+    const myDay = day.toLowerCase() + "Holiday";
+    const updatedHolidayState = {};
+    [
+      "sundayHoliday",
+      "mondayHoliday",
+      "tuesdayHoliday",
+      "wednesdayHoliday",
+      "thursdayHoliday",
+      "fridayHoliday",
+      "saturdayHoliday"
+    ].forEach(newDay => {
+      console.log(myDay);
+      if (newDay === myDay) {
+        updatedHolidayState[myDay] = !this.state[myDay];
+      }
+    });
+    console.log(updatedHolidayState);
+    this.setState(updatedHolidayState);
+  };
 
   // static getDerivedStateFromProps = nextProps => ({
   //   about_us_tagline: nextProps.tagline,
@@ -70,6 +123,53 @@ class SubBusinessAbout extends Component {
 
   getState = () => this.state;
 
+  handleWorkingHourChange = time => {
+    console.log("selectedTime: ", time);
+  };
+
+  renderWorkingHours = () => {
+    return Days.map(day => (
+      <FormGroup>
+        <Card>
+          <CardBody
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "space-around"
+            }}
+          >
+            <strong>{day.day}</strong>
+            <Label check>
+              <Input
+                type="checkbox"
+                checked={this.state[day.day.toLowerCase() + "Holiday"]}
+                onClick={this.toggleHoliday.bind(this, day.day)}
+              />
+              Holiday
+            </Label>
+            <Label>Opens at: </Label>
+            <TimeInput
+              disabled={
+                this.state[day.day.toLowerCase() + "Holiday"] ? true : false
+              }
+              mode="12h"
+              value={day.start}
+              onChange={time => this.handleWorkingHourChange(time)}
+            />
+            <Label>Closes at: </Label>
+            <TimeInput
+              disabled={
+                this.state[day.day.toLowerCase() + "Holiday"] ? true : false
+              }
+              mode="12h"
+              value={day.end}
+              onChange={time => this.handleWorkingHourChange(time)}
+            />
+          </CardBody>
+        </Card>
+      </FormGroup>
+    ));
+  };
   render() {
     const companyTypes = this.props.company_types;
 
@@ -166,6 +266,8 @@ class SubBusinessAbout extends Component {
                             <Input type="checkbox" /> Visible To Public
                           </Label>
                         </FormGroup> */}
+                  <Label>Woring Hour</Label>
+                  {this.renderWorkingHours()}
                 </Col>
               </Row>
             </CardBody>

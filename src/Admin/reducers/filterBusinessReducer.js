@@ -2,12 +2,14 @@ import {
   CLEAR_BUSINESS_NAME_SEARCH,
   BUSINESS_FILTER_ON_CHANGE,
   CLEAR_BUSINESS_FILTER,
-  FETCH_BUSINESS_FULFILLED
+  FETCH_BUSINESS_FULFILLED,
+  SET_SORT_BY
 } from "../actions/types";
 
 const INITIAL_STATE = {
   q: "",
-  industry: null,
+  sort_by: [],
+  industry: "",
   rows: 20,
   page: 1
 };
@@ -19,6 +21,9 @@ export default function(state = INITIAL_STATE, action) {
 
     case BUSINESS_FILTER_ON_CHANGE:
       return { ...state, ...action.payload };
+
+    case SET_SORT_BY:
+      return { ...state, sort_by: action.payload };
 
     case CLEAR_BUSINESS_FILTER:
       return {
