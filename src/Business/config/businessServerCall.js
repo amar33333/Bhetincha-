@@ -34,7 +34,9 @@ export const onBusinessPost = ({ data, access_token }) => {
     industry: data.industry.id,
     categories: category_list,
     sub_categories: sub_category_list,
-    paymentMethod: payment_methods_list
+    paymentMethod: payment_methods_list,
+    workingHour: data.workingHour,
+    alwaysOpen: data.alwaysOpen
   };
 
   // const server_format_data = {

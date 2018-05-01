@@ -68,7 +68,8 @@ class BusinessAdminDetail extends Component {
       ...this.subBusinessBranchWrapperRef.getState(),
       ...this.subBusinessCoverImageRef.getState(),
       ...this.subBusinessLogoRef.getState(),
-      ...this.subBusinessPrimaryAddressRef.getState()
+      ...this.subBusinessPrimaryAddressRef.getState(),
+      ...this.subBusinessWorkingHourRef.getState()
     };
 
     this.props.onBusinessCreate({
@@ -195,6 +196,7 @@ class BusinessAdminDetail extends Component {
                 />
                 <SubBusinessWorkingHour
                   collapsed={this.state.businessWorkingHourCollapse}
+                  ref={ref => (this.subBusinessWorkingHourRef = ref)}
                   toggleCollapse={this.toggleCollapse.bind(
                     this,
                     "businessWorkingHourCollapse"

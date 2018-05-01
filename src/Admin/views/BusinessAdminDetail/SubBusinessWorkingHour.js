@@ -18,56 +18,64 @@ class subBusinessWorkingHour extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      alwaysOpen: false,
       workingHour: [
         {
           day: "Sunday",
-          start: moment().format("hh:mm a"),
-          end: moment().format("hh:mm a"),
+          start: moment.utc().format(),
+          end: moment.utc().format(),
           holiday: false
         },
         {
           day: "Monday",
-          start: moment().format("hh:mm a"),
-          end: moment().format("hh:mm a"),
+          start: moment.utc().format(),
+          end: moment.utc().format(),
           holiday: false
         },
         {
           day: "Tuesday",
-          start: moment().format("hh:mm a"),
-          end: moment().format("hh:mm a"),
+          start: moment.utc().format(),
+          end: moment.utc().format(),
           holiday: false
         },
         {
           day: "Wednesday",
-          start: moment().format("hh:mm a"),
-          end: moment().format("hh:mm a"),
+          start: moment.utc().format(),
+          end: moment.utc().format(),
           holiday: false
         },
         {
           day: "Thursday",
-          start: moment().format("hh:mm a"),
-          end: moment().format("hh:mm a"),
+          start: moment.utc().format(),
+          end: moment.utc().format(),
           holiday: false
         },
         {
           day: "Friday",
-          start: moment().format("hh:mm a"),
-          end: moment().format("hh:mm a"),
+          start: moment.utc().format(),
+          end: moment.utc().format(),
           holiday: false
         },
         {
           day: "Saturday",
-          start: moment().format("hh:mm a"),
-          end: moment().format("hh:mm a"),
+          start: moment.utc().format("hh:mm a"),
+          end: moment.utc().format("hh:mm a"),
           holiday: true
         }
       ]
     };
   }
+  getState = () => this.state;
+
   toggleHoliday = day => {
     const newWorkingHour = this.state.workingHour.map(each => {
       if (each.day === day) {
-        return { ...each, holiday: !each.holiday };
+        return {
+          ...each,
+          holiday: !each.holiday,
+          start: moment.utc().format(),
+          end: moment.utc().format()
+        };
       } else {
         return each;
       }
@@ -77,10 +85,16 @@ class subBusinessWorkingHour extends Component {
     });
   };
 
+  toggleAlwaysOpen() {
+    this.setState({
+      alwaysOpen: !this.state.alwaysOpen
+    });
+  }
+
   handleStartHourChange = (time, day) => {
     const newWorkingHour = this.state.workingHour.map(each => {
       if (each.day === day) {
-        return { ...each, start: time };
+        return { ...each, start: moment.utc(time).format() };
       } else {
         return each;
       }
@@ -91,9 +105,10 @@ class subBusinessWorkingHour extends Component {
   };
 
   handleClosingHourChange = (time, day) => {
+    console.log("time:", time);
     const newWorkingHour = this.state.workingHour.map(each => {
       if (each.day === day) {
-        return { ...each, end: time };
+        return { ...each, end: moment.utc(time).format() };
       } else {
         return each;
       }
@@ -127,7 +142,7 @@ class subBusinessWorkingHour extends Component {
                 <Label>Opens at: </Label>
                 <Datetime
                   dateFormat={false}
-                  defaultValue={moment("2018-05-01 10:00 AM").format("hh:mm A")}
+                  defaultValue={moment.utc().format("hh:mm a")}
                   onChange={time => {
                     this.handleStartHourChange(time, day.day);
                   }}
@@ -141,7 +156,7 @@ class subBusinessWorkingHour extends Component {
                 <Label>Closes at: </Label>
                 <Datetime
                   dateFormat={false}
-                  defaultValue={moment("2018-05-01 04:00 PM").format("hh:mm A")}
+                  defaultValue={moment.utc().format("hh:mm a")}
                   onChange={time => this.handleClosingHourChange(time, day.day)}
                   viewMode={"time"}
                   utc={true}
@@ -197,7 +212,20 @@ class subBusinessWorkingHour extends Component {
             <CardBody>
               <Row>
                 <Col xs="12" md="12">
-                  {this.renderWorkingHours()}
+                  <Row>
+                    <Label
+                      check
+                      style={{ marginLeft: "30px", marginBottom: "20px" }}
+                    >
+                      <Input
+                        type="checkbox"
+                        checked={this.state.alwaysOpen}
+                        onClick={this.toggleAlwaysOpen.bind(this)}
+                      />
+                      Always Open
+                    </Label>
+                  </Row>
+                  {!this.state.alwaysOpen && this.renderWorkingHours()}
                 </Col>
               </Row>
             </CardBody>
