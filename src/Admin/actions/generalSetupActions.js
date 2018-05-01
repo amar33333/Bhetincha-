@@ -190,6 +190,46 @@ export const onAreaList = ({ access_token }) => dispatch => {
   dispatch({ type: FETCH_AREA_PENDING });
 };
 
+export const onAddressTreeListAllImmediate = ({
+  id,
+  access_token
+}) => dispatch => {
+  const { countryId, stateId, districtId, cityId } = id;
+
+  onCountryEachGet({ countryId, access_token })
+    .then(response =>
+      onStateEachGet({ stateId, access_token })
+        .then(response =>
+          onDistrictEachGet({ districtId, access_token })
+            .then(response =>
+              onCityEachGet({ cityId, access_token })
+                .then(response =>
+                  dispatch({
+                    type: FETCH_ADDRESS_TREE_FULFILLED,
+                    payload: response.data
+                  })
+                )
+                .catch(error =>
+                  dispatch({
+                    type: FETCH_ADDRESS_TREE_REJECTED,
+                    payload: error
+                  })
+                )
+            )
+            .catch(error =>
+              dispatch({ type: FETCH_ADDRESS_TREE_REJECTED, payload: error })
+            )
+        )
+        .catch(error =>
+          dispatch({ type: FETCH_ADDRESS_TREE_REJECTED, payload: error })
+        )
+    )
+    .catch(error =>
+      dispatch({ type: FETCH_ADDRESS_TREE_REJECTED, payload: error })
+    );
+  dispatch({ type: FETCH_ADDRESS_TREE_PENDING });
+};
+
 export const onAddressTreeList = ({
   id,
   access_token,

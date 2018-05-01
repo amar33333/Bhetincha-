@@ -22,6 +22,25 @@ class SubBusinessBranchWrapper extends Component {
       // collapsed: true
     };
   }
+
+  // static getDerivedStateFromProps = nextProps => {
+  //   console.log("nextpors: ", nextProps);
+  //   return nextProps.branchAddress && nextProps.edit
+  //     ? {
+  //         branchComponentList: nextProps.branchAddress.map((each, index) => (
+  //           <SubBusinessBranch
+  //             key={each.addressID}
+  //             serial_num={index}
+  //             id={each.addressID}
+  //             branch={each}
+  //             edit
+  //           />
+  //         )),
+
+  //         branchs: nextProps.branchAddress
+  //       }
+  //     : null;
+  // };
   // toggleCollapse = () => {
   //   this.setState({
   //     collapsed: !this.state.collapsed
@@ -56,6 +75,21 @@ class SubBusinessBranchWrapper extends Component {
   // }
 
   static getDerivedStateFromProps = (nextProps, prevState) => {
+    if (nextProps.branchAddress && nextProps.edit) {
+      return {
+        branchComponentList: nextProps.branchAddress.map((each, index) => (
+          <SubBusinessBranch
+            key={each.addressID}
+            serial_num={index}
+            id={each.addressID}
+            branch={each}
+            edit
+          />
+        )),
+
+        branchs: nextProps.branchAddress
+      };
+    }
     return {
       branchComponentList: prevState.branchComponentList.map(
         branchComponent => {
@@ -126,12 +160,12 @@ class SubBusinessBranchWrapper extends Component {
               branchs[index].branch_other_landline_number =
                 value.branch_other_landline_number;
               branchs[index].branch_post_box = value.branch_post_box;
-              branchs[index].branch_area = value.branch_area.id;
+              branchs[index].branch_area = value.branch_area;
 
-              branchs[index].branch_city = value.branch_city.id;
-              branchs[index].branch_country = value.branch_country.id;
-              branchs[index].branch_district = value.branch_district.id;
-              branchs[index].branch_state = value.branch_state.id;
+              branchs[index].branch_city = value.branch_city;
+              branchs[index].branch_country = value.branch_country;
+              branchs[index].branch_district = value.branch_district;
+              branchs[index].branch_state = value.branch_state;
               branchs[index].branch_toll_free = value.branch_toll_free;
 
               branchs[index].contactPerson = contacts.contactPerson;
@@ -150,11 +184,11 @@ class SubBusinessBranchWrapper extends Component {
                     ...this.state.branchs,
                     {
                       ...value,
-                      branch_area: value.branch_area.id,
-                      branch_city: value.branch_city.id,
-                      branch_country: value.branch_country.id,
-                      branch_state: value.branch_state.id,
-                      branch_district: value.branch_district.id,
+                      branch_area: value.branch_area,
+                      branch_city: value.branch_city,
+                      branch_country: value.branch_country,
+                      branch_state: value.branch_state,
+                      branch_district: value.branch_district,
                       key: id,
                       ...contacts
                     }
@@ -185,6 +219,7 @@ class SubBusinessBranchWrapper extends Component {
   };
 
   render() {
+    // console.log("render props branchs: ", this.props);
     // console.log("render state branchs: ", this.state);
     return (
       <div className="animated fadeIn">

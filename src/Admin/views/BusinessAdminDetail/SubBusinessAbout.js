@@ -42,8 +42,8 @@ class SubBusinessAbout extends Component {
           about_us: nextProps.about.aboutUs,
           established_year: "",
           company_type: {
-            id: nextProps.about.companyType,
-            name: nextProps.about.companyType
+            id: nextProps.about.companyType.id,
+            name: nextProps.about.companyType.name
           }
         }
       : null;
@@ -121,7 +121,6 @@ class SubBusinessAbout extends Component {
                   <FormGroup>
                     <Label for="About_Tagline">Tagline</Label>
                     <Input
-                      required
                       type="text"
                       value={this.state.about_us_tagline}
                       onKeyDown={this._handleKeyPress}
@@ -131,7 +130,6 @@ class SubBusinessAbout extends Component {
                   <FormGroup>
                     <Label for="about_us">About Us</Label>
                     <Input
-                      required
                       type="text"
                       value={this.state.about_us}
                       onKeyDown={this._handleKeyPress}
@@ -141,7 +139,6 @@ class SubBusinessAbout extends Component {
                   <FormGroup>
                     <Label for="year">Established Year</Label>
                     <Input
-                      required
                       type="text"
                       value={this.state.established_year}
                       onKeyDown={this._handleKeyPress}
@@ -151,7 +148,6 @@ class SubBusinessAbout extends Component {
                   <FormGroup>
                     <Label for="company_type">Company Type</Label>
                     <Select
-                      required
                       name="Company Type"
                       placeholder="Select Your Company Type"
                       noResultsText="No Data Found"

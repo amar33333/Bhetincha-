@@ -28,11 +28,13 @@ class SubBusinessDetail extends Component {
       // password: "",
       business_email: "",
       industry: "",
-      category: "",
+      category: [],
       sub_category: [],
       payment_method: []
       // collapsed: true
     };
+
+    this.subCategories = [];
 
     this.access_token = this.props.cookies
       ? this.props.cookies.token_data.access_token
@@ -45,12 +47,13 @@ class SubBusinessDetail extends Component {
         id: this.state.industry.id,
         access_token: this.access_token
       });
-    } else if (this.state.category) {
-      this.props.onCategoryEachList({
-        id: this.state.category.id,
-        access_token: this.access_token
-      });
     }
+    // else if (this.state.category) {
+    //   this.props.onCategoryEachList({
+    //     id: this.state.category.id,
+    //     access_token: this.access_token
+    //   });
+    // }
   }
 
   static getDerivedStateFromProps = nextProps =>
@@ -59,12 +62,12 @@ class SubBusinessDetail extends Component {
           business_name: nextProps.businessData.business_name,
           business_email: nextProps.businessData.business_email,
           payment_method: nextProps.businessData.payment_method.map(each => ({
-            id: each,
-            name: each
+            id: each.id,
+            name: each.name
           })),
           sub_category: nextProps.businessData.sub_categories.map(each => ({
-            id: each,
-            name: each
+            id: each.id,
+            name: each.name
           }))
         }
       : null;
@@ -75,13 +78,25 @@ class SubBusinessDetail extends Component {
   //   });
   // };
 
+  doesInclude = (array, obj) => {
+    let result = false;
+
+    array.find(each => {
+      if (each.id === obj.id) {
+        result = true;
+      }
+    });
+
+    return result;
+  };
+
   onChange = (key, event) => this.setState({ [key]: event.target.value });
 
   handleSelectChange = (key, value) => {
     console.log("vavas: ", key, value);
     this.setState({ [key]: value });
     if (key === "industry" && value) {
-      this.setState({ category: "", sub_category: [] });
+      this.setState({ category: [], sub_category: [] });
 
       this.props.onIndustryEachList({
         id: value.id,
@@ -89,13 +104,57 @@ class SubBusinessDetail extends Component {
       });
       this.props.onUnmountSubCategories();
     } else if (key === "category" && value) {
+      console.log("category state: ", this.state.category);
+      console.log("detaiL : ", key, value);
+
       this.setState({ sub_category: [] });
 
-      console.log("detaiL : ", key, value);
-      this.props.onCategoryEachList({
-        id: value.id,
-        access_token: this.access_token
-      });
+      let diff = {};
+      let ADDED = false;
+
+      // This is adding
+      // if (value.length > this.state.category) {
+      //   value.find(eachVal => {
+      //     diff = this.state.category
+      //       ? this.state.category.find(eachState => {
+      //           return eachVal.id === eachState.id;
+      //         })
+      //       : [];
+      //   });
+      // } else {
+      //   // This is removing
+      // }
+
+      if (value.length > this.state.category.length) {
+        for (let i = 0; i < value.length; i++) {
+          if (!this.doesInclude(this.state.category, value[i])) {
+            console.log("unique found");
+            diff = value[i];
+            ADDED = true;
+          }
+        }
+      } else {
+        for (let i = 0; i < this.state.category.length; i++) {
+          if (!this.doesInclude(value, this.state.category[i])) {
+            console.log("unique found: ");
+            diff = this.state.category[i];
+            ADDED = false;
+          }
+        }
+      }
+
+      console.log("diff: ", diff);
+      if (ADDED) {
+        console.log("ADDED: ", ADDED);
+        this.props.onCategoryEachList({
+          id: diff.id,
+          access_token: this.access_token
+        });
+      } else {
+        console.log("ADDED: ", ADDED);
+
+        if (diff) this.props.onRemoveCategoryData({ obj: diff });
+      }
     }
   };
 
@@ -109,7 +168,7 @@ class SubBusinessDetail extends Component {
       // password: "",
       business_email: "",
       industry: "",
-      category: "",
+      category: [],
       sub_category: [],
       payment_method: []
     });
@@ -118,7 +177,7 @@ class SubBusinessDetail extends Component {
   getState = () => this.state;
 
   render() {
-    console.log("businessdetail props: ", this.props);
+    // console.log("businessdetail props: ", this.props);
     // console.log("businessdetail states: ", this.state);
     const industries = this.props.industries;
 
@@ -126,9 +185,32 @@ class SubBusinessDetail extends Component {
       ? this.props.industryData.categories
       : [];
 
-    const subCategories = this.props.categoryData
-      ? this.props.categoryData.subcategories
-      : [];
+    let subCategories = [];
+
+    if (this.props.categoryData) {
+      this.props.categoryData.map(each => {
+        console.log("subca: ", each.subcategories);
+        subCategories = [...subCategories, ...each.subcategories];
+      });
+    }
+
+    // subCategories = !this.state.category.length
+    //   ? []
+    //   : this.props.categoryData
+    //     ? subCategories.concat(this.props.categoryData.subcategories)
+    //     : [];
+
+    // if (this.state.category.length) {
+    //   if (this.props.categoryData) {
+    //     // console.log("k ho: ", this.props.categoryData);
+    //     // console.log("inside loop subcate: ", this.subCategories);
+    //     this.subCategories = this.props.categoryData.subcategories;
+    //   }
+    // } else {
+    //   this.subCategories = [];
+    // }
+
+    console.log("subcate: ", subCategories);
 
     const paymentMethods = this.props.payment_methods;
 
@@ -136,7 +218,7 @@ class SubBusinessDetail extends Component {
     const valuePaymentMethod = payment_method;
 
     const { category } = this.state;
-    const valueCategory = category && category.id;
+    const valueCategory = category;
 
     const { industry } = this.state;
     const valueIndustry = industry && industry.id;
@@ -204,7 +286,6 @@ class SubBusinessDetail extends Component {
                   <FormGroup>
                     <Label for="bname">Business Tagline</Label>
                     <Input
-                      required
                       type="text"
                       value={this.state.business_tagline}
                       onChange={this.onChange.bind(this, "business_tagline")}
@@ -218,7 +299,6 @@ class SubBusinessDetail extends Component {
                   <FormGroup>
                     <Label for="group">Business Industry</Label>
                     <Select
-                      required
                       name="Industry"
                       placeholder="Select an Industry"
                       noResultsText="No Data Found"
@@ -236,13 +316,14 @@ class SubBusinessDetail extends Component {
                   <FormGroup>
                     <Label for="group">Business Category</Label>
                     <Select
-                      required
                       name="Industry"
-                      placeholder="Select a Category"
+                      placeholder="Select Category (Multiple if any)"
                       noResultsText="No Data Found"
                       value={valueCategory}
                       onChange={this.handleSelectChange.bind(this, "category")}
                       options={categories}
+                      multi
+                      closeOnSelect={false}
                       valueKey="id"
                       labelKey="name"
                     />
@@ -254,7 +335,6 @@ class SubBusinessDetail extends Component {
                   <FormGroup>
                     <Label for="group">Business Sub Category</Label>
                     <Select
-                      required
                       name="Industry"
                       placeholder="Select Sub Category (Multiple if any)"
                       noResultsText="No Data Found"
@@ -278,7 +358,6 @@ class SubBusinessDetail extends Component {
                   <FormGroup>
                     <Label for="business_email">Business_email</Label>
                     <Input
-                      required
                       type="email"
                       value={this.state.business_email}
                       onKeyDown={this._handleKeyPress}
@@ -292,7 +371,6 @@ class SubBusinessDetail extends Component {
                   <FormGroup>
                     <Label for="group">Payment Methods</Label>
                     <Select
-                      required
                       name="Payment Method"
                       multi
                       //removeSelected={false}

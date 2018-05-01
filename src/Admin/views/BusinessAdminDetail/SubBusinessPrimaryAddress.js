@@ -50,6 +50,44 @@ class SubBusinessPrimaryAddress extends Component {
       : null;
   }
 
+  static getDerivedStateFromProps = (nextProps, prevState) =>
+    nextProps.address && nextProps.edit
+      ? {
+          landline: nextProps.address.landlineNumber,
+          house_no: nextProps.address.house_no,
+          landmark: nextProps.address.landmark,
+          address_line_1: nextProps.address.addressLine1,
+          address_line_2: nextProps.address.addressLine2,
+          post_box: nextProps.address.po_box,
+          toll_free: nextProps.address.tollFreeNumber,
+          primary_country: {
+            id: nextProps.address.country.id,
+            name: nextProps.address.country.name
+          },
+          primary_state: {
+            id: nextProps.address.state.id,
+            name: nextProps.address.state.name
+          },
+          primary_district: {
+            id: nextProps.address.district.id,
+            name: nextProps.address.district.name
+          },
+          primary_city: {
+            id: nextProps.address.city.id,
+            name: nextProps.address.city.name
+          },
+          primary_area: {
+            id: nextProps.address.area.id,
+            name: nextProps.address.area.name
+          }
+        }
+      : null;
+
+  getContacts = () =>
+    this.props.address && this.props.edit
+      ? this.props.address.contactPerson
+      : null;
+
   // componentWillUpdate(nextProps, nextState) {
   //   console.log("this.props contact: ", this.propsData);
   //   if (this.props.onSubmit) this.props.onSubmit(nextState, this.propsData);
@@ -161,21 +199,29 @@ class SubBusinessPrimaryAddress extends Component {
 
   render() {
     //PRIMARY ADDRESS
+    // console.log("address props: ", this.props);
+    // console.log("address state: ", this.state);
 
     countries = this.props.countries;
+    // console.log("coutrnri: ", countries);
 
     try {
       states = this.props.countries
-        ? this.props.countries.find(
-            country =>
-              country.states && country.id === this.state.primary_country.id
-          ).states
+        ? this.props.countries.find(country => {
+            // console.log("cuontry states: ", country.id);
+            // console.log("cu state id: ", this.state.primary_country);
+
+            if (country.id === this.state.primary_country.id) {
+              // console.log("COUNTRY FOND");
+              return true;
+            }
+          }).states
         : [];
     } catch (error) {
       states = [];
     }
 
-    console.log("states found: ", states);
+    // console.log("states found: ", states);
 
     try {
       if (this.props.countries) {
@@ -193,7 +239,7 @@ class SubBusinessPrimaryAddress extends Component {
       districts = [];
     }
 
-    console.log("districts found: ", districts);
+    // console.log("districts found: ", districts);
 
     try {
       if (this.props.countries) {
@@ -218,7 +264,7 @@ class SubBusinessPrimaryAddress extends Component {
       cities = [];
     }
 
-    console.log("cities found: ", cities);
+    // console.log("cities found: ", cities);
 
     try {
       if (this.props.countries) {
@@ -247,7 +293,7 @@ class SubBusinessPrimaryAddress extends Component {
       areas = [];
     }
 
-    console.log("areas found: ", areas);
+    // console.log("areas found: ", areas);
 
     // try {
     //   if (this.props.countries) {
@@ -495,7 +541,6 @@ class SubBusinessPrimaryAddress extends Component {
                   <FormGroup>
                     <Label for="bname">Landline Number</Label>
                     <Input
-                      required
                       type="text"
                       value={this.state.landline}
                       onChange={this.onChange.bind(this, "landline")}
@@ -505,7 +550,6 @@ class SubBusinessPrimaryAddress extends Component {
                   <FormGroup>
                     <Label for="bname">OtherLandLineNumber</Label>
                     <Input
-                      required
                       type="text"
                       value={this.state.other_landline_number}
                       onChange={this.onChange.bind(
@@ -518,7 +562,6 @@ class SubBusinessPrimaryAddress extends Component {
                   <FormGroup>
                     <Label for="bname">House No.</Label>
                     <Input
-                      required
                       type="text"
                       value={this.state.house_no}
                       onChange={this.onChange.bind(this, "house_no")}
@@ -528,7 +571,6 @@ class SubBusinessPrimaryAddress extends Component {
                   <FormGroup>
                     <Label for="bname">Landmark</Label>
                     <Input
-                      required
                       type="text"
                       value={this.state.landmark}
                       onChange={this.onChange.bind(this, "landmark")}
@@ -538,7 +580,6 @@ class SubBusinessPrimaryAddress extends Component {
                   <FormGroup>
                     <Label for="bname">Address Line 1</Label>
                     <Input
-                      required
                       type="text"
                       value={this.state.address_line_1}
                       onChange={this.onChange.bind(this, "address_line_1")}
@@ -548,7 +589,6 @@ class SubBusinessPrimaryAddress extends Component {
                   <FormGroup>
                     <Label for="bname">Address Line 2</Label>
                     <Input
-                      required
                       type="text"
                       value={this.state.address_line_2}
                       onChange={this.onChange.bind(this, "address_line_2")}
@@ -558,7 +598,6 @@ class SubBusinessPrimaryAddress extends Component {
                   <FormGroup>
                     <Label for="bname">Post Box No.</Label>
                     <Input
-                      required
                       type="text"
                       value={this.state.post_box}
                       onChange={this.onChange.bind(this, "post_box")}
@@ -568,7 +607,6 @@ class SubBusinessPrimaryAddress extends Component {
                   <FormGroup>
                     <Label for="bname">Toll Free No.</Label>
                     <Input
-                      required
                       type="text"
                       value={this.state.toll_free}
                       onChange={this.onChange.bind(this, "toll_free")}
@@ -579,6 +617,8 @@ class SubBusinessPrimaryAddress extends Component {
               </Row>
               <SubBusinessContactWrapper
                 ref={ref => (this.subBusinessContactWrapperRef = ref)}
+                contactPerson={this.getContacts()}
+                edit
                 /* onSubmit={this.propsDataCallback} */
               />
             </CardBody>

@@ -98,7 +98,6 @@ class SubBusinessCoverImage extends Component {
               <Row>
                 <Col>
                   <FileBase64
-                    required
                     multiple={false}
                     onDone={this.getFiles.bind(this, "business_cover_image")}
                   />

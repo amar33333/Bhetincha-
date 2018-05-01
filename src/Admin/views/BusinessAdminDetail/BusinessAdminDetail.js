@@ -19,7 +19,8 @@ import {
   onUnmountDistrict,
   onPaymentMethodsList,
   onCompanyTypeList,
-  onAddressTreeList
+  onAddressTreeList,
+  onRemoveCategoryData
 } from "../../actions";
 
 import SubBusinessDetails from "./SubBusinessDetails";
@@ -72,12 +73,12 @@ class BusinessAdminDetail extends Component {
       data: this.propsData,
       access_token: this.access_token
     });
-    this.subBusinessAdminDetailRef.clearState();
-    this.subBusinessAboutRef.clearState();
-    this.subBusinessBranchWrapperRef.clearState();
-    this.subBusinessCoverImageRef.clearState();
-    this.subBusinessLogoRef.clearState();
-    this.subBusinessPrimaryAddressRef.clearState();
+    // this.subBusinessAdminDetailRef.clearState();
+    // this.subBusinessAboutRef.clearState();
+    // this.subBusinessBranchWrapperRef.clearState();
+    // this.subBusinessCoverImageRef.clearState();
+    // this.subBusinessLogoRef.clearState();
+    // this.subBusinessPrimaryAddressRef.clearState();
   };
 
   _handleKeyPress = event => {
@@ -234,6 +235,7 @@ export default connect(
 
     onPaymentMethodsList,
     onCompanyTypeList,
-    onAddressTreeList
+    onAddressTreeList,
+    onRemoveCategoryData
   }
 )(BusinessAdminDetail);

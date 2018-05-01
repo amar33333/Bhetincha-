@@ -70,7 +70,45 @@ class SubBusinessBranch extends Component {
   //   }
   // }
 
+  static getDerivedStateFromProps = (nextProps, prevState) =>
+    nextProps.branch && nextProps.edit
+      ? {
+          branch_landline: nextProps.branch.branch_landline,
+          branch_house_no: nextProps.branch.branch_house_no,
+          branch_landmark: nextProps.branch.branch_landmark,
+          branch_address_line_1: nextProps.branch.branch_address_line_1,
+          branch_address_line_2: nextProps.branch.branch_address_line_2,
+          branch_post_box: nextProps.branch.branch_post_box,
+          branch_toll_free: nextProps.branch.branch_toll_free,
+          branch_country: {
+            id: nextProps.branch.branch_country.id,
+            name: nextProps.branch.branch_country.name
+          },
+          branch_state: {
+            id: nextProps.branch.branch_state.id,
+            name: nextProps.branch.branch_state.name
+          },
+          branch_district: {
+            id: nextProps.branch.branch_district.id,
+            name: nextProps.branch.branch_district.name
+          },
+          branch_city: {
+            id: nextProps.branch.branch_city.id,
+            name: nextProps.branch.branch_city.name
+          },
+          branch_area: {
+            id: nextProps.branch.branch_area.id,
+            name: nextProps.branch.branch_area.name
+          }
+        }
+      : null;
+
   onChange = (key, event) => this.setState({ [key]: event.target.value });
+
+  getContacts = () =>
+    this.props.branch && this.props.edit
+      ? this.props.branch.contactPerson
+      : null;
 
   handleSelectChange = (key, value) => {
     this.setState({ [key]: value });
@@ -178,6 +216,7 @@ class SubBusinessBranch extends Component {
 
   render() {
     //branch ADDRESS
+    console.log("branch :", this.props);
 
     countries = this.props.countries;
 
@@ -192,7 +231,7 @@ class SubBusinessBranch extends Component {
       states = [];
     }
 
-    console.log("states found: ", states);
+    // console.log("states found: ", states);
 
     try {
       if (this.props.countries) {
@@ -210,7 +249,7 @@ class SubBusinessBranch extends Component {
       districts = [];
     }
 
-    console.log("districts found: ", districts);
+    // console.log("districts found: ", districts);
 
     try {
       if (this.props.countries) {
@@ -235,7 +274,7 @@ class SubBusinessBranch extends Component {
       cities = [];
     }
 
-    console.log("cities found: ", cities);
+    // console.log("cities found: ", cities);
 
     try {
       if (this.props.countries) {
@@ -260,7 +299,7 @@ class SubBusinessBranch extends Component {
     } catch (error) {
       areas = [];
     }
-    console.log("areas found: ", areas);
+    // console.log("areas found: ", areas);
 
     const { branch_country } = this.state;
     const valueBranchCountry = branch_country && branch_country.id;
@@ -505,6 +544,8 @@ class SubBusinessBranch extends Component {
             </Row>
             <SubBusinessContactWrapper
               ref={ref => (this.subBusinessBranchContactWrapperRef = ref)}
+              contactPerson={this.getContacts()}
+              edit
               /* onSubmit={value => {
               this.propsData = { ...this.propsData, ...value };
             }} */

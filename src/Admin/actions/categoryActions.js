@@ -14,6 +14,9 @@ import {
   FETCH_CATEGORY_EACH_FULFILLED,
   FETCH_CATEGORY_EACH_REJECTED,
   FETCH_CATEGORY_EACH_PENDING,
+  REMOVE_CATEGORY_DATA_PENDING,
+  REMOVE_CATEGORY_DATA_FULFILLED,
+  REMOVE_CATEGORY_DATA_REJECTED,
   UNMOUNT_CATEGORY
 } from "./types";
 
@@ -61,6 +64,13 @@ export const onCategoryEachList = ({ id, access_token }) => dispatch => {
     );
 
   dispatch({ type: FETCH_CATEGORY_EACH_PENDING });
+};
+
+export const onRemoveCategoryData = ({ obj }) => {
+  return {
+    type: REMOVE_CATEGORY_DATA_FULFILLED,
+    payload: obj
+  };
 };
 
 export const onUnmountCategory = () => ({

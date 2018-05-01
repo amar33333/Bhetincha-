@@ -87,7 +87,6 @@ class SubBusinessLogo extends Component {
               {this.displayImage()}
 
               <FileBase64
-                required
                 multiple={false}
                 onDone={this.getFiles.bind(this, "business_logo")}
               />
