@@ -9,15 +9,17 @@ import { ajax } from "rxjs/observable/dom/ajax";
 import querystring from "querystring";
 
 export const onBusinessPost = ({ data, access_token }) => {
-  const category_list = data.categories.map(category => category.id);
+  const category_list = data.categories
+    ? data.categories.map(category => category.id)
+    : [];
 
-  const sub_category_list = data.sub_categories.map(
-    sub_category => sub_category.id
-  );
+  const sub_category_list = data.sub_categories
+    ? data.sub_categories.map(sub_category => sub_category.id)
+    : [];
 
-  const payment_methods_list = data.paymentMethod.map(
-    payment_method => payment_method.id
-  );
+  const payment_methods_list = data.paymentMethod
+    ? data.paymentMethod.map(payment_method => payment_method.id)
+    : [];
 
   console.log("sub_category_list: ", sub_category_list);
   console.log("payment_methods_list: ", payment_methods_list);
@@ -31,7 +33,7 @@ export const onBusinessPost = ({ data, access_token }) => {
     branchs: data.branchs,
     logo: data.logo.base64,
     cover_photo: data.cover_photo.base64,
-    industry: data.industry.id,
+    industry: data.industry ? data.industry.id : undefined,
     categories: category_list,
     sub_categories: sub_category_list,
     paymentMethod: payment_methods_list

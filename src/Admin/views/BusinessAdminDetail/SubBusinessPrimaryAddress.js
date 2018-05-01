@@ -195,17 +195,25 @@ class SubBusinessPrimaryAddress extends Component {
     this.subBusinessContactWrapperRef.clearState();
   };
 
-  getState = () => ({
-    address: {
-      ...this.state,
-      area: this.state.area.id,
-      city: this.state.city.id,
-      district: this.state.district.id,
-      state: this.state.state.id,
-      country: this.state.country.id,
-      ...this.subBusinessContactWrapperRef.getState()
+  getState = () => {
+    let reformed = {};
+    for (var property in this.state) {
+      reformed =
+        this.state[property] !== "" &&
+        this.state[property] !== null &&
+        this.state[property] !== undefined
+          ? { ...reformed, [property]: this.state[property] }
+          : reformed;
     }
-  });
+
+    console.log("primary address reformed: ", reformed);
+    return {
+      address: {
+        ...reformed,
+        ...this.subBusinessContactWrapperRef.getState()
+      }
+    };
+  };
 
   render() {
     //PRIMARY ADDRESS

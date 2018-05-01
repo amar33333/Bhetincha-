@@ -174,6 +174,23 @@ class SubBusinessDetail extends Component {
     });
   };
 
+  // getState = () => {
+  //   let reformed = {};
+  //   for (var property in this.state) {
+  //     reformed =
+  //       this.state[property] !== "" && this.state[property] !== null
+  //         ? { ...reformed, [property]: this.state[property] }
+  //         : reformed;
+  //   }
+
+  //   console.log("buseinss detail reformed: ", reformed);
+  //   return {
+  //     address: {
+  //       ...reformed
+  //     }
+  //   };
+  // };
+
   getState = () => this.state;
 
   render() {
@@ -361,6 +378,7 @@ class SubBusinessDetail extends Component {
                   <FormGroup>
                     <Label for="business_email">Business_email</Label>
                     <Input
+                      required
                       type="email"
                       value={this.state.business_email}
                       onKeyDown={this._handleKeyPress}

@@ -53,8 +53,28 @@ class SubBusinessContactWrapper extends Component {
     if (this.subBusinessContactRef) this.subBusinessContactRef.clearState();
   };
 
-  getState = () => ({ contactPerson: this.state.contactPerson });
+  // getState = () => ({ contactPerson: this.state.contactPerson });
 
+  getState = () => {
+    const contactPerson = this.state.contactPerson.map(eachItem => {
+      let reformed = {};
+      for (var property in eachItem) {
+        reformed =
+          eachItem[property] !== "" &&
+          eachItem[property] !== null &&
+          eachItem[property] !== undefined
+            ? { ...reformed, [property]: eachItem[property] }
+            : reformed;
+      }
+      console.log("contact reformed: ", reformed);
+      return reformed;
+    });
+    console.log("contact reformed array: ", contactPerson);
+
+    return {
+      contactPerson
+    };
+  };
   onContactAdd = () => {
     this.setState({
       contactComponentList: [
@@ -113,7 +133,7 @@ class SubBusinessContactWrapper extends Component {
                   {
                     /* console.log("else monitor state: ", this.state.contactPerson); */
                   }
-                  this.onContactAdd();
+                  //this.onContactAdd();
                 }
               );
             }
