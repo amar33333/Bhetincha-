@@ -42,7 +42,6 @@ class SubBusinessPrimaryAddress extends Component {
       addressLine2: "",
       po_box: "",
       tollFreeNumber: ""
-      // collapsed: true
     };
 
     this.propsData = {};
@@ -89,25 +88,6 @@ class SubBusinessPrimaryAddress extends Component {
     this.props.address && this.props.edit
       ? this.props.address.contactPerson
       : null;
-
-  // componentWillUpdate(nextProps, nextState) {
-  //   console.log("this.props contact: ", this.propsData);
-  //   if (this.props.onSubmit) this.props.onSubmit(nextState, this.propsData);
-  // }
-
-  // propsDataCallback = value => {
-  //   console.log("contact ;", value.contacts);
-  //   this.setState({ contacts: value.contacts });
-
-  //   this.propsData = { ...this.propsData, ...value };
-  //   console.log("props contact ; ", this.propsData);
-  // };
-
-  // toggleCollapse = () => {
-  //   this.setState({
-  //     collapsed: !this.state.collapsed
-  //   });
-  // };
   onChange = (key, event) => this.setState({ [key]: event.target.value });
 
   handleSelectChange = (key, value) => {
@@ -128,9 +108,6 @@ class SubBusinessPrimaryAddress extends Component {
       districts = [];
       cities = [];
       areas = [];
-      // this.props.onUnmountDistrict();
-      // this.props.onUnmountCity();
-      // this.props.onUnmountArea();
     } else if (key === "state" && value) {
       this.setState({
         district: "",
@@ -145,8 +122,6 @@ class SubBusinessPrimaryAddress extends Component {
       });
       cities = [];
       areas = [];
-      // this.props.onUnmountCity();
-      // this.props.onUnmountArea();
     } else if (key === "district" && value) {
       this.setState({
         city: "",
@@ -159,7 +134,6 @@ class SubBusinessPrimaryAddress extends Component {
         ADDRESS_KEY: key
       });
       areas = [];
-      // this.props.onUnmountArea();
     } else if (key === "city" && value) {
       this.setState({
         area: ""
@@ -170,7 +144,6 @@ class SubBusinessPrimaryAddress extends Component {
         access_token: this.access_token,
         ADDRESS_KEY: key
       });
-      // this.props.onUnmountSubCategories();
     }
   };
 
@@ -216,21 +189,12 @@ class SubBusinessPrimaryAddress extends Component {
   };
 
   render() {
-    //PRIMARY ADDRESS
-    // console.log("address props: ", this.props);
-    // console.log("address state: ", this.state);
-
     countries = this.props.countries;
-    // console.log("coutrnri: ", countries);
 
     try {
       states = this.props.countries
         ? this.props.countries.find(country => {
-            // console.log("cuontry states: ", country.id);
-            // console.log("cu state id: ", this.state.country);
-
             if (country.id === this.state.country.id) {
-              // console.log("COUNTRY FOND");
               return true;
             }
           }).states
@@ -238,8 +202,6 @@ class SubBusinessPrimaryAddress extends Component {
     } catch (error) {
       states = [];
     }
-
-    // console.log("states found: ", states);
 
     try {
       if (this.props.countries) {
@@ -256,8 +218,6 @@ class SubBusinessPrimaryAddress extends Component {
     } catch (error) {
       districts = [];
     }
-
-    // console.log("districts found: ", districts);
 
     try {
       if (this.props.countries) {
@@ -282,8 +242,6 @@ class SubBusinessPrimaryAddress extends Component {
       cities = [];
     }
 
-    // console.log("cities found: ", cities);
-
     try {
       if (this.props.countries) {
         this.props.countries.map(country => {
@@ -307,89 +265,6 @@ class SubBusinessPrimaryAddress extends Component {
     } catch (error) {
       areas = [];
     }
-
-    // console.log("areas found: ", areas);
-
-    // try {
-    //   if (this.props.countries) {
-    //     states = this.props.countries.find(country => {
-    //       if (country.states) {
-    //         districts = country.states.find(state => {
-    //           if (state.districts) {
-    //             cities = state.districts.find(district => {
-    //               if (district.cities) {
-    //                 areas = district.cities.find(city => {
-    //                   return (
-    //                     city.areas && city.id === this.state.city.id
-    //                   );
-    //                 }).areas;
-    //               }
-    //             }).cities;
-    //           }
-    //         }).districts;
-    //       }
-    //     }).states;
-    //   }
-    // } catch (error) {
-    //   states = [];
-    //   districts = [];
-    //   cities = [];
-    //   areas = [];
-    // }
-    // console.log("states found: ", states);
-    // console.log("districts found: ", districts);
-    // console.log("cities found: ", cities);
-    // console.log("areas found: ", areas);
-
-    // countries = this.props.countries
-    //   ? this.props.countries.map(country => ({
-    //       value: country.id,
-    //       label: country.name
-    //     }))
-    //   : null;
-
-    // states = this.props.countries
-    //   ? this.props.countries.map(
-    //       country =>
-    //         country.states && country.id === this.state.country.value
-    //           ? country.states.map(state => {
-    //               console.log("estate: ", state);
-    //               return {
-    //                 value: state.id,
-    //                 label: state.name
-    //               };
-    //             })
-    //           : null
-    //     )
-    //   : null;
-
-    // if (this.props.countries) {
-    //   this.props.countries.map(country => {
-    //     if (country.states && country.id === this.state.country.id) {
-    //       states = country.states;
-    //     } else states = [];
-    //   });
-    // }
-
-    // console.log("states: ", states);
-
-    // districts = this.props.stateData
-    //   ? this.props.stateData.districts.map(district => {
-    //       return { value: district.id, label: district.name };
-    //     })
-    //   : null;
-
-    // cities = this.props.districtData
-    //   ? this.props.districtData.cities.map(city => {
-    //       return { value: city.id, label: city.name };
-    //     })
-    //   : null;
-
-    // areas = this.props.cityData
-    //   ? this.props.cityData.areas.map(area => {
-    //       return { value: area.id, label: area.name };
-    //     })
-    //   : null;
 
     const { country } = this.state;
     const valuePrimaryCountry = country && country.id;
@@ -447,7 +322,7 @@ class SubBusinessPrimaryAddress extends Component {
           <Collapse isOpen={!this.props.collapsed}>
             <CardBody>
               <Row>
-                <Col xs="12" md="12">
+                <Col xs="12" md="4">
                   <FormGroup>
                     <Label for="group">Country</Label>
                     <Select
@@ -462,9 +337,7 @@ class SubBusinessPrimaryAddress extends Component {
                     />
                   </FormGroup>
                 </Col>
-              </Row>
-              <Row>
-                <Col xs="12" md="12">
+                <Col xs="12" md="4">
                   <FormGroup>
                     <Label for="group">State</Label>
                     <Select
@@ -479,9 +352,7 @@ class SubBusinessPrimaryAddress extends Component {
                     />
                   </FormGroup>
                 </Col>
-              </Row>
-              <Row>
-                <Col xs="12" md="12">
+                <Col xs="12" md="4">
                   <FormGroup>
                     <Label for="group">District</Label>
                     <Select
@@ -498,7 +369,7 @@ class SubBusinessPrimaryAddress extends Component {
                 </Col>
               </Row>
               <Row>
-                <Col xs="12" md="12">
+                <Col xs="12" md="4">
                   <FormGroup>
                     <Label for="group">City</Label>
                     <Select
@@ -513,9 +384,7 @@ class SubBusinessPrimaryAddress extends Component {
                     />
                   </FormGroup>
                 </Col>
-              </Row>
-              <Row>
-                <Col xs="12" md="12">
+                <Col xs="12" md="4">
                   <FormGroup>
                     <Label for="group">Area</Label>
                     <Select
@@ -530,9 +399,20 @@ class SubBusinessPrimaryAddress extends Component {
                     />
                   </FormGroup>
                 </Col>
+                <Col xs="12" md="4">
+                  <FormGroup>
+                    <Label for="bname">Landmark</Label>
+                    <Input
+                      type="text"
+                      value={this.state.landmark}
+                      onChange={this.onChange.bind(this, "landmark")}
+                      onKeyDown={this._handleKeyPress}
+                    />
+                  </FormGroup>
+                </Col>
               </Row>
               <Row>
-                <Col xs="12" md="12">
+                <Col xs="12" md="4">
                   <FormGroup>
                     <Label for="Email">Email</Label>
                     <Input
@@ -543,9 +423,7 @@ class SubBusinessPrimaryAddress extends Component {
                     />
                   </FormGroup>
                 </Col>
-              </Row>
-              <Row>
-                <Col xs="6" md="6">
+                <Col xs="12" md="4">
                   <FormGroup>
                     <Label for="bname">Landline Number</Label>
                     <Input
@@ -555,6 +433,8 @@ class SubBusinessPrimaryAddress extends Component {
                       onKeyDown={this._handleKeyPress}
                     />
                   </FormGroup>
+                </Col>
+                <Col xs="12" md="4">
                   <FormGroup>
                     <Label for="bname">Other LandLine Number</Label>
                     <Input
@@ -568,24 +448,10 @@ class SubBusinessPrimaryAddress extends Component {
                       onKeyDown={this._handleKeyPress}
                     />
                   </FormGroup>
-                  <FormGroup>
-                    <Label for="bname">House No.</Label>
-                    <Input
-                      type="text"
-                      value={this.state.house_no}
-                      onChange={this.onChange.bind(this, "house_no")}
-                      onKeyDown={this._handleKeyPress}
-                    />
-                  </FormGroup>
-                  <FormGroup>
-                    <Label for="bname">Landmark</Label>
-                    <Input
-                      type="text"
-                      value={this.state.landmark}
-                      onChange={this.onChange.bind(this, "landmark")}
-                      onKeyDown={this._handleKeyPress}
-                    />
-                  </FormGroup>
+                </Col>
+              </Row>
+              <Row>
+                <Col xs="12" md="6">
                   <FormGroup>
                     <Label for="bname">Address Line 1</Label>
                     <Input
@@ -595,6 +461,8 @@ class SubBusinessPrimaryAddress extends Component {
                       onKeyDown={this._handleKeyPress}
                     />
                   </FormGroup>
+                </Col>
+                <Col xs="12" md="6">
                   <FormGroup>
                     <Label for="bname">Address Line 2</Label>
                     <Input
@@ -604,6 +472,21 @@ class SubBusinessPrimaryAddress extends Component {
                       onKeyDown={this._handleKeyPress}
                     />
                   </FormGroup>
+                </Col>
+              </Row>
+              <Row>
+                <Col xs="12" md="4">
+                  <FormGroup>
+                    <Label for="bname">House No.</Label>
+                    <Input
+                      type="text"
+                      value={this.state.house_no}
+                      onChange={this.onChange.bind(this, "house_no")}
+                      onKeyDown={this._handleKeyPress}
+                    />
+                  </FormGroup>
+                </Col>
+                <Col xs="12" md="4">
                   <FormGroup>
                     <Label for="bname">Post Box No.</Label>
                     <Input
@@ -613,6 +496,8 @@ class SubBusinessPrimaryAddress extends Component {
                       onKeyDown={this._handleKeyPress}
                     />
                   </FormGroup>
+                </Col>
+                <Col xs="12" md="4">
                   <FormGroup>
                     <Label for="bname">Toll Free No.</Label>
                     <Input
@@ -628,7 +513,6 @@ class SubBusinessPrimaryAddress extends Component {
                 ref={ref => (this.subBusinessContactWrapperRef = ref)}
                 contactPerson={this.getContacts()}
                 edit
-                /* onSubmit={this.propsDataCallback} */
               />
             </CardBody>
           </Collapse>

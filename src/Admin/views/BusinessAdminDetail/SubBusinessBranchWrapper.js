@@ -134,7 +134,6 @@ class SubBusinessBranchWrapper extends Component {
   };
 
   onBranchAddressAdd = () => {
-    // console.log("onasd branch added");
     this.setState({
       branchComponentList: [
         ...this.state.branchComponentList,

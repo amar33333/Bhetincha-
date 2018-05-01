@@ -43,7 +43,6 @@ class SubBusinessBranch extends Component {
       addressLine2: "",
       po_box: "",
       tollFreeNumber: ""
-      // collapsed: true
     };
 
     this.propsData = {};
@@ -52,24 +51,6 @@ class SubBusinessBranch extends Component {
       ? this.props.cookies.token_data.access_token
       : null;
   }
-  // toggleCollapse = () => {
-  //   this.setState({
-  //     collapsed: !this.state.collapsed
-  //   });
-  // };
-  // componentWillMount() {
-  //   this.props.onCountryList({ access_token: this.access_token });
-  // }
-
-  // componentWillUpdate(nextProps, nextState) {
-  //   if (nextState.add && this.props.onValueChange) {
-  //     console.log("willUpdate called: ", nextState);
-  //     this.props.onValueChange(nextState, this.props.id, this.propsData);
-  //     this.setState({ add: false });
-  //   } else {
-  //     // console.log(" NOO willUpdate: ", nextState);
-  //   }
-  // }
 
   static getDerivedStateFromProps = (nextProps, prevState) =>
     nextProps.branch && nextProps.edit
@@ -130,9 +111,6 @@ class SubBusinessBranch extends Component {
       districts = [];
       cities = [];
       areas = [];
-      // this.props.onUnmountDistrict();
-      // this.props.onUnmountCity();
-      // this.props.onUnmountArea();
     } else if (key === "state" && value) {
       this.setState({
         district: "",
@@ -147,8 +125,6 @@ class SubBusinessBranch extends Component {
       });
       cities = [];
       areas = [];
-      // this.props.onUnmountCity();
-      // this.props.onUnmountArea();
     } else if (key === "district" && value) {
       this.setState({
         city: "",
@@ -161,7 +137,6 @@ class SubBusinessBranch extends Component {
         ADDRESS_KEY: key
       });
       areas = [];
-      // this.props.onUnmountArea();
     } else if (key === "city" && value) {
       this.setState({
         area: ""
@@ -172,7 +147,6 @@ class SubBusinessBranch extends Component {
         access_token: this.access_token,
         ADDRESS_KEY: key
       });
-      // this.props.onUnmountSubCategories();
     }
   };
 
@@ -202,23 +176,15 @@ class SubBusinessBranch extends Component {
     this.subBusinessBranchContactWrapperRef.clearState();
   };
 
-  // not used... instead callback function is used
-  // getState = () => ({
-  //   ...this.state,
-  //   ...this.subBusinessBranchContactWrapperRef.getState()
-  // });
-
   _handleKeyPress = event => {
     if (event.keyCode === ON_KEY_PRESS_ENTER) {
       console.log("enter entered");
-      // form.elements[index + 1].focus();
       event.preventDefault();
       this.setState({ key_press: ON_KEY_PRESS_ENTER });
     }
   };
 
   render() {
-    //branch ADDRESS
     console.log("branch state:", this.state);
 
     countries = this.props.countries;
@@ -232,8 +198,6 @@ class SubBusinessBranch extends Component {
     } catch (error) {
       states = [];
     }
-
-    // console.log("states found: ", states);
 
     try {
       if (this.props.countries) {
@@ -250,8 +214,6 @@ class SubBusinessBranch extends Component {
     } catch (error) {
       districts = [];
     }
-
-    // console.log("districts found: ", districts);
 
     try {
       if (this.props.countries) {
@@ -276,8 +238,6 @@ class SubBusinessBranch extends Component {
       cities = [];
     }
 
-    // console.log("cities found: ", cities);
-
     try {
       if (this.props.countries) {
         this.props.countries.map(country => {
@@ -301,7 +261,6 @@ class SubBusinessBranch extends Component {
     } catch (error) {
       areas = [];
     }
-    // console.log("areas found: ", areas);
 
     const { country } = this.state;
     const valueBranchCountry = country && country.id;
@@ -332,13 +291,7 @@ class SubBusinessBranch extends Component {
             <strong>
               Business Branch - {this.props.serial_num + 1} Address
             </strong>
-            <Button
-              color="danger"
-              onClick={this.onDelete}
-              style={{ float: "right" }}
-            >
-              DELETE
-            </Button>
+
             <Button
               color="primary"
               onClick={this.props.toggleCollapse}
@@ -367,7 +320,7 @@ class SubBusinessBranch extends Component {
         <Collapse isOpen={!this.props.collapsed}>
           <CardBody>
             <Row>
-              <Col xs="12" md="12">
+              <Col xs="12" md="4">
                 <FormGroup>
                   <Label for="group">Country</Label>
                   <Select
@@ -382,9 +335,7 @@ class SubBusinessBranch extends Component {
                   />
                 </FormGroup>
               </Col>
-            </Row>
-            <Row>
-              <Col xs="12" md="12">
+              <Col xs="12" md="4">
                 <FormGroup>
                   <Label for="group">State</Label>
                   <Select
@@ -399,9 +350,7 @@ class SubBusinessBranch extends Component {
                   />
                 </FormGroup>
               </Col>
-            </Row>
-            <Row>
-              <Col xs="12" md="12">
+              <Col xs="12" md="4">
                 <FormGroup>
                   <Label for="group">District</Label>
                   <Select
@@ -418,7 +367,7 @@ class SubBusinessBranch extends Component {
               </Col>
             </Row>
             <Row>
-              <Col xs="12" md="12">
+              <Col xs="12" md="4">
                 <FormGroup>
                   <Label for="group">City</Label>
                   <Select
@@ -433,9 +382,7 @@ class SubBusinessBranch extends Component {
                   />
                 </FormGroup>
               </Col>
-            </Row>
-            <Row>
-              <Col xs="12" md="12">
+              <Col xs="12" md="4">
                 <FormGroup>
                   <Label for="group">Area</Label>
                   <Select
@@ -450,22 +397,30 @@ class SubBusinessBranch extends Component {
                   />
                 </FormGroup>
               </Col>
+              <Col xs="12" md="4">
+                <FormGroup>
+                  <Label for="bname">Branch Landmark</Label>
+                  <Input
+                    type="text"
+                    value={this.state.landmark}
+                    onChange={this.onChange.bind(this, "landmark")}
+                  />
+                </FormGroup>
+              </Col>
             </Row>
             <Row>
-              <Row>
-                <Col xs="12" md="12">
-                  <FormGroup>
-                    <Label for="Email">Email</Label>
-                    <Input
-                      type="email"
-                      value={this.state.email}
-                      onKeyDown={this._handleKeyPress}
-                      onChange={this.onChange.bind(this, "email")}
-                    />
-                  </FormGroup>
-                </Col>
-              </Row>
-              <Col xs="6" md="6">
+              <Col xs="12" md="4">
+                <FormGroup>
+                  <Label for="Email">Email</Label>
+                  <Input
+                    type="email"
+                    value={this.state.email}
+                    onKeyDown={this._handleKeyPress}
+                    onChange={this.onChange.bind(this, "email")}
+                  />
+                </FormGroup>
+              </Col>
+              <Col xs="12" md="4">
                 <FormGroup>
                   <Label for="bname">Branch Landline Number</Label>
                   <Input
@@ -474,6 +429,8 @@ class SubBusinessBranch extends Component {
                     onChange={this.onChange.bind(this, "landlineNumber")}
                   />
                 </FormGroup>
+              </Col>
+              <Col xs="12" md="4">
                 <FormGroup>
                   <Label for="bname">Other Branch LandLine Number</Label>
                   <Input
@@ -486,6 +443,10 @@ class SubBusinessBranch extends Component {
                     }}
                   />
                 </FormGroup>
+              </Col>
+            </Row>
+            <Row>
+              <Col xs="12" md="4">
                 <FormGroup>
                   <Label for="bname">House No.</Label>
                   <Input
@@ -494,30 +455,8 @@ class SubBusinessBranch extends Component {
                     onChange={this.onChange.bind(this, "house_no")}
                   />
                 </FormGroup>
-                <FormGroup>
-                  <Label for="bname">Branch Landmark</Label>
-                  <Input
-                    type="text"
-                    value={this.state.landmark}
-                    onChange={this.onChange.bind(this, "landmark")}
-                  />
-                </FormGroup>
-                <FormGroup>
-                  <Label for="bname">Address Line 1</Label>
-                  <Input
-                    type="text"
-                    value={this.state.addressLine1}
-                    onChange={this.onChange.bind(this, "addressLine1")}
-                  />
-                </FormGroup>
-                <FormGroup>
-                  <Label for="bname">Address Line 2</Label>
-                  <Input
-                    type="text"
-                    value={this.state.addressLine2}
-                    onChange={this.onChange.bind(this, "addressLine2")}
-                  />
-                </FormGroup>
+              </Col>
+              <Col xs="12" md="4">
                 <FormGroup>
                   <Label for="bname">Post Box No.</Label>
                   <Input
@@ -526,6 +465,8 @@ class SubBusinessBranch extends Component {
                     onChange={this.onChange.bind(this, "po_box")}
                   />
                 </FormGroup>
+              </Col>
+              <Col xs="12" md="4">
                 <FormGroup>
                   <Label for="bname">Toll Free No.</Label>
                   <Input
@@ -536,18 +477,38 @@ class SubBusinessBranch extends Component {
                 </FormGroup>
               </Col>
             </Row>
+            <Row>
+              <Col xs="6" md="6">
+                <FormGroup>
+                  <Label for="bname">Address Line 1</Label>
+                  <Input
+                    type="text"
+                    value={this.state.addressLine1}
+                    onChange={this.onChange.bind(this, "addressLine1")}
+                  />
+                </FormGroup>
+              </Col>
+              <Col xs="6" md="6">
+                <FormGroup>
+                  <Label for="bname">Address Line 2</Label>
+                  <Input
+                    type="text"
+                    value={this.state.addressLine2}
+                    onChange={this.onChange.bind(this, "addressLine2")}
+                  />
+                </FormGroup>
+              </Col>
+            </Row>
+
             <SubBusinessContactWrapper
               ref={ref => (this.subBusinessBranchContactWrapperRef = ref)}
               contactPerson={this.getContacts()}
               edit
-              /* onSubmit={value => {
-              this.propsData = { ...this.propsData, ...value };
-            }} */
             />
             <Row style={{ marginBottom: 15 }}>
               <Col xs="6" md="6">
                 <Button
-                  color="primary"
+                  color="success"
                   onClick={() =>
                     this.props.onAdd(
                       this.state,
@@ -560,7 +521,7 @@ class SubBusinessBranch extends Component {
                 </Button>
               </Col>
               <Col xs="6" md="6">
-                <Button color="primary" onClick={this.onDelete}>
+                <Button color="danger" onClick={this.onDelete}>
                   DELETE
                 </Button>
               </Col>

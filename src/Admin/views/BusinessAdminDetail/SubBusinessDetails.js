@@ -21,17 +21,11 @@ class SubBusinessDetail extends Component {
 
     this.state = {
       business_name: "",
-      // business_tagline: "",
-      // first_name: "",
-      // last_name: "",
-      // username: "",
-      // password: "",
       business_email: "",
       industry: "",
       categories: [],
       sub_categories: [],
       paymentMethod: []
-      // collapsed: true
     };
 
     this.subCategories = [];
@@ -48,12 +42,6 @@ class SubBusinessDetail extends Component {
         access_token: this.access_token
       });
     }
-    // else if (this.state.categories) {
-    //   this.props.onCategoriesEachList({
-    //     id: this.state.categories.id,
-    //     access_token: this.access_token
-    //   });
-    // }
   }
 
   static getDerivedStateFromProps = nextProps =>
@@ -71,12 +59,6 @@ class SubBusinessDetail extends Component {
           }))
         }
       : null;
-
-  // toggleCollapse = () => {
-  //   this.setState({
-  //     collapsed: !this.state.collapsed
-  //   });
-  // };
 
   doesInclude = (array, obj) => {
     let result = false;
@@ -111,19 +93,6 @@ class SubBusinessDetail extends Component {
 
       let diff = {};
       let ADDED = false;
-
-      // This is adding
-      // if (value.length > this.state.categories) {
-      //   value.find(eachVal => {
-      //     diff = this.state.categories
-      //       ? this.state.categories.find(eachState => {
-      //           return eachVal.id === eachState.id;
-      //         })
-      //       : [];
-      //   });
-      // } else {
-      //   // This is removing
-      // }
 
       if (value.length > this.state.categories.length) {
         for (let i = 0; i < value.length; i++) {
@@ -161,11 +130,6 @@ class SubBusinessDetail extends Component {
   clearState = () => {
     this.setState({
       business_name: "",
-      // business_tagline: "",
-      // first_name: "",
-      // last_name: "",
-      // username: "",
-      // password: "",
       business_email: "",
       industry: "",
       categories: [],
@@ -174,28 +138,9 @@ class SubBusinessDetail extends Component {
     });
   };
 
-  // getState = () => {
-  //   let reformed = {};
-  //   for (var property in this.state) {
-  //     reformed =
-  //       this.state[property] !== "" && this.state[property] !== null
-  //         ? { ...reformed, [property]: this.state[property] }
-  //         : reformed;
-  //   }
-
-  //   console.log("buseinss detail reformed: ", reformed);
-  //   return {
-  //     address: {
-  //       ...reformed
-  //     }
-  //   };
-  // };
-
   getState = () => this.state;
 
   render() {
-    // console.log("businessdetail props: ", this.props);
-    // console.log("businessdetail states: ", this.state);
     const industries = this.props.industries;
 
     const categories = this.props.industryData
@@ -211,22 +156,6 @@ class SubBusinessDetail extends Component {
       });
     }
 
-    // subCategories = !this.state.category.length
-    //   ? []
-    //   : this.props.categoryData
-    //     ? subCategories.concat(this.props.categoryData.subcategories)
-    //     : [];
-
-    // if (this.state.category.length) {
-    //   if (this.props.categoryData) {
-    //     // console.log("k ho: ", this.props.categoryData);
-    //     // console.log("inside loop subcate: ", this.subCategories);
-    //     this.subCategories = this.props.categoryData.subcategories;
-    //   }
-    // } else {
-    //   this.subCategories = [];
-    // }
-
     console.log("subcate: ", subCategories);
 
     const paymentMethods = this.props.payment_methods;
@@ -234,14 +163,8 @@ class SubBusinessDetail extends Component {
     const { paymentMethod } = this.state;
     const valuePaymentMethod = paymentMethod;
 
-    // const { category } = this.state;
-    // const valueCategory = category;
-
     const { industry } = this.state;
     const valueIndustry = industry && industry.id;
-
-    // const { sub_categories } = this.state;
-    // const valueSubCategory = sub_categories;
 
     return (
       <div className="animated fadeIn">
@@ -284,7 +207,7 @@ class SubBusinessDetail extends Component {
           <Collapse isOpen={!this.props.collapsed}>
             <CardBody>
               <Row>
-                <Col xs="12" md="12">
+                <Col xs="12" md="6">
                   <FormGroup>
                     <Label for="bname">Business Name</Label>
                     <Input
@@ -297,22 +220,22 @@ class SubBusinessDetail extends Component {
                     />
                   </FormGroup>
                 </Col>
-              </Row>
-              {/* <Row>
-                <Col xs="12" md="12">
+                <Col xs="12" md="6">
                   <FormGroup>
-                    <Label for="bname">Business Tagline</Label>
+                    <Label for="business_email">Business Email</Label>
                     <Input
-                      type="text"
-                      value={this.state.business_tagline}
-                      onChange={this.onChange.bind(this, "business_tagline")}
+                      required
+                      type="email"
+                      value={this.state.business_email}
                       onKeyDown={this._handleKeyPress}
+                      onChange={this.onChange.bind(this, "business_email")}
                     />
                   </FormGroup>
                 </Col>
-              </Row> */}
+              </Row>
+
               <Row>
-                <Col xs="12" md="12">
+                <Col xs="12" md="6">
                   <FormGroup>
                     <Label for="group">Business Industry</Label>
                     <Select
@@ -327,9 +250,7 @@ class SubBusinessDetail extends Component {
                     />
                   </FormGroup>
                 </Col>
-              </Row>
-              <Row>
-                <Col xs="12" md="12">
+                <Col xs="12" md="6">
                   <FormGroup>
                     <Label for="group">Business Category</Label>
                     <Select
@@ -351,7 +272,7 @@ class SubBusinessDetail extends Component {
                 </Col>
               </Row>
               <Row>
-                <Col xs="12" md="12">
+                <Col xs="12" md="6">
                   <FormGroup>
                     <Label for="group">Business Sub Category</Label>
                     <Select
@@ -372,29 +293,12 @@ class SubBusinessDetail extends Component {
                     />
                   </FormGroup>
                 </Col>
-              </Row>
-              <Row>
-                <Col xs="12" md="12">
-                  <FormGroup>
-                    <Label for="business_email">Business_email</Label>
-                    <Input
-                      required
-                      type="email"
-                      value={this.state.business_email}
-                      onKeyDown={this._handleKeyPress}
-                      onChange={this.onChange.bind(this, "business_email")}
-                    />
-                  </FormGroup>
-                </Col>
-              </Row>
-              <Row>
-                <Col xs="12" md="12">
+                <Col xs="12" md="6">
                   <FormGroup>
                     <Label for="group">Payment Methods</Label>
                     <Select
                       name="Payment Method"
                       multi
-                      //removeSelected={false}
                       closeOnSelect={false}
                       placeholder="Select Payment Methods (Multiple if any)"
                       noResultsText="No Data Found"
@@ -410,61 +314,6 @@ class SubBusinessDetail extends Component {
                   </FormGroup>
                 </Col>
               </Row>
-              {/* <Row>
-                <Col xs="6" md="6">
-                  <FormGroup>
-                    <Label for="fname">First Name</Label>
-                    <Input
-                      required
-                      type="text"
-                      value={this.state.first_name}
-                      onChange={this.onChange.bind(this, "first_name")}
-                      innerRef={input => {
-                        this.nameInput = input;
-                      }}
-                      onKeyDown={this._handleKeyPress}
-                    />
-                  </FormGroup>
-                </Col>
-                <Col xs="6" md="6">
-                  <FormGroup>
-                    <Label for="lname">Last Name</Label>
-                    <Input
-                      required
-                      type="text"
-                      value={this.state.last_name}
-                      onKeyDown={this._handleKeyPress}
-                      onChange={this.onChange.bind(this, "last_name")}
-                    />
-                  </FormGroup>
-                </Col>
-              </Row>
-              <Row>
-                <Col xs="12" md="6">
-                  <FormGroup>
-                    <Label for="username">Username</Label>
-                    <Input
-                      required
-                      type="text"
-                      value={this.state.username}
-                      onKeyDown={this._handleKeyPress}
-                      onChange={this.onChange.bind(this, "username")}
-                    />
-                  </FormGroup>
-                </Col>
-                <Col xs="12" md="6">
-                  <FormGroup>
-                    <Label for="pass">Password</Label>
-                    <Input
-                      required
-                      type="password"
-                      value={this.state.password}
-                      onKeyDown={this._handleKeyPress}
-                      onChange={this.onChange.bind(this, "password")}
-                    />
-                  </FormGroup>
-                </Col>
-              </Row> */}
             </CardBody>
           </Collapse>
         </Card>

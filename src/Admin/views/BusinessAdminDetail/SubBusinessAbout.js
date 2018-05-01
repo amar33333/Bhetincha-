@@ -29,13 +29,6 @@ class SubBusinessAbout extends Component {
     };
   }
 
-  // static getDerivedStateFromProps = nextProps => ({
-  //   tagline: nextProps.tagline,
-  //   aboutUs: nextProps.aboutUs,
-  //   establishedYear: nextProps.aboutUs,
-  //   companyType: { id: nextProps.companyType, name: nextProps.companyType }
-  // });
-
   static getDerivedStateFromProps = nextProps =>
     nextProps.about && nextProps.edit
       ? {
@@ -66,8 +59,24 @@ class SubBusinessAbout extends Component {
     });
   };
 
-  getState = () => this.state;
+  getState = () => {
+    let reformed = {};
+    for (var property in this.state) {
+      reformed =
+        this.state[property] !== "" &&
+        this.state[property] !== null &&
+        this.state[property] !== undefined
+          ? { ...reformed, [property]: this.state[property] }
+          : reformed;
+    }
 
+    console.log("about reformed: ", reformed);
+    return {
+      about: {
+        ...reformed
+      }
+    };
+  };
   render() {
     const companyTypes = this.props.company_types;
 
@@ -125,6 +134,10 @@ class SubBusinessAbout extends Component {
                       onChange={this.onChange.bind(this, "tagline")}
                     />
                   </FormGroup>
+                </Col>
+              </Row>
+              <Row>
+                <Col xs="12" md="12">
                   <FormGroup>
                     <Label for="aboutUs">About Us</Label>
                     <AboutUsEditor
@@ -132,14 +145,11 @@ class SubBusinessAbout extends Component {
                       value={this.state.aboutUs}
                       onChange={this.handleAboutChange}
                     />
-                    {/* <Input
-                      required
-                      type="text"
-                      value={this.state.aboutUs}
-                      onKeyDown={this._handleKeyPress}
-                      onChange={this.onChange.bind(this, "aboutUs")}
-                    /> */}
                   </FormGroup>
+                </Col>
+              </Row>
+              <Row>
+                <Col xs="6" md="6">
                   <FormGroup>
                     <Label for="year">Established Year</Label>
                     <Input
@@ -149,6 +159,8 @@ class SubBusinessAbout extends Component {
                       onChange={this.onChange.bind(this, "establishedYear")}
                     />
                   </FormGroup>
+                </Col>
+                <Col xs="6" md="6">
                   <FormGroup>
                     <Label for="company_type">Company Type</Label>
                     <Select

@@ -22,21 +22,15 @@ class SubBusinessContact extends Component {
       email: "",
       designation: "",
       mobileNumber: "",
-      department: ""
-      // collapsed: false
+      department: "",
+      collapsed: false
     };
   }
-  // toggleCollapse = () => {
-  //   this.setState({
-  //     collapsed: !this.state.collapsed
-  //   });
-  // };
-
-  componentDidMount() {
-    if (this.props.globalCollapsed) {
-      this.toggleCollapse();
-    }
-  }
+  toggleCollapse = () => {
+    this.setState({
+      collapsed: !this.state.collapsed
+    });
+  };
 
   static getDerivedStateFromProps = nextProps =>
     nextProps.contact && nextProps.edit
@@ -48,16 +42,6 @@ class SubBusinessContact extends Component {
           department: nextProps.contact.department
         }
       : null;
-
-  // componentWillUpdate(nextProps, nextState) {
-  //   if (nextState.add && this.props.onValueChange) {
-  //     console.log("willUpdate called: ", nextState);
-  //     this.props.onValueChange(nextState, this.props.id);
-  //     this.setState({ add: false });
-  //   } else {
-  //     // console.log(" NOO willUpdate: ", nextState);
-  //   }
-  // }
 
   onChange = (key, event) => this.setState({ [key]: event.target.value });
 
@@ -76,14 +60,11 @@ class SubBusinessContact extends Component {
     });
   };
 
-  //no need callback function is used
-  // getState = () => this.state;
-
   render() {
     return (
       <div className="animated fadeIn">
         <Card>
-          <CardHeader onClick={this.props.toggleCollapge}>
+          <CardHeader onClick={this.toggleCollapse}>
             <div
               style={{
                 display: "flex",
@@ -95,16 +76,10 @@ class SubBusinessContact extends Component {
               <strong>
                 Contact Person Detail - {this.props.serial_num + 1}{" "}
               </strong>
-              <Button
-                color="danger"
-                onClick={this.onDelete}
-                style={{ float: "right" }}
-              >
-                DELETE
-              </Button>
+
               <Button
                 color="primary"
-                onClick={this.props.toggleCollapse}
+                onClick={this.toggleCollapse}
                 style={{
                   marginBottom: "0rem",
                   backgroundColor: "rgb(230, 228, 241)",
@@ -127,10 +102,10 @@ class SubBusinessContact extends Component {
               </Button>
             </div>
           </CardHeader>
-          <Collapse isOpen={!this.props.collapsed}>
+          <Collapse isOpen={!this.state.collapsed}>
             <CardBody>
               <Row>
-                <Col xs="12" md="12">
+                <Col xs="12" md="6">
                   <FormGroup>
                     <Label for="Name">Full Name</Label>
                     <Input
@@ -141,6 +116,9 @@ class SubBusinessContact extends Component {
                       onChange={this.onChange.bind(this, "name")}
                     />
                   </FormGroup>
+                </Col>
+                <Col xs="12" md="6">
+                  {" "}
                   <FormGroup>
                     <Label for="Deparment">Department</Label>
                     <Input
@@ -150,6 +128,10 @@ class SubBusinessContact extends Component {
                       onChange={this.onChange.bind(this, "department")}
                     />
                   </FormGroup>
+                </Col>
+              </Row>
+              <Row>
+                <Col xs="12" md="4">
                   <FormGroup>
                     <Label for="Email">Email</Label>
                     <Input
@@ -159,6 +141,8 @@ class SubBusinessContact extends Component {
                       onChange={this.onChange.bind(this, "email")}
                     />
                   </FormGroup>
+                </Col>
+                <Col xs="12" md="4">
                   <FormGroup>
                     <Label for="Desgination">Designation</Label>
                     <Input
@@ -168,6 +152,8 @@ class SubBusinessContact extends Component {
                       onChange={this.onChange.bind(this, "designation")}
                     />
                   </FormGroup>
+                </Col>
+                <Col xs="12" md="4">
                   <FormGroup>
                     <Label for="Mobile Number">Mobile Number</Label>
                     <Input
@@ -182,14 +168,14 @@ class SubBusinessContact extends Component {
               <Row style={{ marginBottom: 15 }}>
                 <Col xs="6" md="6">
                   <Button
-                    color="primary"
+                    color="success"
                     onClick={() => this.props.onAdd(this.state, this.props.id)}
                   >
                     SAVE CONTACT
                   </Button>
                 </Col>
                 <Col xs="6" md="6">
-                  <Button color="primary" onClick={this.onDelete}>
+                  <Button color="danger" onClick={this.onDelete}>
                     DELETE
                   </Button>
                 </Col>

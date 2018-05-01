@@ -18,8 +18,8 @@ class SubBusinessContactWrapper extends Component {
 
     this.state = {
       contactComponentList: [],
-      contactPerson: []
-      // collapsed: true
+      contactPerson: [],
+      collapsed: false
     };
   }
 
@@ -40,11 +40,11 @@ class SubBusinessContactWrapper extends Component {
         }
       : null;
 
-  // toggleCollapse = () => {
-  //   this.setState({
-  //     collapsed: !this.state.collapsed
-  //   });
-  // };
+  toggleCollapse = () => {
+    this.setState({
+      collapsed: !this.state.collapsed
+    });
+  };
   clearState = () => {
     this.setState({
       contactComponentList: [],
@@ -203,7 +203,7 @@ class SubBusinessContactWrapper extends Component {
     return (
       <div className="animated fadeIn">
         <Card>
-          <CardHeader onClick={this.props.toggleCollapse}>
+          <CardHeader onClick={this.toggleCollapse}>
             <div
               style={{
                 display: "flex",
@@ -215,7 +215,7 @@ class SubBusinessContactWrapper extends Component {
               <strong>Contact Person Details</strong>
               <Button
                 color="primary"
-                onClick={this.props.toggleCollapse}
+                onClick={this.toggleCollapse}
                 style={{
                   marginBottom: "0rem",
                   backgroundColor: "rgb(230, 228, 241)",
@@ -230,7 +230,7 @@ class SubBusinessContactWrapper extends Component {
                   alignItems: "center"
                 }}
               >
-                {!this.props.collapsed ? (
+                {!this.state.collapsed ? (
                   <i className="fa fa-angle-up" />
                 ) : (
                   <i className="fa fa-angle-down" />
@@ -238,7 +238,7 @@ class SubBusinessContactWrapper extends Component {
               </Button>
             </div>
           </CardHeader>
-          <Collapse isOpen={!this.props.collapsed}>
+          <Collapse isOpen={!this.state.collapsed}>
             <CardBody>
               {this.state.contactComponentList}
               <Row style={{ marginTop: 15 }}>

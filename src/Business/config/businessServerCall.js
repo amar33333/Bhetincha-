@@ -27,6 +27,7 @@ export const onBusinessPost = ({ data, access_token }) => {
   console.log("final: data: ", data);
 
   const server_format_data = {
+    about: data.about,
     business_name: data.business_name,
     business_email: data.business_email,
     address: data.address,
