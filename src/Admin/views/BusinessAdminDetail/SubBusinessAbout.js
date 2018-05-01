@@ -1,5 +1,6 @@
 import React, { Component } from "react";
-import { TimeInput } from "material-ui-time-picker";
+import AboutUsEditor from "../../../Website/Views/Minisite/components/AboutUsEditor";
+import "react-datetime/css/react-datetime.css";
 
 import {
   Row,
@@ -14,8 +15,6 @@ import {
   Button
 } from "reactstrap";
 
-import Days from "../../config/daysItems";
-
 import Select from "react-select";
 
 class SubBusinessAbout extends Component {
@@ -23,90 +22,36 @@ class SubBusinessAbout extends Component {
     super(props);
 
     this.state = {
-      about_us_tagline: "",
-      about_us: "",
-      established_year: "",
-      company_type: [],
-
-      sundayHoliday: Days[0].holiday,
-      sundayStart: "",
-      sundayEnd: "",
-
-      mondayHoliday: Days[1].holiday,
-      mondayStart: "",
-      mondayEnd: "",
-
-      tuesdayHoliday: Days[2].holiday,
-      tuesdayStart: "",
-      tuesdayEnd: "",
-
-      wednesdayHoliday: Days[3].holiday,
-      wednesdayStart: "",
-      wednesdayEnd: "",
-
-      thursdayHoliday: Days[4].holiday,
-      thursdayStart: "",
-      thursdayEnd: "",
-
-      fridayHoliday: Days[5].holiday,
-      fridayStart: "",
-      fridayEnd: "",
-
-      saturdayHoliday: Days[6].holiday,
-      saturdayStart: "",
-      saturdayEnd: ""
-
-      // collapsed: true
+      tagline: "",
+      aboutUs: "",
+      establishedYear: "",
+      companyType: []
     };
   }
 
-  toggleHoliday = day => {
-    const myDay = day.toLowerCase() + "Holiday";
-    const updatedHolidayState = {};
-    [
-      "sundayHoliday",
-      "mondayHoliday",
-      "tuesdayHoliday",
-      "wednesdayHoliday",
-      "thursdayHoliday",
-      "fridayHoliday",
-      "saturdayHoliday"
-    ].forEach(newDay => {
-      console.log(myDay);
-      if (newDay === myDay) {
-        updatedHolidayState[myDay] = !this.state[myDay];
-      }
-    });
-    console.log(updatedHolidayState);
-    this.setState(updatedHolidayState);
-  };
-
   // static getDerivedStateFromProps = nextProps => ({
-  //   about_us_tagline: nextProps.tagline,
-  //   about_us: nextProps.aboutUs,
-  //   established_year: nextProps.aboutUs,
-  //   company_type: { id: nextProps.companyType, name: nextProps.companyType }
+  //   tagline: nextProps.tagline,
+  //   aboutUs: nextProps.aboutUs,
+  //   establishedYear: nextProps.aboutUs,
+  //   companyType: { id: nextProps.companyType, name: nextProps.companyType }
   // });
 
   static getDerivedStateFromProps = nextProps =>
     nextProps.about && nextProps.edit
       ? {
-          about_us_tagline: nextProps.about.tagline,
-          about_us: nextProps.about.aboutUs,
-          established_year: "",
-          company_type: {
-            id: nextProps.about.companyType.id,
-            name: nextProps.about.companyType.name
+          tagline: nextProps.about.tagline,
+          aboutUs: nextProps.about.aboutUs,
+          establishedYear: "",
+          companyType: {
+            id: nextProps.about.companyType,
+            name: nextProps.about.companyType
           }
         }
       : null;
 
-  // toggleCollapse = () => {
-  //   this.setState({
-  //     collapsed: !this.state.collapsed
-  //   });
-  // };
   onChange = (key, event) => this.setState({ [key]: event.target.value });
+
+  handleAboutChange = value => this.setState({ aboutUs: value });
 
   handleSelectChange = (key, value) => {
     this.setState({ [key]: value });
@@ -114,62 +59,15 @@ class SubBusinessAbout extends Component {
 
   clearState = () => {
     this.setState({
-      about_us_tagline: "",
-      about_us: "",
-      established_year: "",
-      company_type: ""
+      tagline: "",
+      aboutUs: "",
+      establishedYear: "",
+      companyType: ""
     });
   };
 
   getState = () => this.state;
 
-  handleWorkingHourChange = time => {
-    console.log("selectedTime: ", time);
-  };
-
-  renderWorkingHours = () => {
-    return Days.map(day => (
-      <FormGroup>
-        <Card>
-          <CardBody
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "space-around"
-            }}
-          >
-            <strong>{day.day}</strong>
-            <Label check>
-              <Input
-                type="checkbox"
-                checked={this.state[day.day.toLowerCase() + "Holiday"]}
-                onClick={this.toggleHoliday.bind(this, day.day)}
-              />
-              Holiday
-            </Label>
-            <Label>Opens at: </Label>
-            <TimeInput
-              disabled={
-                this.state[day.day.toLowerCase() + "Holiday"] ? true : false
-              }
-              mode="12h"
-              value={day.start}
-              onChange={time => this.handleWorkingHourChange(time)}
-            />
-            <Label>Closes at: </Label>
-            <TimeInput
-              disabled={
-                this.state[day.day.toLowerCase() + "Holiday"] ? true : false
-              }
-              mode="12h"
-              value={day.end}
-              onChange={time => this.handleWorkingHourChange(time)}
-            />
-          </CardBody>
-        </Card>
-      </FormGroup>
-    ));
-  };
   render() {
     const companyTypes = this.props.company_types;
 
@@ -222,27 +120,33 @@ class SubBusinessAbout extends Component {
                     <Label for="About_Tagline">Tagline</Label>
                     <Input
                       type="text"
-                      value={this.state.about_us_tagline}
+                      value={this.state.tagline}
                       onKeyDown={this._handleKeyPress}
-                      onChange={this.onChange.bind(this, "about_us_tagline")}
+                      onChange={this.onChange.bind(this, "tagline")}
                     />
                   </FormGroup>
                   <FormGroup>
-                    <Label for="about_us">About Us</Label>
-                    <Input
-                      type="text"
-                      value={this.state.about_us}
-                      onKeyDown={this._handleKeyPress}
-                      onChange={this.onChange.bind(this, "about_us")}
+                    <Label for="aboutUs">About Us</Label>
+                    <AboutUsEditor
+                      readOnly={this.props.loading}
+                      value={this.state.aboutUs}
+                      onChange={this.handleAboutChange}
                     />
+                    {/* <Input
+                      required
+                      type="text"
+                      value={this.state.aboutUs}
+                      onKeyDown={this._handleKeyPress}
+                      onChange={this.onChange.bind(this, "aboutUs")}
+                    /> */}
                   </FormGroup>
                   <FormGroup>
                     <Label for="year">Established Year</Label>
                     <Input
                       type="text"
-                      value={this.state.established_year}
+                      value={this.state.establishedYear}
                       onKeyDown={this._handleKeyPress}
-                      onChange={this.onChange.bind(this, "established_year")}
+                      onChange={this.onChange.bind(this, "establishedYear")}
                     />
                   </FormGroup>
                   <FormGroup>
@@ -254,20 +158,13 @@ class SubBusinessAbout extends Component {
                       value={valueCompanyType}
                       onChange={this.handleSelectChange.bind(
                         this,
-                        "company_type"
+                        "companyType"
                       )}
                       options={companyTypes}
                       valueKey="id"
                       labelKey="name"
                     />
                   </FormGroup>
-                  {/* <FormGroup check>
-                          <Label for="visible_to_public" check>
-                            <Input type="checkbox" /> Visible To Public
-                          </Label>
-                        </FormGroup> */}
-                  <Label>Woring Hour</Label>
-                  {this.renderWorkingHours()}
                 </Col>
               </Row>
             </CardBody>
