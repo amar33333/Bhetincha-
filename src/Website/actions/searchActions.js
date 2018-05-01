@@ -19,7 +19,7 @@ epics.push(action$ =>
   action$
     .ofType(SEARCH_QUERY)
     .debounceTime(250)
-    .mergeMap(action =>
+    .switchMap(action =>
       onSearch(action.payload)
         .map(({ response }) => ({
           type: SEARCH_QUERY_FULFILLED,

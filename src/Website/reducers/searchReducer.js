@@ -10,7 +10,6 @@ const INITIAL_STATE = {
 };
 
 export default function(state = INITIAL_STATE, action) {
-  // console.log("actionsL: ", action);
   switch (action.type) {
     case SEARCH_QUERY_PENDING:
       return {
@@ -19,7 +18,6 @@ export default function(state = INITIAL_STATE, action) {
       };
 
     case SEARCH_QUERY_FULFILLED:
-      console.log("asdf", action.payload);
       return {
         ...state,
         data: action.payload.hits.map(hit => ({ ...hit._source })),
