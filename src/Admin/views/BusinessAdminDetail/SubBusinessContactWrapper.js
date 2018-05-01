@@ -22,6 +22,24 @@ class SubBusinessContactWrapper extends Component {
       // collapsed: true
     };
   }
+
+  static getDerivedStateFromProps = nextProps =>
+    nextProps.contactPerson && nextProps.edit
+      ? {
+          contactComponentList: nextProps.contactPerson.map((each, index) => (
+            <SubBusinessContact
+              key={each.contactID}
+              serial_num={index}
+              id={each.contactID}
+              contact={each}
+              edit
+            />
+          )),
+
+          contactPerson: nextProps.contactPerson
+        }
+      : null;
+
   // toggleCollapse = () => {
   //   this.setState({
   //     collapsed: !this.state.collapsed
@@ -161,6 +179,7 @@ class SubBusinessContactWrapper extends Component {
 
   render() {
     // console.log("render state contactPerson: ", this.state.contactPerson);
+    // console.log("contactwrapper: ", this.state);
     return (
       <div className="animated fadeIn">
         <Card>

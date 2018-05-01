@@ -1,6 +1,5 @@
 import { Observable } from "rxjs/Observable";
 import { toast } from "react-toastify";
-import { NOTIFICATION_TIME } from "../../config/CONSTANTS";
 import {
   onCompanyTypePost,
   onPaymentMethodPost
@@ -50,8 +49,7 @@ export const onBusinessAllGet = payload => ({
 });
 
 epics.push((action$, { getState }) =>
-  action$.ofType(FETCH_BUSINESS_PENDING).mergeMap(({ payload }) => {
-    const toastId = toast("Fetching Businesses...", { autoClose: false });
+  action$.ofType(FETCH_BUSINESS_PENDING).switchMap(({ payload }) => {
     const filterValue = getState().AdminContainer.filterBusiness;
     const params = {};
     params.rows = filterValue.rows;
@@ -79,11 +77,7 @@ epics.push((action$, { getState }) =>
           typeof response === "object" &&
           Array.isArray(response) === false
         ) {
-          toast.update(toastId, {
-            render: "Businesses fetched successfully!",
-            type: toast.TYPE.SUCCESS,
-            autoClose: NOTIFICATION_TIME
-          });
+          toast.success("Businesses fetched successfully!");
           return {
             type: FETCH_BUSINESS_FULFILLED,
             payload: response
@@ -93,11 +87,7 @@ epics.push((action$, { getState }) =>
         }
       })
       .catch(ajaxError => {
-        toast.update(toastId, {
-          render: "Error Fetching Businesses",
-          type: toast.TYPE.ERROR,
-          autoClose: NOTIFICATION_TIME
-        });
+        toast.error("Error Fetching Businesses");
         return Observable.of({ type: FETCH_BUSINESS_REJECTED });
       });
   })

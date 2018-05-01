@@ -8,6 +8,7 @@ import "rxjs/add/operator/ignoreElements";
 import "rxjs/add/operator/debounceTime";
 import "rxjs/add/operator/startWith";
 import "rxjs/add/operator/mapTo";
+import "rxjs/add/operator/switchMap";
 
 import "rxjs/add/observable/of";
 
@@ -16,4 +17,3 @@ import "rxjs/add/observable/of";
 // import "rxjs/add/operator/delay";
 // import "rxjs/add/observable/combineLatest";
 // import "rxjs/add/operator/filter";
-// import "rxjs/add/operator/switchMap";

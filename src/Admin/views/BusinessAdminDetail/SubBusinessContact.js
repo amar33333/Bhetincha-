@@ -38,6 +38,17 @@ class SubBusinessContact extends Component {
     }
   }
 
+  static getDerivedStateFromProps = nextProps =>
+    nextProps.contact && nextProps.edit
+      ? {
+          name: nextProps.contact.name,
+          email: nextProps.contact.email,
+          designation: nextProps.contact.designation,
+          mobileNumber: nextProps.contact.mobileNumber,
+          department: nextProps.contact.department
+        }
+      : null;
+
   // componentWillUpdate(nextProps, nextState) {
   //   if (nextState.add && this.props.onValueChange) {
   //     console.log("willUpdate called: ", nextState);
@@ -133,7 +144,6 @@ class SubBusinessContact extends Component {
                   <FormGroup>
                     <Label for="Deparment">Department</Label>
                     <Input
-                      required
                       type="text"
                       value={this.state.department}
                       onKeyDown={this._handleKeyPress}
@@ -143,7 +153,6 @@ class SubBusinessContact extends Component {
                   <FormGroup>
                     <Label for="Email">Email</Label>
                     <Input
-                      required
                       type="email"
                       value={this.state.email}
                       onKeyDown={this._handleKeyPress}
@@ -153,7 +162,6 @@ class SubBusinessContact extends Component {
                   <FormGroup>
                     <Label for="Desgination">Designation</Label>
                     <Input
-                      required
                       type="text"
                       value={this.state.designation}
                       onKeyDown={this._handleKeyPress}
@@ -163,7 +171,6 @@ class SubBusinessContact extends Component {
                   <FormGroup>
                     <Label for="Mobile Number">Mobile Number</Label>
                     <Input
-                      required
                       type="text"
                       value={this.state.mobileNumber}
                       onKeyDown={this._handleKeyPress}

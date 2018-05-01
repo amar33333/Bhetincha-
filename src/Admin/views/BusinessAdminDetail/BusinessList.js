@@ -177,14 +177,7 @@ class BusinessList extends Component {
           onPageSizeChange={(pageSize, pageIndex) =>
             this.props.onBusinessAllGet({ page: ++pageIndex, rows: pageSize })
           }
-          onSortedChange={newSorted => {
-            this.props.handleSortChangeBusiness(newSorted);
-            // this.props.onBusinessAllGet({
-            //   sort_by: newSorted.map(
-            //     data => `${data.id}-${data.desc ? "desc" : "asc"}`
-            //   )
-            // });
-          }}
+          onSortedChange={this.props.handleSortChangeBusiness}
           page={this.props.page - 1}
           pages={this.props.pages}
           {...this.tableProps}

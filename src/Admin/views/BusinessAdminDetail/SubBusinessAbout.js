@@ -119,7 +119,6 @@ class SubBusinessAbout extends Component {
                   <FormGroup>
                     <Label for="About_Tagline">Tagline</Label>
                     <Input
-                      required
                       type="text"
                       value={this.state.tagline}
                       onKeyDown={this._handleKeyPress}
@@ -144,7 +143,6 @@ class SubBusinessAbout extends Component {
                   <FormGroup>
                     <Label for="year">Established Year</Label>
                     <Input
-                      required
                       type="text"
                       value={this.state.establishedYear}
                       onKeyDown={this._handleKeyPress}
@@ -154,7 +152,6 @@ class SubBusinessAbout extends Component {
                   <FormGroup>
                     <Label for="company_type">Company Type</Label>
                     <Select
-                      required
                       name="Company Type"
                       placeholder="Select Your Company Type"
                       noResultsText="No Data Found"

@@ -9,7 +9,7 @@ class SubBusinessLogo extends Component {
     super(props);
 
     this.state = {
-      business_logo: ""
+      logo: ""
       // collapsed: true
     };
   }
@@ -27,11 +27,11 @@ class SubBusinessLogo extends Component {
 
   clearState = () => {
     this.setState({
-      business_logo: ""
+      logo: ""
     });
   };
 
-  getState = () => this.state;
+  getState = () => (this.state ? this.state : null);
 
   displayImage = () =>
     this.props.edit ? (
@@ -87,9 +87,8 @@ class SubBusinessLogo extends Component {
               {this.displayImage()}
 
               <FileBase64
-                required
                 multiple={false}
-                onDone={this.getFiles.bind(this, "business_logo")}
+                onDone={this.getFiles.bind(this, "logo")}
               />
             </CardBody>
           </Collapse>

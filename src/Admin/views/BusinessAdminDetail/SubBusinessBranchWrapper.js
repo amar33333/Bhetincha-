@@ -22,6 +22,25 @@ class SubBusinessBranchWrapper extends Component {
       // collapsed: true
     };
   }
+
+  // static getDerivedStateFromProps = nextProps => {
+  //   console.log("nextpors: ", nextProps);
+  //   return nextProps.branchAddress && nextProps.edit
+  //     ? {
+  //         branchComponentList: nextProps.branchAddress.map((each, index) => (
+  //           <SubBusinessBranch
+  //             key={each.addressID}
+  //             serial_num={index}
+  //             id={each.addressID}
+  //             branch={each}
+  //             edit
+  //           />
+  //         )),
+
+  //         branchs: nextProps.branchAddress
+  //       }
+  //     : null;
+  // };
   // toggleCollapse = () => {
   //   this.setState({
   //     collapsed: !this.state.collapsed
@@ -56,6 +75,21 @@ class SubBusinessBranchWrapper extends Component {
   // }
 
   static getDerivedStateFromProps = (nextProps, prevState) => {
+    if (nextProps.branchAddress && nextProps.edit) {
+      return {
+        branchComponentList: nextProps.branchAddress.map((each, index) => (
+          <SubBusinessBranch
+            key={each.addressID}
+            serial_num={index}
+            id={each.addressID}
+            branch={each}
+            edit
+          />
+        )),
+
+        branchs: nextProps.branchAddress
+      };
+    }
     return {
       branchComponentList: prevState.branchComponentList.map(
         branchComponent => {
@@ -116,23 +150,21 @@ class SubBusinessBranchWrapper extends Component {
                 /* console.log("edit ran BRNAHC: ", contacts); */
               }
 
-              branchs[index].branch_address_line_1 =
-                value.branch_address_line_1;
-              branchs[index].branch_address_line_2 =
-                value.branch_address_line_2;
-              branchs[index].branch_house_no = value.branch_house_no;
-              branchs[index].branch_landline = value.branch_landline;
-              branchs[index].branch_landmark = value.branch_landmark;
-              branchs[index].branch_other_landline_number =
-                value.branch_other_landline_number;
-              branchs[index].branch_post_box = value.branch_post_box;
-              branchs[index].branch_area = value.branch_area.id;
+              branchs[index].addressLine1 = value.addressLine1;
+              branchs[index].addressLine2 = value.addressLine2;
+              branchs[index].house_no = value.house_no;
+              branchs[index].landlineNumber = value.landlineNumber;
+              branchs[index].landmark = value.landmark;
+              branchs[index].otherLandlineNumber = value.otherLandlineNumber;
+              branchs[index].po_box = value.po_box;
+              branchs[index].area = value.area.id;
+              branchs[index].email = value.email;
 
-              branchs[index].branch_city = value.branch_city.id;
-              branchs[index].branch_country = value.branch_country.id;
-              branchs[index].branch_district = value.branch_district.id;
-              branchs[index].branch_state = value.branch_state.id;
-              branchs[index].branch_toll_free = value.branch_toll_free;
+              branchs[index].city = value.city.id;
+              branchs[index].country = value.country.id;
+              branchs[index].district = value.district.id;
+              branchs[index].state = value.state.id;
+              branchs[index].tollFreeNumber = value.tollFreeNumber;
 
               branchs[index].contactPerson = contacts.contactPerson;
               console.log("update branch: ", [...branchs, ...contacts]);
@@ -150,11 +182,11 @@ class SubBusinessBranchWrapper extends Component {
                     ...this.state.branchs,
                     {
                       ...value,
-                      branch_area: value.branch_area.id,
-                      branch_city: value.branch_city.id,
-                      branch_country: value.branch_country.id,
-                      branch_state: value.branch_state.id,
-                      branch_district: value.branch_district.id,
+                      area: value.area.id,
+                      city: value.city.id,
+                      country: value.country.id,
+                      state: value.state.id,
+                      district: value.district.id,
                       key: id,
                       ...contacts
                     }
@@ -185,6 +217,7 @@ class SubBusinessBranchWrapper extends Component {
   };
 
   render() {
+    // console.log("render props branchs: ", this.props);
     // console.log("render state branchs: ", this.state);
     return (
       <div className="animated fadeIn">

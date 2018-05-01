@@ -28,19 +28,20 @@ class SubBusinessPrimaryAddress extends Component {
     super(props);
 
     this.state = {
-      primary_country: "",
-      primary_state: "",
-      primary_district: "",
-      primary_city: "",
-      primary_area: "",
-      landline: "",
-      other_landline_number: "",
+      country: "",
+      state: "",
+      district: "",
+      city: "",
+      area: "",
+      email: "",
+      landlineNumber: "",
+      otherLandlineNumber: [],
       house_no: "",
       landmark: "",
-      address_line_1: "",
-      address_line_2: "",
-      post_box: "",
-      toll_free: ""
+      addressLine1: "",
+      addressLine2: "",
+      po_box: "",
+      tollFreeNumber: ""
       // collapsed: true
     };
 
@@ -49,6 +50,45 @@ class SubBusinessPrimaryAddress extends Component {
       ? this.props.cookies.token_data.access_token
       : null;
   }
+
+  static getDerivedStateFromProps = (nextProps, prevState) =>
+    nextProps.address && nextProps.edit
+      ? {
+          landlineNumber: nextProps.address.landline,
+          house_no: nextProps.address.house_no,
+          landmark: nextProps.address.landmark,
+          addressLine1: nextProps.address.addressLine1,
+          addressLine2: nextProps.address.addressLine2,
+          po_box: nextProps.address.po_box,
+          tollFreeNumber: nextProps.address.tollFreeNumber,
+          email: nextProps.address.email,
+          country: {
+            id: nextProps.address.country.id,
+            name: nextProps.address.country.name
+          },
+          state: {
+            id: nextProps.address.state.id,
+            name: nextProps.address.state.name
+          },
+          district: {
+            id: nextProps.address.district.id,
+            name: nextProps.address.district.name
+          },
+          city: {
+            id: nextProps.address.city.id,
+            name: nextProps.address.city.name
+          },
+          area: {
+            id: nextProps.address.area.id,
+            name: nextProps.address.area.name
+          }
+        }
+      : null;
+
+  getContacts = () =>
+    this.props.address && this.props.edit
+      ? this.props.address.contactPerson
+      : null;
 
   // componentWillUpdate(nextProps, nextState) {
   //   console.log("this.props contact: ", this.propsData);
@@ -73,12 +113,12 @@ class SubBusinessPrimaryAddress extends Component {
   handleSelectChange = (key, value) => {
     this.setState({ [key]: value });
 
-    if (key === "primary_country" && value) {
+    if (key === "country" && value) {
       this.setState({
-        primary_state: "",
-        primary_district: "",
-        primary_city: "",
-        primary_area: ""
+        state: "",
+        district: "",
+        city: "",
+        area: ""
       });
       this.props.onAddressTreeList({
         id: value.id,
@@ -91,11 +131,11 @@ class SubBusinessPrimaryAddress extends Component {
       // this.props.onUnmountDistrict();
       // this.props.onUnmountCity();
       // this.props.onUnmountArea();
-    } else if (key === "primary_state" && value) {
+    } else if (key === "state" && value) {
       this.setState({
-        primary_district: "",
-        primary_city: "",
-        primary_area: ""
+        district: "",
+        city: "",
+        area: ""
       });
 
       this.props.onAddressTreeList({
@@ -107,10 +147,10 @@ class SubBusinessPrimaryAddress extends Component {
       areas = [];
       // this.props.onUnmountCity();
       // this.props.onUnmountArea();
-    } else if (key === "primary_district" && value) {
+    } else if (key === "district" && value) {
       this.setState({
-        primary_city: "",
-        primary_area: ""
+        city: "",
+        area: ""
       });
 
       this.props.onAddressTreeList({
@@ -120,9 +160,9 @@ class SubBusinessPrimaryAddress extends Component {
       });
       areas = [];
       // this.props.onUnmountArea();
-    } else if (key === "primary_city" && value) {
+    } else if (key === "city" && value) {
       this.setState({
-        primary_area: ""
+        area: ""
       });
 
       this.props.onAddressTreeList({
@@ -136,53 +176,69 @@ class SubBusinessPrimaryAddress extends Component {
 
   clearState = () => {
     this.setState({
-      primary_country: "",
-      primary_state: "",
-      primary_district: "",
-      primary_city: "",
-      primary_area: "",
-      landline: "",
-      other_landline_number: "",
+      country: "",
+      state: "",
+      district: "",
+      city: "",
+      area: "",
+      email: "",
+      landlineNumber: "",
+      otherLandlineNumber: [],
       house_no: "",
       landmark: "",
-      address_line_1: "",
-      address_line_2: "",
-      post_box: "",
-      toll_free: ""
+      addressLine1: "",
+      addressLine2: "",
+      po_box: "",
+      tollFreeNumber: ""
     });
 
     this.subBusinessContactWrapperRef.clearState();
   };
 
   getState = () => ({
-    ...this.state,
-    ...this.subBusinessContactWrapperRef.getState()
+    address: {
+      ...this.state,
+      area: this.state.area.id,
+      city: this.state.city.id,
+      district: this.state.district.id,
+      state: this.state.state.id,
+      country: this.state.country.id,
+      ...this.subBusinessContactWrapperRef.getState()
+    }
   });
 
   render() {
     //PRIMARY ADDRESS
+    // console.log("address props: ", this.props);
+    // console.log("address state: ", this.state);
 
     countries = this.props.countries;
+    // console.log("coutrnri: ", countries);
 
     try {
       states = this.props.countries
-        ? this.props.countries.find(
-            country =>
-              country.states && country.id === this.state.primary_country.id
-          ).states
+        ? this.props.countries.find(country => {
+            // console.log("cuontry states: ", country.id);
+            // console.log("cu state id: ", this.state.country);
+
+            if (country.id === this.state.country.id) {
+              // console.log("COUNTRY FOND");
+              return true;
+            }
+          }).states
         : [];
     } catch (error) {
       states = [];
     }
 
-    console.log("states found: ", states);
+    // console.log("states found: ", states);
 
     try {
       if (this.props.countries) {
         this.props.countries.map(country => {
           if (country.states) {
             country.states.map(state => {
-              if (state.districts && state.id === this.state.primary_state.id) {
+              if (state.districts && state.id === this.state.state.id) {
                 districts = state.districts;
               }
             });
@@ -193,7 +249,7 @@ class SubBusinessPrimaryAddress extends Component {
       districts = [];
     }
 
-    console.log("districts found: ", districts);
+    // console.log("districts found: ", districts);
 
     try {
       if (this.props.countries) {
@@ -204,7 +260,7 @@ class SubBusinessPrimaryAddress extends Component {
                 state.districts.map(district => {
                   if (
                     district.cities &&
-                    district.id === this.state.primary_district.id
+                    district.id === this.state.district.id
                   ) {
                     cities = district.cities;
                   }
@@ -218,7 +274,7 @@ class SubBusinessPrimaryAddress extends Component {
       cities = [];
     }
 
-    console.log("cities found: ", cities);
+    // console.log("cities found: ", cities);
 
     try {
       if (this.props.countries) {
@@ -229,10 +285,7 @@ class SubBusinessPrimaryAddress extends Component {
                 state.districts.map(district => {
                   if (district.cities) {
                     district.cities.map(city => {
-                      if (
-                        city.areas &&
-                        city.id === this.state.primary_city.id
-                      ) {
+                      if (city.areas && city.id === this.state.city.id) {
                         areas = city.areas;
                       }
                     });
@@ -247,7 +300,7 @@ class SubBusinessPrimaryAddress extends Component {
       areas = [];
     }
 
-    console.log("areas found: ", areas);
+    // console.log("areas found: ", areas);
 
     // try {
     //   if (this.props.countries) {
@@ -259,7 +312,7 @@ class SubBusinessPrimaryAddress extends Component {
     //               if (district.cities) {
     //                 areas = district.cities.find(city => {
     //                   return (
-    //                     city.areas && city.id === this.state.primary_city.id
+    //                     city.areas && city.id === this.state.city.id
     //                   );
     //                 }).areas;
     //               }
@@ -290,7 +343,7 @@ class SubBusinessPrimaryAddress extends Component {
     // states = this.props.countries
     //   ? this.props.countries.map(
     //       country =>
-    //         country.states && country.id === this.state.primary_country.value
+    //         country.states && country.id === this.state.country.value
     //           ? country.states.map(state => {
     //               console.log("estate: ", state);
     //               return {
@@ -304,7 +357,7 @@ class SubBusinessPrimaryAddress extends Component {
 
     // if (this.props.countries) {
     //   this.props.countries.map(country => {
-    //     if (country.states && country.id === this.state.primary_country.id) {
+    //     if (country.states && country.id === this.state.country.id) {
     //       states = country.states;
     //     } else states = [];
     //   });
@@ -330,20 +383,20 @@ class SubBusinessPrimaryAddress extends Component {
     //     })
     //   : null;
 
-    const { primary_country } = this.state;
-    const valuePrimaryCountry = primary_country && primary_country.id;
+    const { country } = this.state;
+    const valuePrimaryCountry = country && country.id;
 
-    const { primary_state } = this.state;
-    const valuePrimaryState = primary_state && primary_state.id;
+    const { state } = this.state;
+    const valuePrimaryState = state && state.id;
 
-    const { primary_district } = this.state;
-    const valuePrimaryDistrict = primary_district && primary_district.id;
+    const { district } = this.state;
+    const valuePrimaryDistrict = district && district.id;
 
-    const { primary_city } = this.state;
-    const valuePrimaryCity = primary_city && primary_city.id;
+    const { city } = this.state;
+    const valuePrimaryCity = city && city.id;
 
-    const { primary_area } = this.state;
-    const valuePrimaryArea = primary_area && primary_area.id;
+    const { area } = this.state;
+    const valuePrimaryArea = area && area.id;
 
     return (
       <div className="animated fadeIn">
@@ -390,15 +443,11 @@ class SubBusinessPrimaryAddress extends Component {
                   <FormGroup>
                     <Label for="group">Country</Label>
                     <Select
-                      required
                       name="Country"
                       placeholder="Select a Country"
                       noResultsText="No Data Found"
                       value={valuePrimaryCountry}
-                      onChange={this.handleSelectChange.bind(
-                        this,
-                        "primary_country"
-                      )}
+                      onChange={this.handleSelectChange.bind(this, "country")}
                       options={countries}
                       valueKey="id"
                       labelKey="name"
@@ -411,15 +460,11 @@ class SubBusinessPrimaryAddress extends Component {
                   <FormGroup>
                     <Label for="group">State</Label>
                     <Select
-                      required
                       name="State"
                       placeholder="Select a State"
                       noResultsText="No Data Found"
                       value={valuePrimaryState}
-                      onChange={this.handleSelectChange.bind(
-                        this,
-                        "primary_state"
-                      )}
+                      onChange={this.handleSelectChange.bind(this, "state")}
                       options={states}
                       valueKey="id"
                       labelKey="name"
@@ -432,15 +477,11 @@ class SubBusinessPrimaryAddress extends Component {
                   <FormGroup>
                     <Label for="group">District</Label>
                     <Select
-                      required
                       name="District"
                       placeholder="Select a District"
                       noResultsText="No Data Found"
                       value={valuePrimaryDistrict}
-                      onChange={this.handleSelectChange.bind(
-                        this,
-                        "primary_district"
-                      )}
+                      onChange={this.handleSelectChange.bind(this, "district")}
                       options={districts}
                       valueKey="id"
                       labelKey="name"
@@ -453,15 +494,11 @@ class SubBusinessPrimaryAddress extends Component {
                   <FormGroup>
                     <Label for="group">City</Label>
                     <Select
-                      required
                       name="City"
                       placeholder="Select a City"
                       noResultsText="No Data Found"
                       value={valuePrimaryCity}
-                      onChange={this.handleSelectChange.bind(
-                        this,
-                        "primary_city"
-                      )}
+                      onChange={this.handleSelectChange.bind(this, "city")}
                       options={cities}
                       valueKey="id"
                       labelKey="name"
@@ -474,18 +511,27 @@ class SubBusinessPrimaryAddress extends Component {
                   <FormGroup>
                     <Label for="group">Area</Label>
                     <Select
-                      required
                       name="Area"
                       placeholder="Select an Area"
                       noResultsText="No Data Found"
                       value={valuePrimaryArea}
-                      onChange={this.handleSelectChange.bind(
-                        this,
-                        "primary_area"
-                      )}
+                      onChange={this.handleSelectChange.bind(this, "area")}
                       options={areas}
                       valueKey="id"
                       labelKey="name"
+                    />
+                  </FormGroup>
+                </Col>
+              </Row>
+              <Row>
+                <Col xs="12" md="12">
+                  <FormGroup>
+                    <Label for="Email">Email</Label>
+                    <Input
+                      type="email"
+                      value={this.state.email}
+                      onKeyDown={this._handleKeyPress}
+                      onChange={this.onChange.bind(this, "email")}
                     />
                   </FormGroup>
                 </Col>
@@ -495,30 +541,28 @@ class SubBusinessPrimaryAddress extends Component {
                   <FormGroup>
                     <Label for="bname">Landline Number</Label>
                     <Input
-                      required
                       type="text"
-                      value={this.state.landline}
-                      onChange={this.onChange.bind(this, "landline")}
+                      value={this.state.landlineNumber}
+                      onChange={this.onChange.bind(this, "landlineNumber")}
                       onKeyDown={this._handleKeyPress}
                     />
                   </FormGroup>
                   <FormGroup>
-                    <Label for="bname">OtherLandLineNumber</Label>
+                    <Label for="bname">Other LandLine Number</Label>
                     <Input
-                      required
                       type="text"
-                      value={this.state.other_landline_number}
-                      onChange={this.onChange.bind(
-                        this,
-                        "other_landline_number"
-                      )}
+                      value={this.state.otherLandlineNumber}
+                      onChange={event => {
+                        this.setState({
+                          otherLandlineNumber: [event.target.value]
+                        });
+                      }}
                       onKeyDown={this._handleKeyPress}
                     />
                   </FormGroup>
                   <FormGroup>
                     <Label for="bname">House No.</Label>
                     <Input
-                      required
                       type="text"
                       value={this.state.house_no}
                       onChange={this.onChange.bind(this, "house_no")}
@@ -528,7 +572,6 @@ class SubBusinessPrimaryAddress extends Component {
                   <FormGroup>
                     <Label for="bname">Landmark</Label>
                     <Input
-                      required
                       type="text"
                       value={this.state.landmark}
                       onChange={this.onChange.bind(this, "landmark")}
@@ -538,40 +581,36 @@ class SubBusinessPrimaryAddress extends Component {
                   <FormGroup>
                     <Label for="bname">Address Line 1</Label>
                     <Input
-                      required
                       type="text"
-                      value={this.state.address_line_1}
-                      onChange={this.onChange.bind(this, "address_line_1")}
+                      value={this.state.addressLine1}
+                      onChange={this.onChange.bind(this, "addressLine1")}
                       onKeyDown={this._handleKeyPress}
                     />
                   </FormGroup>
                   <FormGroup>
                     <Label for="bname">Address Line 2</Label>
                     <Input
-                      required
                       type="text"
-                      value={this.state.address_line_2}
-                      onChange={this.onChange.bind(this, "address_line_2")}
+                      value={this.state.addressLine2}
+                      onChange={this.onChange.bind(this, "addressLine2")}
                       onKeyDown={this._handleKeyPress}
                     />
                   </FormGroup>
                   <FormGroup>
                     <Label for="bname">Post Box No.</Label>
                     <Input
-                      required
                       type="text"
-                      value={this.state.post_box}
-                      onChange={this.onChange.bind(this, "post_box")}
+                      value={this.state.po_box}
+                      onChange={this.onChange.bind(this, "po_box")}
                       onKeyDown={this._handleKeyPress}
                     />
                   </FormGroup>
                   <FormGroup>
                     <Label for="bname">Toll Free No.</Label>
                     <Input
-                      required
                       type="text"
-                      value={this.state.toll_free}
-                      onChange={this.onChange.bind(this, "toll_free")}
+                      value={this.state.tollFreeNumber}
+                      onChange={this.onChange.bind(this, "tollFreeNumber")}
                       onKeyDown={this._handleKeyPress}
                     />
                   </FormGroup>
@@ -579,6 +618,8 @@ class SubBusinessPrimaryAddress extends Component {
               </Row>
               <SubBusinessContactWrapper
                 ref={ref => (this.subBusinessContactWrapperRef = ref)}
+                contactPerson={this.getContacts()}
+                edit
                 /* onSubmit={this.propsDataCallback} */
               />
             </CardBody>

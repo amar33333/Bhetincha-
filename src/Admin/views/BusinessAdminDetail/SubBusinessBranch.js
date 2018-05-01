@@ -29,19 +29,20 @@ class SubBusinessBranch extends Component {
     super(props);
 
     this.state = {
-      branch_country: "",
-      branch_state: "",
-      branch_district: "",
-      branch_city: "",
-      branch_area: "",
-      branch_landline: "",
-      branch_other_landline_number: "",
-      branch_house_no: "",
-      branch_landmark: "",
-      branch_address_line_1: "",
-      branch_address_line_2: "",
-      branch_post_box: "",
-      branch_toll_free: ""
+      country: "",
+      state: "",
+      district: "",
+      city: "",
+      area: "",
+      email: "",
+      landlineNumber: "",
+      otherLandlineNumber: [],
+      house_no: "",
+      landmark: "",
+      addressLine1: "",
+      addressLine2: "",
+      po_box: "",
+      tollFreeNumber: ""
       // collapsed: true
     };
 
@@ -70,17 +71,56 @@ class SubBusinessBranch extends Component {
   //   }
   // }
 
+  static getDerivedStateFromProps = (nextProps, prevState) =>
+    nextProps.branch && nextProps.edit
+      ? {
+          landlineNumber: nextProps.branch.landlineNumber,
+          house_no: nextProps.branch.house_no,
+          landmark: nextProps.branch.landmark,
+          addressLine1: nextProps.branch.addressLine1,
+          addressLine2: nextProps.branch.addressLine2,
+          po_box: nextProps.branch.po_box,
+          tollFreeNumber: nextProps.branch.tollFreeNumber,
+          email: nextProps.branch.email,
+          country: {
+            id: nextProps.branch.country.id,
+            name: nextProps.branch.country.name
+          },
+          state: {
+            id: nextProps.branch.state.id,
+            name: nextProps.branch.state.name
+          },
+          district: {
+            id: nextProps.branch.district.id,
+            name: nextProps.branch.district.name
+          },
+          city: {
+            id: nextProps.branch.city.id,
+            name: nextProps.branch.city.name
+          },
+          area: {
+            id: nextProps.branch.area.id,
+            name: nextProps.branch.area.name
+          }
+        }
+      : null;
+
   onChange = (key, event) => this.setState({ [key]: event.target.value });
+
+  getContacts = () =>
+    this.props.branch && this.props.edit
+      ? this.props.branch.contactPerson
+      : null;
 
   handleSelectChange = (key, value) => {
     this.setState({ [key]: value });
 
-    if (key === "branch_country" && value) {
+    if (key === "country" && value) {
       this.setState({
-        branch_state: "",
-        branch_district: "",
-        branch_city: "",
-        branch_area: ""
+        state: "",
+        district: "",
+        city: "",
+        area: ""
       });
       this.props.onAddressTreeList({
         id: value.id,
@@ -93,11 +133,11 @@ class SubBusinessBranch extends Component {
       // this.props.onUnmountDistrict();
       // this.props.onUnmountCity();
       // this.props.onUnmountArea();
-    } else if (key === "branch_state" && value) {
+    } else if (key === "state" && value) {
       this.setState({
-        branch_district: "",
-        branch_city: "",
-        branch_area: ""
+        district: "",
+        city: "",
+        area: ""
       });
 
       this.props.onAddressTreeList({
@@ -109,10 +149,10 @@ class SubBusinessBranch extends Component {
       areas = [];
       // this.props.onUnmountCity();
       // this.props.onUnmountArea();
-    } else if (key === "branch_district" && value) {
+    } else if (key === "district" && value) {
       this.setState({
-        branch_city: "",
-        branch_area: ""
+        city: "",
+        area: ""
       });
 
       this.props.onAddressTreeList({
@@ -122,9 +162,9 @@ class SubBusinessBranch extends Component {
       });
       areas = [];
       // this.props.onUnmountArea();
-    } else if (key === "branch_city" && value) {
+    } else if (key === "city" && value) {
       this.setState({
-        branch_area: ""
+        area: ""
       });
 
       this.props.onAddressTreeList({
@@ -143,19 +183,20 @@ class SubBusinessBranch extends Component {
 
   clearState = () => {
     this.setState({
-      branch_country: "",
-      branch_state: "",
-      branch_district: "",
-      branch_city: "",
-      branch_area: "",
-      branch_landline: "",
-      branch_other_landline_number: "",
-      branch_house_no: "",
-      branch_landmark: "",
-      branch_address_line_1: "",
-      branch_address_line_2: "",
-      branch_post_box: "",
-      branch_toll_free: ""
+      country: "",
+      state: "",
+      district: "",
+      city: "",
+      area: "",
+      email: "",
+      landlineNumber: "",
+      otherLandlineNumber: [],
+      house_no: "",
+      landmark: "",
+      addressLine1: "",
+      addressLine2: "",
+      po_box: "",
+      tollFreeNumber: ""
     });
 
     this.subBusinessBranchContactWrapperRef.clearState();
@@ -178,28 +219,28 @@ class SubBusinessBranch extends Component {
 
   render() {
     //branch ADDRESS
+    console.log("branch state:", this.state);
 
     countries = this.props.countries;
 
     try {
       states = this.props.countries
         ? this.props.countries.find(
-            country =>
-              country.states && country.id === this.state.branch_country.id
+            country => country.states && country.id === this.state.country.id
           ).states
         : [];
     } catch (error) {
       states = [];
     }
 
-    console.log("states found: ", states);
+    // console.log("states found: ", states);
 
     try {
       if (this.props.countries) {
         this.props.countries.map(country => {
           if (country.states) {
             country.states.map(state => {
-              if (state.districts && state.id === this.state.branch_state.id) {
+              if (state.districts && state.id === this.state.state.id) {
                 districts = state.districts;
               }
             });
@@ -210,7 +251,7 @@ class SubBusinessBranch extends Component {
       districts = [];
     }
 
-    console.log("districts found: ", districts);
+    // console.log("districts found: ", districts);
 
     try {
       if (this.props.countries) {
@@ -221,7 +262,7 @@ class SubBusinessBranch extends Component {
                 state.districts.map(district => {
                   if (
                     district.cities &&
-                    district.id === this.state.branch_district.id
+                    district.id === this.state.district.id
                   ) {
                     cities = district.cities;
                   }
@@ -235,7 +276,7 @@ class SubBusinessBranch extends Component {
       cities = [];
     }
 
-    console.log("cities found: ", cities);
+    // console.log("cities found: ", cities);
 
     try {
       if (this.props.countries) {
@@ -246,7 +287,7 @@ class SubBusinessBranch extends Component {
                 state.districts.map(district => {
                   if (district.cities) {
                     district.cities.map(city => {
-                      if (city.areas && city.id === this.state.branch_city.id) {
+                      if (city.areas && city.id === this.state.city.id) {
                         areas = city.areas;
                       }
                     });
@@ -260,22 +301,22 @@ class SubBusinessBranch extends Component {
     } catch (error) {
       areas = [];
     }
-    console.log("areas found: ", areas);
+    // console.log("areas found: ", areas);
 
-    const { branch_country } = this.state;
-    const valueBranchCountry = branch_country && branch_country.id;
+    const { country } = this.state;
+    const valueBranchCountry = country && country.id;
 
-    const { branch_state } = this.state;
-    const valueBranchState = branch_state && branch_state.id;
+    const { state } = this.state;
+    const valueBranchState = state && state.id;
 
-    const { branch_district } = this.state;
-    const valueBranchDistrict = branch_district && branch_district.id;
+    const { district } = this.state;
+    const valueBranchDistrict = district && district.id;
 
-    const { branch_city } = this.state;
-    const valueBranchCity = branch_city && branch_city.id;
+    const { city } = this.state;
+    const valueBranchCity = city && city.id;
 
-    const { branch_area } = this.state;
-    const valueBranchArea = branch_area && branch_area.id;
+    const { area } = this.state;
+    const valueBranchArea = area && area.id;
 
     return (
       <Card>
@@ -330,15 +371,11 @@ class SubBusinessBranch extends Component {
                 <FormGroup>
                   <Label for="group">Country</Label>
                   <Select
-                    required
                     name="Country"
                     placeholder="Select a Country"
                     noResultsText="No Data Found"
                     value={valueBranchCountry}
-                    onChange={this.handleSelectChange.bind(
-                      this,
-                      "branch_country"
-                    )}
+                    onChange={this.handleSelectChange.bind(this, "country")}
                     options={countries}
                     valueKey="id"
                     labelKey="name"
@@ -351,15 +388,11 @@ class SubBusinessBranch extends Component {
                 <FormGroup>
                   <Label for="group">State</Label>
                   <Select
-                    required
                     name="State"
                     placeholder="Select a State"
                     noResultsText="No Data Found"
                     value={valueBranchState}
-                    onChange={this.handleSelectChange.bind(
-                      this,
-                      "branch_state"
-                    )}
+                    onChange={this.handleSelectChange.bind(this, "state")}
                     options={states}
                     valueKey="id"
                     labelKey="name"
@@ -372,15 +405,11 @@ class SubBusinessBranch extends Component {
                 <FormGroup>
                   <Label for="group">District</Label>
                   <Select
-                    required
                     name="District"
                     placeholder="Select a District"
                     noResultsText="No Data Found"
                     value={valueBranchDistrict}
-                    onChange={this.handleSelectChange.bind(
-                      this,
-                      "branch_district"
-                    )}
+                    onChange={this.handleSelectChange.bind(this, "district")}
                     options={districts}
                     valueKey="id"
                     labelKey="name"
@@ -393,12 +422,11 @@ class SubBusinessBranch extends Component {
                 <FormGroup>
                   <Label for="group">City</Label>
                   <Select
-                    required
                     name="City"
                     placeholder="Select a City"
                     noResultsText="No Data Found"
                     value={valueBranchCity}
-                    onChange={this.handleSelectChange.bind(this, "branch_city")}
+                    onChange={this.handleSelectChange.bind(this, "city")}
                     options={cities}
                     valueKey="id"
                     labelKey="name"
@@ -411,12 +439,11 @@ class SubBusinessBranch extends Component {
                 <FormGroup>
                   <Label for="group">Area</Label>
                   <Select
-                    required
                     name="Area"
                     placeholder="Select an Area"
                     noResultsText="No Data Found"
                     value={valueBranchArea}
-                    onChange={this.handleSelectChange.bind(this, "branch_area")}
+                    onChange={this.handleSelectChange.bind(this, "area")}
                     options={areas}
                     valueKey="id"
                     labelKey="name"
@@ -425,86 +452,94 @@ class SubBusinessBranch extends Component {
               </Col>
             </Row>
             <Row>
+              <Row>
+                <Col xs="12" md="12">
+                  <FormGroup>
+                    <Label for="Email">Email</Label>
+                    <Input
+                      type="email"
+                      value={this.state.email}
+                      onKeyDown={this._handleKeyPress}
+                      onChange={this.onChange.bind(this, "email")}
+                    />
+                  </FormGroup>
+                </Col>
+              </Row>
               <Col xs="6" md="6">
                 <FormGroup>
                   <Label for="bname">Branch Landline Number</Label>
                   <Input
-                    required
                     type="text"
-                    value={this.state.branch_landline}
-                    onChange={this.onChange.bind(this, "branch_landline")}
+                    value={this.state.landlineNumber}
+                    onChange={this.onChange.bind(this, "landlineNumber")}
                   />
                 </FormGroup>
                 <FormGroup>
                   <Label for="bname">Other Branch LandLine Number</Label>
                   <Input
-                    required
                     type="text"
-                    value={this.state.branch_other_landline_number}
-                    onChange={this.onChange.bind(
-                      this,
-                      "branch_other_landline_number"
-                    )}
+                    value={this.state.otherLandlineNumber}
+                    onChange={event => {
+                      this.setState({
+                        otherLandlineNumber: [event.target.value]
+                      });
+                    }}
                   />
                 </FormGroup>
                 <FormGroup>
                   <Label for="bname">House No.</Label>
                   <Input
-                    required
                     type="text"
-                    value={this.state.branch_house_no}
-                    onChange={this.onChange.bind(this, "branch_house_no")}
+                    value={this.state.house_no}
+                    onChange={this.onChange.bind(this, "house_no")}
                   />
                 </FormGroup>
                 <FormGroup>
                   <Label for="bname">Branch Landmark</Label>
                   <Input
-                    required
                     type="text"
-                    value={this.state.branch_landmark}
-                    onChange={this.onChange.bind(this, "branch_landmark")}
+                    value={this.state.landmark}
+                    onChange={this.onChange.bind(this, "landmark")}
                   />
                 </FormGroup>
                 <FormGroup>
                   <Label for="bname">Address Line 1</Label>
                   <Input
-                    required
                     type="text"
-                    value={this.state.branch_address_line_1}
-                    onChange={this.onChange.bind(this, "branch_address_line_1")}
+                    value={this.state.addressLine1}
+                    onChange={this.onChange.bind(this, "addressLine1")}
                   />
                 </FormGroup>
                 <FormGroup>
                   <Label for="bname">Address Line 2</Label>
                   <Input
-                    required
                     type="text"
-                    value={this.state.branch_address_line_2}
-                    onChange={this.onChange.bind(this, "branch_address_line_2")}
+                    value={this.state.addressLine2}
+                    onChange={this.onChange.bind(this, "addressLine2")}
                   />
                 </FormGroup>
                 <FormGroup>
                   <Label for="bname">Post Box No.</Label>
                   <Input
-                    required
                     type="text"
-                    value={this.state.branch_post_box}
-                    onChange={this.onChange.bind(this, "branch_post_box")}
+                    value={this.state.po_box}
+                    onChange={this.onChange.bind(this, "po_box")}
                   />
                 </FormGroup>
                 <FormGroup>
                   <Label for="bname">Toll Free No.</Label>
                   <Input
-                    required
                     type="text"
-                    value={this.state.branch_toll_free}
-                    onChange={this.onChange.bind(this, "branch_toll_free")}
+                    value={this.state.tollFreeNumber}
+                    onChange={this.onChange.bind(this, "tollFreeNumber")}
                   />
                 </FormGroup>
               </Col>
             </Row>
             <SubBusinessContactWrapper
               ref={ref => (this.subBusinessBranchContactWrapperRef = ref)}
+              contactPerson={this.getContacts()}
+              edit
               /* onSubmit={value => {
               this.propsData = { ...this.propsData, ...value };
             }} */
