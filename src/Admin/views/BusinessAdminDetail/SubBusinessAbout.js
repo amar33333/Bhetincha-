@@ -1,5 +1,9 @@
 import React, { Component } from "react";
-import { TimeInput } from "material-ui-time-picker";
+// import { TimeInput } from "material-ui-time-picker";
+import Datetime from "react-datetime";
+import moment from "moment";
+
+import "react-datetime/css/react-datetime.css";
 
 import {
   Row,
@@ -23,89 +27,91 @@ class SubBusinessAbout extends Component {
     super(props);
 
     this.state = {
-      about_us_tagline: "",
-      about_us: "",
-      established_year: "",
-      company_type: [],
-
-      sundayHoliday: Days[0].holiday,
-      sundayStart: "",
-      sundayEnd: "",
-
-      mondayHoliday: Days[1].holiday,
-      mondayStart: "",
-      mondayEnd: "",
-
-      tuesdayHoliday: Days[2].holiday,
-      tuesdayStart: "",
-      tuesdayEnd: "",
-
-      wednesdayHoliday: Days[3].holiday,
-      wednesdayStart: "",
-      wednesdayEnd: "",
-
-      thursdayHoliday: Days[4].holiday,
-      thursdayStart: "",
-      thursdayEnd: "",
-
-      fridayHoliday: Days[5].holiday,
-      fridayStart: "",
-      fridayEnd: "",
-
-      saturdayHoliday: Days[6].holiday,
-      saturdayStart: "",
-      saturdayEnd: ""
-
-      // collapsed: true
+      tagline: "",
+      aboutUs: "",
+      establishedYear: "",
+      companyType: [],
+      workingHour: [
+        {
+          day: "Sunday",
+          start: moment().format("hh:mm a"),
+          end: moment().format("hh:mm a"),
+          holiday: false
+        },
+        {
+          day: "Monday",
+          start: moment().format("hh:mm a"),
+          end: moment().format("hh:mm a"),
+          holiday: false
+        },
+        {
+          day: "Tuesday",
+          start: moment().format("hh:mm a"),
+          end: moment().format("hh:mm a"),
+          holiday: false
+        },
+        {
+          day: "Wednesday",
+          start: moment().format("hh:mm a"),
+          end: moment().format("hh:mm a"),
+          holiday: false
+        },
+        {
+          day: "Thursday",
+          start: moment().format("hh:mm a"),
+          end: moment().format("hh:mm a"),
+          holiday: false
+        },
+        {
+          day: "Friday",
+          start: moment().format("hh:mm a"),
+          end: moment().format("hh:mm a"),
+          holiday: false
+        },
+        {
+          day: "Saturday",
+          start: moment().format("hh:mm a"),
+          end: moment().format("hh:mm a"),
+          holiday: true
+        }
+      ]
     };
   }
 
   toggleHoliday = day => {
-    const myDay = day.toLowerCase() + "Holiday";
-    const updatedHolidayState = {};
-    [
-      "sundayHoliday",
-      "mondayHoliday",
-      "tuesdayHoliday",
-      "wednesdayHoliday",
-      "thursdayHoliday",
-      "fridayHoliday",
-      "saturdayHoliday"
-    ].forEach(newDay => {
-      console.log(myDay);
-      if (newDay === myDay) {
-        updatedHolidayState[myDay] = !this.state[myDay];
+    // const myDay = day.toLowerCase() + "Holiday";
+    const newWorkingHour = this.state.workingHour.map(each => {
+      if (each.day === day) {
+        return { ...each, holiday: !each.holiday };
+      } else {
+        return each;
       }
     });
-    console.log(updatedHolidayState);
-    this.setState(updatedHolidayState);
+    this.setState({
+      workingHour: newWorkingHour
+    });
   };
 
   // static getDerivedStateFromProps = nextProps => ({
-  //   about_us_tagline: nextProps.tagline,
-  //   about_us: nextProps.aboutUs,
-  //   established_year: nextProps.aboutUs,
-  //   company_type: { id: nextProps.companyType, name: nextProps.companyType }
+  //   tagline: nextProps.tagline,
+  //   aboutUs: nextProps.aboutUs,
+  //   establishedYear: nextProps.aboutUs,
+  //   companyType: { id: nextProps.companyType, name: nextProps.companyType }
   // });
 
   static getDerivedStateFromProps = nextProps =>
     nextProps.about && nextProps.edit
       ? {
-          about_us_tagline: nextProps.about.tagline,
-          about_us: nextProps.about.aboutUs,
-          established_year: "",
-          company_type: {
+          tagline: nextProps.about.tagline,
+          aboutUs: nextProps.about.aboutUs,
+          establishedYear: "",
+          companyType: {
             id: nextProps.about.companyType,
             name: nextProps.about.companyType
           }
         }
       : null;
 
-  // toggleCollapse = () => {
-  //   this.setState({
-  //     collapsed: !this.state.collapsed
-  //   });
-  // };
   onChange = (key, event) => this.setState({ [key]: event.target.value });
 
   handleSelectChange = (key, value) => {
@@ -114,57 +120,78 @@ class SubBusinessAbout extends Component {
 
   clearState = () => {
     this.setState({
-      about_us_tagline: "",
-      about_us: "",
-      established_year: "",
-      company_type: ""
+      tagline: "",
+      aboutUs: "",
+      establishedYear: "",
+      companyType: ""
     });
   };
 
   getState = () => this.state;
 
-  handleWorkingHourChange = time => {
-    console.log("selectedTime: ", time);
+  handleStartHourChange = (time, day) => {
+    console.log("updatedStartState: ", day, time);
+
+    const updatedStartState = {};
+    const newStartHour = day.toLowerCase() + "Start";
+    updatedStartState[newStartHour] = time;
+    this.setState({ updatedStartState });
+    console.log("updatedStartState: ", day, time);
+  };
+  handleClosingHourChange = (time, day) => {
+    const updatedEndState = {};
+    const newEndHour = day.toLowerCase() + "End";
+    updatedEndState[newEndHour] = time;
+    this.setState({ updatedEndState });
+    console.log("updatedEndState: ", day, time);
   };
 
   renderWorkingHours = () => {
-    return Days.map(day => (
+    return this.state.workingHour.map(day => (
       <FormGroup>
-        <Card>
+        <Card body outline color={day.holiday ? "danger" : "primary"}>
           <CardBody
             style={{
               display: "flex",
               flexDirection: "row",
-              justifyContent: "space-around"
+              justifyContent: "space-between"
             }}
           >
             <strong>{day.day}</strong>
             <Label check>
               <Input
                 type="checkbox"
-                checked={this.state[day.day.toLowerCase() + "Holiday"]}
+                checked={day.holiday}
                 onClick={this.toggleHoliday.bind(this, day.day)}
               />
               Holiday
             </Label>
-            <Label>Opens at: </Label>
-            <TimeInput
-              disabled={
-                this.state[day.day.toLowerCase() + "Holiday"] ? true : false
-              }
-              mode="12h"
-              value={day.start}
-              onChange={time => this.handleWorkingHourChange(time)}
-            />
-            <Label>Closes at: </Label>
-            <TimeInput
-              disabled={
-                this.state[day.day.toLowerCase() + "Holiday"] ? true : false
-              }
-              mode="12h"
-              value={day.end}
-              onChange={time => this.handleWorkingHourChange(time)}
-            />
+            {day.holiday ? null : (
+              <span>
+                <Label>Opens at: </Label>
+                <Datetime
+                  dateFormat={false}
+                  defaultValue={moment("2018-05-01 10:00 AM").format("hh:mm A")}
+                  onChange={time => {
+                    this.handleStartHourChange(time, day.day);
+                  }}
+                  viewMode={"time"}
+                  utc={true}
+                />
+              </span>
+            )}
+            {day.holiday ? null : (
+              <span>
+                <Label>Closes at: </Label>
+                <Datetime
+                  dateFormat={false}
+                  defaultValue={moment("2018-05-01 04:00 PM").format("hh:mm A")}
+                  onChange={time => this.handleClosingHourChange(time, day.day)}
+                  viewMode={"time"}
+                  utc={true}
+                />
+              </span>
+            )}
           </CardBody>
         </Card>
       </FormGroup>
@@ -223,19 +250,19 @@ class SubBusinessAbout extends Component {
                     <Input
                       required
                       type="text"
-                      value={this.state.about_us_tagline}
+                      value={this.state.tagline}
                       onKeyDown={this._handleKeyPress}
-                      onChange={this.onChange.bind(this, "about_us_tagline")}
+                      onChange={this.onChange.bind(this, "tagline")}
                     />
                   </FormGroup>
                   <FormGroup>
-                    <Label for="about_us">About Us</Label>
+                    <Label for="aboutUs">About Us</Label>
                     <Input
                       required
                       type="text"
-                      value={this.state.about_us}
+                      value={this.state.aboutUs}
                       onKeyDown={this._handleKeyPress}
-                      onChange={this.onChange.bind(this, "about_us")}
+                      onChange={this.onChange.bind(this, "aboutUs")}
                     />
                   </FormGroup>
                   <FormGroup>
@@ -243,9 +270,9 @@ class SubBusinessAbout extends Component {
                     <Input
                       required
                       type="text"
-                      value={this.state.established_year}
+                      value={this.state.establishedYear}
                       onKeyDown={this._handleKeyPress}
-                      onChange={this.onChange.bind(this, "established_year")}
+                      onChange={this.onChange.bind(this, "establishedYear")}
                     />
                   </FormGroup>
                   <FormGroup>
@@ -258,7 +285,7 @@ class SubBusinessAbout extends Component {
                       value={valueCompanyType}
                       onChange={this.handleSelectChange.bind(
                         this,
-                        "company_type"
+                        "companyType"
                       )}
                       options={companyTypes}
                       valueKey="id"

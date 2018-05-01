@@ -1,44 +1,30 @@
 export default [
   {
     day: "Sunday",
-    holiday: false,
-    start: "",
-    end: ""
+    holiday: false
   },
   {
     day: "Monday",
-    holiday: false,
-    start: "",
-    end: ""
+    holiday: false
   },
   {
     day: "Tuesday",
-    holiday: false,
-    start: "",
-    end: ""
+    holiday: false
   },
   {
     day: "Wednesday",
-    holiday: false,
-    start: "",
-    end: ""
+    holiday: false
   },
   {
     day: "Thursday",
-    holiday: false,
-    start: "",
-    end: ""
+    holiday: false
   },
   {
     day: "Friday",
-    holiday: false,
-    start: "",
-    end: ""
+    holiday: false
   },
   {
     day: "Saturday",
-    holiday: true,
-    start: "",
-    end: ""
+    holiday: true
   }
 ];
