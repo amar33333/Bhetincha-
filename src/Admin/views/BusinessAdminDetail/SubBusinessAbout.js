@@ -1,8 +1,5 @@
 import React, { Component } from "react";
-// import { TimeInput } from "material-ui-time-picker";
-import Datetime from "react-datetime";
-import moment from "moment";
-
+import AboutUsEditor from "../../../Website/Views/Minisite/components/AboutUsEditor";
 import "react-datetime/css/react-datetime.css";
 
 import {
@@ -18,8 +15,6 @@ import {
   Button
 } from "reactstrap";
 
-import Days from "../../config/daysItems";
-
 import Select from "react-select";
 
 class SubBusinessAbout extends Component {
@@ -30,67 +25,9 @@ class SubBusinessAbout extends Component {
       tagline: "",
       aboutUs: "",
       establishedYear: "",
-      companyType: [],
-      workingHour: [
-        {
-          day: "Sunday",
-          start: moment().format("hh:mm a"),
-          end: moment().format("hh:mm a"),
-          holiday: false
-        },
-        {
-          day: "Monday",
-          start: moment().format("hh:mm a"),
-          end: moment().format("hh:mm a"),
-          holiday: false
-        },
-        {
-          day: "Tuesday",
-          start: moment().format("hh:mm a"),
-          end: moment().format("hh:mm a"),
-          holiday: false
-        },
-        {
-          day: "Wednesday",
-          start: moment().format("hh:mm a"),
-          end: moment().format("hh:mm a"),
-          holiday: false
-        },
-        {
-          day: "Thursday",
-          start: moment().format("hh:mm a"),
-          end: moment().format("hh:mm a"),
-          holiday: false
-        },
-        {
-          day: "Friday",
-          start: moment().format("hh:mm a"),
-          end: moment().format("hh:mm a"),
-          holiday: false
-        },
-        {
-          day: "Saturday",
-          start: moment().format("hh:mm a"),
-          end: moment().format("hh:mm a"),
-          holiday: true
-        }
-      ]
+      companyType: []
     };
   }
-
-  toggleHoliday = day => {
-    // const myDay = day.toLowerCase() + "Holiday";
-    const newWorkingHour = this.state.workingHour.map(each => {
-      if (each.day === day) {
-        return { ...each, holiday: !each.holiday };
-      } else {
-        return each;
-      }
-    });
-    this.setState({
-      workingHour: newWorkingHour
-    });
-  };
 
   // static getDerivedStateFromProps = nextProps => ({
   //   tagline: nextProps.tagline,
@@ -114,6 +51,8 @@ class SubBusinessAbout extends Component {
 
   onChange = (key, event) => this.setState({ [key]: event.target.value });
 
+  handleAboutChange = value => this.setState({ aboutUs: value });
+
   handleSelectChange = (key, value) => {
     this.setState({ [key]: value });
   };
@@ -129,74 +68,6 @@ class SubBusinessAbout extends Component {
 
   getState = () => this.state;
 
-  handleStartHourChange = (time, day) => {
-    console.log("updatedStartState: ", day, time);
-
-    const updatedStartState = {};
-    const newStartHour = day.toLowerCase() + "Start";
-    updatedStartState[newStartHour] = time;
-    this.setState({ updatedStartState });
-    console.log("updatedStartState: ", day, time);
-  };
-  handleClosingHourChange = (time, day) => {
-    const updatedEndState = {};
-    const newEndHour = day.toLowerCase() + "End";
-    updatedEndState[newEndHour] = time;
-    this.setState({ updatedEndState });
-    console.log("updatedEndState: ", day, time);
-  };
-
-  renderWorkingHours = () => {
-    return this.state.workingHour.map(day => (
-      <FormGroup>
-        <Card body outline color={day.holiday ? "danger" : "primary"}>
-          <CardBody
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "space-between"
-            }}
-          >
-            <strong>{day.day}</strong>
-            <Label check>
-              <Input
-                type="checkbox"
-                checked={day.holiday}
-                onClick={this.toggleHoliday.bind(this, day.day)}
-              />
-              Holiday
-            </Label>
-            {day.holiday ? null : (
-              <span>
-                <Label>Opens at: </Label>
-                <Datetime
-                  dateFormat={false}
-                  defaultValue={moment("2018-05-01 10:00 AM").format("hh:mm A")}
-                  onChange={time => {
-                    this.handleStartHourChange(time, day.day);
-                  }}
-                  viewMode={"time"}
-                  utc={true}
-                />
-              </span>
-            )}
-            {day.holiday ? null : (
-              <span>
-                <Label>Closes at: </Label>
-                <Datetime
-                  dateFormat={false}
-                  defaultValue={moment("2018-05-01 04:00 PM").format("hh:mm A")}
-                  onChange={time => this.handleClosingHourChange(time, day.day)}
-                  viewMode={"time"}
-                  utc={true}
-                />
-              </span>
-            )}
-          </CardBody>
-        </Card>
-      </FormGroup>
-    ));
-  };
   render() {
     const companyTypes = this.props.company_types;
 
@@ -257,13 +128,18 @@ class SubBusinessAbout extends Component {
                   </FormGroup>
                   <FormGroup>
                     <Label for="aboutUs">About Us</Label>
-                    <Input
+                    <AboutUsEditor
+                      readOnly={this.props.loading}
+                      value={this.state.aboutUs}
+                      onChange={this.handleAboutChange}
+                    />
+                    {/* <Input
                       required
                       type="text"
                       value={this.state.aboutUs}
                       onKeyDown={this._handleKeyPress}
                       onChange={this.onChange.bind(this, "aboutUs")}
-                    />
+                    /> */}
                   </FormGroup>
                   <FormGroup>
                     <Label for="year">Established Year</Label>
@@ -292,13 +168,6 @@ class SubBusinessAbout extends Component {
                       labelKey="name"
                     />
                   </FormGroup>
-                  {/* <FormGroup check>
-                          <Label for="visible_to_public" check>
-                            <Input type="checkbox" /> Visible To Public
-                          </Label>
-                        </FormGroup> */}
-                  <Label>Woring Hour</Label>
-                  {this.renderWorkingHours()}
                 </Col>
               </Row>
             </CardBody>

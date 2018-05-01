@@ -28,6 +28,7 @@ import SubBusinessLogo from "./SubBusinessLogo";
 import SubBusinessCoverImage from "./SubBusinessCoverImage";
 import SubBusinessAbout from "./SubBusinessAbout";
 import SubBusinessBranchWrapper from "./SubBusinessBranchWrapper";
+import SubBusinessWorkingHour from "./SubBusinessWorkingHour";
 
 class BusinessAdminDetail extends Component {
   constructor(props) {
@@ -38,7 +39,8 @@ class BusinessAdminDetail extends Component {
       businessBranchWrapperCollapse: true,
       businessCoverImageCollapse: true,
       businessLogoCollapse: true,
-      businessPrimaryAddressCollapse: true
+      businessPrimaryAddressCollapse: true,
+      businessWorkingHourCollapse: true
     };
 
     this.access_token = this.props.cookies
@@ -115,7 +117,8 @@ class BusinessAdminDetail extends Component {
       "businessLogoCollapse",
       "businessCoverImageCollapse",
       "businessBranchWrapperCollapse",
-      "businessAdminDetailCollapse"
+      "businessAdminDetailCollapse",
+      "businessWorkingHourCollapse"
     ].forEach(collapse => {
       if (collapse === key) {
         updatedCollapseState[key] = !this.state[key];
@@ -188,6 +191,13 @@ class BusinessAdminDetail extends Component {
                   )}
                   ref={ref => (this.subBusinessAboutRef = ref)}
                   company_types={this.props.company_types}
+                />
+                <SubBusinessWorkingHour
+                  collapsed={this.state.businessWorkingHourCollapse}
+                  toggleCollapse={this.toggleCollapse.bind(
+                    this,
+                    "businessWorkingHourCollapse"
+                  )}
                 />
                 <Row>
                   <Col xs="12">
