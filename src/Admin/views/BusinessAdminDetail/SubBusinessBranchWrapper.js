@@ -110,7 +110,28 @@ class SubBusinessBranchWrapper extends Component {
     if (this.subBusinessBranchRef) this.subBusinessBranchRef.clearState();
   };
 
-  getState = () => ({ branchs: this.state.branchs });
+  // getState = () => ({ branchs: this.state.branchs });
+
+  getState = () => {
+    const branchs = this.state.branchs.map(eachItem => {
+      let reformed = {};
+      for (var property in eachItem) {
+        reformed =
+          eachItem[property] !== "" &&
+          eachItem[property] !== null &&
+          eachItem[property] !== undefined
+            ? { ...reformed, [property]: eachItem[property] }
+            : reformed;
+      }
+      console.log("branch address reformed: ", reformed);
+      return reformed;
+    });
+    console.log("branch address reformed array: ", branchs);
+
+    return {
+      branchs
+    };
+  };
 
   onBranchAddressAdd = () => {
     // console.log("onasd branch added");
@@ -196,7 +217,7 @@ class SubBusinessBranchWrapper extends Component {
                   {
                     /* console.log("else monitor state: ", this.state.branchs); */
                   }
-                  this.onBranchAddressAdd();
+                  //this.onBranchAddressAdd();
                 }
               );
             }

@@ -556,7 +556,7 @@ class SubBusinessBranch extends Component {
                     )
                   }
                 >
-                  ADD
+                  SAVE BRANCH
                 </Button>
               </Col>
               <Col xs="6" md="6">

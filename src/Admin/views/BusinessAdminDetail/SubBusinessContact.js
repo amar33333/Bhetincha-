@@ -185,7 +185,7 @@ class SubBusinessContact extends Component {
                     color="primary"
                     onClick={() => this.props.onAdd(this.state, this.props.id)}
                   >
-                    ADD
+                    SAVE CONTACT
                   </Button>
                 </Col>
                 <Col xs="6" md="6">
