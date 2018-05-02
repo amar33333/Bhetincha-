@@ -60,9 +60,11 @@ class SubBusinessContactWrapper extends Component {
       let reformed = {};
       for (var property in eachItem) {
         reformed =
-          eachItem[property] !== "" &&
-          eachItem[property] !== null &&
-          eachItem[property] !== undefined
+          (eachItem[property] !== "" &&
+            eachItem[property] !== null &&
+            eachItem[property] !== undefined) ||
+          (eachItem[property].constructor === Array &&
+            eachItem[property].length > 0)
             ? { ...reformed, [property]: eachItem[property] }
             : reformed;
       }
@@ -71,9 +73,11 @@ class SubBusinessContactWrapper extends Component {
     });
     console.log("contact reformed array: ", contactPerson);
 
-    return {
-      contactPerson
-    };
+    return contactPerson.constructor === Array && contactPerson.length > 0
+      ? {
+          contactPerson
+        }
+      : null;
   };
   onContactAdd = () => {
     this.setState({
@@ -198,7 +202,7 @@ class SubBusinessContactWrapper extends Component {
   };
 
   render() {
-    // console.log("render state contactPerson: ", this.state.contactPerson);
+    console.log("render state contactPerson: ", this.state.contactPerson);
     // console.log("contactwrapper: ", this.state);
     return (
       <div className="animated fadeIn">

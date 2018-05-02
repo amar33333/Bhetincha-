@@ -50,8 +50,10 @@ class SubBusinessPrimaryAddress extends Component {
       : null;
   }
 
-  static getDerivedStateFromProps = (nextProps, prevState) =>
-    nextProps.address && nextProps.edit
+  static getDerivedStateFromProps = (nextProps, prevState) => {
+    const { address } = nextProps;
+
+    return nextProps.address && nextProps.edit
       ? {
           landlineNumber: nextProps.address.landline,
           house_no: nextProps.address.house_no,
@@ -60,29 +62,30 @@ class SubBusinessPrimaryAddress extends Component {
           addressLine2: nextProps.address.addressLine2,
           po_box: nextProps.address.po_box,
           tollFreeNumber: nextProps.address.tollFreeNumber,
-          email: nextProps.address.email,
-          country: {
-            id: nextProps.address.country.id,
-            name: nextProps.address.country.name
-          },
-          state: {
-            id: nextProps.address.state.id,
-            name: nextProps.address.state.name
-          },
-          district: {
-            id: nextProps.address.district.id,
-            name: nextProps.address.district.name
-          },
-          city: {
-            id: nextProps.address.city.id,
-            name: nextProps.address.city.name
-          },
-          area: {
-            id: nextProps.address.area.id,
-            name: nextProps.address.area.name
-          }
+          email: nextProps.address.email
+          // country: {
+          //   id: nextProps.address.country.id,
+          //   name: nextProps.address.country.name
+          // },
+          // state: {
+          //   id: nextProps.address.state.id,
+          //   name: nextProps.address.state.name
+          // },
+          // district: {
+          //   id: nextProps.address.district.id,
+          //   name: nextProps.address.district.name
+          // },
+          // city: {
+          //   id: nextProps.address.city.id,
+          //   name: nextProps.address.city.name
+          // },
+          // area: {
+          //   id: nextProps.address.area.id,
+          //   name: nextProps.address.area.name
+          // }
         }
       : null;
+  };
 
   getContacts = () =>
     this.props.address && this.props.edit
@@ -169,12 +172,16 @@ class SubBusinessPrimaryAddress extends Component {
   };
 
   getState = () => {
+    console.log("eachItem PRIMARY: ", this.state);
+
     let reformed = {};
     for (var property in this.state) {
       reformed =
-        this.state[property] !== "" &&
-        this.state[property] !== null &&
-        this.state[property] !== undefined
+        (this.state[property] !== "" &&
+          this.state[property] !== null &&
+          this.state[property] !== undefined) ||
+        (this.state[property].constructor === Array &&
+          this.state[property].length > 0)
           ? { ...reformed, [property]: this.state[property] }
           : reformed;
     }

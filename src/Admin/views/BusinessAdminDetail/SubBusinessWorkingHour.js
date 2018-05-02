@@ -21,43 +21,43 @@ class subBusinessWorkingHour extends Component {
       alwaysOpen: false,
       workingHour: [
         {
-          day: "Sunday",
+          day: "SUN",
           start: moment.utc().format(),
           end: moment.utc().format(),
           holiday: false
         },
         {
-          day: "Monday",
+          day: "MON",
           start: moment.utc().format(),
           end: moment.utc().format(),
           holiday: false
         },
         {
-          day: "Tuesday",
+          day: "TUE",
           start: moment.utc().format(),
           end: moment.utc().format(),
           holiday: false
         },
         {
-          day: "Wednesday",
+          day: "WED",
           start: moment.utc().format(),
           end: moment.utc().format(),
           holiday: false
         },
         {
-          day: "Thursday",
+          day: "THU",
           start: moment.utc().format(),
           end: moment.utc().format(),
           holiday: false
         },
         {
-          day: "Friday",
+          day: "FRI",
           start: moment.utc().format(),
           end: moment.utc().format(),
           holiday: false
         },
         {
-          day: "Saturday",
+          day: "SAT",
           start: moment.utc().format("hh:mm a"),
           end: moment.utc().format("hh:mm a"),
           holiday: true

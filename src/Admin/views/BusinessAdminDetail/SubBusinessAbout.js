@@ -25,20 +25,24 @@ class SubBusinessAbout extends Component {
       tagline: "",
       aboutUs: "",
       establishedYear: "",
-      companyType: []
+      companyType: ""
     };
   }
 
   static getDerivedStateFromProps = nextProps =>
     nextProps.about && nextProps.edit
       ? {
-          tagline: nextProps.about.tagline,
-          aboutUs: nextProps.about.aboutUs,
-          establishedYear: "",
-          companyType: {
-            id: nextProps.about.companyType,
-            name: nextProps.about.companyType
-          }
+          tagline: nextProps.about.tagline ? nextProps.about.tagline : "",
+          aboutUs: nextProps.about.aboutUs ? nextProps.about.aboutUs : "",
+          establishedYear: nextProps.about.establishedYear
+            ? nextProps.about.establishedYear
+            : "",
+          companyType: nextProps.about.companyType
+            ? {
+                id: nextProps.about.companyType.id,
+                name: nextProps.about.companyType.name
+              }
+            : ""
         }
       : null;
 
@@ -63,9 +67,11 @@ class SubBusinessAbout extends Component {
     let reformed = {};
     for (var property in this.state) {
       reformed =
-        this.state[property] !== "" &&
-        this.state[property] !== null &&
-        this.state[property] !== undefined
+        (this.state[property] !== null &&
+          this.state[property] !== undefined &&
+          this.state[property] !== "") ||
+        (this.state[property].constructor === Array &&
+          this.state[property].length > 0)
           ? { ...reformed, [property]: this.state[property] }
           : reformed;
     }
@@ -73,15 +79,15 @@ class SubBusinessAbout extends Component {
     console.log("about reformed: ", reformed);
     return {
       about: {
-        ...reformed
+        ...reformed,
+        companyType: this.state.companyType.id
       }
     };
   };
   render() {
+    console.log("about props: ", this.props);
+    console.log("about state: ", this.state);
     const companyTypes = this.props.company_types;
-
-    const { company_type } = this.state;
-    const valueCompanyType = company_type && company_type.id;
 
     return (
       <div className="animated fadeIn">
@@ -167,7 +173,9 @@ class SubBusinessAbout extends Component {
                       name="Company Type"
                       placeholder="Select Your Company Type"
                       noResultsText="No Data Found"
-                      value={valueCompanyType}
+                      value={
+                        this.state.companyType ? this.state.companyType.id : ""
+                      }
                       onChange={this.handleSelectChange.bind(
                         this,
                         "companyType"

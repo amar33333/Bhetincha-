@@ -114,12 +114,15 @@ class SubBusinessBranchWrapper extends Component {
 
   getState = () => {
     const branchs = this.state.branchs.map(eachItem => {
+      console.log("eachItem: ", eachItem);
       let reformed = {};
       for (var property in eachItem) {
         reformed =
-          eachItem[property] !== "" &&
-          eachItem[property] !== null &&
-          eachItem[property] !== undefined
+          (eachItem[property] !== "" &&
+            eachItem[property] !== null &&
+            eachItem[property] !== undefined) ||
+          (eachItem[property].constructor === Array &&
+            eachItem[property].length > 0)
             ? { ...reformed, [property]: eachItem[property] }
             : reformed;
       }
@@ -177,16 +180,19 @@ class SubBusinessBranchWrapper extends Component {
               branchs[index].landmark = value.landmark;
               branchs[index].otherLandlineNumber = value.otherLandlineNumber;
               branchs[index].po_box = value.po_box;
-              branchs[index].area = value.area.id;
               branchs[index].email = value.email;
 
-              branchs[index].city = value.city.id;
-              branchs[index].country = value.country.id;
-              branchs[index].district = value.district.id;
-              branchs[index].state = value.state.id;
+              branchs[index].area = value.area ? value.area.id : "";
+              branchs[index].city = value.city ? value.city.id : "";
+              branchs[index].country = value.country ? value.country.id : "";
+              branchs[index].district = value.district ? value.district.id : "";
+              branchs[index].state = value.state ? value.state.id : "";
+
               branchs[index].tollFreeNumber = value.tollFreeNumber;
 
-              branchs[index].contactPerson = contacts.contactPerson;
+              branchs[index].contactPerson = contacts
+                ? contacts.contactPerson
+                : [];
               console.log("update branch: ", [...branchs, ...contacts]);
               this.setState({ branchs }, () => {
                 /* console.log("immediate branch conta: ", this.state.branchs) */
@@ -202,11 +208,11 @@ class SubBusinessBranchWrapper extends Component {
                     ...this.state.branchs,
                     {
                       ...value,
-                      area: value.area.id,
-                      city: value.city.id,
-                      country: value.country.id,
-                      state: value.state.id,
-                      district: value.district.id,
+                      area: value.area ? value.area.id : "",
+                      city: value.city ? value.city.id : "",
+                      country: value.country ? value.country.id : "",
+                      state: value.state ? value.state.id : "",
+                      district: value.district ? value.district.id : "",
                       key: id,
                       ...contacts
                     }
@@ -216,6 +222,7 @@ class SubBusinessBranchWrapper extends Component {
                   {
                     /* console.log("else monitor state: ", this.state.branchs); */
                   }
+
                   //this.onBranchAddressAdd();
                 }
               );

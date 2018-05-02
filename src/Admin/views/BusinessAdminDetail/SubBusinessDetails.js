@@ -151,12 +151,12 @@ class SubBusinessDetail extends Component {
 
     if (this.props.categoryData) {
       this.props.categoryData.map(each => {
-        console.log("subca: ", each.subcategories);
+        // console.log("subca: ", each.subcategories);
         subCategories = [...subCategories, ...each.subcategories];
       });
     }
 
-    console.log("subcate: ", subCategories);
+    // console.log("subcate: ", subCategories);
 
     const paymentMethods = this.props.payment_methods;
 

@@ -49,88 +49,88 @@ class BusinessEdit extends Component {
     });
   }
 
-  static getDerivedStateFromProps = nextProps => {
-    let countries = nextProps.general_setup.countries;
-    const access_token = nextProps.cookies
-      ? nextProps.cookies.token_data.access_token
-      : null;
+  // static getDerivedStateFromProps = nextProps => {
+  //   let countries = nextProps.general_setup.countries;
+  //   const access_token = nextProps.cookies
+  //     ? nextProps.cookies.token_data.access_token
+  //     : null;
 
-    if (
-      countries &&
-      countries.length &&
-      nextProps.businessData &&
-      nextProps.businessData.address
-    ) {
-      // console.log(
-      //   "repeating...: ",
-      //   countries,
-      //   " ",
-      //   BusinessEdit.stateRepeat,
-      //   " ",
-      //   countries.states,
-      //   " "
-      // );
-      if (BusinessEdit.countryRepeat) {
-        console.log("country repeat: ", BusinessEdit.countryRepeat);
-        nextProps.onAddressTreeList({
-          id: nextProps.businessData.address.country.id,
-          access_token: access_token,
-          ADDRESS_KEY: "primary_country"
-        });
-        BusinessEdit.countryRepeat = false;
-      }
-      if (
-        BusinessEdit.stateRepeat &&
-        countries.states &&
-        countries.states.length
-      ) {
-        console.log("stae repeat: ", BusinessEdit.stateRepeat);
+  //   if (
+  //     countries &&
+  //     countries.length &&
+  //     nextProps.businessData &&
+  //     nextProps.businessData.address
+  //   ) {
+  //     // console.log(
+  //     //   "repeating...: ",
+  //     //   countries,
+  //     //   " ",
+  //     //   BusinessEdit.stateRepeat,
+  //     //   " ",
+  //     //   countries.states,
+  //     //   " "
+  //     // );
+  //     if (BusinessEdit.countryRepeat) {
+  //       console.log("country repeat: ", BusinessEdit.countryRepeat);
+  //       nextProps.onAddressTreeList({
+  //         id: nextProps.businessData.address.country.id,
+  //         access_token: access_token,
+  //         ADDRESS_KEY: "primary_country"
+  //       });
+  //       BusinessEdit.countryRepeat = false;
+  //     }
+  //     if (
+  //       BusinessEdit.stateRepeat &&
+  //       countries.states &&
+  //       countries.states.length
+  //     ) {
+  //       console.log("stae repeat: ", BusinessEdit.stateRepeat);
 
-        nextProps.onAddressTreeList({
-          id: nextProps.businessData.address.state.id,
-          access_token: access_token,
-          ADDRESS_KEY: "primary_state"
-        });
-        BusinessEdit.stateRepeat = false;
-      }
-      if (
-        BusinessEdit.districtRepeat &&
-        countries.states &&
-        countries.states.length &&
-        countries.states.districts &&
-        countries.states.districts.length
-      ) {
-        console.log("district repeat: ", BusinessEdit.districtRepeat);
+  //       nextProps.onAddressTreeList({
+  //         id: nextProps.businessData.address.state.id,
+  //         access_token: access_token,
+  //         ADDRESS_KEY: "primary_state"
+  //       });
+  //       BusinessEdit.stateRepeat = false;
+  //     }
+  //     if (
+  //       BusinessEdit.districtRepeat &&
+  //       countries.states &&
+  //       countries.states.length &&
+  //       countries.states.districts &&
+  //       countries.states.districts.length
+  //     ) {
+  //       console.log("district repeat: ", BusinessEdit.districtRepeat);
 
-        nextProps.onAddressTreeList({
-          id: nextProps.businessData.address.district.id,
-          access_token: access_token,
-          ADDRESS_KEY: "primary_district"
-        });
-        BusinessEdit.districtRepeat = false;
-      }
-      if (
-        BusinessEdit.cityRepeat &&
-        countries.states &&
-        countries.states.length &&
-        countries.states.districts &&
-        countries.states.districts.length &&
-        countries.states.districts.cities &&
-        countries.states.districts.cities.length
-      ) {
-        console.log("city repeat: ", BusinessEdit.cityRepeat);
+  //       nextProps.onAddressTreeList({
+  //         id: nextProps.businessData.address.district.id,
+  //         access_token: access_token,
+  //         ADDRESS_KEY: "primary_district"
+  //       });
+  //       BusinessEdit.districtRepeat = false;
+  //     }
+  //     if (
+  //       BusinessEdit.cityRepeat &&
+  //       countries.states &&
+  //       countries.states.length &&
+  //       countries.states.districts &&
+  //       countries.states.districts.length &&
+  //       countries.states.districts.cities &&
+  //       countries.states.districts.cities.length
+  //     ) {
+  //       console.log("city repeat: ", BusinessEdit.cityRepeat);
 
-        nextProps.onAddressTreeList({
-          id: nextProps.businessData.address.city.id,
-          access_token: access_token,
-          ADDRESS_KEY: "primary_city"
-        });
-        BusinessEdit.cityRepeat = false;
-      }
-    }
+  //       nextProps.onAddressTreeList({
+  //         id: nextProps.businessData.address.city.id,
+  //         access_token: access_token,
+  //         ADDRESS_KEY: "primary_city"
+  //       });
+  //       BusinessEdit.cityRepeat = false;
+  //     }
+  //   }
 
-    return null;
-  };
+  //   return null;
+  // };
 
   render() {
     const data = this.props.businessData;
