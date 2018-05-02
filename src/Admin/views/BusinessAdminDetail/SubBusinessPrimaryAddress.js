@@ -94,6 +94,7 @@ class SubBusinessPrimaryAddress extends Component {
     this.props.address && this.props.edit
       ? this.props.address.contactPerson
       : null;
+
   onChange = (key, event) => {
     if (key === "landmark" || "addressLine1" || "addressLine2") {
       this.setState({
@@ -184,16 +185,23 @@ class SubBusinessPrimaryAddress extends Component {
 
   getState = () => {
     console.log("eachItem PRIMARY: ", this.state);
-
+    const temp = {
+      ...this.state,
+      country: this.state.country.id,
+      state: this.state.state.id,
+      district: this.state.district.id,
+      city: this.state.city.id,
+      area: this.state.area.id
+    };
     let reformed = {};
-    for (var property in this.state) {
+
+    for (var property in temp) {
       reformed =
-        (this.state[property] !== "" &&
-          this.state[property] !== null &&
-          this.state[property] !== undefined) ||
-        (this.state[property].constructor === Array &&
-          this.state[property].length > 0)
-          ? { ...reformed, [property]: this.state[property] }
+        (temp[property] !== "" &&
+          temp[property] !== null &&
+          temp[property] !== undefined) ||
+        (temp[property].constructor === Array && temp[property].length > 0)
+          ? { ...reformed, [property]: temp[property] }
           : reformed;
     }
 

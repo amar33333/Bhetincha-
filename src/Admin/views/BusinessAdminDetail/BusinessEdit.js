@@ -14,7 +14,8 @@ import {
   onUnmountSubCategories,
   onCountryList,
   onAddressTreeList,
-  onRemoveCategoryData
+  onRemoveCategoryData,
+  onBusinessEdit
 } from "../../actions";
 
 import SubBusinessDetails from "./SubBusinessDetails";
@@ -132,6 +133,29 @@ class BusinessEdit extends Component {
   //   return null;
   // };
 
+  onEditFormSubmit = event => {
+    event.preventDefault();
+
+    console.log("onformEDIT");
+    this.propsData = {
+      ...this.subBusinessAdminDetailRef.getState(),
+      ...this.subBusinessAboutRef.getState(),
+      ...this.subBusinessBranchWrapperRef.getState(),
+      ...this.subBusinessCoverImageRef.getState(),
+      ...this.subBusinessLogoRef.getState(),
+      ...this.subBusinessPrimaryAddressRef.getState()
+      // ...this.subBusinessWorkingHourRef.getState()
+    };
+
+    console.log("this.propsdttaa: ", this.propsData);
+
+    this.props.onBusinessEdit({
+      id: this.props.businessData.id,
+      data: this.propsData,
+      access_token: this.access_token
+    });
+  };
+
   render() {
     const data = this.props.businessData;
     console.log("new props: ", this.props);
@@ -148,6 +172,8 @@ class BusinessEdit extends Component {
         business_name: data.business_name,
         business_email: data.business_email,
         payment_method: data.paymentMethod,
+        industry: data.industry,
+        categories: data.categories,
         sub_categories: data.sub_categories
       };
 
@@ -166,7 +192,7 @@ class BusinessEdit extends Component {
               <strong>Edit Your Business</strong>
             </CardHeader>
             <CardBody>
-              <form onSubmit={this.onFormSubmit}>
+              <form onSubmit={this.onEditFormSubmit}>
                 <SubBusinessDetails
                   ref={ref => (this.subBusinessAdminDetailRef = ref)}
                   businessData={businessData}
@@ -175,9 +201,10 @@ class BusinessEdit extends Component {
                   onIndustryEachList={this.props.onIndustryEachList}
                   onCategoryEachList={this.props.onCategoryEachList}
                   onUnmountSubCategories={this.props.onUnmountSubCategories}
-                  //onRemoveCategoryData={this.props.onRemoveCategoryData}
+                  onRemoveCategoryData={this.props.onRemoveCategoryData}
                   cookies={this.props.cookies}
                   industryData={this.props.industryData}
+                  /* {...this.props.general_setup} */
                   edit
                 />
                 <SubBusinessPrimaryAddress
@@ -190,7 +217,7 @@ class BusinessEdit extends Component {
                 <SubBusinessBranchWrapper
                   ref={ref => (this.subBusinessBranchWrapperRef = ref)}
                   branchAddress={branchAddress}
-                  {...this.props.general_setup}
+                  general_setup={this.props.general_setup}
                   onAddressTreeList={this.props.onAddressTreeList}
                   edit
                 />
@@ -249,6 +276,7 @@ export default connect(
     onUnmountSubCategories,
     onCountryList,
     onAddressTreeList,
-    onRemoveCategoryData
+    onRemoveCategoryData,
+    onBusinessEdit
   }
 )(BusinessEdit);

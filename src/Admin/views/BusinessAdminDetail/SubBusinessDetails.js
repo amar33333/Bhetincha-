@@ -34,30 +34,42 @@ class SubBusinessDetail extends Component {
       : null;
   }
 
-  componentDidMount() {
-    if (this.state.industry) {
-      this.props.onIndustryEachList({
-        id: this.state.industry.id,
-        access_token: this.access_token
-      });
-    }
-  }
+  static getDerivedStateFromProps = nextProps => {
+    const { businessData } = nextProps;
 
-  static getDerivedStateFromProps = nextProps =>
-    nextProps.businessData && nextProps.edit
+    // console.log("subbusiness props: ", nextProps);
+    return businessData && nextProps.edit
       ? {
-          business_name: nextProps.businessData.business_name,
-          business_email: nextProps.businessData.business_email,
-          paymentMethod: nextProps.businessData.payment_method.map(each => ({
-            id: each.id,
-            name: each.name
-          })),
-          sub_categories: nextProps.businessData.sub_categories.map(each => ({
-            id: each.id,
-            name: each.name
-          }))
+          business_name: businessData.business_name
+            ? businessData.business_name
+            : "",
+          business_email: businessData.business_email
+            ? businessData.business_email
+            : "",
+          industry: businessData.industry
+            ? { id: businessData.industry.id, name: businessData.industry.name }
+            : "",
+          categories: businessData.categories
+            ? businessData.categories.map(each => ({
+                id: each.id,
+                name: each.name
+              }))
+            : [],
+          sub_categories: businessData.sub_categories
+            ? businessData.sub_categories.map(each => ({
+                id: each.id,
+                name: each.name
+              }))
+            : [],
+          paymentMethod: businessData.payment_method
+            ? businessData.payment_method.map(each => ({
+                id: each.id,
+                name: each.name
+              }))
+            : []
         }
       : null;
+  };
 
   doesInclude = (array, obj) => {
     let result = false;
@@ -151,6 +163,7 @@ class SubBusinessDetail extends Component {
   getState = () => this.state;
 
   render() {
+    // console.log("state subbusiness: ", this.state);
     const industries = this.props.industries;
 
     const categories = this.props.industryData

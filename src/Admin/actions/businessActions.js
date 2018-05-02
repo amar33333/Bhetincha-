@@ -2,11 +2,17 @@ import { Observable } from "rxjs/Observable";
 import { toast } from "react-toastify";
 import {
   onCompanyTypePost,
-  onPaymentMethodPost
+  onPaymentMethodPost,
+  onIndustryEachGet,
+  onCountryEachGet,
+  onStateEachGet,
+  onDistrictEachGet,
+  onCityEachGet
 } from "../config/adminServerCall";
 
 import {
   onBusinessPost,
+  onBusinessPut,
   onCompanyTypeGet,
   onPaymentMethodsGet,
   onBusinessAllGetAjax,
@@ -21,6 +27,9 @@ import {
   CREATE_PAYMENT_METHODS_FULFILLED,
   CREATE_PAYMENT_METHODS_PENDING,
   CREATE_PAYMENT_METHODS_REJECTED,
+  FETCH_INDUSTRY_EACH_PENDING,
+  FETCH_INDUSTRY_EACH_FULFILLED,
+  FETCH_INDUSTRY_EACH_REJECTED,
   FETCH_BUSINESS_FULFILLED,
   FETCH_BUSINESS_REJECTED,
   FETCH_BUSINESS_PENDING,
@@ -38,7 +47,25 @@ import {
   FETCH_COMPANY_TYPE_PENDING,
   DELETE_BUSINESS_FULFILLED,
   DELETE_BUSINESS_PENDING,
-  DELETE_BUSINESS_REJECTED
+  DELETE_BUSINESS_REJECTED,
+  FETCH_COUNTRY_EACH_FULFILLED,
+  FETCH_COUNTRY_EACH_REJECTED,
+  FETCH_COUNTRY_EACH_PENDING,
+  FETCH_DISTRICT_EACH_FULFILLED,
+  FETCH_DISTRICT_EACH_REJECTED,
+  FETCH_DISTRICT_EACH_PENDING,
+  FETCH_STATE_EACH_FULFILLED,
+  FETCH_STATE_EACH_REJECTED,
+  FETCH_STATE_EACH_PENDING,
+  FETCH_CITY_EACH_FULFILLED,
+  FETCH_CITY_EACH_REJECTED,
+  FETCH_CITY_EACH_PENDING,
+  FETCH_ADDRESS_TREE_FULFILLED,
+  FETCH_ADDRESS_TREE_REJECTED,
+  FETCH_ADDRESS_TREE_PENDING,
+  EDIT_BUSINESS_FULFILLED,
+  EDIT_BUSINESS_PENDING,
+  EDIT_BUSINESS_REJECTED
 } from "./types";
 
 const epics = [];
@@ -122,11 +149,144 @@ export const onBusinessCreate = ({ data, access_token }) => dispatch => {
   dispatch({ type: CREATE_BUSINESS_PENDING });
 };
 
+export const onBusinessEdit = ({ id, data, access_token }) => dispatch => {
+  onBusinessPut({ id, data, access_token })
+    .then(response =>
+      dispatch({ type: EDIT_BUSINESS_FULFILLED, payload: response.data })
+    )
+    .catch(error => dispatch({ type: EDIT_BUSINESS_REJECTED, payload: error }));
+  dispatch({ type: EDIT_BUSINESS_PENDING });
+};
+
+const getAddressTree = (
+  countryId,
+  stateId,
+  districtId,
+  cityId,
+  access_token,
+  dispatch
+) => {
+  if (countryId !== "")
+    onCountryEachGet({ id: countryId, access_token })
+      .then(countryResponse => {
+        dispatch({
+          type: FETCH_ADDRESS_TREE_FULFILLED,
+          payload: countryResponse.data
+        });
+        if (stateId !== "")
+          onStateEachGet({ id: stateId, access_token })
+            .then(stateResponse => {
+              dispatch({
+                type: FETCH_ADDRESS_TREE_FULFILLED,
+                payload: stateResponse.data
+              });
+              if (districtId !== "")
+                onDistrictEachGet({ id: districtId, access_token })
+                  .then(districtResponse => {
+                    dispatch({
+                      type: FETCH_ADDRESS_TREE_FULFILLED,
+                      payload: districtResponse.data
+                    });
+                    if (cityId !== "")
+                      onCityEachGet({ id: cityId, access_token })
+                        .then(cityResponse =>
+                          dispatch({
+                            type: FETCH_ADDRESS_TREE_FULFILLED,
+                            payload: cityResponse.data
+                          })
+                        )
+                        .catch(cityErr =>
+                          dispatch({
+                            type: FETCH_ADDRESS_TREE_REJECTED,
+                            payload: cityErr
+                          })
+                        );
+                  })
+                  .catch(districtErr =>
+                    dispatch({
+                      type: FETCH_ADDRESS_TREE_REJECTED,
+                      payload: districtErr
+                    })
+                  );
+            })
+            .catch(stateErr =>
+              dispatch({ type: FETCH_ADDRESS_TREE_REJECTED, payload: stateErr })
+            );
+      })
+      .catch(countryErr =>
+        dispatch({ type: FETCH_ADDRESS_TREE_REJECTED, payload: countryErr })
+      );
+};
+
 export const onBusinessEachList = ({ username, access_token }) => dispatch => {
   onBusinessEachGet({ username, access_token })
-    .then(response =>
-      dispatch({ type: FETCH_BUSINESS_EACH_FULFILLED, payload: response.data })
-    )
+    .then(response => {
+      console.log("asdadsadADasd: ", response.data);
+
+      dispatch({ type: FETCH_BUSINESS_EACH_FULFILLED, payload: response.data });
+
+      const industryId = response.data.industry
+        ? response.data.industry.id
+        : "";
+      const countryId = response.data.address.country
+        ? response.data.address.country.id
+        : "";
+      const stateId = response.data.address.state
+        ? response.data.address.state.id
+        : "";
+      const districtId = response.data.address.district
+        ? response.data.address.district.id
+        : "";
+      const cityId = response.data.address.city
+        ? response.data.address.city.id
+        : "";
+
+      if (industryId !== "")
+        onIndustryEachGet({ id: industryId, access_token })
+          .then(newResponse =>
+            dispatch({
+              type: FETCH_INDUSTRY_EACH_FULFILLED,
+              payload: newResponse.data
+            })
+          )
+          .catch(err =>
+            dispatch({ type: FETCH_INDUSTRY_EACH_REJECTED, payload: err })
+          );
+
+      //For Primary Address
+      getAddressTree(
+        countryId,
+        stateId,
+        districtId,
+        cityId,
+        access_token,
+        dispatch
+      );
+
+      // For Branch Address
+      response.data.branchAddress.map(each => {
+        const branchcountryId = each.country ? each.country.id : "";
+        const branchstateId = each.state ? each.state.id : "";
+        const branchdistrictId = each.district ? each.district.id : "";
+        const branchcityId = each.city ? each.city.id : "";
+
+        getAddressTree(
+          branchcountryId,
+          branchstateId,
+          branchdistrictId,
+          branchcityId,
+          access_token,
+          dispatch
+        );
+      });
+
+      dispatch({ type: FETCH_INDUSTRY_EACH_PENDING });
+      dispatch({ type: FETCH_ADDRESS_TREE_PENDING });
+      // dispatch({ type: FETCH_COUNTRY_EACH_PENDING });
+      // dispatch({ type: FETCH_STATE_EACH_PENDING });
+      // dispatch({ type: FETCH_DISTRICT_EACH_PENDING });
+      // dispatch({ type: FETCH_CITY_EACH_PENDING });
+    })
     .catch(error =>
       dispatch({ type: FETCH_BUSINESS_EACH_REJECTED, payload: error })
     );

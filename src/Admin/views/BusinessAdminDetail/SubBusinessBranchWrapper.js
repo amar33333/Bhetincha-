@@ -31,6 +31,7 @@ class SubBusinessBranchWrapper extends Component {
             serial_num={index}
             id={each.addressID}
             branch={each}
+            {...nextProps.general_setup}
             edit
           />
         )),
@@ -162,8 +163,8 @@ class SubBusinessBranchWrapper extends Component {
   };
 
   render() {
-    console.log("branchWrapper props:", this.props);
-    console.log("branchWrapper state:", this.state);
+    // console.log("branchWrapper props:", this.props);
+    // console.log("branchWrapper state:", this.state);
 
     return (
       <div className="animated fadeIn">

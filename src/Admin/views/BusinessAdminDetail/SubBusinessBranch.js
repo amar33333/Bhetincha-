@@ -54,7 +54,6 @@ class SubBusinessBranch extends Component {
 
   static getDerivedStateFromProps = (nextProps, prevState) => {
     const { branch } = nextProps;
-    console.log("branch props:", branch);
 
     return branch && nextProps.edit
       ? {
@@ -201,7 +200,7 @@ class SubBusinessBranch extends Component {
 
   render() {
     // console.log("branch props:", this.props);
-    console.log("branch state:", this.state);
+    // console.log("branch state:", this.state);
 
     countries = this.props.countries;
 
