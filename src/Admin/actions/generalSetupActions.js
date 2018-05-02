@@ -190,6 +190,7 @@ export const onAreaList = ({ access_token }) => dispatch => {
   dispatch({ type: FETCH_AREA_PENDING });
 };
 
+// Not Used till now...
 export const onAddressTreeListAllImmediate = ({
   id,
   access_token
@@ -236,7 +237,7 @@ export const onAddressTreeList = ({
   ADDRESS_KEY
 }) => dispatch => {
   console.log("address key: ", ADDRESS_KEY);
-  if (ADDRESS_KEY === "country" || ADDRESS_KEY === "primary_country") {
+  if (ADDRESS_KEY === "country") {
     console.log("addreskey: ", ADDRESS_KEY);
     onCountryEachGet({ id, access_token })
       .then(response =>
@@ -248,7 +249,7 @@ export const onAddressTreeList = ({
       .catch(error =>
         dispatch({ type: FETCH_ADDRESS_TREE_REJECTED, payload: error })
       );
-  } else if (ADDRESS_KEY === "state" || ADDRESS_KEY === "primary_state")
+  } else if (ADDRESS_KEY === "state")
     onStateEachGet({ id, access_token })
       .then(response =>
         dispatch({
@@ -259,7 +260,7 @@ export const onAddressTreeList = ({
       .catch(error =>
         dispatch({ type: FETCH_ADDRESS_TREE_REJECTED, payload: error })
       );
-  else if (ADDRESS_KEY === "district" || ADDRESS_KEY === "primary_district")
+  else if (ADDRESS_KEY === "district")
     onDistrictEachGet({ id, access_token })
       .then(response =>
         dispatch({
@@ -270,7 +271,7 @@ export const onAddressTreeList = ({
       .catch(error =>
         dispatch({ type: FETCH_ADDRESS_TREE_REJECTED, payload: error })
       );
-  else if (ADDRESS_KEY === "city" || ADDRESS_KEY === "primary_city")
+  else if (ADDRESS_KEY === "city")
     onCityEachGet({ id, access_token })
       .then(response =>
         dispatch({

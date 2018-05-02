@@ -52,39 +52,45 @@ class SubBusinessBranch extends Component {
       : null;
   }
 
-  static getDerivedStateFromProps = (nextProps, prevState) =>
-    nextProps.branch && nextProps.edit
+  static getDerivedStateFromProps = (nextProps, prevState) => {
+    const { branch } = nextProps;
+
+    return branch && nextProps.edit
       ? {
-          landlineNumber: nextProps.branch.landlineNumber,
-          house_no: nextProps.branch.house_no,
-          landmark: nextProps.branch.landmark,
-          addressLine1: nextProps.branch.addressLine1,
-          addressLine2: nextProps.branch.addressLine2,
-          po_box: nextProps.branch.po_box,
-          tollFreeNumber: nextProps.branch.tollFreeNumber,
-          email: nextProps.branch.email,
+          landlineNumber: branch.landlineNumber ? branch.landlineNumber : "",
+          otherLandlineNumber: branch.otherLandlineNumber
+            ? branch.otherLandlineNumber
+            : "",
+          house_no: branch.house_no ? branch.house_no : "",
+          landmark: branch.landmark ? branch.landmark : "",
+          addressLine1: branch.addressLine1 ? branch.addressLine1 : "",
+          addressLine2: branch.addressLine2 ? branch.addressLine2 : "",
+          po_box: branch.po_box ? branch.po_box : "",
+          tollFreeNumber: branch.tollFreeNumber ? branch.tollFreeNumber : "",
+          email: branch.email ? branch.email : "",
           country: {
-            id: nextProps.branch.country.id,
-            name: nextProps.branch.country.name
+            id: branch.country ? branch.country.id : "",
+            name: branch.country ? branch.country.name : ""
           },
           state: {
-            id: nextProps.branch.state.id,
-            name: nextProps.branch.state.name
+            id: branch.state ? branch.state.id : "",
+            name: branch.state ? branch.state.name : ""
           },
           district: {
-            id: nextProps.branch.district.id,
-            name: nextProps.branch.district.name
+            id: branch.district ? branch.district.id : "",
+            name: branch.district ? branch.district.name : ""
           },
           city: {
-            id: nextProps.branch.city.id,
-            name: nextProps.branch.city.name
+            id: branch.city ? branch.city.id : "",
+            name: branch.city ? branch.city.name : ""
           },
           area: {
-            id: nextProps.branch.area.id,
-            name: nextProps.branch.area.name
+            id: branch.area ? branch.area.id : "",
+            name: branch.area ? branch.area.name : ""
           }
         }
       : null;
+  };
 
   onChange = (key, event) => {
     if (key === "landmark" || "addressLine1" || "addressLine2") {
@@ -193,7 +199,8 @@ class SubBusinessBranch extends Component {
   };
 
   render() {
-    console.log("branch state:", this.state);
+    // console.log("branch props:", this.props);
+    // console.log("branch state:", this.state);
 
     countries = this.props.countries;
 

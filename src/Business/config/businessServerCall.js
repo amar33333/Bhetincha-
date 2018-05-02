@@ -31,7 +31,7 @@ export const onBusinessPost = ({ data, access_token }) => {
     business_name: data.business_name,
     business_email: data.business_email,
     address: data.address,
-    branchs: data.branchs,
+    branchAddress: data.branchs,
     logo: data.logo.base64,
     cover_photo: data.cover_photo.base64,
     industry: data.industry ? data.industry.id : undefined,
@@ -42,76 +42,51 @@ export const onBusinessPost = ({ data, access_token }) => {
     alwaysOpen: data.alwaysOpen
   };
 
-  // const server_format_data = {
-  //   business_name: data.business_name,
-  //   // username: data.username,
-  //   // password: data.password,
-  //   business_email: data.business_email,
-  //   address: {
-  //     otherLandlineNumber: [data.other_landline_number],
-  //     house_no: data.house_no,
-  //     landmark: data.landmark,
-  //     addressLine1: data.address_line_1,
-  //     addressLine2: data.address_line_2,
-  //     po_box: data.post_box,
-  //     tollFreeNumber: data.toll_free,
-  //     landlineNumber: data.landline,
-  //     email: data.email,
-  //     country: data.primary_country.id,
-  //     state: data.primary_state.id,
-  //     district: data.primary_district.id,
-  //     city: data.primary_city.id,
-  //     area: data.primary_area.id,
-  //     contactPerson: data.contactPerson
-  //     // contactPerson: {
-  //     //   name: data.contact_person_name,
-  //     //   designation: data.contact_person_designation,
-  //     //   email: data.contact_person_email,
-  //     //   mobileNumber: data.contact_person_mobile_number
-  //     //   // visibleToPublic: "false"
-  //     // }
-  //   },
-  //   branchAddress: data.branchs,
-  //   // branchAddress: [
-  //   //   {
-  //   //     otherLandlineNumber: ["9849477523", "9843047233"],
-  //   //     house_no: "1235",
-  //   //     landmark: "opposite to ",
-  //   //     addressLine1: "address_line_1",
-  //   //     addressLine2: "address_line_2",
-  //   //     po_box: "1234",
-  //   //     tollFreeNumber: "123465453",
-  //   //     landlineNumber: "4123362",
-  //   //     email: "xyz@gmail.com",
-  //   //     area: "435321321453f2sf65",
-  //   //     contactPerson: {
-  //   //       name: "sagarkumar",
-  //   //       designation: "founder",
-  //   //       email: "abcsdfs@gmail.com",
-  //   //       mobileNumber: "4354213213",
-  //   //       visibleToPublic: "True"
-  //   //     }
-  //   //   }
-  //   // ],
-  //   about: {
-  //     tagline: data.about_us_tagline,
-  //     aboutUs: data.about_us,
-  //     // establishedYear: "2010-01-02T00:00:00Z",
-  //     companyType: data.company_type.id
-  //   },
-  //   logo: data.business_logo.base64,
-  //   cover_photo: data.business_cover_image.base64,
-  //   industry: data.industry.id,
-  //   categories: category_list,
-  //   sub_categories: sub_category_list,
-  //   paymentMethod: payment_methods_list
-  // };
-
   console.log("server_droasd: ", server_format_data);
 
   return axios({
     method: "post",
     url: BUSINESS_URL,
+    data: server_format_data,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+};
+
+export const onBusinessPut = ({ id, access_token, data }) => {
+  const category_list = data.categories
+    ? data.categories.map(category => category.id)
+    : [];
+
+  const sub_category_list = data.sub_categories
+    ? data.sub_categories.map(sub_category => sub_category.id)
+    : [];
+
+  const payment_methods_list = data.paymentMethod
+    ? data.paymentMethod.map(payment_method => payment_method.id)
+    : [];
+
+  const server_format_data = {
+    about: data.about,
+    business_name: data.business_name,
+    business_email: data.business_email,
+    address: data.address,
+    branchAddress: data.branchs,
+    logo: data.logo.base64,
+    cover_photo: data.cover_photo.base64,
+    industry: data.industry ? data.industry.id : undefined,
+    categories: category_list,
+    sub_categories: sub_category_list,
+    paymentMethod: payment_methods_list
+    //workingHour: data.workingHour,
+    //alwaysOpen: data.alwaysOpen
+  };
+
+  return axios({
+    method: "PUT",
+    url: `${BUSINESS_URL}${id}/`,
     data: server_format_data,
     headers: {
       "Content-Type": "application/json",

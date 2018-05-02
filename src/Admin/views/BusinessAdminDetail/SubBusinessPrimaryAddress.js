@@ -53,36 +53,39 @@ class SubBusinessPrimaryAddress extends Component {
   static getDerivedStateFromProps = (nextProps, prevState) => {
     const { address } = nextProps;
 
-    return nextProps.address && nextProps.edit
+    return address && nextProps.edit
       ? {
-          landlineNumber: nextProps.address.landline,
-          house_no: nextProps.address.house_no,
-          landmark: nextProps.address.landmark,
-          addressLine1: nextProps.address.addressLine1,
-          addressLine2: nextProps.address.addressLine2,
-          po_box: nextProps.address.po_box,
-          tollFreeNumber: nextProps.address.tollFreeNumber,
-          email: nextProps.address.email
-          // country: {
-          //   id: nextProps.address.country.id,
-          //   name: nextProps.address.country.name
-          // },
-          // state: {
-          //   id: nextProps.address.state.id,
-          //   name: nextProps.address.state.name
-          // },
-          // district: {
-          //   id: nextProps.address.district.id,
-          //   name: nextProps.address.district.name
-          // },
-          // city: {
-          //   id: nextProps.address.city.id,
-          //   name: nextProps.address.city.name
-          // },
-          // area: {
-          //   id: nextProps.address.area.id,
-          //   name: nextProps.address.area.name
-          // }
+          landlineNumber: address.landlineNumber ? address.landlineNumber : "",
+          otherLandlineNumber: address.otherLandlineNumber
+            ? address.otherLandlineNumber
+            : "",
+          house_no: address.house_no ? address.house_no : "",
+          landmark: address.landmark ? address.landmark : "",
+          addressLine1: address.addressLine1 ? address.addressLine1 : "",
+          addressLine2: address.addressLine2 ? address.addressLine2 : "",
+          po_box: address.po_box ? address.po_box : "",
+          tollFreeNumber: address.tollFreeNumber ? address.tollFreeNumber : "",
+          email: address.email ? address.email : "",
+          country: {
+            id: address.country ? address.country.id : "",
+            name: address.country ? address.country.name : ""
+          },
+          state: {
+            id: address.state ? address.state.id : "",
+            name: address.state ? address.state.name : ""
+          },
+          district: {
+            id: address.district ? address.district.id : "",
+            name: address.district ? address.district.name : ""
+          },
+          city: {
+            id: address.city ? address.city.id : "",
+            name: address.city ? address.city.name : ""
+          },
+          area: {
+            id: address.area ? address.area.id : "",
+            name: address.area ? address.area.name : ""
+          }
         }
       : null;
   };
@@ -91,6 +94,7 @@ class SubBusinessPrimaryAddress extends Component {
     this.props.address && this.props.edit
       ? this.props.address.contactPerson
       : null;
+
   onChange = (key, event) => {
     if (key === "landmark" || "addressLine1" || "addressLine2") {
       this.setState({
@@ -181,16 +185,23 @@ class SubBusinessPrimaryAddress extends Component {
 
   getState = () => {
     console.log("eachItem PRIMARY: ", this.state);
-
+    const temp = {
+      ...this.state,
+      country: this.state.country.id,
+      state: this.state.state.id,
+      district: this.state.district.id,
+      city: this.state.city.id,
+      area: this.state.area.id
+    };
     let reformed = {};
-    for (var property in this.state) {
+
+    for (var property in temp) {
       reformed =
-        (this.state[property] !== "" &&
-          this.state[property] !== null &&
-          this.state[property] !== undefined) ||
-        (this.state[property].constructor === Array &&
-          this.state[property].length > 0)
-          ? { ...reformed, [property]: this.state[property] }
+        (temp[property] !== "" &&
+          temp[property] !== null &&
+          temp[property] !== undefined) ||
+        (temp[property].constructor === Array && temp[property].length > 0)
+          ? { ...reformed, [property]: temp[property] }
           : reformed;
     }
 
@@ -204,6 +215,8 @@ class SubBusinessPrimaryAddress extends Component {
   };
 
   render() {
+    // console.log("primasdd addr props: ", this.props);
+    // console.log("primasdd addr state: ", this.state);
     countries = this.props.countries;
 
     try {

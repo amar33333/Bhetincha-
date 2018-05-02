@@ -139,7 +139,7 @@ class SubBusinessContactWrapper extends Component {
   };
 
   render() {
-    console.log("render state contactPerson: ", this.state.contactPerson);
+    // console.log("render state contactPerson: ", this.state.contactPerson);
     // console.log("contactwrapper: ", this.state);
     return (
       <div className="animated fadeIn">
