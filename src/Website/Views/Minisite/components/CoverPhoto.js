@@ -8,7 +8,9 @@ import { handleCoverPhotoChange } from "../actions";
 import { CustomModal } from "../../../../Common/components";
 
 class CoverPhoto extends Component {
-  state = { PhotoEditorComponent: null, isOpen: false };
+  state = { PhotoEditorComponent: null, isOpen: true };
+
+  componentDidMount = () => this.props.mainEdit && this.renderPhotoComponent();
 
   componentDidUpdate(prevProps) {
     if (prevProps.mainEdit !== this.props.mainEdit) {
@@ -46,7 +48,20 @@ class CoverPhoto extends Component {
             className="modal-lg"
             title="Image Editor"
           >
-            {PhotoEditorComponent && <PhotoEditorComponent />}
+            {PhotoEditorComponent && (
+              <PhotoEditorComponent
+                logo={`${MAIN_URL}${this.props.logo}`}
+                cover={`${MAIN_URL}${this.props.cover_photo}`}
+                onUploadCover={file =>
+                  this.props.handleCoverPhotoChange({
+                    id: this.props.id,
+                    access_token: this.props.cookies.token_data.access_token,
+                    username: this.props.username,
+                    data: { cover_photo: file }
+                  })
+                }
+              />
+            )}
           </CustomModal>
         )}
       </div>
@@ -57,9 +72,10 @@ class CoverPhoto extends Component {
 export default connect(
   ({
     auth: { cookies },
-    MinisiteContainer: { crud: { cover_photo, id, username }, edit }
+    MinisiteContainer: { crud: { cover_photo, logo, id, username }, edit }
   }) => ({
     cover_photo,
+    logo,
     id,
     username,
     cookies,
