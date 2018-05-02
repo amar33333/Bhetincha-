@@ -19,16 +19,29 @@ import {
 
 import Select from "react-select";
 
-import { onCitySubmit, onDistrictList } from "../../actions";
+import {
+  onCountryList,
+  onCountryEachList,
+  onStateEachList,
+  onDistrictList,
+  onCitySubmit
+} from "../../actions";
 
 class Cities extends Component {
-  state = { city: "", district: "" };
-  access_token = this.props.cookies
-    ? this.props.cookies.token_data.access_token
-    : null;
+  constructor(props) {
+    super(props);
+    this.state = {
+      country: "",
+      state: "",
+      district: "",
+      city: ""
+    };
 
-  componentWillMount() {
-    this.props.onDistrictList({ access_token: this.access_token });
+    this.access_token = this.props.cookies
+      ? this.props.cookies.token_data.access_token
+      : null;
+
+    this.props.onCountryList({ access_token: this.access_token });
   }
 
   onFormSubmit = event => {
@@ -50,19 +63,36 @@ class Cities extends Component {
     });
   };
 
-  handleSelectChange = district => {
-    this.setState({ district });
+  handleSelectChange = (key, value) => {
+    this.setState({ [key]: value });
+    if (key === "country") {
+      this.setState({
+        state: ""
+      });
+      this.props.onCountryEachList({
+        id: value.id,
+        access_token: this.access_token
+      });
+    } else if (key === "state") {
+      this.setState({
+        district: ""
+      });
+      this.props.onStateEachList({
+        id: value.id,
+        access_token: this.access_token
+      });
+    }
   };
 
   render() {
-    const districts = this.props.general_setup.districts
-      ? this.props.general_setup.districts.map(district => {
-          return { value: district.id, label: district.name };
-        })
+    const countries = this.props.general_setup.countries;
+    const states = this.props.general_setup.countryData
+      ? this.props.general_setup.countryData.states
       : null;
 
-    const { district } = this.state;
-    const value = district && district.value;
+    const districts = this.props.general_setup.stateData
+      ? this.props.general_setup.stateData.districts
+      : null;
 
     return (
       <div className="animated fadeIn">
@@ -73,42 +103,93 @@ class Cities extends Component {
                 <strong>Add City</strong>
               </CardHeader>
               <CardBody>
-                <Form onSubmit={this.onFormSubmit} inline>
-                  <FormGroup className="mb-2 mr-sm-2 mb-sm-0">
-                    <Label for="Industies">District</Label>
-                    <Select
-                      autoFocus
-                      autosize
-                      clearable
-                      required
-                      name="Industies"
-                      className="select-industry"
-                      value={value}
-                      onChange={this.handleSelectChange}
-                      options={districts}
-                    />
-                    <InputGroup>
-                      <InputGroupAddon addonType="prepend">
-                        <InputGroupText>
-                          <i className="fa fa-industry" />
-                        </InputGroupText>
-                      </InputGroupAddon>
-                      <Input
-                        autoFocus
-                        required
-                        type="text"
-                        placeholder="Type City Name"
-                        value={this.state.city}
-                        onChange={this.onChange.bind(this, "city")}
-                      />
-                    </InputGroup>
-                  </FormGroup>
-                  <Button
-                    color="primary"
-                    //onClick={() => this.onLoginBtnClick()}
-                  >
-                    <span className="fa fa-plus" /> Add
-                  </Button>
+                <Form onSubmit={this.onFormSubmit}>
+                  <Row>
+                    <Col xs="12" md="4">
+                      <FormGroup>
+                        <Label for="Industies">Country</Label>
+                        <Select
+                          autoFocus
+                          autosize
+                          clearable
+                          required
+                          name="countries"
+                          className="select-industry"
+                          value={this.state.country.id}
+                          onChange={this.handleSelectChange.bind(
+                            this,
+                            "country"
+                          )}
+                          options={countries}
+                          valueKey="id"
+                          labelKey="name"
+                        />
+                      </FormGroup>
+                    </Col>
+                    <Col xs="12" md="4">
+                      <FormGroup>
+                        <Label for="Industies">State</Label>
+                        <Select
+                          autoFocus
+                          autosize
+                          clearable
+                          required
+                          name="states"
+                          className="select-industry"
+                          value={this.state.state.id}
+                          onChange={this.handleSelectChange.bind(this, "state")}
+                          options={states}
+                          valueKey="id"
+                          labelKey="name"
+                        />
+                      </FormGroup>
+                    </Col>
+                    <Col xs="12" md="4">
+                      <FormGroup>
+                        <Label for="Industies">District</Label>
+                        <Select
+                          autoFocus
+                          autosize
+                          clearable
+                          required
+                          name="Industies"
+                          className="select-industry"
+                          value={this.state.district.id}
+                          onChange={this.handleSelectChange.bind(
+                            this,
+                            "district"
+                          )}
+                          options={districts}
+                          valueKey="id"
+                          labelKey="name"
+                        />
+                      </FormGroup>
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col xs="10" md="10">
+                      <InputGroup>
+                        <InputGroupAddon addonType="prepend">
+                          <InputGroupText>
+                            <i className="fa fa-industry" />
+                          </InputGroupText>
+                        </InputGroupAddon>
+                        <Input
+                          autoFocus
+                          required
+                          type="text"
+                          placeholder="Type City Name"
+                          value={this.state.city}
+                          onChange={this.onChange.bind(this, "city")}
+                        />
+                      </InputGroup>
+                    </Col>
+                    <Col xs="2" md="2">
+                      <Button color="primary">
+                        <span className="fa fa-plus" /> Add
+                      </Button>
+                    </Col>
+                  </Row>
                 </Form>
               </CardBody>
             </Card>
@@ -123,6 +204,8 @@ export default connect(
   ({ AdminContainer: { general_setup }, auth }) => ({ general_setup, ...auth }),
   {
     onCitySubmit,
-    onDistrictList
+    onCountryList,
+    onCountryEachList,
+    onStateEachList
   }
 )(Cities);

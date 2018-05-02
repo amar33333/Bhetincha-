@@ -72,7 +72,7 @@ class States extends Component {
                 <strong>Add State</strong>
               </CardHeader>
               <CardBody>
-                <Form onSubmit={this.onFormSubmit} inline>
+                <Form onSubmit={this.onFormSubmit}>
                   <Row>
                     <Col xs="12">
                       <FormGroup>
@@ -92,7 +92,7 @@ class States extends Component {
                     </Col>
                   </Row>
                   <Row>
-                    <Col xs="12">
+                    <Col xs="10" md="10">
                       <InputGroup>
                         <InputGroupAddon addonType="prepend">
                           <InputGroupText>
@@ -108,6 +108,8 @@ class States extends Component {
                           onChange={this.onChange.bind(this, "state")}
                         />
                       </InputGroup>
+                    </Col>
+                    <Col xs="2" md="2">
                       <Button color="primary">
                         <span className="fa fa-plus" /> Add
                       </Button>
