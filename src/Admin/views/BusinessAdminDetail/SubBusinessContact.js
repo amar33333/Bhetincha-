@@ -43,7 +43,15 @@ class SubBusinessContact extends Component {
         }
       : null;
 
-  onChange = (key, event) => this.setState({ [key]: event.target.value });
+  onChange = (key, event) => {
+    if (key === "name" || "department" || "designation") {
+      this.setState({
+        [key]: event.target.value.replace(/\b\w/g, l => l.toUpperCase())
+      });
+    } else {
+      this.setState({ [key]: event.target.value });
+    }
+  };
 
   onDelete = () => {
     this.clearState();

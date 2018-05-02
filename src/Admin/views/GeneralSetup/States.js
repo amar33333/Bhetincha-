@@ -44,7 +44,9 @@ class States extends Component {
   };
 
   onChange = (key, event) => {
-    this.setState({ [key]: event.target.value });
+    this.setState({
+      [key]: event.target.value.replace(/\b\w/g, l => l.toUpperCase())
+    });
   };
 
   handleSelectChange = country => {
@@ -71,41 +73,46 @@ class States extends Component {
               </CardHeader>
               <CardBody>
                 <Form onSubmit={this.onFormSubmit} inline>
-                  <FormGroup className="mb-2 mr-sm-2 mb-sm-0">
-                    <Label for="Country">Country</Label>
-                    <Select
-                      autoFocus
-                      autosize
-                      clearable
-                      required
-                      name="Industies"
-                      className="select-industry"
-                      value={value}
-                      onChange={this.handleSelectChange}
-                      options={countries}
-                    />
-                    <InputGroup>
-                      <InputGroupAddon addonType="prepend">
-                        <InputGroupText>
-                          <i className="fa fa-industry" />
-                        </InputGroupText>
-                      </InputGroupAddon>
-                      <Input
-                        autoFocus
-                        required
-                        type="text"
-                        placeholder="Type State Name"
-                        value={this.state.state}
-                        onChange={this.onChange.bind(this, "state")}
-                      />
-                    </InputGroup>
-                  </FormGroup>
-                  <Button
-                    color="primary"
-                    //onClick={() => this.onLoginBtnClick()}
-                  >
-                    <span className="fa fa-plus" /> Add
-                  </Button>
+                  <Row>
+                    <Col xs="12">
+                      <FormGroup>
+                        <Label for="Country">Country</Label>
+                        <Select
+                          autoFocus
+                          autosize
+                          clearable
+                          required
+                          name="Industies"
+                          className="select-industry mb-2"
+                          value={value}
+                          onChange={this.handleSelectChange}
+                          options={countries}
+                        />
+                      </FormGroup>
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col xs="12">
+                      <InputGroup>
+                        <InputGroupAddon addonType="prepend">
+                          <InputGroupText>
+                            <i className="fa fa-industry" />
+                          </InputGroupText>
+                        </InputGroupAddon>
+                        <Input
+                          autoFocus
+                          required
+                          type="text"
+                          placeholder="Type State Name"
+                          value={this.state.state}
+                          onChange={this.onChange.bind(this, "state")}
+                        />
+                      </InputGroup>
+                      <Button color="primary">
+                        <span className="fa fa-plus" /> Add
+                      </Button>
+                    </Col>
+                  </Row>
                 </Form>
               </CardBody>
             </Card>
