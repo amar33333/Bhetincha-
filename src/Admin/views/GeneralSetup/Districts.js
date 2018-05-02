@@ -48,7 +48,9 @@ class Districts extends Component {
   };
 
   onChange = (key, event) => {
-    this.setState({ [key]: event.target.value });
+    this.setState({
+      [key]: event.target.value.replace(/\b\w/g, l => l.toUpperCase())
+    });
   };
 
   handleSelectChange = state => {
@@ -119,10 +121,7 @@ class Districts extends Component {
                       />
                     </InputGroup>
                   </FormGroup>
-                  <Button
-                    color="primary"
-                    //onClick={() => this.onLoginBtnClick()}
-                  >
+                  <Button color="primary">
                     <span className="fa fa-plus" /> Add
                   </Button>
                 </Form>

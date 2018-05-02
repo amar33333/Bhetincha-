@@ -1,5 +1,7 @@
 import React, { Component } from "react";
+import moment from "moment";
 import AboutUsEditor from "../../../Website/Views/Minisite/components/AboutUsEditor";
+import Datetime from "react-datetime";
 import "react-datetime/css/react-datetime.css";
 
 import {
@@ -25,24 +27,44 @@ class SubBusinessAbout extends Component {
       tagline: "",
       aboutUs: "",
       establishedYear: "",
-      companyType: []
+      companyType: ""
     };
   }
 
   static getDerivedStateFromProps = nextProps =>
     nextProps.about && nextProps.edit
       ? {
-          tagline: nextProps.about.tagline,
-          aboutUs: nextProps.about.aboutUs,
-          establishedYear: "",
-          companyType: {
-            id: nextProps.about.companyType,
-            name: nextProps.about.companyType
-          }
+          tagline: nextProps.about.tagline ? nextProps.about.tagline : "",
+          aboutUs: nextProps.about.aboutUs ? nextProps.about.aboutUs : "",
+          establishedYear: nextProps.about.establishedYear
+            ? nextProps.about.establishedYear
+            : "",
+          companyType: nextProps.about.companyType
+            ? {
+                id: nextProps.about.companyType.id,
+                name: nextProps.about.companyType.name
+              }
+            : ""
         }
       : null;
 
-  onChange = (key, event) => this.setState({ [key]: event.target.value });
+  onChange = (key, event) => {
+    if (key === "tagline") {
+      this.setState({
+        [key]: event.target.value.replace(/\b\w/g, l => l.toUpperCase())
+      });
+    } else {
+      this.setState({ [key]: event.target.value });
+    }
+  };
+
+  onChangeEstablishedYear = year => {
+    console.log("Year: ", year);
+    console.log("Year after moment: ", moment.utc(year).format("YYYY"));
+    this.setState({
+      establishedYear: moment.utc(year).format("YYYY")
+    });
+  };
 
   handleAboutChange = value => this.setState({ aboutUs: value });
 
@@ -63,9 +85,11 @@ class SubBusinessAbout extends Component {
     let reformed = {};
     for (var property in this.state) {
       reformed =
-        this.state[property] !== "" &&
-        this.state[property] !== null &&
-        this.state[property] !== undefined
+        (this.state[property] !== null &&
+          this.state[property] !== undefined &&
+          this.state[property] !== "") ||
+        (this.state[property].constructor === Array &&
+          this.state[property].length > 0)
           ? { ...reformed, [property]: this.state[property] }
           : reformed;
     }
@@ -73,15 +97,21 @@ class SubBusinessAbout extends Component {
     console.log("about reformed: ", reformed);
     return {
       about: {
-        ...reformed
+        ...reformed,
+        companyType: this.state.companyType.id
       }
     };
   };
   render() {
+    // console.log("about props: ", this.props);
+    // console.log("about state: ", this.state);
     const companyTypes = this.props.company_types;
 
-    const { company_type } = this.state;
-    const valueCompanyType = company_type && company_type.id;
+    let yesterday = Datetime.moment().subtract(1, "day");
+
+    let validEstablishedYear = function(current) {
+      return current.isBefore(yesterday);
+    };
 
     return (
       <div className="animated fadeIn">
@@ -152,11 +182,15 @@ class SubBusinessAbout extends Component {
                 <Col xs="6" md="6">
                   <FormGroup>
                     <Label for="year">Established Year</Label>
-                    <Input
-                      type="text"
-                      value={this.state.establishedYear}
-                      onKeyDown={this._handleKeyPress}
-                      onChange={this.onChange.bind(this, "establishedYear")}
+
+                    <Datetime
+                      timeFormat={false}
+                      isValidDate={validEstablishedYear}
+                      dateFormat="YYYY"
+                      defaultValue={moment.utc().format("YYYY")}
+                      onChange={this.onChangeEstablishedYear}
+                      viewMode={"years"}
+                      utc={true}
                     />
                   </FormGroup>
                 </Col>
@@ -167,7 +201,9 @@ class SubBusinessAbout extends Component {
                       name="Company Type"
                       placeholder="Select Your Company Type"
                       noResultsText="No Data Found"
-                      value={valueCompanyType}
+                      value={
+                        this.state.companyType ? this.state.companyType.id : ""
+                      }
                       onChange={this.handleSelectChange.bind(
                         this,
                         "companyType"

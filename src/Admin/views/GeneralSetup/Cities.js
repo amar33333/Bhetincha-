@@ -45,7 +45,9 @@ class Cities extends Component {
   };
 
   onChange = (key, event) => {
-    this.setState({ [key]: event.target.value });
+    this.setState({
+      [key]: event.target.value.replace(/\b\w/g, l => l.toUpperCase())
+    });
   };
 
   handleSelectChange = district => {

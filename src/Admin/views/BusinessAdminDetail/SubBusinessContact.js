@@ -43,7 +43,15 @@ class SubBusinessContact extends Component {
         }
       : null;
 
-  onChange = (key, event) => this.setState({ [key]: event.target.value });
+  onChange = (key, event) => {
+    if (key === "name" || "department" || "designation") {
+      this.setState({
+        [key]: event.target.value.replace(/\b\w/g, l => l.toUpperCase())
+      });
+    } else {
+      this.setState({ [key]: event.target.value });
+    }
+  };
 
   onDelete = () => {
     this.clearState();
@@ -171,12 +179,12 @@ class SubBusinessContact extends Component {
                     color="success"
                     onClick={() => this.props.onAdd(this.state, this.props.id)}
                   >
-                    SAVE CONTACT
+                    <i className="fa fa-save" /> SAVE CONTACT
                   </Button>
                 </Col>
                 <Col xs="6" md="6">
                   <Button color="danger" onClick={this.onDelete}>
-                    DELETE
+                    <i className="fa fa-remove" /> DELETE
                   </Button>
                 </Col>
               </Row>

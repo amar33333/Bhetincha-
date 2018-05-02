@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-
 import Select from "react-select";
 
 import {
@@ -72,7 +71,18 @@ class SubBusinessDetail extends Component {
     return result;
   };
 
-  onChange = (key, event) => this.setState({ [key]: event.target.value });
+  onChange = (key, event) => {
+    if (key === "business_name") {
+      let newBusinessName = event.target.value.replace(/\b\w/g, l =>
+        l.toUpperCase()
+      );
+      this.setState({
+        [key]: newBusinessName
+      });
+    } else {
+      this.setState({ [key]: event.target.value });
+    }
+  };
 
   handleSelectChange = (key, value) => {
     console.log("vavas: ", key, value);
@@ -151,12 +161,12 @@ class SubBusinessDetail extends Component {
 
     if (this.props.categoryData) {
       this.props.categoryData.map(each => {
-        console.log("subca: ", each.subcategories);
+        // console.log("subca: ", each.subcategories);
         subCategories = [...subCategories, ...each.subcategories];
       });
     }
 
-    console.log("subcate: ", subCategories);
+    // console.log("subcate: ", subCategories);
 
     const paymentMethods = this.props.payment_methods;
 
