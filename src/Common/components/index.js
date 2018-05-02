@@ -10,6 +10,7 @@ import SidebarHeader from "./SidebarHeader";
 import SidebarMinimizer from "./SidebarMinimizer";
 import Tooltip from "./Tooltip";
 import PopoverDelete from "./PopoverDelete";
+import CustomModal from "./CustomModal";
 
 export {
   Aside,
@@ -23,5 +24,6 @@ export {
   SidebarHeader,
   SidebarMinimizer,
   Tooltip,
-  PopoverDelete
+  PopoverDelete,
+  CustomModal
 };

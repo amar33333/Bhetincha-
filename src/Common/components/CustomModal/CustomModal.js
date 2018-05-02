@@ -10,7 +10,7 @@ class CustomModal extends Component {
         className={this.props.className}
       >
         <ModalHeader toggle={this.props.toggleModal}>
-          Login To Bhetincha
+          {this.props.title || "Login To Bhetincha"}
         </ModalHeader>
         <ModalBody>{this.props.children}</ModalBody>
       </Modal>

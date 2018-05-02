@@ -10,17 +10,20 @@ import {
 } from "../../../../Business/config/businessServerCall";
 
 import {
-  TOGGLE_EDIT_ABOUT_US,
   UPDATE_ABOUT_PENDING,
   UPDATE_ABOUT_FULFILLED,
   UPDATE_ABOUT_REJECTED,
   FETCH_BUSINESS_PENDING,
   FETCH_BUSINESS_FULFILLED,
   FETCH_BUSINESS_REJECTED,
+  UPDATE_BUSINESS_PENDING,
+  UPDATE_BUSINESS_FULFILLED,
+  UPDATE_BUSINESS_REJECTED,
   FETCH_PART_BUSINESS,
-  UPDATE_COVER_PHOTO_PENDING,
-  UPDATE_COVER_PHOTO_FULFILLED,
-  UPDATE_COVER_PHOTO_REJECTED,
+  TOGGLE_EDIT_ABOUT_US,
+  UPDATE_LOGO_COVER_PHOTO_PENDING,
+  UPDATE_LOGO_COVER_PHOTO_FULFILLED,
+  UPDATE_LOGO_COVER_PHOTO_REJECTED,
   UPLOAD_GALLERY_PHOTO_FULFILLED,
   UPLOAD_GALLERY_PHOTO_PENDING,
   UPLOAD_GALLERY_PHOTO_REJECTED,
@@ -32,18 +35,34 @@ import {
 
 const epics = [];
 
-export const handleAboutUsSave = payload => ({
-  type: UPDATE_ABOUT_PENDING,
-  payload,
-  updates: ["about"]
+export const onBusinessUpdate = payload => ({
+  type: UPDATE_BUSINESS_PENDING,
+  payload
 });
 
 epics.push((action$, { getState }) =>
-  action$.ofType(UPDATE_ABOUT_PENDING).mergeMap(action => {
-    const { payload, updates } = action;
+  action$.ofType(UPDATE_BUSINESS_PENDING).mergeMap(({ payload }) => {
+    const updates = Object.keys(payload.body);
     const globalState = getState();
+    let TYPE;
+    const extraDispatch = [];
+    if (updates[0] === "cover_photo" || updates[0] === "logo") {
+      TYPE = {
+        pending: UPDATE_LOGO_COVER_PHOTO_PENDING,
+        fulfilled: UPDATE_LOGO_COVER_PHOTO_FULFILLED,
+        rejected: UPDATE_LOGO_COVER_PHOTO_REJECTED
+      };
+    } else if (updates[0] === "about") {
+      TYPE = {
+        pending: UPDATE_ABOUT_PENDING,
+        fulfilled: UPDATE_ABOUT_FULFILLED,
+        rejected: UPDATE_ABOUT_REJECTED
+      };
+      extraDispatch.push({ type: TOGGLE_EDIT_ABOUT_US });
+    }
+
     return onBusinessEachPutAjax({
-      ...payload,
+      body: payload.body,
       access_token: globalState.auth.cookies.token_data.access_token,
       id: globalState.MinisiteContainer.crud.id
     })
@@ -54,40 +73,18 @@ epics.push((action$, { getState }) =>
                 type: FETCH_PART_BUSINESS,
                 updates,
                 onSuccess: payload => [
-                  { type: UPDATE_ABOUT_FULFILLED, payload },
-                  { type: TOGGLE_EDIT_ABOUT_US }
+                  { type: TYPE.fulfilled, payload },
+                  ...extraDispatch
                 ],
-                FAILED: UPDATE_ABOUT_REJECTED,
+                FAILED: TYPE.rejected,
                 slug: globalState.auth.cookies.user_data.slug
               }
-            : { type: UPDATE_ABOUT_REJECTED }
+            : { type: TYPE.rejected }
       )
-      .catch(ajaxError => Observable.of({ type: UPDATE_ABOUT_REJECTED }));
+      .catch(ajaxError => Observable.of({ type: TYPE.rejected }))
+      .startWith({ type: TYPE.pending });
   })
 );
-
-export const handleCoverPhotoChange = ({
-  id,
-  username,
-  access_token,
-  data
-}) => dispatch => {
-  dispatch({ type: UPDATE_COVER_PHOTO_PENDING });
-  onBusinessEachPut({ id, access_token, data })
-    .then(response => {
-      response.data.msg === "success" &&
-        onBusinessEachGet({ username })
-          .then(innerResponse => {
-            const data = innerResponse.data;
-            const payload = {};
-            if (data.cover_photo) payload.cover_photo = data.cover_photo;
-
-            dispatch({ type: UPDATE_COVER_PHOTO_FULFILLED, payload });
-          })
-          .catch(error => dispatch({ type: UPDATE_COVER_PHOTO_REJECTED }));
-    })
-    .catch(error => dispatch({ type: UPDATE_COVER_PHOTO_REJECTED }));
-};
 
 export const createNewAlbum = ({
   data,
