@@ -23,60 +23,59 @@ class subBusinessWorkingHour extends Component {
       alwaysOpen: false,
       workingHour: [
         {
-          day: "SUN",
-          start: moment.utc().format(),
-          end: moment.utc().format(),
+          day: "Sunday",
+          start: moment().format("YYYY-MM-DDTHH:mmZ"),
+          end: moment().format("YYYY-MM-DDTHH:mmZ"),
           holiday: false
         },
         {
-          day: "MON",
-          start: moment.utc().format(),
-          end: moment.utc().format(),
+          day: "Monday",
+          start: moment().format("YYYY-MM-DDTHH:mmZ"),
+          end: moment().format("YYYY-MM-DDTHH:mmZ"),
           holiday: false
         },
         {
-          day: "TUE",
-          start: moment.utc().format(),
-          end: moment.utc().format(),
+          day: "Tuesday",
+          start: moment().format("YYYY-MM-DDTHH:mmZ"),
+          end: moment().format("YYYY-MM-DDTHH:mmZ"),
           holiday: false
         },
         {
-          day: "WED",
-          start: moment.utc().format(),
-          end: moment.utc().format(),
+          day: "Wednesday",
+          start: moment().format("YYYY-MM-DDTHH:mmZ"),
+          end: moment().format("YYYY-MM-DDTHH:mmZ"),
           holiday: false
         },
         {
-          day: "THU",
-          start: moment.utc().format(),
-          end: moment.utc().format(),
+          day: "Thursday",
+          start: moment().format("YYYY-MM-DDTHH:mmZ"),
+          end: moment().format("YYYY-MM-DDTHH:mmZ"),
           holiday: false
         },
         {
-          day: "FRI",
-          start: moment.utc().format(),
-          end: moment.utc().format(),
+          day: "Friday",
+          start: moment().format("YYYY-MM-DDTHH:mmZ"),
+          end: moment().format("YYYY-MM-DDTHH:mmZ"),
           holiday: false
         },
         {
-          day: "SAT",
-          start: moment.utc().format("hh:mm a"),
-          end: moment.utc().format("hh:mm a"),
+          day: "Saturday",
+          start: moment().format("YYYY-MM-DDTHH:mmZ"),
+          end: moment().format("YYYY-MM-DDTHH:mmZ"),
           holiday: true
         }
       ]
     };
   }
   getState = () => this.state;
-
   toggleHoliday = day => {
     const newWorkingHour = this.state.workingHour.map(each => {
       if (each.day === day) {
         return {
           ...each,
           holiday: !each.holiday,
-          start: moment.utc().format(),
-          end: moment.utc().format()
+          start: moment().format("YYYY-MM-DDTHH:mmZ"),
+          end: moment().format("YYYY-MM-DDTHH:mmZ")
         };
       } else {
         return each;
@@ -92,11 +91,15 @@ class subBusinessWorkingHour extends Component {
       alwaysOpen: !this.state.alwaysOpen
     });
   }
-
+  //2018-05-02T08:38:49.549000Z
   handleStartHourChange = (time, day) => {
+    console.log("startHourchange: ", moment(time).format("YYYY-MM-DDTHH:mmZ"));
     const newWorkingHour = this.state.workingHour.map(each => {
       if (each.day === day) {
-        return { ...each, start: moment.utc(time).format() };
+        return {
+          ...each,
+          start: moment(time).format("YYYY-MM-DDTHH:mmZ")
+        };
       } else {
         return each;
       }
@@ -110,7 +113,7 @@ class subBusinessWorkingHour extends Component {
     console.log("time:", time);
     const newWorkingHour = this.state.workingHour.map(each => {
       if (each.day === day) {
-        return { ...each, end: moment.utc(time).format() };
+        return { ...each, end: moment.utc(time).format("YYYY-MM-DDTHH:mmZ") };
       } else {
         return each;
       }
@@ -144,7 +147,7 @@ class subBusinessWorkingHour extends Component {
                 <Label>Opens at: </Label>
                 <Datetime
                   dateFormat={false}
-                  defaultValue={moment.utc().format("hh:mm a")}
+                  defaultValue={moment().format("hh:mm a")}
                   onChange={time => {
                     this.handleStartHourChange(time, day.day);
                   }}
@@ -158,7 +161,7 @@ class subBusinessWorkingHour extends Component {
                 <Label>Closes at: </Label>
                 <Datetime
                   dateFormat={false}
-                  defaultValue={moment.utc().format("hh:mm a")}
+                  defaultValue={moment().format("hh:mm a")}
                   onChange={time => this.handleClosingHourChange(time, day.day)}
                   viewMode={"time"}
                   utc={true}

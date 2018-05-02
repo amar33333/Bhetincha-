@@ -51,7 +51,7 @@ class Cities extends Component {
 
     this.props.onCitySubmit({
       city,
-      district: district.value,
+      district: district.id,
       access_token: this.access_token
     });
     this.setState({ city: "", district: "" });

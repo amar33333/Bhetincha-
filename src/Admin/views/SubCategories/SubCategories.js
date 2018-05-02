@@ -7,14 +7,18 @@ import {
   InputGroup,
   InputGroupAddon,
   InputGroupText,
-  Form
+  Form,
+  Card,
+  CardBody,
+  CardHeader
 } from "reactstrap";
 
 import { connect } from "react-redux";
 import Select from "react-select";
 
 import {
-  onCategoryList,
+  onIndustryList,
+  onIndustryEachList,
   onExtraSectionList,
   onSubCategorySubmit,
   onUnmountCategory,
@@ -23,14 +27,20 @@ import {
 } from "../../actions";
 
 class SubCategories extends Component {
-  state = { subCategory: "", category: "", extraSection: [] };
+  constructor(props) {
+    super(props);
+    this.state = {
+      subCategory: "",
+      category: "",
+      industry: "",
+      extraSection: []
+    };
+    this.access_token = this.props.cookies
+      ? this.props.cookies.token_data.access_token
+      : null;
 
-  access_token = this.props.cookies
-    ? this.props.cookies.token_data.access_token
-    : null;
-
-  componentWillMount() {
-    this.props.onCategoryList({ access_token: this.access_token });
+    this.props.onIndustryList({ access_token: this.access_token });
+    this.props.onIndustryEachList({ access_token: this.access_token });
     this.props.onExtraSectionList({ access_token: this.access_token });
   }
 
@@ -60,11 +70,14 @@ class SubCategories extends Component {
   };
 
   render() {
-    const categories = this.props.categories.data
+    const industries = this.props.industries.industries;
+
+    const categories = this.props.industries.data
       ? this.props.categories.data.map(category => {
           return { value: category.id, label: category.name };
         })
       : null;
+    console.log("categories: ", categories);
 
     const extraSections = this.props.extra_sections.data
       ? this.props.extra_sections.data.extra_sections.map(extra_section => {
@@ -79,71 +92,89 @@ class SubCategories extends Component {
     const valueExtraSection = extraSection;
 
     return (
-      <Form onSubmit={this.onFormSubmit}>
-        <InputGroup className="mb-3">
-          <InputGroupAddon addonType="prepend">
-            <InputGroupText>
-              <i className="icon-user" />
-            </InputGroupText>
-          </InputGroupAddon>
-          <Input
-            autoFocus
-            required
-            type="text"
-            placeholder="Sub Category Name"
-            value={this.state.subCategory}
-            onChange={this.onChange.bind(this, "subCategory")}
-          />
-        </InputGroup>
-        Category:
-        <Select
-          autosize
-          clearable
-          required
-          name="Category"
-          className="select-category"
-          value={valueCategory}
-          onChange={this.handleSelectChange.bind(this, "category")}
-          options={categories}
-        />
-        Extra Section
-        <Select
-          autosize
-          clearable
-          required
-          multi
-          //removeSelected={false}
-          closeOnSelect={false}
-          name="Extra-Sections"
-          className="select-extra-sections"
-          value={valueExtraSection}
-          onChange={this.handleSelectChange.bind(this, "extraSection")}
-          options={extraSections}
-        />
-        <Row>
-          <Col xs="6">
-            <Button
-              color="primary"
-              className="px-4"
-              //onClick={() => this.onLoginBtnClick()}
-            >
-              Add
-            </Button>
+      <div className="animated fadeIn">
+        <Row className="hr-centered">
+          <Col xs="12" md="6">
+            <Card>
+              <CardHeader>
+                <strong>Add Sub-Categories</strong>
+              </CardHeader>
+              <CardBody>
+                <Form onSubmit={this.onFormSubmit}>
+                  <InputGroup className="mb-3">
+                    <InputGroupAddon addonType="prepend">
+                      <InputGroupText>
+                        <i className="icon-user" />
+                      </InputGroupText>
+                    </InputGroupAddon>
+                    <Input
+                      autoFocus
+                      required
+                      type="text"
+                      placeholder="Sub Category Name"
+                      value={this.state.subCategory}
+                      onChange={this.onChange.bind(this, "subCategory")}
+                    />
+                  </InputGroup>
+                  Category:
+                  <Select
+                    autosize
+                    clearable
+                    required
+                    name="Category"
+                    className="select-category"
+                    value={valueCategory}
+                    onChange={this.handleSelectChange.bind(this, "category")}
+                    options={categories}
+                  />
+                  Extra Section
+                  <Select
+                    autosize
+                    clearable
+                    required
+                    multi
+                    //removeSelected={false}
+                    closeOnSelect={false}
+                    name="Extra-Sections"
+                    className="select-extra-sections"
+                    value={valueExtraSection}
+                    onChange={this.handleSelectChange.bind(
+                      this,
+                      "extraSection"
+                    )}
+                    options={extraSections}
+                  />
+                  <Row>
+                    <Col xs="6">
+                      <Button
+                        color="primary"
+                        className="px-4"
+                        //onClick={() => this.onLoginBtnClick()}
+                      >
+                        Add
+                      </Button>
+                    </Col>
+                  </Row>
+                </Form>
+              </CardBody>
+            </Card>
           </Col>
         </Row>
-      </Form>
+      </div>
     );
   }
 }
 
 export default connect(
-  ({ AdminContainer: { categories, extra_sections }, auth }) => ({
+  ({ AdminContainer: { categories, extra_sections, industries }, auth }) => ({
     categories,
     extra_sections,
+    industries,
     ...auth
   }),
   {
-    onCategoryList,
+    onIndustryList,
+    onIndustryEachList,
     onExtraSectionList,
     onSubCategorySubmit,
     onUnmountCategory,

@@ -37,7 +37,7 @@ class States extends Component {
 
     this.props.onStateSubmit({
       state,
-      country: country.value,
+      country: country.id,
       access_token: this.access_token
     });
     this.setState({ state: "", country: "" });
@@ -54,14 +54,10 @@ class States extends Component {
   };
 
   render() {
-    const countries = this.props.general_setup.countries
-      ? this.props.general_setup.countries.map(country => {
-          return { value: country.id, label: country.name };
-        })
-      : null;
+    const countries = this.props.general_setup.countries;
 
     const { country } = this.state;
-    const value = country && country.value;
+    const value = country && country.id;
 
     return (
       <div className="animated fadeIn">
@@ -87,6 +83,8 @@ class States extends Component {
                           value={value}
                           onChange={this.handleSelectChange}
                           options={countries}
+                          valueKey="id"
+                          labelKey="name"
                         />
                       </FormGroup>
                     </Col>

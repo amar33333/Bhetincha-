@@ -86,7 +86,7 @@ class Areas extends Component {
 
     this.props.onAreaSubmit({
       area,
-      city: city.value,
+      city: city.id,
       access_token: this.access_token
     });
     this.setState({ area: "" });

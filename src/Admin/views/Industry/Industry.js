@@ -108,7 +108,9 @@ class Industry extends Component {
                         required
                         type="text"
                         placeholder="Type Industry Name"
-                        value={this.state.industry}
+                        value={this.state.industry.replace(/\b\w/g, l =>
+                          l.toUpperCase()
+                        )}
                         onChange={this.onChange.bind(this, "industry")}
                       />
                     </InputGroup>
