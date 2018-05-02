@@ -35,7 +35,7 @@ class BusinessAdminDetail extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      businessAdminDetailCollapse: true,
+      businessAdminDetailCollapse: false,
       businessAboutCollapse: true,
       businessBranchWrapperCollapse: true,
       businessCoverImageCollapse: true,
@@ -134,85 +134,76 @@ class BusinessAdminDetail extends Component {
   render() {
     // console.log("busines admin props: ", this.props);
     return (
-      <div className="animated fadeIn">
-        <Col>
-          <Card>
-            <CardHeader>
-              <strong>Add New Business</strong>
-            </CardHeader>
-            <CardBody>
-              <form onSubmit={this.onFormSubmit}>
-                <SubBusinessDetails
-                  collapsed={this.state.businessAdminDetailCollapse}
-                  toggleCollapse={this.toggleCollapse.bind(
-                    this,
-                    "businessAdminDetailCollapse"
-                  )}
-                  ref={ref => (this.subBusinessAdminDetailRef = ref)}
-                  {...this.props}
-                />
-                <SubBusinessPrimaryAddress
-                  collapsed={this.state.businessPrimaryAddressCollapse}
-                  toggleCollapse={this.toggleCollapse.bind(
-                    this,
-                    "businessPrimaryAddressCollapse"
-                  )}
-                  ref={ref => (this.subBusinessPrimaryAddressRef = ref)}
-                  {...this.props}
-                />
-                <SubBusinessBranchWrapper
-                  collapsed={this.state.businessBranchWrapperCollapse}
-                  toggleCollapse={this.toggleCollapse.bind(
-                    this,
-                    "businessBranchWrapperCollapse"
-                  )}
-                  ref={ref => (this.subBusinessBranchWrapperRef = ref)}
-                  {...this.props}
-                />
-                <SubBusinessLogo
-                  collapsed={this.state.businessLogoCollapse}
-                  toggleCollapse={this.toggleCollapse.bind(
-                    this,
-                    "businessLogoCollapse"
-                  )}
-                  ref={ref => (this.subBusinessLogoRef = ref)}
-                />
-                <SubBusinessCoverImage
-                  collapsed={this.state.businessCoverImageCollapse}
-                  toggleCollapse={this.toggleCollapse.bind(
-                    this,
-                    "businessCoverImageCollapse"
-                  )}
-                  ref={ref => (this.subBusinessCoverImageRef = ref)}
-                />
-                <SubBusinessAbout
-                  collapsed={this.state.businessAboutCollapse}
-                  toggleCollapse={this.toggleCollapse.bind(
-                    this,
-                    "businessAboutCollapse"
-                  )}
-                  ref={ref => (this.subBusinessAboutRef = ref)}
-                  company_types={this.props.company_types}
-                />
-                <SubBusinessWorkingHour
-                  collapsed={this.state.businessWorkingHourCollapse}
-                  ref={ref => (this.subBusinessWorkingHourRef = ref)}
-                  toggleCollapse={this.toggleCollapse.bind(
-                    this,
-                    "businessWorkingHourCollapse"
-                  )}
-                />
-                <Row>
-                  <Col xs="12">
-                    <Button color="primary" size="lg">
-                      SUBMIT
-                    </Button>
-                  </Col>
-                </Row>
-              </form>
-            </CardBody>
-          </Card>
-        </Col>
+      <div className="animated fadeIn" style={{ marginBottom: "20px" }}>
+        <form onSubmit={this.onFormSubmit}>
+          <SubBusinessDetails
+            collapsed={this.state.businessAdminDetailCollapse}
+            toggleCollapse={this.toggleCollapse.bind(
+              this,
+              "businessAdminDetailCollapse"
+            )}
+            ref={ref => (this.subBusinessAdminDetailRef = ref)}
+            {...this.props}
+          />
+          <SubBusinessPrimaryAddress
+            collapsed={this.state.businessPrimaryAddressCollapse}
+            toggleCollapse={this.toggleCollapse.bind(
+              this,
+              "businessPrimaryAddressCollapse"
+            )}
+            ref={ref => (this.subBusinessPrimaryAddressRef = ref)}
+            {...this.props}
+          />
+          <SubBusinessBranchWrapper
+            collapsed={this.state.businessBranchWrapperCollapse}
+            toggleCollapse={this.toggleCollapse.bind(
+              this,
+              "businessBranchWrapperCollapse"
+            )}
+            ref={ref => (this.subBusinessBranchWrapperRef = ref)}
+            {...this.props}
+          />
+          <SubBusinessLogo
+            collapsed={this.state.businessLogoCollapse}
+            toggleCollapse={this.toggleCollapse.bind(
+              this,
+              "businessLogoCollapse"
+            )}
+            ref={ref => (this.subBusinessLogoRef = ref)}
+          />
+          <SubBusinessCoverImage
+            collapsed={this.state.businessCoverImageCollapse}
+            toggleCollapse={this.toggleCollapse.bind(
+              this,
+              "businessCoverImageCollapse"
+            )}
+            ref={ref => (this.subBusinessCoverImageRef = ref)}
+          />
+          <SubBusinessAbout
+            collapsed={this.state.businessAboutCollapse}
+            toggleCollapse={this.toggleCollapse.bind(
+              this,
+              "businessAboutCollapse"
+            )}
+            ref={ref => (this.subBusinessAboutRef = ref)}
+            company_types={this.props.company_types}
+          />
+          <SubBusinessWorkingHour
+            collapsed={this.state.businessWorkingHourCollapse}
+            ref={ref => (this.subBusinessWorkingHourRef = ref)}
+            toggleCollapse={this.toggleCollapse.bind(
+              this,
+              "businessWorkingHourCollapse"
+            )}
+          />
+          <Row>
+            <Col xs="12">
+              <Button color="primary" size="lg">
+                SUBMIT
+              </Button>
+            </Col>
+          </Row>
+        </form>
       </div>
     );
   }

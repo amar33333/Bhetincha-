@@ -171,12 +171,12 @@ class SubBusinessContact extends Component {
                     color="success"
                     onClick={() => this.props.onAdd(this.state, this.props.id)}
                   >
-                    SAVE CONTACT
+                    <i className="fa fa-save" /> SAVE CONTACT
                   </Button>
                 </Col>
                 <Col xs="6" md="6">
                   <Button color="danger" onClick={this.onDelete}>
-                    DELETE
+                    <i className="fa fa-remove" /> DELETE
                   </Button>
                 </Col>
               </Row>

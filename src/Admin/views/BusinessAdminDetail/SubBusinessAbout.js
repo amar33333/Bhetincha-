@@ -1,5 +1,7 @@
 import React, { Component } from "react";
+import moment from "moment";
 import AboutUsEditor from "../../../Website/Views/Minisite/components/AboutUsEditor";
+import Datetime from "react-datetime";
 import "react-datetime/css/react-datetime.css";
 
 import {
@@ -48,6 +50,14 @@ class SubBusinessAbout extends Component {
 
   onChange = (key, event) => this.setState({ [key]: event.target.value });
 
+  onChangeEstablishedYear = year => {
+    console.log("Year: ", year);
+    console.log("Year after moment: ", moment.utc(year).format("YYYY"));
+    this.setState({
+      establishedYear: moment.utc(year).format("YYYY")
+    });
+  };
+
   handleAboutChange = value => this.setState({ aboutUs: value });
 
   handleSelectChange = (key, value) => {
@@ -88,6 +98,12 @@ class SubBusinessAbout extends Component {
     console.log("about props: ", this.props);
     console.log("about state: ", this.state);
     const companyTypes = this.props.company_types;
+
+    let yesterday = Datetime.moment().subtract(1, "day");
+
+    let validEstablishedYear = function(current) {
+      return current.isBefore(yesterday);
+    };
 
     return (
       <div className="animated fadeIn">
@@ -158,11 +174,15 @@ class SubBusinessAbout extends Component {
                 <Col xs="6" md="6">
                   <FormGroup>
                     <Label for="year">Established Year</Label>
-                    <Input
-                      type="text"
-                      value={this.state.establishedYear}
-                      onKeyDown={this._handleKeyPress}
-                      onChange={this.onChange.bind(this, "establishedYear")}
+
+                    <Datetime
+                      timeFormat={false}
+                      isValidDate={validEstablishedYear}
+                      dateFormat="YYYY"
+                      defaultValue={moment.utc().format("YYYY")}
+                      onChange={this.onChangeEstablishedYear}
+                      viewMode={"years"}
+                      utc={true}
                     />
                   </FormGroup>
                 </Col>

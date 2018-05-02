@@ -517,12 +517,12 @@ class SubBusinessBranch extends Component {
                     )
                   }
                 >
-                  SAVE BRANCH
+                  <i className="fa fa-save" /> SAVE BRANCH
                 </Button>
               </Col>
               <Col xs="6" md="6">
                 <Button color="danger" onClick={this.onDelete}>
-                  DELETE
+                  <i className="fa fa-remove" /> DELETE
                 </Button>
               </Col>
             </Row>

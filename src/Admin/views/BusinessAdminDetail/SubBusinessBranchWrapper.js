@@ -19,60 +19,8 @@ class SubBusinessBranchWrapper extends Component {
     this.state = {
       branchComponentList: [],
       branchs: []
-      // collapsed: true
     };
   }
-
-  // static getDerivedStateFromProps = nextProps => {
-  //   console.log("nextpors: ", nextProps);
-  //   return nextProps.branchAddress && nextProps.edit
-  //     ? {
-  //         branchComponentList: nextProps.branchAddress.map((each, index) => (
-  //           <SubBusinessBranch
-  //             key={each.addressID}
-  //             serial_num={index}
-  //             id={each.addressID}
-  //             branch={each}
-  //             edit
-  //           />
-  //         )),
-
-  //         branchs: nextProps.branchAddress
-  //       }
-  //     : null;
-  // };
-  // toggleCollapse = () => {
-  //   this.setState({
-  //     collapsed: !this.state.collapsed
-  //   });
-  // };
-
-  // componentDidMount() {
-  //   if (this.props.globalCollapsed) {
-  //     this.toggleCollapse();
-  //   }
-  // }
-  // componentWillUpdate(nextProps, nextState) {
-  //   if (this.props.onSubmit)
-  //     this.props.onSubmit({ branchs: nextState.branchs });
-  // }
-
-  /* TO BE DEPRECATED IN REACT 17.x 
-   * USE `getDerivedStateFromProps` instead.
-  */
-
-  // componentWillReceiveProps(nextProps, nextState) {
-  //   this.setState({
-  //     branchComponentList: this.state.branchComponentList.map(
-  //       branchComponent => {
-  //         return {
-  //           ...branchComponent,
-  //           props: { ...branchComponent.props, ...nextProps }
-  //         };
-  //       }
-  //     )
-  //   });
-  // }
 
   static getDerivedStateFromProps = (nextProps, prevState) => {
     if (nextProps.branchAddress && nextProps.edit) {
@@ -110,8 +58,6 @@ class SubBusinessBranchWrapper extends Component {
     if (this.subBusinessBranchRef) this.subBusinessBranchRef.clearState();
   };
 
-  // getState = () => ({ branchs: this.state.branchs });
-
   getState = () => {
     const branchs = this.state.branchs.map(eachItem => {
       console.log("eachItem: ", eachItem);
@@ -147,32 +93,16 @@ class SubBusinessBranchWrapper extends Component {
           id={new Date().getTime()}
           serial_num={this.state.branchComponentList.length}
           onAdd={(value, id, contacts) => {
-            {
-              /* console.log("branch wrapper: ", value, id, contacts); */
-            }
             let branchs = [...this.state.branchs];
             let index = null;
 
             branchs.map((branch, i) => {
-              {
-                /* console.log("key BRANCH: ", branch.key, "id BRANCH: ", id); */
-              }
               if (id === Number(branch.key)) {
-                {
-                  /* console.log("index BRNACH: ", i); */
-                }
                 index = i;
               }
             });
-            {
-              /* console.log("index BRNAHC: ", index); */
-            }
 
             if (branchs.length > 0 && index !== null) {
-              {
-                /* console.log("edit ran BRNAHC: ", contacts); */
-              }
-
               branchs[index].addressLine1 = value.addressLine1;
               branchs[index].addressLine2 = value.addressLine2;
               branchs[index].house_no = value.house_no;
@@ -194,14 +124,8 @@ class SubBusinessBranchWrapper extends Component {
                 ? contacts.contactPerson
                 : [];
               console.log("update branch: ", [...branchs, ...contacts]);
-              this.setState({ branchs }, () => {
-                /* console.log("immediate branch conta: ", this.state.branchs) */
-              });
+              this.setState({ branchs }, () => {});
             } else {
-              {
-                /* console.log("new add ran  brnach: ", contacts); */
-              }
-
               this.setState(
                 {
                   branchs: [
@@ -218,13 +142,7 @@ class SubBusinessBranchWrapper extends Component {
                     }
                   ]
                 },
-                () => {
-                  {
-                    /* console.log("else monitor state: ", this.state.branchs); */
-                  }
-
-                  //this.onBranchAddressAdd();
-                }
+                () => {}
               );
             }
           }}
@@ -244,8 +162,6 @@ class SubBusinessBranchWrapper extends Component {
   };
 
   render() {
-    // console.log("render props branchs: ", this.props);
-    // console.log("render state branchs: ", this.state);
     return (
       <div className="animated fadeIn">
         <Card>
@@ -290,7 +206,7 @@ class SubBusinessBranchWrapper extends Component {
               <Row style={{ marginTop: 15 }}>
                 <Col xs="6" md="6">
                   <Button color="primary" onClick={this.onBranchAddressAdd}>
-                    Add New Branch
+                    <i className="fa fa-plus" /> Add New Branch
                   </Button>
                 </Col>
               </Row>

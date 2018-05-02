@@ -53,8 +53,6 @@ class SubBusinessContactWrapper extends Component {
     if (this.subBusinessContactRef) this.subBusinessContactRef.clearState();
   };
 
-  // getState = () => ({ contactPerson: this.state.contactPerson });
-
   getState = () => {
     const contactPerson = this.state.contactPerson.map(eachItem => {
       let reformed = {};
@@ -94,23 +92,13 @@ class SubBusinessContactWrapper extends Component {
             let index = null;
 
             contactPerson.map((contact, i) => {
-              {
-                /* console.log("key: ", contact.key, "id: ", id); */
-              }
               if (id === Number(contact.key)) {
-                {
-                  /* console.log("index: ", i); */
-                }
                 index = i;
               }
             });
             console.log("index: ", index);
 
             if (contactPerson.length > 0 && index !== null) {
-              {
-                /* console.log("edit ran: ", value); */
-              }
-
               contactPerson[index].name = value.name;
               contactPerson[index].email = value.email;
               contactPerson[index].designation = value.designation;
@@ -119,10 +107,6 @@ class SubBusinessContactWrapper extends Component {
 
               this.setState({ contactPerson });
             } else {
-              {
-                /* console.log("new add ran"); */
-              }
-
               this.setState(
                 {
                   contactPerson: [
@@ -134,58 +118,11 @@ class SubBusinessContactWrapper extends Component {
                   ]
                 },
                 () => {
-                  {
-                    /* console.log("else monitor state: ", this.state.contactPerson); */
-                  }
-                  //this.onContactAdd();
-                }
-              );
-            }
-          }}
-          /* onValueChange={(value, id) => {
-            let contactPerson = [...this.state.contactPerson];
-            let index = null;
-
-            contactPerson.map((contact, i) => {
-              console.log("key: ", contact.key, "id: ", id);
-              if (id === Number(contact.key)) {
-                console.log("index: ", i);
-                index = i;
-              }
-            });
-            console.log("index: ", index);
-
-            if (contactPerson.length > 0 && index !== null) {
-              console.log("edit ran: ", value);
-
-              contactPerson[index].name = value.name;
-              contactPerson[index].email = value.email;
-              contactPerson[index].designation =
-                value.designation;
-              contactPerson[index].mobile_number =
-                value.mobile_number;
-
-              this.setState({ contactPerson });
-            } else {
-              console.log("new add ran");
-
-              this.setState(
-                {
-                  contactPerson: [
-                    ...this.state.contactPerson,
-                    {
-                      ...value,
-                      key: id
-                    }
-                  ]
-                },
-                () => {
-                  console.log("else monitor state: ", this.state.contactPerson);
                   this.onContactAdd();
                 }
               );
             }
-          }} */
+          }}
           onDelete={id => {
             this.setState({
               contactComponentList: this.state.contactComponentList.filter(
@@ -248,7 +185,7 @@ class SubBusinessContactWrapper extends Component {
               <Row style={{ marginTop: 15 }}>
                 <Col xs="6" md="6">
                   <Button color="primary" onClick={this.onContactAdd}>
-                    Add New Contact
+                    <i className="fa fa-plus" /> Add New Contact
                   </Button>
                 </Col>
               </Row>
