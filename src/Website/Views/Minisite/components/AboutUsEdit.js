@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import LaddaButton, { S, EXPAND_RIGHT } from "react-ladda";
 import AboutUsEditor from "./AboutUsEditor";
 
-import { handleAboutUsSave } from "../actions";
+import { onBusinessUpdate } from "../actions";
 
 class AboutUsEdit extends Component {
   static getDerivedStateFromProps = ({ initialValue }) => ({
@@ -47,7 +47,7 @@ class AboutUsEdit extends Component {
           data-size={S}
           data-style={EXPAND_RIGHT}
           onClick={() =>
-            this.props.handleAboutUsSave({
+            this.props.onBusinessUpdate({
               body: {
                 about: {
                   tagline: this.state.tagline,
@@ -79,5 +79,5 @@ export default connect(
   ({ MinisiteContainer: { edit: { aboutUsLoading } } }) => ({
     loading: aboutUsLoading
   }),
-  { handleAboutUsSave }
+  { onBusinessUpdate }
 )(AboutUsEdit);
