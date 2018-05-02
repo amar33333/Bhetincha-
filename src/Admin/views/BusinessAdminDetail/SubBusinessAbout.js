@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import moment from "moment";
-import AboutUsEditor from "../../../Website/Views/Minisite/components/AboutUsEditor";
+import AboutUsEditor from "../../../Website/Views/Minisite/components/AboutUs/AboutUsEditor";
 import Datetime from "react-datetime";
 import "react-datetime/css/react-datetime.css";
 

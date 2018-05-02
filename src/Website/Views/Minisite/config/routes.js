@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import { Route, Switch, Redirect } from "react-router-dom";
-import { Gallery, MainPage } from "../components";
+import MainPage from "../MainPage";
+import { Gallery } from "../components";
+
 import {
   ROUTE_PARAMS_BUSINESS_NAME,
   ROUTE_PARAMS_MINISITE_BUSINESS_ROUTE

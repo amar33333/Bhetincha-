@@ -1,8 +1,7 @@
 import React, { Component } from "react";
-import AboutUs from "./AboutUs";
-import CoverPhoto from "./CoverPhoto";
+import { AboutUs, CoverPhoto } from "./components";
 
-import "../minisite.css";
+import "./minisite.css";
 
 class MainPage extends Component {
   render() {

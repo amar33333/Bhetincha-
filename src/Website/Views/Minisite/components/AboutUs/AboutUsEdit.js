@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import LaddaButton, { S, EXPAND_RIGHT } from "react-ladda";
 import AboutUsEditor from "./AboutUsEditor";
 
-import { onBusinessUpdate } from "../actions";
+import { onBusinessUpdate } from "../../actions";
 
 class AboutUsEdit extends Component {
   static getDerivedStateFromProps = ({ initialValue }) => ({

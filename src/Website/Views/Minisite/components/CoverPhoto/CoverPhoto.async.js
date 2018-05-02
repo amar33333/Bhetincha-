@@ -2,10 +2,10 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 // import FileInputComponent from "react-file-input-previews-base64";
 
-import "../minisite.css";
+import "../../minisite.css";
 
-import { MAIN_URL } from "../config/MINISITE_API";
-import { handleCoverPhotoChange } from "../actions";
+import { MAIN_URL } from "../../config/MINISITE_API";
+import { handleCoverPhotoChange } from "../../actions";
 
 class CoverPhoto extends Component {
   state = { FileInputComponent: null };
