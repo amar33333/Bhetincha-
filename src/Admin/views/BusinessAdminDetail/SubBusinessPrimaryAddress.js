@@ -94,7 +94,15 @@ class SubBusinessPrimaryAddress extends Component {
     this.props.address && this.props.edit
       ? this.props.address.contactPerson
       : null;
-  onChange = (key, event) => this.setState({ [key]: event.target.value });
+  onChange = (key, event) => {
+    if (key === "landmark" || "addressLine1" || "addressLine2") {
+      this.setState({
+        [key]: event.target.value.replace(/\b\w/g, l => l.toUpperCase())
+      });
+    } else {
+      this.setState({ [key]: event.target.value });
+    }
+  };
 
   handleSelectChange = (key, value) => {
     this.setState({ [key]: value });

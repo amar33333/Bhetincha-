@@ -35,7 +35,9 @@ class Countries extends Component {
   };
 
   onChange = (key, event) => {
-    this.setState({ [key]: event.target.value.toUpperCase() });
+    this.setState({
+      [key]: event.target.value.replace(/\b\w/g, l => l.toUpperCase())
+    });
   };
 
   render() {
@@ -66,10 +68,7 @@ class Countries extends Component {
                       />
                     </InputGroup>
                   </FormGroup>
-                  <Button
-                    color="primary"
-                    //onClick={() => this.onLoginBtnClick()}
-                  >
+                  <Button color="primary">
                     <span className="fa fa-plus" /> Add
                   </Button>
                 </Form>

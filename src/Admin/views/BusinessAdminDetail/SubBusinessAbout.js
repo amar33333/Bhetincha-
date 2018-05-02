@@ -48,7 +48,15 @@ class SubBusinessAbout extends Component {
         }
       : null;
 
-  onChange = (key, event) => this.setState({ [key]: event.target.value });
+  onChange = (key, event) => {
+    if (key === "tagline") {
+      this.setState({
+        [key]: event.target.value.replace(/\b\w/g, l => l.toUpperCase())
+      });
+    } else {
+      this.setState({ [key]: event.target.value });
+    }
+  };
 
   onChangeEstablishedYear = year => {
     console.log("Year: ", year);
