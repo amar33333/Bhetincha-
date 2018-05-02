@@ -53,36 +53,39 @@ class SubBusinessPrimaryAddress extends Component {
   static getDerivedStateFromProps = (nextProps, prevState) => {
     const { address } = nextProps;
 
-    return nextProps.address && nextProps.edit
+    return address && nextProps.edit
       ? {
-          landlineNumber: nextProps.address.landline,
-          house_no: nextProps.address.house_no,
-          landmark: nextProps.address.landmark,
-          addressLine1: nextProps.address.addressLine1,
-          addressLine2: nextProps.address.addressLine2,
-          po_box: nextProps.address.po_box,
-          tollFreeNumber: nextProps.address.tollFreeNumber,
-          email: nextProps.address.email
-          // country: {
-          //   id: nextProps.address.country.id,
-          //   name: nextProps.address.country.name
-          // },
-          // state: {
-          //   id: nextProps.address.state.id,
-          //   name: nextProps.address.state.name
-          // },
-          // district: {
-          //   id: nextProps.address.district.id,
-          //   name: nextProps.address.district.name
-          // },
-          // city: {
-          //   id: nextProps.address.city.id,
-          //   name: nextProps.address.city.name
-          // },
-          // area: {
-          //   id: nextProps.address.area.id,
-          //   name: nextProps.address.area.name
-          // }
+          landlineNumber: address.landlineNumber ? address.landlineNumber : "",
+          otherLandlineNumber: address.otherLandlineNumber
+            ? address.otherLandlineNumber
+            : "",
+          house_no: address.house_no ? address.house_no : "",
+          landmark: address.landmark ? address.landmark : "",
+          addressLine1: address.addressLine1 ? address.addressLine1 : "",
+          addressLine2: address.addressLine2 ? address.addressLine2 : "",
+          po_box: address.po_box ? address.po_box : "",
+          tollFreeNumber: address.tollFreeNumber ? address.tollFreeNumber : "",
+          email: address.email ? address.email : "",
+          country: {
+            id: address.country ? address.country.id : "",
+            name: address.country ? address.country.name : ""
+          },
+          state: {
+            id: address.state ? address.state.id : "",
+            name: address.state ? address.state.name : ""
+          },
+          district: {
+            id: address.district ? address.district.id : "",
+            name: address.district ? address.district.name : ""
+          },
+          city: {
+            id: address.city ? address.city.id : "",
+            name: address.city ? address.city.name : ""
+          },
+          area: {
+            id: address.area ? address.area.id : "",
+            name: address.area ? address.area.name : ""
+          }
         }
       : null;
   };
@@ -196,6 +199,8 @@ class SubBusinessPrimaryAddress extends Component {
   };
 
   render() {
+    // console.log("primasdd addr props: ", this.props);
+    // console.log("primasdd addr state: ", this.state);
     countries = this.props.countries;
 
     try {

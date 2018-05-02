@@ -162,6 +162,9 @@ class SubBusinessBranchWrapper extends Component {
   };
 
   render() {
+    console.log("branchWrapper props:", this.props);
+    console.log("branchWrapper state:", this.state);
+
     return (
       <div className="animated fadeIn">
         <Card>
