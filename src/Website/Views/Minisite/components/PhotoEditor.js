@@ -10,6 +10,8 @@ class PhotoEditor extends Component {
     logo: { files: [], zoomSlider: 100, imageURL: "", WIDTH: 500, HEIGHT: 500 },
     cover: { files: [], zoomSlider: 100, imageURL: "", WIDTH: 800, HEIGHT: 500 }
   };
+
+  // TBN: Base64
   // getBase64(file) {
   //   var reader = new FileReader();
   //   reader.readAsDataURL(file);
@@ -25,32 +27,36 @@ class PhotoEditor extends Component {
     if (this.imageEditorEl) {
       const canvas = this.imageEditorEl.getImage().toDataURL();
 
-      fetch(canvas).then(res => {
-        console.log(res);
-        this.state.active === "cover"
-          ? this.props.onUploadCover(res.url)
-          : console.log("logo");
-        // return res.blob();
-      });
-      // .then(blob => {
-      //   const imageURL = window.URL.createObjectURL(blob);
-      //   console.log(blob, "asdf", "\n", imageURL);
-      //   this.setState({ imageURL });
-      // });
+      fetch(canvas).then(res =>
+        this.props.onUpload(this.state.active, res.url)
+      );
     }
   };
 
-  componentDidMount = () => this.handleItemChange(this.state.active);
+  componentDidMount = () => {
+    window.addEventListener("resize", this.updateDimensions);
+    this.setState({ active: this.props.active || "logo" }, () =>
+      this.handleItemChange(this.state.active)
+    );
+  };
 
-  handleItemChange = item => {
+  componentWillUnmount = () => {
+    window.removeEventListener("resize", this.updateDimensions);
+  };
+
+  updateDimensions = () => {
     const bodyWidth = this.editorBody.offsetWidth;
     const logo = { WIDTH: bodyWidth / 2, HEIGHT: bodyWidth / 2 };
     const cover = { WIDTH: bodyWidth * 0.9, HEIGHT: bodyWidth * 0.9 / 3 };
     this.setState({
-      active: item,
       logo: { ...this.state.logo, ...logo },
       cover: { ...this.state.cover, ...cover }
     });
+  };
+
+  handleItemChange = item => {
+    this.updateDimensions();
+    this.setState({ active: item });
   };
 
   renderListGroupItem = () =>
@@ -92,12 +98,20 @@ class PhotoEditor extends Component {
           <Col xs="12" md="9">
             <div ref={ref => (this.editorBody = ref)}>
               <div>
-                <button onClick={() => this.fileUploadEl.click()}>
-                  Upload New Photo
+                <button
+                  onClick={() => this[`${this.state.active}UploadEl`].click()}
+                >
+                  Add New Photo
                 </button>
                 <input
                   style={{ display: "none" }}
-                  ref={ref => (this.fileUploadEl = ref)}
+                  ref={ref => (this.logoUploadEl = ref)}
+                  type="file"
+                  onChange={this.handleUploadPhoto}
+                />
+                <input
+                  style={{ display: "none" }}
+                  ref={ref => (this.coverUploadEl = ref)}
                   type="file"
                   onChange={this.handleUploadPhoto}
                 />
@@ -124,7 +138,9 @@ class PhotoEditor extends Component {
                 />
               </div>
             </div>
-            <button onClick={this.onImageSave}>Upload</button>
+            <button disabled={this.props.loading} onClick={this.onImageSave}>
+              Upload
+            </button>
           </Col>
         </Row>
       </div>

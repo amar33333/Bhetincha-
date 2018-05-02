@@ -4,11 +4,11 @@ import { connect } from "react-redux";
 import "../minisite.css";
 
 import { MAIN_URL } from "../config/MINISITE_API";
-import { handleCoverPhotoChange } from "../actions";
+import { onBusinessUpdate } from "../actions";
 import { CustomModal } from "../../../../Common/components";
 
 class CoverPhoto extends Component {
-  state = { PhotoEditorComponent: null, isOpen: true };
+  state = { PhotoEditorComponent: null, isOpen: false };
 
   componentDidMount = () => this.props.mainEdit && this.renderPhotoComponent();
 
@@ -50,14 +50,13 @@ class CoverPhoto extends Component {
           >
             {PhotoEditorComponent && (
               <PhotoEditorComponent
+                active="cover"
                 logo={`${MAIN_URL}${this.props.logo}`}
                 cover={`${MAIN_URL}${this.props.cover_photo}`}
-                onUploadCover={file =>
-                  this.props.handleCoverPhotoChange({
-                    id: this.props.id,
-                    access_token: this.props.cookies.token_data.access_token,
-                    username: this.props.username,
-                    data: { cover_photo: file }
+                loading={this.props.loading}
+                onUpload={(key, file) =>
+                  this.props.onBusinessUpdate({
+                    body: { [key === "cover" ? "cover_photo" : "logo"]: file }
                   })
                 }
               />
@@ -70,16 +69,11 @@ class CoverPhoto extends Component {
 }
 
 export default connect(
-  ({
-    auth: { cookies },
-    MinisiteContainer: { crud: { cover_photo, logo, id, username }, edit }
-  }) => ({
+  ({ MinisiteContainer: { crud: { cover_photo, logo }, edit } }) => ({
     cover_photo,
     logo,
-    id,
-    username,
-    cookies,
-    mainEdit: edit.main
+    mainEdit: edit.main,
+    loading: edit.imageEditorLoading
   }),
-  { handleCoverPhotoChange }
+  { onBusinessUpdate }
 )(CoverPhoto);

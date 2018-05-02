@@ -11,14 +11,18 @@ import {
   UPLOAD_GALLERY_PHOTO_FULFILLED,
   UPLOAD_GALLERY_PHOTO_REJECTED,
   CREATE_NEW_ALBUM_FULFILLED,
-  CLEAR_MINISITE_DATA
+  CLEAR_MINISITE_DATA,
+  UPDATE_LOGO_COVER_PHOTO_PENDING,
+  UPDATE_LOGO_COVER_PHOTO_FULFILLED,
+  UPDATE_LOGO_COVER_PHOTO_REJECTED
 } from "../actions/types";
 
 const INITIAL_STATE = {
-  main: true,
+  main: false,
   mainLoading: true,
   aboutUs: false,
   aboutUsLoading: false,
+  imageEditorLoading: false,
   galleryLoading: []
 };
 
@@ -33,6 +37,11 @@ export default function(state = INITIAL_STATE, action) {
     case UPDATE_ABOUT_FULFILLED:
     case UPDATE_ABOUT_REJECTED:
       return { ...state, aboutUsLoading: false };
+    case UPDATE_LOGO_COVER_PHOTO_PENDING:
+      return { ...state, imageEditorLoading: true };
+    case UPDATE_LOGO_COVER_PHOTO_FULFILLED:
+    case UPDATE_LOGO_COVER_PHOTO_REJECTED:
+      return { ...state, imageEditorLoading: false };
     case FETCH_BUSINESS_PENDING:
       return { ...state, mainLoading: true };
     case FETCH_BUSINESS_FULFILLED:
