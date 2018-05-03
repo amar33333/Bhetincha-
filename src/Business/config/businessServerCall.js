@@ -31,7 +31,7 @@ export const onBusinessPost = ({ data, access_token }) => {
     business_name: data.business_name,
     business_email: data.business_email,
     address: data.address,
-    branchAddress: data.branchs,
+    branchAddress: data.branchAddress,
     logo: data.logo.base64,
     cover_photo: data.cover_photo.base64,
     industry: data.industry ? data.industry.id : undefined,

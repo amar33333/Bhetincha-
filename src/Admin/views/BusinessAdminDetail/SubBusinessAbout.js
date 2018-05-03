@@ -95,8 +95,7 @@ class SubBusinessAbout extends Component {
       reformed =
         temp[property] !== null &&
         temp[property] !== undefined &&
-        temp[property] !== "" &&
-        temp[property].length > 0
+        temp[property] !== ""
           ? { ...reformed, [property]: temp[property] }
           : reformed;
     }
@@ -109,8 +108,8 @@ class SubBusinessAbout extends Component {
     };
   };
   render() {
-    console.log("about props: ", this.props);
-    console.log("about state: ", this.state);
+    // console.log("about props: ", this.props);
+    // console.log("about state: ", this.state);
     const companyTypes = this.props.company_types;
 
     let yesterday = Datetime.moment().subtract(1, "day");

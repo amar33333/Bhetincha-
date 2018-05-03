@@ -165,7 +165,7 @@ class SubBusinessDetail extends Component {
   getState = () => this.state;
 
   render() {
-    console.log("state subbusiness: ", this.state);
+    // console.log("state subbusiness: ", this.state);
     const industries = this.props.industries;
 
     const categories =

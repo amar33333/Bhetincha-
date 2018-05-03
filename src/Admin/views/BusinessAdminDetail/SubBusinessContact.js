@@ -53,9 +53,9 @@ class SubBusinessContact extends Component {
     }
   };
 
-  onDelete = () => {
+  onContactDelete = () => {
     this.clearState();
-    this.props.onDelete(this.props.id);
+    this.props.onContactDelete();
   };
 
   clearState = () => {
@@ -66,6 +66,21 @@ class SubBusinessContact extends Component {
       mobileNumber: "",
       department: ""
     });
+  };
+
+  getState = () => {
+    let reformed = {};
+    for (var property in this.state) {
+      reformed =
+        this.state[property] !== "" &&
+        this.state[property] !== null &&
+        this.state[property] !== undefined &&
+        this.state[property].length > 0
+          ? { ...reformed, [property]: this.state[property] }
+          : reformed;
+    }
+    console.log("contact reformed: ", reformed);
+    return reformed;
   };
 
   render() {
@@ -83,9 +98,7 @@ class SubBusinessContact extends Component {
                 alignItems: "center"
               }}
             >
-              <strong>
-                Contact Person Detail - {this.props.serial_num + 1}{" "}
-              </strong>
+              <strong>Contact Person Detail - {this.props.id + 1}</strong>
 
               <Button
                 color="primary"
@@ -179,13 +192,13 @@ class SubBusinessContact extends Component {
                 <Col xs="6" md="6">
                   <Button
                     color="success"
-                    onClick={() => this.props.onAdd(this.state, this.props.id)}
+                    onClick={() => this.props.onContactChange(this.state)}
                   >
                     <i className="fa fa-save" /> SAVE CONTACT
                   </Button>
                 </Col>
                 <Col xs="6" md="6">
-                  <Button color="danger" onClick={this.onDelete}>
+                  <Button color="danger" onClick={this.onContactDelete}>
                     <i className="fa fa-remove" /> DELETE
                   </Button>
                 </Col>

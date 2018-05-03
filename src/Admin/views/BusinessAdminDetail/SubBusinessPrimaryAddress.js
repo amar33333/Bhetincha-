@@ -18,6 +18,7 @@ import {
 } from "reactstrap";
 
 import SubBusinessContactWrapper from "./SubBusinessContactWrapper.js";
+import SubBusinessContact from "./SubBusinessContact";
 
 let countries = [];
 let states = [];
@@ -45,7 +46,8 @@ class SubBusinessPrimaryAddress extends Component {
       po_box: "",
       tollFreeNumber: "",
       latitude: 27.7172453,
-      longitude: 85.32391758465576
+      longitude: 85.32391758465576,
+      contactPerson: []
     };
 
     this.propsData = {};
@@ -61,9 +63,10 @@ class SubBusinessPrimaryAddress extends Component {
   static getDerivedStateFromProps = (nextProps, prevState) => {
     const { address } = nextProps;
 
-    console.log("props addres: ", nextProps);
+    // console.log("props addres: ", nextProps);
     return address && nextProps.edit
       ? {
+          contactPerson: address.contactPerson ? address.contactPerson : [],
           landlineNumber: address.landlineNumber ? address.landlineNumber : "",
           otherLandlineNumber: address.otherLandlineNumber
             ? address.otherLandlineNumber
@@ -210,14 +213,66 @@ class SubBusinessPrimaryAddress extends Component {
       addressLine1: "",
       addressLine2: "",
       po_box: "",
-      tollFreeNumber: ""
+      tollFreeNumber: "",
+      contactPerson: []
     });
 
     this.subBusinessContactWrapperRef.clearState();
   };
 
+  onContactPersonAdd = () => {
+    this.setState({
+      contactPerson: [
+        ...this.state.contactPerson,
+        {
+          name: "",
+          email: "",
+          designation: "",
+          mobileNumber: "",
+          department: "",
+          collapsed: false
+        }
+      ]
+    });
+  };
+
+  onContactChange = (index, data) => {
+    console.log("herau: ", index, data);
+    const newContactPerson = this.state.contactPerson.map(
+      (contact, sub_index) => {
+        return index !== sub_index ? contact : { ...contact, ...data };
+      }
+    );
+
+    this.setState({ contactPerson: newContactPerson });
+  };
+
+  onContactDelete = index => () => {
+    this.setState({
+      contactPerson: this.state.contactPerson.filter(
+        (contact, sub_index) => index !== sub_index
+      )
+    });
+  };
+
   getState = () => {
     console.log("eachItem PRIMARY: ", this.state);
+    let contactPerson = this.state.contactPerson.map(eachItem => {
+      let contactReformed = {};
+      for (var property in eachItem) {
+        contactReformed =
+          eachItem[property] !== "" &&
+          eachItem[property] !== null &&
+          eachItem[property] !== undefined &&
+          eachItem[property].length > 0
+            ? { ...contactReformed, [property]: eachItem[property] }
+            : contactReformed;
+      }
+      return contactReformed;
+    });
+    console.log("contact contactReformed: ", contactPerson);
+    contactPerson = contactPerson.length > 0 ? contactPerson : undefined;
+
     const temp = {
       ...this.state,
       country: this.state.country ? this.state.country.id : "",
@@ -235,8 +290,7 @@ class SubBusinessPrimaryAddress extends Component {
       reformed =
         temp[property] !== "" &&
         temp[property] !== null &&
-        temp[property] !== undefined &&
-        temp[property].length > 0
+        temp[property] !== undefined
           ? { ...reformed, [property]: temp[property] }
           : reformed;
     }
@@ -245,7 +299,8 @@ class SubBusinessPrimaryAddress extends Component {
     return {
       address: {
         ...reformed,
-        ...this.subBusinessContactWrapperRef.getState()
+        contactPerson
+        // ...this.subBusinessContactWrapperRef.getState()
       }
     };
   };
@@ -253,6 +308,7 @@ class SubBusinessPrimaryAddress extends Component {
   render() {
     // console.log("primasdd addr props: ", this.props);
     // console.log("primasdd addr state: ", this.state);
+    // console.log("primasdd addr contact state: ", this.state.contactPerson);
     countries = this.props.countries;
 
     try {
@@ -591,11 +647,78 @@ class SubBusinessPrimaryAddress extends Component {
                   </FormGroup>
                 </Col>
               </Row>
-              <SubBusinessContactWrapper
+              <div className="animated fadeIn">
+                <Card>
+                  <CardHeader onClick={this.toggleCollapse}>
+                    <div
+                      style={{
+                        display: "flex",
+                        flexDirection: "row",
+                        justifyContent: "space-between",
+                        alignItems: "center"
+                      }}
+                    >
+                      <strong>Contact Person Details</strong>
+                      <Button
+                        color="primary"
+                        onClick={this.toggleCollapse}
+                        style={{
+                          marginBottom: "0rem",
+                          backgroundColor: "rgb(230, 228, 241)",
+                          color: "black",
+                          fontSize: "1.3rem",
+                          border: "1px solid #2e219036",
+                          borderRadius: "50%",
+                          height: "30px",
+                          width: "30px",
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center"
+                        }}
+                      >
+                        {!this.state.collapsed ? (
+                          <i className="fa fa-angle-up" />
+                        ) : (
+                          <i className="fa fa-angle-down" />
+                        )}
+                      </Button>
+                    </div>
+                  </CardHeader>
+                  <Collapse isOpen={!this.state.collapsed}>
+                    <CardBody>
+                      {this.state.contactPerson.map((contact, index) => (
+                        <SubBusinessContact
+                          contact={contact}
+                          key={index}
+                          id={index}
+                          onContactChange={this.onContactChange.bind(
+                            this,
+                            index
+                          )}
+                          onContactDelete={this.onContactDelete(index)}
+                          edit={this.props.edit}
+                        />
+                      ))}
+                      <Row style={{ marginTop: 15 }}>
+                        <Col xs="6" md="6">
+                          <Button
+                            color="primary"
+                            onClick={this.onContactPersonAdd}
+                          >
+                            <i className="fa fa-plus" /> Add New Contact
+                          </Button>
+                        </Col>
+                      </Row>
+                    </CardBody>
+                  </Collapse>
+                </Card>
+              </div>
+
+              {/* <SubBusinessContactWrapper
                 ref={ref => (this.subBusinessContactWrapperRef = ref)}
                 contactPerson={this.getContacts()}
                 edit
-              />
+              /> */}
             </CardBody>
           </Collapse>
         </Card>

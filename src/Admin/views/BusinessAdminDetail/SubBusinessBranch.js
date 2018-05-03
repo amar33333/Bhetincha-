@@ -16,7 +16,8 @@ import {
   Collapse
 } from "reactstrap";
 
-import SubBusinessContactWrapper from "./SubBusinessContactWrapper";
+// import SubBusinessContactWrapper from "./SubBusinessContactWrapper";
+import SubBusinessContact from "./SubBusinessContact";
 import { ON_KEY_PRESS_ENTER } from "../../../config/CONSTANTS";
 
 let countries = [];
@@ -45,7 +46,8 @@ class SubBusinessBranch extends Component {
       po_box: "",
       tollFreeNumber: "",
       latitude: 27.7172453,
-      longitude: 85.32391758465576
+      longitude: 85.32391758465576,
+      contactPerson: []
     };
 
     this.propsData = {};
@@ -61,9 +63,10 @@ class SubBusinessBranch extends Component {
 
   static getDerivedStateFromProps = (nextProps, prevState) => {
     const { branch } = nextProps;
-
+    console.log("branchprops: ", nextProps);
     return branch && nextProps.edit
       ? {
+          contactPerson: branch.contactPerson ? branch.contactPerson : [],
           landlineNumber: branch.landlineNumber ? branch.landlineNumber : "",
           otherLandlineNumber: branch.otherLandlineNumber
             ? branch.otherLandlineNumber
@@ -195,9 +198,9 @@ class SubBusinessBranch extends Component {
     });
   };
 
-  onDelete = () => {
+  onBranchDelete = () => {
     this.clearState();
-    this.props.onDelete(this.props.id);
+    this.props.onBranchDelete();
   };
 
   clearState = () => {
@@ -215,18 +218,65 @@ class SubBusinessBranch extends Component {
       addressLine1: "",
       addressLine2: "",
       po_box: "",
-      tollFreeNumber: ""
+      tollFreeNumber: "",
+      contactPerson: []
     });
 
-    this.subBusinessBranchContactWrapperRef.clearState();
+    // this.subBusinessBranchContactWrapperRef.clearState();
   };
 
-  _handleKeyPress = event => {
-    if (event.keyCode === ON_KEY_PRESS_ENTER) {
-      console.log("enter entered");
-      event.preventDefault();
-      this.setState({ key_press: ON_KEY_PRESS_ENTER });
-    }
+  onContactPersonAdd = () => {
+    this.setState({
+      contactPerson: [
+        ...this.state.contactPerson,
+        {
+          name: "",
+          email: "",
+          designation: "",
+          mobileNumber: "",
+          department: "",
+          collapsed: false
+        }
+      ]
+    });
+  };
+
+  onContactChange = (index, data) => {
+    // console.log("herau: ", index, data);
+    const newContactPerson = this.state.contactPerson.map(
+      (contact, sub_index) => {
+        return index !== sub_index ? contact : { ...contact, ...data };
+      }
+    );
+
+    this.setState({ contactPerson: newContactPerson });
+  };
+
+  onContactDelete = index => () => {
+    this.setState({
+      contactPerson: this.state.contactPerson.filter(
+        (contact, sub_index) => index !== sub_index
+      )
+    });
+  };
+
+  getState = () => {
+    console.log("branch getstate: ", {
+      ...this.state,
+      country: this.state.country ? this.state.country.id : "",
+      state: this.state.state ? this.state.state.id : "",
+      district: this.state.district ? this.state.district.id : "",
+      city: this.state.city ? this.state.city.id : "",
+      area: this.state.area ? this.state.area.id : ""
+    });
+    return {
+      ...this.state,
+      country: this.state.country ? this.state.country.id : "",
+      state: this.state.state ? this.state.state.id : "",
+      district: this.state.district ? this.state.district.id : "",
+      city: this.state.city ? this.state.city.id : "",
+      area: this.state.area ? this.state.area.id : ""
+    };
   };
 
   render() {
@@ -334,9 +384,7 @@ class SubBusinessBranch extends Component {
               alignItems: "center"
             }}
           >
-            <strong>
-              Business Branch - {this.props.serial_num + 1} Address
-            </strong>
+            <strong>Business Branch - {this.props.id + 1} Address</strong>
 
             <Button
               color="primary"
@@ -563,29 +611,90 @@ class SubBusinessBranch extends Component {
                 </FormGroup>
               </Col>
             </Row>
+            <div className="animated fadeIn">
+              <Card>
+                <CardHeader onClick={this.toggleCollapse}>
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "row",
+                      justifyContent: "space-between",
+                      alignItems: "center"
+                    }}
+                  >
+                    <strong>Contact Person Details</strong>
+                    <Button
+                      color="primary"
+                      onClick={this.toggleCollapse}
+                      style={{
+                        marginBottom: "0rem",
+                        backgroundColor: "rgb(230, 228, 241)",
+                        color: "black",
+                        fontSize: "1.3rem",
+                        border: "1px solid #2e219036",
+                        borderRadius: "50%",
+                        height: "30px",
+                        width: "30px",
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center"
+                      }}
+                    >
+                      {!this.state.collapsed ? (
+                        <i className="fa fa-angle-up" />
+                      ) : (
+                        <i className="fa fa-angle-down" />
+                      )}
+                    </Button>
+                  </div>
+                </CardHeader>
+                <Collapse isOpen={!this.state.collapsed}>
+                  <CardBody>
+                    {this.state.contactPerson.map((contact, index) => (
+                      <SubBusinessContact
+                        contact={contact}
+                        key={index}
+                        id={index}
+                        onContactChange={this.onContactChange.bind(this, index)}
+                        onContactDelete={this.onContactDelete(index)}
+                        edit={this.props.edit}
+                      />
+                    ))}
+                    <Row style={{ marginTop: 15 }}>
+                      <Col xs="6" md="6">
+                        <Button
+                          color="primary"
+                          onClick={this.onContactPersonAdd}
+                        >
+                          <i className="fa fa-plus" /> Add New Contact
+                        </Button>
+                      </Col>
+                    </Row>
+                  </CardBody>
+                </Collapse>
+              </Card>
+            </div>
 
-            <SubBusinessContactWrapper
+            {/* <SubBusinessContactWrapper
               ref={ref => (this.subBusinessBranchContactWrapperRef = ref)}
               contactPerson={this.getContacts()}
               edit
-            />
+            /> */}
             <Row style={{ marginBottom: 15 }}>
               <Col xs="6" md="6">
                 <Button
                   color="success"
                   onClick={() =>
-                    this.props.onAdd(
-                      this.state,
-                      this.props.id,
-                      this.subBusinessBranchContactWrapperRef.getState()
-                    )
+                    this.props.onBranchChange(this.getState(), {
+                      /* this.subBusinessBranchContactWrapperRef.getState() */
+                    })
                   }
                 >
                   <i className="fa fa-save" /> SAVE BRANCH
                 </Button>
               </Col>
               <Col xs="6" md="6">
-                <Button color="danger" onClick={this.onDelete}>
+                <Button color="danger" onClick={this.onBranchDelete}>
                   <i className="fa fa-remove" /> DELETE
                 </Button>
               </Col>

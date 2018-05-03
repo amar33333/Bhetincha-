@@ -17,164 +17,98 @@ class SubBusinessBranchWrapper extends Component {
     super(props);
 
     this.state = {
-      branchComponentList: [],
-      branchs: []
+      branchAddress: []
     };
   }
 
-  static getDerivedStateFromProps = (nextProps, prevState) => {
-    if (nextProps.branchAddress && nextProps.edit) {
-      return {
-        branchComponentList: nextProps.branchAddress.map((each, index) => (
-          <SubBusinessBranch
-            key={each.addressID}
-            serial_num={index}
-            id={each.addressID}
-            branch={each}
-            {...nextProps.general_setup}
-            edit
-          />
-        )),
-
-        branchs: nextProps.branchAddress
-      };
-    }
-    return {
-      branchComponentList: prevState.branchComponentList.map(
-        branchComponent => {
-          return {
-            ...branchComponent,
-            props: { ...branchComponent.props, ...nextProps }
-          };
-        }
-      )
-    };
+  static getDerivedStateFromProps = nextProps => {
+    // console.log("branchwrapper props: ", nextProps);
+    return nextProps.branchAddress &&
+      nextProps.branchAddress.length > 0 &&
+      nextProps.edit
+      ? { branchAddress: nextProps.branchAddress }
+      : null;
   };
 
   clearState = () => {
     this.setState({
-      branchComponentList: [],
-      branchs: []
+      branchAddress: []
     });
-    if (this.subBusinessBranchRef) this.subBusinessBranchRef.clearState();
+  };
+
+  onBranchAddressAdd = () => {
+    this.setState({
+      branchAddress: [
+        ...this.state.branchAddress,
+        {
+          country: "",
+          state: "",
+          district: "",
+          city: "",
+          area: "",
+          email: "",
+          landlineNumber: "",
+          otherLandlineNumber: [],
+          house_no: "",
+          landmark: "",
+          addressLine1: "",
+          addressLine2: "",
+          po_box: "",
+          tollFreeNumber: "",
+          latitude: 27.7172453,
+          longitude: 85.32391758465576,
+          contactPerson: []
+        }
+      ]
+    });
+  };
+
+  onBranchChange = (index, data) => {
+    console.log("branch change: ", index, data);
+    const newBranchAddress = this.state.branchAddress.map(
+      (branch, sub_index) => {
+        return index !== sub_index ? branch : { ...branch, ...data };
+      }
+    );
+
+    this.setState({ branchAddress: newBranchAddress });
+  };
+
+  onBranchDelete = index => () => {
+    this.setState({
+      branchAddress: this.state.branchAddress.filter(
+        (branch, sub_index) => index !== sub_index
+      )
+    });
   };
 
   getState = () => {
-    const branchs = this.state.branchs.map(eachItem => {
+    const branchAddress = this.state.branchAddress.map(eachItem => {
       console.log("eachItem: ", eachItem);
       let reformed = {};
       for (var property in eachItem) {
+        console.log("property: ", property, eachItem[property]);
+
         reformed =
           eachItem[property] !== "" &&
           eachItem[property] !== null &&
-          eachItem[property] !== undefined &&
-          eachItem[property].length > 0
+          eachItem[property] !== undefined
             ? { ...reformed, [property]: eachItem[property] }
             : reformed;
       }
       console.log("branch address reformed: ", reformed);
       return reformed;
     });
-    console.log("branch address reformed array: ", branchs);
+    console.log("branch address reformed array: ", branchAddress);
 
     return {
-      branchs
+      branchAddress
     };
-  };
-
-  onBranchAddressAdd = () => {
-    this.setState({
-      branchComponentList: [
-        ...this.state.branchComponentList,
-        <SubBusinessBranch
-          ref={ref => (this.subBusinessBranchRef = ref)}
-          {...this.props}
-          key={new Date().getTime()}
-          id={new Date().getTime()}
-          {...this.props.general_setup}
-          serial_num={this.state.branchComponentList.length}
-          onAdd={(value, id, contacts) => {
-            let branchs = [...this.state.branchs];
-            let index = null;
-
-            branchs.map((branch, i) => {
-              if (id === Number(branch.key)) {
-                index = i;
-              }
-            });
-
-            if (branchs.length > 0 && index !== null) {
-              branchs[index].addressLine1 = value.addressLine1
-                ? value.addressLine1
-                : "";
-              branchs[index].addressLine2 = value.addressLine2
-                ? value.addressLine2
-                : "";
-              branchs[index].house_no = value.house_no ? value.house_no : "";
-              branchs[index].landlineNumber = value.landlineNumber
-                ? value.landlineNumber
-                : "";
-              branchs[index].landmark = value.landmark ? value.landmark : "";
-              branchs[index].otherLandlineNumber = value.otherLandlineNumber
-                ? value.otherLandlineNumber
-                : "";
-              branchs[index].po_box = value.po_box ? value.po_box : "";
-              branchs[index].email = value.email ? value.email : "";
-
-              branchs[index].area = value.area ? value.area.id : "";
-              branchs[index].city = value.city ? value.city.id : "";
-              branchs[index].country = value.country ? value.country.id : "";
-              branchs[index].district = value.district ? value.district.id : "";
-              branchs[index].state = value.state ? value.state.id : "";
-
-              branchs[index].tollFreeNumber = value.tollFreeNumber
-                ? value.tollFreeNumber
-                : "";
-
-              branchs[index].contactPerson = contacts
-                ? contacts.contactPerson
-                : [];
-              console.log("update branch: ", [...branchs, ...contacts]);
-              this.setState({ branchs }, () => {});
-            } else {
-              this.setState(
-                {
-                  branchs: [
-                    ...this.state.branchs,
-                    {
-                      ...value,
-                      area: value.area ? value.area.id : "",
-                      city: value.city ? value.city.id : "",
-                      country: value.country ? value.country.id : "",
-                      state: value.state ? value.state.id : "",
-                      district: value.district ? value.district.id : "",
-                      key: id,
-                      ...contacts
-                    }
-                  ]
-                },
-                () => {}
-              );
-            }
-          }}
-          onDelete={id => {
-            this.setState({
-              branchComponentList: this.state.branchComponentList.filter(
-                branchList => id !== Number(branchList.key)
-              ),
-              branchs: this.state.branchs.filter(
-                branch => id !== Number(branch.key)
-              )
-            });
-          }}
-        />
-      ]
-    });
   };
 
   render() {
     // console.log("branchWrapper props:", this.props);
-    // console.log("branchWrapper state:", this.state);
+    console.log("branchWrapper state:", this.state);
 
     return (
       <div className="animated fadeIn">
@@ -216,7 +150,19 @@ class SubBusinessBranchWrapper extends Component {
           </CardHeader>
           <Collapse isOpen={!this.props.collapsed}>
             <CardBody>
-              {this.state.branchComponentList}
+              {this.state.branchAddress.map((branch, index) => (
+                <SubBusinessBranch
+                  branch={branch}
+                  key={index}
+                  id={index}
+                  onBranchChange={this.onBranchChange.bind(this, index)}
+                  onBranchDelete={this.onBranchDelete(index)}
+                  countries={this.props.countries}
+                  cookies={this.props.cookies}
+                  onAddressTreeList={this.props.onAddressTreeList}
+                  edit={this.props.edit}
+                />
+              ))}
               <Row style={{ marginTop: 15 }}>
                 <Col xs="6" md="6">
                   <Button color="primary" onClick={this.onBranchAddressAdd}>

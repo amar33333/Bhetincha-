@@ -83,7 +83,7 @@ class SubBusinessContactWrapper extends Component {
                   )
                 };
               }}
-              edit
+              edit={this.props.edit}
             />
           )),
 
@@ -127,6 +127,7 @@ class SubBusinessContactWrapper extends Component {
         }
       : null;
   };
+
   onContactAdd = () => {
     this.setState({
       contactComponentList: [

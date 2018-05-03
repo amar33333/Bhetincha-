@@ -219,7 +219,7 @@ class BusinessEdit extends Component {
                   ref={ref => (this.subBusinessBranchWrapperRef = ref)}
                   cookies={this.props.cookies}
                   branchAddress={branchAddress}
-                  general_setup={this.props.general_setup}
+                  {...this.props.general_setup}
                   onAddressTreeList={this.props.onAddressTreeList}
                   edit
                 />
