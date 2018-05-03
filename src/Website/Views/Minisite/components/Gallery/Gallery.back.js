@@ -3,9 +3,9 @@ import GalleryGrid from "react-grid-gallery";
 import FileInputComponent from "react-file-input-previews-base64";
 import { connect } from "react-redux";
 
-import { handleGalleryPhotoUpload, createNewAlbum } from "../actions";
+import { handleGalleryPhotoUpload, createNewAlbum } from "../../actions";
 
-import { MAIN_URL } from "../config/MINISITE_API";
+import { MAIN_URL } from "../../config/MINISITE_API";
 import FontAwesome from "react-fontawesome";
 
 class Gallery extends Component {

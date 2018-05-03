@@ -1,11 +1,11 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 
-import "../minisite.css";
+import "../../minisite.css";
 
-import { MAIN_URL } from "../config/MINISITE_API";
-import { onBusinessUpdate } from "../actions";
-import { CustomModal } from "../../../../Common/components";
+import { MAIN_URL } from "../../config/MINISITE_API";
+import { onBusinessUpdate } from "../../actions";
+import { CustomModal } from "../../../../../Common/components";
 
 class CoverPhoto extends Component {
   state = { PhotoEditorComponent: null, isOpen: false };
