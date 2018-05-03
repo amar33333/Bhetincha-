@@ -1,0 +1,8 @@
+.Select-input input {
+  border: none !important;
+  padding: 8px 0px 12px !important;
+}
+
+.Select-control {
+  text-align: left;
+}

@@ -1,5 +1,9 @@
-body {
-  margin: 0;
-  padding: 0;
-  font-family: sans-serif;
+.ReactTable .rt-thead.-filters input,
+.ReactTable .rt-thead.-filters select {
+  padding: 8px 7px !important;
+}
+
+.ReactTable .rt-thead.-filters .Select-input input,
+.ReactTable .rt-thead.-filters select {
+  padding: 8px 0px !important;
 }

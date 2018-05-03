@@ -14,7 +14,7 @@ import {
   CardHeader,
   CardBody
 } from "reactstrap";
-import Select from "./Select";
+import { Select } from "../../../Common/components";
 
 import { connect } from "react-redux";
 import ReactTable from "react-table";
@@ -66,19 +66,17 @@ class Categories extends Component {
           } else return true;
         },
         Filter: ({ filter, onChange }) => (
-          <div style={{ zIndex: 999, position: "relative" }}>
-            <Select
-              clearable
-              value={filter ? filter.value : "All"}
-              onChange={onChange}
-              valueKey="id"
-              labelKey="name"
-              options={[
-                { id: "all", name: "All" },
-                ...this.props.industries.industries
-              ]}
-            />
-          </div>
+          <Select
+            clearable
+            value={filter ? filter.value : "All"}
+            onChange={onChange}
+            valueKey="id"
+            labelKey="name"
+            options={[
+              { id: "all", name: "All" },
+              ...this.props.industries.industries
+            ]}
+          />
         )
         // filterMethod: (filter, row) => {
         //   if (filter.value === "all") return true;

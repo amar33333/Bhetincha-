@@ -11,6 +11,7 @@ import SidebarMinimizer from "./SidebarMinimizer";
 import Tooltip from "./Tooltip";
 import PopoverDelete from "./PopoverDelete";
 import CustomModal from "./CustomModal";
+import Select from "./ReactSelect/ReactSelect";
 
 export {
   Aside,
@@ -25,5 +26,6 @@ export {
   SidebarMinimizer,
   Tooltip,
   PopoverDelete,
-  CustomModal
+  CustomModal,
+  Select
 };
