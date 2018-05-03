@@ -11,3 +11,9 @@
 .ReactTable .rt-noData {
   z-index: 0 !important;
 }
+
+.ReactTable .rt-th
+ /* .ReactTable .rt-td  */
+ {
+  white-space: pre-wrap !important;
+}
