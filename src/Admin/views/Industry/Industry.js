@@ -68,7 +68,7 @@ class Industry extends Component {
       }
     ],
     minRows: 5,
-    defaultPageSize: 10,
+    defaultPageSize: 20,
     className: "-striped -highlight",
     filterable: true
   };

@@ -59,13 +59,11 @@ class Categories extends Component {
           );
           return industry ? industry.name : "Not Found";
         },
-        // filterMethod: (filter, row) => {
-        //   if (filter.value === "all") return true;
-        //   return filter.value === row.industry;
-        // },
         filterMethod: (filter, row) => {
-          if (filter.value.id === "all") return true;
-          return filter.value.id === row.industry;
+          if (filter && filter.value) {
+            if (filter.value.id === "all") return true;
+            return filter.value.id === row.industry;
+          } else return true;
         },
         Filter: ({ filter, onChange }) => (
           <div style={{ zIndex: 999, position: "relative" }}>
@@ -83,6 +81,10 @@ class Categories extends Component {
             />
           </div>
         )
+        // filterMethod: (filter, row) => {
+        //   if (filter.value === "all") return true;
+        //   return filter.value === row.industry;
+        // },
         // Filter: ({ filter, onChange }) => (
         //   <select
         //     onChange={event => onChange(event.target.value)}
@@ -123,7 +125,7 @@ class Categories extends Component {
       }
     ],
     minRows: 5,
-    defaultPageSize: 10,
+    defaultPageSize: 20,
     className: "-striped -highlight",
     filterable: true
   };
