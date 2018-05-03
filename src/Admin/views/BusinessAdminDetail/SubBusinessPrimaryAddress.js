@@ -119,7 +119,11 @@ class SubBusinessPrimaryAddress extends Component {
     geocoder.geocode({ address: value.name }, (results, status) => {
       if (status === "OK") {
         const location = results[0].geometry.location;
-        // this.mapComponentEl.mapEl.googleEL.panTo({ latLng: location });
+        var latLng = new window.google.maps.LatLng(
+          location.lat(),
+          location.lng()
+        );
+        this.mapComponentEl.googleMapEl.panTo(latLng);
         this.setState({
           area: value,
           latitude: location.lat(),
@@ -473,7 +477,7 @@ class SubBusinessPrimaryAddress extends Component {
                       Select your Business position from map displayed below
                     </strong>
                     <MapComponent
-                      // ref={ref => (this.mapComponentEl = ref)}
+                      ref={ref => (this.mapComponentEl = ref)}
                       position={{
                         lat: this.state.latitude,
                         lng: this.state.longitude
