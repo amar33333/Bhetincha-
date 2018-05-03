@@ -99,15 +99,17 @@ class SubBusinessDetail extends Component {
   handleSelectChange = (key, value) => {
     console.log("vavas: ", key, value);
     this.setState({ [key]: value });
-    if (key === "industry" && value) {
+
+    if (key === "industry") {
       this.setState({ categories: [], sub_categories: [] });
 
-      this.props.onIndustryEachList({
-        id: value.id,
-        access_token: this.access_token
-      });
+      if (value)
+        this.props.onIndustryEachList({
+          id: value.id,
+          access_token: this.access_token
+        });
       this.props.onUnmountSubCategories();
-    } else if (key === "categories" && value) {
+    } else if (key === "categories") {
       console.log("categories state: ", this.state.categories);
       console.log("detaiL : ", key, value);
 
@@ -163,16 +165,21 @@ class SubBusinessDetail extends Component {
   getState = () => this.state;
 
   render() {
-    // console.log("state subbusiness: ", this.state);
+    console.log("state subbusiness: ", this.state);
     const industries = this.props.industries;
 
-    const categories = this.props.industryData
-      ? this.props.industryData.categories
-      : [];
+    const categories =
+      this.state.industry && this.props.industryData
+        ? this.props.industryData.categories
+        : [];
 
     let subCategories = [];
 
-    if (this.props.categoryData) {
+    if (
+      this.state.industry &&
+      this.state.categories.length &&
+      this.props.categoryData
+    ) {
       this.props.categoryData.map(each => {
         // console.log("subca: ", each.subcategories);
         subCategories = [...subCategories, ...each.subcategories];

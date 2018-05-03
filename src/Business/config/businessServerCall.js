@@ -80,13 +80,13 @@ export const onBusinessPut = ({ id, access_token, data }) => {
     categories: category_list,
     sub_categories: sub_category_list,
     paymentMethod: payment_methods_list
-    //workingHour: data.workingHour,
-    //alwaysOpen: data.alwaysOpen
+    // workingHour: data.workingHour,
+    // alwaysOpen: data.alwaysOpen
   };
 
   return axios({
     method: "PUT",
-    url: `${BUSINESS_URL}${id}/`,
+    url: `http://159.65.150.212:8025/business/business-put/${id}/`,
     data: server_format_data,
     headers: {
       "Content-Type": "application/json",

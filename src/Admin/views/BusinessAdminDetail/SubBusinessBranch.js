@@ -110,60 +110,60 @@ class SubBusinessBranch extends Component {
   handleSelectChange = (key, value) => {
     this.setState({ [key]: value });
 
-    if (key === "country" && value) {
+    if (key === "country") {
       this.setState({
         state: "",
         district: "",
         city: "",
         area: ""
       });
-      this.props.onAddressTreeList({
-        id: value.id,
-        access_token: this.access_token,
-        ADDRESS_KEY: key
-      });
+      if (value)
+        this.props.onAddressTreeList({
+          id: value.id,
+          access_token: this.access_token,
+          ADDRESS_KEY: key
+        });
       districts = [];
       cities = [];
       areas = [];
-    } else if (key === "state" && value) {
+    } else if (key === "state") {
       this.setState({
         district: "",
         city: "",
         area: ""
       });
-
-      this.props.onAddressTreeList({
-        id: value.id,
-        access_token: this.access_token,
-        ADDRESS_KEY: key
-      });
+      if (value)
+        this.props.onAddressTreeList({
+          id: value.id,
+          access_token: this.access_token,
+          ADDRESS_KEY: key
+        });
       cities = [];
       areas = [];
-    } else if (key === "district" && value) {
+    } else if (key === "district") {
       this.setState({
         city: "",
         area: ""
       });
-
-      this.props.onAddressTreeList({
-        id: value.id,
-        access_token: this.access_token,
-        ADDRESS_KEY: key
-      });
+      if (value)
+        this.props.onAddressTreeList({
+          id: value.id,
+          access_token: this.access_token,
+          ADDRESS_KEY: key
+        });
       areas = [];
-    } else if (key === "city" && value) {
+    } else if (key === "city") {
       this.setState({
         area: ""
       });
-
-      this.props.onAddressTreeList({
-        id: value.id,
-        access_token: this.access_token,
-        ADDRESS_KEY: key
-      });
+      if (value)
+        this.props.onAddressTreeList({
+          id: value.id,
+          access_token: this.access_token,
+          ADDRESS_KEY: key
+        });
     }
   };
-
   onDelete = () => {
     this.clearState();
     this.props.onDelete(this.props.id);

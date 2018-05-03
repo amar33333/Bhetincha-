@@ -65,11 +65,10 @@ class SubBusinessBranchWrapper extends Component {
       let reformed = {};
       for (var property in eachItem) {
         reformed =
-          (eachItem[property] !== "" &&
-            eachItem[property] !== null &&
-            eachItem[property] !== undefined) ||
-          (eachItem[property].constructor === Array &&
-            eachItem[property].length > 0)
+          eachItem[property] !== "" &&
+          eachItem[property] !== null &&
+          eachItem[property] !== undefined &&
+          eachItem[property].length > 0
             ? { ...reformed, [property]: eachItem[property] }
             : reformed;
       }
@@ -92,6 +91,7 @@ class SubBusinessBranchWrapper extends Component {
           {...this.props}
           key={new Date().getTime()}
           id={new Date().getTime()}
+          {...this.props.general_setup}
           serial_num={this.state.branchComponentList.length}
           onAdd={(value, id, contacts) => {
             let branchs = [...this.state.branchs];
@@ -104,14 +104,22 @@ class SubBusinessBranchWrapper extends Component {
             });
 
             if (branchs.length > 0 && index !== null) {
-              branchs[index].addressLine1 = value.addressLine1;
-              branchs[index].addressLine2 = value.addressLine2;
-              branchs[index].house_no = value.house_no;
-              branchs[index].landlineNumber = value.landlineNumber;
-              branchs[index].landmark = value.landmark;
-              branchs[index].otherLandlineNumber = value.otherLandlineNumber;
-              branchs[index].po_box = value.po_box;
-              branchs[index].email = value.email;
+              branchs[index].addressLine1 = value.addressLine1
+                ? value.addressLine1
+                : "";
+              branchs[index].addressLine2 = value.addressLine2
+                ? value.addressLine2
+                : "";
+              branchs[index].house_no = value.house_no ? value.house_no : "";
+              branchs[index].landlineNumber = value.landlineNumber
+                ? value.landlineNumber
+                : "";
+              branchs[index].landmark = value.landmark ? value.landmark : "";
+              branchs[index].otherLandlineNumber = value.otherLandlineNumber
+                ? value.otherLandlineNumber
+                : "";
+              branchs[index].po_box = value.po_box ? value.po_box : "";
+              branchs[index].email = value.email ? value.email : "";
 
               branchs[index].area = value.area ? value.area.id : "";
               branchs[index].city = value.city ? value.city.id : "";
@@ -119,7 +127,9 @@ class SubBusinessBranchWrapper extends Component {
               branchs[index].district = value.district ? value.district.id : "";
               branchs[index].state = value.state ? value.state.id : "";
 
-              branchs[index].tollFreeNumber = value.tollFreeNumber;
+              branchs[index].tollFreeNumber = value.tollFreeNumber
+                ? value.tollFreeNumber
+                : "";
 
               branchs[index].contactPerson = contacts
                 ? contacts.contactPerson

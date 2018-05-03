@@ -23,7 +23,7 @@ class SubBusinessContactWrapper extends Component {
     };
   }
 
-  static getDerivedStateFromProps = nextProps =>
+  static getDerivedStateFromProps = (nextProps, prevState) =>
     nextProps.contactPerson && nextProps.edit
       ? {
           contactComponentList: nextProps.contactPerson.map((each, index) => (
@@ -31,7 +31,58 @@ class SubBusinessContactWrapper extends Component {
               key={each.contactID}
               serial_num={index}
               id={each.contactID}
-              contact={each}
+              contact={{ ...each, id: each.contactID }}
+              onAdd={(value, id) => {
+                console.log("naya caonctac: ", value, id);
+                let contactPerson = [...prevState.contactPerson];
+                let index = null;
+
+                console.log("contactPerson edit: ", contactPerson, id);
+
+                contactPerson.map((contact, i) => {
+                  if (id === Number(contact.id)) {
+                    index = i;
+                  }
+                });
+                console.log("index edit: ", index);
+
+                if (contactPerson.length > 0 && index !== null) {
+                  contactPerson[index].name = value.name;
+                  contactPerson[index].email = value.email;
+                  contactPerson[index].designation = value.designation;
+                  contactPerson[index].department = value.department;
+                  contactPerson[index].mobileNumber = value.mobileNumber;
+
+                  return { contactPerson };
+                } else {
+                  console.log("this else ran contact: ", prevState);
+                  return (
+                    {
+                      contactPerson: [
+                        ...prevState.contactPerson,
+
+                        {
+                          ...value,
+                          id: id
+                        }
+                      ]
+                    },
+                    () => {
+                      //this.onContactAdd();
+                    }
+                  );
+                }
+              }}
+              onDelete={id => {
+                return {
+                  contactComponentList: prevState.contactComponentList.filter(
+                    contactList => id !== Number(contactList.key)
+                  ),
+                  contactPerson: prevState.contactPerson.filter(
+                    contact => id !== Number(contact.key)
+                  )
+                };
+              }}
               edit
             />
           )),
@@ -58,11 +109,10 @@ class SubBusinessContactWrapper extends Component {
       let reformed = {};
       for (var property in eachItem) {
         reformed =
-          (eachItem[property] !== "" &&
-            eachItem[property] !== null &&
-            eachItem[property] !== undefined) ||
-          (eachItem[property].constructor === Array &&
-            eachItem[property].length > 0)
+          eachItem[property] !== "" &&
+          eachItem[property] !== null &&
+          eachItem[property] !== undefined &&
+          eachItem[property].length > 0
             ? { ...reformed, [property]: eachItem[property] }
             : reformed;
       }
@@ -91,8 +141,10 @@ class SubBusinessContactWrapper extends Component {
             let contactPerson = [...this.state.contactPerson];
             let index = null;
 
+            console.log("contacPTerson add: ", contactPerson);
             contactPerson.map((contact, i) => {
-              if (id === Number(contact.key)) {
+              console.log("contact add: ", contact);
+              if (id === Number(contact.id)) {
                 index = i;
               }
             });
@@ -113,12 +165,12 @@ class SubBusinessContactWrapper extends Component {
                     ...this.state.contactPerson,
                     {
                       ...value,
-                      key: id
+                      id: id
                     }
                   ]
                 },
                 () => {
-                  this.onContactAdd();
+                  //this.onContactAdd();
                 }
               );
             }

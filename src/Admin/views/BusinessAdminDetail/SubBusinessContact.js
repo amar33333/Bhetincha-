@@ -69,6 +69,8 @@ class SubBusinessContact extends Component {
   };
 
   render() {
+    // // console.log("contact props: ", this.props);
+    // // console.log("contact state: ", this.state);
     return (
       <div className="animated fadeIn">
         <Card>

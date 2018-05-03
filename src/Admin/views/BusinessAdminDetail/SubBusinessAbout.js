@@ -31,22 +31,25 @@ class SubBusinessAbout extends Component {
     };
   }
 
-  static getDerivedStateFromProps = nextProps =>
-    nextProps.about && nextProps.edit
-      ? {
-          tagline: nextProps.about.tagline ? nextProps.about.tagline : "",
-          aboutUs: nextProps.about.aboutUs ? nextProps.about.aboutUs : "",
-          establishedYear: nextProps.about.establishedYear
-            ? nextProps.about.establishedYear
-            : "",
-          companyType: nextProps.about.companyType
-            ? {
-                id: nextProps.about.companyType.id,
-                name: nextProps.about.companyType.name
-              }
-            : ""
-        }
-      : null;
+  static getDerivedStateFromProps = nextProps => {
+    if (nextProps.about && nextProps.edit) {
+      return {
+        tagline: nextProps.about.tagline ? nextProps.about.tagline : "",
+        aboutUs: nextProps.about.aboutUs ? nextProps.about.aboutUs : "",
+        establishedYear: nextProps.about.establishedYear
+          ? nextProps.about.establishedYear
+          : "",
+        companyType: nextProps.about.companyType
+          ? {
+              id: nextProps.about.companyType.id,
+              name: nextProps.about.companyType.name
+            }
+          : ""
+      };
+    }
+
+    return null;
+  };
 
   onChange = (key, event) => {
     if (key === "tagline") {
@@ -82,29 +85,32 @@ class SubBusinessAbout extends Component {
   };
 
   getState = () => {
+    const temp = {
+      ...this.state,
+      companyType: this.state.companyType ? this.state.companyType.id : ""
+    };
+
     let reformed = {};
-    for (var property in this.state) {
+    for (var property in temp) {
       reformed =
-        (this.state[property] !== null &&
-          this.state[property] !== undefined &&
-          this.state[property] !== "") ||
-        (this.state[property].constructor === Array &&
-          this.state[property].length > 0)
-          ? { ...reformed, [property]: this.state[property] }
+        temp[property] !== null &&
+        temp[property] !== undefined &&
+        temp[property] !== "" &&
+        temp[property].length > 0
+          ? { ...reformed, [property]: temp[property] }
           : reformed;
     }
 
     console.log("about reformed: ", reformed);
     return {
       about: {
-        ...reformed,
-        companyType: this.state.companyType.id
+        ...reformed
       }
     };
   };
   render() {
-    // console.log("about props: ", this.props);
-    // console.log("about state: ", this.state);
+    console.log("about props: ", this.props);
+    console.log("about state: ", this.state);
     const companyTypes = this.props.company_types;
 
     let yesterday = Datetime.moment().subtract(1, "day");

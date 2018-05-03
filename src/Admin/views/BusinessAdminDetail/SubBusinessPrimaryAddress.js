@@ -53,6 +53,7 @@ class SubBusinessPrimaryAddress extends Component {
   static getDerivedStateFromProps = (nextProps, prevState) => {
     const { address } = nextProps;
 
+    console.log("props addres: ", nextProps);
     return address && nextProps.edit
       ? {
           landlineNumber: address.landlineNumber ? address.landlineNumber : "",
@@ -107,58 +108,59 @@ class SubBusinessPrimaryAddress extends Component {
 
   handleSelectChange = (key, value) => {
     this.setState({ [key]: value });
-
-    if (key === "country" && value) {
+    console.log("access token in this case: ", this.access_token);
+    if (key === "country") {
       this.setState({
         state: "",
         district: "",
         city: "",
         area: ""
       });
-      this.props.onAddressTreeList({
-        id: value.id,
-        access_token: this.access_token,
-        ADDRESS_KEY: key
-      });
+      if (value)
+        this.props.onAddressTreeList({
+          id: value.id,
+          access_token: this.access_token,
+          ADDRESS_KEY: key
+        });
       districts = [];
       cities = [];
       areas = [];
-    } else if (key === "state" && value) {
+    } else if (key === "state") {
       this.setState({
         district: "",
         city: "",
         area: ""
       });
-
-      this.props.onAddressTreeList({
-        id: value.id,
-        access_token: this.access_token,
-        ADDRESS_KEY: key
-      });
+      if (value)
+        this.props.onAddressTreeList({
+          id: value.id,
+          access_token: this.access_token,
+          ADDRESS_KEY: key
+        });
       cities = [];
       areas = [];
-    } else if (key === "district" && value) {
+    } else if (key === "district") {
       this.setState({
         city: "",
         area: ""
       });
-
-      this.props.onAddressTreeList({
-        id: value.id,
-        access_token: this.access_token,
-        ADDRESS_KEY: key
-      });
+      if (value)
+        this.props.onAddressTreeList({
+          id: value.id,
+          access_token: this.access_token,
+          ADDRESS_KEY: key
+        });
       areas = [];
-    } else if (key === "city" && value) {
+    } else if (key === "city") {
       this.setState({
         area: ""
       });
-
-      this.props.onAddressTreeList({
-        id: value.id,
-        access_token: this.access_token,
-        ADDRESS_KEY: key
-      });
+      if (value)
+        this.props.onAddressTreeList({
+          id: value.id,
+          access_token: this.access_token,
+          ADDRESS_KEY: key
+        });
     }
   };
 
@@ -187,20 +189,23 @@ class SubBusinessPrimaryAddress extends Component {
     console.log("eachItem PRIMARY: ", this.state);
     const temp = {
       ...this.state,
-      country: this.state.country.id,
-      state: this.state.state.id,
-      district: this.state.district.id,
-      city: this.state.city.id,
-      area: this.state.area.id
+      country: this.state.country ? this.state.country.id : "",
+      state: this.state.state ? this.state.state.id : "",
+      district: this.state.district ? this.state.district.id : "",
+      city: this.state.city ? this.state.city.id : "",
+      area: this.state.area ? this.state.area.id : ""
     };
+
+    console.log("temp: ", temp);
     let reformed = {};
 
     for (var property in temp) {
+      console.log("property: ", property);
       reformed =
-        (temp[property] !== "" &&
-          temp[property] !== null &&
-          temp[property] !== undefined) ||
-        (temp[property].constructor === Array && temp[property].length > 0)
+        temp[property] !== "" &&
+        temp[property] !== null &&
+        temp[property] !== undefined &&
+        temp[property].length > 0
           ? { ...reformed, [property]: temp[property] }
           : reformed;
     }

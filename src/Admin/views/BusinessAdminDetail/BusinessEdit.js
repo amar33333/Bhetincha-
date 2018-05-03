@@ -209,6 +209,7 @@ class BusinessEdit extends Component {
                 />
                 <SubBusinessPrimaryAddress
                   ref={ref => (this.subBusinessPrimaryAddressRef = ref)}
+                  cookies={this.props.cookies}
                   address={address}
                   {...this.props.general_setup}
                   onAddressTreeList={this.props.onAddressTreeList}
@@ -216,6 +217,7 @@ class BusinessEdit extends Component {
                 />
                 <SubBusinessBranchWrapper
                   ref={ref => (this.subBusinessBranchWrapperRef = ref)}
+                  cookies={this.props.cookies}
                   branchAddress={branchAddress}
                   general_setup={this.props.general_setup}
                   onAddressTreeList={this.props.onAddressTreeList}
