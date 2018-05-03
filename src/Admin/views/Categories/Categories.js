@@ -14,7 +14,7 @@ import {
   CardHeader,
   CardBody
 } from "reactstrap";
-import Select from "react-select";
+import Select from "./Select";
 
 import { connect } from "react-redux";
 import ReactTable from "react-table";
@@ -73,7 +73,6 @@ class Categories extends Component {
               onChange={onChange}
               valueKey="id"
               labelKey="name"
-              className="select-industry-rt-table"
               options={[
                 { id: "all", name: "All" },
                 ...this.props.industries.industries
@@ -242,16 +241,12 @@ class Categories extends Component {
             </Card>
           </Col>
         </Row>
-        <Row className="hr-centered">
-          <Col xs="12" md="7">
-            <ReactTable
-              data={this.props.categories.categories}
-              loading={this.props.categories.fetchLoading}
-              defaultFilterMethod={this.filterCaseInsensitive}
-              {...this.tableProps}
-            />
-          </Col>
-        </Row>
+        <ReactTable
+          data={this.props.categories.categories}
+          loading={this.props.categories.fetchLoading}
+          defaultFilterMethod={this.filterCaseInsensitive}
+          {...this.tableProps}
+        />
       </div>
     );
   }
