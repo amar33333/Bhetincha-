@@ -1,30 +1,16 @@
 import React, { Component } from "react";
-import {
-  withScriptjs,
-  withGoogleMap,
-  GoogleMap,
-  Marker
-} from "react-google-maps";
-
 import { Container, Row, Col, Input, Button } from "reactstrap";
 
-const MyMapComponent = withScriptjs(
-  withGoogleMap(props => (
-    <GoogleMap
-      defaultZoom={15}
-      defaultCenter={props.position}
-      center={props.position}
-    >
-      <Marker position={props.position} draggable onDragEnd={props.onDragEnd} />
-    </GoogleMap>
-  ))
-);
+import MapComponent from "../../../Common/components/MapComponent";
 
 class Dashboard extends Component {
   state = {
     position: { lat: 27.7172453, lng: 85.32391758465576 },
     address: "Kathmandu"
   };
+
+  onChangeLatLng = ({ latLng }) =>
+    this.setState({ position: { lat: latLng.lat(), lng: latLng.lng() } });
 
   render() {
     return (
@@ -47,12 +33,15 @@ class Dashboard extends Component {
                   geocoder.geocode(
                     { address: this.state.address },
                     (results, status) => {
-                      //console.log(results, status[0]);
                       if (status === "OK") {
                         const location = results[0].geometry.location;
                         this.setState({
                           position: { lat: location.lat(), lng: location.lng() }
                         });
+                      } else {
+                        console.log(
+                          "Location not found in map. Select Manually"
+                        );
                       }
                     }
                   );
@@ -62,18 +51,10 @@ class Dashboard extends Component {
               </Button>
             </Col>
           </Row>
-          <MyMapComponent
+          <MapComponent
             position={this.state.position}
-            onDragEnd={({ latLng }) => {
-              this.setState({
-                position: { lat: latLng.lat(), lng: latLng.lng() }
-              });
-              console.log(latLng.lat(), latLng.lng());
-            }}
-            googleMapURL="https://maps.googleapis.com/maps/api/js?key=AIzaSyDuyvcH5Rr55zHXmJFjuQ30jd_edLi1HbQ"
-            loadingElement={<div style={{ height: `100%` }} />}
-            containerElement={<div style={{ height: `400px` }} />}
-            mapElement={<div style={{ height: `100%` }} />}
+            onRightClick={this.onChangeLatLng}
+            onDragEnd={this.onChangeLatLng}
           />
         </Container>
       </div>
