@@ -39,7 +39,14 @@ export default function(state = INITIAL_STATE, action) {
       return { ...state, fetchLoading: true };
 
     case FETCH_INDUSTRY_FULFILLED:
-      return { ...state, industries: action.payload, fetchLoading: false };
+      return {
+        ...state,
+        industries: action.payload.map((industry, i) => ({
+          ...industry,
+          s_no: i + 1
+        })),
+        fetchLoading: false
+      };
 
     case FETCH_INDUSTRY_REJECTED:
       return { ...state, fetchLoading: false };

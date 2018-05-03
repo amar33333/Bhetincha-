@@ -104,7 +104,7 @@ class BusinessList extends Component {
     pageSizeOptions: [5, 10, 20, 25, 50, 100],
     manual: true,
     sortable: true,
-    minRows: 2
+    minRows: 5
   };
 
   componentDidMount = () => {

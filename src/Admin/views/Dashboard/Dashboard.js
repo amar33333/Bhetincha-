@@ -30,11 +30,17 @@ class Dashboard extends Component {
                 color="primary"
                 onClick={() => {
                   let geocoder = new window.google.maps.Geocoder();
+
                   geocoder.geocode(
                     { address: this.state.address },
                     (results, status) => {
                       if (status === "OK") {
                         const location = results[0].geometry.location;
+                        let latLng = new window.google.maps.LatLng(
+                          location.lat(),
+                          location.lng()
+                        );
+                        this.mapEl.googleMapEl.panTo(latLng);
                         this.setState({
                           position: { lat: location.lat(), lng: location.lng() }
                         });
@@ -52,6 +58,7 @@ class Dashboard extends Component {
             </Col>
           </Row>
           <MapComponent
+            ref={ref => (this.mapEl = ref)}
             position={this.state.position}
             onClick={this.onChangeLatLng}
             onDragEnd={this.onChangeLatLng}
