@@ -18,7 +18,7 @@ class PopoverItem extends React.Component {
           {this.props.text || "Delete"}
         </Button>
         <Popover
-          placement={this.props.placement || "right"}
+          placement={this.props.placement || "bottom"}
           isOpen={this.state.popoverOpen}
           target={"Popover-" + this.props.id}
           toggle={this.toggle}

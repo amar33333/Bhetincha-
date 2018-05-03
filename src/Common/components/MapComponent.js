@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Component } from "react";
 import {
   withScriptjs,
   withGoogleMap,
@@ -7,32 +7,47 @@ import {
 } from "react-google-maps";
 import { GOOGLE_MAPS_URL } from "../utils/API";
 
-const MyMapComponent = withScriptjs(
-  withGoogleMap(props => (
-    <GoogleMap
-      defaultZoom={15}
-      defaultCenter={{ lat: 27.7172453, lng: 85.32391758465576 }}
-      center={props.position}
-      onRightClick={({ latLng }) => props.onRightClick({ latLng })}
-      // onClick={() => console.log("click")}
-    >
-      <Marker position={props.position} draggable onDragEnd={props.onDragEnd} />
-    </GoogleMap>
-  ))
-);
+class GoogleMapComponent extends Component {
+  componentDidMount() {
+    this.props.setRef(this.gEl);
+  }
+  render() {
+    return (
+      <GoogleMap
+        ref={ref => (this.gEl = ref)}
+        defaultZoom={15}
+        defaultCenter={{ lat: 27.7172453, lng: 85.32391758465576 }}
+        onClick={({ latLng }) => this.props.onClick({ latLng })}
+      >
+        <Marker
+          position={this.props.position}
+          draggable
+          onDragEnd={this.props.onDragEnd}
+        />
+      </GoogleMap>
+    );
+  }
+}
 
-const MapComponent = props => (
-  <MyMapComponent
-    position={props.position}
-    onRightClick={props.onRightClick}
-    onDragEnd={props.onDragEnd}
-    googleMapURL={GOOGLE_MAPS_URL}
-    loadingElement={props.loadingElement || <div style={{ height: `100%` }} />}
-    containerElement={
-      props.containerElement || <div style={{ height: `400px` }} />
-    }
-    mapElement={props.mapElement || <div style={{ height: `100%` }} />}
-  />
-);
-
+class MapComponent extends Component {
+  render() {
+    const MyMapComponent = withScriptjs(withGoogleMap(GoogleMapComponent));
+    return (
+      <MyMapComponent
+        setRef={ref => (this.googleMapEl = ref)}
+        position={this.props.position}
+        onClick={this.props.onClick}
+        onDragEnd={this.props.onDragEnd}
+        googleMapURL={GOOGLE_MAPS_URL}
+        loadingElement={
+          this.props.loadingElement || <div style={{ height: `100%` }} />
+        }
+        containerElement={
+          this.props.containerElement || <div style={{ height: `400px` }} />
+        }
+        mapElement={this.props.mapElement || <div style={{ height: `100%` }} />}
+      />
+    );
+  }
+}
 export default MapComponent;
