@@ -124,7 +124,7 @@ class subBusinessWorkingHour extends Component {
   };
   renderWorkingHours = () => {
     return this.state.workingHour.map(day => (
-      <FormGroup>
+      <FormGroup key={day.day}>
         <Card body outline color={day.holiday ? "danger" : "primary"}>
           <CardBody
             style={{
@@ -138,7 +138,7 @@ class subBusinessWorkingHour extends Component {
               <Input
                 type="checkbox"
                 checked={day.holiday}
-                onClick={this.toggleHoliday.bind(this, day.day)}
+                onChange={this.toggleHoliday.bind(this, day.day)}
               />
               Holiday
             </Label>
@@ -225,7 +225,7 @@ class subBusinessWorkingHour extends Component {
                       <Input
                         type="checkbox"
                         checked={this.state.alwaysOpen}
-                        onClick={this.toggleAlwaysOpen.bind(this)}
+                        onChange={this.toggleAlwaysOpen.bind(this)}
                       />
                       Always Open
                     </Label>
