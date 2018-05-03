@@ -4,6 +4,7 @@ import { Provider } from "react-redux";
 import Raven from "raven-js";
 import "./config/rxjs";
 
+import "./index.css";
 import store from "./config/store";
 import App from "./App";
 import registerServiceWorker from "./registerServiceWorker";
