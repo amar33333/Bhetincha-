@@ -68,17 +68,20 @@ class Categories extends Component {
           return filter.value.id === row.industry;
         },
         Filter: ({ filter, onChange }) => (
-          <Select
-            clearable
-            value={filter ? filter.value : "All"}
-            onChange={onChange}
-            valueKey="id"
-            labelKey="name"
-            options={[
-              { id: "all", name: "All" },
-              ...this.props.industries.industries
-            ]}
-          />
+          <div style={{ zIndex: 999, position: "relative" }}>
+            <Select
+              clearable
+              value={filter ? filter.value : "All"}
+              onChange={onChange}
+              valueKey="id"
+              labelKey="name"
+              className="select-industry-rt-table"
+              options={[
+                { id: "all", name: "All" },
+                ...this.props.industries.industries
+              ]}
+            />
+          </div>
         )
         // Filter: ({ filter, onChange }) => (
         //   <select
@@ -237,12 +240,16 @@ class Categories extends Component {
             </Card>
           </Col>
         </Row>
-        <ReactTable
-          data={this.props.categories.categories}
-          loading={this.props.categories.fetchLoading}
-          defaultFilterMethod={this.filterCaseInsensitive}
-          {...this.tableProps}
-        />
+        <Row className="hr-centered">
+          <Col xs="12" md="7">
+            <ReactTable
+              data={this.props.categories.categories}
+              loading={this.props.categories.fetchLoading}
+              defaultFilterMethod={this.filterCaseInsensitive}
+              {...this.tableProps}
+            />
+          </Col>
+        </Row>
       </div>
     );
   }

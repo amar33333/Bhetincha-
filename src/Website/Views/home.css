@@ -435,3 +435,13 @@ input.main-nav-search::placeholder {
   width: 70px;
   object-fit: cover;
 }
+
+/* ============ Admin ============= */
+
+.rt-th {
+  overflow: visible !important;
+}
+
+.rt-th .select-industry-rt-table input {
+  border: none !important;
+}
