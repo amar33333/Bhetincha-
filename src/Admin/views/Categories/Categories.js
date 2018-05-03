@@ -59,43 +59,30 @@ class Categories extends Component {
           );
           return industry ? industry.name : "Not Found";
         },
+        // Multiple filter option
         filterMethod: (filter, row) => {
-          if (filter && filter.value) {
-            if (filter.value.id === "all") return true;
-            return filter.value.id === row.industry;
+          if (filter && filter.value && filter.value.length > 0) {
+            let found = false;
+            for (let i = 0; i < filter.value.length; i++) {
+              found = found || filter.value[i].id === row.industry;
+            }
+            return found;
           } else return true;
         },
+        // Single filter option
+        // filterMethod: (filter, row) =>
+        //   filter && filter.value ? filter.value.id === row.industry : true,
         Filter: ({ filter, onChange }) => (
           <Select
             clearable
-            value={filter ? filter.value : "All"}
+            multi
+            value={filter ? filter.value : null}
             onChange={onChange}
             valueKey="id"
             labelKey="name"
-            options={[
-              { id: "all", name: "All" },
-              ...this.props.industries.industries
-            ]}
+            options={this.props.industries.industries}
           />
         )
-        // filterMethod: (filter, row) => {
-        //   if (filter.value === "all") return true;
-        //   return filter.value === row.industry;
-        // },
-        // Filter: ({ filter, onChange }) => (
-        //   <select
-        //     onChange={event => onChange(event.target.value)}
-        //     style={{ width: "100%" }}
-        //     value={filter ? filter.value : "all"}
-        //   >
-        //     <option value="all">Show All</option>
-        //     {this.props.industries.industries.map(industry => (
-        //       <option key={industry.id} value={industry.id}>
-        //         {industry.name}
-        //       </option>
-        //     ))}
-        //   </select>
-        // )
       },
       {
         Header: "Actions",
