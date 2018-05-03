@@ -53,7 +53,7 @@ class Dashboard extends Component {
           </Row>
           <MapComponent
             position={this.state.position}
-            onRightClick={this.onChangeLatLng}
+            onClick={this.onChangeLatLng}
             onDragEnd={this.onChangeLatLng}
           />
         </Container>

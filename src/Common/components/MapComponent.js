@@ -12,8 +12,8 @@ const MyMapComponent = withScriptjs(
     <GoogleMap
       defaultZoom={15}
       defaultCenter={{ lat: 27.7172453, lng: 85.32391758465576 }}
-      center={props.position}
-      onRightClick={({ latLng }) => props.onRightClick({ latLng })}
+      // center={props.position}
+      onClick={({ latLng }) => props.onClick({ latLng })}
       // onClick={() => console.log("click")}
     >
       <Marker position={props.position} draggable onDragEnd={props.onDragEnd} />
@@ -24,7 +24,7 @@ const MyMapComponent = withScriptjs(
 const MapComponent = props => (
   <MyMapComponent
     position={props.position}
-    onRightClick={props.onRightClick}
+    onClick={props.onClick}
     onDragEnd={props.onDragEnd}
     googleMapURL={GOOGLE_MAPS_URL}
     loadingElement={props.loadingElement || <div style={{ height: `100%` }} />}
