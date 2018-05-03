@@ -30,23 +30,35 @@ class GoogleMapComponent extends Component {
 }
 
 class MapComponent extends Component {
+  state = { MyMapComponent: null };
+  componentDidMount() {
+    this.setState({
+      MyMapComponent: withScriptjs(withGoogleMap(GoogleMapComponent))
+    });
+  }
   render() {
-    const MyMapComponent = withScriptjs(withGoogleMap(GoogleMapComponent));
+    const MyMapComponent = this.state.MyMapComponent;
     return (
-      <MyMapComponent
-        setRef={ref => (this.googleMapEl = ref)}
-        position={this.props.position}
-        onClick={this.props.onClick}
-        onDragEnd={this.props.onDragEnd}
-        googleMapURL={GOOGLE_MAPS_URL}
-        loadingElement={
-          this.props.loadingElement || <div style={{ height: `100%` }} />
-        }
-        containerElement={
-          this.props.containerElement || <div style={{ height: `400px` }} />
-        }
-        mapElement={this.props.mapElement || <div style={{ height: `100%` }} />}
-      />
+      <div>
+        {MyMapComponent && (
+          <MyMapComponent
+            setRef={ref => (this.googleMapEl = ref)}
+            position={this.props.position}
+            onClick={this.props.onClick}
+            onDragEnd={this.props.onDragEnd}
+            googleMapURL={GOOGLE_MAPS_URL}
+            loadingElement={
+              this.props.loadingElement || <div style={{ height: `100%` }} />
+            }
+            containerElement={
+              this.props.containerElement || <div style={{ height: `400px` }} />
+            }
+            mapElement={
+              this.props.mapElement || <div style={{ height: `100%` }} />
+            }
+          />
+        )}
+      </div>
     );
   }
 }
