@@ -41,9 +41,10 @@ export const onCategorySubmit = ({
     industry,
     access_token
   })
-    .then(response =>
-      dispatch({ type: CREATE_CATEGORY_FULFILLED, payload: response.data })
-    )
+    .then(response => {
+      dispatch({ type: CREATE_CATEGORY_FULFILLED, payload: response.data });
+      dispatch({ type: FETCH_CATEGORY_PENDING });
+    })
     .catch(error =>
       dispatch({ type: CREATE_CATEGORY_REJECTED, payload: error })
     );

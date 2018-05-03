@@ -26,7 +26,13 @@ class PopoverItem extends React.Component {
           <PopoverHeader>Are You Sure</PopoverHeader>
           <PopoverBody>
             <div>Clicking yes will delete your data</div>
-            <Button color="danger" onClick={this.props.onClick}>
+            <Button
+              color="danger"
+              onClick={() => {
+                this.props.onClick();
+                this.toggle();
+              }}
+            >
               Yes
             </Button>{" "}
             <Button color="secondary" onClick={this.toggle}>
