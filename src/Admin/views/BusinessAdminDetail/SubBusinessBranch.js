@@ -177,7 +177,11 @@ class SubBusinessBranch extends Component {
     geocoder.geocode({ address: value.name }, (results, status) => {
       if (status === "OK") {
         const location = results[0].geometry.location;
-        // this.mapComponentEl.mapEl.googleEL.panTo({ latLng: location });
+        var latLng = new window.google.maps.LatLng(
+          location.lat(),
+          location.lng()
+        );
+        this.mapComponentEl.googleMapEl.panTo(latLng);
         this.setState({
           area: value,
           latitude: location.lat(),
@@ -453,10 +457,10 @@ class SubBusinessBranch extends Component {
               <Col xs="12" md="12">
                 <Card className="p-3">
                   <strong className="mb-2">
-                    Select your Branch position from map displayed below
+                    Select your Branch Location from the map displayed below
                   </strong>
                   <MapComponent
-                    // ref={ref => (this.mapComponentEl = ref)}
+                    ref={ref => (this.mapComponentEl = ref)}
                     position={{
                       lat: this.state.latitude,
                       lng: this.state.longitude

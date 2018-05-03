@@ -474,7 +474,7 @@ class SubBusinessPrimaryAddress extends Component {
                 <Col xs="12" md="12">
                   <Card className="p-3">
                     <strong className="mb-2">
-                      Select your Business position from map displayed below
+                      Select your Business Location from the map displayed below
                     </strong>
                     <MapComponent
                       ref={ref => (this.mapComponentEl = ref)}
