@@ -3,9 +3,9 @@ import { connect } from "react-redux";
 import { Container, Row, Col } from "reactstrap";
 
 import "react-quill/dist/quill.snow.css";
-import "../minisite.css";
+import "../../minisite.css";
 
-import { onEditAboutUsClicked } from "../actions";
+import { onEditAboutUsClicked } from "../../actions";
 
 class AboutUs extends Component {
   state = { AsyncEditor: null };

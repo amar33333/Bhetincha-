@@ -124,50 +124,56 @@ class subBusinessWorkingHour extends Component {
   };
   renderWorkingHours = () => {
     return this.state.workingHour.map(day => (
-      <FormGroup>
+      <FormGroup key={day.day}>
         <Card body outline color={day.holiday ? "danger" : "primary"}>
-          <CardBody
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "space-between"
-            }}
-          >
-            <strong>{day.day}</strong>
-            <Label check>
-              <Input
-                type="checkbox"
-                checked={day.holiday}
-                onClick={this.toggleHoliday.bind(this, day.day)}
-              />
-              Holiday
-            </Label>
-            {day.holiday ? null : (
-              <span>
-                <Label>Opens at: </Label>
-                <Datetime
-                  dateFormat={false}
-                  defaultValue={moment().format("hh:mm a")}
-                  onChange={time => {
-                    this.handleStartHourChange(time, day.day);
-                  }}
-                  viewMode={"time"}
-                  utc={true}
-                />
-              </span>
-            )}
-            {day.holiday ? null : (
-              <span>
-                <Label>Closes at: </Label>
-                <Datetime
-                  dateFormat={false}
-                  defaultValue={moment().format("hh:mm a")}
-                  onChange={time => this.handleClosingHourChange(time, day.day)}
-                  viewMode={"time"}
-                  utc={true}
-                />
-              </span>
-            )}
+          <CardBody>
+            <Row>
+              <Col xs="6" md="2">
+                <strong>{day.day}</strong>
+              </Col>
+              <Col xs="6" md="2">
+                <Label check>
+                  <Input
+                    type="checkbox"
+                    checked={day.holiday}
+                    onChange={this.toggleHoliday.bind(this, day.day)}
+                  />
+                  Holiday
+                </Label>
+              </Col>
+              <Col xs="6" md="4">
+                {day.holiday ? null : (
+                  <span>
+                    <Label>Opens at: </Label>
+                    <Datetime
+                      dateFormat={false}
+                      defaultValue={moment().format("hh:mm a")}
+                      onChange={time => {
+                        this.handleStartHourChange(time, day.day);
+                      }}
+                      viewMode={"time"}
+                      utc={true}
+                    />
+                  </span>
+                )}
+              </Col>
+              <Col xs="6" md="4">
+                {day.holiday ? null : (
+                  <span>
+                    <Label>Closes at: </Label>
+                    <Datetime
+                      dateFormat={false}
+                      defaultValue={moment().format("hh:mm a")}
+                      onChange={time =>
+                        this.handleClosingHourChange(time, day.day)
+                      }
+                      viewMode={"time"}
+                      utc={true}
+                    />
+                  </span>
+                )}
+              </Col>
+            </Row>
           </CardBody>
         </Card>
       </FormGroup>
@@ -225,7 +231,7 @@ class subBusinessWorkingHour extends Component {
                       <Input
                         type="checkbox"
                         checked={this.state.alwaysOpen}
-                        onClick={this.toggleAlwaysOpen.bind(this)}
+                        onChange={this.toggleAlwaysOpen.bind(this)}
                       />
                       Always Open
                     </Label>

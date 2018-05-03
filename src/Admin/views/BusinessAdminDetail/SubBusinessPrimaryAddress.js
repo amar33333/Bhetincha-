@@ -2,6 +2,8 @@ import React, { Component } from "react";
 
 import Select from "react-select";
 
+import MapComponent from "../../../Common/components/MapComponent";
+
 import {
   Row,
   Col,
@@ -41,7 +43,9 @@ class SubBusinessPrimaryAddress extends Component {
       addressLine1: "",
       addressLine2: "",
       po_box: "",
-      tollFreeNumber: ""
+      tollFreeNumber: "",
+      latitude: 27.7172453,
+      longitude: 85.32391758465576
     };
 
     this.propsData = {};
@@ -49,6 +53,10 @@ class SubBusinessPrimaryAddress extends Component {
       ? this.props.cookies.token_data.access_token
       : null;
   }
+  onChangeLatLng = ({ latLng }) => {
+    console.log("latLang: ", this.state.latitude, this.state.longitude);
+    this.setState({ latitude: latLng.lat(), longitude: latLng.lng() });
+  };
 
   static getDerivedStateFromProps = (nextProps, prevState) => {
     const { address } = nextProps;
@@ -104,6 +112,29 @@ class SubBusinessPrimaryAddress extends Component {
     } else {
       this.setState({ [key]: event.target.value });
     }
+  };
+
+  handleAreaSelectChange = value => {
+    console.log("Value: ", value.name);
+    let geocoder = new window.google.maps.Geocoder();
+    geocoder.geocode({ address: value.name }, (results, status) => {
+      if (status === "OK") {
+        const location = results[0].geometry.location;
+        var latLng = new window.google.maps.LatLng(
+          location.lat(),
+          location.lng()
+        );
+        this.mapComponentEl.googleMapEl.panTo(latLng);
+        this.setState({
+          area: value,
+          latitude: location.lat(),
+          longitude: location.lng()
+        });
+        console.log("latLang: ", this.state.latitude, this.state.longitude);
+      } else {
+        console.log("Location not found in map. Select Manually");
+      }
+    });
   };
 
   handleSelectChange = (key, value) => {
@@ -425,7 +456,7 @@ class SubBusinessPrimaryAddress extends Component {
                       placeholder="Select an Area"
                       noResultsText="No Data Found"
                       value={valuePrimaryArea}
-                      onChange={this.handleSelectChange.bind(this, "area")}
+                      onChange={this.handleAreaSelectChange.bind(this)}
                       options={areas}
                       valueKey="id"
                       labelKey="name"
@@ -442,6 +473,24 @@ class SubBusinessPrimaryAddress extends Component {
                       onKeyDown={this._handleKeyPress}
                     />
                   </FormGroup>
+                </Col>
+              </Row>
+              <Row>
+                <Col xs="12" md="12">
+                  <Card className="p-3">
+                    <strong className="mb-2">
+                      Select your Business Location from the map displayed below
+                    </strong>
+                    <MapComponent
+                      ref={ref => (this.mapComponentEl = ref)}
+                      position={{
+                        lat: this.state.latitude,
+                        lng: this.state.longitude
+                      }}
+                      onClick={this.onChangeLatLng}
+                      onDragEnd={this.onChangeLatLng}
+                    />
+                  </Card>
                 </Col>
               </Row>
               <Row>

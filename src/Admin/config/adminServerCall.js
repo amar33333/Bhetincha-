@@ -158,6 +158,26 @@ export const onCategoryGet = ({ access_token }) =>
     }
   });
 
+export const onCategoryGetAjax = ({ access_token }) =>
+  ajax({
+    method: "get",
+    url: CATEGORY_URL,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
+export const onCategoryEachDeleteAjax = ({ id, access_token }) =>
+  ajax({
+    method: "DELETE",
+    url: `${CATEGORY_URL}${id}/`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
 export const onSubCategoryPost = ({
   category,
   extraSection,

@@ -11,31 +11,30 @@ import {
 
 const INITIAL_STATE = {
   loading: false,
-  statusClass: ""
+  fetchLoading: false,
+  categories: []
 };
 
 export default function(state = INITIAL_STATE, action) {
   switch (action.type) {
     case UNMOUNT_CATEGORY:
-      return {
-        ...state,
-        data: action.payload,
-        loading: false,
-        statusClass: "fulfilled"
-      };
+      return { ...state, categories: [] };
+
     case FETCH_CATEGORY_PENDING:
-      return { ...state, loading: true, statusClass: "pending" };
+      return { ...state, fetchLoading: true };
 
     case FETCH_CATEGORY_FULFILLED:
       return {
         ...state,
-        data: action.payload,
-        loading: false,
-        statusClass: "fulfilled"
+        categories: action.payload.map((category, i) => ({
+          ...category,
+          s_no: i + 1
+        })),
+        fetchLoading: false
       };
 
     case FETCH_CATEGORY_REJECTED:
-      return { ...state, loading: false, statusClass: "rejected" };
+      return { ...state, fetchLoading: false };
 
     case FETCH_CATEGORY_EACH_PENDING:
       return { ...state, loading: true };
@@ -59,8 +58,7 @@ export default function(state = INITIAL_STATE, action) {
         categoryData: state.categoryData
           ? [...state.categoryData, action.payload]
           : [action.payload],
-        loading: false,
-        statusClass: "fulfilled"
+        loading: false
       };
 
     case FETCH_CATEGORY_EACH_REJECTED:

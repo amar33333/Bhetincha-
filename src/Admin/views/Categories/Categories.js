@@ -17,12 +17,17 @@ import {
 import Select from "react-select";
 
 import { connect } from "react-redux";
+import ReactTable from "react-table";
+import { PopoverDelete } from "../../../Common/components";
+import "react-table/react-table.css";
 
 import {
   onCategorySubmit,
+  onCategoryList,
   onIndustryList,
   onUnmountIndustry,
-  onUnmountCategory
+  onUnmountCategory,
+  onCategoryDelete
 } from "../../actions";
 
 class Categories extends Component {
@@ -35,13 +40,112 @@ class Categories extends Component {
     ? this.props.cookies.token_data.access_token
     : null;
 
+  tableProps = {
+    columns: [
+      {
+        Header: "S. No.",
+        accessor: "s_no",
+        filterable: false,
+        searchable: false,
+        width: 70
+      },
+      { Header: "Category", accessor: "name" },
+      {
+        Header: "Industry",
+        accessor: "industry",
+        Cell: ({ value }) => {
+          const industry = this.props.industries.industries.find(
+            industry => industry.id === value
+          );
+          return industry ? industry.name : "Not Found";
+        },
+        filterMethod: (filter, row) => {
+          if (filter && filter.value) {
+            if (filter.value.id === "all") return true;
+            return filter.value.id === row.industry;
+          } else return true;
+        },
+        Filter: ({ filter, onChange }) => (
+          <Select
+            clearable
+            value={filter ? filter.value : "All"}
+            onChange={onChange}
+            valueKey="id"
+            labelKey="name"
+            options={[
+              { id: "all", name: "All" },
+              ...this.props.industries.industries
+            ]}
+          />
+        )
+        // filterMethod: (filter, row) => {
+        //   if (filter.value === "all") return true;
+        //   return filter.value === row.industry;
+        // },
+        // Filter: ({ filter, onChange }) => (
+        //   <select
+        //     onChange={event => onChange(event.target.value)}
+        //     style={{ width: "100%" }}
+        //     value={filter ? filter.value : "all"}
+        //   >
+        //     <option value="all">Show All</option>
+        //     {this.props.industries.industries.map(industry => (
+        //       <option key={industry.id} value={industry.id}>
+        //         {industry.name}
+        //       </option>
+        //     ))}
+        //   </select>
+        // )
+      },
+      {
+        Header: "Actions",
+        id: "edit",
+        accessor: "id",
+        filterable: false,
+        sortable: false,
+        width: 130,
+        Cell: ({ value }) => (
+          <div>
+            <Button
+              color="secondary"
+              className="mr-l"
+              onClick={event => console.log("Edit clicked for id: ", value)}
+            >
+              Edit
+            </Button>
+            <PopoverDelete
+              id={`delete-${value}`}
+              onClick={() => this.props.onCategoryDelete({ id: value })}
+            />
+          </div>
+        )
+      }
+    ],
+    minRows: 5,
+    defaultPageSize: 20,
+    className: "-striped -highlight",
+    filterable: true
+  };
+
   componentWillMount() {
-    this.props.onIndustryList({ access_token: this.access_token });
+    this.props.onIndustryList();
+    this.props.onCategoryList();
   }
 
   componentWillUnmount() {
     this.props.onUnmountIndustry();
+    this.props.onUnmountCategory();
   }
+
+  filterCaseInsensitive = (filter, row) => {
+    const id = filter.pivotId || filter.id;
+    if (row[id] !== null) {
+      return row[id] !== undefined
+        ? String(row[id].toLowerCase()).indexOf(filter.value.toLowerCase()) !==
+            -1
+        : true;
+    }
+  };
 
   onChange = (key, event) => {
     this.setState({ [key]: event.target.value });
@@ -65,31 +169,11 @@ class Categories extends Component {
   };
 
   render() {
-    // console.log("cqeqweL: ", this.props);
     const industries = this.props.industries.industries
       ? this.props.industries.industries.map(industry => {
           return { value: industry.id, label: industry.name };
         })
       : null;
-
-    // console.log("indsua: ", industries);
-
-    // if (industries) {
-    //   this.setState({ industries });
-    // }
-
-    // industries ? this.setState({ industries }) : null;
-    // const industries = this.props.industries
-    //   ? this.props.industries.map(industry => {
-    //       return { value: industry.id, label: industry.name };
-    //     })
-    //   : null;
-
-    // console.log("asdasds: ", industries);
-
-    // this.setState({ industries }, () => {
-    //   console.log("prin indsus: ", this.state);
-    // });
 
     const { industry } = this.state;
     const value = industry && industry.value;
@@ -155,12 +239,29 @@ class Categories extends Component {
             </Card>
           </Col>
         </Row>
+        <ReactTable
+          data={this.props.categories.categories}
+          loading={this.props.categories.fetchLoading}
+          defaultFilterMethod={this.filterCaseInsensitive}
+          {...this.tableProps}
+        />
       </div>
     );
   }
 }
 
 export default connect(
-  ({ AdminContainer: { industries }, auth }) => ({ industries, ...auth }),
-  { onCategorySubmit, onIndustryList, onUnmountIndustry, onUnmountCategory }
+  ({ AdminContainer: { industries, categories }, auth }) => ({
+    industries,
+    categories,
+    ...auth
+  }),
+  {
+    onCategorySubmit,
+    onIndustryList,
+    onUnmountIndustry,
+    onUnmountCategory,
+    onCategoryList,
+    onCategoryDelete
+  }
 )(Categories);

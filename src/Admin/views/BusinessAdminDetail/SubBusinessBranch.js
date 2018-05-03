@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import MapComponent from "../../../Common/components/MapComponent";
 
 import Select from "react-select";
 
@@ -42,7 +43,9 @@ class SubBusinessBranch extends Component {
       addressLine1: "",
       addressLine2: "",
       po_box: "",
-      tollFreeNumber: ""
+      tollFreeNumber: "",
+      latitude: 27.7172453,
+      longitude: 85.32391758465576
     };
 
     this.propsData = {};
@@ -51,6 +54,10 @@ class SubBusinessBranch extends Component {
       ? this.props.cookies.token_data.access_token
       : null;
   }
+  onChangeLatLng = ({ latLng }) => {
+    console.log("latLang: ", this.state.latitude, this.state.longitude);
+    this.setState({ latitude: latLng.lat(), longitude: latLng.lng() });
+  };
 
   static getDerivedStateFromProps = (nextProps, prevState) => {
     const { branch } = nextProps;
@@ -164,6 +171,30 @@ class SubBusinessBranch extends Component {
         });
     }
   };
+
+  handleAreaSelectChange = value => {
+    console.log("Value: ", value.name);
+    let geocoder = new window.google.maps.Geocoder();
+    geocoder.geocode({ address: value.name }, (results, status) => {
+      if (status === "OK") {
+        const location = results[0].geometry.location;
+        var latLng = new window.google.maps.LatLng(
+          location.lat(),
+          location.lng()
+        );
+        this.mapComponentEl.googleMapEl.panTo(latLng);
+        this.setState({
+          area: value,
+          latitude: location.lat(),
+          longitude: location.lng()
+        });
+        console.log("latLang: ", this.state.latitude, this.state.longitude);
+      } else {
+        console.log("Location not found in map. Select Manually");
+      }
+    });
+  };
+
   onDelete = () => {
     this.clearState();
     this.props.onDelete(this.props.id);
@@ -405,7 +436,7 @@ class SubBusinessBranch extends Component {
                     placeholder="Select an Area"
                     noResultsText="No Data Found"
                     value={valueBranchArea}
-                    onChange={this.handleSelectChange.bind(this, "area")}
+                    onChange={this.handleAreaSelectChange.bind(this)}
                     options={areas}
                     valueKey="id"
                     labelKey="name"
@@ -421,6 +452,24 @@ class SubBusinessBranch extends Component {
                     onChange={this.onChange.bind(this, "landmark")}
                   />
                 </FormGroup>
+              </Col>
+            </Row>
+            <Row>
+              <Col xs="12" md="12">
+                <Card className="p-3">
+                  <strong className="mb-2">
+                    Select your Branch Location from the map displayed below
+                  </strong>
+                  <MapComponent
+                    ref={ref => (this.mapComponentEl = ref)}
+                    position={{
+                      lat: this.state.latitude,
+                      lng: this.state.longitude
+                    }}
+                    onClick={this.onChangeLatLng}
+                    onDragEnd={this.onChangeLatLng}
+                  />
+                </Card>
               </Col>
             </Row>
             <Row>

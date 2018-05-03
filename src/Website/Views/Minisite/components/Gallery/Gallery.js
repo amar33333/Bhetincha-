@@ -3,13 +3,10 @@ import GalleryGrid from "react-grid-gallery";
 import FileInputComponent from "react-file-input-previews-base64";
 import { connect } from "react-redux";
 import { Container, Card, CardBody, CardHeader, Input } from "reactstrap";
-import AvatarEditor from "react-avatar-editor";
 
-import { handleGalleryPhotoUpload, createNewAlbum } from "../actions";
+import { handleGalleryPhotoUpload, createNewAlbum } from "../../actions";
 
-import image from "../../../../static/img/banner.jpg";
-
-import { MAIN_URL } from "../config/MINISITE_API";
+import { MAIN_URL } from "../../config/MINISITE_API";
 import FontAwesome from "react-fontawesome";
 
 class Gallery extends Component {

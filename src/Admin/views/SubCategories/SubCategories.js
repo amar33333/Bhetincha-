@@ -4,13 +4,15 @@ import {
   Col,
   Row,
   Input,
+  Label,
   InputGroup,
   InputGroupAddon,
   InputGroupText,
   Form,
   Card,
   CardBody,
-  CardHeader
+  CardHeader,
+  FormGroup
 } from "reactstrap";
 
 import { connect } from "react-redux";
@@ -94,13 +96,55 @@ class SubCategories extends Component {
     return (
       <div className="animated fadeIn">
         <Row className="hr-centered">
-          <Col xs="12" md="6">
+          <Col xs="12" md="8">
             <Card>
               <CardHeader>
                 <strong>Add Sub-Categories</strong>
               </CardHeader>
               <CardBody>
                 <Form onSubmit={this.onFormSubmit}>
+                  <Row>
+                    <Col xs="12" md="6">
+                      <FormGroup>
+                        <Label> Industry </Label>
+                        <Select
+                          autosize
+                          clearable
+                          required
+                          name="Category"
+                          className="select-category"
+                          value={valueCategory}
+                          onChange={this.handleSelectChange.bind(
+                            this,
+                            "category"
+                          )}
+                          options={categories}
+                          valueKey="id"
+                          labelKey="name"
+                        />
+                      </FormGroup>
+                    </Col>
+                    <Col xs="12" md="6">
+                      <FormGroup>
+                        <Label> Category </Label>
+                        <Select
+                          autosize
+                          clearable
+                          required
+                          name="Category"
+                          className="select-category"
+                          value={valueCategory}
+                          onChange={this.handleSelectChange.bind(
+                            this,
+                            "category"
+                          )}
+                          options={categories}
+                          valueKey="id"
+                          labelKey="name"
+                        />
+                      </FormGroup>
+                    </Col>
+                  </Row>
                   <InputGroup className="mb-3">
                     <InputGroupAddon addonType="prepend">
                       <InputGroupText>
@@ -111,39 +155,34 @@ class SubCategories extends Component {
                       autoFocus
                       required
                       type="text"
-                      placeholder="Sub Category Name"
-                      value={this.state.subCategory}
+                      placeholder="New Sub Category Name"
+                      value={this.state.subCategory.replace(/\b\w/g, l =>
+                        l.toUpperCase()
+                      )}
                       onChange={this.onChange.bind(this, "subCategory")}
                     />
                   </InputGroup>
-                  Category:
-                  <Select
-                    autosize
-                    clearable
-                    required
-                    name="Category"
-                    className="select-category"
-                    value={valueCategory}
-                    onChange={this.handleSelectChange.bind(this, "category")}
-                    options={categories}
-                  />
-                  Extra Section
-                  <Select
-                    autosize
-                    clearable
-                    required
-                    multi
-                    //removeSelected={false}
-                    closeOnSelect={false}
-                    name="Extra-Sections"
-                    className="select-extra-sections"
-                    value={valueExtraSection}
-                    onChange={this.handleSelectChange.bind(
-                      this,
-                      "extraSection"
-                    )}
-                    options={extraSections}
-                  />
+                  <FormGroup>
+                    <Label> Extra Section </Label>
+                    <Select
+                      autosize
+                      clearable
+                      required
+                      multi
+                      //removeSelected={false}
+                      closeOnSelect={false}
+                      name="Extra-Sections"
+                      className="select-extra-sections"
+                      value={valueExtraSection}
+                      onChange={this.handleSelectChange.bind(
+                        this,
+                        "extraSection"
+                      )}
+                      options={extraSections}
+                      valueKey="id"
+                      labelKey="name"
+                    />
+                  </FormGroup>
                   <Row>
                     <Col xs="6">
                       <Button
