@@ -47,7 +47,7 @@ class BusinessList extends Component {
               <Link to={`/${business.slug}`}>
                 <strong>{props.value}</strong>
               </Link>
-              <div>Email: {business.email}</div>
+              <div>Email: {business.business_email}</div>
               <div>Mobile: {business.phone_number}</div>
               {business.creation && (
                 <Tooltip
