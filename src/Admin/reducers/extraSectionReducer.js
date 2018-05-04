@@ -24,7 +24,6 @@ export default function(state = INITIAL_STATE, action) {
       return { ...state, loading: true, statusClass: "pending" };
 
     case FETCH_EXTRA_SECTION_FULFILLED:
-      console.log("extrasection", action.payload);
       return {
         ...state,
         data: action.payload.extra_sections.map(extra_section => ({

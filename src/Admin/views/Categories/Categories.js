@@ -14,11 +14,11 @@ import {
   CardHeader,
   CardBody
 } from "reactstrap";
-import { Select } from "../../../Common/components";
 
 import { connect } from "react-redux";
 import ReactTable from "react-table";
-import { PopoverDelete } from "../../../Common/components";
+import { PopoverDelete, Select } from "../../../Common/components";
+import filterCaseInsensitive from "../../../Common/utils/filterCaseInsesitive";
 import "react-table/react-table.css";
 
 import {
@@ -124,16 +124,6 @@ class Categories extends Component {
     this.props.onUnmountCategory();
   }
 
-  filterCaseInsensitive = (filter, row) => {
-    const id = filter.pivotId || filter.id;
-    if (row[id] !== null) {
-      return row[id] !== undefined
-        ? String(row[id].toLowerCase()).indexOf(filter.value.toLowerCase()) !==
-            -1
-        : true;
-    }
-  };
-
   onChange = (key, event) => {
     this.setState({ [key]: event.target.value });
   };
@@ -227,10 +217,10 @@ class Categories extends Component {
           </Col>
         </Row>
         <ReactTable
+          {...this.tableProps}
           data={this.props.categories.categories}
           loading={this.props.categories.fetchLoading}
-          defaultFilterMethod={this.filterCaseInsensitive}
-          {...this.tableProps}
+          defaultFilterMethod={filterCaseInsensitive}
         />
       </div>
     );

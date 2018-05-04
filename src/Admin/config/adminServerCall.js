@@ -208,6 +208,17 @@ export const onSubCategoryEachGet = ({ id, access_token }) =>
       Authorization: "Bearer " + access_token
     }
   });
+
+export const onSubCategoryGetAjax = ({ access_token }) =>
+  ajax({
+    method: "get",
+    url: SUB_CATEGORY_URL,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
 export const onExtraSectionGet = ({ access_token }) =>
   axios({
     method: "get",

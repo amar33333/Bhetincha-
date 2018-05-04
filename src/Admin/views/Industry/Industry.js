@@ -16,6 +16,7 @@ import {
 import { connect } from "react-redux";
 import ReactTable from "react-table";
 import { PopoverDelete } from "../../../Common/components";
+import filterCaseInsensitive from "../../../Common/utils/filterCaseInsesitive";
 import "react-table/react-table.css";
 
 import {
@@ -77,16 +78,6 @@ class Industry extends Component {
 
   componentWillUnmount = () => this.props.onUnmountIndustry();
 
-  filterCaseInsensitive = (filter, row) => {
-    const id = filter.pivotId || filter.id;
-    if (row[id] !== null) {
-      return row[id] !== undefined
-        ? String(row[id].toLowerCase()).indexOf(filter.value.toLowerCase()) !==
-            -1
-        : true;
-    }
-  };
-
   onChange = (key, event) => this.setState({ [key]: event.target.value });
 
   onFormSubmit = event => {
@@ -140,7 +131,7 @@ class Industry extends Component {
         <ReactTable
           data={this.props.industries}
           loading={this.props.fetchLoading}
-          defaultFilterMethod={this.filterCaseInsensitive}
+          defaultFilterMethod={filterCaseInsensitive}
           {...this.tableProps}
         />
       </div>
