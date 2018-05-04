@@ -2,6 +2,7 @@ import industryEpics from "./industryActions";
 import businessEpics from "./businessActions";
 import filterBusinessEpics from "./filterBusinessActions";
 import categoryEpics from "./categoryActions";
+import subCategoryEpics from "./subCategoryActions";
 
 export * from "./industryActions";
 export * from "./categoryActions";
@@ -16,5 +17,6 @@ export default [
   ...industryEpics,
   ...businessEpics,
   ...filterBusinessEpics,
-  ...categoryEpics
+  ...categoryEpics,
+  ...subCategoryEpics
 ];

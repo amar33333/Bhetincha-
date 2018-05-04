@@ -6,32 +6,30 @@ import {
 } from "../actions/types";
 
 const INITIAL_STATE = {
-  loading: false,
-  statusClass: ""
+  fetchLoading: false,
+  subCategories: []
 };
 
 export default function(state = INITIAL_STATE, action) {
   switch (action.type) {
     case UNMOUNT_SUB_CATEGORY:
-      return {
-        ...state,
-        subCategories: action.payload,
-        loading: false,
-        statusClass: "fulfilled"
-      };
+      return { ...state, subCategories: [] };
+
     case FETCH_SUB_CATEGORY_PENDING:
-      return { ...state, loading: true, statusClass: "pending" };
+      return { ...state, fetchLoading: true };
 
     case FETCH_SUB_CATEGORY_FULFILLED:
       return {
         ...state,
-        subCategories: action.payload,
-        loading: false,
-        statusClass: "fulfilled"
+        subCategories: action.payload.map((subCategory, i) => ({
+          ...subCategory,
+          s_no: i + 1
+        })),
+        fetchLoading: false
       };
 
     case FETCH_SUB_CATEGORY_REJECTED:
-      return { ...state, loading: false, statusClass: "rejected" };
+      return { ...state, fetchLoading: false };
 
     default:
       return state;
