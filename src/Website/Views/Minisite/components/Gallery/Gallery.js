@@ -141,6 +141,8 @@ class Gallery extends Component {
   };
 
   render() {
+    console.log("album props: ", this.props.albums);
+
     return (
       <div className="gallery-wrapper">
         {this.props.mainEdit && this.renderAddNewGallery()}
