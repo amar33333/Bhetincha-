@@ -159,6 +159,7 @@ class Gallery extends Component {
                     username: this.props.username,
                     data: { albums: { name: this.state.newAlbumName } }
                   });
+                  this.setState({ newAlbumName: "" });
                 }}
               >
                 <Input
