@@ -17,12 +17,20 @@ import { MainRoute } from "./config/routes";
 
 import { loadCookies } from "./actions";
 
+import { ToastContainer } from "react-toastify";
+import { NOTIFICATION_TIME } from "./config/CONSTANTS";
+
 class App extends Component {
   componentWillMount() {
     this.props.loadCookies();
   }
   render() {
-    return <MainRoute />;
+    return (
+      <div>
+        <ToastContainer hideProgressBar autoClose={NOTIFICATION_TIME} />
+        <MainRoute />
+      </div>
+    );
   }
 }
 
