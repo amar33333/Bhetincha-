@@ -32,7 +32,9 @@ class SubBusinessAbout extends Component {
   }
 
   static getDerivedStateFromProps = nextProps => {
-    if (nextProps.about && nextProps.edit) {
+    if (nextProps.about && nextProps.EDIT) {
+      nextProps.ToogleEDIT(!nextProps.EDIT);
+
       return {
         tagline: nextProps.about.tagline ? nextProps.about.tagline : "",
         aboutUs: nextProps.about.aboutUs ? nextProps.about.aboutUs : "",

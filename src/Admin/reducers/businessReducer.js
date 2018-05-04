@@ -16,12 +16,17 @@ import {
   FETCH_BUSINESS_REJECTED,
   FETCH_BUSINESS_EACH_FULFILLED,
   FETCH_BUSINESS_EACH_REJECTED,
-  FETCH_BUSINESS_EACH_PENDING
+  FETCH_BUSINESS_EACH_PENDING,
+  EDIT_BUSINESS_FULFILLED,
+  EDIT_BUSINESS_PENDING,
+  EDIT_BUSINESS_REJECTED,
+  TOGGLE_EDIT
 } from "../actions/types";
 
 const INITIAL_STATE = {
   loading: false,
   statusClass: "",
+  EDIT: true,
 
   company_types: [],
 
@@ -46,6 +51,19 @@ export default function(state = INITIAL_STATE, action) {
         pages: action.payload.pages
       };
 
+    case EDIT_BUSINESS_PENDING:
+      return { ...state, fetchLoading: true };
+
+    case EDIT_BUSINESS_REJECTED:
+      return { ...state, fetchLoading: false };
+
+    case EDIT_BUSINESS_FULFILLED:
+      return {
+        ...state,
+        fetchLoading: false,
+        editBusinessSuccess: action.payload
+      };
+
     case FETCH_BUSINESS_EACH_PENDING:
       return { ...state, fetchLoading: true };
 
@@ -55,7 +73,8 @@ export default function(state = INITIAL_STATE, action) {
     case FETCH_BUSINESS_EACH_FULFILLED:
       return {
         ...state,
-        businessData: action.payload
+        businessData: action.payload,
+        fetchLoading: false
       };
 
     case CREATE_PAYMENT_METHODS_PENDING:
@@ -111,6 +130,10 @@ export default function(state = INITIAL_STATE, action) {
 
     case FETCH_COMPANY_TYPE_REJECTED:
       return { ...state, loading: false };
+
+    case TOGGLE_EDIT:
+      console.log("toogle edit: ", action.payload);
+      return { ...state, EDIT: action.payload, loading: false };
 
     default:
       return state;

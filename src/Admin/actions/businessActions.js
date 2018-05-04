@@ -65,7 +65,8 @@ import {
   FETCH_ADDRESS_TREE_PENDING,
   EDIT_BUSINESS_FULFILLED,
   EDIT_BUSINESS_PENDING,
-  EDIT_BUSINESS_REJECTED
+  EDIT_BUSINESS_REJECTED,
+  TOGGLE_EDIT
 } from "./types";
 
 const epics = [];
@@ -149,11 +150,105 @@ export const onBusinessCreate = ({ data, access_token }) => dispatch => {
   dispatch({ type: CREATE_BUSINESS_PENDING });
 };
 
-export const onBusinessEdit = ({ id, data, access_token }) => dispatch => {
+export const onBusinessEdit = ({
+  id,
+  data,
+  access_token,
+  EDIT
+}) => dispatch => {
   onBusinessPut({ id, data, access_token })
-    .then(response =>
-      dispatch({ type: EDIT_BUSINESS_FULFILLED, payload: response.data })
-    )
+    .then(response => {
+      if (response.data.msg === "success") {
+        toast.success("Business Updated Successfully!");
+        dispatch({
+          type: TOGGLE_EDIT,
+          payload: !EDIT
+        });
+
+        onBusinessEachGet({ username: id, access_token })
+          .then(response => {
+            console.log("asdadsadADasd: ", response.data);
+
+            // ToogleEDIT(!EDIT);
+
+            dispatch({
+              type: FETCH_BUSINESS_EACH_FULFILLED,
+              payload: response.data
+            });
+
+            const industryId = response.data.industry
+              ? response.data.industry.id
+              : "";
+            const countryId = response.data.address.country
+              ? response.data.address.country.id
+              : "";
+            const stateId = response.data.address.state
+              ? response.data.address.state.id
+              : "";
+            const districtId = response.data.address.district
+              ? response.data.address.district.id
+              : "";
+            const cityId = response.data.address.city
+              ? response.data.address.city.id
+              : "";
+
+            if (industryId !== "")
+              onIndustryEachGet({ id: industryId, access_token })
+                .then(newResponse =>
+                  dispatch({
+                    type: FETCH_INDUSTRY_EACH_FULFILLED,
+                    payload: newResponse.data
+                  })
+                )
+                .catch(err =>
+                  dispatch({ type: FETCH_INDUSTRY_EACH_REJECTED, payload: err })
+                );
+
+            //For Primary Address
+            getAddressTree(
+              countryId,
+              stateId,
+              districtId,
+              cityId,
+              access_token,
+              dispatch
+            );
+
+            // For Branch Address
+            response.data.branchAddress.map(each => {
+              const branchcountryId = each.country ? each.country.id : "";
+              const branchstateId = each.state ? each.state.id : "";
+              const branchdistrictId = each.district ? each.district.id : "";
+              const branchcityId = each.city ? each.city.id : "";
+
+              getAddressTree(
+                branchcountryId,
+                branchstateId,
+                branchdistrictId,
+                branchcityId,
+                access_token,
+                dispatch
+              );
+            });
+
+            dispatch({ type: FETCH_INDUSTRY_EACH_PENDING });
+            dispatch({ type: FETCH_ADDRESS_TREE_PENDING });
+            // dispatch({ type: FETCH_COUNTRY_EACH_PENDING });
+            // dispatch({ type: FETCH_STATE_EACH_PENDING });
+            // dispatch({ type: FETCH_DISTRICT_EACH_PENDING });
+            // dispatch({ type: FETCH_CITY_EACH_PENDING });
+          })
+          .catch(error =>
+            dispatch({ type: FETCH_BUSINESS_EACH_REJECTED, payload: error })
+          );
+        dispatch({ type: FETCH_BUSINESS_EACH_PENDING });
+      } else {
+        response.data.msg.name.map(msg => {
+          toast.error(msg);
+        });
+      }
+      dispatch({ type: EDIT_BUSINESS_FULFILLED, payload: response.data });
+    })
     .catch(error => dispatch({ type: EDIT_BUSINESS_REJECTED, payload: error }));
   dispatch({ type: EDIT_BUSINESS_PENDING });
 };
@@ -357,5 +452,10 @@ export const onPaymentMethodsList = ({ access_token }) => dispatch => {
     );
   dispatch({ type: FETCH_PAYMENT_METHODS_PENDING });
 };
+
+export const ToogleEDIT = value => ({
+  type: TOGGLE_EDIT,
+  payload: value
+});
 
 export default epics;
