@@ -6,6 +6,7 @@ import {
   FETCH_CATEGORY_EACH_REJECTED,
   FETCH_CATEGORY_EACH_PENDING,
   REMOVE_CATEGORY_DATA_FULFILLED,
+  UNMOUNT_CATEGORY_DATA,
   UNMOUNT_CATEGORY
 } from "../actions/types";
 
@@ -91,6 +92,8 @@ export default function(state = INITIAL_STATE, action) {
         })
       };
 
+    case UNMOUNT_CATEGORY_DATA:
+      return { ...state, categoryData: action.payload, loading: false };
     default:
       return state;
   }

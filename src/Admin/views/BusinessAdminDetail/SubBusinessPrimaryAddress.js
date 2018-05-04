@@ -20,12 +20,6 @@ import {
 import SubBusinessContactWrapper from "./SubBusinessContactWrapper.js";
 import SubBusinessContact from "./SubBusinessContact";
 
-let countries = [];
-let states = [];
-let districts = [];
-let cities = [];
-let areas = [];
-
 class SubBusinessPrimaryAddress extends Component {
   constructor(props) {
     super(props);
@@ -49,6 +43,12 @@ class SubBusinessPrimaryAddress extends Component {
       longitude: 85.32391758465576,
       contactPerson: []
     };
+
+    this.countries = [];
+    this.states = [];
+    this.districts = [];
+    this.cities = [];
+    this.areas = [];
 
     this.propsData = {};
     this.access_token = this.props.cookies
@@ -156,9 +156,9 @@ class SubBusinessPrimaryAddress extends Component {
           access_token: this.access_token,
           ADDRESS_KEY: key
         });
-      districts = [];
-      cities = [];
-      areas = [];
+      this.districts = [];
+      this.cities = [];
+      this.areas = [];
     } else if (key === "state") {
       this.setState({
         district: "",
@@ -171,8 +171,8 @@ class SubBusinessPrimaryAddress extends Component {
           access_token: this.access_token,
           ADDRESS_KEY: key
         });
-      cities = [];
-      areas = [];
+      this.cities = [];
+      this.areas = [];
     } else if (key === "district") {
       this.setState({
         city: "",
@@ -184,7 +184,7 @@ class SubBusinessPrimaryAddress extends Component {
           access_token: this.access_token,
           ADDRESS_KEY: key
         });
-      areas = [];
+      this.areas = [];
     } else if (key === "city") {
       this.setState({
         area: ""
@@ -217,7 +217,7 @@ class SubBusinessPrimaryAddress extends Component {
       contactPerson: []
     });
 
-    this.subBusinessContactWrapperRef.clearState();
+    // this.subBusinessContactWrapperRef.clearState();
   };
 
   onContactPersonAdd = () => {
@@ -309,10 +309,10 @@ class SubBusinessPrimaryAddress extends Component {
     // console.log("primasdd addr props: ", this.props);
     // console.log("primasdd addr state: ", this.state);
     // console.log("primasdd addr contact state: ", this.state.contactPerson);
-    countries = this.props.countries;
+    this.countries = this.props.countries;
 
     try {
-      states = this.props.countries
+      this.states = this.props.countries
         ? this.props.countries.find(country => {
             if (country.id === this.state.country.id) {
               return true;
@@ -320,7 +320,7 @@ class SubBusinessPrimaryAddress extends Component {
           }).states
         : [];
     } catch (error) {
-      states = [];
+      this.states = [];
     }
 
     try {
@@ -329,14 +329,14 @@ class SubBusinessPrimaryAddress extends Component {
           if (country.states) {
             country.states.map(state => {
               if (state.districts && state.id === this.state.state.id) {
-                districts = state.districts;
+                this.districts = state.districts;
               }
             });
           }
         });
       }
     } catch (error) {
-      districts = [];
+      this.districts = [];
     }
 
     try {
@@ -350,7 +350,7 @@ class SubBusinessPrimaryAddress extends Component {
                     district.cities &&
                     district.id === this.state.district.id
                   ) {
-                    cities = district.cities;
+                    this.cities = district.cities;
                   }
                 });
               }
@@ -359,7 +359,7 @@ class SubBusinessPrimaryAddress extends Component {
         });
       }
     } catch (error) {
-      cities = [];
+      this.cities = [];
     }
 
     try {
@@ -372,7 +372,7 @@ class SubBusinessPrimaryAddress extends Component {
                   if (district.cities) {
                     district.cities.map(city => {
                       if (city.areas && city.id === this.state.city.id) {
-                        areas = city.areas;
+                        this.areas = city.areas;
                       }
                     });
                   }
@@ -383,7 +383,7 @@ class SubBusinessPrimaryAddress extends Component {
         });
       }
     } catch (error) {
-      areas = [];
+      this.areas = [];
     }
 
     const { country } = this.state;
@@ -451,7 +451,7 @@ class SubBusinessPrimaryAddress extends Component {
                       noResultsText="No Data Found"
                       value={valuePrimaryCountry}
                       onChange={this.handleSelectChange.bind(this, "country")}
-                      options={countries}
+                      options={this.countries}
                       valueKey="id"
                       labelKey="name"
                     />
@@ -466,7 +466,7 @@ class SubBusinessPrimaryAddress extends Component {
                       noResultsText="No Data Found"
                       value={valuePrimaryState}
                       onChange={this.handleSelectChange.bind(this, "state")}
-                      options={states}
+                      options={this.states}
                       valueKey="id"
                       labelKey="name"
                     />
@@ -481,7 +481,7 @@ class SubBusinessPrimaryAddress extends Component {
                       noResultsText="No Data Found"
                       value={valuePrimaryDistrict}
                       onChange={this.handleSelectChange.bind(this, "district")}
-                      options={districts}
+                      options={this.districts}
                       valueKey="id"
                       labelKey="name"
                     />
@@ -498,7 +498,7 @@ class SubBusinessPrimaryAddress extends Component {
                       noResultsText="No Data Found"
                       value={valuePrimaryCity}
                       onChange={this.handleSelectChange.bind(this, "city")}
-                      options={cities}
+                      options={this.cities}
                       valueKey="id"
                       labelKey="name"
                     />
@@ -513,7 +513,7 @@ class SubBusinessPrimaryAddress extends Component {
                       noResultsText="No Data Found"
                       value={valuePrimaryArea}
                       onChange={this.handleAreaSelectChange.bind(this)}
-                      options={areas}
+                      options={this.areas}
                       valueKey="id"
                       labelKey="name"
                     />

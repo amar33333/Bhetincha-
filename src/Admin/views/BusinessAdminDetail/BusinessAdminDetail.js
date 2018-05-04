@@ -20,7 +20,9 @@ import {
   onPaymentMethodsList,
   onCompanyTypeList,
   onAddressTreeList,
-  onRemoveCategoryData
+  onRemoveCategoryData,
+  onUnmountIndustryData,
+  onUnmountCategoryData
 } from "../../actions";
 
 import SubBusinessDetails from "./SubBusinessDetails";
@@ -239,6 +241,8 @@ export default connect(
     onPaymentMethodsList,
     onCompanyTypeList,
     onAddressTreeList,
-    onRemoveCategoryData
+    onRemoveCategoryData,
+    onUnmountIndustryData,
+    onUnmountCategoryData
   }
 )(BusinessAdminDetail);

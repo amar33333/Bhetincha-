@@ -24,10 +24,10 @@ import {
   DELETE_CATEGORY_PENDING,
   DELETE_CATEGORY_FULFILLED,
   DELETE_CATEGORY_REJECTED,
+  UNMOUNT_CATEGORY_DATA,
+  UNMOUNT_SUB_CATEGORY,
   UNMOUNT_CATEGORY
 } from "./types";
-
-import { UNMOUNT_SUB_CATEGORY } from "../../Business/actions/types";
 
 const epics = [];
 
@@ -129,9 +129,15 @@ export const onUnmountCategory = () => ({
   payload: []
 });
 
+export const onUnmountCategoryData = () => ({
+  type: UNMOUNT_CATEGORY_DATA,
+  payload: null
+});
+
 export const onUnmountSubCategories = () => {
   return {
-    type: UNMOUNT_SUB_CATEGORY
+    type: UNMOUNT_SUB_CATEGORY,
+    payload: []
   };
 };
 

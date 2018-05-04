@@ -27,8 +27,6 @@ class SubBusinessDetail extends Component {
       paymentMethod: []
     };
 
-    this.subCategories = [];
-
     this.access_token = this.props.cookies
       ? this.props.cookies.token_data.access_token
       : null;
@@ -37,7 +35,7 @@ class SubBusinessDetail extends Component {
   static getDerivedStateFromProps = nextProps => {
     const { businessData } = nextProps;
 
-    // console.log("subbusiness props: ", nextProps);
+    console.log("subbusiness props: ", nextProps);
     return businessData && nextProps.edit
       ? {
           business_name: businessData.business_name
@@ -108,7 +106,13 @@ class SubBusinessDetail extends Component {
           id: value.id,
           access_token: this.access_token
         });
-      this.props.onUnmountSubCategories();
+
+      if (!value) {
+        this.props.onUnmountIndustryData();
+        this.props.onUnmountCategoryData();
+      }
+      // No use
+      // this.props.onUnmountSubCategories();
     } else if (key === "categories") {
       console.log("categories state: ", this.state.categories);
       console.log("detaiL : ", key, value);

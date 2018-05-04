@@ -24,6 +24,7 @@ import {
   DELETE_INDUSTRY_PENDING,
   DELETE_INDUSTRY_FULFILLED,
   DELETE_INDUSTRY_REJECTED,
+  UNMOUNT_INDUSTRY_DATA,
   UNMOUNT_INDUSTRY
 } from "./types";
 
@@ -116,6 +117,11 @@ export const onIndustryEachList = ({ id, access_token }) => dispatch => {
 
 export const onUnmountIndustry = () => ({
   type: UNMOUNT_INDUSTRY,
+  payload: null
+});
+
+export const onUnmountIndustryData = () => ({
+  type: UNMOUNT_INDUSTRY_DATA,
   payload: null
 });
 

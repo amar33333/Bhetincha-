@@ -68,12 +68,14 @@ export const onBusinessPut = ({ id, access_token, data }) => {
     ? data.paymentMethod.map(payment_method => payment_method.id)
     : [];
 
+  console.log("final: data edit: ", data);
+
   const server_format_data = {
     about: data.about,
     business_name: data.business_name,
     business_email: data.business_email,
     address: data.address,
-    branchAddress: data.branchs,
+    branchAddress: data.branchAddress,
     logo: data.logo.base64,
     cover_photo: data.cover_photo.base64,
     industry: data.industry ? data.industry.id : undefined,
@@ -83,6 +85,8 @@ export const onBusinessPut = ({ id, access_token, data }) => {
     // workingHour: data.workingHour,
     // alwaysOpen: data.alwaysOpen
   };
+
+  console.log("server_edit: ", server_format_data);
 
   return axios({
     method: "PUT",

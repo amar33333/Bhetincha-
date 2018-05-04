@@ -15,7 +15,9 @@ import {
   onCountryList,
   onAddressTreeList,
   onRemoveCategoryData,
-  onBusinessEdit
+  onBusinessEdit,
+  onUnmountIndustryData,
+  onUnmountCategoryData
 } from "../../actions";
 
 import SubBusinessDetails from "./SubBusinessDetails";
@@ -204,6 +206,8 @@ class BusinessEdit extends Component {
                   onRemoveCategoryData={this.props.onRemoveCategoryData}
                   cookies={this.props.cookies}
                   industryData={this.props.industryData}
+                  onUnmountIndustryData={this.props.onUnmountIndustryData}
+                  onUnmountCategoryData={this.props.onUnmountIndustryData}
                   /* {...this.props.general_setup} */
                   edit
                 />
@@ -279,6 +283,8 @@ export default connect(
     onCountryList,
     onAddressTreeList,
     onRemoveCategoryData,
-    onBusinessEdit
+    onBusinessEdit,
+    onUnmountIndustryData,
+    onUnmountCategoryData
   }
 )(BusinessEdit);

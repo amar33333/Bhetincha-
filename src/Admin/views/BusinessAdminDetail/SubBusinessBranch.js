@@ -20,12 +20,6 @@ import {
 import SubBusinessContact from "./SubBusinessContact";
 import { ON_KEY_PRESS_ENTER } from "../../../config/CONSTANTS";
 
-let countries = [];
-let states = [];
-let districts = [];
-let cities = [];
-let areas = [];
-
 class SubBusinessBranch extends Component {
   constructor(props) {
     super(props);
@@ -49,6 +43,12 @@ class SubBusinessBranch extends Component {
       longitude: 85.32391758465576,
       contactPerson: []
     };
+
+    this.countries = [];
+    this.states = [];
+    this.districts = [];
+    this.cities = [];
+    this.areas = [];
 
     this.propsData = {};
 
@@ -133,9 +133,9 @@ class SubBusinessBranch extends Component {
           access_token: this.access_token,
           ADDRESS_KEY: key
         });
-      districts = [];
-      cities = [];
-      areas = [];
+      this.districts = [];
+      this.cities = [];
+      this.areas = [];
     } else if (key === "state") {
       this.setState({
         district: "",
@@ -148,8 +148,8 @@ class SubBusinessBranch extends Component {
           access_token: this.access_token,
           ADDRESS_KEY: key
         });
-      cities = [];
-      areas = [];
+      this.cities = [];
+      this.areas = [];
     } else if (key === "district") {
       this.setState({
         city: "",
@@ -161,7 +161,7 @@ class SubBusinessBranch extends Component {
           access_token: this.access_token,
           ADDRESS_KEY: key
         });
-      areas = [];
+      this.areas = [];
     } else if (key === "city") {
       this.setState({
         area: ""
@@ -269,13 +269,32 @@ class SubBusinessBranch extends Component {
       city: this.state.city ? this.state.city.id : "",
       area: this.state.area ? this.state.area.id : ""
     });
+
+    console.log("eachItem PRIMARY: ", this.state);
+    let contactPerson = this.state.contactPerson.map(eachItem => {
+      let contactReformed = {};
+      for (var property in eachItem) {
+        contactReformed =
+          eachItem[property] !== "" &&
+          eachItem[property] !== null &&
+          eachItem[property] !== undefined &&
+          eachItem[property].length > 0
+            ? { ...contactReformed, [property]: eachItem[property] }
+            : contactReformed;
+      }
+      return contactReformed;
+    });
+    console.log("contact contactReformed: ", contactPerson);
+    contactPerson = contactPerson.length > 0 ? contactPerson : undefined;
+
     return {
       ...this.state,
       country: this.state.country ? this.state.country.id : "",
       state: this.state.state ? this.state.state.id : "",
       district: this.state.district ? this.state.district.id : "",
       city: this.state.city ? this.state.city.id : "",
-      area: this.state.area ? this.state.area.id : ""
+      area: this.state.area ? this.state.area.id : "",
+      contactPerson
     };
   };
 
@@ -283,16 +302,16 @@ class SubBusinessBranch extends Component {
     // console.log("branch props:", this.props);
     // console.log("branch state:", this.state);
 
-    countries = this.props.countries;
+    this.countries = this.props.countries;
 
     try {
-      states = this.props.countries
+      this.states = this.props.countries
         ? this.props.countries.find(
             country => country.states && country.id === this.state.country.id
           ).states
         : [];
     } catch (error) {
-      states = [];
+      this.states = [];
     }
 
     try {
@@ -301,14 +320,14 @@ class SubBusinessBranch extends Component {
           if (country.states) {
             country.states.map(state => {
               if (state.districts && state.id === this.state.state.id) {
-                districts = state.districts;
+                this.districts = state.districts;
               }
             });
           }
         });
       }
     } catch (error) {
-      districts = [];
+      this.districts = [];
     }
 
     try {
@@ -322,7 +341,7 @@ class SubBusinessBranch extends Component {
                     district.cities &&
                     district.id === this.state.district.id
                   ) {
-                    cities = district.cities;
+                    this.cities = district.cities;
                   }
                 });
               }
@@ -331,7 +350,7 @@ class SubBusinessBranch extends Component {
         });
       }
     } catch (error) {
-      cities = [];
+      this.cities = [];
     }
 
     try {
@@ -344,7 +363,7 @@ class SubBusinessBranch extends Component {
                   if (district.cities) {
                     district.cities.map(city => {
                       if (city.areas && city.id === this.state.city.id) {
-                        areas = city.areas;
+                        this.areas = city.areas;
                       }
                     });
                   }
@@ -355,7 +374,7 @@ class SubBusinessBranch extends Component {
         });
       }
     } catch (error) {
-      areas = [];
+      this.areas = [];
     }
 
     const { country } = this.state;
@@ -423,7 +442,7 @@ class SubBusinessBranch extends Component {
                     noResultsText="No Data Found"
                     value={valueBranchCountry}
                     onChange={this.handleSelectChange.bind(this, "country")}
-                    options={countries}
+                    options={this.countries}
                     valueKey="id"
                     labelKey="name"
                   />
@@ -438,7 +457,7 @@ class SubBusinessBranch extends Component {
                     noResultsText="No Data Found"
                     value={valueBranchState}
                     onChange={this.handleSelectChange.bind(this, "state")}
-                    options={states}
+                    options={this.states}
                     valueKey="id"
                     labelKey="name"
                   />
@@ -453,7 +472,7 @@ class SubBusinessBranch extends Component {
                     noResultsText="No Data Found"
                     value={valueBranchDistrict}
                     onChange={this.handleSelectChange.bind(this, "district")}
-                    options={districts}
+                    options={this.districts}
                     valueKey="id"
                     labelKey="name"
                   />
@@ -470,7 +489,7 @@ class SubBusinessBranch extends Component {
                     noResultsText="No Data Found"
                     value={valueBranchCity}
                     onChange={this.handleSelectChange.bind(this, "city")}
-                    options={cities}
+                    options={this.cities}
                     valueKey="id"
                     labelKey="name"
                   />
@@ -485,7 +504,7 @@ class SubBusinessBranch extends Component {
                     noResultsText="No Data Found"
                     value={valueBranchArea}
                     onChange={this.handleAreaSelectChange.bind(this)}
-                    options={areas}
+                    options={this.areas}
                     valueKey="id"
                     labelKey="name"
                   />

@@ -8,6 +8,7 @@ import {
   FETCH_INDUSTRY_EACH_FULFILLED,
   FETCH_INDUSTRY_EACH_REJECTED,
   FETCH_INDUSTRY_EACH_PENDING,
+  UNMOUNT_INDUSTRY_DATA,
   UNMOUNT_INDUSTRY
 } from "../actions/types";
 
@@ -63,6 +64,13 @@ export default function(state = INITIAL_STATE, action) {
 
     case FETCH_INDUSTRY_EACH_REJECTED:
       return { ...state, loading: false };
+
+    case UNMOUNT_INDUSTRY_DATA:
+      return {
+        ...state,
+        industryData: action.payload,
+        loading: false
+      };
 
     default:
       return state;
