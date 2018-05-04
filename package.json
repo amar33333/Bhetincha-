@@ -39,6 +39,7 @@
     "react-select": "^1.2.1",
     "react-simple-timefield": "^2.0.0",
     "react-table": "^6.8.0",
+    "react-tagsinput": "^3.19.0",
     "react-tether": "^0.6.1",
     "react-toastify": "^4.0.0-rc.5",
     "reactstrap": "5.0.0-beta",

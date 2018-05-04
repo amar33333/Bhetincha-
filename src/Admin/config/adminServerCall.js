@@ -181,6 +181,7 @@ export const onCategoryEachDeleteAjax = ({ id, access_token }) =>
 export const onSubCategoryPost = ({
   category,
   extraSection,
+  tags,
   subCategory,
   access_token
 }) => {
@@ -190,6 +191,7 @@ export const onSubCategoryPost = ({
     data: {
       category,
       extra_section: extraSection,
+      tags: tags,
       name: subCategory
     },
     headers: {
