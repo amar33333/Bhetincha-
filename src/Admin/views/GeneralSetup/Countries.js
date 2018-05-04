@@ -15,8 +15,12 @@ import {
   CardBody,
   CardHeader
 } from "reactstrap";
+import ReactTable from "react-table";
+import "react-table/react-table.css";
+import { PopoverDelete } from "../../../Common/components";
+import filterCaseInsensitive from "../../../Common/utils/filterCaseInsesitive";
 
-import { onCountrySubmit } from "../../actions";
+import { onCountrySubmit, onCountryList } from "../../actions";
 
 class Countries extends Component {
   state = { country: "" };
@@ -24,6 +28,49 @@ class Countries extends Component {
   access_token = this.props.cookies
     ? this.props.cookies.token_data.access_token
     : null;
+
+  tableProps = {
+    columns: [
+      {
+        Header: "S. No.",
+        accessor: "s_no",
+        filterable: false,
+        searchable: false,
+        width: 70
+      },
+      { Header: "Country", accessor: "name" },
+      {
+        Header: "Actions",
+        id: "edit",
+        accessor: "id",
+        filterable: false,
+        sortable: false,
+        width: 130,
+        Cell: ({ value }) => (
+          <div>
+            <Button
+              color="secondary"
+              className="mr-l"
+              onClick={event => console.log("Edit clicked for id: ", value)}
+            >
+              Edit
+            </Button>
+            <PopoverDelete
+              id={`delete-${value}`}
+              onClick={() => console.log("Delete clicked for id: ", value)}
+            />
+          </div>
+        )
+      }
+    ],
+    minRows: 5,
+    defaultPageSize: 20,
+    className: "-striped -highlight",
+    filterable: true
+  };
+
+  componentDidMount = () =>
+    this.props.onCountryList({ access_token: this.access_token });
 
   onFormSubmit = event => {
     event.preventDefault();
@@ -76,11 +123,25 @@ class Countries extends Component {
             </Card>
           </Col>
         </Row>
+
+        <ReactTable
+          {...this.tableProps}
+          data={this.props.countries}
+          // loading={this.props.fetchLoading}
+          defaultFilterMethod={filterCaseInsensitive}
+        />
       </div>
     );
   }
 }
 
-export default connect(({ auth }) => ({ ...auth }), { onCountrySubmit })(
-  Countries
-);
+export default connect(
+  ({ auth, AdminContainer: { general_setup } }) => ({
+    ...auth,
+    countries: general_setup.countries
+  }),
+  {
+    onCountrySubmit,
+    onCountryList
+  }
+)(Countries);

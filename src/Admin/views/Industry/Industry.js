@@ -129,10 +129,10 @@ class Industry extends Component {
         </Row>
 
         <ReactTable
+          {...this.tableProps}
           data={this.props.industries}
           loading={this.props.fetchLoading}
           defaultFilterMethod={filterCaseInsensitive}
-          {...this.tableProps}
         />
       </div>
     );
