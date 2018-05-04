@@ -26,7 +26,7 @@ class Gallery extends Component {
     }))
   });
 
-  state = { newAlbumName: "" };
+  state = { newAlbumName: "", albums: [] };
 
   onSelectImage = (albumID, index, image) =>
     this.setState({
@@ -181,19 +181,8 @@ class Gallery extends Component {
     return (
       <div className="gallery-wrapper">
         {this.props.mainEdit && this.renderAddNewGallery()}
-        {/* <div>
-          <AvatarEditor
-            image={image}
-            width={1200}
-            height={400}
-            border={10}
-            color={[255, 255, 255, 0.6]} // RGBA
-            scale={1.3}
-            rotate={0}
-          />
-        </div> */}
-        {this.props.albums.map(album => (
-          <Container>
+        {this.state.albums.map(album => (
+          <Container key={album.albumID}>
             <Card>
               <CardBody>
                 <div className="album-title">
