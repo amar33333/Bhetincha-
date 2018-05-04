@@ -122,6 +122,7 @@ class Gallery extends Component {
                   this.props.onBusinessUpdate({
                     body: { albums: { name: this.state.newAlbumName } }
                   });
+                  this.setState({ newAlbumName: "" });
                 }}
               >
                 <Input
