@@ -26,6 +26,7 @@ import SubBusinessLogo from "./SubBusinessLogo";
 import SubBusinessCoverImage from "./SubBusinessCoverImage";
 import SubBusinessPrimaryAddress from "./SubBusinessPrimaryAddress";
 import SubBusinessBranchWrapper from "./SubBusinessBranchWrapper";
+import SubBusinessWorkingHour from "./SubBusinessWorkingHour";
 
 class BusinessEdit extends Component {
   static countryRepeat = true;
@@ -33,7 +34,15 @@ class BusinessEdit extends Component {
   static districtRepeat = true;
   static cityRepeat = true;
 
-  state = {};
+  state = {
+    businessAdminDetailCollapse: false,
+    businessAboutCollapse: true,
+    businessBranchWrapperCollapse: true,
+    businessCoverImageCollapse: true,
+    businessLogoCollapse: true,
+    businessPrimaryAddressCollapse: true,
+    businessWorkingHourCollapse: true
+  };
 
   access_token = this.props.cookies
     ? this.props.cookies.token_data.access_token
@@ -52,89 +61,6 @@ class BusinessEdit extends Component {
     });
   }
 
-  // static getDerivedStateFromProps = nextProps => {
-  //   let countries = nextProps.general_setup.countries;
-  //   const access_token = nextProps.cookies
-  //     ? nextProps.cookies.token_data.access_token
-  //     : null;
-
-  //   if (
-  //     countries &&
-  //     countries.length &&
-  //     nextProps.businessData &&
-  //     nextProps.businessData.address
-  //   ) {
-  //     // console.log(
-  //     //   "repeating...: ",
-  //     //   countries,
-  //     //   " ",
-  //     //   BusinessEdit.stateRepeat,
-  //     //   " ",
-  //     //   countries.states,
-  //     //   " "
-  //     // );
-  //     if (BusinessEdit.countryRepeat) {
-  //       console.log("country repeat: ", BusinessEdit.countryRepeat);
-  //       nextProps.onAddressTreeList({
-  //         id: nextProps.businessData.address.country.id,
-  //         access_token: access_token,
-  //         ADDRESS_KEY: "primary_country"
-  //       });
-  //       BusinessEdit.countryRepeat = false;
-  //     }
-  //     if (
-  //       BusinessEdit.stateRepeat &&
-  //       countries.states &&
-  //       countries.states.length
-  //     ) {
-  //       console.log("stae repeat: ", BusinessEdit.stateRepeat);
-
-  //       nextProps.onAddressTreeList({
-  //         id: nextProps.businessData.address.state.id,
-  //         access_token: access_token,
-  //         ADDRESS_KEY: "primary_state"
-  //       });
-  //       BusinessEdit.stateRepeat = false;
-  //     }
-  //     if (
-  //       BusinessEdit.districtRepeat &&
-  //       countries.states &&
-  //       countries.states.length &&
-  //       countries.states.districts &&
-  //       countries.states.districts.length
-  //     ) {
-  //       console.log("district repeat: ", BusinessEdit.districtRepeat);
-
-  //       nextProps.onAddressTreeList({
-  //         id: nextProps.businessData.address.district.id,
-  //         access_token: access_token,
-  //         ADDRESS_KEY: "primary_district"
-  //       });
-  //       BusinessEdit.districtRepeat = false;
-  //     }
-  //     if (
-  //       BusinessEdit.cityRepeat &&
-  //       countries.states &&
-  //       countries.states.length &&
-  //       countries.states.districts &&
-  //       countries.states.districts.length &&
-  //       countries.states.districts.cities &&
-  //       countries.states.districts.cities.length
-  //     ) {
-  //       console.log("city repeat: ", BusinessEdit.cityRepeat);
-
-  //       nextProps.onAddressTreeList({
-  //         id: nextProps.businessData.address.city.id,
-  //         access_token: access_token,
-  //         ADDRESS_KEY: "primary_city"
-  //       });
-  //       BusinessEdit.cityRepeat = false;
-  //     }
-  //   }
-
-  //   return null;
-  // };
-
   onEditFormSubmit = event => {
     event.preventDefault();
 
@@ -145,8 +71,8 @@ class BusinessEdit extends Component {
       ...this.subBusinessBranchWrapperRef.getState(),
       ...this.subBusinessCoverImageRef.getState(),
       ...this.subBusinessLogoRef.getState(),
-      ...this.subBusinessPrimaryAddressRef.getState()
-      // ...this.subBusinessWorkingHourRef.getState()
+      ...this.subBusinessPrimaryAddressRef.getState(),
+      ...this.subBusinessWorkingHourRef.getState()
     };
 
     console.log("this.propsdttaa: ", this.propsData);
@@ -157,7 +83,25 @@ class BusinessEdit extends Component {
       access_token: this.access_token
     });
   };
-
+  toggleCollapse = key => {
+    const updatedCollapseState = {};
+    [
+      "businessAboutCollapse",
+      "businessPrimaryAddressCollapse",
+      "businessLogoCollapse",
+      "businessCoverImageCollapse",
+      "businessBranchWrapperCollapse",
+      "businessAdminDetailCollapse",
+      "businessWorkingHourCollapse"
+    ].forEach(collapse => {
+      if (collapse === key) {
+        updatedCollapseState[key] = !this.state[key];
+      } else {
+        updatedCollapseState[collapse] = true;
+      }
+    });
+    this.setState(updatedCollapseState);
+  };
   render() {
     const data = this.props.businessData;
     console.log("new props: ", this.props);
@@ -196,6 +140,11 @@ class BusinessEdit extends Component {
             <CardBody>
               <form onSubmit={this.onEditFormSubmit}>
                 <SubBusinessDetails
+                  collapsed={this.state.businessAdminDetailCollapse}
+                  toggleCollapse={this.toggleCollapse.bind(
+                    this,
+                    "businessAdminDetailCollapse"
+                  )}
                   ref={ref => (this.subBusinessAdminDetailRef = ref)}
                   businessData={businessData}
                   payment_methods={this.props.paymentMethods}
@@ -212,6 +161,11 @@ class BusinessEdit extends Component {
                   edit
                 />
                 <SubBusinessPrimaryAddress
+                  collapsed={this.state.businessPrimaryAddressCollapse}
+                  toggleCollapse={this.toggleCollapse.bind(
+                    this,
+                    "businessPrimaryAddressCollapse"
+                  )}
                   ref={ref => (this.subBusinessPrimaryAddressRef = ref)}
                   cookies={this.props.cookies}
                   address={address}
@@ -220,6 +174,11 @@ class BusinessEdit extends Component {
                   edit
                 />
                 <SubBusinessBranchWrapper
+                  collapsed={this.state.businessBranchWrapperCollapse}
+                  toggleCollapse={this.toggleCollapse.bind(
+                    this,
+                    "businessBranchWrapperCollapse"
+                  )}
                   ref={ref => (this.subBusinessBranchWrapperRef = ref)}
                   cookies={this.props.cookies}
                   branchAddress={branchAddress}
@@ -228,20 +187,43 @@ class BusinessEdit extends Component {
                   edit
                 />
                 <SubBusinessAbout
+                  collapsed={this.state.businessAboutCollapse}
+                  toggleCollapse={this.toggleCollapse.bind(
+                    this,
+                    "businessAboutCollapse"
+                  )}
                   ref={ref => (this.subBusinessAboutRef = ref)}
                   about={about}
                   company_types={this.props.companyTypes}
                   edit
                 />
                 <SubBusinessLogo
+                  collapsed={this.state.businessLogoCollapse}
+                  toggleCollapse={this.toggleCollapse.bind(
+                    this,
+                    "businessLogoCollapse"
+                  )}
                   ref={ref => (this.subBusinessLogoRef = ref)}
                   imagePath={logo}
                   edit
                 />
                 <SubBusinessCoverImage
+                  collapsed={this.state.businessCoverImageCollapse}
+                  toggleCollapse={this.toggleCollapse.bind(
+                    this,
+                    "businessCoverImageCollapse"
+                  )}
                   ref={ref => (this.subBusinessCoverImageRef = ref)}
                   imagePath={cover_photo}
                   edit
+                />
+                <SubBusinessWorkingHour
+                  collapsed={this.state.businessWorkingHourCollapse}
+                  ref={ref => (this.subBusinessWorkingHourRef = ref)}
+                  toggleCollapse={this.toggleCollapse.bind(
+                    this,
+                    "businessWorkingHourCollapse"
+                  )}
                 />
                 <Row>
                   <Col xs="12">
