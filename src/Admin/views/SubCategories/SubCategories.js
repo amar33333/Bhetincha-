@@ -28,6 +28,7 @@ import {
   onSubCategorySubmit,
   onSubCategoryList,
   onCategoryList,
+  onSubCategoryDelete,
   onUnmountCategory,
   onUnmountExtraSection,
   onUnmountSubCategory
@@ -77,22 +78,15 @@ class SubCategories extends Component {
             return found;
           } else return true;
         },
-        // Single filter option
-        // filterMethod: (filter, row) =>
-        //   filter && filter.value ? filter.value.id === row.category : true,
-        Filter: value => {
-          const { filter, onChange } = value;
-          // console.log(value);
-          return (
-            <Select
-              clearable
-              multi
-              value={filter ? filter.value : null}
-              onChange={onChange}
-              options={this.props.extra_sections.data}
-            />
-          );
-        }
+        Filter: ({ filter, onChange }) => (
+          <Select
+            clearable
+            multi
+            value={filter ? filter.value : null}
+            onChange={onChange}
+            options={this.props.extra_sections.data}
+          />
+        )
       },
       {
         Header: "Category",
@@ -157,9 +151,6 @@ class SubCategories extends Component {
             return found;
           } else return true;
         },
-        // Single filter option
-        // filterMethod: (filter, row) =>
-        //   filter && filter.value ? filter.value.id === row.category : true,
         Filter: ({ filter, onChange }) => (
           <Select
             clearable
@@ -190,7 +181,7 @@ class SubCategories extends Component {
             </Button>
             <PopoverDelete
               id={`delete-${value}`}
-              onClick={() => this.props.onCategoryDelete({ id: value })}
+              onClick={() => this.props.onSubCategoryDelete({ id: value })}
             />
           </div>
         )
@@ -362,6 +353,7 @@ export default connect(
     onSubCategorySubmit,
     onSubCategoryList,
     onCategoryList,
+    onSubCategoryDelete,
     onUnmountCategory,
     onUnmountExtraSection,
     onUnmountSubCategory
