@@ -1,4 +1,5 @@
 import { Observable } from "rxjs/Observable";
+import { toast } from "react-toastify";
 
 import {
   onCategoryPost,
@@ -42,12 +43,20 @@ export const onCategorySubmit = ({
     access_token
   })
     .then(response => {
+      if (response.data.msg === "success") {
+        toast.success("New Category Created Successfully!");
+      } else {
+        response.data.msg.name.map(msg => {
+          toast.error(msg);
+        });
+      }
       dispatch({ type: CREATE_CATEGORY_FULFILLED, payload: response.data });
       dispatch({ type: FETCH_CATEGORY_PENDING });
     })
-    .catch(error =>
-      dispatch({ type: CREATE_CATEGORY_REJECTED, payload: error })
-    );
+    .catch(error => {
+      toast.error("Category Not created!");
+      dispatch({ type: CREATE_CATEGORY_REJECTED, payload: error });
+    });
   dispatch({ type: CREATE_CATEGORY_PENDING });
 };
 
@@ -91,14 +100,14 @@ epics.push((action$, { getState }) =>
       access_token: getState().auth.cookies.token_data.access_token
     })
       .concatMap(() => {
-        // toast.success("Deleted Successfully!");
+        toast.success("Category Deleted Successfully!");
         return [
           { type: FETCH_CATEGORY_PENDING },
           { type: DELETE_CATEGORY_FULFILLED }
         ];
       })
       .catch(ajaxError => {
-        // toast.error("Error Deleting Industry");
+        toast.error("Error Deleting Category");
         console.log(ajaxError);
         return Observable.of({ type: DELETE_CATEGORY_REJECTED });
       })

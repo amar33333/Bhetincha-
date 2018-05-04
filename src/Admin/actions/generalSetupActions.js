@@ -1,3 +1,4 @@
+import { toast } from "react-toastify";
 import {
   onAreaPost,
   onDistrictPost,
@@ -81,12 +82,21 @@ import {
 
 export const onCountrySubmit = ({ country, access_token }) => dispatch => {
   onCountryPost({ country, access_token })
-    .then(response =>
-      dispatch({ type: CREATE_COUNTRY_FULFILLED, payload: response.data })
-    )
-    .catch(error =>
-      dispatch({ type: CREATE_COUNTRY_REJECTED, payload: error })
-    );
+    .then(response => {
+      if (response.data.msg === "success") {
+        toast.success("New Country Added Successfully!");
+      } else {
+        response.data.msg.name.map(msg => {
+          toast.error(msg);
+        });
+      }
+      dispatch({ type: CREATE_COUNTRY_FULFILLED, payload: response.data });
+    })
+    .catch(error => {
+      toast.error("New Country not added!");
+
+      dispatch({ type: CREATE_COUNTRY_REJECTED, payload: error });
+    });
 
   dispatch({ type: CREATE_COUNTRY_PENDING });
 };
@@ -103,10 +113,20 @@ export const onCountryList = ({ access_token }) => dispatch => {
 
 export const onStateSubmit = ({ state, country, access_token }) => dispatch => {
   onStatePost({ state, country, access_token })
-    .then(response =>
-      dispatch({ type: CREATE_STATE_FULFILLED, payload: response.data })
-    )
-    .catch(error => dispatch({ type: CREATE_STATE_REJECTED, payload: error }));
+    .then(response => {
+      if (response.data.msg === "success") {
+        toast.success("New State Added Successfully!");
+      } else {
+        response.data.msg.name.map(msg => {
+          toast.error(msg);
+        });
+      }
+      dispatch({ type: CREATE_STATE_FULFILLED, payload: response.data });
+    })
+    .catch(error => {
+      toast.error("New State not created !");
+      dispatch({ type: CREATE_STATE_REJECTED, payload: error });
+    });
 
   dispatch({ type: CREATE_STATE_PENDING });
 };
@@ -128,12 +148,20 @@ export const onDistrictSubmit = ({
   access_token
 }) => dispatch => {
   onDistrictPost({ state, district, districtCode, access_token })
-    .then(response =>
-      dispatch({ type: CREATE_DISTRICT_FULFILLED, payload: response.data })
-    )
-    .catch(error =>
-      dispatch({ type: CREATE_DISTRICT_REJECTED, payload: error })
-    );
+    .then(response => {
+      if (response.data.msg === "success") {
+        toast.success("New District Added Successfully!");
+      } else {
+        response.data.msg.name.map(msg => {
+          toast.error(msg);
+        });
+      }
+      dispatch({ type: CREATE_DISTRICT_FULFILLED, payload: response.data });
+    })
+    .catch(error => {
+      toast.error("New District not added!");
+      dispatch({ type: CREATE_DISTRICT_REJECTED, payload: error });
+    });
 
   dispatch({ type: CREATE_DISTRICT_PENDING });
 };
@@ -152,10 +180,20 @@ export const onDistrictList = ({ access_token }) => dispatch => {
 
 export const onCitySubmit = ({ district, city, access_token }) => dispatch => {
   onCityPost({ district, city, access_token })
-    .then(response =>
-      dispatch({ type: CREATE_CITY_FULFILLED, payload: response.data })
-    )
-    .catch(error => dispatch({ type: CREATE_CITY_REJECTED, payload: error }));
+    .then(response => {
+      if (response.data.msg === "success") {
+        toast.success("New City Added Successfully!");
+      } else {
+        response.data.msg.name.map(msg => {
+          toast.error(msg);
+        });
+      }
+      dispatch({ type: CREATE_CITY_FULFILLED, payload: response.data });
+    })
+    .catch(error => {
+      toast.error("New City not added !");
+      dispatch({ type: CREATE_CITY_REJECTED, payload: error });
+    });
 
   dispatch({ type: CREATE_CITY_PENDING });
 };
@@ -172,10 +210,20 @@ export const onCityList = ({ access_token }) => dispatch => {
 
 export const onAreaSubmit = ({ city, area, access_token }) => dispatch => {
   onAreaPost({ city, area, access_token })
-    .then(response =>
-      dispatch({ type: CREATE_AREA_FULFILLED, payload: response.data })
-    )
-    .catch(error => dispatch({ type: CREATE_AREA_REJECTED, payload: error }));
+    .then(response => {
+      if (response.data.msg === "success") {
+        toast.success("New Area Added Successfully!");
+      } else {
+        response.data.msg.name.map(msg => {
+          toast.error(msg);
+        });
+      }
+      dispatch({ type: CREATE_AREA_FULFILLED, payload: response.data });
+    })
+    .catch(error => {
+      toast.error("New Area not added !");
+      dispatch({ type: CREATE_AREA_REJECTED, payload: error });
+    });
 
   dispatch({ type: CREATE_AREA_PENDING });
 };
