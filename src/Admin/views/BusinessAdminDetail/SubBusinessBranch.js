@@ -63,7 +63,7 @@ class SubBusinessBranch extends Component {
 
   static getDerivedStateFromProps = (nextProps, prevState) => {
     const { branch } = nextProps;
-    console.log("branchprops: ", nextProps);
+    // console.log("branchprops: ", nextProps);
     return branch && nextProps.edit
       ? {
           contactPerson: branch.contactPerson ? branch.contactPerson : [],

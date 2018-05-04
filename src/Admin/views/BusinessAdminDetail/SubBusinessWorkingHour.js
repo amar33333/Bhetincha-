@@ -69,7 +69,7 @@ class subBusinessWorkingHour extends Component {
   }
 
   static getDerivedStateFromProps = nextProps => {
-    console.log("woeking howisa;", nextProps);
+    // console.log("woeking howisa;", nextProps);
     return nextProps.workingHour && nextProps.edit
       ? {
           workingHour: [...nextProps.workingHour.map(each => each)],
@@ -191,7 +191,7 @@ class subBusinessWorkingHour extends Component {
   };
 
   render() {
-    console.log("working state: ", this.state);
+    // console.log("working state: ", this.state);
     return (
       <div className="animated fadeIn">
         <Card>
