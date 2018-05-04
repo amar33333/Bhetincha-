@@ -2,7 +2,8 @@ import { Observable } from "rxjs/Observable";
 
 import {
   onSubCategoryPost,
-  onSubCategoryGetAjax
+  onSubCategoryGetAjax,
+  onSubCategoryEachDeleteAjax
 } from "../config/adminServerCall";
 
 import {
@@ -12,6 +13,9 @@ import {
   FETCH_SUB_CATEGORY_PENDING,
   FETCH_SUB_CATEGORY_FULFILLED,
   FETCH_SUB_CATEGORY_REJECTED,
+  DELETE_SUB_CATEGORY_FULFILLED,
+  DELETE_SUB_CATEGORY_PENDING,
+  DELETE_SUB_CATEGORY_REJECTED,
   UNMOUNT_SUB_CATEGORY
 } from "./types";
 
@@ -50,6 +54,31 @@ epics.push((action$, { getState }) =>
         payload: response
       }))
       .catch(ajaxError => Observable.of({ type: FETCH_SUB_CATEGORY_FULFILLED }))
+  )
+);
+export const onSubCategoryDelete = payload => ({
+  type: DELETE_SUB_CATEGORY_PENDING,
+  payload
+});
+
+epics.push((action$, { getState }) =>
+  action$.ofType(DELETE_SUB_CATEGORY_PENDING).mergeMap(({ payload }) =>
+    onSubCategoryEachDeleteAjax({
+      id: payload.id,
+      access_token: getState().auth.cookies.token_data.access_token
+    })
+      .concatMap(() => {
+        // toast.success("Deleted Successfully!");
+        return [
+          { type: FETCH_SUB_CATEGORY_PENDING },
+          { type: DELETE_SUB_CATEGORY_FULFILLED }
+        ];
+      })
+      .catch(ajaxError => {
+        // toast.error("Error Deleting Industry");
+        console.log(ajaxError);
+        return Observable.of({ type: DELETE_SUB_CATEGORY_REJECTED });
+      })
   )
 );
 
