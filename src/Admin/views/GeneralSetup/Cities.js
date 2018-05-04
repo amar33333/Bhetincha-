@@ -54,7 +54,7 @@ class Cities extends Component {
       district: district.id,
       access_token: this.access_token
     });
-    this.setState({ city: "", district: "" });
+    this.setState({ city: "" });
   };
 
   onChange = (key, event) => {

@@ -1,4 +1,5 @@
 import { Observable } from "rxjs/Observable";
+import { toast } from "react-toastify";
 
 import {
   onSubCategoryPost,
@@ -33,12 +34,20 @@ export const onSubCategorySubmit = ({
     extraSection,
     access_token
   })
-    .then(response =>
-      dispatch({ type: CREATE_SUB_CATEGORY_FULFILLED, payload: response.data })
-    )
-    .catch(error =>
-      dispatch({ type: CREATE_SUB_CATEGORY_REJECTED, payload: error })
-    );
+    .then(response => {
+      if (response.data.msg === "success") {
+        toast.success("New Sub Category Created Successfully!");
+      } else {
+        response.data.msg.name.map(msg => {
+          toast.error(msg);
+        });
+      }
+      dispatch({ type: CREATE_SUB_CATEGORY_FULFILLED, payload: response.data });
+    })
+    .catch(error => {
+      toast.error("Sub-Category Not created!");
+      dispatch({ type: CREATE_SUB_CATEGORY_REJECTED, payload: error });
+    });
   dispatch({ type: CREATE_SUB_CATEGORY_PENDING });
 };
 
