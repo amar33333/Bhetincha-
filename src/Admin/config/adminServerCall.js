@@ -184,14 +184,12 @@ export const onSubCategoryPost = ({
   subCategory,
   access_token
 }) => {
-  const extra_section = extraSection.map(eachValue => eachValue.value);
-
   return axios({
     method: "post",
     url: SUB_CATEGORY_URL,
     data: {
-      category: category,
-      extra_section,
+      category,
+      extra_section: extraSection,
       name: subCategory
     },
     headers: {

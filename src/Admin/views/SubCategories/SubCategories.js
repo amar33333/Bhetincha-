@@ -16,7 +16,7 @@ import {
 } from "reactstrap";
 
 import { connect } from "react-redux";
-import Select from "react-select";
+import { Select } from "../../../Common/components";
 
 import {
   onIndustryList,
@@ -35,14 +35,13 @@ class SubCategories extends Component {
       subCategory: "",
       category: "",
       industry: "",
-      extraSection: []
+      extraSections: []
     };
     this.access_token = this.props.cookies
       ? this.props.cookies.token_data.access_token
       : null;
 
-    this.props.onIndustryList({ access_token: this.access_token });
-    this.props.onIndustryEachList({ access_token: this.access_token });
+    this.props.onIndustryList();
     this.props.onExtraSectionList({ access_token: this.access_token });
   }
 
@@ -56,43 +55,30 @@ class SubCategories extends Component {
   };
 
   handleSelectChange = (key, value) => {
-    this.setState({ [key]: value }, () => {});
+    this.setState({ [key]: value });
   };
+
+  handleIndustryChange = value =>
+    this.setState(
+      { industry: value, category: "" },
+      () =>
+        this.state.industry && this.props.onIndustryEachList({ id: value.id })
+    );
 
   onFormSubmit = event => {
     event.preventDefault();
-    const { category, subCategory, extraSection } = this.state;
+    const { category, subCategory, extraSections } = this.state;
+    console.log(category, extraSections, subCategory);
     this.props.onSubCategorySubmit({
-      category: category.value,
-      extraSection: extraSection,
+      category: category.id,
+      extraSection: extraSections.map(extraSection => extraSection.value),
       subCategory,
       access_token: this.access_token
     });
-    this.setState({ subCategory: "", category: "", extraSection: [] });
+    this.setState({ subCategory: "", extraSections: [] });
   };
 
   render() {
-    const industries = this.props.industries.industries;
-
-    const categories = this.props.industries.data
-      ? this.props.categories.data.map(category => {
-          return { value: category.id, label: category.name };
-        })
-      : null;
-    console.log("categories: ", categories);
-
-    const extraSections = this.props.extra_sections.data
-      ? this.props.extra_sections.data.extra_sections.map(extra_section => {
-          return { value: extra_section, label: extra_section };
-        })
-      : null;
-
-    const { category } = this.state;
-    const valueCategory = category && category.value;
-
-    const { extraSection } = this.state;
-    const valueExtraSection = extraSection;
-
     return (
       <div className="animated fadeIn">
         <Row className="hr-centered">
@@ -113,12 +99,10 @@ class SubCategories extends Component {
                           required
                           name="Category"
                           className="select-category"
-                          value={valueCategory}
-                          onChange={this.handleSelectChange.bind(
-                            this,
-                            "category"
-                          )}
-                          options={categories}
+                          disabled={this.props.industries.fetchLoading}
+                          value={this.state.industry}
+                          onChange={this.handleIndustryChange}
+                          options={this.props.industries.industries}
                           valueKey="id"
                           labelKey="name"
                         />
@@ -133,12 +117,13 @@ class SubCategories extends Component {
                           required
                           name="Category"
                           className="select-category"
-                          value={valueCategory}
+                          disabled={this.props.industries.fetchLoadingData}
+                          value={this.state.category}
                           onChange={this.handleSelectChange.bind(
                             this,
                             "category"
                           )}
-                          options={categories}
+                          options={this.props.industries.industriesData}
                           valueKey="id"
                           labelKey="name"
                         />
@@ -169,27 +154,19 @@ class SubCategories extends Component {
                       clearable
                       required
                       multi
-                      //removeSelected={false}
-                      closeOnSelect={false}
                       name="Extra-Sections"
                       className="select-extra-sections"
-                      value={valueExtraSection}
+                      value={this.state.extraSections}
                       onChange={this.handleSelectChange.bind(
                         this,
-                        "extraSection"
+                        "extraSections"
                       )}
-                      options={extraSections}
-                      valueKey="id"
-                      labelKey="name"
+                      options={this.props.extra_sections.data}
                     />
                   </FormGroup>
                   <Row>
                     <Col xs="6">
-                      <Button
-                        color="primary"
-                        className="px-4"
-                        //onClick={() => this.onLoginBtnClick()}
-                      >
+                      <Button color="primary" className="px-4">
                         Add
                       </Button>
                     </Col>

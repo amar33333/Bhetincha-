@@ -103,17 +103,37 @@ epics.push((action$, { getState }) =>
   )
 );
 
-export const onIndustryEachList = ({ id, access_token }) => dispatch => {
-  onIndustryEachGet({ id, access_token })
-    .then(response =>
-      dispatch({ type: FETCH_INDUSTRY_EACH_FULFILLED, payload: response.data })
-    )
-    .catch(error =>
-      dispatch({ type: FETCH_INDUSTRY_EACH_REJECTED, payload: error })
-    );
+export const onIndustryEachList = payload => ({
+  type: FETCH_INDUSTRY_EACH_PENDING,
+  payload
+});
 
-  dispatch({ type: FETCH_INDUSTRY_EACH_PENDING });
-};
+epics.push((action$, { getState }) =>
+  action$.ofType(FETCH_INDUSTRY_EACH_PENDING).mergeMap(({ payload }) =>
+    onIndustryEachGetAjax({
+      id: payload.id,
+      access_token: getState().auth.cookies.token_data.access_token
+    })
+      .map(({ response }) => ({
+        type: FETCH_INDUSTRY_EACH_FULFILLED,
+        payload: response
+      }))
+      .catch(ajaxError => {
+        return Observable.of({ type: FETCH_INDUSTRY_EACH_REJECTED });
+      })
+  )
+);
+// export const onIndustryEachList = ({ id, access_token }) => dispatch => {
+//   onIndustryEachGet({ id, access_token })
+//     .then(response =>
+//       dispatch({ type: FETCH_INDUSTRY_EACH_FULFILLED, payload: response.data })
+//     )
+//     .catch(error =>
+//       dispatch({ type: FETCH_INDUSTRY_EACH_REJECTED, payload: error })
+//     );
+
+//   dispatch({ type: FETCH_INDUSTRY_EACH_PENDING });
+// };
 
 export const onUnmountIndustry = () => ({
   type: UNMOUNT_INDUSTRY,

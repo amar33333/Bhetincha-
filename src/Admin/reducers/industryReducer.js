@@ -16,8 +16,10 @@ const INITIAL_STATE = {
   loading: false,
   error: "",
   fetchLoading: false,
+  fetchLoadingData: false,
   fetchError: "",
-  industries: []
+  industries: [],
+  industriesData: []
 };
 
 export default function(state = INITIAL_STATE, action) {
@@ -53,24 +55,23 @@ export default function(state = INITIAL_STATE, action) {
       return { ...state, fetchLoading: false };
 
     case FETCH_INDUSTRY_EACH_PENDING:
-      return { ...state, loading: true };
+      return { ...state, fetchLoadingData: true };
 
     case FETCH_INDUSTRY_EACH_FULFILLED:
       return {
         ...state,
-        industryData: action.payload,
-        loading: false
+        industriesData: action.payload.categories.map((industry, i) => ({
+          ...industry,
+          s_no: i + 1
+        })),
+        fetchLoadingData: false
       };
 
     case FETCH_INDUSTRY_EACH_REJECTED:
-      return { ...state, loading: false };
+      return { ...state, fetchLoadingData: false };
 
     case UNMOUNT_INDUSTRY_DATA:
-      return {
-        ...state,
-        industryData: action.payload,
-        loading: false
-      };
+      return { ...state, industriesData: [] };
 
     default:
       return state;

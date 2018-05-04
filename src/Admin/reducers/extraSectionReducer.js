@@ -7,11 +7,11 @@ import {
 
 const INITIAL_STATE = {
   loading: false,
-  statusClass: ""
+  statusClass: "",
+  data: []
 };
 
 export default function(state = INITIAL_STATE, action) {
-  // console.log("actionsL: ", action);
   switch (action.type) {
     case UNMOUNT_EXTRA_SECTION:
       return {
@@ -24,10 +24,13 @@ export default function(state = INITIAL_STATE, action) {
       return { ...state, loading: true, statusClass: "pending" };
 
     case FETCH_EXTRA_SECTION_FULFILLED:
-      // console.log("fuludids");
+      console.log("extrasection", action.payload);
       return {
         ...state,
-        data: action.payload,
+        data: action.payload.extra_sections.map(extra_section => ({
+          value: extra_section,
+          label: extra_section
+        })),
         loading: false,
         statusClass: "fulfilled"
       };
