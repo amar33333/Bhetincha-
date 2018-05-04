@@ -63,49 +63,53 @@ class SubBusinessPrimaryAddress extends Component {
   static getDerivedStateFromProps = (nextProps, prevState) => {
     const { address } = nextProps;
 
-    console.log("props addres: ", nextProps);
-    return address && nextProps.edit
-      ? {
-          contactPerson: address.contactPerson ? address.contactPerson : [],
-          landlineNumber: address.landlineNumber ? address.landlineNumber : "",
-          otherLandlineNumber: address.otherLandlineNumber
-            ? address.otherLandlineNumber
-            : "",
-          house_no: address.house_no ? address.house_no : "",
-          landmark: address.landmark ? address.landmark : "",
-          addressLine1: address.addressLine1 ? address.addressLine1 : "",
-          addressLine2: address.addressLine2 ? address.addressLine2 : "",
-          po_box: address.po_box ? address.po_box : "",
-          tollFreeNumber: address.tollFreeNumber ? address.tollFreeNumber : "",
-          email: address.email ? address.email : "",
-          country: {
-            id: address.country ? address.country.id : "",
-            name: address.country ? address.country.name : ""
-          },
-          state: {
-            id: address.state ? address.state.id : "",
-            name: address.state ? address.state.name : ""
-          },
-          district: {
-            id: address.district ? address.district.id : "",
-            name: address.district ? address.district.name : ""
-          },
-          city: {
-            id: address.city ? address.city.id : "",
-            name: address.city ? address.city.name : ""
-          },
-          area: {
-            id: address.area ? address.area.id : "",
-            name: address.area ? address.area.name : ""
-          }
+    // console.log("props addres: ", nextProps);
+    if (address && nextProps.EDIT) {
+      console.log("inditial state loaded: ", prevState);
+      nextProps.ToogleEDIT(!nextProps.EDIT);
+
+      return {
+        contactPerson: address.contactPerson ? address.contactPerson : [],
+        landlineNumber: address.landlineNumber ? address.landlineNumber : "",
+        otherLandlineNumber: address.otherLandlineNumber
+          ? address.otherLandlineNumber
+          : "",
+        house_no: address.house_no ? address.house_no : "",
+        landmark: address.landmark ? address.landmark : "",
+        addressLine1: address.addressLine1 ? address.addressLine1 : "",
+        addressLine2: address.addressLine2 ? address.addressLine2 : "",
+        po_box: address.po_box ? address.po_box : "",
+        tollFreeNumber: address.tollFreeNumber ? address.tollFreeNumber : "",
+        email: address.email ? address.email : "",
+        country: {
+          id: address.country ? address.country.id : "",
+          name: address.country ? address.country.name : ""
+        },
+        state: {
+          id: address.state ? address.state.id : "",
+          name: address.state ? address.state.name : ""
+        },
+        district: {
+          id: address.district ? address.district.id : "",
+          name: address.district ? address.district.name : ""
+        },
+        city: {
+          id: address.city ? address.city.id : "",
+          name: address.city ? address.city.name : ""
+        },
+        area: {
+          id: address.area ? address.area.id : "",
+          name: address.area ? address.area.name : ""
         }
-      : null;
+      };
+    }
+    return null;
   };
 
-  getContacts = () =>
-    this.props.address && this.props.edit
-      ? this.props.address.contactPerson
-      : null;
+  // getContacts = () =>
+  //   this.props.address && this.props.edit
+  //     ? this.props.address.contactPerson
+  //     : null;
 
   onChange = (key, event) => {
     if (key === "landmark" || "addressLine1" || "addressLine2") {
@@ -306,8 +310,8 @@ class SubBusinessPrimaryAddress extends Component {
   };
 
   render() {
-    // console.log("primasdd addr props: ", this.props);
-    // console.log("primasdd addr state: ", this.state);
+    console.log("primasdd addr props: ", this.props);
+    console.log("primasdd addr state: ", this.state);
     // console.log("primasdd addr contact state: ", this.state.contactPerson);
     this.countries = this.props.countries;
 
@@ -322,6 +326,8 @@ class SubBusinessPrimaryAddress extends Component {
     } catch (error) {
       this.states = [];
     }
+
+    console.log("states: ", this.states);
 
     try {
       if (this.props.countries) {
@@ -696,7 +702,7 @@ class SubBusinessPrimaryAddress extends Component {
                             index
                           )}
                           onContactDelete={this.onContactDelete(index)}
-                          edit={this.props.edit}
+                          EDIT={this.props.EDIT}
                         />
                       ))}
                       <Row style={{ marginTop: 15 }}>

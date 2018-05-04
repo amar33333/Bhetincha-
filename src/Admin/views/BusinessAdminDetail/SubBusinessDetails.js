@@ -101,6 +101,7 @@ class SubBusinessDetail extends Component {
     if (key === "industry") {
       this.setState({ categories: [], sub_categories: [] });
 
+      console.log("indsustr value: ", value);
       if (value)
         this.props.onIndustryEachList({
           id: value.id,
@@ -169,8 +170,9 @@ class SubBusinessDetail extends Component {
   getState = () => this.state;
 
   render() {
+    // console.log("props subbusiness: ", this.props);
     // console.log("state subbusiness: ", this.state);
-    console.log("props subbusiness: ", this.props);
+
     const industries = this.props.industries;
 
     const categories =

@@ -70,13 +70,17 @@ class subBusinessWorkingHour extends Component {
 
   static getDerivedStateFromProps = nextProps => {
     // console.log("woeking howisa;", nextProps);
-    return nextProps.workingHour && nextProps.edit
-      ? {
-          workingHour: [...nextProps.workingHour.map(each => each)],
-          alwaysOpen: nextProps.alwaysOpen
-        }
-      : null;
+    if (nextProps.workingHour && nextProps.EDIT) {
+      nextProps.ToogleEDIT(!nextProps.EDIT);
+
+      return {
+        workingHour: [...nextProps.workingHour.map(each => each)],
+        alwaysOpen: nextProps.alwaysOpen
+      };
+    }
+    return null;
   };
+
   getState = () => this.state;
   toggleHoliday = day => {
     const newWorkingHour = this.state.workingHour.map(each => {

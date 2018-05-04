@@ -17,7 +17,8 @@ import {
   onRemoveCategoryData,
   onBusinessEdit,
   onUnmountIndustryData,
-  onUnmountCategoryData
+  onUnmountCategoryData,
+  ToogleEDIT
 } from "../../actions";
 
 import SubBusinessDetails from "./SubBusinessDetails";
@@ -80,9 +81,11 @@ class BusinessEdit extends Component {
     this.props.onBusinessEdit({
       id: this.props.businessData.id,
       data: this.propsData,
-      access_token: this.access_token
+      access_token: this.access_token,
+      EDIT: this.props.EDIT
     });
   };
+
   toggleCollapse = key => {
     const updatedCollapseState = {};
     [
@@ -102,6 +105,7 @@ class BusinessEdit extends Component {
     });
     this.setState(updatedCollapseState);
   };
+
   render() {
     const data = this.props.businessData;
     console.log("new props: ", this.props);
@@ -159,8 +163,9 @@ class BusinessEdit extends Component {
                   onRemoveCategoryData={this.props.onRemoveCategoryData}
                   cookies={this.props.cookies}
                   industryData={this.props.industryData}
+                  categoryData={this.props.categoryData}
                   onUnmountIndustryData={this.props.onUnmountIndustryData}
-                  onUnmountCategoryData={this.props.onUnmountIndustryData}
+                  onUnmountCategoryData={this.props.onUnmountCategoryData}
                   /* {...this.props.general_setup} */
                   edit
                 />
@@ -175,7 +180,8 @@ class BusinessEdit extends Component {
                   address={address}
                   {...this.props.general_setup}
                   onAddressTreeList={this.props.onAddressTreeList}
-                  edit
+                  ToogleEDIT={this.props.ToogleEDIT}
+                  EDIT={this.props.EDIT}
                 />
                 <SubBusinessBranchWrapper
                   collapsed={this.state.businessBranchWrapperCollapse}
@@ -199,7 +205,8 @@ class BusinessEdit extends Component {
                   ref={ref => (this.subBusinessAboutRef = ref)}
                   about={about}
                   company_types={this.props.companyTypes}
-                  edit
+                  ToogleEDIT={this.props.ToogleEDIT}
+                  EDIT={this.props.EDIT}
                 />
                 <SubBusinessLogo
                   collapsed={this.state.businessLogoCollapse}
@@ -209,7 +216,8 @@ class BusinessEdit extends Component {
                   )}
                   ref={ref => (this.subBusinessLogoRef = ref)}
                   imagePath={logo}
-                  edit
+                  ToogleEDIT={this.props.ToogleEDIT}
+                  EDIT={this.props.EDIT}
                 />
                 <SubBusinessCoverImage
                   collapsed={this.state.businessCoverImageCollapse}
@@ -219,7 +227,8 @@ class BusinessEdit extends Component {
                   )}
                   ref={ref => (this.subBusinessCoverImageRef = ref)}
                   imagePath={cover_photo}
-                  edit
+                  ToogleEDIT={this.props.ToogleEDIT}
+                  EDIT={this.props.EDIT}
                 />
                 <SubBusinessWorkingHour
                   collapsed={this.state.businessWorkingHourCollapse}
@@ -230,7 +239,8 @@ class BusinessEdit extends Component {
                   )}
                   workingHour={workingHour}
                   alwaysOpen={alwaysOpen}
-                  edit
+                  ToogleEDIT={this.props.ToogleEDIT}
+                  EDIT={this.props.EDIT}
                 />
                 <Row>
                   <Col xs="12">
@@ -256,6 +266,8 @@ export default connect(
     companyTypes: business_reducer.company_types,
     paymentMethods: business_reducer.payment_methods,
     businessData: business_reducer.businessData,
+    EDIT: business_reducer.EDIT,
+    editBusinessSuccess: business_reducer.editBusinessSuccess,
     ...industries,
     ...auth,
     general_setup
@@ -274,6 +286,7 @@ export default connect(
     onRemoveCategoryData,
     onBusinessEdit,
     onUnmountIndustryData,
-    onUnmountCategoryData
+    onUnmountCategoryData,
+    ToogleEDIT
   }
 )(BusinessEdit);

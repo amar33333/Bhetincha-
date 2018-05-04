@@ -43,7 +43,7 @@ class SubBusinessCoverImage extends Component {
   getState = () => (this.state ? this.state : null);
 
   displayImage = () =>
-    this.props.edit ? (
+    this.props.EDIT ? (
       <img
         alt=""
         width="840"

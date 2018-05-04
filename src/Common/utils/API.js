@@ -16,9 +16,9 @@ const ACCOUNTS = "accounts";
 const USER = "user/";
 
 const O_TOKEN = "o/token/";
-export const CLIENT_ID = "RP2p0jcJvSydf2oOOK7Yz6GBo3171boXLkOCfIxg";
+export const CLIENT_ID = "K1F1m2XfcVmC42Zja4oBRVOMWhGb6LoQu1bFOmNZ";
 export const CLIENT_SECRET =
-  "pEQxArvjLN2eBjMhox6j9wVIykJQKWB6v4CS1Nyh8P2t5AFE8fwJ7u43rO0JMTL006TxKetgyKLmb02xyS5iva6xFFAQ3WuwERRkXfXLQ5TqxYogkLpNibiPc7Xd0OND";
+  "TzNiRMbsLBkb2g3S90s4whAGRuJysu1g5eZuCtLNvda5b54Tu1pYp0FjyrYlnAD9GwmWS3rQvbYL4nnLjYSqVoxzA46pbXlpyzJSpQYZ1B2acQOYwksjBfMXXubRFsis";
 export const GET_USER_INFO_URL = `${MAIN_URL}/${GET_USER_INFO}`;
 export const BUSINESS_INFO_URL = `${MAIN_URL}/${BUSINESS_INFO}`;
 export const BUSINESS_LIST_URL = `${MAIN_URL}/${BUSINESS_LIST}`;

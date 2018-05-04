@@ -33,7 +33,7 @@ class SubBusinessContact extends Component {
   };
 
   static getDerivedStateFromProps = nextProps =>
-    nextProps.contact && nextProps.edit
+    nextProps.contact && nextProps.EDIT
       ? {
           name: nextProps.contact.name,
           email: nextProps.contact.email,
