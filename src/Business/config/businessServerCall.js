@@ -81,9 +81,9 @@ export const onBusinessPut = ({ id, access_token, data }) => {
     industry: data.industry ? data.industry.id : undefined,
     categories: category_list,
     sub_categories: sub_category_list,
-    paymentMethod: payment_methods_list
-    // workingHour: data.workingHour,
-    // alwaysOpen: data.alwaysOpen
+    paymentMethod: payment_methods_list,
+    workingHour: data.workingHour,
+    alwaysOpen: data.alwaysOpen
   };
 
   console.log("server_edit: ", server_format_data);

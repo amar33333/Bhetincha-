@@ -67,6 +67,16 @@ class subBusinessWorkingHour extends Component {
       ]
     };
   }
+
+  static getDerivedStateFromProps = nextProps => {
+    console.log("woeking howisa;", nextProps);
+    return nextProps.workingHour && nextProps.edit
+      ? {
+          workingHour: [...nextProps.workingHour.map(each => each)],
+          alwaysOpen: nextProps.alwaysOpen
+        }
+      : null;
+  };
   getState = () => this.state;
   toggleHoliday = day => {
     const newWorkingHour = this.state.workingHour.map(each => {
@@ -181,6 +191,7 @@ class subBusinessWorkingHour extends Component {
   };
 
   render() {
+    console.log("working state: ", this.state);
     return (
       <div className="animated fadeIn">
         <Card>

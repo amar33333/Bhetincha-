@@ -112,6 +112,8 @@ class BusinessEdit extends Component {
     let cover_photo = null;
     let address = null;
     let branchAddress = null;
+    let alwaysOpen = false;
+    let workingHour = [];
 
     if (data) {
       businessData = {
@@ -128,6 +130,8 @@ class BusinessEdit extends Component {
       cover_photo = data.cover_photo;
       address = data.address;
       branchAddress = data.branchAddress;
+      alwaysOpen = data.alwaysOpen;
+      workingHour = data.workingHour;
     }
 
     return (
@@ -135,7 +139,7 @@ class BusinessEdit extends Component {
         <Col>
           <Card>
             <CardHeader>
-              <strong>Edit Your Business</strong>
+              <strong>Edit Business</strong>
             </CardHeader>
             <CardBody>
               <form onSubmit={this.onEditFormSubmit}>
@@ -224,6 +228,9 @@ class BusinessEdit extends Component {
                     this,
                     "businessWorkingHourCollapse"
                   )}
+                  workingHour={workingHour}
+                  alwaysOpen={alwaysOpen}
+                  edit
                 />
                 <Row>
                   <Col xs="12">
