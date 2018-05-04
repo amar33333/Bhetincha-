@@ -63,7 +63,7 @@ class SubBusinessPrimaryAddress extends Component {
   static getDerivedStateFromProps = (nextProps, prevState) => {
     const { address } = nextProps;
 
-    // console.log("props addres: ", nextProps);
+    console.log("props addres: ", nextProps);
     return address && nextProps.edit
       ? {
           contactPerson: address.contactPerson ? address.contactPerson : [],

@@ -35,7 +35,7 @@ class SubBusinessDetail extends Component {
   static getDerivedStateFromProps = nextProps => {
     const { businessData } = nextProps;
 
-    console.log("subbusiness props: ", nextProps);
+    // console.log("subbusiness props: ", nextProps);
     return businessData && nextProps.edit
       ? {
           business_name: businessData.business_name
@@ -170,6 +170,7 @@ class SubBusinessDetail extends Component {
 
   render() {
     // console.log("state subbusiness: ", this.state);
+    console.log("props subbusiness: ", this.props);
     const industries = this.props.industries;
 
     const categories =

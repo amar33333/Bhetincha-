@@ -60,6 +60,7 @@ export default function(state = INITIAL_STATE, action) {
     case FETCH_INDUSTRY_EACH_FULFILLED:
       return {
         ...state,
+        industryData: action.payload,
         industriesData: action.payload.categories.map((industry, i) => ({
           ...industry,
           s_no: i + 1
@@ -71,7 +72,7 @@ export default function(state = INITIAL_STATE, action) {
       return { ...state, fetchLoadingData: false };
 
     case UNMOUNT_INDUSTRY_DATA:
-      return { ...state, industriesData: [] };
+      return { ...state, industryData: [] };
 
     default:
       return state;

@@ -219,6 +219,16 @@ export const onSubCategoryGetAjax = ({ access_token }) =>
     }
   });
 
+export const onSubCategoryEachDeleteAjax = ({ id, access_token }) =>
+  ajax({
+    method: "DELETE",
+    url: `${SUB_CATEGORY_URL}${id}/`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
 export const onExtraSectionGet = ({ access_token }) =>
   axios({
     method: "get",
