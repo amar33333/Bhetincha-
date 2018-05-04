@@ -4,7 +4,7 @@ import FileInputComponent from "react-file-input-previews-base64";
 import { connect } from "react-redux";
 import { Container, Card, CardBody, CardHeader, Input } from "reactstrap";
 
-import { handleGalleryPhotoUpload, createNewAlbum } from "../../actions";
+import { handleGalleryPhotoUpload, onBusinessUpdate } from "../../actions";
 
 import { MAIN_URL } from "../../config/MINISITE_API";
 import FontAwesome from "react-fontawesome";
@@ -46,42 +46,6 @@ class Gallery extends Component {
       )
     });
 
-  renderAddNewGallery = () => {
-    return (
-      <div>
-        <Container>
-          <Card>
-            <CardHeader style={{ backgroundColor: "#21a8d8", color: "#fff" }}>
-              <strong>Create New Album</strong>
-            </CardHeader>
-            <CardBody>
-              <form
-                action=""
-                onSubmit={event => {
-                  event.preventDefault();
-                  this.props.createNewAlbum({
-                    id: this.props.id,
-                    access_token: this.props.cookies.token_data.access_token,
-                    username: this.props.username,
-                    data: { albums: { name: this.state.newAlbumName } }
-                  });
-                }}
-              >
-                <Input
-                  placeholder="Album Name"
-                  value={this.state.newAlbumName}
-                  onChange={event =>
-                    this.setState({ newAlbumName: event.target.value })
-                  }
-                />
-              </form>
-            </CardBody>
-          </Card>
-        </Container>
-      </div>
-    );
-  };
-
   renderDeleteButton = album => {
     const selectedLength = album.photos.filter(photo => photo.isSelected)
       .length;
@@ -108,11 +72,13 @@ class Gallery extends Component {
           multiple={true}
           callbackFunction={photos =>
             this.props.handleGalleryPhotoUpload({
-              photos,
-              business_id: this.props.id,
-              album_id: albumID,
-              access_token: this.props.cookies.token_data.access_token,
-              username: this.props.username
+              body: {
+                photos: photos.map(photo => ({
+                  name: photo.name,
+                  data: photo.base64
+                }))
+              },
+              album_id: albumID
             })
           }
           accept="image/*"
@@ -153,11 +119,8 @@ class Gallery extends Component {
                 action=""
                 onSubmit={event => {
                   event.preventDefault();
-                  this.props.createNewAlbum({
-                    id: this.props.id,
-                    access_token: this.props.cookies.token_data.access_token,
-                    username: this.props.username,
-                    data: { albums: { name: this.state.newAlbumName } }
+                  this.props.onBusinessUpdate({
+                    body: { albums: { name: this.state.newAlbumName } }
                   });
                   this.setState({ newAlbumName: "" });
                 }}
@@ -179,8 +142,6 @@ class Gallery extends Component {
   };
 
   render() {
-    console.log("album props: ", this.props.albums);
-
     return (
       <div className="gallery-wrapper">
         {this.props.mainEdit && this.renderAddNewGallery()}
@@ -190,6 +151,7 @@ class Gallery extends Component {
               <CardBody>
                 <div className="album-title">
                   <p className="album-title">{album.name}</p>
+                  {this.renderDeleteButton(album)}
                   <small>
                     {album.photos.length === 0
                       ? `Created at: ${new Date(
@@ -225,16 +187,10 @@ class Gallery extends Component {
 }
 
 export default connect(
-  ({
-    auth: { cookies },
-    MinisiteContainer: { crud: { cover_photo, id, username, albums }, edit }
-  }) => ({
-    id,
-    username,
-    cookies,
+  ({ MinisiteContainer: { crud: { cover_photo, albums }, edit } }) => ({
     mainEdit: edit.main,
     galleryLoading: edit.galleryLoading,
     albums
   }),
-  { handleGalleryPhotoUpload, createNewAlbum }
+  { handleGalleryPhotoUpload, onBusinessUpdate }
 )(Gallery);
