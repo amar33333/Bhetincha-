@@ -26,12 +26,14 @@ export const onSubCategorySubmit = ({
   category,
   subCategory,
   extraSection,
+  tags,
   access_token
 }) => dispatch => {
   onSubCategoryPost({
     category,
     subCategory,
     extraSection,
+    tags,
     access_token
   })
     .then(response => {

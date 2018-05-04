@@ -1,4 +1,6 @@
 import React, { Component } from "react";
+import TagsInput from "react-tagsinput";
+import "react-tagsinput/react-tagsinput.css";
 import {
   Button,
   Col,
@@ -41,7 +43,8 @@ class SubCategories extends Component {
       subCategory: "",
       category: "",
       industry: "",
-      extraSections: []
+      extraSections: [],
+      tags: []
     };
     this.access_token = this.props.cookies
       ? this.props.cookies.token_data.access_token
@@ -215,15 +218,21 @@ class SubCategories extends Component {
 
   onFormSubmit = event => {
     event.preventDefault();
-    const { category, subCategory, extraSections } = this.state;
-    console.log(category, extraSections, subCategory);
+    const { category, subCategory, extraSections, tags } = this.state;
+    console.log(category, extraSections, subCategory, tags);
+    console.log("tags:::::", tags);
     this.props.onSubCategorySubmit({
       category: category.id,
       extraSection: extraSections.map(extraSection => extraSection.value),
       subCategory,
+      tags,
       access_token: this.access_token
     });
-    this.setState({ subCategory: "", extraSections: [] });
+    this.setState({ subCategory: "", extraSections: [], tags: [] });
+  };
+
+  handleTagsChange = tags => {
+    this.setState({ tags });
   };
 
   render() {
@@ -278,6 +287,7 @@ class SubCategories extends Component {
                       </FormGroup>
                     </Col>
                   </Row>
+
                   <InputGroup className="mb-3">
                     <InputGroupAddon addonType="prepend">
                       <InputGroupText>
@@ -295,6 +305,16 @@ class SubCategories extends Component {
                       onChange={this.onChange.bind(this, "subCategory")}
                     />
                   </InputGroup>
+                  <Row>
+                    <Col xs="12" md="12">
+                      <TagsInput
+                        onlyUnique
+                        addKeys={[9, 32, 188]}
+                        value={this.state.tags}
+                        onChange={this.handleTagsChange}
+                      />
+                    </Col>
+                  </Row>
                   <FormGroup>
                     <Label> Extra Section </Label>
                     <Select
