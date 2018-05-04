@@ -4,7 +4,21 @@ import { connect } from "react-redux";
 import ReactTable from "react-table";
 import Select from "react-select";
 import moment from "moment";
-import { Button } from "reactstrap";
+import {
+  Button,
+  Row,
+  Col,
+  Label,
+  Container,
+  Card,
+  CardHeader,
+  CardBody,
+  FormGroup,
+  Input,
+  Form,
+  InputGroup,
+  InputGroupAddon
+} from "reactstrap";
 import { Tooltip, PopoverDelete } from "../../../Common/components";
 
 import {
@@ -25,12 +39,14 @@ class BusinessList extends Component {
         Header: "Business Name",
         id: "name",
         accessor: "business_name",
-        minWidth: 200,
+        minWidth: 150,
         Cell: props => {
           const business = props.original;
           return (
-            <div>
-              <Link to={`/${business.slug}`}>{props.value}</Link>
+            <div style={{ paddingLeft: "10px" }}>
+              <Link to={`/${business.slug}`}>
+                <strong>{props.value}</strong>
+              </Link>
               <div>Email: {business.email}</div>
               <div>Mobile: {business.phone_number}</div>
               {business.creation && (
@@ -40,7 +56,7 @@ class BusinessList extends Component {
                   id={`Tooltip-created-date-${business.id}`}
                 >
                   <span id={`Tooltip-created-date-${business.id}`}>
-                    Joined {moment(business.creation.created_date).fromNow()}
+                    Joined: {moment(business.creation.created_date).fromNow()}
                   </span>
                 </Tooltip>
               )}
@@ -75,20 +91,21 @@ class BusinessList extends Component {
       {
         Header: "Actions",
         accessor: "slug",
-        width: 130,
+        width: 170,
         Cell: props => (
           <div>
             <Button
-              color="secondary"
-              className="mr-l"
+              color="primary"
+              className="mr-2"
               onClick={() =>
                 this.props.history.push(
                   `${this.props.match.path}/${props.value}/edit`
                 )
               }
             >
-              Edit
+              <i className="fa fa-pencil" /> Edit
             </Button>
+
             <PopoverDelete
               id={`delete-${props.original.id}`}
               onClick={() =>
@@ -130,58 +147,115 @@ class BusinessList extends Component {
   render() {
     return (
       <div className="animated fadeIn">
-        Hello BusinessList
-        <div>
-          <p>Filter Stuff</p>
-          <span>Industry Filter</span>
-          <Select
-            // autosize
-            disabled={this.props.industryLoading}
-            isLoading={this.props.industryLoading}
-            labelKey="name"
-            multi
-            onChange={this.handleIndustryChange}
-            options={this.props.industries}
-            placeholder="--- All ---"
-            value={this.props.industry}
-            valueKey="id"
-          />
+        <Row>
+          <Col xs="12" md="12">
+            <Card>
+              <CardHeader>
+                <strong>Filter and Search</strong>
+              </CardHeader>
+              <CardBody>
+                <Row>
+                  <Col xs="6" md="4">
+                    <FormGroup>
+                      <Select
+                        // autosize
+                        disabled={this.props.industryLoading}
+                        isLoading={this.props.industryLoading}
+                        labelKey="name"
+                        multi
+                        onChange={this.handleIndustryChange}
+                        options={this.props.industries}
+                        placeholder="Filter Industry"
+                        value={this.props.industry}
+                        valueKey="id"
+                      />
+                    </FormGroup>
+                  </Col>
+                  <Col xs="1" md="1">
+                    <Button
+                      color="primary"
+                      onClick={this.props.onBusinessAllGet}
+                    >
+                      <i className="fa fa-filter" /> Filter
+                    </Button>
+                  </Col>
+                  <Col xs="1" md="1">
+                    <FormGroup>
+                      <Button
+                        color="danger"
+                        onClick={this.props.onFilterCleared}
+                      >
+                        <i className="fa fa-close" /> Clear
+                      </Button>
+                    </FormGroup>
+                  </Col>
+                  <Col xs="6" md="4">
+                    <Form onSubmit={this.handleSearchKeywordSubmit}>
+                      <InputGroup>
+                        <Input
+                          placeholder="Search for Business Name"
+                          onChange={this.handleChange.bind(null, "q")}
+                          value={this.props.q}
+                        />
+                        <InputGroupAddon addonType="append">
+                          <Button color="warning">
+                            <i className="fa fa-search" /> Search{" "}
+                          </Button>
+                        </InputGroupAddon>
+                      </InputGroup>
+                      {/* <Input
+                        placeholder="Search for Business Name"
+                        onChange={this.handleChange.bind(null, "q")}
+                        value={this.props.q}
+                      />
 
-          <button onClick={this.props.onBusinessAllGet}>Filter</button>
-          <button onClick={this.props.onFilterCleared}>Clear Filter</button>
-        </div>
-        <div>
-          <h4>Search Stuff</h4>
-          <form onSubmit={this.handleSearchKeywordSubmit}>
-            <label>Search Name:</label>
-            <input
-              onChange={this.handleChange.bind(null, "q")}
-              value={this.props.q}
+                      <FormGroup>
+                        <Button color="primary">
+                          <i className="fa fa-search" /> Search
+                        </Button>
+                      </FormGroup> */}
+                    </Form>
+                  </Col>
+                  <Col xs="2" md="1">
+                    <FormGroup>
+                      <Button
+                        color="danger"
+                        onClick={this.props.handleSearchKeywordCleared}
+                      >
+                        <i className="fa fa-close" /> Clear Search
+                      </Button>
+                    </FormGroup>
+                  </Col>
+                </Row>
+              </CardBody>
+            </Card>
+          </Col>
+        </Row>
+        <Row>
+          <Col xs="12">
+            <ReactTable
+              style={{ background: "white" }}
+              className="-striped -highlight"
+              data={this.props.businesses}
+              defaultPageSize={this.props.rows}
+              defaultSorted={this.props.sort_by}
+              loading={this.props.fetchLoading}
+              onPageChange={pageIndex => {
+                this.props.onBusinessAllGet({ page: ++pageIndex });
+              }}
+              onPageSizeChange={(pageSize, pageIndex) =>
+                this.props.onBusinessAllGet({
+                  page: ++pageIndex,
+                  rows: pageSize
+                })
+              }
+              onSortedChange={this.props.handleSortChangeBusiness}
+              page={this.props.page - 1}
+              pages={this.props.pages}
+              {...this.tableProps}
             />
-            <button>Search</button>
-          </form>
-          <button onClick={this.props.handleSearchKeywordCleared}>
-            Clear Search
-          </button>
-        </div>
-        <ReactTable
-          style={{ background: "white" }}
-          className="-striped -highlight"
-          data={this.props.businesses}
-          defaultPageSize={this.props.rows}
-          defaultSorted={this.props.sort_by}
-          loading={this.props.fetchLoading}
-          onPageChange={pageIndex => {
-            this.props.onBusinessAllGet({ page: ++pageIndex });
-          }}
-          onPageSizeChange={(pageSize, pageIndex) =>
-            this.props.onBusinessAllGet({ page: ++pageIndex, rows: pageSize })
-          }
-          onSortedChange={this.props.handleSortChangeBusiness}
-          page={this.props.page - 1}
-          pages={this.props.pages}
-          {...this.tableProps}
-        />
+          </Col>
+        </Row>
       </div>
     );
   }

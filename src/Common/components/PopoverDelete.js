@@ -15,7 +15,7 @@ class PopoverItem extends React.Component {
           id={"Popover-" + this.props.id}
           onClick={this.toggle}
         >
-          {this.props.text || "Delete"}
+          <i className="fa fa-close" /> {this.props.text || "Delete"}
         </Button>
         <Popover
           placement={this.props.placement || "bottom"}
@@ -28,13 +28,14 @@ class PopoverItem extends React.Component {
             <div>Clicking yes will delete your data</div>
             <Button
               color="danger"
+              className="mr-2"
               onClick={() => {
                 this.props.onClick();
                 this.toggle();
               }}
             >
               Yes
-            </Button>{" "}
+            </Button>
             <Button color="secondary" onClick={this.toggle}>
               No
             </Button>
