@@ -36,7 +36,11 @@ import {
 
 const INITIAL_STATE = {
   loading: false,
-  statusClass: ""
+  statusClass: "",
+  countries: [],
+  states: [],
+  districts: [],
+  countryEach: []
 };
 
 export default function(state = INITIAL_STATE, action) {
@@ -118,6 +122,7 @@ export default function(state = INITIAL_STATE, action) {
       return {
         ...state,
         countryData: action.payload,
+        countryEach: action.payload.states,
         loading: false,
         statusClass: "fulfilled"
       };
@@ -217,6 +222,7 @@ export default function(state = INITIAL_STATE, action) {
     case FETCH_DISTRICT_EACH_PENDING:
       return { ...state, loading: true };
     case FETCH_DISTRICT_EACH_FULFILLED:
+      console.log(action.payload);
       return {
         ...state,
         districtData: action.payload,

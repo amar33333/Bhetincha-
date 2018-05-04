@@ -16,9 +16,12 @@ import {
   CardHeader
 } from "reactstrap";
 
-import Select from "react-select";
+import ReactTable from "react-table";
+import { PopoverDelete, Select } from "../../../Common/components";
+import filterCaseInsensitive from "../../../Common/utils/filterCaseInsesitive";
+import "react-table/react-table.css";
 
-import { onStateSubmit, onCountryList } from "../../actions";
+import { onStateSubmit, onCountryList, onStateList } from "../../actions";
 
 class States extends Component {
   state = { state: "", country: "" };
@@ -26,8 +29,79 @@ class States extends Component {
     ? this.props.cookies.token_data.access_token
     : null;
 
+  tableProps = {
+    columns: [
+      {
+        Header: "S. No.",
+        accessor: "s_no",
+        filterable: false,
+        searchable: false,
+        width: 70
+      },
+      { Header: "State", accessor: "name" },
+      {
+        Header: "Country",
+        accessor: "country",
+        Cell: ({ value }) => {
+          const country = this.props.countries.find(
+            country => country.id === value
+          );
+          return country ? country.name : "Not Found";
+        },
+        filterMethod: (filter, row) => {
+          if (filter && filter.value && filter.value.length > 0) {
+            let found = false;
+            for (let i = 0; i < filter.value.length; i++) {
+              found = found || filter.value[i].id === row.country;
+            }
+            return found;
+          } else return true;
+        },
+        Filter: ({ filter, onChange }) => (
+          <Select
+            clearable
+            multi
+            value={filter ? filter.value : null}
+            onChange={onChange}
+            valueKey="id"
+            labelKey="name"
+            options={this.props.countries}
+          />
+        )
+      },
+      {
+        Header: "Actions",
+        id: "edit",
+        accessor: "id",
+        filterable: false,
+        sortable: false,
+        width: 130,
+        Cell: ({ value }) => (
+          <div>
+            <Button
+              color="secondary"
+              className="mr-l"
+              onClick={event => console.log("Edit clicked for id: ", value)}
+            >
+              Edit
+            </Button>
+            <PopoverDelete
+              id={`delete-${value}`}
+              onClick={() => console.log("Delete clicked for id: ", value)}
+            />
+          </div>
+        )
+      }
+    ],
+    minRows: 5,
+    defaultPageSize: 20,
+    className: "-striped -highlight",
+    filterable: true
+  };
+
   componentWillMount() {
     this.props.onCountryList({ access_token: this.access_token });
+    this.props.onStateList({ access_token: this.access_token });
   }
 
   onFormSubmit = event => {
@@ -118,15 +192,27 @@ class States extends Component {
             </Card>
           </Col>
         </Row>
+        <ReactTable
+          {...this.tableProps}
+          data={this.props.states}
+          // loading={this.props.categories.fetchLoading}
+          defaultFilterMethod={filterCaseInsensitive}
+        />
       </div>
     );
   }
 }
 
 export default connect(
-  ({ AdminContainer: { general_setup }, auth }) => ({ general_setup, ...auth }),
+  ({ AdminContainer: { general_setup }, auth }) => ({
+    general_setup,
+    countries: general_setup.countries,
+    states: general_setup.states,
+    ...auth
+  }),
   {
     onStateSubmit,
-    onCountryList
+    onCountryList,
+    onStateList
   }
 )(States);
