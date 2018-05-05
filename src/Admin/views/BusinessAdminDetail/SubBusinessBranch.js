@@ -275,16 +275,6 @@ class SubBusinessBranch extends Component {
   };
 
   getState = () => {
-    console.log("branch getstate: ", {
-      ...this.state,
-      country: this.state.country ? this.state.country.id : "",
-      state: this.state.state ? this.state.state.id : "",
-      district: this.state.district ? this.state.district.id : "",
-      city: this.state.city ? this.state.city.id : "",
-      area: this.state.area ? this.state.area.id : ""
-    });
-
-    console.log("eachItem PRIMARY: ", this.state);
     let contactPerson = this.state.contactPerson.map(eachItem => {
       let contactReformed = {};
       for (var property in eachItem) {
@@ -298,16 +288,15 @@ class SubBusinessBranch extends Component {
       }
       return contactReformed;
     });
-    console.log("contact contactReformed: ", contactPerson);
     contactPerson = contactPerson.length > 0 ? contactPerson : undefined;
 
     return {
       ...this.state,
-      country: this.state.country ? this.state.country.id : "",
-      state: this.state.state ? this.state.state.id : "",
-      district: this.state.district ? this.state.district.id : "",
-      city: this.state.city ? this.state.city.id : "",
-      area: this.state.area ? this.state.area.id : "",
+      // country: this.state.country ? this.state.country.id : "",
+      // state: this.state.state ? this.state.state.id : "",
+      // district: this.state.district ? this.state.district.id : "",
+      // city: this.state.city ? this.state.city.id : "",
+      // area: this.state.area ? this.state.area.id : "",
       contactPerson
     };
   };

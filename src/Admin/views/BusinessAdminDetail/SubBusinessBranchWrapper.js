@@ -108,13 +108,22 @@ class SubBusinessBranchWrapper extends Component {
       console.log("eachItem: ", eachItem);
       let reformed = {};
       for (var property in eachItem) {
+        const temp = {
+          ...eachItem,
+          country: eachItem.country ? eachItem.country.id : "",
+          state: eachItem.state ? eachItem.state.id : "",
+          district: eachItem.district ? eachItem.district.id : "",
+          city: eachItem.city ? eachItem.city.id : "",
+          area: eachItem.area ? eachItem.area.id : ""
+        };
+
         console.log("property: ", property, eachItem[property]);
 
         reformed =
-          eachItem[property] !== "" &&
-          eachItem[property] !== null &&
-          eachItem[property] !== undefined
-            ? { ...reformed, [property]: eachItem[property] }
+          temp[property] !== "" &&
+          temp[property] !== null &&
+          temp[property] !== undefined
+            ? { ...reformed, [property]: temp[property] }
             : reformed;
       }
       console.log("branch address reformed: ", reformed);
