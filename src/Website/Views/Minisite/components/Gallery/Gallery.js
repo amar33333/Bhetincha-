@@ -145,6 +145,7 @@ class Gallery extends Component {
     return (
       <div className="gallery-wrapper">
         {this.props.mainEdit && this.renderAddNewGallery()}
+        {this.state.albums.length === 0 && "Comming Soon!"}
         {this.state.albums.map(album => (
           <Container key={album.albumID}>
             <Card>

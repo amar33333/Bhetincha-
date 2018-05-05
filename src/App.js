@@ -8,6 +8,8 @@ import "font-awesome/css/font-awesome.min.css";
 // Import Simple Line Icons Set
 import "simple-line-icons/css/simple-line-icons.css";
 
+import "react-toastify/dist/ReactToastify.css";
+
 // import "bootstrap/dist/css/bootstrap.min.css";
 
 import "./static/scss/style.css";
