@@ -50,6 +50,8 @@ class BusinessEdit extends Component {
     : null;
 
   componentDidMount() {
+    this.props.ToogleEDIT(true);
+
     this.props.onCompanyTypeList({ access_token: this.access_token });
     this.props.onPaymentMethodsList({ access_token: this.access_token });
     this.props.onIndustryList({ access_token: this.access_token });
@@ -105,6 +107,8 @@ class BusinessEdit extends Component {
     });
     this.setState(updatedCollapseState);
   };
+
+  onInitialPropsReceived = () => this.props.ToogleEDIT(!this.props.EDIT);
 
   render() {
     const data = this.props.businessData;
@@ -167,7 +171,9 @@ class BusinessEdit extends Component {
                   onUnmountIndustryData={this.props.onUnmountIndustryData}
                   onUnmountCategoryData={this.props.onUnmountCategoryData}
                   /* {...this.props.general_setup} */
-                  edit
+                  businessGet={this.props.businessGet}
+                  onInitialPropsReceived={this.onInitialPropsReceived}
+                  EDIT={this.props.EDIT}
                 />
                 <SubBusinessPrimaryAddress
                   collapsed={this.state.businessPrimaryAddressCollapse}
@@ -180,7 +186,8 @@ class BusinessEdit extends Component {
                   address={address}
                   {...this.props.general_setup}
                   onAddressTreeList={this.props.onAddressTreeList}
-                  ToogleEDIT={this.props.ToogleEDIT}
+                  businessGet={this.props.businessGet}
+                  onInitialPropsReceived={this.onInitialPropsReceived}
                   EDIT={this.props.EDIT}
                 />
                 <SubBusinessBranchWrapper
@@ -194,7 +201,9 @@ class BusinessEdit extends Component {
                   branchAddress={branchAddress}
                   {...this.props.general_setup}
                   onAddressTreeList={this.props.onAddressTreeList}
-                  edit
+                  businessGet={this.props.businessGet}
+                  onInitialPropsReceived={this.onInitialPropsReceived}
+                  EDIT={this.props.EDIT}
                 />
                 <SubBusinessAbout
                   collapsed={this.state.businessAboutCollapse}
@@ -205,7 +214,8 @@ class BusinessEdit extends Component {
                   ref={ref => (this.subBusinessAboutRef = ref)}
                   about={about}
                   company_types={this.props.companyTypes}
-                  ToogleEDIT={this.props.ToogleEDIT}
+                  businessGet={this.props.businessGet}
+                  onInitialPropsReceived={this.onInitialPropsReceived}
                   EDIT={this.props.EDIT}
                 />
                 <SubBusinessLogo
@@ -216,7 +226,8 @@ class BusinessEdit extends Component {
                   )}
                   ref={ref => (this.subBusinessLogoRef = ref)}
                   imagePath={logo}
-                  ToogleEDIT={this.props.ToogleEDIT}
+                  businessGet={this.props.businessGet}
+                  onInitialPropsReceived={this.onInitialPropsReceived}
                   EDIT={this.props.EDIT}
                 />
                 <SubBusinessCoverImage
@@ -227,7 +238,8 @@ class BusinessEdit extends Component {
                   )}
                   ref={ref => (this.subBusinessCoverImageRef = ref)}
                   imagePath={cover_photo}
-                  ToogleEDIT={this.props.ToogleEDIT}
+                  businessGet={this.props.businessGet}
+                  onInitialPropsReceived={this.onInitialPropsReceived}
                   EDIT={this.props.EDIT}
                 />
                 <SubBusinessWorkingHour
@@ -239,7 +251,8 @@ class BusinessEdit extends Component {
                   )}
                   workingHour={workingHour}
                   alwaysOpen={alwaysOpen}
-                  ToogleEDIT={this.props.ToogleEDIT}
+                  businessGet={this.props.businessGet}
+                  onInitialPropsReceived={this.onInitialPropsReceived}
                   EDIT={this.props.EDIT}
                 />
                 <Row>
@@ -260,7 +273,7 @@ class BusinessEdit extends Component {
 
 export default connect(
   ({
-    AdminContainer: { business_reducer, industries, general_setup },
+    AdminContainer: { business_reducer, industries, categories, general_setup },
     auth
   }) => ({
     companyTypes: business_reducer.company_types,
@@ -268,7 +281,10 @@ export default connect(
     businessData: business_reducer.businessData,
     EDIT: business_reducer.EDIT,
     editBusinessSuccess: business_reducer.editBusinessSuccess,
-    ...industries,
+    businessGet: business_reducer.businessGet,
+    categoryData: categories.categoryData,
+    industries: industries.industries,
+    industryData: industries.industryData,
     ...auth,
     general_setup
   }),

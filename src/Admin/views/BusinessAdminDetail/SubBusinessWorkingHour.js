@@ -70,8 +70,17 @@ class subBusinessWorkingHour extends Component {
 
   static getDerivedStateFromProps = nextProps => {
     // console.log("woeking howisa;", nextProps);
-    if (nextProps.workingHour && nextProps.EDIT) {
-      nextProps.ToogleEDIT(!nextProps.EDIT);
+    // console.log("working hour before toogle recevied: ", nextProps.EDIT);
+
+    if (
+      !nextProps.businessGet &&
+      nextProps.workingHour &&
+      nextProps.workingHour.length &&
+      nextProps.EDIT
+    ) {
+      // console.log("working hourinside toogle recevied: ", nextProps.EDIT);
+
+      nextProps.onInitialPropsReceived();
 
       return {
         workingHour: [...nextProps.workingHour.map(each => each)],

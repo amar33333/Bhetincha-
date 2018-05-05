@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { toast } from "react-toastify";
 
 import {
   Row,
@@ -23,11 +24,26 @@ class SubBusinessBranchWrapper extends Component {
 
   static getDerivedStateFromProps = nextProps => {
     // console.log("branchwrapper props: ", nextProps);
-    return nextProps.branchAddress &&
+    // console.log("branch wrapper before toogle recevied: ", nextProps.EDIT);
+
+    if (
+      !nextProps.businessGet &&
+      nextProps.branchAddress &&
       nextProps.branchAddress.length > 0 &&
-      nextProps.edit
-      ? { branchAddress: nextProps.branchAddress }
-      : null;
+      nextProps.EDIT
+    ) {
+      console.log(
+        // "branchtoogle wrapper inside toogle recevied: ",
+        nextProps.EDIT
+      );
+
+      nextProps.onInitialPropsReceived();
+
+      return {
+        branchAddress: nextProps.branchAddress ? nextProps.branchAddress : []
+      };
+    }
+    return null;
   };
 
   clearState = () => {
@@ -63,7 +79,7 @@ class SubBusinessBranchWrapper extends Component {
     });
   };
 
-  onBranchChange = (index, data) => {
+  onBranchSave = (index, data) => {
     console.log("branch change: ", index, data);
     const newBranchAddress = this.state.branchAddress.map(
       (branch, sub_index) => {
@@ -71,15 +87,20 @@ class SubBusinessBranchWrapper extends Component {
       }
     );
 
-    this.setState({ branchAddress: newBranchAddress });
+    this.setState({ branchAddress: newBranchAddress }, () =>
+      toast.success(` Branch - ${index + 1} Saved Successfully`)
+    );
   };
 
   onBranchDelete = index => () => {
-    this.setState({
-      branchAddress: this.state.branchAddress.filter(
-        (branch, sub_index) => index !== sub_index
-      )
-    });
+    this.setState(
+      {
+        branchAddress: this.state.branchAddress.filter(
+          (branch, sub_index) => index !== sub_index
+        )
+      },
+      () => toast.success(`Branch - ${index + 1} Deleted Successfully`)
+    );
   };
 
   getState = () => {
@@ -155,12 +176,13 @@ class SubBusinessBranchWrapper extends Component {
                   branch={branch}
                   key={index}
                   id={index}
-                  onBranchChange={this.onBranchChange.bind(this, index)}
+                  onBranchSave={this.onBranchSave.bind(this, index)}
                   onBranchDelete={this.onBranchDelete(index)}
                   countries={this.props.countries}
                   cookies={this.props.cookies}
                   onAddressTreeList={this.props.onAddressTreeList}
-                  edit={this.props.edit}
+                  EDIT={this.props.EDIT}
+                  //edit={this.props.edit}
                 />
               ))}
               <Row style={{ marginTop: 15 }}>

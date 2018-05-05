@@ -141,12 +141,18 @@ epics.push((action$, { getState }) =>
 
 export const onBusinessCreate = ({ data, access_token }) => dispatch => {
   onBusinessPost({ data, access_token })
-    .then(response =>
-      dispatch({ type: CREATE_BUSINESS_FULFILLED, payload: response.data })
-    )
-    .catch(error =>
-      dispatch({ type: CREATE_BUSINESS_REJECTED, payload: error })
-    );
+    .then(response => {
+      if (response.data.msg === "success") {
+        toast.success("Business Created Successfully!");
+      } else {
+        toast.error("Business Creation Failed !!!");
+      }
+      dispatch({ type: CREATE_BUSINESS_FULFILLED, payload: response.data });
+    })
+    .catch(error => {
+      toast.error("Error in Updating!!!");
+      dispatch({ type: CREATE_BUSINESS_REJECTED, payload: error });
+    });
   dispatch({ type: CREATE_BUSINESS_PENDING });
 };
 
@@ -158,98 +164,97 @@ export const onBusinessEdit = ({
 }) => dispatch => {
   onBusinessPut({ id, data, access_token })
     .then(response => {
-      if (response.data.msg === "success") {
-        toast.success("Business Updated Successfully!");
-        dispatch({
-          type: TOGGLE_EDIT,
-          payload: !EDIT
-        });
+      dispatch({
+        type: TOGGLE_EDIT,
+        payload: !EDIT
+      });
 
-        onBusinessEachGet({ username: id, access_token })
-          .then(response => {
-            console.log("asdadsadADasd: ", response.data);
+      onBusinessEachGet({ username: id, access_token })
+        .then(response => {
+          console.log("asdadsadADasd: ", response.data);
 
-            // ToogleEDIT(!EDIT);
+          // ToogleEDIT(!EDIT);
 
-            dispatch({
-              type: FETCH_BUSINESS_EACH_FULFILLED,
-              payload: response.data
-            });
+          const industryId = response.data.industry
+            ? response.data.industry.id
+            : "";
+          const countryId = response.data.address.country
+            ? response.data.address.country.id
+            : "";
+          const stateId = response.data.address.state
+            ? response.data.address.state.id
+            : "";
+          const districtId = response.data.address.district
+            ? response.data.address.district.id
+            : "";
+          const cityId = response.data.address.city
+            ? response.data.address.city.id
+            : "";
 
-            const industryId = response.data.industry
-              ? response.data.industry.id
-              : "";
-            const countryId = response.data.address.country
-              ? response.data.address.country.id
-              : "";
-            const stateId = response.data.address.state
-              ? response.data.address.state.id
-              : "";
-            const districtId = response.data.address.district
-              ? response.data.address.district.id
-              : "";
-            const cityId = response.data.address.city
-              ? response.data.address.city.id
-              : "";
+          if (industryId !== "")
+            onIndustryEachGet({ id: industryId, access_token })
+              .then(newResponse =>
+                dispatch({
+                  type: FETCH_INDUSTRY_EACH_FULFILLED,
+                  payload: newResponse.data
+                })
+              )
+              .catch(err =>
+                dispatch({ type: FETCH_INDUSTRY_EACH_REJECTED, payload: err })
+              );
 
-            if (industryId !== "")
-              onIndustryEachGet({ id: industryId, access_token })
-                .then(newResponse =>
-                  dispatch({
-                    type: FETCH_INDUSTRY_EACH_FULFILLED,
-                    payload: newResponse.data
-                  })
-                )
-                .catch(err =>
-                  dispatch({ type: FETCH_INDUSTRY_EACH_REJECTED, payload: err })
-                );
+          //For Primary Address
+          getAddressTree(
+            countryId,
+            stateId,
+            districtId,
+            cityId,
+            access_token,
+            dispatch
+          );
 
-            //For Primary Address
+          // For Branch Address
+          response.data.branchAddress.map(each => {
+            const branchcountryId = each.country ? each.country.id : "";
+            const branchstateId = each.state ? each.state.id : "";
+            const branchdistrictId = each.district ? each.district.id : "";
+            const branchcityId = each.city ? each.city.id : "";
+
             getAddressTree(
-              countryId,
-              stateId,
-              districtId,
-              cityId,
+              branchcountryId,
+              branchstateId,
+              branchdistrictId,
+              branchcityId,
               access_token,
               dispatch
             );
+          });
 
-            // For Branch Address
-            response.data.branchAddress.map(each => {
-              const branchcountryId = each.country ? each.country.id : "";
-              const branchstateId = each.state ? each.state.id : "";
-              const branchdistrictId = each.district ? each.district.id : "";
-              const branchcityId = each.city ? each.city.id : "";
+          // dispatch({ type: FETCH_INDUSTRY_EACH_PENDING });
+          dispatch({ type: FETCH_ADDRESS_TREE_PENDING });
+          dispatch({
+            type: FETCH_BUSINESS_EACH_FULFILLED,
+            payload: response.data
+          });
+        })
+        .catch(error =>
+          dispatch({ type: FETCH_BUSINESS_EACH_REJECTED, payload: error })
+        );
+      dispatch({ type: FETCH_BUSINESS_EACH_PENDING });
 
-              getAddressTree(
-                branchcountryId,
-                branchstateId,
-                branchdistrictId,
-                branchcityId,
-                access_token,
-                dispatch
-              );
-            });
-
-            dispatch({ type: FETCH_INDUSTRY_EACH_PENDING });
-            dispatch({ type: FETCH_ADDRESS_TREE_PENDING });
-            // dispatch({ type: FETCH_COUNTRY_EACH_PENDING });
-            // dispatch({ type: FETCH_STATE_EACH_PENDING });
-            // dispatch({ type: FETCH_DISTRICT_EACH_PENDING });
-            // dispatch({ type: FETCH_CITY_EACH_PENDING });
-          })
-          .catch(error =>
-            dispatch({ type: FETCH_BUSINESS_EACH_REJECTED, payload: error })
-          );
-        dispatch({ type: FETCH_BUSINESS_EACH_PENDING });
+      if (response.data.msg === "success") {
+        toast.success("Business Updated Successfully!");
+        console.log("bussiness acction toogle called: ", EDIT);
+        dispatch({ type: EDIT_BUSINESS_FULFILLED, payload: response.data });
       } else {
-        response.data.msg.name.map(msg => {
-          toast.error(msg);
-        });
+        toast.error("Error in Updating!!!");
+        dispatch({ type: EDIT_BUSINESS_REJECTED, payload: response.data.msg });
       }
-      dispatch({ type: EDIT_BUSINESS_FULFILLED, payload: response.data });
     })
-    .catch(error => dispatch({ type: EDIT_BUSINESS_REJECTED, payload: error }));
+    .catch(error => {
+      toast.error("Error in Updating!!!");
+      dispatch({ type: EDIT_BUSINESS_REJECTED, payload: error });
+    });
   dispatch({ type: EDIT_BUSINESS_PENDING });
 };
 
@@ -318,8 +323,6 @@ export const onBusinessEachList = ({ username, access_token }) => dispatch => {
     .then(response => {
       console.log("asdadsadADasd: ", response.data);
 
-      dispatch({ type: FETCH_BUSINESS_EACH_FULFILLED, payload: response.data });
-
       const industryId = response.data.industry
         ? response.data.industry.id
         : "";
@@ -338,15 +341,20 @@ export const onBusinessEachList = ({ username, access_token }) => dispatch => {
 
       if (industryId !== "")
         onIndustryEachGet({ id: industryId, access_token })
-          .then(newResponse =>
+          .then(newResponse => {
+            console.log("industry each: ", newResponse);
             dispatch({
               type: FETCH_INDUSTRY_EACH_FULFILLED,
               payload: newResponse.data
-            })
-          )
+            });
+          })
+
           .catch(err =>
             dispatch({ type: FETCH_INDUSTRY_EACH_REJECTED, payload: err })
           );
+
+      // This below `dispatch` causes error of payload = undefined in industryEachList Action epics
+      // dispatch({ type: FETCH_INDUSTRY_EACH_PENDING });
 
       //For Primary Address
       getAddressTree(
@@ -375,12 +383,8 @@ export const onBusinessEachList = ({ username, access_token }) => dispatch => {
         );
       });
 
-      dispatch({ type: FETCH_INDUSTRY_EACH_PENDING });
       dispatch({ type: FETCH_ADDRESS_TREE_PENDING });
-      // dispatch({ type: FETCH_COUNTRY_EACH_PENDING });
-      // dispatch({ type: FETCH_STATE_EACH_PENDING });
-      // dispatch({ type: FETCH_DISTRICT_EACH_PENDING });
-      // dispatch({ type: FETCH_CITY_EACH_PENDING });
+      dispatch({ type: FETCH_BUSINESS_EACH_FULFILLED, payload: response.data });
     })
     .catch(error =>
       dispatch({ type: FETCH_BUSINESS_EACH_REJECTED, payload: error })

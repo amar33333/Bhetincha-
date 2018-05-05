@@ -35,38 +35,43 @@ class SubBusinessDetail extends Component {
   static getDerivedStateFromProps = nextProps => {
     const { businessData } = nextProps;
 
-    // console.log("subbusiness props: ", nextProps);
-    return businessData && nextProps.edit
-      ? {
-          business_name: businessData.business_name
-            ? businessData.business_name
-            : "",
-          business_email: businessData.business_email
-            ? businessData.business_email
-            : "",
-          industry: businessData.industry
-            ? { id: businessData.industry.id, name: businessData.industry.name }
-            : "",
-          categories: businessData.categories
-            ? businessData.categories.map(each => ({
-                id: each.id,
-                name: each.name
-              }))
-            : [],
-          sub_categories: businessData.sub_categories
-            ? businessData.sub_categories.map(each => ({
-                id: each.id,
-                name: each.name
-              }))
-            : [],
-          paymentMethod: businessData.payment_method
-            ? businessData.payment_method.map(each => ({
-                id: each.id,
-                name: each.name
-              }))
-            : []
-        }
-      : null;
+    console.log("subbusiness detail props: ", nextProps);
+    if (!nextProps.businessGet && businessData && nextProps.EDIT) {
+      console.log("sbbusines detail: ", nextProps);
+      nextProps.onInitialPropsReceived();
+      console.log("sbbusines detail: ", nextProps);
+
+      return {
+        business_name: businessData.business_name
+          ? businessData.business_name
+          : "",
+        business_email: businessData.business_email
+          ? businessData.business_email
+          : "",
+        industry: businessData.industry
+          ? { id: businessData.industry.id, name: businessData.industry.name }
+          : "",
+        categories: businessData.categories
+          ? businessData.categories.map(each => ({
+              id: each.id,
+              name: each.name
+            }))
+          : [],
+        sub_categories: businessData.sub_categories
+          ? businessData.sub_categories.map(each => ({
+              id: each.id,
+              name: each.name
+            }))
+          : [],
+        paymentMethod: businessData.payment_method
+          ? businessData.payment_method.map(each => ({
+              id: each.id,
+              name: each.name
+            }))
+          : []
+      };
+    }
+    return null;
   };
 
   doesInclude = (array, obj) => {
@@ -102,11 +107,16 @@ class SubBusinessDetail extends Component {
       this.setState({ categories: [], sub_categories: [] });
 
       console.log("indsustr value: ", value);
-      if (value)
+      if (value) {
+        console.log("indsutry each Called: ", value);
+
         this.props.onIndustryEachList({
           id: value.id,
           access_token: this.access_token
         });
+      } else {
+        console.log("indsutry each NOT called: ", value);
+      }
 
       if (!value) {
         this.props.onUnmountIndustryData();
@@ -181,11 +191,13 @@ class SubBusinessDetail extends Component {
         : [];
 
     let subCategories = [];
+    // console.log("categoryData: ", this.props.categoryData);
 
     if (
       this.state.industry &&
       this.state.categories.length &&
-      this.props.categoryData
+      this.props.categoryData &&
+      this.props.categoryData.length
     ) {
       this.props.categoryData.map(each => {
         // console.log("subca: ", each.subcategories);
@@ -261,7 +273,7 @@ class SubBusinessDetail extends Component {
                   <FormGroup>
                     <Label for="business_email">Business Email</Label>
                     <Input
-                      required
+                      //required
                       type="email"
                       value={this.state.business_email}
                       onKeyDown={this._handleKeyPress}

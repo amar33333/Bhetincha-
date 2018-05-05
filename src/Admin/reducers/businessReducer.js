@@ -26,13 +26,14 @@ import {
 const INITIAL_STATE = {
   loading: false,
   statusClass: "",
-  EDIT: true,
+  EDIT: false,
 
   company_types: [],
 
   businesses: [],
   pages: 3,
-  fetchLoading: false
+  fetchLoading: false,
+  businessGet: false
 };
 
 export default function(state = INITIAL_STATE, action) {
@@ -52,29 +53,31 @@ export default function(state = INITIAL_STATE, action) {
       };
 
     case EDIT_BUSINESS_PENDING:
-      return { ...state, fetchLoading: true };
+      return { ...state, fetchLoading: true, businessGet: true };
 
     case EDIT_BUSINESS_REJECTED:
-      return { ...state, fetchLoading: false };
+      return { ...state, fetchLoading: false, businessGet: true };
 
     case EDIT_BUSINESS_FULFILLED:
       return {
         ...state,
         fetchLoading: false,
+        businessGet: true,
         editBusinessSuccess: action.payload
       };
 
     case FETCH_BUSINESS_EACH_PENDING:
-      return { ...state, fetchLoading: true };
+      return { ...state, fetchLoading: true, businessGet: true };
 
     case FETCH_BUSINESS_EACH_REJECTED:
-      return { ...state, fetchLoading: false };
+      return { ...state, fetchLoading: false, businessGet: false };
 
     case FETCH_BUSINESS_EACH_FULFILLED:
       return {
         ...state,
         businessData: action.payload,
-        fetchLoading: false
+        fetchLoading: false,
+        businessGet: false
       };
 
     case CREATE_PAYMENT_METHODS_PENDING:

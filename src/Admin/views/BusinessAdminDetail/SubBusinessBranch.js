@@ -1,4 +1,6 @@
 import React, { Component } from "react";
+import { toast } from "react-toastify";
+
 import MapComponent from "../../../Common/components/MapComponent";
 
 import Select from "react-select";
@@ -18,7 +20,7 @@ import {
 
 // import SubBusinessContactWrapper from "./SubBusinessContactWrapper";
 import SubBusinessContact from "./SubBusinessContact";
-import { ON_KEY_PRESS_ENTER } from "../../../config/CONSTANTS";
+// import { ON_KEY_PRESS_ENTER } from "../../../config/CONSTANTS";
 
 class SubBusinessBranch extends Component {
   constructor(props) {
@@ -63,43 +65,50 @@ class SubBusinessBranch extends Component {
 
   static getDerivedStateFromProps = (nextProps, prevState) => {
     const { branch } = nextProps;
-    // console.log("branchprops: ", nextProps);
-    return branch && nextProps.edit
-      ? {
-          contactPerson: branch.contactPerson ? branch.contactPerson : [],
-          landlineNumber: branch.landlineNumber ? branch.landlineNumber : "",
-          otherLandlineNumber: branch.otherLandlineNumber
-            ? branch.otherLandlineNumber
-            : "",
-          house_no: branch.house_no ? branch.house_no : "",
-          landmark: branch.landmark ? branch.landmark : "",
-          addressLine1: branch.addressLine1 ? branch.addressLine1 : "",
-          addressLine2: branch.addressLine2 ? branch.addressLine2 : "",
-          po_box: branch.po_box ? branch.po_box : "",
-          tollFreeNumber: branch.tollFreeNumber ? branch.tollFreeNumber : "",
-          email: branch.email ? branch.email : "",
-          country: {
-            id: branch.country ? branch.country.id : "",
-            name: branch.country ? branch.country.name : ""
-          },
-          state: {
-            id: branch.state ? branch.state.id : "",
-            name: branch.state ? branch.state.name : ""
-          },
-          district: {
-            id: branch.district ? branch.district.id : "",
-            name: branch.district ? branch.district.name : ""
-          },
-          city: {
-            id: branch.city ? branch.city.id : "",
-            name: branch.city ? branch.city.name : ""
-          },
-          area: {
-            id: branch.area ? branch.area.id : "",
-            name: branch.area ? branch.area.name : ""
-          }
+    console.log("branchprops: ", nextProps);
+    // console.log("branch onlytoogle props branch: ", nextProps);
+    if (branch && nextProps.EDIT) {
+      console.log("branch if run");
+      return {
+        contactPerson: branch.contactPerson ? branch.contactPerson : [],
+        landlineNumber: branch.landlineNumber ? branch.landlineNumber : "",
+        otherLandlineNumber: branch.otherLandlineNumber
+          ? branch.otherLandlineNumber
+          : "",
+        house_no: branch.house_no ? branch.house_no : "",
+        landmark: branch.landmark ? branch.landmark : "",
+        addressLine1: branch.addressLine1 ? branch.addressLine1 : "",
+        addressLine2: branch.addressLine2 ? branch.addressLine2 : "",
+        po_box: branch.po_box ? branch.po_box : "",
+        tollFreeNumber: branch.tollFreeNumber ? branch.tollFreeNumber : "",
+        email: branch.email ? branch.email : "",
+        latitude: branch.latitude ? branch.latitude : 27.7172453,
+        longitude: branch.longitude ? branch.longitude : 85.32391758465576,
+        country: {
+          id: branch.country ? branch.country.id : "",
+          name: branch.country ? branch.country.name : ""
+        },
+        state: {
+          id: branch.state ? branch.state.id : "",
+          name: branch.state ? branch.state.name : ""
+        },
+        district: {
+          id: branch.district ? branch.district.id : "",
+          name: branch.district ? branch.district.name : ""
+        },
+        city: {
+          id: branch.city ? branch.city.id : "",
+          name: branch.city ? branch.city.name : ""
+        },
+        area: {
+          id: branch.area ? branch.area.id : "",
+          name: branch.area ? branch.area.name : ""
         }
-      : null;
+      };
+    } else {
+      console.log("branchs else run");
+      return null;
+    }
   };
 
   onChange = (key, event) => {
@@ -112,10 +121,10 @@ class SubBusinessBranch extends Component {
     }
   };
 
-  getContacts = () =>
-    this.props.branch && this.props.edit
-      ? this.props.branch.contactPerson
-      : null;
+  // getContacts = () =>
+  //   this.props.branch && this.props.edit
+  //     ? this.props.branch.contactPerson
+  //     : null;
 
   handleSelectChange = (key, value) => {
     this.setState({ [key]: value });
@@ -241,7 +250,7 @@ class SubBusinessBranch extends Component {
     });
   };
 
-  onContactChange = (index, data) => {
+  onContactSave = (index, data) => {
     // console.log("herau: ", index, data);
     const newContactPerson = this.state.contactPerson.map(
       (contact, sub_index) => {
@@ -249,15 +258,20 @@ class SubBusinessBranch extends Component {
       }
     );
 
-    this.setState({ contactPerson: newContactPerson });
+    this.setState({ contactPerson: newContactPerson }, () =>
+      toast.success(`Contact - ${index + 1} Saved Successfully`)
+    );
   };
 
   onContactDelete = index => () => {
-    this.setState({
-      contactPerson: this.state.contactPerson.filter(
-        (contact, sub_index) => index !== sub_index
-      )
-    });
+    this.setState(
+      {
+        contactPerson: this.state.contactPerson.filter(
+          (contact, sub_index) => index !== sub_index
+        )
+      },
+      () => toast.success(`Contact - ${index + 1} Deleted Successfully`)
+    );
   };
 
   getState = () => {
@@ -300,7 +314,8 @@ class SubBusinessBranch extends Component {
 
   render() {
     // console.log("branch props:", this.props);
-    // console.log("branch state:", this.state);
+    console.log("branch state:", this.state);
+    // console.log("branch onlytoogle state branch: ", this.state);
 
     this.countries = this.props.countries;
 
@@ -674,9 +689,8 @@ class SubBusinessBranch extends Component {
                         contact={contact}
                         key={index}
                         id={index}
-                        onContactChange={this.onContactChange.bind(this, index)}
+                        onContactSave={this.onContactSave.bind(this, index)}
                         onContactDelete={this.onContactDelete(index)}
-                        edit={this.props.edit}
                       />
                     ))}
                     <Row style={{ marginTop: 15 }}>
@@ -704,7 +718,7 @@ class SubBusinessBranch extends Component {
                 <Button
                   color="success"
                   onClick={() =>
-                    this.props.onBranchChange(this.getState(), {
+                    this.props.onBranchSave(this.getState(), {
                       /* this.subBusinessBranchContactWrapperRef.getState() */
                     })
                   }
