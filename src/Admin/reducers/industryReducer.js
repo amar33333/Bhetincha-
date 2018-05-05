@@ -19,7 +19,8 @@ const INITIAL_STATE = {
   fetchLoadingData: false,
   fetchError: "",
   industries: [],
-  industriesData: []
+  industriesData: [],
+  industryData: null
 };
 
 export default function(state = INITIAL_STATE, action) {

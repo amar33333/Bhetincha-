@@ -3,6 +3,7 @@ import React, { Component } from "react";
 import FileBase64 from "react-file-base64";
 
 import { Card, CardHeader, CardBody, Button, Collapse } from "reactstrap";
+import { FETCH_DISTRICT_PENDING } from "../../actions/types";
 
 class SubBusinessLogo extends Component {
   constructor(props) {
@@ -34,7 +35,7 @@ class SubBusinessLogo extends Component {
   getState = () => (this.state ? this.state : null);
 
   displayImage = () =>
-    this.props.EDIT ? (
+    this.props.imagePath ? (
       <img
         alt=""
         width="100"

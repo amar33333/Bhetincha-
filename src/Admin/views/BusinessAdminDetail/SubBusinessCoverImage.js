@@ -43,7 +43,7 @@ class SubBusinessCoverImage extends Component {
   getState = () => (this.state ? this.state : null);
 
   displayImage = () =>
-    this.props.EDIT ? (
+    this.props.imagePath ? (
       <img
         alt=""
         width="840"
@@ -53,6 +53,7 @@ class SubBusinessCoverImage extends Component {
     ) : null;
 
   render() {
+    console.log("logo: ", this.props);
     return (
       <div className="animated fadeIn">
         <Card>

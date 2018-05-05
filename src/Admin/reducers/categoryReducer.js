@@ -13,7 +13,8 @@ import {
 const INITIAL_STATE = {
   loading: false,
   fetchLoading: false,
-  categories: []
+  categories: [],
+  categoryData: []
 };
 
 export default function(state = INITIAL_STATE, action) {

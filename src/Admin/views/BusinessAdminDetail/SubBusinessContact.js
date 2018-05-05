@@ -33,7 +33,7 @@ class SubBusinessContact extends Component {
   };
 
   static getDerivedStateFromProps = nextProps =>
-    nextProps.contact && nextProps.EDIT
+    nextProps.contact
       ? {
           name: nextProps.contact.name,
           email: nextProps.contact.email,
@@ -192,7 +192,7 @@ class SubBusinessContact extends Component {
                 <Col xs="6" md="6">
                   <Button
                     color="success"
-                    onClick={() => this.props.onContactChange(this.state)}
+                    onClick={() => this.props.onContactSave(this.state)}
                   >
                     <i className="fa fa-save" /> SAVE CONTACT
                   </Button>

@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 
 import Select from "react-select";
+import { toast } from "react-toastify";
 
 import MapComponent from "../../../Common/components/MapComponent";
 
@@ -17,7 +18,7 @@ import {
   Collapse
 } from "reactstrap";
 
-import SubBusinessContactWrapper from "./SubBusinessContactWrapper.js";
+// import SubBusinessContactWrapper from "./SubBusinessContactWrapper.js";
 import SubBusinessContact from "./SubBusinessContact";
 
 class SubBusinessPrimaryAddress extends Component {
@@ -64,9 +65,13 @@ class SubBusinessPrimaryAddress extends Component {
     const { address } = nextProps;
 
     // console.log("props addres: ", nextProps);
-    if (address && nextProps.EDIT) {
-      console.log("inditial state loaded: ", prevState);
-      nextProps.ToogleEDIT(!nextProps.EDIT);
+    // console.log(" toogle addres : ", nextProps);
+    // console.log("primary toogle before called: ", nextProps.EDIT);
+    if (!nextProps.businessGet && address && nextProps.EDIT) {
+      // console.log("initial state loaded: ", prevState);
+      // console.log("primary toogle  success called: ", nextProps.EDIT);
+      // nextProps.ToogleEDIT(!nextProps.EDIT);
+      nextProps.onInitialPropsReceived();
 
       return {
         contactPerson: address.contactPerson ? address.contactPerson : [],
@@ -81,6 +86,14 @@ class SubBusinessPrimaryAddress extends Component {
         po_box: address.po_box ? address.po_box : "",
         tollFreeNumber: address.tollFreeNumber ? address.tollFreeNumber : "",
         email: address.email ? address.email : "",
+        latitude:
+          address.latitude && !isNaN(address.latitude)
+            ? Number(address.latitude)
+            : 27.7172453,
+        longitude:
+          address.longitude && !isNaN(address.longitude)
+            ? Number(address.longitude)
+            : 85.32391758465576,
         country: {
           id: address.country ? address.country.id : "",
           name: address.country ? address.country.name : ""
@@ -102,8 +115,10 @@ class SubBusinessPrimaryAddress extends Component {
           name: address.area ? address.area.name : ""
         }
       };
+    } else {
+      console.log("new initial state not loaded");
+      return null;
     }
-    return null;
   };
 
   // getContacts = () =>
@@ -240,7 +255,7 @@ class SubBusinessPrimaryAddress extends Component {
     });
   };
 
-  onContactChange = (index, data) => {
+  onContactSave = (index, data) => {
     console.log("herau: ", index, data);
     const newContactPerson = this.state.contactPerson.map(
       (contact, sub_index) => {
@@ -248,15 +263,20 @@ class SubBusinessPrimaryAddress extends Component {
       }
     );
 
-    this.setState({ contactPerson: newContactPerson });
+    this.setState({ contactPerson: newContactPerson }, () =>
+      toast.success(`Contact - ${index + 1} Saved Successfully`)
+    );
   };
 
   onContactDelete = index => () => {
-    this.setState({
-      contactPerson: this.state.contactPerson.filter(
-        (contact, sub_index) => index !== sub_index
-      )
-    });
+    this.setState(
+      {
+        contactPerson: this.state.contactPerson.filter(
+          (contact, sub_index) => index !== sub_index
+        )
+      },
+      () => toast.success(`Contact - ${index + 1} Deleted Successfully`)
+    );
   };
 
   getState = () => {
@@ -310,8 +330,8 @@ class SubBusinessPrimaryAddress extends Component {
   };
 
   render() {
-    console.log("primasdd addr props: ", this.props);
-    console.log("primasdd addr state: ", this.state);
+    // console.log("primasdd addr props: ", this.props);
+    // console.log("primasdd addr state: ", this.state);
     // console.log("primasdd addr contact state: ", this.state.contactPerson);
     this.countries = this.props.countries;
 
@@ -697,12 +717,8 @@ class SubBusinessPrimaryAddress extends Component {
                           contact={contact}
                           key={index}
                           id={index}
-                          onContactChange={this.onContactChange.bind(
-                            this,
-                            index
-                          )}
+                          onContactSave={this.onContactSave.bind(this, index)}
                           onContactDelete={this.onContactDelete(index)}
-                          EDIT={this.props.EDIT}
                         />
                       ))}
                       <Row style={{ marginTop: 15 }}>
