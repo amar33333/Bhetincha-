@@ -82,7 +82,7 @@ class Home extends Component {
                 suggestions={this.props.search_result.data}
                 onSuggestionsFetchRequested={this.props.onSearchQuerySubmit}
                 onSearchItemSelected={business => {
-                  this.props.history.push(`/${business.user}`);
+                  this.props.history.push(`/${business.slug}`);
                 }}
                 onSearchComplete={keyword => {
                   this.props.history.push({
