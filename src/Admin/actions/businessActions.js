@@ -150,7 +150,8 @@ export const onBusinessCreate = ({ data, access_token }) => dispatch => {
       dispatch({ type: CREATE_BUSINESS_FULFILLED, payload: response.data });
     })
     .catch(error => {
-      toast.error("Error in Updating!!!");
+      toast.error("Business Creation Failed !!!");
+
       dispatch({ type: CREATE_BUSINESS_REJECTED, payload: error });
     });
   dispatch({ type: CREATE_BUSINESS_PENDING });
