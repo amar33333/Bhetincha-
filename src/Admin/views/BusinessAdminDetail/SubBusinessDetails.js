@@ -273,7 +273,7 @@ class SubBusinessDetail extends Component {
                   <FormGroup>
                     <Label for="business_email">Business Email</Label>
                     <Input
-                      //required
+                      required
                       type="email"
                       value={this.state.business_email}
                       onKeyDown={this._handleKeyPress}
