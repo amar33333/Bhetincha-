@@ -72,9 +72,9 @@ class AboutUs extends Component {
 export default connect(
   ({ MinisiteContainer: { crud: { about }, edit } }) => ({
     data: {
-      tagline: about.tagline,
-      aboutUs: about.aboutUs,
-      establishedYear: about.establishedYear
+      tagline: about.tagline || "",
+      aboutUs: about.aboutUs || "",
+      establishedYear: about.establishedYear || ""
       // companyType: about.companyType
     },
     aboutUsEdit: edit.aboutUs,

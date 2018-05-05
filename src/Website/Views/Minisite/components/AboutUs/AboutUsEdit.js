@@ -12,11 +12,22 @@ class AboutUsEdit extends Component {
     establishedYear: initialValue.establishedYear
   });
 
-  state = { aboutUs: "" };
+  state = { aboutUs: "", establishedYear: "", tagline: "" };
 
   handleChange = value => this.setState({ aboutUs: value });
 
   onChange = (key, event) => this.setState({ [key]: event.target.value });
+
+  onSaveChanges = () => {
+    const { tagline, aboutUs, establishedYear } = this.props.initialValue;
+    const about = {};
+    if (this.state.tagline !== tagline) about.tagline = this.state.tagline;
+    if (this.state.aboutUs !== aboutUs) about.aboutUs = this.state.aboutUs;
+    if (this.state.establishedYear !== establishedYear)
+      about.establishedYear = this.state.establishedYear;
+
+    this.props.onBusinessUpdate({ body: { about } });
+  };
 
   render() {
     return (
@@ -46,18 +57,7 @@ class AboutUsEdit extends Component {
           loading={this.props.loading}
           data-size={S}
           data-style={EXPAND_RIGHT}
-          onClick={() =>
-            this.props.onBusinessUpdate({
-              body: {
-                about: {
-                  tagline: this.state.tagline,
-                  aboutUs: this.state.aboutUs,
-                  establishedYear: this.state.establishedYear
-                  // companyType: this.state.companyType
-                }
-              }
-            })
-          }
+          onClick={this.onSaveChanges}
         >
           Save
         </LaddaButton>

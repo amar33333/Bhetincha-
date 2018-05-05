@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { Container } from "reactstrap";
-import "react-toastify/dist/ReactToastify.css";
 
 import {
   Header,

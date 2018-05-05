@@ -1,4 +1,5 @@
 import { Observable } from "rxjs/Observable";
+import { toast } from "react-toastify";
 import {
   onBusinessEachGet,
   onBusinessEachPut,
@@ -46,6 +47,7 @@ epics.push((action$, { getState }) =>
     const globalState = getState();
     let TYPE;
     const extraDispatch = [];
+    const successToasts = [];
     switch (updates[0]) {
       case "cover_photo":
       case "logo":
@@ -54,6 +56,11 @@ epics.push((action$, { getState }) =>
           fulfilled: UPDATE_LOGO_COVER_PHOTO_FULFILLED,
           rejected: UPDATE_LOGO_COVER_PHOTO_REJECTED
         };
+        successToasts.push(
+          `${
+            updates[0] === "cover_photo" ? "Cover Photo" : "Logo"
+          } uploaded successfully`
+        );
         break;
       case "about":
         TYPE = {
@@ -62,6 +69,7 @@ epics.push((action$, { getState }) =>
           rejected: UPDATE_ABOUT_REJECTED
         };
         extraDispatch.push({ type: TOGGLE_EDIT_ABOUT_US });
+        successToasts.push("About info updated Successfully!");
         break;
 
       case "albums":
@@ -70,6 +78,7 @@ epics.push((action$, { getState }) =>
           fulfilled: CREATE_NEW_ALBUM_FULFILLED,
           rejected: CREATE_NEW_ALBUM_REJECTED
         };
+        successToasts.push("New Album Created");
         break;
 
       default:
@@ -81,22 +90,31 @@ epics.push((action$, { getState }) =>
       access_token: globalState.auth.cookies.token_data.access_token,
       id: globalState.MinisiteContainer.crud.id
     })
-      .map(
-        ({ response }) =>
-          response.msg === "success"
-            ? {
-                type: FETCH_PART_BUSINESS,
-                updates,
-                onSuccess: payload => [
-                  { type: TYPE.fulfilled, payload },
-                  ...extraDispatch
-                ],
-                FAILED: TYPE.rejected,
-                slug: globalState.auth.cookies.user_data.slug
-              }
-            : { type: TYPE.rejected }
-      )
-      .catch(ajaxError => Observable.of({ type: TYPE.rejected }))
+      .map(({ response }) => {
+        if (response.msg === "success") {
+          return {
+            type: FETCH_PART_BUSINESS,
+            updates,
+            onSuccess: payload => [
+              { type: TYPE.fulfilled, payload },
+              ...extraDispatch
+            ],
+            successToasts,
+            FAILED: TYPE.rejected,
+            slug: globalState.auth.cookies.user_data.slug
+          };
+        } else {
+          throw new Error(
+            `${Object.keys(response.msg)[0]}: ${
+              response.msg[Object.keys(response.msg)[0]][0]
+            }`
+          );
+        }
+      })
+      .catch(ajaxError => {
+        toast.error(ajaxError.toString());
+        return Observable.of({ type: TYPE.rejected });
+      })
       .startWith({ type: TYPE.pending });
   })
 );
@@ -122,6 +140,7 @@ epics.push((action$, { getState }) =>
               onSuccess: payload => [
                 { type: UPLOAD_GALLERY_PHOTO_FULFILLED, payload }
               ],
+              successToasts: ["Photo Uploaded Successfully"],
               FAILED: UPLOAD_GALLERY_PHOTO_REJECTED,
               slug: getState().auth.cookies.user_data.slug
             }
@@ -132,13 +151,15 @@ epics.push((action$, { getState }) =>
 
 epics.push(action$ =>
   action$.ofType(FETCH_PART_BUSINESS).mergeMap(action => {
-    const { slug, updates, onSuccess, FAILED } = action;
+    const { slug, updates, onSuccess, successToasts, FAILED } = action;
     return onBusinessEachGetAjax({ slug })
       .concatMap(({ response }) => {
         const payload = {};
         updates.forEach(key => {
           if (response[key]) payload[key] = response[key];
         });
+        successToasts &&
+          successToasts.forEach(message => toast.success(message));
         return onSuccess(payload);
       })
       .catch(ajaxError => Observable.of({ type: FAILED }));
