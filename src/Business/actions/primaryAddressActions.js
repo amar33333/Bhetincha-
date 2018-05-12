@@ -15,6 +15,10 @@ import {
   onCityEachGet
 } from "../../Admin/config/adminServerCall";
 import {
+  FETCH_ADDRESS_TREE_FULFILLED,
+  FETCH_ADDRESS_TREE_REJECTED,
+  FETCH_ADDRESS_TREE_PENDING,
+
   // AREA
   FETCH_AREA_FULFILLED,
   FETCH_AREA_REJECTED,
@@ -158,6 +162,61 @@ export const onAreaList = ({ access_token }) => dispatch => {
     .catch(error => dispatch({ type: FETCH_AREA_REJECTED, payload: error }));
 
   dispatch({ type: FETCH_AREA_PENDING });
+};
+
+export const onAddressTreeList = ({
+  id,
+  access_token,
+  ADDRESS_KEY
+}) => dispatch => {
+  console.log("address key: ", ADDRESS_KEY);
+  if (ADDRESS_KEY === "country") {
+    console.log("addreskey: ", ADDRESS_KEY);
+    onCountryEachGet({ id, access_token })
+      .then(response =>
+        dispatch({
+          type: FETCH_ADDRESS_TREE_FULFILLED,
+          payload: response.data
+        })
+      )
+      .catch(error =>
+        dispatch({ type: FETCH_ADDRESS_TREE_REJECTED, payload: error })
+      );
+  } else if (ADDRESS_KEY === "state")
+    onStateEachGet({ id, access_token })
+      .then(response =>
+        dispatch({
+          type: FETCH_ADDRESS_TREE_FULFILLED,
+          payload: response.data
+        })
+      )
+      .catch(error =>
+        dispatch({ type: FETCH_ADDRESS_TREE_REJECTED, payload: error })
+      );
+  else if (ADDRESS_KEY === "district")
+    onDistrictEachGet({ id, access_token })
+      .then(response =>
+        dispatch({
+          type: FETCH_ADDRESS_TREE_FULFILLED,
+          payload: response.data
+        })
+      )
+      .catch(error =>
+        dispatch({ type: FETCH_ADDRESS_TREE_REJECTED, payload: error })
+      );
+  else if (ADDRESS_KEY === "city")
+    onCityEachGet({ id, access_token })
+      .then(response =>
+        dispatch({
+          type: FETCH_ADDRESS_TREE_FULFILLED,
+          payload: response.data
+        })
+      )
+      .catch(error =>
+        dispatch({ type: FETCH_ADDRESS_TREE_REJECTED, payload: error })
+      );
+
+  dispatch({ type: FETCH_ADDRESS_TREE_PENDING });
 };
 
 export const onUnmountDistrict = () => {

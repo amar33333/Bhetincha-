@@ -12,6 +12,8 @@ import {
   Collapse
 } from "reactstrap";
 
+import { MAIN_URL } from "../../../Common/utils/API";
+
 class SubBusinessCoverImage extends Component {
   constructor(props) {
     super(props);
@@ -48,7 +50,7 @@ class SubBusinessCoverImage extends Component {
         alt=""
         width="840"
         height="360"
-        src={`http://159.65.150.212:8025${this.props.imagePath}`}
+        src={`${MAIN_URL}${this.props.imagePath}`}
       />
     ) : null;
 
