@@ -1,4 +1,6 @@
 import { Observable } from "rxjs/Observable";
+import { toast } from "react-toastify";
+
 import {
   FETCH_USER_FULFILLED,
   FETCH_USER_REJECTED,
@@ -92,10 +94,14 @@ epics.push(action$ =>
   action$
     .ofType(CREATE_USER_PENDING)
     .mergeMap(action => onRegister({ ...action.payload }))
-    .concatMap(({ response }) => [
-      { type: TOGGLE_REGISTER_MODAL },
-      { type: CREATE_USER_FULFILLED, payload: response }
-    ])
+    .concatMap(({ response }) => {
+      toast.success("Registered Successfully");
+
+      return [
+        { type: TOGGLE_REGISTER_MODAL },
+        { type: CREATE_USER_FULFILLED, payload: response }
+      ];
+    })
     .catch(ajaxError =>
       Observable.of({ type: CREATE_USER_REJECTED, payload: ajaxError })
     )

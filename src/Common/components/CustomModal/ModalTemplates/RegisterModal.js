@@ -12,6 +12,8 @@ import {
   Label
 } from "reactstrap";
 
+import { toast } from "react-toastify";
+
 import { connect } from "react-redux";
 
 import { onRegisterSubmit } from "../../../../actions";
@@ -22,7 +24,8 @@ class RegisterModal extends Component {
     password: "",
     confirm_password: "",
     email: "",
-    business_name: ""
+    business_name: "",
+    checked: false
   };
 
   onChange = (key, event) => {
@@ -37,13 +40,21 @@ class RegisterModal extends Component {
       password,
       confirm_password,
       email,
-      business_name
+      business_name,
+      checked
     } = this.state;
 
     if (password === confirm_password) {
-      this.props.onRegisterSubmit({ username, password, email, business_name });
+      if (checked) {
+        this.props.onRegisterSubmit({
+          username,
+          password,
+          email,
+          business_name
+        });
+      } else toast.error("You have to agree to our User Agreement Policy");
     } else {
-      console.log("password mismatch");
+      toast.error("Password Mismatch");
     }
   };
 
@@ -123,7 +134,16 @@ class RegisterModal extends Component {
           <Col sm={{ size: 10 }}>
             <FormGroup check>
               <Label check>
-                <Input type="checkbox" id="checkbox2" /> I agree to{" "}
+                <Input
+                  type="checkbox"
+                  id="checkbox2"
+                  onChange={event =>
+                    this.setState({ checked: event.target.checked }, () =>
+                      console.log("state: ", this.state)
+                    )
+                  }
+                />{" "}
+                I agree to{" "}
                 <a
                   href="http://techkunja.com.np"
                   rel="noopener noreferrer"

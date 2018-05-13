@@ -4,22 +4,26 @@ import {
   FETCH_INDUSTRY_REJECTED,
   FETCH_INDUSTRY_EACH_FULFILLED,
   FETCH_INDUSTRY_EACH_REJECTED,
-  FETCH_INDUSTRY_EACH_PENDING
+  FETCH_INDUSTRY_EACH_PENDING,
+  UNMOUNT_INDUSTRY_DATA
 } from "../actions/types";
 
 const INITIAL_STATE = {
   loading: false,
-  statusClass: ""
+  error: "",
+  fetchLoading: false,
+  fetchLoadingData: false,
+  fetchError: "",
+  industries: [],
+  industryData: null
 };
 
 export default function(state = INITIAL_STATE, action) {
-  console.log("asd: ", action);
   switch (action.type) {
     case FETCH_INDUSTRY_PENDING:
       return { ...state, loading: true, statusClass: "pending" };
 
     case FETCH_INDUSTRY_FULFILLED:
-      console.log("inside: ", action);
       return {
         ...state,
         industries: action.payload,
@@ -31,19 +35,20 @@ export default function(state = INITIAL_STATE, action) {
       return { ...state, loading: false, statusClass: "rejected" };
 
     case FETCH_INDUSTRY_EACH_PENDING:
-      return { ...state, loading: true, statusClass: "pending" };
+      return { ...state, fetchLoadingData: true };
 
     case FETCH_INDUSTRY_EACH_FULFILLED:
-      console.log("inside: ", action);
       return {
         ...state,
         industryData: action.payload,
-        loading: false,
-        statusClass: "fulfilled"
+        fetchLoadingData: false
       };
 
     case FETCH_INDUSTRY_EACH_REJECTED:
-      return { ...state, loading: false, statusClass: "rejected" };
+      return { ...state, fetchLoadingData: false };
+
+    case UNMOUNT_INDUSTRY_DATA:
+      return { ...state, industryData: [] };
 
     default:
       return state;

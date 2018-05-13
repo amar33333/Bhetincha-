@@ -9,7 +9,9 @@ import {
   FETCH_INDUSTRY_PENDING,
   FETCH_INDUSTRY_EACH_FULFILLED,
   FETCH_INDUSTRY_EACH_REJECTED,
-  FETCH_INDUSTRY_EACH_PENDING
+  FETCH_INDUSTRY_EACH_PENDING,
+  UNMOUNT_INDUSTRY_DATA,
+  UNMOUNT_INDUSTRY
 } from "./types";
 
 export const onIndustryList = ({ access_token }) => dispatch => {
@@ -35,3 +37,13 @@ export const onIndustryEachList = ({ id, access_token }) => dispatch => {
 
   dispatch({ type: FETCH_INDUSTRY_EACH_PENDING });
 };
+
+export const onUnmountIndustry = () => ({
+  type: UNMOUNT_INDUSTRY,
+  payload: null
+});
+
+export const onUnmountIndustryData = () => ({
+  type: UNMOUNT_INDUSTRY_DATA,
+  payload: null
+});

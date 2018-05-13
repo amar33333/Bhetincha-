@@ -2,7 +2,8 @@ import {
   BUSINESS_URL,
   PAYMENT_METHOD_URL,
   COMPANY_TYPE_URL,
-  ALBUM_URL
+  ALBUM_URL,
+  BUSINESS_PUT_URL
 } from "./BUSINESS_API";
 import axios from "axios";
 import { ajax } from "rxjs/observable/dom/ajax";
@@ -90,7 +91,7 @@ export const onBusinessPut = ({ id, access_token, data }) => {
 
   return axios({
     method: "PUT",
-    url: `http://202.51.75.111:8025/business/business-put/${id}/`,
+    url: `${BUSINESS_PUT_URL}/${id}/`,
     data: server_format_data,
     headers: {
       "Content-Type": "application/json",

@@ -5,6 +5,8 @@ import FileBase64 from "react-file-base64";
 import { Card, CardHeader, CardBody, Button, Collapse } from "reactstrap";
 import { FETCH_DISTRICT_PENDING } from "../../actions/types";
 
+import { MAIN_URL } from "../../../Common/utils/API";
+
 class SubBusinessLogo extends Component {
   constructor(props) {
     super(props);
@@ -40,7 +42,7 @@ class SubBusinessLogo extends Component {
         alt=""
         width="100"
         height="100"
-        src={`http://159.65.150.212:8025${this.props.imagePath}`}
+        src={`${MAIN_URL}${this.props.imagePath}`}
       />
     ) : null;
 

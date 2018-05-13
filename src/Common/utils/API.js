@@ -1,4 +1,4 @@
-const HOST = "http://159.65.150.212";
+const HOST = "http://202.51.75.111";
 const MONGO_PORT = "8025";
 const ELASTIC_PORT = "9200";
 export const MAIN_URL = `${HOST}:${MONGO_PORT}`;
@@ -16,9 +16,9 @@ const ACCOUNTS = "accounts";
 const USER = "user/";
 
 const O_TOKEN = "o/token/";
-export const CLIENT_ID = "K1F1m2XfcVmC42Zja4oBRVOMWhGb6LoQu1bFOmNZ";
+export const CLIENT_ID = "XCk93ofBdiAXePna8YC0Rso7VrUWOBhrDKmfmEDR";
 export const CLIENT_SECRET =
-  "TzNiRMbsLBkb2g3S90s4whAGRuJysu1g5eZuCtLNvda5b54Tu1pYp0FjyrYlnAD9GwmWS3rQvbYL4nnLjYSqVoxzA46pbXlpyzJSpQYZ1B2acQOYwksjBfMXXubRFsis";
+  "7XzvzqxLBgIypsJymI9EcSYMYM0jXgbRXUUt3ibi8I9uT0Gh2s7JqKTz6k0mVdNLmWe8NLO2TnJtQLQR2xIteZKlkAUDvmDtBqnnIrd5WRXFCe7eObtyQRxK2GhIGGVh";
 export const GET_USER_INFO_URL = `${MAIN_URL}/${GET_USER_INFO}`;
 export const BUSINESS_INFO_URL = `${MAIN_URL}/${BUSINESS_INFO}`;
 export const BUSINESS_LIST_URL = `${MAIN_URL}/${BUSINESS_LIST}`;

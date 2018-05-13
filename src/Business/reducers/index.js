@@ -7,8 +7,8 @@ import PrimaryAddress from "./primaryAddressReducer";
 
 const createReducer = combineReducers({
   business_reducer: BusinessReducer,
-  industry_reducer: Industry,
-  category_reducer: Category,
+  industries: Industry,
+  categories: Category,
   primary_address: PrimaryAddress
 });
 

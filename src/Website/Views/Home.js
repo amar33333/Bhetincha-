@@ -35,6 +35,7 @@ class Home extends Component {
         </Button>
 
         <CustomModal
+          title="Login To Bhetincha"
           isOpen={this.props.loginModal}
           toggle={this.props.toggleLoginModal}
           className={"modal-xs" + this.props.className}
@@ -43,6 +44,7 @@ class Home extends Component {
         </CustomModal>
 
         <CustomModal
+          title="Register In Bhetincha"
           isOpen={this.props.registerModal}
           toggle={this.props.toggleRegisterModal}
           className={"register_modal " + this.props.className}
