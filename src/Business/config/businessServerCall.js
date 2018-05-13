@@ -90,7 +90,7 @@ export const onBusinessPut = ({ id, access_token, data }) => {
 
   return axios({
     method: "PUT",
-    url: `http://159.65.150.212:8025/business/business-put/${id}/`,
+    url: `http://202.51.75.111:8025/business/business-put/${id}/`,
     data: server_format_data,
     headers: {
       "Content-Type": "application/json",
