@@ -4,7 +4,11 @@ import FileInputComponent from "react-file-input-previews-base64";
 import { connect } from "react-redux";
 import { Container, Card, CardBody, CardHeader, Input } from "reactstrap";
 
-import { handleGalleryPhotoUpload, onBusinessUpdate } from "../../actions";
+import {
+  handleGalleryPhotoUpload,
+  onBusinessUpdate,
+  handleGalleryPhotoDelete
+} from "../../actions";
 
 import { MAIN_URL } from "../../config/MINISITE_API";
 import FontAwesome from "react-fontawesome";
@@ -47,12 +51,21 @@ class Gallery extends Component {
     });
 
   renderDeleteButton = album => {
-    const selectedLength = album.photos.filter(photo => photo.isSelected)
-      .length;
-    if (selectedLength > 0) {
+    const selectedPhotos = album.photos
+      .filter(photo => photo.isSelected)
+      .map(photo => photo.photoID);
+
+    if (selectedPhotos.length > 0) {
       return (
-        <button onClick={() => console.log("delete pressed")}>
-          {`Delete ${selectedLength} Items`}
+        <button
+          onClick={() =>
+            this.props.handleGalleryPhotoDelete({
+              body: { photos: selectedPhotos },
+              album_id: album.albumID
+            })
+          }
+        >
+          {`Delete ${selectedPhotos.length} Items`}
         </button>
       );
     }
@@ -168,7 +181,7 @@ class Gallery extends Component {
                     <GalleryGrid
                       images={album.photos}
                       backdropClosesModal={true}
-                      enableImageSelection={true}
+                      enableImageSelection={this.props.mainEdit}
                       onSelectImage={this.onSelectImage.bind(
                         this,
                         album.albumID
@@ -193,5 +206,5 @@ export default connect(
     galleryLoading: edit.galleryLoading,
     albums
   }),
-  { handleGalleryPhotoUpload, onBusinessUpdate }
+  { handleGalleryPhotoUpload, onBusinessUpdate, handleGalleryPhotoDelete }
 )(Gallery);
