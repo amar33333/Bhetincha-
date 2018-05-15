@@ -2,6 +2,10 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import LaddaButton, { S, EXPAND_RIGHT } from "react-ladda";
 import AboutUsEditor from "./AboutUsEditor";
+import Datetime from "react-datetime";
+import "react-datetime/css/react-datetime.css";
+
+import moment from "moment";
 
 import { onBusinessUpdate } from "../../actions";
 
@@ -18,6 +22,13 @@ class AboutUsEdit extends Component {
 
   onChange = (key, event) => this.setState({ [key]: event.target.value });
 
+  onChangeEstablishedYear = year => {
+    console.log("Year: ", year);
+    console.log("Year after moment: ", moment.utc(year).format("YYYY"));
+    this.setState({
+      establishedYear: moment.utc(year).format("YYYY")
+    });
+  };
   onSaveChanges = () => {
     const { tagline, aboutUs, establishedYear } = this.props.initialValue;
     const about = {};
@@ -30,6 +41,11 @@ class AboutUsEdit extends Component {
   };
 
   render() {
+    let yesterday = Datetime.moment().subtract(1, "day");
+
+    let validEstablishedYear = function(current) {
+      return current.isBefore(yesterday);
+    };
     return (
       <div>
         <div>
@@ -42,6 +58,16 @@ class AboutUsEdit extends Component {
         </div>
         <div>
           Established Year{" "}
+          <Datetime
+            timeFormat={false}
+            isValidDate={validEstablishedYear}
+            dateFormat="YYYY"
+            value={this.state.establishedYear}
+            defaultValue={moment.utc().format("YYYY")}
+            onChange={this.onChangeEstablishedYear}
+            viewMode={"years"}
+            utc={true}
+          />
           <input
             disabled={this.props.loading}
             onChange={this.onChange.bind(this, "establishedYear")}
