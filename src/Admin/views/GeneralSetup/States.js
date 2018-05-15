@@ -33,15 +33,17 @@ import {
 } from "../../actions";
 
 class States extends Component {
-  state = { state: "", country: "" };
-  access_token = this.props.cookies
-    ? this.props.cookies.token_data.access_token
-    : null;
+  static getDerivedStateFromProps = (nextProps, prevState) =>
+    prevState.stateSubmit && !nextProps.error && !nextProps.loading
+      ? { state: "", stateSubmit: false }
+      : null;
+
+  state = { state: "", country: "", stateSubmit: false };
 
   tableProps = {
     columns: [
       {
-        Header: "S. No.",
+        Header: "SN",
         accessor: "s_no",
         filterable: false,
         searchable: false,
@@ -109,40 +111,36 @@ class States extends Component {
     PaginationComponent
   };
 
-  componentWillMount() {
-    this.props.onCountryList({ access_token: this.access_token });
-    this.props.onStateList({ access_token: this.access_token });
+  componentDidMount() {
+    this.props.onCountryList();
+    this.props.onStateList();
   }
+
+  componentDidUpdate = (prevProps, prevState) => {
+    if (prevState.stateSubmit && prevProps.loading) this.focusableInput.focus();
+  };
 
   onFormSubmit = event => {
     event.preventDefault();
 
     const { state, country } = this.state;
 
-    this.props.onStateSubmit({
-      state,
-      country: country.id,
-      access_token: this.access_token
-    });
-    this.setState({ state: "", country: "" });
+    this.setState({ stateSubmit: true }, () =>
+      this.props.onStateSubmit({
+        state,
+        country: country.id
+      })
+    );
   };
 
-  onChange = (key, event) => {
+  onChange = (key, event) =>
     this.setState({
       [key]: event.target.value.replace(/\b\w/g, l => l.toUpperCase())
     });
-  };
 
-  handleSelectChange = country => {
-    this.setState({ country });
-  };
+  handleSelectChange = country => this.setState({ country });
 
   render() {
-    const countries = this.props.general_setup.countries;
-
-    const { country } = this.state;
-    const value = country && country.id;
-
     return (
       <div className="animated fadeIn">
         <Row className="hr-centered">
@@ -162,11 +160,12 @@ class States extends Component {
                           autosize
                           clearable
                           required
+                          disabled={this.props.loading}
                           name="Industies"
                           className="select-industry mb-2"
-                          value={value}
+                          value={this.state.country}
                           onChange={this.handleSelectChange}
-                          options={countries}
+                          options={this.props.countries}
                           valueKey="id"
                           labelKey="name"
                         />
@@ -182,8 +181,9 @@ class States extends Component {
                           </InputGroupText>
                         </InputGroupAddon>
                         <Input
-                          autoFocus
                           required
+                          disabled={this.props.loading}
+                          innerRef={ref => (this.focusableInput = ref)}
                           type="text"
                           placeholder="Type State Name"
                           value={this.state.state}
@@ -205,7 +205,7 @@ class States extends Component {
         <ReactTable
           {...this.tableProps}
           data={this.props.states}
-          // loading={this.props.categories.fetchLoading}
+          loading={this.props.fetchLoading}
           defaultFilterMethod={filterCaseInsensitive}
         />
       </div>
@@ -214,11 +214,12 @@ class States extends Component {
 }
 
 export default connect(
-  ({ AdminContainer: { general_setup }, auth }) => ({
-    general_setup,
+  ({ AdminContainer: { general_setup } }) => ({
     countries: general_setup.countries,
     states: general_setup.states,
-    ...auth
+    fetchLoading: general_setup.statesFetchLoading,
+    loading: general_setup.stateLoading,
+    error: general_setup.stateError
   }),
   {
     onStateSubmit,

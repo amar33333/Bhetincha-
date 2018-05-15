@@ -321,6 +321,20 @@ export const onStatePost = ({ state, country, access_token }) =>
     }
   });
 
+export const onStatePostAjax = ({ state, country, access_token }) =>
+  ajax({
+    method: "POST",
+    url: STATE_URL,
+    body: {
+      name: state,
+      country
+    },
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
 export const onStateGet = ({ access_token }) =>
   axios({
     method: "get",

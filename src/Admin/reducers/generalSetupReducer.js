@@ -5,6 +5,12 @@ import {
   CREATE_COUNTRY_FULFILLED,
   CREATE_COUNTRY_PENDING,
   CREATE_COUNTRY_REJECTED,
+  FETCH_STATE_FULFILLED,
+  FETCH_STATE_PENDING,
+  FETCH_STATE_REJECTED,
+  CREATE_STATE_FULFILLED,
+  CREATE_STATE_PENDING,
+  CREATE_STATE_REJECTED,
   FETCH_AREA_FULFILLED,
   FETCH_AREA_PENDING,
   FETCH_AREA_REJECTED,
@@ -14,9 +20,6 @@ import {
   FETCH_DISTRICT_FULFILLED,
   FETCH_DISTRICT_PENDING,
   FETCH_DISTRICT_REJECTED,
-  FETCH_STATE_FULFILLED,
-  FETCH_STATE_PENDING,
-  FETCH_STATE_REJECTED,
   FETCH_COUNTRY_EACH_FULFILLED,
   FETCH_COUNTRY_EACH_REJECTED,
   FETCH_COUNTRY_EACH_PENDING,
@@ -40,8 +43,11 @@ import {
 const INITIAL_STATE = {
   loading: false,
   countryLoading: false,
-  countriesFetchLoading: false,
   countryError: false,
+  countriesFetchLoading: false,
+  stateLoading: false,
+  stateError: false,
+  statesFetchLoading: false,
   statusClass: "",
   countries: [],
   states: [],
@@ -78,20 +84,32 @@ export default function(state = INITIAL_STATE, action) {
     /*
       States
     */
+    case CREATE_STATE_PENDING:
+      return { ...state, stateLoading: true, stateError: false };
+    case CREATE_STATE_FULFILLED:
+      return { ...state, stateLoading: false, stateError: false };
+    case CREATE_STATE_REJECTED:
+      return { ...state, stateLoading: false, stateError: true };
+
     case FETCH_STATE_PENDING:
-      return { ...state, loading: true };
+      return { ...state, statesFetchLoading: true };
 
     case FETCH_STATE_FULFILLED:
       return {
         ...state,
-        states: action.payload,
-        loading: false,
-        statusClass: "fulfilled"
+        states: action.payload.map((state, i) => ({
+          ...state,
+          s_no: i + 1
+        })),
+        statesFetchLoading: false
       };
 
     case FETCH_STATE_REJECTED:
-      return { ...state, loading: false };
+      return { ...state, statesFetchLoading: false };
 
+    /*
+      District
+    */
     case FETCH_DISTRICT_PENDING:
       return { ...state, loading: true };
 
