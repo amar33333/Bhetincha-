@@ -44,7 +44,7 @@ class SubBusinessContact extends Component {
       : null;
 
   onChange = (key, event) => {
-    if (key === "name" || "department" || "designation") {
+    if (key === "name" || key === "department" || key === "designation") {
       this.setState({
         [key]: event.target.value.replace(/\b\w/g, l => l.toUpperCase())
       });
