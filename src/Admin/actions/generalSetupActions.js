@@ -3,6 +3,7 @@ import { Observable } from "rxjs/Observable";
 import {
   onAreaPost,
   onDistrictPost,
+  onDistrictPostAjax,
   onCityPost,
   onCountryPost,
   onCountryPostAjax,
@@ -251,31 +252,37 @@ epics.push((action$, { getState }) =>
   )
 );
 
-export const onDistrictSubmit = ({
-  state,
-  district,
-  districtCode,
-  access_token
-}) => dispatch => {
-  onDistrictPost({ state, district, districtCode, access_token })
-    .then(response => {
-      if (response.data.msg === "success") {
-        toast.success("New District Added Successfully!");
-      } else {
-        response.data.msg.name.map(msg => {
-          toast.error(msg);
-        });
-      }
-      dispatch({ type: CREATE_DISTRICT_FULFILLED, payload: response.data });
-      dispatch({ type: FETCH_DISTRICT_PENDING });
-    })
-    .catch(error => {
-      toast.error("New District not added!");
-      dispatch({ type: CREATE_DISTRICT_REJECTED, payload: error });
-    });
+export const onDistrictSubmit = payload => ({
+  type: CREATE_DISTRICT_PENDING,
+  payload
+});
 
-  dispatch({ type: CREATE_DISTRICT_PENDING });
-};
+epics.push((action$, { getState }) =>
+  action$.ofType(CREATE_DISTRICT_PENDING).mergeMap(({ payload }) => {
+    const { state, district, districtCode } = payload;
+    const access_token = getState().auth.cookies.token_data.access_token;
+
+    return onDistrictPostAjax({ state, district, districtCode, access_token })
+      .concatMap(({ response }) => {
+        if (response.msg === "success") {
+          toast.success("District added successfully!");
+          return [
+            { type: CREATE_DISTRICT_FULFILLED },
+            { type: FETCH_DISTRICT_PENDING }
+          ];
+        } else {
+          throw new Error(response.msg[Object.keys(response.msg)[0]][0]);
+        }
+      })
+      .catch(ajaxError => {
+        toast.error(ajaxError.toString());
+        return Observable.of({
+          type: CREATE_DISTRICT_REJECTED,
+          payload: ajaxError
+        });
+      });
+  })
+);
 
 export const onDistrictList = () => ({ type: FETCH_DISTRICT_PENDING });
 
@@ -546,7 +553,7 @@ export const onCountryEachList = payload => ({
 
 epics.push((action$, { getState }) =>
   action$.ofType(FETCH_COUNTRY_EACH_PENDING).mergeMap(({ payload }) =>
-    onCountryEachGet({
+    onCountryEachGetAjax({
       id: payload.id,
       access_token: getState().auth.cookies.token_data.access_token
     })

@@ -36,6 +36,11 @@ import {
 } from "../../actions";
 
 class Districts extends Component {
+  static getDerivedStateFromProps = (nextProps, prevState) =>
+    prevState.districtSubmit && !nextProps.error && !nextProps.loading
+      ? { district: "", districtCode: "", districtSubmit: false }
+      : null;
+
   state = {
     country: "",
     state: "",
@@ -50,10 +55,15 @@ class Districts extends Component {
     this.props.onStateList();
   }
 
+  componentDidUpdate = (prevProps, prevState) => {
+    if (prevState.districtSubmit && prevProps.loading)
+      this.focusableInput.focus();
+  };
+
   tableProps = {
     columns: [
       {
-        Header: "S. No.",
+        Header: "SN",
         accessor: "s_no",
         filterable: false,
         searchable: false,
@@ -163,37 +173,29 @@ class Districts extends Component {
 
     const { district, districtCode, state } = this.state;
 
-    this.props.onDistrictSubmit({
-      district,
-      districtCode,
-      state: state.id,
-      access_token: this.access_token
-    });
-    this.setState({ district: "", districtCode: "" });
+    this.setState({ districtSubmit: true }, () =>
+      this.props.onDistrictSubmit({
+        district,
+        districtCode,
+        state: state.id
+      })
+    );
   };
 
-  onChange = (key, event) => {
+  onChange = (key, event) =>
     this.setState({
       [key]: event.target.value.replace(/\b\w/g, l => l.toUpperCase())
     });
-  };
 
   handleSelectChange = (key, value) => {
     this.setState({ [key]: value });
     if (key === "country") {
-      this.setState({
-        state: ""
-      });
-      this.props.onCountryEachList({
-        id: value.id
-      });
+      this.setState({ state: "" });
+      value && this.props.onCountryEachList({ id: value.id });
     }
   };
 
   render() {
-    const countries = this.props.general_setup.countries;
-    const states = this.props.general_setup.countryData;
-
     return (
       <div className="animated fadeIn">
         <Row className="hr-centered">
@@ -207,20 +209,21 @@ class Districts extends Component {
                   <Row>
                     <Col xs="12" md="6">
                       <FormGroup>
-                        <Label for="Industies">Country</Label>
+                        <Label for="country">Country</Label>
                         <Select
                           autoFocus
                           autosize
                           clearable
+                          disabled={this.props.loading}
                           required
                           name="country"
                           className="select-industry"
-                          value={this.state.country.id}
+                          value={this.state.country}
                           onChange={this.handleSelectChange.bind(
                             this,
                             "country"
                           )}
-                          options={countries}
+                          options={this.props.countries}
                           valueKey="id"
                           labelKey="name"
                         />
@@ -228,17 +231,17 @@ class Districts extends Component {
                     </Col>
                     <Col xs="12" md="6">
                       <FormGroup>
-                        <Label for="Industies">State</Label>
+                        <Label for="State">State</Label>
                         <Select
-                          autoFocus
                           autosize
                           clearable
+                          disabled={this.props.loading}
                           required
                           name="State"
                           className="select-industry"
-                          value={this.state.state.id}
+                          value={this.state.state}
                           onChange={this.handleSelectChange.bind(this, "state")}
-                          options={states}
+                          options={this.props.states}
                           valueKey="id"
                           labelKey="name"
                         />
@@ -254,9 +257,10 @@ class Districts extends Component {
                           </InputGroupText>
                         </InputGroupAddon>
                         <Input
-                          autoFocus
                           required
+                          disabled={this.props.loading}
                           type="text"
+                          innerRef={ref => (this.focusableInput = ref)}
                           placeholder="Type District Name"
                           value={this.state.district}
                           onChange={this.onChange.bind(this, "district")}
@@ -271,9 +275,9 @@ class Districts extends Component {
                           </InputGroupText>
                         </InputGroupAddon>
                         <Input
-                          autoFocus
                           required
                           type="text"
+                          disabled={this.props.loading}
                           placeholder="Type District Code"
                           value={this.state.districtCode}
                           onChange={this.onChange.bind(this, "districtCode")}
@@ -295,7 +299,7 @@ class Districts extends Component {
         <ReactTable
           {...this.tableProps}
           data={this.props.districts}
-          // loading={this.props.categories.fetchLoading}
+          loading={this.props.fetchLoading}
           defaultFilterMethod={filterCaseInsensitive}
         />
       </div>
@@ -304,12 +308,13 @@ class Districts extends Component {
 }
 
 export default connect(
-  ({ AdminContainer: { general_setup }, auth }) => ({
-    general_setup,
-    districts: general_setup.districts,
-    states: general_setup.states,
+  ({ AdminContainer: { general_setup } }) => ({
     countries: general_setup.countries,
-    ...auth
+    states: general_setup.states,
+    districts: general_setup.districts,
+    fetchLoading: general_setup.districtsFetchLoading,
+    loading: general_setup.districtLoading,
+    error: general_setup.districtError
   }),
   {
     onStateList,

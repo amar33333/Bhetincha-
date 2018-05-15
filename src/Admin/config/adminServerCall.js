@@ -415,6 +415,26 @@ export const onDistrictPost = ({
     }
   });
 
+export const onDistrictPostAjax = ({
+  state,
+  district,
+  districtCode,
+  access_token
+}) =>
+  ajax({
+    method: "post",
+    url: DISTRICT_URL,
+    body: {
+      name: district,
+      state,
+      districtCode
+    },
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
 export const onDistrictGet = ({ access_token }) =>
   axios({
     method: "get",

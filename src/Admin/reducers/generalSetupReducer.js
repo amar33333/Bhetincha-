@@ -139,6 +139,9 @@ export default function(state = INITIAL_STATE, action) {
     case FETCH_DISTRICT_REJECTED:
       return { ...state, districtsFetchLoading: false };
 
+    /*
+      City
+    */
     case FETCH_CITY_PENDING:
       return { ...state, loading: true };
 
