@@ -46,10 +46,10 @@ export const onBusinessPost = ({ data, access_token }) => {
 
   console.log("server_droasd: ", server_format_data);
 
-  return axios({
+  return ajax({
     method: "post",
     url: BUSINESS_URL,
-    data: server_format_data,
+    body: server_format_data,
     headers: {
       "Content-Type": "application/json",
       Authorization: "Bearer " + access_token
@@ -221,7 +221,7 @@ export const onBusinessEachAlbumEachPhotosDelete = ({
   });
 
 export const onPaymentMethodsGet = ({ access_token }) =>
-  axios({
+  ajax({
     method: "get",
     url: `${PAYMENT_METHOD_URL}`,
     headers: {
@@ -231,7 +231,7 @@ export const onPaymentMethodsGet = ({ access_token }) =>
   });
 
 export const onCompanyTypeGet = ({ access_token }) =>
-  axios({
+  ajax({
     method: "get",
     url: `${COMPANY_TYPE_URL}`,
     headers: {

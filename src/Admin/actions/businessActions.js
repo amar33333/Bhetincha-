@@ -66,6 +66,7 @@ import {
   EDIT_BUSINESS_FULFILLED,
   EDIT_BUSINESS_PENDING,
   EDIT_BUSINESS_REJECTED,
+  FETCH_ADDRESS_TREE_GET_PENDING,
   TOGGLE_EDIT
 } from "./types";
 
@@ -139,23 +140,52 @@ epics.push((action$, { getState }) =>
   })
 );
 
-export const onBusinessCreate = ({ data, access_token }) => dispatch => {
-  onBusinessPost({ data, access_token })
-    .then(response => {
-      if (response.data.msg === "success") {
-        toast.success("Business Created Successfully!");
-      } else {
-        toast.error("Business Creation Failed !!!");
-      }
-      dispatch({ type: CREATE_BUSINESS_FULFILLED, payload: response.data });
-    })
-    .catch(error => {
-      toast.error("Business Creation Failed !!!");
+export const onBusinessCreate = payload => ({
+  type: CREATE_BUSINESS_PENDING,
+  payload
+});
 
-      dispatch({ type: CREATE_BUSINESS_REJECTED, payload: error });
-    });
-  dispatch({ type: CREATE_BUSINESS_PENDING });
-};
+epics.push((action$, { getState }) =>
+  action$.ofType(CREATE_BUSINESS_PENDING).mergeMap(({ payload }) => {
+    const { data } = payload;
+    const access_token = getState().auth.cookies.token_data.access_token;
+
+    return onBusinessPost({ data, access_token })
+      .map(({ response }) => {
+        if (response.msg === "success") {
+          toast.success("Business Created Successfully!");
+          return { type: CREATE_BUSINESS_FULFILLED };
+        } else {
+          throw new Error(response.msg[Object.keys(response.msg)[0]][0]);
+        }
+      })
+      .catch(ajaxError => {
+        toast.error(ajaxError.toString());
+        return Observable.of({
+          type: CREATE_BUSINESS_REJECTED,
+          payload: ajaxError
+        });
+      });
+  })
+);
+
+// export const onBusinessCreate = ({ data, access_token }) => dispatch => {
+//   onBusinessPost({ data, access_token })
+//     .then(response => {
+//       if (response.data.msg === "success") {
+//         toast.success("Business Created Successfully!");
+//       } else {
+//         toast.error("Business Creation Failed !!!");
+//       }
+//       dispatch({ type: CREATE_BUSINESS_FULFILLED, payload: response.data });
+//     })
+//     .catch(error => {
+//       toast.error("Business Creation Failed !!!");
+
+//       dispatch({ type: CREATE_BUSINESS_REJECTED, payload: error });
+//     });
+//   dispatch({ type: CREATE_BUSINESS_PENDING });
+// };
 
 export const onBusinessEdit = ({
   id,
@@ -221,14 +251,14 @@ export const onBusinessEdit = ({
             const branchdistrictId = each.district ? each.district.id : "";
             const branchcityId = each.city ? each.city.id : "";
 
-            getAddressTree(
+            getAddressTree({
               branchcountryId,
               branchstateId,
               branchdistrictId,
               branchcityId,
               access_token,
               dispatch
-            );
+            });
           });
 
           // dispatch({ type: FETCH_INDUSTRY_EACH_PENDING });
@@ -259,65 +289,151 @@ export const onBusinessEdit = ({
   dispatch({ type: EDIT_BUSINESS_PENDING });
 };
 
-const getAddressTree = (
-  countryId,
-  stateId,
-  districtId,
-  cityId,
-  access_token,
-  dispatch
-) => {
-  if (countryId !== "")
-    onCountryEachGet({ id: countryId, access_token })
-      .then(countryResponse => {
-        dispatch({
+export const getAddressTree = () => ({
+  type: FETCH_ADDRESS_TREE_GET_PENDING
+});
+
+epics.push((action$, { getState }) =>
+  action$.ofType(FETCH_ADDRESS_TREE_GET_PENDING).mergeMap(({ payload }) => {
+    const { countryId, stateId, districtId, cityId } = payload;
+    const access_token = getState().auth.cookies.token_data.access_token;
+
+    return onCountryEachGet({ id: countryId, access_token })
+      .mergeMap(({ response }) => {
+        return {
           type: FETCH_ADDRESS_TREE_FULFILLED,
-          payload: countryResponse.data
-        });
-        if (stateId !== "")
-          onStateEachGet({ id: stateId, access_token })
-            .then(stateResponse => {
-              dispatch({
-                type: FETCH_ADDRESS_TREE_FULFILLED,
-                payload: stateResponse.data
-              });
-              if (districtId !== "")
-                onDistrictEachGet({ id: districtId, access_token })
-                  .then(districtResponse => {
-                    dispatch({
-                      type: FETCH_ADDRESS_TREE_FULFILLED,
-                      payload: districtResponse.data
-                    });
-                    if (cityId !== "")
-                      onCityEachGet({ id: cityId, access_token })
-                        .then(cityResponse =>
-                          dispatch({
-                            type: FETCH_ADDRESS_TREE_FULFILLED,
-                            payload: cityResponse.data
-                          })
-                        )
-                        .catch(cityErr =>
-                          dispatch({
-                            type: FETCH_ADDRESS_TREE_REJECTED,
-                            payload: cityErr
-                          })
-                        );
-                  })
-                  .catch(districtErr =>
-                    dispatch({
-                      type: FETCH_ADDRESS_TREE_REJECTED,
-                      payload: districtErr
-                    })
-                  );
-            })
-            .catch(stateErr =>
-              dispatch({ type: FETCH_ADDRESS_TREE_REJECTED, payload: stateErr })
-            );
+          payload: response
+        };
       })
-      .catch(countryErr =>
-        dispatch({ type: FETCH_ADDRESS_TREE_REJECTED, payload: countryErr })
-      );
-};
+      .mergeMap(() => onStateEachGet({ id: stateId, access_token }))
+      .mergeMap(({ response }) => {
+        return {
+          type: FETCH_ADDRESS_TREE_FULFILLED,
+          payload: response
+        };
+      });
+  })
+);
+
+// const getAddressTree = (
+//   countryId,
+//   stateId,
+//   districtId,
+//   cityId,
+//   access_token,
+//   dispatch
+// ) => {
+//   if (countryId !== "")
+//     onCountryEachGet({ id: countryId, access_token })
+//       .then(countryResponse => {
+//         dispatch({
+//           type: FETCH_ADDRESS_TREE_FULFILLED,
+//           payload: countryResponse.data
+//         });
+//         if (stateId !== "")
+//           onStateEachGet({ id: stateId, access_token })
+//             .then(stateResponse => {
+//               dispatch({
+//                 type: FETCH_ADDRESS_TREE_FULFILLED,
+//                 payload: stateResponse.data
+//               });
+//               if (districtId !== "")
+//                 onDistrictEachGet({ id: districtId, access_token })
+//                   .then(districtResponse => {
+//                     dispatch({
+//                       type: FETCH_ADDRESS_TREE_FULFILLED,
+//                       payload: districtResponse.data
+//                     });
+//                     if (cityId !== "")
+//                       onCityEachGet({ id: cityId, access_token })
+//                         .then(cityResponse =>
+//                           dispatch({
+//                             type: FETCH_ADDRESS_TREE_FULFILLED,
+//                             payload: cityResponse.data
+//                           })
+//                         )
+//                         .catch(cityErr =>
+//                           dispatch({
+//                             type: FETCH_ADDRESS_TREE_REJECTED,
+//                             payload: cityErr
+//                           })
+//                         );
+//                   })
+//                   .catch(districtErr =>
+//                     dispatch({
+//                       type: FETCH_ADDRESS_TREE_REJECTED,
+//                       payload: districtErr
+//                     })
+//                   );
+//             })
+//             .catch(stateErr =>
+//               dispatch({ type: FETCH_ADDRESS_TREE_REJECTED, payload: stateErr })
+//             );
+//       })
+//       .catch(countryErr =>
+//         dispatch({ type: FETCH_ADDRESS_TREE_REJECTED, payload: countryErr })
+//       );
+// };
+
+// const getAddressTree = (
+//   countryId,
+//   stateId,
+//   districtId,
+//   cityId,
+//   access_token,
+//   dispatch
+// ) => {
+//   if (countryId !== "")
+//     onCountryEachGet({ id: countryId, access_token })
+//       .then(countryResponse => {
+//         dispatch({
+//           type: FETCH_ADDRESS_TREE_FULFILLED,
+//           payload: countryResponse.data
+//         });
+//         if (stateId !== "")
+//           onStateEachGet({ id: stateId, access_token })
+//             .then(stateResponse => {
+//               dispatch({
+//                 type: FETCH_ADDRESS_TREE_FULFILLED,
+//                 payload: stateResponse.data
+//               });
+//               if (districtId !== "")
+//                 onDistrictEachGet({ id: districtId, access_token })
+//                   .then(districtResponse => {
+//                     dispatch({
+//                       type: FETCH_ADDRESS_TREE_FULFILLED,
+//                       payload: districtResponse.data
+//                     });
+//                     if (cityId !== "")
+//                       onCityEachGet({ id: cityId, access_token })
+//                         .then(cityResponse =>
+//                           dispatch({
+//                             type: FETCH_ADDRESS_TREE_FULFILLED,
+//                             payload: cityResponse.data
+//                           })
+//                         )
+//                         .catch(cityErr =>
+//                           dispatch({
+//                             type: FETCH_ADDRESS_TREE_REJECTED,
+//                             payload: cityErr
+//                           })
+//                         );
+//                   })
+//                   .catch(districtErr =>
+//                     dispatch({
+//                       type: FETCH_ADDRESS_TREE_REJECTED,
+//                       payload: districtErr
+//                     })
+//                   );
+//             })
+//             .catch(stateErr =>
+//               dispatch({ type: FETCH_ADDRESS_TREE_REJECTED, payload: stateErr })
+//             );
+//       })
+//       .catch(countryErr =>
+//         dispatch({ type: FETCH_ADDRESS_TREE_REJECTED, payload: countryErr })
+//       );
+// };
 
 export const onBusinessEachList = ({ username, access_token }) => dispatch => {
   onBusinessEachGet({ username, access_token })
@@ -393,70 +509,177 @@ export const onBusinessEachList = ({ username, access_token }) => dispatch => {
   dispatch({ type: FETCH_BUSINESS_EACH_PENDING });
 };
 
-export const onCompanyTypeSubmit = ({
-  company_type,
-  access_token
-}) => dispatch => {
-  onCompanyTypePost({
-    company_type,
-    access_token
+export const onCompanyTypeSubmit = payload => ({
+  type: CREATE_COMPANY_TYPE_PENDING,
+  payload
+});
+
+epics.push((action$, { getState }) =>
+  action$.ofType(CREATE_COMPANY_TYPE_PENDING).mergeMap(({ payload }) => {
+    const { company_type } = payload;
+    const access_token = getState().auth.cookies.token_data.access_token;
+
+    return onCompanyTypePost({ company_type, access_token })
+      .map(({ response }) => {
+        if (response.msg === "success") {
+          toast.success("Company Type Created Successfully!");
+          return { type: CREATE_COMPANY_TYPE_FULFILLED };
+        } else {
+          throw new Error(response.msg[Object.keys(response.msg)[0]][0]);
+        }
+      })
+      .catch(ajaxError => {
+        toast.error(ajaxError.toString());
+        return Observable.of({
+          type: CREATE_COMPANY_TYPE_REJECTED,
+          payload: ajaxError
+        });
+      });
   })
-    .then(response =>
-      dispatch({ type: CREATE_COMPANY_TYPE_FULFILLED, payload: response.data })
-    )
-    .catch(error =>
-      dispatch({ type: CREATE_COMPANY_TYPE_REJECTED, payload: error })
-    );
-  dispatch({ type: CREATE_COMPANY_TYPE_PENDING });
-};
+);
 
-export const onPaymentMethodSubmit = ({
-  payment_method,
-  access_token
-}) => dispatch => {
-  onPaymentMethodPost({
-    payment_method,
-    access_token
+// export const onCompanyTypeSubmit = ({
+//   company_type,
+//   access_token
+// }) => dispatch => {
+//   onCompanyTypePost({
+//     company_type,
+//     access_token
+//   })
+//     .then(response =>
+//       dispatch({ type: CREATE_COMPANY_TYPE_FULFILLED, payload: response.data })
+//     )
+//     .catch(error =>
+//       dispatch({ type: CREATE_COMPANY_TYPE_REJECTED, payload: error })
+//     );
+//   dispatch({ type: CREATE_COMPANY_TYPE_PENDING });
+// };
+
+export const onPaymentMethodSubmit = payload => ({
+  type: CREATE_PAYMENT_METHODS_PENDING,
+  payload
+});
+
+epics.push((action$, { getState }) =>
+  action$.ofType(CREATE_PAYMENT_METHODS_PENDING).mergeMap(({ payload }) => {
+    const { payment_method } = payload;
+    const access_token = getState().auth.cookies.token_data.access_token;
+
+    return onPaymentMethodPost({ payment_method, access_token })
+      .map(({ response }) => {
+        if (response.msg === "success") {
+          toast.success("Payment Method Created Successfully!");
+          return { type: CREATE_PAYMENT_METHODS_FULFILLED };
+        } else {
+          throw new Error(response.msg[Object.keys(response.msg)[0]][0]);
+        }
+      })
+      .catch(ajaxError => {
+        toast.error(ajaxError.toString());
+        return Observable.of({
+          type: CREATE_PAYMENT_METHODS_REJECTED,
+          payload: ajaxError
+        });
+      });
   })
-    .then(response =>
-      dispatch({
-        type: CREATE_PAYMENT_METHODS_FULFILLED,
-        payload: response.data
-      })
-    )
-    .catch(error =>
-      dispatch({ type: CREATE_PAYMENT_METHODS_REJECTED, payload: error })
-    );
-  dispatch({ type: CREATE_PAYMENT_METHODS_PENDING });
-};
+);
 
-export const onCompanyTypeList = ({ access_token }) => dispatch => {
-  onCompanyTypeGet({ access_token })
-    .then(response =>
-      dispatch({
-        type: FETCH_COMPANY_TYPE_FULFILLED,
-        payload: response.data
-      })
-    )
-    .catch(error =>
-      dispatch({ type: FETCH_COMPANY_TYPE_REJECTED, payload: error })
-    );
-  dispatch({ type: FETCH_COMPANY_TYPE_PENDING });
-};
+// export const onPaymentMethodSubmit = ({
+//   payment_method,
+//   access_token
+// }) => dispatch => {
+//   onPaymentMethodPost({
+//     payment_method,
+//     access_token
+//   })
+//     .then(response =>
+//       dispatch({
+//         type: CREATE_PAYMENT_METHODS_FULFILLED,
+//         payload: response.data
+//       })
+//     )
+//     .catch(error =>
+//       dispatch({ type: CREATE_PAYMENT_METHODS_REJECTED, payload: error })
+//     );
+//   dispatch({ type: CREATE_PAYMENT_METHODS_PENDING });
+// };
 
-export const onPaymentMethodsList = ({ access_token }) => dispatch => {
-  onPaymentMethodsGet({ access_token })
-    .then(response =>
-      dispatch({
-        type: FETCH_PAYMENT_METHODS_FULFILLED,
-        payload: response.data
+export const onCompanyTypeList = () => ({
+  type: FETCH_COMPANY_TYPE_PENDING
+});
+
+epics.push((action$, { getState }) =>
+  action$.ofType(FETCH_COMPANY_TYPE_PENDING).mergeMap(action => {
+    const access_token = getState().auth.cookies.token_data.access_token;
+
+    return onCompanyTypeGet({ access_token })
+      .map(({ response }) => {
+        toast.success("Company Types Fetched Successfully!");
+        return { type: FETCH_COMPANY_TYPE_FULFILLED, payload: response };
       })
-    )
-    .catch(error =>
-      dispatch({ type: FETCH_PAYMENT_METHODS_REJECTED, payload: error })
-    );
-  dispatch({ type: FETCH_PAYMENT_METHODS_PENDING });
-};
+      .catch(ajaxError => {
+        toast.error(ajaxError.toString());
+        return Observable.of({
+          type: FETCH_COMPANY_TYPE_REJECTED,
+          payload: ajaxError
+        });
+      });
+  })
+);
+
+// export const onCompanyTypeList = ({ access_token }) => dispatch => {
+//   onCompanyTypeGet({ access_token })
+//     .then(response =>
+//       dispatch({
+//         type: FETCH_COMPANY_TYPE_FULFILLED,
+//         payload: response.data
+//       })
+//     )
+//     .catch(error =>
+//       dispatch({ type: FETCH_COMPANY_TYPE_REJECTED, payload: error })
+//     );
+//   dispatch({ type: FETCH_COMPANY_TYPE_PENDING });
+// };
+
+export const onPaymentMethodsList = () => ({
+  type: FETCH_PAYMENT_METHODS_PENDING
+});
+
+epics.push((action$, { getState }) =>
+  action$.ofType(FETCH_PAYMENT_METHODS_PENDING).mergeMap(action => {
+    const access_token = getState().auth.cookies.token_data.access_token;
+
+    return onPaymentMethodsGet({ access_token })
+      .map(({ response }) => {
+        toast.success("Payment Methods Fetched Successfully!");
+        return {
+          type: FETCH_PAYMENT_METHODS_FULFILLED,
+          payload: response
+        };
+      })
+      .catch(ajaxError => {
+        toast.error(ajaxError.toString());
+        return Observable.of({
+          type: FETCH_PAYMENT_METHODS_REJECTED,
+          payload: ajaxError
+        });
+      });
+  })
+);
+
+// export const onPaymentMethodsList = ({ access_token }) => dispatch => {
+//   onPaymentMethodsGet({ access_token })
+//     .then(response =>
+//       dispatch({
+//         type: FETCH_PAYMENT_METHODS_FULFILLED,
+//         payload: response.data
+//       })
+//     )
+//     .catch(error =>
+//       dispatch({ type: FETCH_PAYMENT_METHODS_REJECTED, payload: error })
+//     );
+//   dispatch({ type: FETCH_PAYMENT_METHODS_PENDING });
+// };
 
 export const ToogleEDIT = value => ({
   type: TOGGLE_EDIT,

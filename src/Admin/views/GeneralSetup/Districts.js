@@ -185,18 +185,14 @@ class Districts extends Component {
         state: ""
       });
       this.props.onCountryEachList({
-        id: value.id,
-        access_token: this.access_token
+        id: value.id
       });
     }
   };
 
   render() {
     const countries = this.props.general_setup.countries;
-
-    const states = this.props.general_setup.countryData
-      ? this.props.general_setup.countryData.states
-      : null;
+    const states = this.props.general_setup.countryData;
 
     return (
       <div className="animated fadeIn">

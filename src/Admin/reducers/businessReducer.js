@@ -114,6 +114,7 @@ export default function(state = INITIAL_STATE, action) {
       return { ...state, loading: true };
 
     case FETCH_PAYMENT_METHODS_FULFILLED:
+      console.log("payment: ", action);
       return {
         ...state,
         payment_methods: action.payload,

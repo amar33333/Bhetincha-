@@ -1,3 +1,4 @@
+import { Observable } from "rxjs/Observable";
 import { toast } from "react-toastify";
 
 import {
@@ -40,6 +41,8 @@ import {
   FETCH_INDUSTRY_EACH_REJECTED,
   TOGGLE_EDIT
 } from "./types";
+
+const epics = [];
 
 export const onBusinessList = () => dispatch => {
   onBusinessAllGet()
@@ -292,33 +295,82 @@ export const onBusinessEachList = ({ username, access_token }) => dispatch => {
   dispatch({ type: FETCH_BUSINESS_EACH_PENDING });
 };
 
-export const onCompanyTypeList = ({ access_token }) => dispatch => {
-  onCompanyTypeGet({ access_token })
-    .then(response =>
-      dispatch({
-        type: FETCH_COMPANY_TYPE_FULFILLED,
-        payload: response.data
-      })
-    )
-    .catch(error =>
-      dispatch({ type: FETCH_COMPANY_TYPE_REJECTED, payload: error })
-    );
-  dispatch({ type: FETCH_COMPANY_TYPE_PENDING });
-};
+export const onCompanyTypeList = () => ({
+  type: FETCH_COMPANY_TYPE_PENDING
+});
 
-export const onPaymentMethodsList = ({ access_token }) => dispatch => {
-  onPaymentMethodsGet({ access_token })
-    .then(response =>
-      dispatch({
-        type: FETCH_PAYMENT_METHODS_FULFILLED,
-        payload: response.data
+epics.push((action$, { getState }) =>
+  action$.ofType(FETCH_COMPANY_TYPE_PENDING).mergeMap(({ payload }) => {
+    const access_token = getState().auth.cookies.token_data.access_token;
+
+    return onCompanyTypeGet({ access_token })
+      .map(({ response }) => {
+        toast.success("Company Types Fetched Successfully!");
+        return { type: FETCH_COMPANY_TYPE_FULFILLED, payload: response };
       })
-    )
-    .catch(error =>
-      dispatch({ type: FETCH_PAYMENT_METHODS_REJECTED, payload: error })
-    );
-  dispatch({ type: FETCH_PAYMENT_METHODS_PENDING });
-};
+      .catch(ajaxError => {
+        toast.error(ajaxError.toString());
+        return Observable.of({
+          type: FETCH_COMPANY_TYPE_REJECTED,
+          payload: ajaxError
+        });
+      });
+  })
+);
+
+// export const onCompanyTypeList = ({ access_token }) => dispatch => {
+//   onCompanyTypeGet({ access_token })
+//     .then(response =>
+//       dispatch({
+//         type: FETCH_COMPANY_TYPE_FULFILLED,
+//         payload: response.data
+//       })
+//     )
+//     .catch(error =>
+//       dispatch({ type: FETCH_COMPANY_TYPE_REJECTED, payload: error })
+//     );
+//   dispatch({ type: FETCH_COMPANY_TYPE_PENDING });
+// };
+
+export const onPaymentMethodsList = () => ({
+  type: FETCH_PAYMENT_METHODS_PENDING
+});
+
+epics.push((action$, { getState }) =>
+  action$.ofType(FETCH_PAYMENT_METHODS_PENDING).mergeMap(({ payload }) => {
+    const access_token = getState().auth.cookies.token_data.access_token;
+
+    return onPaymentMethodsGet({ access_token })
+      .map(({ response }) => {
+        toast.success("Payment Methods Fetched Successfully!");
+        return {
+          type: FETCH_PAYMENT_METHODS_FULFILLED,
+          payload: response
+        };
+      })
+      .catch(ajaxError => {
+        toast.error(ajaxError.toString());
+        return Observable.of({
+          type: FETCH_PAYMENT_METHODS_REJECTED,
+          payload: ajaxError
+        });
+      });
+  })
+);
+
+// export const onPaymentMethodsList = ({ access_token }) => dispatch => {
+//   onPaymentMethodsGet({ access_token })
+//     .then(response =>
+//       dispatch({
+//         type: FETCH_PAYMENT_METHODS_FULFILLED,
+//         payload: response.data
+//       })
+//     )
+//     .catch(error =>
+//       dispatch({ type: FETCH_PAYMENT_METHODS_REJECTED, payload: error })
+//     );
+//   dispatch({ type: FETCH_PAYMENT_METHODS_PENDING });
+// };
 
 export const ToogleEDIT = value => ({
   type: TOGGLE_EDIT,

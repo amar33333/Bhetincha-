@@ -54,9 +54,9 @@ class BusinessAdminDetail extends Component {
   }
 
   componentWillMount() {
-    this.props.onCompanyTypeList({ access_token: this.access_token });
+    this.props.onCompanyTypeList();
     this.props.onIndustryList({ access_token: this.access_token });
-    this.props.onPaymentMethodsList({ access_token: this.access_token });
+    this.props.onPaymentMethodsList();
     this.props.onCountryList({ access_token: this.access_token });
   }
 

@@ -56,24 +56,21 @@ class Areas extends Component {
         state: ""
       });
       this.props.onCountryEachList({
-        id: value.id,
-        access_token: this.access_token
+        id: value.id
       });
     } else if (key === "state") {
       this.setState({
         district: ""
       });
       this.props.onStateEachList({
-        id: value.id,
-        access_token: this.access_token
+        id: value.id
       });
     } else if (key === "district") {
       this.setState({
         city: ""
       });
       this.props.onDistrictEachList({
-        id: value.id,
-        access_token: this.access_token
+        id: value.id
       });
     }
   };
@@ -94,17 +91,9 @@ class Areas extends Component {
 
   render() {
     const countries = this.props.general_setup.countries;
-    const states = this.props.general_setup.countryData
-      ? this.props.general_setup.countryData.states
-      : null;
-
-    const districts = this.props.general_setup.stateData
-      ? this.props.general_setup.stateData.districts
-      : null;
-
-    const cities = this.props.general_setup.districtData
-      ? this.props.general_setup.districtData.cities
-      : null;
+    const states = this.props.general_setup.countryData;
+    const districts = this.props.general_setup.stateData;
+    const cities = this.props.general_setup.districtData;
 
     return (
       <div className="animated fadeIn">
