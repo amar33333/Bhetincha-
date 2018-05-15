@@ -127,7 +127,7 @@ class SubBusinessPrimaryAddress extends Component {
   //     : null;
 
   onChange = (key, event) => {
-    if (key === "landmark" || "addressLine1" || "addressLine2") {
+    if (key === "addressLine1" || key === "addressLine2") {
       this.setState({
         [key]: event.target.value.replace(/\b\w/g, l => l.toUpperCase())
       });

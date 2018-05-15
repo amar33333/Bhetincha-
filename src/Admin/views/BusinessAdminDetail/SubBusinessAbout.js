@@ -198,6 +198,7 @@ class SubBusinessAbout extends Component {
                       timeFormat={false}
                       isValidDate={validEstablishedYear}
                       dateFormat="YYYY"
+                      value={this.state.establishedYear}
                       defaultValue={moment.utc().format("YYYY")}
                       onChange={this.onChangeEstablishedYear}
                       viewMode={"years"}

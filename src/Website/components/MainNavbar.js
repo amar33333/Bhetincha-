@@ -9,7 +9,7 @@ class MainNavbar extends Component {
   render() {
     return (
       <div>
-        <Navbar color="dark" dark expand="md" className="main-nav">
+        <Navbar color="dark" fixed="top" dark expand="md" className="main-nav">
           <Link to="/" className="navbar-brand">
             Bhetincha
           </Link>

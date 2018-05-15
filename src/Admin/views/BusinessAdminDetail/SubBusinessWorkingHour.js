@@ -24,44 +24,44 @@ class subBusinessWorkingHour extends Component {
       workingHour: [
         {
           day: "Sunday",
-          start: moment().format("YYYY-MM-DDTHH:mmZ"),
-          end: moment().format("YYYY-MM-DDTHH:mmZ"),
+          start: moment("2018-05-01T10:00").format("YYYY-MM-DDTHH:mmZ"),
+          end: moment("2018-05-01T17:00").format("YYYY-MM-DDTHH:mmZ"),
           holiday: false
         },
         {
           day: "Monday",
-          start: moment().format("YYYY-MM-DDTHH:mmZ"),
-          end: moment().format("YYYY-MM-DDTHH:mmZ"),
+          start: moment("2018-05-01T10:00").format("YYYY-MM-DDTHH:mmZ"),
+          end: moment("2018-05-01T17:00").format("YYYY-MM-DDTHH:mmZ"),
           holiday: false
         },
         {
           day: "Tuesday",
-          start: moment().format("YYYY-MM-DDTHH:mmZ"),
-          end: moment().format("YYYY-MM-DDTHH:mmZ"),
+          start: moment("2018-05-01T10:00").format("YYYY-MM-DDTHH:mmZ"),
+          end: moment("2018-05-01T17:00").format("YYYY-MM-DDTHH:mmZ"),
           holiday: false
         },
         {
           day: "Wednesday",
-          start: moment().format("YYYY-MM-DDTHH:mmZ"),
-          end: moment().format("YYYY-MM-DDTHH:mmZ"),
+          start: moment("2018-05-01T10:00").format("YYYY-MM-DDTHH:mmZ"),
+          end: moment("2018-05-01T17:00").format("YYYY-MM-DDTHH:mmZ"),
           holiday: false
         },
         {
           day: "Thursday",
-          start: moment().format("YYYY-MM-DDTHH:mmZ"),
-          end: moment().format("YYYY-MM-DDTHH:mmZ"),
+          start: moment("2018-05-01T10:00").format("YYYY-MM-DDTHH:mmZ"),
+          end: moment("2018-05-01T17:00").format("YYYY-MM-DDTHH:mmZ"),
           holiday: false
         },
         {
           day: "Friday",
-          start: moment().format("YYYY-MM-DDTHH:mmZ"),
-          end: moment().format("YYYY-MM-DDTHH:mmZ"),
+          start: moment("2018-05-01T10:00").format("YYYY-MM-DDTHH:mmZ"),
+          end: moment("2018-05-01T17:00").format("YYYY-MM-DDTHH:mmZ"),
           holiday: false
         },
         {
           day: "Saturday",
-          start: moment().format("YYYY-MM-DDTHH:mmZ"),
-          end: moment().format("YYYY-MM-DDTHH:mmZ"),
+          start: moment("2018-05-01T10:00").format("YYYY-MM-DDTHH:mmZ"),
+          end: moment("2018-05-01T17:00").format("YYYY-MM-DDTHH:mmZ"),
           holiday: true
         }
       ]
@@ -170,12 +170,15 @@ class subBusinessWorkingHour extends Component {
                     <Label>Opens at: </Label>
                     <Datetime
                       dateFormat={false}
-                      defaultValue={moment().format("hh:mm a")}
+                      value={moment(day.start).format("hh:mm a")}
+                      // defaultValue={moment("2018-05-01T10:00").format(
+                      //   "hh:mm a"
+                      // )}
                       onChange={time => {
                         this.handleStartHourChange(time, day.day);
                       }}
                       viewMode={"time"}
-                      utc={true}
+                      // utc={true}
                     />
                   </span>
                 )}
@@ -186,12 +189,15 @@ class subBusinessWorkingHour extends Component {
                     <Label>Closes at: </Label>
                     <Datetime
                       dateFormat={false}
-                      defaultValue={moment().format("hh:mm a")}
+                      value={moment(day.end).format("hh:mm a")}
+                      // defaultValue={moment("2018-05-01T17:00").format(
+                      //   "hh:mm a"
+                      // )}
                       onChange={time =>
                         this.handleClosingHourChange(time, day.day)
                       }
                       viewMode={"time"}
-                      utc={true}
+                      // utc={true}
                     />
                   </span>
                 )}

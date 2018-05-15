@@ -254,6 +254,19 @@ export const onCountryPost = ({ country, access_token }) =>
     }
   });
 
+export const onCountryPostAjax = ({ country, access_token }) =>
+  ajax({
+    method: "post",
+    url: COUNTRY_URL,
+    body: {
+      name: country
+    },
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
 export const onCountryGet = ({ access_token }) =>
   axios({
     method: "get",
@@ -299,6 +312,20 @@ export const onStatePost = ({ state, country, access_token }) =>
     method: "post",
     url: STATE_URL,
     data: {
+      name: state,
+      country
+    },
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
+export const onStatePostAjax = ({ state, country, access_token }) =>
+  ajax({
+    method: "POST",
+    url: STATE_URL,
+    body: {
       name: state,
       country
     },

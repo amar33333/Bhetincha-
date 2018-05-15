@@ -5,7 +5,9 @@ import {
   onDistrictPost,
   onCityPost,
   onCountryPost,
+  onCountryPostAjax,
   onStatePost,
+  onStatePostAjax,
   onCountryGetAjax,
   onStateGet,
   onStateGetAjax,
@@ -98,27 +100,37 @@ import {
 
 const epics = [];
 
-export const onCountrySubmit = ({ country, access_token }) => dispatch => {
-  onCountryPost({ country, access_token })
-    .then(response => {
-      if (response.data.msg === "success") {
-        toast.success("New Country Added Successfully!");
-      } else {
-        response.data.msg.name.map(msg => {
-          toast.error(msg);
+export const onCountrySubmit = payload => ({
+  type: CREATE_COUNTRY_PENDING,
+  payload
+});
+
+epics.push((action$, { getState }) =>
+  action$.ofType(CREATE_COUNTRY_PENDING).mergeMap(({ payload }) => {
+    const { country } = payload;
+    const access_token = getState().auth.cookies.token_data.access_token;
+
+    return onCountryPostAjax({ country, access_token })
+      .concatMap(({ response }) => {
+        if (response.msg === "success") {
+          toast.success("Country added successfully!");
+          return [
+            { type: CREATE_COUNTRY_FULFILLED },
+            { type: FETCH_COUNTRY_PENDING }
+          ];
+        } else {
+          throw new Error(response.msg[Object.keys(response.msg)[0]][0]);
+        }
+      })
+      .catch(ajaxError => {
+        toast.error(ajaxError.toString());
+        return Observable.of({
+          type: CREATE_COUNTRY_REJECTED,
+          payload: ajaxError
         });
-      }
-      dispatch({ type: CREATE_COUNTRY_FULFILLED, payload: response.data });
-      dispatch({ type: FETCH_COUNTRY_PENDING });
-    })
-    .catch(error => {
-      toast.error("New Country not added!");
-
-      dispatch({ type: CREATE_COUNTRY_REJECTED, payload: error });
-    });
-
-  dispatch({ type: CREATE_COUNTRY_PENDING });
-};
+      });
+  })
+);
 
 export const onCountryList = () => ({ type: FETCH_COUNTRY_PENDING });
 
@@ -161,36 +173,37 @@ epics.push((action$, { getState }) =>
   )
 );
 
-// export const onCountryList = ({ access_token }) => dispatch => {
-//   onCountryGet({ access_token })
-//     .then(response =>
-//       dispatch({ type: FETCH_COUNTRY_FULFILLED, payload: response.data })
-//     )
-//     .catch(error => dispatch({ type: FETCH_COUNTRY_REJECTED, payload: error }));
+export const onStateSubmit = payload => ({
+  type: CREATE_STATE_PENDING,
+  payload
+});
 
-//   dispatch({ type: FETCH_COUNTRY_PENDING });
-// };
+epics.push((action$, { getState }) =>
+  action$.ofType(CREATE_STATE_PENDING).mergeMap(({ payload }) => {
+    const { state, country } = payload;
+    const access_token = getState().auth.cookies.token_data.access_token;
 
-export const onStateSubmit = ({ state, country, access_token }) => dispatch => {
-  onStatePost({ state, country, access_token })
-    .then(response => {
-      if (response.data.msg === "success") {
-        toast.success("New State Added Successfully!");
-      } else {
-        response.data.msg.name.map(msg => {
-          toast.error(msg);
+    return onStatePostAjax({ country, state, access_token })
+      .concatMap(({ response }) => {
+        if (response.msg === "success") {
+          toast.success("State added successfully!");
+          return [
+            { type: CREATE_STATE_FULFILLED },
+            { type: FETCH_STATE_PENDING }
+          ];
+        } else {
+          throw new Error(response.msg[Object.keys(response.msg)[0]][0]);
+        }
+      })
+      .catch(ajaxError => {
+        toast.error(ajaxError.toString());
+        return Observable.of({
+          type: CREATE_STATE_REJECTED,
+          payload: ajaxError
         });
-      }
-      dispatch({ type: CREATE_STATE_FULFILLED, payload: response.data });
-      dispatch({ type: FETCH_STATE_PENDING });
-    })
-    .catch(error => {
-      toast.error("New State not created !");
-      dispatch({ type: CREATE_STATE_REJECTED, payload: error });
-    });
-
-  dispatch({ type: CREATE_STATE_PENDING });
-};
+      });
+  })
+);
 
 export const onStateList = () => ({ type: FETCH_STATE_PENDING });
 
@@ -232,16 +245,6 @@ epics.push((action$, { getState }) =>
       })
   )
 );
-
-// export const onStateList = ({ access_token }) => dispatch => {
-//   onStateGet({ access_token })
-//     .then(response =>
-//       dispatch({ type: FETCH_STATE_FULFILLED, payload: response.data })
-//     )
-//     .catch(error => dispatch({ type: FETCH_STATE_REJECTED, payload: error }));
-
-//   dispatch({ type: FETCH_STATE_PENDING });
-// };
 
 export const onDistrictSubmit = ({
   state,

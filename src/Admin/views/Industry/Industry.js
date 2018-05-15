@@ -109,8 +109,8 @@ class Industry extends Component {
                       </InputGroupAddon>
                       <Input
                         autoFocus
-                        disabled={this.props.loading}
                         required
+                        disabled={this.props.loading}
                         type="text"
                         placeholder="Type Industry Name"
                         value={this.state.industry.replace(/\b\w/g, l =>
