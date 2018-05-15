@@ -297,6 +297,16 @@ export const onCountryEachGet = ({ id, access_token }) =>
     }
   });
 
+export const onCountryEachGetAjax = ({ id, access_token }) =>
+  ajax({
+    method: "get",
+    url: `${COUNTRY_URL}${id}/`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
 export const onCountryEachDeleteAjax = ({ id, access_token }) =>
   ajax({
     method: "delete",
@@ -365,6 +375,16 @@ export const onStateEachGet = ({ id, access_token }) =>
     }
   });
 
+export const onStateEachGetAjax = ({ id, access_token }) =>
+  ajax({
+    method: "get",
+    url: `${STATE_URL}${id}/`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
 export const onStateEachDeleteAjax = ({ id, access_token }) =>
   ajax({
     method: "delete",
@@ -425,6 +445,16 @@ export const onDistrictEachGet = ({ id, access_token }) =>
     }
   });
 
+export const onDistrictEachGetAjax = ({ id, access_token }) =>
+  ajax({
+    method: "get",
+    url: `${DISTRICT_URL}${id}/`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
 export const onDistrictEachDeleteAjax = ({ id, access_token }) =>
   ajax({
     method: "delete",
@@ -461,6 +491,16 @@ export const onCityGet = ({ access_token }) =>
 
 export const onCityEachGet = ({ id, access_token }) =>
   axios({
+    method: "get",
+    url: `${CITY_URL}${id}/`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
+export const onCityEachGetAjax = ({ id, access_token }) =>
+  ajax({
     method: "get",
     url: `${CITY_URL}${id}/`,
     headers: {

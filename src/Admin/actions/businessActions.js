@@ -66,6 +66,7 @@ import {
   EDIT_BUSINESS_FULFILLED,
   EDIT_BUSINESS_PENDING,
   EDIT_BUSINESS_REJECTED,
+  FETCH_ADDRESS_TREE_GET_PENDING,
   TOGGLE_EDIT
 } from "./types";
 
@@ -288,89 +289,91 @@ export const onBusinessEdit = ({
   dispatch({ type: EDIT_BUSINESS_PENDING });
 };
 
-// export const getAddressTree = () => ({
-//   type: FETCH_ADDRESS_TREE_PENDING
-// });
+export const getAddressTree = () => ({
+  type: FETCH_ADDRESS_TREE_GET_PENDING
+});
 
-// epics.push((action$, { getState }) =>
-//   action$.ofType(FETCH_ADDRESS_TREE_PENDING).mergeMap(({ payload }) => {
-//     const { countryId, stateId, districtId, cityId } = payload;
-//     const access_token = getState().auth.cookies.token_data.access_token;
+epics.push((action$, { getState }) =>
+  action$.ofType(FETCH_ADDRESS_TREE_GET_PENDING).mergeMap(({ payload }) => {
+    const { countryId, stateId, districtId, cityId } = payload;
+    const access_token = getState().auth.cookies.token_data.access_token;
 
-//     return onCountryEachGet({ id: countryId, access_token }).map(
-//       ({ response }) => {
-//         return {
-//           type: FETCH_ADDRESS_TREE_FULFILLED,
-//           payload: response
-//         };
-//       }
-//     );
-//   })
-// );
-
-const getAddressTree = (
-  countryId,
-  stateId,
-  districtId,
-  cityId,
-  access_token,
-  dispatch
-) => {
-  if (countryId !== "")
-    return {
-      type: FETCH_ADDRESS_TREE_PENDING,
-      payload: { id: countryId, access_token }
-    };
-  onCountryEachGet({ id: countryId, access_token })
-    .then(countryResponse => {
-      dispatch({
-        type: FETCH_ADDRESS_TREE_FULFILLED,
-        payload: countryResponse.data
+    return onCountryEachGet({ id: countryId, access_token })
+      .mergeMap(({ response }) => {
+        return {
+          type: FETCH_ADDRESS_TREE_FULFILLED,
+          payload: response
+        };
+      })
+      .mergeMap(() => onStateEachGet({ id: stateId, access_token }))
+      .mergeMap(({ response }) => {
+        return {
+          type: FETCH_ADDRESS_TREE_FULFILLED,
+          payload: response
+        };
       });
-      if (stateId !== "")
-        onStateEachGet({ id: stateId, access_token })
-          .then(stateResponse => {
-            dispatch({
-              type: FETCH_ADDRESS_TREE_FULFILLED,
-              payload: stateResponse.data
-            });
-            if (districtId !== "")
-              onDistrictEachGet({ id: districtId, access_token })
-                .then(districtResponse => {
-                  dispatch({
-                    type: FETCH_ADDRESS_TREE_FULFILLED,
-                    payload: districtResponse.data
-                  });
-                  if (cityId !== "")
-                    onCityEachGet({ id: cityId, access_token })
-                      .then(cityResponse =>
-                        dispatch({
-                          type: FETCH_ADDRESS_TREE_FULFILLED,
-                          payload: cityResponse.data
-                        })
-                      )
-                      .catch(cityErr =>
-                        dispatch({
-                          type: FETCH_ADDRESS_TREE_REJECTED,
-                          payload: cityErr
-                        })
-                      );
-                })
-                .catch(districtErr =>
-                  dispatch({
-                    type: FETCH_ADDRESS_TREE_REJECTED,
-                    payload: districtErr
-                  })
-                );
-          })
-          .catch(stateErr =>
-            dispatch({ type: FETCH_ADDRESS_TREE_REJECTED, payload: stateErr })
-          );
-    })
-    .catch(countryErr =>
-      dispatch({ type: FETCH_ADDRESS_TREE_REJECTED, payload: countryErr })
-    );
-};
+  })
+);
+
+// const getAddressTree = (
+//   countryId,
+//   stateId,
+//   districtId,
+//   cityId,
+//   access_token,
+//   dispatch
+// ) => {
+//   if (countryId !== "")
+//     onCountryEachGet({ id: countryId, access_token })
+//       .then(countryResponse => {
+//         dispatch({
+//           type: FETCH_ADDRESS_TREE_FULFILLED,
+//           payload: countryResponse.data
+//         });
+//         if (stateId !== "")
+//           onStateEachGet({ id: stateId, access_token })
+//             .then(stateResponse => {
+//               dispatch({
+//                 type: FETCH_ADDRESS_TREE_FULFILLED,
+//                 payload: stateResponse.data
+//               });
+//               if (districtId !== "")
+//                 onDistrictEachGet({ id: districtId, access_token })
+//                   .then(districtResponse => {
+//                     dispatch({
+//                       type: FETCH_ADDRESS_TREE_FULFILLED,
+//                       payload: districtResponse.data
+//                     });
+//                     if (cityId !== "")
+//                       onCityEachGet({ id: cityId, access_token })
+//                         .then(cityResponse =>
+//                           dispatch({
+//                             type: FETCH_ADDRESS_TREE_FULFILLED,
+//                             payload: cityResponse.data
+//                           })
+//                         )
+//                         .catch(cityErr =>
+//                           dispatch({
+//                             type: FETCH_ADDRESS_TREE_REJECTED,
+//                             payload: cityErr
+//                           })
+//                         );
+//                   })
+//                   .catch(districtErr =>
+//                     dispatch({
+//                       type: FETCH_ADDRESS_TREE_REJECTED,
+//                       payload: districtErr
+//                     })
+//                   );
+//             })
+//             .catch(stateErr =>
+//               dispatch({ type: FETCH_ADDRESS_TREE_REJECTED, payload: stateErr })
+//             );
+//       })
+//       .catch(countryErr =>
+//         dispatch({ type: FETCH_ADDRESS_TREE_REJECTED, payload: countryErr })
+//       );
+// };
 
 // const getAddressTree = (
 //   countryId,

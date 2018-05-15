@@ -52,7 +52,11 @@ const INITIAL_STATE = {
   countries: [],
   states: [],
   districts: [],
-  countryEach: []
+  countryEach: [],
+  countryData: [],
+  stateData: [],
+  districtData: [],
+  cityData: []
 };
 
 export default function(state = INITIAL_STATE, action) {
@@ -152,21 +156,6 @@ export default function(state = INITIAL_STATE, action) {
     case FETCH_AREA_REJECTED:
       return { ...state, loading: false };
 
-    case FETCH_COUNTRY_EACH_PENDING:
-      return { ...state, loading: true };
-
-    case FETCH_COUNTRY_EACH_FULFILLED:
-      return {
-        ...state,
-        countryData: action.payload,
-        countryEach: action.payload.states,
-        loading: false,
-        statusClass: "fulfilled"
-      };
-
-    case FETCH_COUNTRY_EACH_REJECTED:
-      return { ...state, loading: false };
-
     case FETCH_ADDRESS_TREE_PENDING:
       return { ...state, loading: true };
 
@@ -174,7 +163,7 @@ export default function(state = INITIAL_STATE, action) {
       const countries = state.countries;
       const payload = action.payload;
 
-      // console.log("payload: ", payload);
+      console.log("address payload: ", payload);
       return {
         ...state,
         countries: countries.map(country => {
@@ -242,13 +231,28 @@ export default function(state = INITIAL_STATE, action) {
     case FETCH_ADDRESS_TREE_REJECTED:
       return { ...state, loading: false };
 
+    case FETCH_COUNTRY_EACH_PENDING:
+      return { ...state, loading: true };
+
+    case FETCH_COUNTRY_EACH_FULFILLED:
+      return {
+        ...state,
+        countryData: action.payload.states,
+        countryEach: action.payload.states,
+        loading: false,
+        statusClass: "fulfilled"
+      };
+
+    case FETCH_COUNTRY_EACH_REJECTED:
+      return { ...state, loading: false };
+
     case FETCH_STATE_EACH_PENDING:
       return { ...state, loading: true };
 
     case FETCH_STATE_EACH_FULFILLED:
       return {
         ...state,
-        stateData: action.payload,
+        stateData: action.payload.districts,
         loading: false,
         statusClass: "fulfilled"
       };
@@ -262,7 +266,7 @@ export default function(state = INITIAL_STATE, action) {
       console.log(action.payload);
       return {
         ...state,
-        districtData: action.payload,
+        districtData: action.payload.cities,
         loading: false,
         statusClass: "fulfilled"
       };
@@ -276,7 +280,7 @@ export default function(state = INITIAL_STATE, action) {
     case FETCH_CITY_EACH_FULFILLED:
       return {
         ...state,
-        cityData: action.payload,
+        cityData: action.payload.areas,
         loading: false,
         statusClass: "fulfilled"
       };
