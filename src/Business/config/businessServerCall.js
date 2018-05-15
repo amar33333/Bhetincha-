@@ -3,7 +3,8 @@ import {
   PAYMENT_METHOD_URL,
   COMPANY_TYPE_URL,
   ALBUM_URL,
-  BUSINESS_PUT_URL
+  BUSINESS_PUT_URL,
+  PHOTO_URL
 } from "./BUSINESS_API";
 import axios from "axios";
 import { ajax } from "rxjs/observable/dom/ajax";
@@ -211,7 +212,7 @@ export const onBusinessEachAlbumEachPhotosDelete = ({
 }) =>
   ajax({
     method: "DELETE",
-    url: `${ALBUM_URL}${business_id}/${album_id}/`,
+    url: `${PHOTO_URL}${business_id}/${album_id}/`,
     body,
     headers: {
       "Content-Type": "application/json",

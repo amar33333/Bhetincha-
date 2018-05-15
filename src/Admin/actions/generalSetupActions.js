@@ -1,20 +1,27 @@
 import { toast } from "react-toastify";
+import { Observable } from "rxjs/Observable";
 import {
   onAreaPost,
   onDistrictPost,
   onCityPost,
   onCountryPost,
   onStatePost,
-  onCountryGet,
+  onCountryGetAjax,
   onStateGet,
+  onStateGetAjax,
+  onStateEachDeleteAjax,
   onAreaGet,
   onDistrictGet,
+  onDistrictGetAjax,
+  onDistrictEachDeleteAjax,
   onCityGet,
   onCountryEachGet,
   onStateEachGet,
   onDistrictEachGet,
-  onCityEachGet
+  onCityEachGet,
+  onCountryEachDeleteAjax
 } from "../config/adminServerCall";
+
 import {
   FETCH_ADDRESS_TREE_FULFILLED,
   FETCH_ADDRESS_TREE_REJECTED,
@@ -71,6 +78,15 @@ import {
   FETCH_CITY_EACH_FULFILLED,
   FETCH_CITY_EACH_REJECTED,
   FETCH_CITY_EACH_PENDING,
+  DELETE_COUNTRY_PENDING,
+  DELETE_COUNTRY_FULFILLED,
+  DELETE_COUNTRY_REJECTED,
+  DELETE_STATE_PENDING,
+  DELETE_STATE_FULFILLED,
+  DELETE_STATE_REJECTED,
+  DELETE_DISTRICT_PENDING,
+  DELETE_DISTRICT_FULFILLED,
+  DELETE_DISTRICT_REJECTED,
 
   // UNMOUNT
   UNMOUNT_AREA,
@@ -79,6 +95,8 @@ import {
   UNMOUNT_DISTRICT,
   UNMOUNT_CITY
 } from "./types";
+
+const epics = [];
 
 export const onCountrySubmit = ({ country, access_token }) => dispatch => {
   onCountryPost({ country, access_token })
@@ -91,6 +109,7 @@ export const onCountrySubmit = ({ country, access_token }) => dispatch => {
         });
       }
       dispatch({ type: CREATE_COUNTRY_FULFILLED, payload: response.data });
+      dispatch({ type: FETCH_COUNTRY_PENDING });
     })
     .catch(error => {
       toast.error("New Country not added!");
@@ -101,15 +120,56 @@ export const onCountrySubmit = ({ country, access_token }) => dispatch => {
   dispatch({ type: CREATE_COUNTRY_PENDING });
 };
 
-export const onCountryList = ({ access_token }) => dispatch => {
-  onCountryGet({ access_token })
-    .then(response =>
-      dispatch({ type: FETCH_COUNTRY_FULFILLED, payload: response.data })
-    )
-    .catch(error => dispatch({ type: FETCH_COUNTRY_REJECTED, payload: error }));
+export const onCountryList = () => ({ type: FETCH_COUNTRY_PENDING });
 
-  dispatch({ type: FETCH_COUNTRY_PENDING });
-};
+epics.push((action$, { getState }) =>
+  action$.ofType(FETCH_COUNTRY_PENDING).mergeMap(action =>
+    onCountryGetAjax({
+      access_token: getState().auth.cookies.token_data.access_token
+    })
+      .map(({ response }) => ({
+        type: FETCH_COUNTRY_FULFILLED,
+        payload: response
+      }))
+      .catch(ajaxError => Observable.of({ type: FETCH_COUNTRY_REJECTED }))
+  )
+);
+
+export const onCountryDelete = payload => ({
+  type: DELETE_COUNTRY_PENDING,
+  payload
+});
+
+epics.push((action$, { getState }) =>
+  action$.ofType(DELETE_COUNTRY_PENDING).mergeMap(({ payload }) =>
+    onCountryEachDeleteAjax({
+      id: payload.id,
+      access_token: getState().auth.cookies.token_data.access_token
+    })
+      .concatMap(() => {
+        toast.success("Deleted Successfully!");
+        return [
+          { type: FETCH_COUNTRY_PENDING },
+          { type: DELETE_COUNTRY_FULFILLED }
+        ];
+      })
+      .catch(ajaxError => {
+        toast.error("Error Deleting Country");
+        console.log(ajaxError);
+        return Observable.of({ type: DELETE_COUNTRY_REJECTED });
+      })
+  )
+);
+
+// export const onCountryList = ({ access_token }) => dispatch => {
+//   onCountryGet({ access_token })
+//     .then(response =>
+//       dispatch({ type: FETCH_COUNTRY_FULFILLED, payload: response.data })
+//     )
+//     .catch(error => dispatch({ type: FETCH_COUNTRY_REJECTED, payload: error }));
+
+//   dispatch({ type: FETCH_COUNTRY_PENDING });
+// };
 
 export const onStateSubmit = ({ state, country, access_token }) => dispatch => {
   onStatePost({ state, country, access_token })
@@ -122,6 +182,7 @@ export const onStateSubmit = ({ state, country, access_token }) => dispatch => {
         });
       }
       dispatch({ type: CREATE_STATE_FULFILLED, payload: response.data });
+      dispatch({ type: FETCH_STATE_PENDING });
     })
     .catch(error => {
       toast.error("New State not created !");
@@ -131,15 +192,56 @@ export const onStateSubmit = ({ state, country, access_token }) => dispatch => {
   dispatch({ type: CREATE_STATE_PENDING });
 };
 
-export const onStateList = ({ access_token }) => dispatch => {
-  onStateGet({ access_token })
-    .then(response =>
-      dispatch({ type: FETCH_STATE_FULFILLED, payload: response.data })
-    )
-    .catch(error => dispatch({ type: FETCH_STATE_REJECTED, payload: error }));
+export const onStateList = () => ({ type: FETCH_STATE_PENDING });
 
-  dispatch({ type: FETCH_STATE_PENDING });
-};
+epics.push((action$, { getState }) =>
+  action$.ofType(FETCH_STATE_PENDING).mergeMap(action =>
+    onStateGetAjax({
+      access_token: getState().auth.cookies.token_data.access_token
+    })
+      .map(({ response }) => ({
+        type: FETCH_STATE_FULFILLED,
+        payload: response
+      }))
+      .catch(ajaxError => Observable.of({ type: FETCH_STATE_REJECTED }))
+  )
+);
+
+export const onStateDelete = payload => ({
+  type: DELETE_STATE_PENDING,
+  payload
+});
+
+epics.push((action$, { getState }) =>
+  action$.ofType(DELETE_STATE_PENDING).mergeMap(({ payload }) =>
+    onStateEachDeleteAjax({
+      id: payload.id,
+      access_token: getState().auth.cookies.token_data.access_token
+    })
+      .concatMap(() => {
+        toast.success("Deleted Successfully!");
+        return [
+          { type: FETCH_STATE_PENDING },
+          { type: DELETE_STATE_FULFILLED }
+        ];
+      })
+      .catch(ajaxError => {
+        toast.error("Error Deleting State");
+        console.log(ajaxError);
+        return Observable.of({ type: DELETE_STATE_REJECTED });
+      })
+  )
+);
+
+// export const onStateList = ({ access_token }) => dispatch => {
+//   onStateGet({ access_token })
+//     .then(response =>
+//       dispatch({ type: FETCH_STATE_FULFILLED, payload: response.data })
+//     )
+//     .catch(error => dispatch({ type: FETCH_STATE_REJECTED, payload: error }));
+
+//   dispatch({ type: FETCH_STATE_PENDING });
+// };
 
 export const onDistrictSubmit = ({
   state,
@@ -157,6 +259,7 @@ export const onDistrictSubmit = ({
         });
       }
       dispatch({ type: CREATE_DISTRICT_FULFILLED, payload: response.data });
+      dispatch({ type: FETCH_DISTRICT_PENDING });
     })
     .catch(error => {
       toast.error("New District not added!");
@@ -166,17 +269,58 @@ export const onDistrictSubmit = ({
   dispatch({ type: CREATE_DISTRICT_PENDING });
 };
 
-export const onDistrictList = ({ access_token }) => dispatch => {
-  onDistrictGet({ access_token })
-    .then(response =>
-      dispatch({ type: FETCH_DISTRICT_FULFILLED, payload: response.data })
-    )
-    .catch(error =>
-      dispatch({ type: FETCH_DISTRICT_REJECTED, payload: error })
-    );
+export const onDistrictList = () => ({ type: FETCH_DISTRICT_PENDING });
 
-  dispatch({ type: FETCH_DISTRICT_PENDING });
-};
+epics.push((action$, { getState }) =>
+  action$.ofType(FETCH_DISTRICT_PENDING).mergeMap(action =>
+    onDistrictGetAjax({
+      access_token: getState().auth.cookies.token_data.access_token
+    })
+      .map(({ response }) => ({
+        type: FETCH_DISTRICT_FULFILLED,
+        payload: response
+      }))
+      .catch(ajaxError => Observable.of({ type: FETCH_DISTRICT_REJECTED }))
+  )
+);
+
+export const onDistrictDelete = payload => ({
+  type: DELETE_DISTRICT_PENDING,
+  payload
+});
+
+epics.push((action$, { getState }) =>
+  action$.ofType(DELETE_DISTRICT_PENDING).mergeMap(({ payload }) =>
+    onDistrictEachDeleteAjax({
+      id: payload.id,
+      access_token: getState().auth.cookies.token_data.access_token
+    })
+      .concatMap(() => {
+        toast.success("Deleted Successfully!");
+        return [
+          { type: FETCH_DISTRICT_PENDING },
+          { type: DELETE_DISTRICT_FULFILLED }
+        ];
+      })
+      .catch(ajaxError => {
+        toast.error("Error Deleting State");
+        console.log(ajaxError);
+        return Observable.of({ type: DELETE_DISTRICT_REJECTED });
+      })
+  )
+);
+
+// export const onDistrictList = ({ access_token }) => dispatch => {
+//   onDistrictGet({ access_token })
+//     .then(response =>
+//       dispatch({ type: FETCH_DISTRICT_FULFILLED, payload: response.data })
+//     )
+//     .catch(error =>
+//       dispatch({ type: FETCH_DISTRICT_REJECTED, payload: error })
+//     );
+
+//   dispatch({ type: FETCH_DISTRICT_PENDING });
+// };
 
 export const onCitySubmit = ({ district, city, access_token }) => dispatch => {
   onCityPost({ district, city, access_token })
@@ -407,3 +551,5 @@ export const onUnmountArea = () => {
 //   type: UNMOUNT_AREA,
 //   payload: null
 // });
+
+export default epics;

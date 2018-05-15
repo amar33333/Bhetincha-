@@ -126,7 +126,7 @@ class PhotoEditor extends Component {
                     ? this.props[this.state.active]
                     : this.state[this.state.active].files[0]
                 }
-                //crossOrigin="anonymous"
+                crossOrigin="anonymous"
               />
               <div style={{ margin: "20px", width: "160px" }}>
                 <span>Zoom</span>

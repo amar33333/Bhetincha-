@@ -28,6 +28,9 @@ import {
   UPLOAD_GALLERY_PHOTO_FULFILLED,
   UPLOAD_GALLERY_PHOTO_PENDING,
   UPLOAD_GALLERY_PHOTO_REJECTED,
+  DELETE_GALLERY_PHOTO_FULFILLED,
+  DELETE_GALLERY_PHOTO_PENDING,
+  DELETE_GALLERY_PHOTO_REJECTED,
   CREATE_NEW_ALBUM_PENDING,
   CREATE_NEW_ALBUM_FULFILLED,
   CREATE_NEW_ALBUM_REJECTED,
@@ -145,6 +148,36 @@ epics.push((action$, { getState }) =>
               slug: getState().auth.cookies.user_data.slug
             }
           : { type: UPLOAD_GALLERY_PHOTO_REJECTED }
+    )
+  )
+);
+
+export const handleGalleryPhotoDelete = payload => ({
+  type: DELETE_GALLERY_PHOTO_PENDING,
+  payload
+});
+
+epics.push((action$, { getState }) =>
+  action$.ofType(DELETE_GALLERY_PHOTO_PENDING).mergeMap(({ payload }) =>
+    onBusinessEachAlbumEachPhotosDelete({
+      body: payload.body,
+      album_id: payload.album_id,
+      access_token: getState().auth.cookies.token_data.access_token,
+      business_id: getState().MinisiteContainer.crud.id
+    }).map(
+      ({ response }) =>
+        response.msg === "success"
+          ? {
+              type: FETCH_PART_BUSINESS,
+              updates: ["albums"],
+              onSuccess: payload => [
+                { type: DELETE_GALLERY_PHOTO_FULFILLED, payload }
+              ],
+              successToasts: ["Photo Deleted Successfully"],
+              FAILED: DELETE_GALLERY_PHOTO_REJECTED,
+              slug: getState().auth.cookies.user_data.slug
+            }
+          : { type: DELETE_GALLERY_PHOTO_REJECTED }
     )
   )
 );

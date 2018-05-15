@@ -19,7 +19,11 @@ import {
   InputGroup,
   InputGroupAddon
 } from "reactstrap";
-import { Tooltip, PopoverDelete } from "../../../Common/components";
+import {
+  Tooltip,
+  PopoverDelete,
+  PaginationComponent
+} from "../../../Common/components";
 
 import {
   onBusinessAllGet,
@@ -121,7 +125,8 @@ class BusinessList extends Component {
     pageSizeOptions: [5, 10, 20, 25, 50, 100],
     manual: true,
     sortable: true,
-    minRows: 5
+    minRows: 5,
+    PaginationComponent
   };
 
   componentDidMount = () => {
@@ -252,6 +257,7 @@ class BusinessList extends Component {
               onSortedChange={this.props.handleSortChangeBusiness}
               page={this.props.page - 1}
               pages={this.props.pages}
+              rowCount={100}
               {...this.tableProps}
             />
           </Col>

@@ -18,7 +18,11 @@ import {
 } from "reactstrap";
 
 import ReactTable from "react-table";
-import { PopoverDelete, Select } from "../../../Common/components";
+import {
+  PopoverDelete,
+  Select,
+  PaginationComponent
+} from "../../../Common/components";
 import filterCaseInsensitive from "../../../Common/utils/filterCaseInsesitive";
 import "react-table/react-table.css";
 
@@ -27,7 +31,8 @@ import {
   onCountryEachList,
   onStateList,
   onDistrictList,
-  onDistrictSubmit
+  onDistrictSubmit,
+  onDistrictDelete
 } from "../../actions";
 
 class Districts extends Component {
@@ -144,7 +149,7 @@ class Districts extends Component {
             </Button>
             <PopoverDelete
               id={`delete-${value}`}
-              onClick={() => console.log("Delete clicked for id: ", value)}
+              onClick={() => this.props.onDistrictDelete({ id: value })}
             />
           </div>
         )
@@ -153,7 +158,8 @@ class Districts extends Component {
     minRows: 5,
     defaultPageSize: 20,
     className: "-striped -highlight",
-    filterable: true
+    filterable: true,
+    PaginationComponent
   };
 
   onFormSubmit = event => {
@@ -191,7 +197,6 @@ class Districts extends Component {
 
   render() {
     const countries = this.props.general_setup.countries;
-    console.log("district props: ", this.props);
 
     const states = this.props.general_setup.countryData
       ? this.props.general_setup.countryData.states
@@ -319,6 +324,7 @@ export default connect(
     onDistrictSubmit,
     onCountryList,
     onDistrictList,
-    onCountryEachList
+    onCountryEachList,
+    onDistrictDelete
   }
 )(Districts);

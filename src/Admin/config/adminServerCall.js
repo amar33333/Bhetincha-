@@ -264,9 +264,29 @@ export const onCountryGet = ({ access_token }) =>
     }
   });
 
+export const onCountryGetAjax = ({ access_token }) =>
+  ajax({
+    method: "get",
+    url: COUNTRY_URL,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
 export const onCountryEachGet = ({ id, access_token }) =>
   axios({
     method: "get",
+    url: `${COUNTRY_URL}${id}/`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
+export const onCountryEachDeleteAjax = ({ id, access_token }) =>
+  ajax({
+    method: "delete",
     url: `${COUNTRY_URL}${id}/`,
     headers: {
       "Content-Type": "application/json",
@@ -298,9 +318,29 @@ export const onStateGet = ({ access_token }) =>
     }
   });
 
+export const onStateGetAjax = ({ access_token }) =>
+  ajax({
+    method: "get",
+    url: STATE_URL,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
 export const onStateEachGet = ({ id, access_token }) =>
   axios({
     method: "get",
+    url: `${STATE_URL}${id}/`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
+export const onStateEachDeleteAjax = ({ id, access_token }) =>
+  ajax({
+    method: "delete",
     url: `${STATE_URL}${id}/`,
     headers: {
       "Content-Type": "application/json",
@@ -338,9 +378,29 @@ export const onDistrictGet = ({ access_token }) =>
     }
   });
 
+export const onDistrictGetAjax = ({ access_token }) =>
+  ajax({
+    method: "get",
+    url: DISTRICT_URL,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
 export const onDistrictEachGet = ({ id, access_token }) =>
   axios({
     method: "get",
+    url: `${DISTRICT_URL}${id}/`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
+export const onDistrictEachDeleteAjax = ({ id, access_token }) =>
+  ajax({
+    method: "delete",
     url: `${DISTRICT_URL}${id}/`,
     headers: {
       "Content-Type": "application/json",

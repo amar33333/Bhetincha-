@@ -15,7 +15,7 @@ import {
 } from "reactstrap";
 import { connect } from "react-redux";
 import ReactTable from "react-table";
-import { PopoverDelete } from "../../../Common/components";
+import { PopoverDelete, PaginationComponent } from "../../../Common/components";
 import filterCaseInsensitive from "../../../Common/utils/filterCaseInsesitive";
 import "react-table/react-table.css";
 
@@ -71,7 +71,8 @@ class Industry extends Component {
     minRows: 5,
     defaultPageSize: 20,
     className: "-striped -highlight",
-    filterable: true
+    filterable: true,
+    PaginationComponent
   };
 
   componentDidMount = () => this.props.onIndustryList();

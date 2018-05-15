@@ -12,6 +12,7 @@ import Tooltip from "./Tooltip";
 import PopoverDelete from "./PopoverDelete";
 import CustomModal from "./CustomModal";
 import Select from "./ReactSelect/ReactSelect";
+import PaginationComponent from "./CBReactTablePagination";
 
 export {
   Aside,
@@ -27,5 +28,6 @@ export {
   Tooltip,
   PopoverDelete,
   CustomModal,
-  Select
+  Select,
+  PaginationComponent
 };

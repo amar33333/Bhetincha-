@@ -17,10 +17,10 @@ import {
 } from "reactstrap";
 import ReactTable from "react-table";
 import "react-table/react-table.css";
-import { PopoverDelete } from "../../../Common/components";
+import { PopoverDelete, PaginationComponent } from "../../../Common/components";
 import filterCaseInsensitive from "../../../Common/utils/filterCaseInsesitive";
 
-import { onCountrySubmit, onCountryList } from "../../actions";
+import { onCountrySubmit, onCountryList, onCountryDelete } from "../../actions";
 
 class Countries extends Component {
   state = { country: "" };
@@ -57,7 +57,7 @@ class Countries extends Component {
             </Button>
             <PopoverDelete
               id={`delete-${value}`}
-              onClick={() => console.log("Delete clicked for id: ", value)}
+              onClick={() => this.props.onCountryDelete({ id: value })}
             />
           </div>
         )
@@ -66,7 +66,8 @@ class Countries extends Component {
     minRows: 5,
     defaultPageSize: 20,
     className: "-striped -highlight",
-    filterable: true
+    filterable: true,
+    PaginationComponent
   };
 
   componentDidMount = () =>
@@ -142,6 +143,7 @@ export default connect(
   }),
   {
     onCountrySubmit,
-    onCountryList
+    onCountryList,
+    onCountryDelete
   }
 )(Countries);
