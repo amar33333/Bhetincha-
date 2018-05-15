@@ -33,7 +33,8 @@ const INITIAL_STATE = {
   businesses: [],
   pages: 3,
   fetchLoading: false,
-  businessGet: false
+  businessGet: false,
+  rowCount: 0
 };
 
 export default function(state = INITIAL_STATE, action) {
@@ -49,7 +50,8 @@ export default function(state = INITIAL_STATE, action) {
         ...state,
         fetchLoading: false,
         businesses: action.payload.data,
-        pages: action.payload.pages
+        pages: action.payload.pages,
+        rowCount: action.payload.rowCount
       };
 
     case EDIT_BUSINESS_PENDING:

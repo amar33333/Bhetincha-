@@ -3,7 +3,7 @@ import {
   BUSINESS_FILTER_ON_CHANGE,
   FETCH_BUSINESS_PENDING,
   CLEAR_BUSINESS_FILTER,
-  SET_SORT_BY
+  BUSINESS_SET_SORT_BY
 } from "./types";
 
 const epics = [];
@@ -30,12 +30,12 @@ epics.push(action$ =>
 );
 
 export const handleSortChangeBusiness = payload => ({
-  type: SET_SORT_BY,
+  type: BUSINESS_SET_SORT_BY,
   payload
 });
 
 epics.push(action$ =>
-  action$.ofType(SET_SORT_BY).mapTo({ type: FETCH_BUSINESS_PENDING })
+  action$.ofType(BUSINESS_SET_SORT_BY).mapTo({ type: FETCH_BUSINESS_PENDING })
 );
 
 export default epics;

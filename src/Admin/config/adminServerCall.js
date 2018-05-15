@@ -254,6 +254,19 @@ export const onCountryPost = ({ country, access_token }) =>
     }
   });
 
+export const onCountryPostAjax = ({ country, access_token }) =>
+  ajax({
+    method: "post",
+    url: COUNTRY_URL,
+    body: {
+      name: country
+    },
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
 export const onCountryGet = ({ access_token }) =>
   axios({
     method: "get",

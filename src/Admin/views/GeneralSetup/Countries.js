@@ -23,16 +23,17 @@ import filterCaseInsensitive from "../../../Common/utils/filterCaseInsesitive";
 import { onCountrySubmit, onCountryList, onCountryDelete } from "../../actions";
 
 class Countries extends Component {
-  state = { country: "" };
+  static getDerivedStateFromProps = (nextProps, prevState) =>
+    prevState.countrySubmit && !nextProps.error && !nextProps.loading
+      ? { country: "", countrySubmit: false }
+      : null;
 
-  access_token = this.props.cookies
-    ? this.props.cookies.token_data.access_token
-    : null;
+  state = { country: "", countrySubmit: false };
 
   tableProps = {
     columns: [
       {
-        Header: "S. No.",
+        Header: "SN",
         accessor: "s_no",
         filterable: false,
         searchable: false,
@@ -70,23 +71,27 @@ class Countries extends Component {
     PaginationComponent
   };
 
-  componentDidMount = () =>
-    this.props.onCountryList({ access_token: this.access_token });
+  componentDidMount = () => this.props.onCountryList();
+
+  componentDidUpdate = (prevProps, prevState) => {
+    if (prevState.countrySubmit && prevProps.loading)
+      this.focusableInput.focus();
+  };
 
   onFormSubmit = event => {
     event.preventDefault();
 
     const { country } = this.state;
 
-    this.props.onCountrySubmit({ country, access_token: this.access_token });
-    this.setState({ country: "" });
+    this.setState({ countrySubmit: true }, () =>
+      this.props.onCountrySubmit({ country })
+    );
   };
 
-  onChange = (key, event) => {
+  onChange = (key, event) =>
     this.setState({
       [key]: event.target.value.replace(/\b\w/g, l => l.toUpperCase())
     });
-  };
 
   render() {
     return (
@@ -109,6 +114,8 @@ class Countries extends Component {
                       <Input
                         autoFocus
                         required
+                        innerRef={ref => (this.focusableInput = ref)}
+                        disabled={this.props.loading}
                         type="text"
                         placeholder="Type Country Name"
                         value={this.state.country}
@@ -128,7 +135,7 @@ class Countries extends Component {
         <ReactTable
           {...this.tableProps}
           data={this.props.countries}
-          // loading={this.props.fetchLoading}
+          loading={this.props.fetchLoading}
           defaultFilterMethod={filterCaseInsensitive}
         />
       </div>
@@ -137,9 +144,11 @@ class Countries extends Component {
 }
 
 export default connect(
-  ({ auth, AdminContainer: { general_setup } }) => ({
-    ...auth,
-    countries: general_setup.countries
+  ({ AdminContainer: { general_setup } }) => ({
+    countries: general_setup.countries,
+    fetchLoading: general_setup.countriesFetchLoading,
+    loading: general_setup.countryLoading,
+    error: general_setup.countryError
   }),
   {
     onCountrySubmit,

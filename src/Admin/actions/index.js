@@ -13,6 +13,7 @@ export * from "./generalSetupActions";
 export * from "./userActions";
 export * from "./businessActions";
 export * from "./filterBusinessActions";
+export * from "./filterCityActions";
 
 export default [
   ...industryEpics,

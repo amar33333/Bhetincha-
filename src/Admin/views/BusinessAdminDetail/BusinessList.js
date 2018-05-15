@@ -126,6 +126,7 @@ class BusinessList extends Component {
     manual: true,
     sortable: true,
     minRows: 5,
+    className: "-striped -highlight",
     PaginationComponent
   };
 
@@ -240,7 +241,6 @@ class BusinessList extends Component {
           <Col xs="12">
             <ReactTable
               style={{ background: "white" }}
-              className="-striped -highlight"
               data={this.props.businesses}
               defaultPageSize={this.props.rows}
               defaultSorted={this.props.sort_by}
@@ -257,7 +257,7 @@ class BusinessList extends Component {
               onSortedChange={this.props.handleSortChangeBusiness}
               page={this.props.page - 1}
               pages={this.props.pages}
-              rowCount={100}
+              rowCount={this.props.rowCount}
               {...this.tableProps}
             />
           </Col>
