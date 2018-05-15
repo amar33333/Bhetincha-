@@ -36,22 +36,18 @@ import {
 } from "../../actions";
 
 class Districts extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      country: "",
-      state: "",
-      district: "",
-      districtCode: ""
-    };
+  state = {
+    country: "",
+    state: "",
+    district: "",
+    districtCode: "",
+    districtSubmit: false
+  };
 
-    this.access_token = this.props.cookies
-      ? this.props.cookies.token_data.access_token
-      : null;
-
-    this.props.onCountryList({ access_token: this.access_token });
-    this.props.onDistrictList({ access_token: this.access_token });
-    this.props.onStateList({ access_token: this.access_token });
+  componentDidMount() {
+    this.props.onCountryList();
+    this.props.onDistrictList();
+    this.props.onStateList();
   }
 
   tableProps = {

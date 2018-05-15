@@ -8,6 +8,12 @@ import {
   FETCH_STATE_FULFILLED,
   FETCH_STATE_PENDING,
   FETCH_STATE_REJECTED,
+  CREATE_DISTRICT_FULFILLED,
+  CREATE_DISTRICT_PENDING,
+  CREATE_DISTRICT_REJECTED,
+  FETCH_DISTRICT_FULFILLED,
+  FETCH_DISTRICT_PENDING,
+  FETCH_DISTRICT_REJECTED,
   CREATE_STATE_FULFILLED,
   CREATE_STATE_PENDING,
   CREATE_STATE_REJECTED,
@@ -17,9 +23,6 @@ import {
   FETCH_CITY_FULFILLED,
   FETCH_CITY_PENDING,
   FETCH_CITY_REJECTED,
-  FETCH_DISTRICT_FULFILLED,
-  FETCH_DISTRICT_PENDING,
-  FETCH_DISTRICT_REJECTED,
   FETCH_COUNTRY_EACH_FULFILLED,
   FETCH_COUNTRY_EACH_REJECTED,
   FETCH_COUNTRY_EACH_PENDING,
@@ -42,16 +45,19 @@ import {
 
 const INITIAL_STATE = {
   loading: false,
+  countries: [],
   countryLoading: false,
   countryError: false,
   countriesFetchLoading: false,
+  states: [],
   stateLoading: false,
   stateError: false,
   statesFetchLoading: false,
-  statusClass: "",
-  countries: [],
-  states: [],
   districts: [],
+  districtLoading: false,
+  districtError: false,
+  districtsFetchLoading: false,
+  statusClass: "",
   countryEach: []
 };
 
@@ -110,19 +116,24 @@ export default function(state = INITIAL_STATE, action) {
     /*
       District
     */
+    case CREATE_DISTRICT_PENDING:
+      return { ...state, districtLoading: true, districtError: false };
+    case CREATE_DISTRICT_FULFILLED:
+      return { ...state, districtLoading: false, districtError: false };
+    case CREATE_DISTRICT_REJECTED:
+      return { ...state, districtLoading: false, districtError: true };
     case FETCH_DISTRICT_PENDING:
-      return { ...state, loading: true };
+      return { ...state, districtsFetchLoading: true };
 
     case FETCH_DISTRICT_FULFILLED:
       return {
         ...state,
         districts: action.payload,
-        loading: false,
-        statusClass: "fulfilled"
+        districtsFetchLoading: false
       };
 
     case FETCH_DISTRICT_REJECTED:
-      return { ...state, loading: false };
+      return { ...state, districtsFetchLoading: false };
 
     case FETCH_CITY_PENDING:
       return { ...state, loading: true };
