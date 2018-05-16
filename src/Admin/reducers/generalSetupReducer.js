@@ -132,7 +132,10 @@ export default function(state = INITIAL_STATE, action) {
     case FETCH_DISTRICT_FULFILLED:
       return {
         ...state,
-        districts: action.payload,
+        districts: action.payload.map((district, i) => ({
+          ...district,
+          s_no: i + 1
+        })),
         districtsFetchLoading: false
       };
 

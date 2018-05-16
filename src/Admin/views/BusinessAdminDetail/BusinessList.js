@@ -240,17 +240,18 @@ class BusinessList extends Component {
         <Row>
           <Col xs="12">
             <ReactTable
+              {...this.tableProps}
               style={{ background: "white" }}
               data={this.props.businesses}
               defaultPageSize={this.props.rows}
               defaultSorted={this.props.sort_by}
               loading={this.props.fetchLoading}
               onPageChange={pageIndex => {
-                this.props.onBusinessAllGet({ page: ++pageIndex });
+                this.props.onBusinessAllGet({ page: pageIndex + 1 });
               }}
               onPageSizeChange={(pageSize, pageIndex) =>
                 this.props.onBusinessAllGet({
-                  page: ++pageIndex,
+                  page: pageIndex + 1,
                   rows: pageSize
                 })
               }
@@ -258,7 +259,6 @@ class BusinessList extends Component {
               page={this.props.page - 1}
               pages={this.props.pages}
               rowCount={this.props.rowCount}
-              {...this.tableProps}
             />
           </Col>
         </Row>
@@ -270,7 +270,7 @@ class BusinessList extends Component {
 export default connect(
   ({
     AdminContainer: {
-      business_reducer: { businesses, fetchLoading, pages },
+      business_reducer: { businesses, fetchLoading, pages, rowCount },
       filterBusiness,
       industries
     }
@@ -279,6 +279,7 @@ export default connect(
     industryLoading: industries.loading,
     businesses,
     pages,
+    rowCount,
     fetchLoading,
     ...filterBusiness
   }),

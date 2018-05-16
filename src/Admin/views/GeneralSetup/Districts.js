@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import orderBy from "lodash.orderby";
+import debounce from "lodash.debounce";
 
 import {
   Button,
@@ -23,7 +25,6 @@ import {
   Select,
   PaginationComponent
 } from "../../../Common/components";
-import filterCaseInsensitive from "../../../Common/utils/filterCaseInsesitive";
 import "react-table/react-table.css";
 
 import {
@@ -34,6 +35,8 @@ import {
   onDistrictSubmit,
   onDistrictDelete
 } from "../../actions";
+
+const DISTRICTS_CHANGED = " districts_changed";
 
 class Districts extends Component {
   static getDerivedStateFromProps = (nextProps, prevState) =>
@@ -46,7 +49,16 @@ class Districts extends Component {
     state: "",
     district: "",
     districtCode: "",
-    districtSubmit: false
+    districtSubmit: false,
+    filterCountry: [],
+    filterState: [],
+    filterText: [],
+    sortedData: [],
+    pages: 1,
+    page: 0,
+    rows: 5,
+    rowCount: 0,
+    districts: []
   };
 
   componentDidMount() {
@@ -55,9 +67,18 @@ class Districts extends Component {
     this.props.onStateList();
   }
 
-  componentDidUpdate = (prevProps, prevState) => {
+  getSnapshotBeforeUpdate(prevProps, prevState) {
+    if (prevProps.districts !== this.props.districts) {
+      return DISTRICTS_CHANGED;
+    }
+    return null;
+  }
+
+  componentDidUpdate = (prevProps, prevState, snapshot) => {
     if (prevState.districtSubmit && prevProps.loading)
       this.focusableInput.focus();
+
+    if (snapshot === DISTRICTS_CHANGED) this.updateTable();
   };
 
   tableProps = {
@@ -79,24 +100,21 @@ class Districts extends Component {
           const state = this.props.states.find(state => state.id === value);
           return state ? state.name : "Not Found";
         },
-        filterMethod: (filter, row) => {
-          if (filter && filter.value && filter.value.length > 0) {
-            let found = false;
-            for (let i = 0; i < filter.value.length; i++) {
-              found = found || filter.value[i].id === row.state;
-            }
-            return found;
-          } else return true;
-        },
-        Filter: ({ filter, onChange }) => (
+        Filter: () => (
           <Select
             clearable
             multi
-            value={filter ? filter.value : null}
-            onChange={onChange}
+            value={this.state.filterState}
+            onChange={this.handleSelectChange.bind(this, "filterState")}
             valueKey="id"
             labelKey="name"
-            options={this.props.states}
+            options={this.props.states.filter(state => {
+              const { filterCountry } = this.state;
+              if (filterCountry.length === 0) return true;
+              for (let i = 0; i < filterCountry.length; i++)
+                if (state.country === filterCountry[i].id) return true;
+              return false;
+            })}
           />
         )
       },
@@ -113,24 +131,12 @@ class Districts extends Component {
             return country ? country.name : "Not Found";
           } else return "Not Found";
         },
-        filterMethod: (filter, row) => {
-          if (filter && filter.value && filter.value.length > 0) {
-            let found = false;
-            for (let i = 0; i < filter.value.length; i++) {
-              const states = this.props.states
-                .filter(state => state.country === filter.value[i].id)
-                .map(state => state.id);
-              found = found || states.includes(row.state);
-            }
-            return found;
-          } else return true;
-        },
-        Filter: ({ filter, onChange }) => (
+        Filter: () => (
           <Select
             clearable
             multi
-            value={filter ? filter.value : null}
-            onChange={onChange}
+            value={this.state.filterCountry}
+            onChange={this.handleSelectChange.bind(this, "filterCountry")}
             valueKey="id"
             labelKey="name"
             options={this.props.countries}
@@ -161,10 +167,10 @@ class Districts extends Component {
         )
       }
     ],
-    minRows: 5,
-    defaultPageSize: 20,
-    className: "-striped -highlight",
+    manual: true,
     filterable: true,
+    minRows: 5,
+    className: "-striped -highlight",
     PaginationComponent
   };
 
@@ -188,12 +194,136 @@ class Districts extends Component {
     });
 
   handleSelectChange = (key, value) => {
-    this.setState({ [key]: value });
+    this.setState(
+      { [key]: value },
+      () =>
+        (key === "filterCountry" || key === "filterState") && this.updateTable()
+    );
     if (key === "country") {
       this.setState({ state: "" });
       value && this.props.onCountryEachList({ id: value.id });
     }
+    if (
+      key === "filterCountry" &&
+      value.length > 0 &&
+      this.state.filterState.length > 0
+    ) {
+      let changed = false;
+      let filterState = this.state.filterState.filter(filter => {
+        let found = false;
+        for (let i = 0; i < value.length; i++) {
+          const states = this.props.states
+            .filter(state => state.country === value[i].id)
+            .map(state => state.id);
+          found = found || states.includes(filter.id);
+          if (!found) changed = true;
+        }
+        return found;
+      });
+      changed && this.updateData({ filterState });
+    }
   };
+
+  updateTable = () => {
+    const {
+      page,
+      rows,
+      filterText,
+      filterCountry,
+      filterState,
+      sortedData
+    } = this.state;
+
+    let districts = this.props.districts;
+    // filter
+    if (filterText.length > 0) {
+      filterText.forEach(filter => {
+        districts = districts.filter(
+          district =>
+            String(district[filter.id].toLowerCase()).indexOf(
+              filter.value.toLowerCase()
+            ) !== -1
+        );
+      });
+    }
+    if (filterState.length > 0) {
+      districts = districts.filter(district => {
+        let found = false;
+        for (let i = 0; i < filterState.length; i++) {
+          found = found || filterState[i].id === district.state;
+        }
+        return found;
+      });
+    } else if (filterCountry.length > 0) {
+      districts = districts.filter(district => {
+        let found = false;
+        for (let i = 0; i < filterCountry.length; i++) {
+          const states = this.props.states
+            .filter(state => state.country === filterCountry[i].id)
+            .map(state => state.id);
+          found = found || states.includes(district.state);
+        }
+        return found;
+      });
+    }
+    // sort
+    if (sortedData.length > 0) {
+      districts = districts.map(district => {
+        const state = this.props.states.find(
+          state => state.id === district.state
+        );
+
+        const country = this.props.countries.find(
+          country => (state ? state.country === country.id : false)
+        );
+
+        return {
+          ...district,
+          stateName: state ? state.name : "Not Found",
+          countryName: country ? country.name : "Not Found"
+        };
+      });
+      districts = orderBy(
+        districts,
+        sortedData.map(sort => {
+          let id;
+          switch (sort.id) {
+            case "state":
+              id = "stateName";
+              break;
+            case "country":
+              id = "countryName";
+              break;
+            default:
+              id = sort.id;
+          }
+          return row => {
+            if (row[id] === null || row[id] === undefined) {
+              return -Infinity;
+            }
+            return typeof row[id] === "string"
+              ? row[id].toLowerCase()
+              : row[id];
+          };
+        }),
+        sortedData.map(d => (d.desc ? "desc" : "asc"))
+      );
+    }
+
+    // pagination
+    let newPage = districts.length <= rows * page ? 0 : page;
+
+    this.setState({
+      rowCount: districts.length,
+      districts: districts.slice(rows * newPage, rows * newPage + rows),
+      page: newPage,
+      pages: Math.ceil(districts.length / rows)
+    });
+  };
+
+  debouncedUpdate = debounce(this.updateTable, 100);
+
+  updateData = params => this.setState({ ...params }, () => this.updateTable());
 
   render() {
     return (
@@ -241,7 +371,7 @@ class Districts extends Component {
                           className="select-industry"
                           value={this.state.state}
                           onChange={this.handleSelectChange.bind(this, "state")}
-                          options={this.props.states}
+                          options={this.props.partialStates}
                           valueKey="id"
                           labelKey="name"
                         />
@@ -298,9 +428,27 @@ class Districts extends Component {
 
         <ReactTable
           {...this.tableProps}
-          data={this.props.districts}
+          data={this.state.districts}
+          pages={this.state.pages}
+          pageSize={this.state.rows}
+          rowCount={this.state.rowCount}
+          onPageChange={pageIndex => {
+            this.updateData({ page: pageIndex });
+          }}
+          onPageSizeChange={(pageSize, pageIndex) =>
+            this.updateData({
+              page: pageIndex,
+              rows: pageSize
+            })
+          }
+          onSortedChange={newSorted =>
+            this.updateData({ sortedData: newSorted })
+          }
+          onFilteredChange={(column, value) => {
+            (value.id === "districtCode" || value.id === "name") &&
+              this.setState({ filterText: column }, this.debouncedUpdate);
+          }}
           loading={this.props.fetchLoading}
-          defaultFilterMethod={filterCaseInsensitive}
         />
       </div>
     );
@@ -310,6 +458,7 @@ class Districts extends Component {
 export default connect(
   ({ AdminContainer: { general_setup } }) => ({
     countries: general_setup.countries,
+    partialStates: general_setup.countryData,
     states: general_setup.states,
     districts: general_setup.districts,
     fetchLoading: general_setup.districtsFetchLoading,
