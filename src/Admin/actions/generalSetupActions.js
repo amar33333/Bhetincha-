@@ -16,6 +16,8 @@ import {
   onStateGetAjax,
   onStateEachDeleteAjax,
   onAreaGet,
+  onAreaGetAjax,
+  onAreaEachDeleteAjax,
   onDistrictGet,
   onDistrictGetAjax,
   onDistrictEachDeleteAjax,
@@ -68,6 +70,9 @@ import {
   FETCH_CITY_FULFILLED,
   FETCH_CITY_PENDING,
   FETCH_CITY_REJECTED,
+  FETCH_CITY_AUTOCOMPLETE_FULFILLED,
+  FETCH_CITY_AUTOCOMPLETE_PENDING,
+  FETCH_CITY_AUTOCOMPLETE_REJECTED,
   FETCH_DISTRICT_FULFILLED,
   FETCH_DISTRICT_PENDING,
   FETCH_DISTRICT_REJECTED,
@@ -101,6 +106,9 @@ import {
   DELETE_CITY_FULFILLED,
   DELETE_CITY_PENDING,
   DELETE_CITY_REJECTED,
+  DELETE_AREA_FULFILLED,
+  DELETE_AREA_PENDING,
+  DELETE_AREA_REJECTED,
   FETCH_ADDRESS_TREE_LIST_PENDING,
 
   // UNMOUNT
@@ -464,15 +472,105 @@ epics.push((action$, { getState }) =>
   })
 );
 
-export const onAreaList = ({ access_token }) => dispatch => {
-  onAreaGet({ access_token })
-    .then(response =>
-      dispatch({ type: FETCH_AREA_FULFILLED, payload: response.data })
-    )
-    .catch(error => dispatch({ type: FETCH_AREA_REJECTED, payload: error }));
+export const onCityAutocomplete = payload => ({
+  type: FETCH_CITY_AUTOCOMPLETE_PENDING,
+  payload
+});
 
-  dispatch({ type: FETCH_AREA_PENDING });
-};
+epics.push((action$, { getState }) =>
+  action$.ofType(FETCH_CITY_AUTOCOMPLETE_PENDING).switchMap(({ payload }) => {
+    console.log(payload);
+    const params = {};
+    params.keyword = "";
+
+    return onCityGetAjax({
+      access_token: getState().auth.cookies.token_data.access_token,
+      params
+    })
+      .map(({ response }) => ({
+        type: FETCH_CITY_AUTOCOMPLETE_FULFILLED,
+        payload: response
+      }))
+      .catch(ajaxError =>
+        Observable.of({ type: FETCH_CITY_AUTOCOMPLETE_REJECTED })
+      );
+  })
+);
+
+export const onAreaList = payload => ({ type: FETCH_AREA_PENDING, payload });
+
+epics.push((action$, { getState }) =>
+  action$.ofType(FETCH_AREA_PENDING).switchMap(({ payload }) => {
+    const {
+      rows,
+      page,
+      name,
+      filterDistrict,
+      filterState,
+      filterCountry,
+      sortby
+    } = getState().AdminContainer.filterArea;
+    const params = {};
+    params.rows = rows;
+    params.page = page;
+    if (name) params.name = name;
+    params.sortby = sortby.map(data => `${data.id}${data.desc ? "-desc" : ""}`);
+
+    if (payload) {
+      if (payload.rows) params.rows = payload.rows;
+      if (payload.page) params.page = payload.page;
+    }
+
+    if (filterDistrict.length)
+      params.district = filterDistrict.map(district => district.id);
+    if (filterState.length) params.state = filterState.map(state => state.id);
+    if (filterCountry.length)
+      params.country = filterCountry.map(country => country.id);
+
+    return onAreaGetAjax({
+      access_token: getState().auth.cookies.token_data.access_token,
+      params
+    })
+      .map(({ response }) => ({
+        type: FETCH_AREA_FULFILLED,
+        payload: response
+      }))
+      .catch(ajaxError => Observable.of({ type: FETCH_AREA_REJECTED }));
+  })
+);
+
+export const onAreaDelete = payload => ({
+  type: DELETE_AREA_PENDING,
+  payload
+});
+
+epics.push((action$, { getState }) =>
+  action$.ofType(DELETE_AREA_PENDING).mergeMap(({ payload }) =>
+    onAreaEachDeleteAjax({
+      id: payload.id,
+      access_token: getState().auth.cookies.token_data.access_token
+    })
+      .concatMap(() => {
+        toast.success("Deleted Successfully!");
+        return [{ type: FETCH_AREA_PENDING }, { type: DELETE_AREA_FULFILLED }];
+      })
+      .catch(ajaxError => {
+        toast.error("Error Deleting State");
+        console.log(ajaxError);
+        return Observable.of({ type: DELETE_AREA_REJECTED });
+      })
+  )
+);
+
+// export const onAreaList = ({ access_token }) => dispatch => {
+//   onAreaGet({ access_token })
+//     .then(response =>
+//       dispatch({ type: FETCH_AREA_FULFILLED, payload: response.data })
+//     )
+//     .catch(error => dispatch({ type: FETCH_AREA_REJECTED, payload: error }));
+
+//   dispatch({ type: FETCH_AREA_PENDING });
+// };
 
 // Not Used till now...
 // export const onAddressTreeListAllImmediate = ({

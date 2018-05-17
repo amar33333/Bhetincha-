@@ -26,6 +26,9 @@ import {
   FETCH_CITY_FULFILLED,
   FETCH_CITY_PENDING,
   FETCH_CITY_REJECTED,
+  FETCH_CITY_AUTOCOMPLETE_FULFILLED,
+  FETCH_CITY_AUTOCOMPLETE_PENDING,
+  FETCH_CITY_AUTOCOMPLETE_REJECTED,
   FETCH_COUNTRY_EACH_FULFILLED,
   FETCH_COUNTRY_EACH_REJECTED,
   FETCH_COUNTRY_EACH_PENDING,
@@ -72,6 +75,7 @@ const INITIAL_STATE = {
   cityLoading: false,
   cityError: false,
   cityData: [],
+  citiesAutocomplete: [],
   areas: [],
   areasPages: 1,
   areasRowCount: 0,
@@ -188,6 +192,9 @@ export default function(state = INITIAL_STATE, action) {
     case FETCH_CITY_REJECTED:
       return { ...state, citiesFetchLoading: false };
 
+    case FETCH_CITY_AUTOCOMPLETE_FULFILLED:
+      return { ...state, citiesAutocomplete: action.payload };
+
     /*
       Area
     */
@@ -199,19 +206,26 @@ export default function(state = INITIAL_STATE, action) {
       return { ...state, areaLoading: false, areaError: true };
 
     case FETCH_AREA_PENDING:
-      return { ...state, loading: true };
+      return { ...state, areasFetchLoading: true };
 
     case FETCH_AREA_FULFILLED:
       return {
         ...state,
-        areas: action.payload,
-        loading: false,
-        statusClass: "fulfilled"
+        areas: action.payload.data.map((area, i) => ({
+          ...area,
+          s_no: action.payload.rows * (action.payload.page - 1) + i + 1
+        })),
+        areasPages: action.payload.pages,
+        areasRowCount: action.payload.rowCount,
+        areasFetchLoading: false
       };
 
     case FETCH_AREA_REJECTED:
-      return { ...state, loading: false };
+      return { ...state, areasFetchLoading: false };
 
+    /*
+      Others
+    */
     case FETCH_ADDRESS_TREE_PENDING:
       return { ...state, loading: true };
 

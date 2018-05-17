@@ -602,6 +602,26 @@ export const onAreaGet = ({ access_token }) =>
     }
   });
 
+export const onAreaGetAjax = ({ access_token, params }) =>
+  ajax({
+    method: "get",
+    url: `${AREA_URL}?${querystring.stringify(params)}`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
+export const onAreaEachDeleteAjax = ({ id, access_token }) =>
+  ajax({
+    method: "delete",
+    url: `${AREA_URL}${id}/`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
 export const onGroupPost = ({ group, access_token }) =>
   axios({
     method: "post",

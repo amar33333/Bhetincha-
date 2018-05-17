@@ -159,7 +159,7 @@ class Cities extends Component {
       }
     ],
     onFilteredChange: (column, value) =>
-      value.id === "name" && this.debouncedSearch(column),
+      value.id === "city" && this.debouncedSearch(column),
     manual: true,
     filterable: true,
     minRows: 5,
@@ -393,7 +393,7 @@ class Cities extends Component {
           style={{ background: "white" }}
           data={this.props.cities}
           defaultPageSize={this.props.rows}
-          defaultSorted={this.props.sort_by}
+          defaultSorted={this.props.sortby}
           loading={this.props.fetchLoading}
           onPageChange={pageIndex => {
             this.props.onCityList({ page: pageIndex + 1 });
