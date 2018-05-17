@@ -61,6 +61,19 @@ export const onIndustryPost = ({ industry, access_token }) =>
     }
   });
 
+export const onIndustryPut = ({ industry, access_token }) =>
+  ajax({
+    method: "PUT",
+    url: `${INDUSTRY_URL}${industry.value}/`,
+    body: {
+      name: industry.name
+    },
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
 export const onIndustryGet = ({ access_token }) =>
   axios({
     method: "get",
@@ -140,6 +153,20 @@ export const onCategoryPost = ({ category, industry, access_token }) =>
     url: CATEGORY_URL,
     data: {
       name: category,
+      industry
+    },
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
+export const onCategoryPut = ({ category, industry, access_token }) =>
+  ajax({
+    method: "PUT",
+    url: `${CATEGORY_URL}${category.id}/`,
+    body: {
+      name: category.name,
       industry
     },
     headers: {

@@ -21,13 +21,18 @@ import { PopoverDelete, Select } from "../../../Common/components";
 import filterCaseInsensitive from "../../../Common/utils/filterCaseInsesitive";
 import "react-table/react-table.css";
 
+import CustomModal from "../../../Common/components/CustomModal";
+import CategoryEditModal from "../../../Common/components/CustomModal/ModalTemplates/CategoryEditModal";
+
 import {
   onCategorySubmit,
+  onCategoryEdit,
   onCategoryList,
   onIndustryList,
   onUnmountIndustry,
   onUnmountCategory,
-  onCategoryDelete
+  onCategoryDelete,
+  toggleCategoryEditModal
 } from "../../actions";
 
 class Categories extends Component {
@@ -91,12 +96,14 @@ class Categories extends Component {
         filterable: false,
         sortable: false,
         width: 130,
-        Cell: ({ value }) => (
+        Cell: ({ value, original: { id, industry, name } }) => (
           <div>
             <Button
               color="secondary"
               className="mr-l"
-              onClick={event => console.log("Edit clicked for id: ", value)}
+              onClick={() =>
+                this.props.toggleCategoryEditModal({ id, industry, name })
+              }
             >
               Edit
             </Button>
@@ -133,7 +140,7 @@ class Categories extends Component {
     const { category, industry } = this.state;
     console.log("asdqwew;asdad;A: ", category, industry);
     this.props.onCategorySubmit({
-      industry: industry.value,
+      industry: industry.id,
       category,
       access_token: this.access_token
     });
@@ -146,14 +153,10 @@ class Categories extends Component {
   };
 
   render() {
-    const industries = this.props.industries.industries
-      ? this.props.industries.industries.map(industry => {
-          return { value: industry.id, label: industry.name };
-        })
-      : null;
+    const industries = this.props.industries.industries;
 
     const { industry } = this.state;
-    const value = industry && industry.value;
+    const value = industry && industry.id;
 
     return (
       <div className="animated fadeIn">
@@ -179,6 +182,8 @@ class Categories extends Component {
                           value={value}
                           onChange={this.handleIndustryChange}
                           options={industries}
+                          valueKey="id"
+                          labelKey="name"
                         />
                       </FormGroup>
                     </Col>
@@ -222,6 +227,18 @@ class Categories extends Component {
           loading={this.props.categories.fetchLoading}
           defaultFilterMethod={filterCaseInsensitive}
         />
+        <CustomModal
+          title="Edit Category Data"
+          isOpen={this.props.categories.categoryEditModal}
+          toggle={this.props.categories.toggleCategoryEditModal}
+          className={"modal-xs" + this.props.className}
+        >
+          <CategoryEditModal
+            data={this.props.categories.categoryEditData}
+            onCategoryEdit={this.props.onCategoryEdit}
+            industries={industries}
+          />
+        </CustomModal>
       </div>
     );
   }
@@ -235,6 +252,8 @@ export default connect(
   }),
   {
     onCategorySubmit,
+    toggleCategoryEditModal,
+    onCategoryEdit,
     onIndustryList,
     onUnmountIndustry,
     onUnmountCategory,

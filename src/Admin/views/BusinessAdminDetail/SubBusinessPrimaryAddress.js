@@ -268,6 +268,21 @@ class SubBusinessPrimaryAddress extends Component {
     );
   };
 
+  // DO NOT DELETE THIS COMMENTED CODE
+
+  // onContactDelete(index) {
+  //   return () => {
+  //     this.setState(
+  //       {
+  //         contactPerson: this.state.contactPerson.filter(
+  //           (contact, sub_index) => index !== sub_index
+  //         )
+  //       },
+  //       () => toast.success(`Contact - ${index + 1} Deleted Successfully`)
+  //     );
+  //   };
+  // }
+
   onContactDelete = index => () => {
     this.setState(
       {

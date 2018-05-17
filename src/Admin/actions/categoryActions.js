@@ -6,7 +6,8 @@ import {
   onCategoryGet,
   onCategoryEachDeleteAjax,
   onCategoryGetAjax,
-  onCategoryEachGet
+  onCategoryEachGet,
+  onCategoryPut
 } from "../config/adminServerCall";
 
 import {
@@ -25,6 +26,10 @@ import {
   DELETE_CATEGORY_PENDING,
   DELETE_CATEGORY_FULFILLED,
   DELETE_CATEGORY_REJECTED,
+  EDIT_CATEGORY_FULFILLED,
+  EDIT_CATEGORY_PENDING,
+  EDIT_CATEGORY_REJECTED,
+  TOGGLE_CATEGORY_EDIT_MODAL,
   UNMOUNT_CATEGORY_DATA,
   UNMOUNT_SUB_CATEGORY,
   UNMOUNT_CATEGORY
@@ -59,6 +64,39 @@ export const onCategorySubmit = ({
     });
   dispatch({ type: CREATE_CATEGORY_PENDING });
 };
+
+export const onCategoryEdit = payload => ({
+  type: EDIT_CATEGORY_PENDING,
+  payload
+});
+
+epics.push((action$, { getState }) =>
+  action$.ofType(EDIT_CATEGORY_PENDING).mergeMap(({ payload }) => {
+    const { category, industry } = payload;
+    const access_token = getState().auth.cookies.token_data.access_token;
+
+    return onCategoryPut({ category, industry, access_token })
+      .concatMap(({ response }) => {
+        if (response.msg === "success") {
+          toast.success("Category Updated successfully!");
+          return [
+            { type: EDIT_CATEGORY_FULFILLED },
+            { type: FETCH_CATEGORY_PENDING },
+            { type: TOGGLE_CATEGORY_EDIT_MODAL }
+          ];
+        } else {
+          throw new Error(response.msg[Object.keys(response.msg)[0]][0]);
+        }
+      })
+      .catch(ajaxError => {
+        toast.error(ajaxError.toString());
+        return Observable.of({
+          type: EDIT_CATEGORY_REJECTED,
+          payload: ajaxError
+        });
+      });
+  })
+);
 
 export const onCategoryList = () => ({ type: FETCH_CATEGORY_PENDING });
 
@@ -125,6 +163,11 @@ export const onCategoryEachList = ({ id, access_token }) => dispatch => {
 
   dispatch({ type: FETCH_CATEGORY_EACH_PENDING });
 };
+
+export const toggleCategoryEditModal = payload => ({
+  type: TOGGLE_CATEGORY_EDIT_MODAL,
+  payload
+});
 
 export const onRemoveCategoryData = ({ obj }) => {
   return {

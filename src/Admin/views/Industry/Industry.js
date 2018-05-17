@@ -19,11 +19,16 @@ import { PopoverDelete, PaginationComponent } from "../../../Common/components";
 import filterCaseInsensitive from "../../../Common/utils/filterCaseInsesitive";
 import "react-table/react-table.css";
 
+import CustomModal from "../../../Common/components/CustomModal";
+import IndustryEditModal from "../../../Common/components/CustomModal/ModalTemplates/IndustryEditModal";
+
 import {
   onIndustrySubmit,
   onIndustryList,
   onUnmountIndustry,
-  onIndustryDelete
+  onIndustryDelete,
+  toggleIndustryEditModal,
+  onIndustryEdit
 } from "../../actions";
 
 class Industry extends Component {
@@ -51,12 +56,14 @@ class Industry extends Component {
         filterable: false,
         sortable: false,
         width: 130,
-        Cell: ({ value }) => (
+        Cell: ({ value, original: { name } }) => (
           <div>
             <Button
               color="secondary"
               className="mr-l"
-              onClick={event => console.log("Edit clicked for id: ", value)}
+              onClick={() =>
+                this.props.toggleIndustryEditModal({ value, name })
+              }
             >
               Edit
             </Button>
@@ -128,13 +135,24 @@ class Industry extends Component {
             </Card>
           </Col>
         </Row>
-
         <ReactTable
           {...this.tableProps}
           data={this.props.industries}
           loading={this.props.fetchLoading}
           defaultFilterMethod={filterCaseInsensitive}
         />
+        <CustomModal
+          title="Edit Industry Data"
+          isOpen={this.props.industryEditModal}
+          toggle={this.props.toggleIndustryEditModal}
+          className={"modal-xs" + this.props.className}
+        >
+          <IndustryEditModal
+            data={this.props.industryEditData}
+            onIndustryEdit={this.props.onIndustryEdit}
+          />
+        </CustomModal>
+        );
       </div>
     );
   }
@@ -142,5 +160,12 @@ class Industry extends Component {
 
 export default connect(
   ({ AdminContainer: { industries } }) => ({ ...industries }),
-  { onIndustrySubmit, onIndustryList, onUnmountIndustry, onIndustryDelete }
+  {
+    onIndustrySubmit,
+    onIndustryList,
+    onUnmountIndustry,
+    onIndustryDelete,
+    onIndustryEdit,
+    toggleIndustryEditModal
+  }
 )(Industry);

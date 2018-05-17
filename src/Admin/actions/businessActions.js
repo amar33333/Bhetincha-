@@ -7,7 +7,9 @@ import {
   onCountryEachGet,
   onStateEachGet,
   onDistrictEachGet,
-  onCityEachGet
+  onCityEachGet,
+  onCountryEachGetAjax,
+  onStateEachGetAjax
 } from "../config/adminServerCall";
 
 import {
@@ -17,7 +19,8 @@ import {
   onPaymentMethodsGet,
   onBusinessAllGetAjax,
   onBusinessEachGet,
-  onBusinessEachDeleteAjax
+  onBusinessEachDeleteAjax,
+  onBusinessEachGetAjax
 } from "../../Business/config/businessServerCall";
 
 import {
@@ -251,14 +254,14 @@ export const onBusinessEdit = ({
             const branchdistrictId = each.district ? each.district.id : "";
             const branchcityId = each.city ? each.city.id : "";
 
-            getAddressTree({
+            getAddressTree(
               branchcountryId,
               branchstateId,
               branchdistrictId,
               branchcityId,
               access_token,
               dispatch
-            });
+            );
           });
 
           // dispatch({ type: FETCH_INDUSTRY_EACH_PENDING });
@@ -289,151 +292,100 @@ export const onBusinessEdit = ({
   dispatch({ type: EDIT_BUSINESS_PENDING });
 };
 
-export const getAddressTree = () => ({
-  type: FETCH_ADDRESS_TREE_GET_PENDING
-});
+// const getAddressTree = payload => {
+//   console.log("address tree sss: ", payload);
 
-epics.push((action$, { getState }) =>
-  action$.ofType(FETCH_ADDRESS_TREE_GET_PENDING).mergeMap(({ payload }) => {
-    const { countryId, stateId, districtId, cityId } = payload;
-    const access_token = getState().auth.cookies.token_data.access_token;
-
-    return onCountryEachGet({ id: countryId, access_token })
-      .mergeMap(({ response }) => {
-        return {
-          type: FETCH_ADDRESS_TREE_FULFILLED,
-          payload: response
-        };
-      })
-      .mergeMap(() => onStateEachGet({ id: stateId, access_token }))
-      .mergeMap(({ response }) => {
-        return {
-          type: FETCH_ADDRESS_TREE_FULFILLED,
-          payload: response
-        };
-      });
-  })
-);
-
-// const getAddressTree = (
-//   countryId,
-//   stateId,
-//   districtId,
-//   cityId,
-//   access_token,
-//   dispatch
-// ) => {
-//   if (countryId !== "")
-//     onCountryEachGet({ id: countryId, access_token })
-//       .then(countryResponse => {
-//         dispatch({
-//           type: FETCH_ADDRESS_TREE_FULFILLED,
-//           payload: countryResponse.data
-//         });
-//         if (stateId !== "")
-//           onStateEachGet({ id: stateId, access_token })
-//             .then(stateResponse => {
-//               dispatch({
-//                 type: FETCH_ADDRESS_TREE_FULFILLED,
-//                 payload: stateResponse.data
-//               });
-//               if (districtId !== "")
-//                 onDistrictEachGet({ id: districtId, access_token })
-//                   .then(districtResponse => {
-//                     dispatch({
-//                       type: FETCH_ADDRESS_TREE_FULFILLED,
-//                       payload: districtResponse.data
-//                     });
-//                     if (cityId !== "")
-//                       onCityEachGet({ id: cityId, access_token })
-//                         .then(cityResponse =>
-//                           dispatch({
-//                             type: FETCH_ADDRESS_TREE_FULFILLED,
-//                             payload: cityResponse.data
-//                           })
-//                         )
-//                         .catch(cityErr =>
-//                           dispatch({
-//                             type: FETCH_ADDRESS_TREE_REJECTED,
-//                             payload: cityErr
-//                           })
-//                         );
-//                   })
-//                   .catch(districtErr =>
-//                     dispatch({
-//                       type: FETCH_ADDRESS_TREE_REJECTED,
-//                       payload: districtErr
-//                     })
-//                   );
-//             })
-//             .catch(stateErr =>
-//               dispatch({ type: FETCH_ADDRESS_TREE_REJECTED, payload: stateErr })
-//             );
-//       })
-//       .catch(countryErr =>
-//         dispatch({ type: FETCH_ADDRESS_TREE_REJECTED, payload: countryErr })
-//       );
+//   return {
+//     type: FETCH_ADDRESS_TREE_GET_PENDING,
+//     payload: payload
+//   };
 // };
 
-// const getAddressTree = (
-//   countryId,
-//   stateId,
-//   districtId,
-//   cityId,
-//   access_token,
-//   dispatch
-// ) => {
-//   if (countryId !== "")
-//     onCountryEachGet({ id: countryId, access_token })
-//       .then(countryResponse => {
-//         dispatch({
+// epics.push((action$, { getState }) =>
+//   action$.ofType(FETCH_ADDRESS_TREE_GET_PENDING).mergeMap(({ payload }) => {
+//     console.log("address tree: ", payload);
+
+//     const { countryId, stateId, districtId, cityId } = payload;
+//     const access_token = getState().auth.cookies.token_data.access_token;
+
+//     return onCountryEachGetAjax({ id: countryId, access_token }).map(
+//       ({ response }) => {
+//         return {
 //           type: FETCH_ADDRESS_TREE_FULFILLED,
-//           payload: countryResponse.data
-//         });
-//         if (stateId !== "")
-//           onStateEachGet({ id: stateId, access_token })
-//             .then(stateResponse => {
-//               dispatch({
-//                 type: FETCH_ADDRESS_TREE_FULFILLED,
-//                 payload: stateResponse.data
-//               });
-//               if (districtId !== "")
-//                 onDistrictEachGet({ id: districtId, access_token })
-//                   .then(districtResponse => {
-//                     dispatch({
-//                       type: FETCH_ADDRESS_TREE_FULFILLED,
-//                       payload: districtResponse.data
-//                     });
-//                     if (cityId !== "")
-//                       onCityEachGet({ id: cityId, access_token })
-//                         .then(cityResponse =>
-//                           dispatch({
-//                             type: FETCH_ADDRESS_TREE_FULFILLED,
-//                             payload: cityResponse.data
-//                           })
-//                         )
-//                         .catch(cityErr =>
-//                           dispatch({
-//                             type: FETCH_ADDRESS_TREE_REJECTED,
-//                             payload: cityErr
-//                           })
-//                         );
-//                   })
-//                   .catch(districtErr =>
-//                     dispatch({
-//                       type: FETCH_ADDRESS_TREE_REJECTED,
-//                       payload: districtErr
-//                     })
-//                   );
-//             })
-//             .catch(stateErr =>
-//               dispatch({ type: FETCH_ADDRESS_TREE_REJECTED, payload: stateErr })
-//             );
-//       })
-//       .catch(countryErr =>
-//         dispatch({ type: FETCH_ADDRESS_TREE_REJECTED, payload: countryErr })
-//       );
-// };
+//           payload: response
+//         };
+//       }
+//     );
+//     // .mergeMap(() => onStateEachGetAjax({ id: stateId, access_token }))
+//     // .mergeMap(({ response }) => {
+//     //   return {
+//     //     type: FETCH_ADDRESS_TREE_FULFILLED,
+//     //     payload: response
+//     //   };
+//     // });
+//   })
+// );
+
+// export const onBusinessEachList = payload => ({
+//   type: FETCH_BUSINESS_EACH_PENDING,
+//   payload: payload
+// });
+
+// epics.push((action$, { getState }) =>
+//   action$.ofType(FETCH_BUSINESS_EACH_PENDING).mergeMap(({ payload }) => {
+//     const { username } = payload;
+//     const access_token = getState().auth.cookies.token_data.access_token;
+
+//     return onBusinessEachGetAjax({ slug: username, access_token }).concatMap(
+//       ({ response }) => {
+//         console.log("business each: ", response);
+//         const industryId = response.industry ? response.industry.id : "";
+//         const countryId = response.address.country
+//           ? response.address.country.id
+//           : "";
+//         const stateId = response.address.state ? response.address.state.id : "";
+//         const districtId = response.address.district
+//           ? response.address.district.id
+//           : "";
+//         const cityId = response.address.city ? response.address.city.id : "";
+
+//         const returnStuffs = [];
+//         if (industryId !== "")
+//           returnStuffs.push({
+//             type: FETCH_INDUSTRY_EACH_PENDING,
+//             payload: { id: industryId }
+//           });
+
+//         return [
+//           {
+//             type: FETCH_BUSINESS_EACH_FULFILLED,
+//             payload: response
+//           },
+//           ...returnStuffs
+//         ];
+//         //   onIndustryEachGet({ id: industryId, access_token })
+//         //     .map(newResponse => {
+//         //       console.log("industry each: ", newResponse);
+//         //       return ({
+//         //         type: FETCH_INDUSTRY_EACH_FULFILLED,
+//         //         payload: newResponse.data
+//         //       });
+//         //     })
+
+//         //     .catch(err =>
+//         //       return ({ type: FETCH_INDUSTRY_EACH_REJECTED, payload: err })
+//         //     );
+//       }
+//     );
+//     // .mergeMap(() => onStateEachGetAjax({ id: stateId, access_token }))
+//     // .mergeMap(({ response }) => {
+//     //   return {
+//     //     type: FETCH_ADDRESS_TREE_FULFILLED,
+//     //     payload: response
+//     //   };
+//     // });
+//   })
+// );
 
 export const onBusinessEachList = ({ username, access_token }) => dispatch => {
   onBusinessEachGet({ username, access_token })
@@ -482,6 +434,29 @@ export const onBusinessEachList = ({ username, access_token }) => dispatch => {
         access_token,
         dispatch
       );
+      // console.log(
+      //   "primary addresss: ",
+      //   getAddressTree(
+      //     countryId,
+      //     stateId,
+      //     districtId,
+      //     cityId,
+      //     access_token,
+      //     dispatch
+      //   )
+      // );
+
+      // return {
+      //   type: FETCH_ADDRESS_TREE_GET_PENDING,
+      //   payload: {
+      //     countryId,
+      //     stateId,
+      //     districtId,
+      //     cityId,
+      //     access_token,
+      //     dispatch
+      //   }
+      // };
 
       // For Branch Address
       response.data.branchAddress.map(each => {
@@ -507,6 +482,66 @@ export const onBusinessEachList = ({ username, access_token }) => dispatch => {
       dispatch({ type: FETCH_BUSINESS_EACH_REJECTED, payload: error })
     );
   dispatch({ type: FETCH_BUSINESS_EACH_PENDING });
+};
+
+const getAddressTree = (
+  countryId,
+  stateId,
+  districtId,
+  cityId,
+  access_token,
+  dispatch
+) => {
+  if (countryId !== "")
+    onCountryEachGet({ id: countryId, access_token })
+      .then(countryResponse => {
+        dispatch({
+          type: FETCH_ADDRESS_TREE_FULFILLED,
+          payload: countryResponse.data
+        });
+        if (stateId !== "")
+          onStateEachGet({ id: stateId, access_token })
+            .then(stateResponse => {
+              dispatch({
+                type: FETCH_ADDRESS_TREE_FULFILLED,
+                payload: stateResponse.data
+              });
+              if (districtId !== "")
+                onDistrictEachGet({ id: districtId, access_token })
+                  .then(districtResponse => {
+                    dispatch({
+                      type: FETCH_ADDRESS_TREE_FULFILLED,
+                      payload: districtResponse.data
+                    });
+                    if (cityId !== "")
+                      onCityEachGet({ id: cityId, access_token })
+                        .then(cityResponse =>
+                          dispatch({
+                            type: FETCH_ADDRESS_TREE_FULFILLED,
+                            payload: cityResponse.data
+                          })
+                        )
+                        .catch(cityErr =>
+                          dispatch({
+                            type: FETCH_ADDRESS_TREE_REJECTED,
+                            payload: cityErr
+                          })
+                        );
+                  })
+                  .catch(districtErr =>
+                    dispatch({
+                      type: FETCH_ADDRESS_TREE_REJECTED,
+                      payload: districtErr
+                    })
+                  );
+            })
+            .catch(stateErr =>
+              dispatch({ type: FETCH_ADDRESS_TREE_REJECTED, payload: stateErr })
+            );
+      })
+      .catch(countryErr =>
+        dispatch({ type: FETCH_ADDRESS_TREE_REJECTED, payload: countryErr })
+      );
 };
 
 export const onCompanyTypeSubmit = payload => ({
