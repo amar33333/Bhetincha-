@@ -5,6 +5,7 @@ import {
   onDistrictPost,
   onDistrictPostAjax,
   onCityPost,
+  onCityPostAjax,
   onCountryPost,
   onCountryPostAjax,
   onStatePost,
@@ -18,6 +19,7 @@ import {
   onDistrictGetAjax,
   onDistrictEachDeleteAjax,
   onCityGet,
+  onCityGetAjax,
   onCountryEachGet,
   onStateEachGet,
   onDistrictEachGet,
@@ -325,47 +327,81 @@ epics.push((action$, { getState }) =>
   )
 );
 
-// export const onDistrictList = ({ access_token }) => dispatch => {
-//   onDistrictGet({ access_token })
-//     .then(response =>
-//       dispatch({ type: FETCH_DISTRICT_FULFILLED, payload: response.data })
-//     )
-//     .catch(error =>
-//       dispatch({ type: FETCH_DISTRICT_REJECTED, payload: error })
-//     );
+export const onCitySubmit = payload => ({
+  type: CREATE_CITY_PENDING,
+  payload
+});
 
-//   dispatch({ type: FETCH_DISTRICT_PENDING });
-// };
+epics.push((action$, { getState }) =>
+  action$.ofType(CREATE_CITY_PENDING).mergeMap(({ payload }) => {
+    const { district, city } = payload;
+    const access_token = getState().auth.cookies.token_data.access_token;
 
-export const onCitySubmit = ({ district, city, access_token }) => dispatch => {
-  onCityPost({ district, city, access_token })
-    .then(response => {
-      if (response.data.msg === "success") {
-        toast.success("New City Added Successfully!");
-      } else {
-        response.data.msg.name.map(msg => {
-          toast.error(msg);
+    return onCityPostAjax({ district, city, access_token })
+      .concatMap(({ response }) => {
+        if (response.msg === "success") {
+          toast.success("City added successfully!");
+          return [
+            { type: CREATE_CITY_FULFILLED },
+            { type: FETCH_CITY_PENDING }
+          ];
+        } else {
+          throw new Error(response.msg[Object.keys(response.msg)[0]][0]);
+        }
+      })
+      .catch(ajaxError => {
+        toast.error(ajaxError.toString());
+        return Observable.of({
+          type: CREATE_CITY_REJECTED,
+          payload: ajaxError
         });
-      }
-      dispatch({ type: CREATE_CITY_FULFILLED, payload: response.data });
+      });
+  })
+);
+
+export const onCityList = payload => ({ type: FETCH_CITY_PENDING, payload });
+
+epics.push((action$, { getState }) =>
+  action$.ofType(FETCH_CITY_PENDING).mergeMap(({ payload }) => {
+    const {
+      rows,
+      page,
+      keyword,
+      filterDistrict,
+      filterState,
+      filterCountry,
+      sort_by
+    } = getState().AdminContainer.filterCity;
+    const params = {};
+    params.rows = rows;
+    params.page = page;
+    if (keyword) params.keyword = keyword;
+    params.sort_by = sort_by.map(
+      data => `${data.id}-${data.desc ? "desc" : "asc"}`
+    );
+
+    if (payload) {
+      if (payload.rows) params.rows = payload.rows;
+      if (payload.page) params.page = payload.page;
+    }
+
+    if (filterDistrict.length)
+      params.district = filterDistrict.map(district => district.id);
+    if (filterState.length) params.state = filterState.map(state => state.id);
+    if (filterCountry.length)
+      params.country = filterCountry.map(country => country.id);
+
+    return onCityGetAjax({
+      access_token: getState().auth.cookies.token_data.access_token,
+      params
     })
-    .catch(error => {
-      toast.error("New City not added !");
-      dispatch({ type: CREATE_CITY_REJECTED, payload: error });
-    });
-
-  dispatch({ type: CREATE_CITY_PENDING });
-};
-
-export const onCityList = ({ access_token }) => dispatch => {
-  onCityGet({ access_token })
-    .then(response =>
-      dispatch({ type: FETCH_CITY_FULFILLED, payload: response.data })
-    )
-    .catch(error => dispatch({ type: FETCH_CITY_REJECTED, payload: error }));
-
-  dispatch({ type: FETCH_CITY_PENDING });
-};
+      .map(({ response }) => ({
+        type: FETCH_CITY_FULFILLED,
+        payload: response
+      }))
+      .catch(ajaxError => Observable.of({ type: FETCH_CITY_REJECTED }));
+  })
+);
 
 export const onAreaSubmit = ({ city, area, access_token }) => dispatch => {
   onAreaPost({ city, area, access_token })
@@ -572,7 +608,7 @@ export const onStateEachList = payload => ({
 
 epics.push((action$, { getState }) =>
   action$.ofType(FETCH_STATE_EACH_PENDING).mergeMap(({ payload }) =>
-    onStateEachGet({
+    onStateEachGetAjax({
       id: payload.id,
       access_token: getState().auth.cookies.token_data.access_token
     })

@@ -7,11 +7,13 @@ import {
 } from "../actions/types";
 
 const INITIAL_STATE = {
-  q: "",
+  keyword: "",
   sort_by: [],
-  city: "",
   rows: 20,
-  page: 1
+  page: 1,
+  filterDistrict: [],
+  filterState: [],
+  filterCountry: []
 };
 
 export default function(state = INITIAL_STATE, action) {
@@ -28,13 +30,13 @@ export default function(state = INITIAL_STATE, action) {
     case CLEAR_CITY_FILTER:
       return {
         ...INITIAL_STATE,
-        q: state.q,
+        keyword: state.keyword,
         rows: state.rows,
         page: state.page
       };
 
     case CLEAR_CITY_NAME_SEARCH:
-      return { ...state, q: "" };
+      return { ...state, keyword: "" };
 
     default:
       return state;

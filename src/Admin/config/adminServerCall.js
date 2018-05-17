@@ -20,6 +20,7 @@ import {
 import axios from "axios";
 
 import { ajax } from "rxjs/observable/dom/ajax";
+import querystring from "querystring";
 
 export const onCompanyTypePost = ({ company_type, access_token }) => {
   return axios({
@@ -499,10 +500,34 @@ export const onCityPost = ({ district, city, access_token }) =>
     }
   });
 
+export const onCityPostAjax = ({ district, city, access_token }) =>
+  ajax({
+    method: "post",
+    url: CITY_URL,
+    body: {
+      name: city,
+      district
+    },
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
 export const onCityGet = ({ access_token }) =>
   axios({
     method: "get",
     url: CITY_URL,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
+export const onCityGetAjax = ({ access_token, params }) =>
+  ajax({
+    method: "get",
+    url: `${CITY_URL}?${querystring.stringify(params)}`,
     headers: {
       "Content-Type": "application/json",
       Authorization: "Bearer " + access_token

@@ -56,7 +56,7 @@ class Districts extends Component {
     sortedData: [],
     pages: 1,
     page: 0,
-    rows: 5,
+    rows: 20,
     rowCount: 0,
     districts: []
   };
@@ -87,7 +87,6 @@ class Districts extends Component {
         Header: "SN",
         accessor: "s_no",
         filterable: false,
-        searchable: false,
         width: 70
       },
       { Header: "District", accessor: "name" },
