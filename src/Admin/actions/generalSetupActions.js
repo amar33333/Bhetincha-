@@ -2,6 +2,7 @@ import { toast } from "react-toastify";
 import { Observable } from "rxjs/Observable";
 import {
   onAreaPost,
+  onAreaPostAjax,
   onDistrictPost,
   onDistrictPostAjax,
   onCityPost,
@@ -431,25 +432,37 @@ epics.push((action$, { getState }) =>
 
 export const onClearCityFilters = () => ({ type: CLEAR_CITY_ALL });
 
-export const onAreaSubmit = ({ city, area, access_token }) => dispatch => {
-  onAreaPost({ city, area, access_token })
-    .then(response => {
-      if (response.data.msg === "success") {
-        toast.success("New Area Added Successfully!");
-      } else {
-        response.data.msg.name.map(msg => {
-          toast.error(msg);
-        });
-      }
-      dispatch({ type: CREATE_AREA_FULFILLED, payload: response.data });
-    })
-    .catch(error => {
-      toast.error("New Area not added !");
-      dispatch({ type: CREATE_AREA_REJECTED, payload: error });
-    });
+export const onAreaSubmit = payload => ({
+  type: CREATE_AREA_PENDING,
+  payload
+});
 
-  dispatch({ type: CREATE_AREA_PENDING });
-};
+epics.push((action$, { getState }) =>
+  action$.ofType(CREATE_AREA_PENDING).mergeMap(({ payload }) => {
+    const { city, area } = payload;
+    const access_token = getState().auth.cookies.token_data.access_token;
+
+    return onAreaPostAjax({ city, area, access_token })
+      .concatMap(({ response }) => {
+        if (response.msg === "success") {
+          toast.success("Area added successfully!");
+          return [
+            { type: CREATE_AREA_FULFILLED },
+            { type: FETCH_AREA_PENDING }
+          ];
+        } else {
+          throw new Error(response.msg[Object.keys(response.msg)[0]][0]);
+        }
+      })
+      .catch(ajaxError => {
+        toast.error(ajaxError.toString());
+        return Observable.of({
+          type: CREATE_AREA_REJECTED,
+          payload: ajaxError
+        });
+      });
+  })
+);
 
 export const onAreaList = ({ access_token }) => dispatch => {
   onAreaGet({ access_token })
@@ -679,7 +692,7 @@ export const onDistrictEachList = payload => ({
 
 epics.push((action$, { getState }) =>
   action$.ofType(FETCH_DISTRICT_EACH_PENDING).mergeMap(({ payload }) =>
-    onDistrictEachGet({
+    onDistrictEachGetAjax({
       id: payload.id,
       access_token: getState().auth.cookies.token_data.access_token
     })

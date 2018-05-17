@@ -304,6 +304,7 @@ class Cities extends Component {
                           autosize
                           clearable
                           required
+                          disabled={this.props.loading}
                           name="countries"
                           className="select-industry"
                           value={this.state.country}
@@ -324,6 +325,7 @@ class Cities extends Component {
                           autosize
                           clearable
                           required
+                          disabled={this.props.loading}
                           name="states"
                           className="select-industry"
                           value={this.state.state}
@@ -341,6 +343,7 @@ class Cities extends Component {
                           autosize
                           clearable
                           required
+                          disabled={this.props.loading}
                           name="District"
                           className="select-industry"
                           value={this.state.district}

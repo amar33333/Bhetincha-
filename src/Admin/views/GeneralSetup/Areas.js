@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-
+import ReactTable from "react-table";
+import debounce from "lodash.debounce";
 import {
   Button,
   Col,
@@ -16,8 +17,11 @@ import {
   CardHeader,
   Label
 } from "reactstrap";
-
-import Select from "react-select";
+import {
+  Select,
+  PopoverDelete,
+  PaginationComponent
+} from "../../../Common/components";
 
 import {
   onCountryList,
@@ -28,73 +32,56 @@ import {
 } from "../../actions";
 
 class Areas extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      country: "",
-      state: "",
-      district: "",
-      area: "",
-      city: ""
-    };
-    this.access_token = this.props.cookies
-      ? this.props.cookies.token_data.access_token
+  static getDerivedStateFromProps = (nextProps, prevState) =>
+    prevState.areaSubmit && !nextProps.error && !nextProps.loading
+      ? { area: "", areaSubmit: false }
       : null;
-    this.props.onCountryList({ access_token: this.access_token });
+
+  state = {
+    country: "",
+    state: "",
+    district: "",
+    city: "",
+    area: "",
+    areaSubmit: false
+  };
+
+  componentDidMount() {
+    this.props.onCountryList();
   }
 
-  onChange = (key, event) => {
+  componentDidUpdate = (prevProps, prevState, snapshot) => {
+    if (prevState.areaSubmit && prevProps.loading) this.focusableInput.focus();
+  };
+
+  onChange = (key, event) =>
     this.setState({
       [key]: event.target.value.replace(/\b\w/g, l => l.toUpperCase())
     });
-  };
 
   handleSelectChange = (key, value) => {
     this.setState({ [key]: value });
     if (key === "country") {
-      this.setState({
-        state: ""
-      });
-      this.props.onCountryEachList({
-        id: value.id
-      });
+      this.setState({ state: "", district: "", city: "" });
+      value && this.props.onCountryEachList({ id: value.id });
     } else if (key === "state") {
-      this.setState({
-        district: ""
-      });
-      this.props.onStateEachList({
-        id: value.id
-      });
+      this.setState({ district: "", city: "" });
+      value && this.props.onStateEachList({ id: value.id });
     } else if (key === "district") {
-      this.setState({
-        city: ""
-      });
-      this.props.onDistrictEachList({
-        id: value.id
-      });
+      this.setState({ city: "" });
+      value && this.props.onDistrictEachList({ id: value.id });
     }
   };
 
   onFormSubmit = event => {
     event.preventDefault();
-
     const { area, city } = this.state;
-    console.log("form submit: ", this.state);
-
-    this.props.onAreaSubmit({
-      area,
-      city: city.id,
-      access_token: this.access_token
-    });
-    this.setState({ area: "" });
+    this.setState({ areaSubmit: true }, () =>
+      this.props.onAreaSubmit({ area, city: city.id })
+    );
   };
 
   render() {
-    const countries = this.props.general_setup.countries;
-    const states = this.props.general_setup.countryData;
-    const districts = this.props.general_setup.stateData;
-    const cities = this.props.general_setup.districtData;
-
     return (
       <div className="animated fadeIn">
         <Row className="hr-centered">
@@ -114,14 +101,15 @@ class Areas extends Component {
                           autosize
                           clearable
                           required
+                          disabled={this.props.loading}
                           name="Countries"
                           className="select-industry"
-                          value={this.state.country.id}
+                          value={this.state.country}
                           onChange={this.handleSelectChange.bind(
                             this,
                             "country"
                           )}
-                          options={countries}
+                          options={this.props.countries}
                           valueKey="id"
                           labelKey="name"
                         />
@@ -131,15 +119,15 @@ class Areas extends Component {
                       <FormGroup>
                         <Label for="States">State</Label>
                         <Select
-                          autoFocus
                           autosize
                           clearable
                           required
+                          disabled={this.props.loading}
                           name="States"
                           className="select-industry"
-                          value={this.state.state.id}
+                          value={this.state.state}
                           onChange={this.handleSelectChange.bind(this, "state")}
-                          options={states}
+                          options={this.props.partialStates}
                           valueKey="id"
                           labelKey="name"
                         />
@@ -149,18 +137,18 @@ class Areas extends Component {
                       <FormGroup>
                         <Label for="Districts">District</Label>
                         <Select
-                          autoFocus
                           autosize
                           clearable
                           required
+                          disabled={this.props.loading}
                           name="Districts"
                           className="select-industry"
-                          value={this.state.district.id}
+                          value={this.state.district}
                           onChange={this.handleSelectChange.bind(
                             this,
                             "district"
                           )}
-                          options={districts}
+                          options={this.props.partialDistricts}
                           valueKey="id"
                           labelKey="name"
                         />
@@ -170,15 +158,15 @@ class Areas extends Component {
                       <FormGroup>
                         <Label for="Cities">City</Label>
                         <Select
-                          autoFocus
                           autosize
                           clearable
                           required
+                          disabled={this.props.loading}
                           name="Cities"
                           className="select-industry"
-                          value={this.state.city.id}
+                          value={this.state.city}
                           onChange={this.handleSelectChange.bind(this, "city")}
-                          options={cities}
+                          options={this.props.partialCities}
                           valueKey="id"
                           labelKey="name"
                         />
@@ -194,8 +182,9 @@ class Areas extends Component {
                           </InputGroupText>
                         </InputGroupAddon>
                         <Input
-                          autoFocus
                           required
+                          innerRef={ref => (this.focusableInput = ref)}
+                          disabled={this.props.loading}
                           type="text"
                           placeholder="Type Area Name"
                           value={this.state.area}
@@ -220,7 +209,14 @@ class Areas extends Component {
 }
 
 export default connect(
-  ({ AdminContainer: { general_setup }, auth }) => ({ general_setup, ...auth }),
+  ({ AdminContainer: { general_setup } }) => ({
+    countries: general_setup.countries,
+    partialStates: general_setup.countryData,
+    partialDistricts: general_setup.stateData,
+    partialCities: general_setup.districtData,
+    loading: general_setup.areaLoading,
+    error: general_setup.areaError
+  }),
   {
     onCountryList,
     onCountryEachList,

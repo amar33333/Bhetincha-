@@ -578,6 +578,20 @@ export const onAreaPost = ({ city, area, access_token }) =>
     }
   });
 
+export const onAreaPostAjax = ({ city, area, access_token }) =>
+  ajax({
+    method: "post",
+    url: AREA_URL,
+    body: {
+      name: area,
+      city
+    },
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
 export const onAreaGet = ({ access_token }) =>
   axios({
     method: "get",

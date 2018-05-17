@@ -1,13 +1,10 @@
 import {
-  FETCH_COUNTRY_FULFILLED,
-  FETCH_COUNTRY_PENDING,
-  FETCH_COUNTRY_REJECTED,
   CREATE_COUNTRY_FULFILLED,
   CREATE_COUNTRY_PENDING,
   CREATE_COUNTRY_REJECTED,
-  FETCH_STATE_FULFILLED,
-  FETCH_STATE_PENDING,
-  FETCH_STATE_REJECTED,
+  FETCH_COUNTRY_FULFILLED,
+  FETCH_COUNTRY_PENDING,
+  FETCH_COUNTRY_REJECTED,
   CREATE_DISTRICT_FULFILLED,
   CREATE_DISTRICT_PENDING,
   CREATE_DISTRICT_REJECTED,
@@ -17,6 +14,12 @@ import {
   CREATE_STATE_FULFILLED,
   CREATE_STATE_PENDING,
   CREATE_STATE_REJECTED,
+  FETCH_STATE_FULFILLED,
+  FETCH_STATE_PENDING,
+  FETCH_STATE_REJECTED,
+  CREATE_AREA_PENDING,
+  CREATE_AREA_FULFILLED,
+  CREATE_AREA_REJECTED,
   FETCH_AREA_FULFILLED,
   FETCH_AREA_PENDING,
   FETCH_AREA_REJECTED,
@@ -69,6 +72,13 @@ const INITIAL_STATE = {
   cityLoading: false,
   cityError: false,
   cityData: [],
+  areas: [],
+  areasPages: 1,
+  areasRowCount: 0,
+  areasFetchLoading: false,
+  areaLoading: false,
+  areaError: false,
+  areaData: [],
   statusClass: "",
   loading: false
 };
@@ -177,6 +187,16 @@ export default function(state = INITIAL_STATE, action) {
 
     case FETCH_CITY_REJECTED:
       return { ...state, citiesFetchLoading: false };
+
+    /*
+      Area
+    */
+    case CREATE_AREA_PENDING:
+      return { ...state, areaLoading: true, areaError: false };
+    case CREATE_AREA_FULFILLED:
+      return { ...state, areaLoading: false, areaError: false };
+    case CREATE_AREA_REJECTED:
+      return { ...state, areaLoading: false, areaError: true };
 
     case FETCH_AREA_PENDING:
       return { ...state, loading: true };
