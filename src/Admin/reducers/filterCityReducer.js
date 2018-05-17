@@ -1,14 +1,13 @@
 import {
-  CLEAR_CITY_NAME_SEARCH,
   CITY_FILTER_ON_CHANGE,
-  CLEAR_CITY_FILTER,
+  CLEAR_CITY_ALL,
   FETCH_CITY_FULFILLED,
   CITY_SET_SORT_BY
 } from "../actions/types";
 
 const INITIAL_STATE = {
-  keyword: "",
-  sort_by: [],
+  name: "",
+  sortby: [],
   rows: 20,
   page: 1,
   filterDistrict: [],
@@ -25,18 +24,10 @@ export default function(state = INITIAL_STATE, action) {
       return { ...state, ...action.payload };
 
     case CITY_SET_SORT_BY:
-      return { ...state, sort_by: action.payload };
+      return { ...state, sortby: action.payload };
 
-    case CLEAR_CITY_FILTER:
-      return {
-        ...INITIAL_STATE,
-        keyword: state.keyword,
-        rows: state.rows,
-        page: state.page
-      };
-
-    case CLEAR_CITY_NAME_SEARCH:
-      return { ...state, keyword: "" };
+    case CLEAR_CITY_ALL:
+      return INITIAL_STATE;
 
     default:
       return state;

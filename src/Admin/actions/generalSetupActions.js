@@ -20,6 +20,7 @@ import {
   onDistrictEachDeleteAjax,
   onCityGet,
   onCityGetAjax,
+  onCityEachDeleteAjax,
   onCountryEachGet,
   onStateEachGet,
   onDistrictEachGet,
@@ -96,6 +97,9 @@ import {
   DELETE_DISTRICT_PENDING,
   DELETE_DISTRICT_FULFILLED,
   DELETE_DISTRICT_REJECTED,
+  DELETE_CITY_FULFILLED,
+  DELETE_CITY_PENDING,
+  DELETE_CITY_REJECTED,
   FETCH_ADDRESS_TREE_LIST_PENDING,
 
   // UNMOUNT
@@ -103,7 +107,8 @@ import {
   // UNMOUNT_COUNTRY,
   // UNMOUNT_STATES,
   UNMOUNT_DISTRICT,
-  UNMOUNT_CITY
+  UNMOUNT_CITY,
+  CLEAR_CITY_ALL
 } from "./types";
 
 const epics = [];
@@ -362,23 +367,21 @@ epics.push((action$, { getState }) =>
 export const onCityList = payload => ({ type: FETCH_CITY_PENDING, payload });
 
 epics.push((action$, { getState }) =>
-  action$.ofType(FETCH_CITY_PENDING).mergeMap(({ payload }) => {
+  action$.ofType(FETCH_CITY_PENDING).switchMap(({ payload }) => {
     const {
       rows,
       page,
-      keyword,
+      name,
       filterDistrict,
       filterState,
       filterCountry,
-      sort_by
+      sortby
     } = getState().AdminContainer.filterCity;
     const params = {};
     params.rows = rows;
     params.page = page;
-    if (keyword) params.keyword = keyword;
-    params.sort_by = sort_by.map(
-      data => `${data.id}-${data.desc ? "desc" : "asc"}`
-    );
+    if (name) params.name = name;
+    params.sortby = sortby.map(data => `${data.id}${data.desc ? "-desc" : ""}`);
 
     if (payload) {
       if (payload.rows) params.rows = payload.rows;
@@ -402,6 +405,31 @@ epics.push((action$, { getState }) =>
       .catch(ajaxError => Observable.of({ type: FETCH_CITY_REJECTED }));
   })
 );
+
+export const onCityDelete = payload => ({
+  type: DELETE_CITY_PENDING,
+  payload
+});
+
+epics.push((action$, { getState }) =>
+  action$.ofType(DELETE_CITY_PENDING).mergeMap(({ payload }) =>
+    onCityEachDeleteAjax({
+      id: payload.id,
+      access_token: getState().auth.cookies.token_data.access_token
+    })
+      .concatMap(() => {
+        toast.success("Deleted Successfully!");
+        return [{ type: FETCH_CITY_PENDING }, { type: DELETE_CITY_FULFILLED }];
+      })
+      .catch(ajaxError => {
+        toast.error("Error Deleting State");
+        console.log(ajaxError);
+        return Observable.of({ type: DELETE_CITY_REJECTED });
+      })
+  )
+);
+
+export const onClearCityFilters = () => ({ type: CLEAR_CITY_ALL });
 
 export const onAreaSubmit = ({ city, area, access_token }) => dispatch => {
   onAreaPost({ city, area, access_token })

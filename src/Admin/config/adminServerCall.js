@@ -554,6 +554,16 @@ export const onCityEachGetAjax = ({ id, access_token }) =>
     }
   });
 
+export const onCityEachDeleteAjax = ({ id, access_token }) =>
+  ajax({
+    method: "delete",
+    url: `${CITY_URL}${id}/`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
 export const onAreaPost = ({ city, area, access_token }) =>
   axios({
     method: "post",

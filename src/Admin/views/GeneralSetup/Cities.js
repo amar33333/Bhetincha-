@@ -32,7 +32,9 @@ import {
   onDistrictList,
   onStateList,
   handleOnCityFilterChange,
-  handleSortChangeCity
+  handleSortChangeCity,
+  onCityDelete,
+  onClearCityFilters
 } from "../../actions";
 
 class Cities extends Component {
@@ -58,7 +60,7 @@ class Cities extends Component {
         sortable: false,
         width: 70
       },
-      { Header: "City", accessor: "name" },
+      { Header: "City", accessor: "name", id: "city" },
       {
         Header: "District",
         accessor: "district",
@@ -150,7 +152,7 @@ class Cities extends Component {
             </Button>
             <PopoverDelete
               id={`delete-${value}`}
-              onClick={() => console.log({ id: value })}
+              onClick={() => this.props.onCityDelete({ id: value })}
             />
           </div>
         )
@@ -166,7 +168,10 @@ class Cities extends Component {
   };
 
   debouncedSearch = debounce(
-    column => this.props.handleOnCityFilterChange({ keyword: column[0].value }),
+    column =>
+      this.props.handleOnCityFilterChange({
+        name: column.length ? column[0].value : ""
+      }),
     200
   );
 
@@ -180,6 +185,8 @@ class Cities extends Component {
   componentDidUpdate = (prevProps, prevState, snapshot) => {
     if (prevState.citySubmit && prevProps.loading) this.focusableInput.focus();
   };
+
+  componentWillUnmount = () => this.props.onClearCityFilters();
 
   onFormSubmit = event => {
     event.preventDefault();
@@ -429,6 +436,8 @@ export default connect(
     onDistrictList,
     onStateList,
     handleOnCityFilterChange,
-    handleSortChangeCity
+    handleSortChangeCity,
+    onCityDelete,
+    onClearCityFilters
   }
 )(Cities);
