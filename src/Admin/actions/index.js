@@ -4,6 +4,7 @@ import filterBusinessEpics from "./filterBusinessActions";
 import categoryEpics from "./categoryActions";
 import subCategoryEpics from "./subCategoryActions";
 import generalSetupEpics from "./generalSetupActions";
+import filterCityEpics from "./filterCityActions";
 
 export * from "./industryActions";
 export * from "./categoryActions";
@@ -21,5 +22,6 @@ export default [
   ...filterBusinessEpics,
   ...categoryEpics,
   ...subCategoryEpics,
-  ...generalSetupEpics
+  ...generalSetupEpics,
+  ...filterCityEpics
 ];

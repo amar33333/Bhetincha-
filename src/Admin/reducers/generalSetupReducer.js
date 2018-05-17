@@ -40,29 +40,37 @@ import {
   FETCH_CITY_EACH_PENDING,
   UNMOUNT_DISTRICT,
   UNMOUNT_CITY,
-  UNMOUNT_AREA
+  UNMOUNT_AREA,
+  CREATE_CITY_PENDING,
+  CREATE_CITY_FULFILLED,
+  CREATE_CITY_REJECTED
 } from "../actions/types";
 
 const INITIAL_STATE = {
-  loading: false,
   countries: [],
+  countriesFetchLoading: false,
   countryLoading: false,
   countryError: false,
-  countriesFetchLoading: false,
+  countryData: [],
   states: [],
+  statesFetchLoading: false,
   stateLoading: false,
   stateError: false,
-  statesFetchLoading: false,
+  stateData: [],
   districts: [],
+  districtsFetchLoading: false,
   districtLoading: false,
   districtError: false,
-  districtsFetchLoading: false,
-  statusClass: "",
-  countryEach: [],
-  countryData: [],
-  stateData: [],
   districtData: [],
-  cityData: []
+  cities: [],
+  citiesPages: 1,
+  citiesRowCount: 0,
+  citiesFetchLoading: false,
+  cityLoading: false,
+  cityError: false,
+  cityData: [],
+  statusClass: "",
+  loading: false
 };
 
 export default function(state = INITIAL_STATE, action) {
@@ -132,7 +140,10 @@ export default function(state = INITIAL_STATE, action) {
     case FETCH_DISTRICT_FULFILLED:
       return {
         ...state,
-        districts: action.payload,
+        districts: action.payload.map((district, i) => ({
+          ...district,
+          s_no: i + 1
+        })),
         districtsFetchLoading: false
       };
 
@@ -142,19 +153,30 @@ export default function(state = INITIAL_STATE, action) {
     /*
       City
     */
+    case CREATE_CITY_PENDING:
+      return { ...state, cityLoading: true, cityError: false };
+    case CREATE_CITY_FULFILLED:
+      return { ...state, cityLoading: false, cityError: false };
+    case CREATE_CITY_REJECTED:
+      return { ...state, cityLoading: false, cityError: true };
+
     case FETCH_CITY_PENDING:
-      return { ...state, loading: true };
+      return { ...state, citiesFetchLoading: true };
 
     case FETCH_CITY_FULFILLED:
       return {
         ...state,
-        cities: action.payload,
-        loading: false,
-        statusClass: "fulfilled"
+        cities: action.payload.data.map((city, i) => ({
+          ...city,
+          s_no: action.payload.rows * (action.payload.page - 1) + i + 1
+        })),
+        citiesPages: action.payload.pages,
+        citiesRowCount: action.payload.rowCount,
+        citiesFetchLoading: false
       };
 
     case FETCH_CITY_REJECTED:
-      return { ...state, loading: false };
+      return { ...state, citiesFetchLoading: false };
 
     case FETCH_AREA_PENDING:
       return { ...state, loading: true };
@@ -252,7 +274,6 @@ export default function(state = INITIAL_STATE, action) {
       return {
         ...state,
         countryData: action.payload.states,
-        countryEach: action.payload.states,
         loading: false,
         statusClass: "fulfilled"
       };

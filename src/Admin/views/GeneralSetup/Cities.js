@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-
+import ReactTable from "react-table";
+import debounce from "lodash.debounce";
 import {
   Button,
   Col,
@@ -16,77 +17,267 @@ import {
   CardHeader,
   Label
 } from "reactstrap";
-
-import Select from "react-select";
+import {
+  Select,
+  PopoverDelete,
+  PaginationComponent
+} from "../../../Common/components";
 
 import {
   onCountryList,
   onCountryEachList,
   onStateEachList,
+  onCitySubmit,
+  onCityList,
   onDistrictList,
-  onCitySubmit
+  onStateList,
+  handleOnCityFilterChange,
+  handleSortChangeCity
 } from "../../actions";
 
 class Cities extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      country: "",
-      state: "",
-      district: "",
-      city: ""
-    };
-
-    this.access_token = this.props.cookies
-      ? this.props.cookies.token_data.access_token
+  static getDerivedStateFromProps = (nextProps, prevState) =>
+    prevState.citySubmit && !nextProps.error && !nextProps.loading
+      ? { city: "", citySubmit: false }
       : null;
 
-    this.props.onCountryList({ access_token: this.access_token });
+  state = {
+    country: "",
+    state: "",
+    district: "",
+    city: "",
+    citySubmit: false
+  };
+
+  tableProps = {
+    columns: [
+      {
+        Header: "SN",
+        accessor: "s_no",
+        filterable: false,
+        sortable: false,
+        width: 70
+      },
+      { Header: "City", accessor: "name" },
+      {
+        Header: "District",
+        accessor: "district",
+        Filter: () => (
+          <Select
+            clearable
+            multi
+            value={this.props.filterDistrict}
+            onChange={this.handleFilterSelectChange.bind(
+              this,
+              "filterDistrict"
+            )}
+            valueKey="id"
+            labelKey="name"
+            options={this.props.districts.filter(district => {
+              const { filterCountry, filterState } = this.props;
+              if (!filterState.length) {
+                if (!filterCountry.length) return true;
+                else {
+                  let found = false;
+                  for (let i = 0; i < filterCountry.length; i++) {
+                    const states = this.props.states
+                      .filter(state => state.country === filterCountry[i].id)
+                      .map(state => state.id);
+                    found = found || states.includes(district.state);
+                  }
+                  return found;
+                }
+              } else {
+                for (let i = 0; i < filterState.length; i++)
+                  if (district.state === filterState[i].id) return true;
+              }
+              return false;
+            })}
+          />
+        )
+      },
+      {
+        Header: "State",
+        accessor: "state",
+        Filter: () => (
+          <Select
+            clearable
+            multi
+            value={this.props.filterState}
+            onChange={this.handleFilterSelectChange.bind(this, "filterState")}
+            valueKey="id"
+            labelKey="name"
+            options={this.props.states.filter(state => {
+              const { filterCountry } = this.props;
+              if (!filterCountry.length) return true;
+              for (let i = 0; i < filterCountry.length; i++)
+                if (state.country === filterCountry[i].id) return true;
+              return false;
+            })}
+          />
+        )
+      },
+      {
+        Header: "Country",
+        accessor: "country",
+        Filter: () => (
+          <Select
+            clearable
+            multi
+            value={this.props.filterCountry}
+            onChange={this.handleFilterSelectChange.bind(this, "filterCountry")}
+            valueKey="id"
+            labelKey="name"
+            options={this.props.countries}
+          />
+        )
+      },
+      {
+        Header: "Actions",
+        id: "edit",
+        accessor: "id",
+        filterable: false,
+        sortable: false,
+        width: 140,
+        Cell: ({ value }) => (
+          <div>
+            <Button
+              color="secondary"
+              className="mr-l"
+              onClick={event => console.log("Edit clicked for id: ", value)}
+            >
+              Edit
+            </Button>
+            <PopoverDelete
+              id={`delete-${value}`}
+              onClick={() => console.log({ id: value })}
+            />
+          </div>
+        )
+      }
+    ],
+    onFilteredChange: (column, value) =>
+      value.id === "name" && this.debouncedSearch(column),
+    manual: true,
+    filterable: true,
+    minRows: 5,
+    className: "-striped -highlight",
+    PaginationComponent
+  };
+
+  debouncedSearch = debounce(
+    column => this.props.handleOnCityFilterChange({ keyword: column[0].value }),
+    200
+  );
+
+  componentDidMount() {
+    this.props.onCountryList();
+    this.props.onCityList();
+    this.props.onDistrictList();
+    this.props.onStateList();
   }
+
+  componentDidUpdate = (prevProps, prevState, snapshot) => {
+    if (prevState.citySubmit && prevProps.loading) this.focusableInput.focus();
+  };
 
   onFormSubmit = event => {
     event.preventDefault();
 
     const { city, district } = this.state;
 
-    this.props.onCitySubmit({
-      city,
-      district: district.id,
-      access_token: this.access_token
-    });
-    this.setState({ city: "" });
+    this.setState({ citySubmit: true }, () =>
+      this.props.onCitySubmit({
+        city,
+        district: district.id
+      })
+    );
   };
 
-  onChange = (key, event) => {
+  onChange = (key, event) =>
     this.setState({
       [key]: event.target.value.replace(/\b\w/g, l => l.toUpperCase())
     });
-  };
 
   handleSelectChange = (key, value) => {
     this.setState({ [key]: value });
     if (key === "country") {
-      this.setState({
-        state: ""
-      });
-      this.props.onCountryEachList({
-        id: value.id
-      });
+      this.setState({ state: "", district: "" });
+      value && this.props.onCountryEachList({ id: value.id });
     } else if (key === "state") {
-      this.setState({
-        district: ""
-      });
-      this.props.onStateEachList({
-        id: value.id
-      });
+      this.setState({ district: "" });
+      value && this.props.onStateEachList({ id: value.id });
     }
   };
 
-  render() {
-    const countries = this.props.general_setup.countries;
-    const states = this.props.general_setup.countryData;
-    const districts = this.props.general_setup.stateData;
+  handleFilterSelectChange = (key, value) => {
+    if (key === "filterDistrict")
+      this.props.handleOnCityFilterChange({ filterDistrict: value });
+    else this.updateOtherFilters(key, value);
+  };
 
+  updateOtherFilters = (key, value) => {
+    const { filterDistrict } = this.props;
+    let changedDistrict = false;
+
+    let newFilterState = key === "filterState" ? value : this.props.filterState,
+      newFilterDistrict = [],
+      filterCountry =
+        key === "filterCountry" ? value : this.props.filterCountry;
+
+    if (newFilterState.length) {
+      if (filterCountry.length) {
+        newFilterState = newFilterState.filter(filter => {
+          let found = false;
+          for (let i = 0; i < filterCountry.length; i++) {
+            const states = this.props.states
+              .filter(state => state.country === filterCountry[i].id)
+              .map(state => state.id);
+            found = found || states.includes(filter.id);
+          }
+          return found;
+        });
+      }
+    }
+    if (filterDistrict.length) {
+      if (newFilterState.length) {
+        newFilterDistrict = filterDistrict.filter(filter => {
+          const tempFilterState = newFilterState;
+          let found = false;
+          for (let i = 0; i < tempFilterState.length; i++) {
+            const districts = this.props.districts
+              .filter(district => district.state === tempFilterState[i].id)
+              .map(district => district.id);
+            found = found || districts.includes(filter.id);
+          }
+          if (!found) changedDistrict = true;
+          return found;
+        });
+      } else if (filterCountry.length) {
+        newFilterDistrict = filterDistrict.filter(filter => {
+          let found = false;
+          for (let i = 0; i < filterCountry.length; i++) {
+            const states = this.props.states
+              .filter(state => state.country === filterCountry[i].id)
+              .map(state => state.id);
+            const districts = this.props.districts
+              .filter(district => states.includes(district.state))
+              .map(district => district.id);
+            found = found || districts.includes(filter.id);
+          }
+          if (!found) changedDistrict = true;
+          return found;
+        });
+      }
+    }
+    const toUpdate = {};
+    toUpdate.filterState = newFilterState;
+    toUpdate.filterCountry = filterCountry;
+    if (changedDistrict) toUpdate.filterDistrict = newFilterDistrict;
+    this.props.handleOnCityFilterChange(toUpdate);
+  };
+
+  render() {
     return (
       <div className="animated fadeIn">
         <Row className="hr-centered">
@@ -108,12 +299,12 @@ class Cities extends Component {
                           required
                           name="countries"
                           className="select-industry"
-                          value={this.state.country.id}
+                          value={this.state.country}
                           onChange={this.handleSelectChange.bind(
                             this,
                             "country"
                           )}
-                          options={countries}
+                          options={this.props.countries}
                           valueKey="id"
                           labelKey="name"
                         />
@@ -121,17 +312,16 @@ class Cities extends Component {
                     </Col>
                     <Col xs="12" md="4">
                       <FormGroup>
-                        <Label for="Industies">State</Label>
+                        <Label for="states">State</Label>
                         <Select
-                          autoFocus
                           autosize
                           clearable
                           required
                           name="states"
                           className="select-industry"
-                          value={this.state.state.id}
+                          value={this.state.state}
                           onChange={this.handleSelectChange.bind(this, "state")}
-                          options={states}
+                          options={this.props.partialStates}
                           valueKey="id"
                           labelKey="name"
                         />
@@ -139,20 +329,19 @@ class Cities extends Component {
                     </Col>
                     <Col xs="12" md="4">
                       <FormGroup>
-                        <Label for="Industies">District</Label>
+                        <Label for="District">District</Label>
                         <Select
-                          autoFocus
                           autosize
                           clearable
                           required
-                          name="Industies"
+                          name="District"
                           className="select-industry"
-                          value={this.state.district.id}
+                          value={this.state.district}
                           onChange={this.handleSelectChange.bind(
                             this,
                             "district"
                           )}
-                          options={districts}
+                          options={this.props.partialDistricts}
                           valueKey="id"
                           labelKey="name"
                         />
@@ -168,9 +357,10 @@ class Cities extends Component {
                           </InputGroupText>
                         </InputGroupAddon>
                         <Input
-                          autoFocus
                           required
                           type="text"
+                          disabled={this.props.loading}
+                          innerRef={ref => (this.focusableInput = ref)}
                           placeholder="Type City Name"
                           value={this.state.city}
                           onChange={this.onChange.bind(this, "city")}
@@ -188,17 +378,57 @@ class Cities extends Component {
             </Card>
           </Col>
         </Row>
+        <ReactTable
+          {...this.tableProps}
+          style={{ background: "white" }}
+          data={this.props.cities}
+          defaultPageSize={this.props.rows}
+          defaultSorted={this.props.sort_by}
+          loading={this.props.fetchLoading}
+          onPageChange={pageIndex => {
+            this.props.onCityList({ page: pageIndex + 1 });
+          }}
+          onPageSizeChange={(pageSize, pageIndex) => {
+            this.props.onCityList({
+              page: pageIndex + 1,
+              rows: pageSize
+            });
+          }}
+          onSortedChange={this.props.handleSortChangeCity}
+          page={this.props.page - 1}
+          pages={this.props.pages}
+          rowCount={this.props.rowCount}
+        />
       </div>
     );
   }
 }
 
 export default connect(
-  ({ AdminContainer: { general_setup }, auth }) => ({ general_setup, ...auth }),
+  ({ AdminContainer: { general_setup, filterCity } }) => ({
+    countries: general_setup.countries,
+    partialStates: general_setup.countryData,
+    partialDistricts: general_setup.stateData,
+    loading: general_setup.cityLoading,
+    error: general_setup.cityError,
+
+    districts: general_setup.districts,
+    states: general_setup.states,
+    cities: general_setup.cities,
+    fetchLoading: general_setup.citiesFetchLoading,
+    pages: general_setup.citiesPages,
+    rowCount: general_setup.citiesRowCount,
+    ...filterCity
+  }),
   {
     onCitySubmit,
     onCountryList,
     onCountryEachList,
-    onStateEachList
+    onStateEachList,
+    onCityList,
+    onDistrictList,
+    onStateList,
+    handleOnCityFilterChange,
+    handleSortChangeCity
   }
 )(Cities);

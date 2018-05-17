@@ -31,7 +31,7 @@ const INITIAL_STATE = {
   company_types: [],
 
   businesses: [],
-  pages: 3,
+  pages: 1,
   fetchLoading: false,
   businessGet: false,
   rowCount: 0
