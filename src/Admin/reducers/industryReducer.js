@@ -26,11 +26,7 @@ const INITIAL_STATE = {
 export default function(state = INITIAL_STATE, action) {
   switch (action.type) {
     case UNMOUNT_INDUSTRY:
-      return {
-        ...state,
-        industries: [],
-        loading: false
-      };
+      return { ...state, industries: [] };
 
     case CREATE_INDUSTRY_PENDING:
       return { ...state, loading: true, error: false };

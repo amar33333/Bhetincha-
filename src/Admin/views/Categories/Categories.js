@@ -211,6 +211,7 @@ class Categories extends Component {
         </Row>
         <ReactTable
           {...this.tableProps}
+          style={{ background: "white" }}
           data={this.props.categories}
           loading={this.props.fetchLoading}
           defaultFilterMethod={filterCaseInsensitive}

@@ -34,7 +34,11 @@ import {
   handleOnCityFilterChange,
   handleSortChangeCity,
   onCityDelete,
-  onClearCityFilters
+  onClearCityFilters,
+  onUnmountCountry,
+  onUnmountState,
+  onUnmountDistrict,
+  onUnmountCity
 } from "../../actions";
 
 class Cities extends Component {
@@ -167,14 +171,6 @@ class Cities extends Component {
     PaginationComponent
   };
 
-  debouncedSearch = debounce(
-    column =>
-      this.props.handleOnCityFilterChange({
-        name: column.length ? column[0].value : ""
-      }),
-    200
-  );
-
   componentDidMount() {
     this.props.onCountryList();
     this.props.onCityList();
@@ -186,7 +182,26 @@ class Cities extends Component {
     if (prevState.citySubmit && prevProps.loading) this.focusableInput.focus();
   };
 
-  componentWillUnmount = () => this.props.onClearCityFilters();
+  componentWillUnmount() {
+    this.props.onUnmountCountry();
+    this.props.onUnmountState();
+    this.props.onUnmountDistrict();
+    this.props.onUnmountCity();
+    this.props.onClearCityFilters();
+  }
+
+  debouncedSearch = debounce(
+    column =>
+      this.props.handleOnCityFilterChange({
+        name: column.length ? column[0].value : ""
+      }),
+    200
+  );
+
+  onChange = (key, event) =>
+    this.setState({
+      [key]: event.target.value.replace(/\b\w/g, l => l.toUpperCase())
+    });
 
   onFormSubmit = event => {
     event.preventDefault();
@@ -200,11 +215,6 @@ class Cities extends Component {
       })
     );
   };
-
-  onChange = (key, event) =>
-    this.setState({
-      [key]: event.target.value.replace(/\b\w/g, l => l.toUpperCase())
-    });
 
   handleSelectChange = (key, value) => {
     this.setState({ [key]: value });
@@ -435,6 +445,10 @@ export default connect(
     handleOnCityFilterChange,
     handleSortChangeCity,
     onCityDelete,
-    onClearCityFilters
+    onClearCityFilters,
+    onUnmountCountry,
+    onUnmountState,
+    onUnmountDistrict,
+    onUnmountCity
   }
 )(Cities);

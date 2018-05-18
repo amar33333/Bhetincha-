@@ -84,7 +84,10 @@ class Industry extends Component {
 
   componentWillUnmount = () => this.props.onUnmountIndustry();
 
-  onChange = (key, event) => this.setState({ [key]: event.target.value });
+  onChange = (key, event) =>
+    this.setState({
+      [key]: event.target.value.replace(/\b\w/g, l => l.toUpperCase())
+    });
 
   onFormSubmit = event => {
     event.preventDefault();
@@ -119,9 +122,7 @@ class Industry extends Component {
                         innerRef={ref => (this.focusableInput = ref)}
                         type="text"
                         placeholder="Type Industry Name"
-                        value={this.state.industry.replace(/\b\w/g, l =>
-                          l.toUpperCase()
-                        )}
+                        value={this.state.industry}
                         onChange={this.onChange.bind(this, "industry")}
                       />
                     </InputGroup>
@@ -137,6 +138,7 @@ class Industry extends Component {
 
         <ReactTable
           {...this.tableProps}
+          style={{ background: "white" }}
           data={this.props.industries}
           loading={this.props.fetchLoading}
           defaultFilterMethod={filterCaseInsensitive}

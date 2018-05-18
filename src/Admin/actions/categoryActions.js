@@ -2,9 +2,7 @@ import { Observable } from "rxjs/Observable";
 import { toast } from "react-toastify";
 
 import {
-  onCategoryPost,
   onCategoryPostAjax,
-  onCategoryGet,
   onCategoryEachDeleteAjax,
   onCategoryGetAjax,
   onCategoryEachGet
@@ -125,10 +123,7 @@ export const onRemoveCategoryData = ({ obj }) => {
   };
 };
 
-export const onUnmountCategory = () => ({
-  type: UNMOUNT_CATEGORY,
-  payload: []
-});
+export const onUnmountCategory = () => ({ type: UNMOUNT_CATEGORY });
 
 export const onUnmountCategoryData = () => ({
   type: UNMOUNT_CATEGORY_DATA,

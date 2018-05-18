@@ -2,7 +2,6 @@ import { Observable } from "rxjs/Observable";
 import { toast } from "react-toastify";
 
 import {
-  onSubCategoryPost,
   onSubCategoryPostAjax,
   onSubCategoryGetAjax,
   onSubCategoryEachDeleteAjax

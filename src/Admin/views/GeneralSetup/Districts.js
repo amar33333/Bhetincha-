@@ -25,7 +25,6 @@ import {
   Select,
   PaginationComponent
 } from "../../../Common/components";
-import "react-table/react-table.css";
 
 import {
   onCountryList,
@@ -33,7 +32,10 @@ import {
   onStateList,
   onDistrictList,
   onDistrictSubmit,
-  onDistrictDelete
+  onDistrictDelete,
+  onUnmountCountry,
+  onUnmountState,
+  onUnmountDistrict
 } from "../../actions";
 
 const DISTRICTS_CHANGED = " districts_changed";
@@ -59,26 +61,6 @@ class Districts extends Component {
     rows: 20,
     rowCount: 0,
     districts: []
-  };
-
-  componentDidMount() {
-    this.props.onCountryList();
-    this.props.onDistrictList();
-    this.props.onStateList();
-  }
-
-  getSnapshotBeforeUpdate(prevProps, prevState) {
-    if (prevProps.districts !== this.props.districts) {
-      return DISTRICTS_CHANGED;
-    }
-    return null;
-  }
-
-  componentDidUpdate = (prevProps, prevState, snapshot) => {
-    if (prevState.districtSubmit && prevProps.loading)
-      this.focusableInput.focus();
-
-    if (snapshot === DISTRICTS_CHANGED) this.updateTable();
   };
 
   tableProps = {
@@ -148,7 +130,7 @@ class Districts extends Component {
         accessor: "id",
         filterable: false,
         sortable: false,
-        width: 130,
+        width: 145,
         Cell: ({ value }) => (
           <div>
             <Button
@@ -173,11 +155,35 @@ class Districts extends Component {
     PaginationComponent
   };
 
+  componentDidMount() {
+    this.props.onCountryList();
+    this.props.onDistrictList();
+    this.props.onStateList();
+  }
+
+  getSnapshotBeforeUpdate(prevProps, prevState) {
+    if (prevProps.districts !== this.props.districts) {
+      return DISTRICTS_CHANGED;
+    }
+    return null;
+  }
+
+  componentDidUpdate = (prevProps, prevState, snapshot) => {
+    if (prevState.districtSubmit && prevProps.loading)
+      this.focusableInput.focus();
+
+    if (snapshot === DISTRICTS_CHANGED) this.updateTable();
+  };
+
+  componentWillUnmount() {
+    this.props.onUnmountCountry();
+    this.props.onUnmountState();
+    this.props.onUnmountDistrict();
+  }
+
   onFormSubmit = event => {
     event.preventDefault();
-
     const { district, districtCode, state } = this.state;
-
     this.setState({ districtSubmit: true }, () =>
       this.props.onDistrictSubmit({
         district,
@@ -211,12 +217,10 @@ class Districts extends Component {
       let filterState = this.state.filterState.filter(filter => {
         let found = false;
         for (let i = 0; i < value.length; i++) {
-          const states = this.props.states
-            .filter(state => state.country === value[i].id)
-            .map(state => state.id);
-          found = found || states.includes(filter.id);
-          if (!found) changed = true;
+          found = found || value[i].id === filter.country;
+          if (found) break;
         }
+        changed = !found;
         return found;
       });
       changed && this.updateData({ filterState });
@@ -235,7 +239,7 @@ class Districts extends Component {
 
     let districts = this.props.districts;
     // filter
-    if (filterText.length > 0) {
+    if (filterText.length) {
       filterText.forEach(filter => {
         districts = districts.filter(
           district =>
@@ -245,15 +249,16 @@ class Districts extends Component {
         );
       });
     }
-    if (filterState.length > 0) {
+    if (filterState.length) {
       districts = districts.filter(district => {
         let found = false;
         for (let i = 0; i < filterState.length; i++) {
           found = found || filterState[i].id === district.state;
+          if (found) break;
         }
         return found;
       });
-    } else if (filterCountry.length > 0) {
+    } else if (filterCountry.length) {
       districts = districts.filter(district => {
         let found = false;
         for (let i = 0; i < filterCountry.length; i++) {
@@ -261,6 +266,7 @@ class Districts extends Component {
             .filter(state => state.country === filterCountry[i].id)
             .map(state => state.id);
           found = found || states.includes(district.state);
+          if (found) break;
         }
         return found;
       });
@@ -322,7 +328,7 @@ class Districts extends Component {
 
   debouncedUpdate = debounce(this.updateTable, 100);
 
-  updateData = params => this.setState({ ...params }, () => this.updateTable());
+  updateData = params => this.setState(params, () => this.updateTable());
 
   render() {
     return (
@@ -427,6 +433,7 @@ class Districts extends Component {
 
         <ReactTable
           {...this.tableProps}
+          style={{ background: "white" }}
           data={this.state.districts}
           pages={this.state.pages}
           pageSize={this.state.rows}
@@ -470,6 +477,9 @@ export default connect(
     onCountryList,
     onDistrictList,
     onCountryEachList,
-    onDistrictDelete
+    onDistrictDelete,
+    onUnmountCountry,
+    onUnmountState,
+    onUnmountDistrict
   }
 )(Districts);

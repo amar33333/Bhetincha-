@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-
 import {
   Button,
   Col,
@@ -16,11 +15,15 @@ import {
   CardHeader
 } from "reactstrap";
 import ReactTable from "react-table";
-import "react-table/react-table.css";
 import { PopoverDelete, PaginationComponent } from "../../../Common/components";
 import filterCaseInsensitive from "../../../Common/utils/filterCaseInsesitive";
 
-import { onCountrySubmit, onCountryList, onCountryDelete } from "../../actions";
+import {
+  onCountrySubmit,
+  onCountryList,
+  onCountryDelete,
+  onUnmountCountry
+} from "../../actions";
 
 class Countries extends Component {
   static getDerivedStateFromProps = (nextProps, prevState) =>
@@ -46,7 +49,7 @@ class Countries extends Component {
         accessor: "id",
         filterable: false,
         sortable: false,
-        width: 130,
+        width: 145,
         Cell: ({ value }) => (
           <div>
             <Button
@@ -78,11 +81,11 @@ class Countries extends Component {
       this.focusableInput.focus();
   };
 
+  componentWillUnmount = () => this.props.onUnmountCountry();
+
   onFormSubmit = event => {
     event.preventDefault();
-
     const { country } = this.state;
-
     this.setState({ countrySubmit: true }, () =>
       this.props.onCountrySubmit({ country })
     );
@@ -134,6 +137,7 @@ class Countries extends Component {
 
         <ReactTable
           {...this.tableProps}
+          style={{ background: "white" }}
           data={this.props.countries}
           loading={this.props.fetchLoading}
           defaultFilterMethod={filterCaseInsensitive}
@@ -153,6 +157,7 @@ export default connect(
   {
     onCountrySubmit,
     onCountryList,
-    onCountryDelete
+    onCountryDelete,
+    onUnmountCountry
   }
 )(Countries);

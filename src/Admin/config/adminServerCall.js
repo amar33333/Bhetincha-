@@ -36,6 +36,27 @@ export const onCompanyTypePost = ({ company_type, access_token }) => {
   });
 };
 
+export const onCompanyTypePostAjax = ({ company_type, access_token }) =>
+  ajax({
+    method: "post",
+    url: COMPANY_TYPE_URL,
+    body: { name: company_type },
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
+export const onCompanyTypeEachDeleteAjax = ({ id, access_token }) =>
+  ajax({
+    method: "delete",
+    url: `${COMPANY_TYPE_URL}${id}/`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
 export const onPaymentMethodPost = ({ payment_method, access_token }) =>
   axios({
     method: "post",
@@ -43,6 +64,27 @@ export const onPaymentMethodPost = ({ payment_method, access_token }) =>
     data: {
       name: payment_method
     },
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
+export const onPaymentMethodPostAjax = ({ payment_method, access_token }) =>
+  ajax({
+    method: "post",
+    url: PAYMENT_METHOD_URL,
+    body: { name: payment_method },
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
+export const onPaymentMethodEachDeleteAjax = ({ id, access_token }) =>
+  ajax({
+    method: "delete",
+    url: `${PAYMENT_METHOD_URL}${id}/`,
     headers: {
       "Content-Type": "application/json",
       Authorization: "Bearer " + access_token

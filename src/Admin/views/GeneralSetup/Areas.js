@@ -35,7 +35,11 @@ import {
   handleOnAreaFilterChange,
   handleSortChangeArea,
   onAreaDelete,
-  onCityAutocomplete
+  onCityAutocomplete,
+  onUnmountCountry,
+  onUnmountState,
+  onUnmountDistrict,
+  onUnmountArea
 } from "../../actions";
 
 class Areas extends Component {
@@ -192,6 +196,30 @@ class Areas extends Component {
     PaginationComponent
   };
 
+  componentDidMount() {
+    this.props.onCountryList();
+    this.props.onAreaList();
+    this.props.onDistrictList();
+    this.props.onStateList();
+    this.props.onCityAutocomplete();
+  }
+
+  componentDidUpdate = (prevProps, prevState, snapshot) => {
+    if (prevState.areaSubmit && prevProps.loading) this.focusableInput.focus();
+  };
+
+  componentWillUnmount() {
+    this.props.onUnmountCountry();
+    this.props.onUnmountState();
+    this.props.onUnmountDistrict();
+    this.props.onUnmountArea();
+  }
+
+  onChange = (key, event) =>
+    this.setState({
+      [key]: event.target.value.replace(/\b\w/g, l => l.toUpperCase())
+    });
+
   debouncedSearch = debounce(
     column =>
       this.props.handleOnAreaFilterChange({
@@ -205,22 +233,13 @@ class Areas extends Component {
     200
   );
 
-  componentDidMount() {
-    this.props.onCountryList();
-    this.props.onAreaList();
-    this.props.onDistrictList();
-    this.props.onStateList();
-    this.props.onCityAutocomplete();
-  }
-
-  componentDidUpdate = (prevProps, prevState, snapshot) => {
-    if (prevState.areaSubmit && prevProps.loading) this.focusableInput.focus();
+  onFormSubmit = event => {
+    event.preventDefault();
+    const { area, city } = this.state;
+    this.setState({ areaSubmit: true }, () =>
+      this.props.onAreaSubmit({ area, city: city.id })
+    );
   };
-
-  onChange = (key, event) =>
-    this.setState({
-      [key]: event.target.value.replace(/\b\w/g, l => l.toUpperCase())
-    });
 
   handleSelectChange = (key, value) => {
     this.setState({ [key]: value });
@@ -338,14 +357,6 @@ class Areas extends Component {
     toUpdate.filterCountry = filterCountry;
     if (changedCity) toUpdate.filterCity = newFilterCity;
     this.props.handleOnAreaFilterChange(toUpdate);
-  };
-
-  onFormSubmit = event => {
-    event.preventDefault();
-    const { area, city } = this.state;
-    this.setState({ areaSubmit: true }, () =>
-      this.props.onAreaSubmit({ area, city: city.id })
-    );
   };
 
   render() {
@@ -528,6 +539,10 @@ export default connect(
     handleOnAreaFilterChange,
     handleSortChangeArea,
     onAreaDelete,
-    onCityAutocomplete
+    onCityAutocomplete,
+    onUnmountCountry,
+    onUnmountState,
+    onUnmountDistrict,
+    onUnmountArea
   }
 )(Areas);
