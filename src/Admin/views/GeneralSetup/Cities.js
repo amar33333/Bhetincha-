@@ -140,7 +140,7 @@ class Cities extends Component {
         accessor: "id",
         filterable: false,
         sortable: false,
-        width: 140,
+        width: 145,
         Cell: ({ value }) => (
           <div>
             <Button
@@ -237,10 +237,8 @@ class Cities extends Component {
         newFilterState = newFilterState.filter(filter => {
           let found = false;
           for (let i = 0; i < filterCountry.length; i++) {
-            const states = this.props.states
-              .filter(state => state.country === filterCountry[i].id)
-              .map(state => state.id);
-            found = found || states.includes(filter.id);
+            found = found || filter.country === filterCountry[i].id;
+            if (found) break;
           }
           return found;
         });
@@ -249,15 +247,12 @@ class Cities extends Component {
     if (filterDistrict.length) {
       if (newFilterState.length) {
         newFilterDistrict = filterDistrict.filter(filter => {
-          const tempFilterState = newFilterState;
           let found = false;
-          for (let i = 0; i < tempFilterState.length; i++) {
-            const districts = this.props.districts
-              .filter(district => district.state === tempFilterState[i].id)
-              .map(district => district.id);
-            found = found || districts.includes(filter.id);
+          for (let i = 0; i < newFilterState.length; i++) {
+            found = found || filter.state === newFilterState[i].id;
+            if (found) break;
           }
-          if (!found) changedDistrict = true;
+          changedDistrict = !found;
           return found;
         });
       } else if (filterCountry.length) {
@@ -267,16 +262,15 @@ class Cities extends Component {
             const states = this.props.states
               .filter(state => state.country === filterCountry[i].id)
               .map(state => state.id);
-            const districts = this.props.districts
-              .filter(district => states.includes(district.state))
-              .map(district => district.id);
-            found = found || districts.includes(filter.id);
+            found = found || states.includes(filter.state);
+            if (found) break;
           }
-          if (!found) changedDistrict = true;
+          changedDistrict = !found;
           return found;
         });
       }
     }
+
     const toUpdate = {};
     toUpdate.filterState = newFilterState;
     toUpdate.filterCountry = filterCountry;

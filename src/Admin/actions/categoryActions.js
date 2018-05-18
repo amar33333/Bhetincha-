@@ -3,6 +3,7 @@ import { toast } from "react-toastify";
 
 import {
   onCategoryPost,
+  onCategoryPostAjax,
   onCategoryGet,
   onCategoryEachDeleteAjax,
   onCategoryGetAjax,
@@ -32,33 +33,37 @@ import {
 
 const epics = [];
 
-export const onCategorySubmit = ({
-  category,
-  industry,
-  access_token
-}) => dispatch => {
-  onCategoryPost({
-    category,
-    industry,
-    access_token
-  })
-    .then(response => {
-      if (response.data.msg === "success") {
-        toast.success("New Category Created Successfully!");
-      } else {
-        response.data.msg.name.map(msg => {
-          toast.error(msg);
+export const onCategorySubmit = payload => ({
+  type: CREATE_CATEGORY_PENDING,
+  payload
+});
+
+epics.push((action$, { getState }) =>
+  action$.ofType(CREATE_CATEGORY_PENDING).mergeMap(({ payload }) => {
+    const { category, industry } = payload;
+    const access_token = getState().auth.cookies.token_data.access_token;
+
+    return onCategoryPostAjax({ category, industry, access_token })
+      .concatMap(({ response }) => {
+        if (response.msg === "success") {
+          toast.success("Category added successfully!");
+          return [
+            { type: CREATE_CATEGORY_FULFILLED },
+            { type: FETCH_CATEGORY_PENDING }
+          ];
+        } else {
+          throw new Error(response.msg[Object.keys(response.msg)[0]][0]);
+        }
+      })
+      .catch(ajaxError => {
+        toast.error(ajaxError.toString());
+        return Observable.of({
+          type: CREATE_CATEGORY_REJECTED,
+          payload: ajaxError
         });
-      }
-      dispatch({ type: CREATE_CATEGORY_FULFILLED, payload: response.data });
-      dispatch({ type: FETCH_CATEGORY_PENDING });
-    })
-    .catch(error => {
-      toast.error("Category Not created!");
-      dispatch({ type: CREATE_CATEGORY_REJECTED, payload: error });
-    });
-  dispatch({ type: CREATE_CATEGORY_PENDING });
-};
+      });
+  })
+);
 
 export const onCategoryList = () => ({ type: FETCH_CATEGORY_PENDING });
 
@@ -74,19 +79,6 @@ epics.push((action$, { getState }) =>
       .catch(ajaxError => Observable.of({ type: FETCH_CATEGORY_REJECTED }))
   )
 );
-
-// export const onCategoryList = ({ access_token }) => dispatch => {
-//   onCategoryGet({
-//     access_token
-//   })
-//     .then(response =>
-//       dispatch({ type: FETCH_CATEGORY_FULFILLED, payload: response.data })
-//     )
-//     .catch(error =>
-//       dispatch({ type: FETCH_CATEGORY_REJECTED, payload: error })
-//     );
-//   dispatch({ type: FETCH_CATEGORY_PENDING });
-// };
 
 export const onCategoryDelete = payload => ({
   type: DELETE_CATEGORY_PENDING,

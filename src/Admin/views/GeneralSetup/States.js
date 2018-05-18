@@ -46,7 +46,7 @@ class States extends Component {
         Header: "SN",
         accessor: "s_no",
         filterable: false,
-        searchable: false,
+        sortable: false,
         width: 70
       },
       { Header: "State", accessor: "name" },

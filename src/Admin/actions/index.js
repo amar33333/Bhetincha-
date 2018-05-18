@@ -6,6 +6,7 @@ import subCategoryEpics from "./subCategoryActions";
 import generalSetupEpics from "./generalSetupActions";
 import filterCityEpics from "./filterCityActions";
 import filterAreaEpics from "./filterAreaActions";
+import extraSectionEpics from "./extraSectionActions";
 
 export * from "./industryActions";
 export * from "./categoryActions";
@@ -26,5 +27,6 @@ export default [
   ...subCategoryEpics,
   ...generalSetupEpics,
   ...filterCityEpics,
-  ...filterAreaEpics
+  ...filterAreaEpics,
+  ...extraSectionEpics
 ];

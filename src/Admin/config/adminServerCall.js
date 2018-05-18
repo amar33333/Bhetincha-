@@ -149,6 +149,20 @@ export const onCategoryPost = ({ category, industry, access_token }) =>
     }
   });
 
+export const onCategoryPostAjax = ({ category, industry, access_token }) =>
+  ajax({
+    method: "post",
+    url: CATEGORY_URL,
+    body: {
+      name: category,
+      industry
+    },
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
 export const onCategoryGet = ({ access_token }) =>
   axios({
     method: "get",
@@ -202,6 +216,28 @@ export const onSubCategoryPost = ({
   });
 };
 
+export const onSubCategoryPostAjax = ({
+  category,
+  extraSection,
+  tags,
+  subCategory,
+  access_token
+}) =>
+  ajax({
+    method: "post",
+    url: SUB_CATEGORY_URL,
+    body: {
+      category,
+      extra_section: extraSection,
+      tags: tags,
+      name: subCategory
+    },
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
 export const onSubCategoryEachGet = ({ id, access_token }) =>
   axios({
     method: "get",
@@ -234,6 +270,16 @@ export const onSubCategoryEachDeleteAjax = ({ id, access_token }) =>
 
 export const onExtraSectionGet = ({ access_token }) =>
   axios({
+    method: "get",
+    url: EXTRA_SECTION_GET_URL,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
+export const onExtraSectionGetAjax = ({ access_token }) =>
+  ajax({
     method: "get",
     url: EXTRA_SECTION_GET_URL,
     headers: {

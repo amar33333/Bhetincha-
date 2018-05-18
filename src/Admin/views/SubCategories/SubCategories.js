@@ -18,7 +18,11 @@ import {
 } from "reactstrap";
 
 import { connect } from "react-redux";
-import { Select, PopoverDelete } from "../../../Common/components";
+import {
+  Select,
+  PopoverDelete,
+  PaginationComponent
+} from "../../../Common/components";
 import filterCaseInsensitive from "../../../Common/utils/filterCaseInsesitive";
 import ReactTable from "react-table";
 import "react-table/react-table.css";
@@ -37,40 +41,39 @@ import {
 } from "../../actions";
 
 class SubCategories extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      subCategory: "",
-      category: "",
-      industry: "",
-      extraSections: [],
-      tags: []
-    };
-    this.access_token = this.props.cookies
-      ? this.props.cookies.token_data.access_token
+  static getDerivedStateFromProps = (nextProps, prevState) =>
+    prevState.subCategorySubmit && !nextProps.error && !nextProps.loading
+      ? {
+          extraSections: [],
+          tags: [],
+          subCategory: "",
+          subCategorySubmit: false
+        }
       : null;
 
-    this.props.onSubCategoryList();
-    this.props.onCategoryList();
-    this.props.onIndustryList();
-    this.props.onExtraSectionList({ access_token: this.access_token });
-  }
+  state = {
+    subCategory: "",
+    category: "",
+    industry: "",
+    extraSections: [],
+    tags: [],
+    subCategorySubmit: false
+  };
 
   tableProps = {
     columns: [
       {
-        Header: "S. No.",
+        Header: "SN",
         accessor: "s_no",
         filterable: false,
-        searchable: false,
+        sortable: false,
         width: 70
       },
       { Header: "Sub-Category", accessor: "name" },
       {
         Header: "Extra Sections",
         accessor: "extra_section",
-        Cell: ({ value }) => value.join(","),
-        // Multiple filter option
+        Cell: ({ value }) => value.join(", "),
         filterMethod: (filter, row) => {
           if (filter && filter.value && filter.value.length > 0) {
             let found = false;
@@ -92,16 +95,29 @@ class SubCategories extends Component {
         )
       },
       {
+        Header: "Tags",
+        accessor: "tags",
+        Cell: ({ value }) => value.join(", "),
+        filterMethod: (filter, row) => {
+          if (!filter) return true;
+          let found = false;
+          row.tags.forEach(tag => {
+            if (tag.toLowerCase().indexOf(filter.value.toLowerCase()) !== -1)
+              found = true;
+          });
+          return found;
+        }
+      },
+      {
         Header: "Category",
         accessor: "category",
         id: "category",
         Cell: ({ value }) => {
-          const category = this.props.categories.categories.find(
+          const category = this.props.categories.find(
             category => category.id === value
           );
           return category ? category.name : "Not Found";
         },
-        // Multiple filter option
         filterMethod: (filter, row) => {
           if (filter && filter.value && filter.value.length > 0) {
             let found = false;
@@ -111,9 +127,6 @@ class SubCategories extends Component {
             return found;
           } else return true;
         },
-        // Single filter option
-        // filterMethod: (filter, row) =>
-        //   filter && filter.value ? filter.value.id === row.category : true,
         Filter: ({ filter, onChange }) => (
           <Select
             clearable
@@ -122,7 +135,7 @@ class SubCategories extends Component {
             onChange={onChange}
             valueKey="id"
             labelKey="name"
-            options={this.props.categories.categories}
+            options={this.props.categories}
           />
         )
       },
@@ -131,22 +144,21 @@ class SubCategories extends Component {
         accessor: "category",
         id: "industry",
         Cell: ({ value }) => {
-          const category = this.props.categories.categories.find(
+          const category = this.props.categories.find(
             category => category.id === value
           );
           if (category) {
-            const industry = this.props.industries.industries.find(
+            const industry = this.props.industries.find(
               industry => industry.id === category.industry
             );
             return industry ? industry.name : "Not Found";
           } else return "Not Found";
         },
-        // Multiple filter option
         filterMethod: (filter, row) => {
           if (filter && filter.value && filter.value.length > 0) {
             let found = false;
             for (let i = 0; i < filter.value.length; i++) {
-              const categories = this.props.categories.categories
+              const categories = this.props.categories
                 .filter(category => category.industry === filter.value[i].id)
                 .map(category => category.id);
               found = found || categories.includes(row.category);
@@ -162,7 +174,7 @@ class SubCategories extends Component {
             onChange={onChange}
             valueKey="id"
             labelKey="name"
-            options={this.props.industries.industries}
+            options={this.props.industries}
           />
         )
       },
@@ -172,7 +184,7 @@ class SubCategories extends Component {
         accessor: "id",
         filterable: false,
         sortable: false,
-        width: 130,
+        width: 145,
         Cell: ({ value }) => (
           <div>
             <Button
@@ -193,7 +205,20 @@ class SubCategories extends Component {
     minRows: 5,
     defaultPageSize: 20,
     className: "-striped -highlight",
-    filterable: true
+    filterable: true,
+    PaginationComponent
+  };
+
+  componentDidMount() {
+    this.props.onSubCategoryList();
+    this.props.onCategoryList();
+    this.props.onIndustryList();
+    this.props.onExtraSectionList();
+  }
+
+  componentDidUpdate = (prevProps, prevState, snapshot) => {
+    if (prevState.subCategorySubmit && prevProps.loading)
+      this.focusableInput.focus();
   };
 
   componentWillUnmount() {
@@ -201,39 +226,32 @@ class SubCategories extends Component {
     this.props.onUnmountExtraSection();
   }
 
-  onChange = (key, event) => {
-    this.setState({ [key]: event.target.value });
-  };
+  onChange = (key, event) =>
+    this.setState({
+      [key]: event.target.value.replace(/\b\w/g, l => l.toUpperCase())
+    });
 
-  handleSelectChange = (key, value) => {
-    this.setState({ [key]: value });
-  };
+  handleSelectChange = (key, value) => this.setState({ [key]: value });
 
-  handleIndustryChange = value =>
-    this.setState(
-      { industry: value, category: "" },
-      () =>
-        this.state.industry && this.props.onIndustryEachList({ id: value.id })
-    );
+  handleIndustryChange = value => {
+    this.setState({ industry: value, category: "" });
+    value && this.props.onIndustryEachList({ id: value.id });
+  };
 
   onFormSubmit = event => {
     event.preventDefault();
     const { category, subCategory, extraSections, tags } = this.state;
-    console.log(category, extraSections, subCategory, tags);
-    console.log("tags:::::", tags);
-    this.props.onSubCategorySubmit({
-      category: category.id,
-      extraSection: extraSections.map(extraSection => extraSection.value),
-      subCategory,
-      tags,
-      access_token: this.access_token
-    });
-    this.setState({ subCategory: "", extraSections: [], tags: [] });
+    this.setState({ subCategorySubmit: true }, () =>
+      this.props.onSubCategorySubmit({
+        category: category.id,
+        extraSection: extraSections.map(extraSection => extraSection.value),
+        subCategory,
+        tags
+      })
+    );
   };
 
-  handleTagsChange = tags => {
-    this.setState({ tags });
-  };
+  handleTagsChange = tags => this.setState({ tags });
 
   render() {
     return (
@@ -252,14 +270,14 @@ class SubCategories extends Component {
                         <Label> Industry </Label>
                         <Select
                           autosize
+                          autoFocus
                           clearable
                           required
                           name="Industry"
                           className="select-category"
-                          disabled={this.props.industries.fetchLoading}
                           value={this.state.industry}
                           onChange={this.handleIndustryChange}
-                          options={this.props.industries.industries}
+                          options={this.props.industries}
                           valueKey="id"
                           labelKey="name"
                         />
@@ -274,13 +292,12 @@ class SubCategories extends Component {
                           required
                           name="Category"
                           className="select-category"
-                          disabled={this.props.industries.fetchLoadingData}
                           value={this.state.category}
                           onChange={this.handleSelectChange.bind(
                             this,
                             "category"
                           )}
-                          options={this.props.industries.industriesData}
+                          options={this.props.partialCategories}
                           valueKey="id"
                           labelKey="name"
                         />
@@ -295,13 +312,11 @@ class SubCategories extends Component {
                       </InputGroupText>
                     </InputGroupAddon>
                     <Input
-                      autoFocus
                       required
+                      innerRef={ref => (this.focusableInput = ref)}
                       type="text"
                       placeholder="New Sub Category Name"
-                      value={this.state.subCategory.replace(/\b\w/g, l =>
-                        l.toUpperCase()
-                      )}
+                      value={this.state.subCategory}
                       onChange={this.onChange.bind(this, "subCategory")}
                     />
                   </InputGroup>
@@ -346,8 +361,8 @@ class SubCategories extends Component {
         </Row>
         <ReactTable
           {...this.tableProps}
-          data={this.props.sub_categories.subCategories}
-          loading={this.props.sub_categories.fetchLoading}
+          data={this.props.subCategories}
+          loading={this.props.fetchLoading}
           defaultFilterMethod={filterCaseInsensitive}
         />
       </div>
@@ -357,14 +372,18 @@ class SubCategories extends Component {
 
 export default connect(
   ({
-    AdminContainer: { sub_categories, categories, extra_sections, industries },
-    auth
+    AdminContainer: {
+      sub_categories,
+      categories: { categories },
+      extra_sections,
+      industries: { industries, industriesData }
+    }
   }) => ({
     industries,
+    partialCategories: industriesData,
     categories,
     extra_sections,
-    sub_categories,
-    ...auth
+    ...sub_categories
   }),
   {
     onIndustryList,

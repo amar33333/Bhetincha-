@@ -123,17 +123,6 @@ epics.push((action$, { getState }) =>
       })
   )
 );
-// export const onIndustryEachList = ({ id, access_token }) => dispatch => {
-//   onIndustryEachGet({ id, access_token })
-//     .then(response =>
-//       dispatch({ type: FETCH_INDUSTRY_EACH_FULFILLED, payload: response.data })
-//     )
-//     .catch(error =>
-//       dispatch({ type: FETCH_INDUSTRY_EACH_REJECTED, payload: error })
-//     );
-
-//   dispatch({ type: FETCH_INDUSTRY_EACH_PENDING });
-// };
 
 export const onUnmountIndustry = () => ({
   type: UNMOUNT_INDUSTRY,

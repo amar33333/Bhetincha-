@@ -28,7 +28,7 @@ import {
 
 class Industry extends Component {
   static getDerivedStateFromProps = (nextProps, prevState) =>
-    !nextProps.loading && prevState.industrySubmit
+    prevState.industrySubmit && !nextProps.error && !nextProps.loading
       ? { industry: "", industrySubmit: false }
       : null;
 
@@ -37,10 +37,10 @@ class Industry extends Component {
   tableProps = {
     columns: [
       {
-        Header: "S. No.",
+        Header: "SN",
         accessor: "s_no",
         filterable: false,
-        searchable: false,
+        sortable: false,
         width: 70
       },
       { Header: "Industry", accessor: "name" },
@@ -50,7 +50,7 @@ class Industry extends Component {
         accessor: "id",
         filterable: false,
         sortable: false,
-        width: 130,
+        width: 145,
         Cell: ({ value }) => (
           <div>
             <Button
@@ -76,6 +76,11 @@ class Industry extends Component {
   };
 
   componentDidMount = () => this.props.onIndustryList();
+
+  componentDidUpdate = (prevProps, prevState, snapshot) => {
+    if (prevState.industrySubmit && prevProps.loading)
+      this.focusableInput.focus();
+  };
 
   componentWillUnmount = () => this.props.onUnmountIndustry();
 
@@ -111,6 +116,7 @@ class Industry extends Component {
                         autoFocus
                         required
                         disabled={this.props.loading}
+                        innerRef={ref => (this.focusableInput = ref)}
                         type="text"
                         placeholder="Type Industry Name"
                         value={this.state.industry.replace(/\b\w/g, l =>
