@@ -479,9 +479,19 @@ export const onCityAutocomplete = payload => ({
 
 epics.push((action$, { getState }) =>
   action$.ofType(FETCH_CITY_AUTOCOMPLETE_PENDING).switchMap(({ payload }) => {
-    console.log(payload);
+    const {
+      filterDistrict,
+      filterState,
+      filterCountry
+    } = getState().AdminContainer.filterArea;
     const params = {};
-    params.keyword = "";
+    params.keyword = (payload && payload.keyword) || "";
+
+    if (filterDistrict.length)
+      params.district = filterDistrict.map(district => district.id);
+    if (filterState.length) params.state = filterState.map(state => state.id);
+    if (filterCountry.length)
+      params.country = filterCountry.map(country => country.id);
 
     return onCityGetAjax({
       access_token: getState().auth.cookies.token_data.access_token,
@@ -505,6 +515,7 @@ epics.push((action$, { getState }) =>
       rows,
       page,
       name,
+      filterCity,
       filterDistrict,
       filterState,
       filterCountry,
@@ -521,6 +532,7 @@ epics.push((action$, { getState }) =>
       if (payload.page) params.page = payload.page;
     }
 
+    if (filterCity.length) params.city = filterCity.map(city => city.id);
     if (filterDistrict.length)
       params.district = filterDistrict.map(district => district.id);
     if (filterState.length) params.state = filterState.map(state => state.id);

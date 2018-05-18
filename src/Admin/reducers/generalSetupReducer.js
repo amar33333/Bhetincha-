@@ -76,6 +76,7 @@ const INITIAL_STATE = {
   cityError: false,
   cityData: [],
   citiesAutocomplete: [],
+  citiesAutocompleteLoading: false,
   areas: [],
   areasPages: 1,
   areasRowCount: 0,
@@ -193,7 +194,21 @@ export default function(state = INITIAL_STATE, action) {
       return { ...state, citiesFetchLoading: false };
 
     case FETCH_CITY_AUTOCOMPLETE_FULFILLED:
-      return { ...state, citiesAutocomplete: action.payload };
+      return {
+        ...state,
+        citiesAutocomplete: action.payload,
+        citiesAutocompleteLoading: false
+      };
+
+    case FETCH_CITY_AUTOCOMPLETE_PENDING:
+      return {
+        ...state,
+        citiesAutocomplete: [],
+        citiesAutocompleteLoading: true
+      };
+
+    case FETCH_CITY_AUTOCOMPLETE_REJECTED:
+      return { ...state, citiesAutocompleteLoading: false };
 
     /*
       Area

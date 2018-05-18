@@ -70,11 +70,19 @@ class Areas extends Component {
           <Select
             clearable
             multi
+            isLoading={this.props.citiesAutocompleteLoading}
+            onInputChange={this.debouncedAutocomplete}
             value={this.props.filterCity}
             onChange={this.handleFilterSelectChange.bind(this, "filterCity")}
             valueKey="id"
             labelKey="name"
-            options={this.props.citiesAutocomplete}
+            filterOptions={options => options}
+            options={this.props.citiesAutocomplete.filter(
+              city =>
+                !this.props.filterCity
+                  .map(filter => filter.id)
+                  .includes(city.id)
+            )}
           />
         )
       },
@@ -157,7 +165,7 @@ class Areas extends Component {
         accessor: "id",
         filterable: false,
         sortable: false,
-        width: 140,
+        width: 145,
         Cell: ({ value }) => (
           <div>
             <Button
@@ -189,6 +197,11 @@ class Areas extends Component {
       this.props.handleOnAreaFilterChange({
         name: column.length ? column[0].value : ""
       }),
+    200
+  );
+
+  debouncedAutocomplete = debounce(
+    keyword => this.props.onCityAutocomplete({ keyword }),
     200
   );
 
@@ -230,11 +243,13 @@ class Areas extends Component {
   };
 
   updateOtherFilters = (key, value) => {
-    const { filterDistrict } = this.props;
-    let changedDistrict = false;
+    const { filterCity } = this.props;
+    let changedCity = false;
 
     let newFilterState = key === "filterState" ? value : this.props.filterState,
-      newFilterDistrict = [],
+      newFilterCity = [],
+      newFilterDistrict =
+        key === "filterDistrict" ? value : this.props.filterDistrict,
       filterCountry =
         key === "filterCountry" ? value : this.props.filterCountry;
 
@@ -243,31 +258,64 @@ class Areas extends Component {
         newFilterState = newFilterState.filter(filter => {
           let found = false;
           for (let i = 0; i < filterCountry.length; i++) {
-            const states = this.props.states
-              .filter(state => state.country === filterCountry[i].id)
-              .map(state => state.id);
-            found = found || states.includes(filter.id);
+            found = found || filter.country === filterCountry[i].id;
+            if (found) break;
           }
           return found;
         });
       }
     }
-    if (filterDistrict.length) {
+    if (newFilterDistrict.length) {
       if (newFilterState.length) {
-        newFilterDistrict = filterDistrict.filter(filter => {
-          const tempFilterState = newFilterState;
+        newFilterDistrict = newFilterDistrict.filter(filter => {
           let found = false;
-          for (let i = 0; i < tempFilterState.length; i++) {
-            const districts = this.props.districts
-              .filter(district => district.state === tempFilterState[i].id)
-              .map(district => district.id);
-            found = found || districts.includes(filter.id);
+          for (let i = 0; i < newFilterState.length; i++) {
+            found = found || filter.state === newFilterState[i].id;
+            if (found) break;
           }
-          if (!found) changedDistrict = true;
           return found;
         });
       } else if (filterCountry.length) {
-        newFilterDistrict = filterDistrict.filter(filter => {
+        newFilterDistrict = newFilterDistrict.filter(filter => {
+          let found = false;
+          for (let i = 0; i < filterCountry.length; i++) {
+            const states = this.props.states
+              .filter(state => state.country === filterCountry[i].id)
+              .map(state => state.id);
+            found = found || states.includes(filter.state);
+            if (found) break;
+          }
+          return found;
+        });
+      }
+    }
+
+    if (filterCity.length) {
+      if (newFilterDistrict.length) {
+        newFilterCity = filterCity.filter(filter => {
+          let found = false;
+          for (let i = 0; i < newFilterDistrict.length; i++) {
+            found = found || filter.district === newFilterDistrict[i].id;
+            if (found) break;
+          }
+          changedCity = !found;
+          return found;
+        });
+      } else if (newFilterState.length) {
+        newFilterCity = filterCity.filter(filter => {
+          let found = false;
+          for (let i = 0; i < newFilterState.length; i++) {
+            const districts = this.props.districts
+              .filter(district => district.state === newFilterState[i].id)
+              .map(district => district.id);
+            found = found || districts.includes(filter.district);
+            if (found) break;
+          }
+          changedCity = !found;
+          return found;
+        });
+      } else if (filterCountry.length) {
+        newFilterCity = filterCity.filter(filter => {
           let found = false;
           for (let i = 0; i < filterCountry.length; i++) {
             const states = this.props.states
@@ -276,17 +324,19 @@ class Areas extends Component {
             const districts = this.props.districts
               .filter(district => states.includes(district.state))
               .map(district => district.id);
-            found = found || districts.includes(filter.id);
+            found = found || districts.includes(filter.district);
+            if (found) break;
           }
-          if (!found) changedDistrict = true;
+          changedCity = !found;
           return found;
         });
       }
     }
     const toUpdate = {};
+    toUpdate.filterDistrict = newFilterDistrict;
     toUpdate.filterState = newFilterState;
     toUpdate.filterCountry = filterCountry;
-    if (changedDistrict) toUpdate.filterDistrict = newFilterDistrict;
+    if (changedCity) toUpdate.filterCity = newFilterCity;
     this.props.handleOnAreaFilterChange(toUpdate);
   };
 
@@ -455,6 +505,7 @@ export default connect(
     partialCities: general_setup.districtData,
     loading: general_setup.areaLoading,
     error: general_setup.areaError,
+    citiesAutocompleteLoading: general_setup.citiesAutocompleteLoading,
 
     areas: general_setup.areas,
     citiesAutocomplete: general_setup.citiesAutocomplete,
