@@ -129,3 +129,11 @@
 #ReactGridGallery img {
   object-fit: cover;
 }
+
+/* Progress Bar */
+.progressbar-red .CircularProgressbar-path {
+  stroke: red !important;
+}
+.progressbar-blue .CircularProgressbar-path {
+  stroke: blue !important;
+}

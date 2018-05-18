@@ -7,6 +7,7 @@ import {
   ROUTE_PARAMS_BUSINESS_NAME,
   ROUTE_PARAMS_MINISITE_BUSINESS_ROUTE
 } from "../../../../config/CONSTANTS";
+import ThemeLight from "../theme-light/ThemeLight";
 
 class MinisiteRoute extends Component {
   render() {
@@ -20,6 +21,11 @@ class MinisiteRoute extends Component {
           path={`/:${ROUTE_PARAMS_BUSINESS_NAME}/gallery`}
           name="Minisite-Gallery"
           component={Gallery}
+        />
+        <Route
+          path={`/:${ROUTE_PARAMS_BUSINESS_NAME}/theme`}
+          name="theme"
+          component={ThemeLight}
         />
 
         <Redirect

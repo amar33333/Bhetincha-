@@ -24,7 +24,7 @@ class BusinessNav extends Component {
   render() {
     return (
       <div>
-        <Navbar color="faded" light expand="md" fixed="top">
+        <Navbar color="faded" light expand="md">
           <Link to={`/${this.props.businessName}`} className="navbar-brand">
             <img
               src={`${MAIN_URL}${this.props.logo}`}

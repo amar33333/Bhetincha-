@@ -114,7 +114,6 @@ class subBusinessWorkingHour extends Component {
       alwaysOpen: !this.state.alwaysOpen
     });
   }
-  //2018-05-02T08:38:49.549000Z
   handleStartHourChange = (time, day) => {
     console.log("startHourchange: ", moment(time).format("YYYY-MM-DDTHH:mmZ"));
     const newWorkingHour = this.state.workingHour.map(each => {
@@ -210,7 +209,6 @@ class subBusinessWorkingHour extends Component {
   };
 
   render() {
-    // console.log("working state: ", this.state);
     return (
       <div className="animated fadeIn">
         <Card>
