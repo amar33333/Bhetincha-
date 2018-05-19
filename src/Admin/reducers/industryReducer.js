@@ -15,7 +15,7 @@ import {
 
 const INITIAL_STATE = {
   loading: false,
-  error: "",
+  error: false,
   fetchLoading: false,
   fetchLoadingData: false,
   fetchError: "",
@@ -28,18 +28,16 @@ const INITIAL_STATE = {
 export default function(state = INITIAL_STATE, action) {
   switch (action.type) {
     case UNMOUNT_INDUSTRY:
-      return {
-        ...state,
-        industries: [],
-        loading: false
-      };
+      return { ...state, industries: [] };
 
     case CREATE_INDUSTRY_PENDING:
-      return { ...state, loading: true };
+      return { ...state, loading: true, error: false };
 
     case CREATE_INDUSTRY_REJECTED:
+      return { ...state, loading: false, error: true };
+
     case CREATE_INDUSTRY_FULFILLED:
-      return { ...state, loading: false };
+      return { ...state, loading: false, error: false };
 
     case FETCH_INDUSTRY_PENDING:
       return { ...state, fetchLoading: true };

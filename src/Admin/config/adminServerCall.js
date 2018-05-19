@@ -36,6 +36,27 @@ export const onCompanyTypePost = ({ company_type, access_token }) => {
   });
 };
 
+export const onCompanyTypePostAjax = ({ company_type, access_token }) =>
+  ajax({
+    method: "post",
+    url: COMPANY_TYPE_URL,
+    body: { name: company_type },
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
+export const onCompanyTypeEachDeleteAjax = ({ id, access_token }) =>
+  ajax({
+    method: "delete",
+    url: `${COMPANY_TYPE_URL}${id}/`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
 export const onPaymentMethodPost = ({ payment_method, access_token }) =>
   axios({
     method: "post",
@@ -43,6 +64,27 @@ export const onPaymentMethodPost = ({ payment_method, access_token }) =>
     data: {
       name: payment_method
     },
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
+export const onPaymentMethodPostAjax = ({ payment_method, access_token }) =>
+  ajax({
+    method: "post",
+    url: PAYMENT_METHOD_URL,
+    body: { name: payment_method },
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
+export const onPaymentMethodEachDeleteAjax = ({ id, access_token }) =>
+  ajax({
+    method: "delete",
+    url: `${PAYMENT_METHOD_URL}${id}/`,
     headers: {
       "Content-Type": "application/json",
       Authorization: "Bearer " + access_token
@@ -176,6 +218,20 @@ export const onCategoryPut = ({ category, industry, access_token }) =>
     }
   });
 
+export const onCategoryPostAjax = ({ category, industry, access_token }) =>
+  ajax({
+    method: "post",
+    url: CATEGORY_URL,
+    body: {
+      name: category,
+      industry
+    },
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
 export const onCategoryGet = ({ access_token }) =>
   axios({
     method: "get",
@@ -229,6 +285,28 @@ export const onSubCategoryPost = ({
   });
 };
 
+export const onSubCategoryPostAjax = ({
+  category,
+  extraSection,
+  tags,
+  subCategory,
+  access_token
+}) =>
+  ajax({
+    method: "post",
+    url: SUB_CATEGORY_URL,
+    body: {
+      category,
+      extra_section: extraSection,
+      tags: tags,
+      name: subCategory
+    },
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
 export const onSubCategoryEachGet = ({ id, access_token }) =>
   axios({
     method: "get",
@@ -261,6 +339,16 @@ export const onSubCategoryEachDeleteAjax = ({ id, access_token }) =>
 
 export const onExtraSectionGet = ({ access_token }) =>
   axios({
+    method: "get",
+    url: EXTRA_SECTION_GET_URL,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
+export const onExtraSectionGetAjax = ({ access_token }) =>
+  ajax({
     method: "get",
     url: EXTRA_SECTION_GET_URL,
     headers: {
@@ -581,6 +669,16 @@ export const onCityEachGetAjax = ({ id, access_token }) =>
     }
   });
 
+export const onCityEachDeleteAjax = ({ id, access_token }) =>
+  ajax({
+    method: "delete",
+    url: `${CITY_URL}${id}/`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
 export const onAreaPost = ({ city, area, access_token }) =>
   axios({
     method: "post",
@@ -595,10 +693,44 @@ export const onAreaPost = ({ city, area, access_token }) =>
     }
   });
 
+export const onAreaPostAjax = ({ city, area, access_token }) =>
+  ajax({
+    method: "post",
+    url: AREA_URL,
+    body: {
+      name: area,
+      city
+    },
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
 export const onAreaGet = ({ access_token }) =>
   axios({
     method: "get",
     url: AREA_URL,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
+export const onAreaGetAjax = ({ access_token, params }) =>
+  ajax({
+    method: "get",
+    url: `${AREA_URL}?${querystring.stringify(params)}`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
+export const onAreaEachDeleteAjax = ({ id, access_token }) =>
+  ajax({
+    method: "delete",
+    url: `${AREA_URL}${id}/`,
     headers: {
       "Content-Type": "application/json",
       Authorization: "Bearer " + access_token

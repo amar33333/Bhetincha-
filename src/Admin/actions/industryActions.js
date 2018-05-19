@@ -2,9 +2,6 @@ import { Observable } from "rxjs/Observable";
 import { toast } from "react-toastify";
 
 import {
-  onIndustryPost,
-  onIndustryGet,
-  onIndustryEachGet,
   onIndustryPostAjax,
   onIndustryGetAjax,
   onIndustryEachGetAjax,
@@ -179,10 +176,12 @@ export const toggleIndustryEditModal = payload => ({
   payload
 });
 
-export const onUnmountIndustry = () => ({
-  type: UNMOUNT_INDUSTRY,
-  payload: null
-});
+// export const onUnmountIndustry = () => ({
+//   type: UNMOUNT_INDUSTRY,
+//   payload: null
+// });
+
+export const onUnmountIndustry = () => ({ type: UNMOUNT_INDUSTRY });
 
 export const onUnmountIndustryData = () => ({
   type: UNMOUNT_INDUSTRY_DATA,

@@ -15,21 +15,22 @@ import {
   CardBody,
   CardHeader
 } from "reactstrap";
-
 import ReactTable from "react-table";
+
 import {
   PopoverDelete,
   Select,
   PaginationComponent
 } from "../../../Common/components";
 import filterCaseInsensitive from "../../../Common/utils/filterCaseInsesitive";
-import "react-table/react-table.css";
 
 import {
   onStateSubmit,
   onCountryList,
   onStateList,
-  onStateDelete
+  onStateDelete,
+  onUnmountCountry,
+  onUnmountState
 } from "../../actions";
 
 class States extends Component {
@@ -46,7 +47,7 @@ class States extends Component {
         Header: "SN",
         accessor: "s_no",
         filterable: false,
-        searchable: false,
+        sortable: false,
         width: 70
       },
       { Header: "State", accessor: "name" },
@@ -86,7 +87,7 @@ class States extends Component {
         accessor: "id",
         filterable: false,
         sortable: false,
-        width: 130,
+        width: 145,
         Cell: ({ value }) => (
           <div>
             <Button
@@ -120,11 +121,14 @@ class States extends Component {
     if (prevState.stateSubmit && prevProps.loading) this.focusableInput.focus();
   };
 
+  componentWillUnmount() {
+    this.props.onUnmountCountry();
+    this.props.onUnmountState();
+  }
+
   onFormSubmit = event => {
     event.preventDefault();
-
     const { state, country } = this.state;
-
     this.setState({ stateSubmit: true }, () =>
       this.props.onStateSubmit({
         state,
@@ -204,6 +208,7 @@ class States extends Component {
         </Row>
         <ReactTable
           {...this.tableProps}
+          style={{ background: "white" }}
           data={this.props.states}
           loading={this.props.fetchLoading}
           defaultFilterMethod={filterCaseInsensitive}
@@ -225,6 +230,8 @@ export default connect(
     onStateSubmit,
     onCountryList,
     onStateList,
-    onStateDelete
+    onStateDelete,
+    onUnmountCountry,
+    onUnmountState
   }
 )(States);

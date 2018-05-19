@@ -1,8 +1,8 @@
 import {
-  CITY_FILTER_ON_CHANGE,
-  CLEAR_CITY_ALL,
-  FETCH_CITY_FULFILLED,
-  CITY_SET_SORT_BY
+  AREA_FILTER_ON_CHANGE,
+  CLEAR_AREA_ALL,
+  FETCH_AREA_FULFILLED,
+  AREA_SET_SORT_BY
 } from "../actions/types";
 
 const INITIAL_STATE = {
@@ -10,6 +10,7 @@ const INITIAL_STATE = {
   sortby: [],
   rows: 20,
   page: 1,
+  filterCity: [],
   filterDistrict: [],
   filterState: [],
   filterCountry: []
@@ -17,16 +18,16 @@ const INITIAL_STATE = {
 
 export default function(state = INITIAL_STATE, action) {
   switch (action.type) {
-    case FETCH_CITY_FULFILLED:
+    case FETCH_AREA_FULFILLED:
       return { ...state, page: action.payload.page, rows: action.payload.rows };
 
-    case CITY_FILTER_ON_CHANGE:
+    case AREA_FILTER_ON_CHANGE:
       return { ...state, ...action.payload };
 
-    case CITY_SET_SORT_BY:
+    case AREA_SET_SORT_BY:
       return { ...state, sortby: action.payload };
 
-    case CLEAR_CITY_ALL:
+    case CLEAR_AREA_ALL:
       return INITIAL_STATE;
 
     default:

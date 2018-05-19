@@ -33,7 +33,7 @@ import {
 
 class Industry extends Component {
   static getDerivedStateFromProps = (nextProps, prevState) =>
-    !nextProps.loading && prevState.industrySubmit
+    prevState.industrySubmit && !nextProps.error && !nextProps.loading
       ? { industry: "", industrySubmit: false }
       : null;
 
@@ -42,10 +42,10 @@ class Industry extends Component {
   tableProps = {
     columns: [
       {
-        Header: "S. No.",
+        Header: "SN",
         accessor: "s_no",
         filterable: false,
-        searchable: false,
+        sortable: false,
         width: 70
       },
       { Header: "Industry", accessor: "name" },
@@ -55,7 +55,7 @@ class Industry extends Component {
         accessor: "id",
         filterable: false,
         sortable: false,
-        width: 130,
+        width: 145,
         Cell: ({ value, original: { name } }) => (
           <div>
             <Button
@@ -84,9 +84,17 @@ class Industry extends Component {
 
   componentDidMount = () => this.props.onIndustryList();
 
+  componentDidUpdate = (prevProps, prevState, snapshot) => {
+    if (prevState.industrySubmit && prevProps.loading)
+      this.focusableInput.focus();
+  };
+
   componentWillUnmount = () => this.props.onUnmountIndustry();
 
-  onChange = (key, event) => this.setState({ [key]: event.target.value });
+  onChange = (key, event) =>
+    this.setState({
+      [key]: event.target.value.replace(/\b\w/g, l => l.toUpperCase())
+    });
 
   onFormSubmit = event => {
     event.preventDefault();
@@ -118,11 +126,10 @@ class Industry extends Component {
                         autoFocus
                         required
                         disabled={this.props.loading}
+                        innerRef={ref => (this.focusableInput = ref)}
                         type="text"
                         placeholder="Type Industry Name"
-                        value={this.state.industry.replace(/\b\w/g, l =>
-                          l.toUpperCase()
-                        )}
+                        value={this.state.industry}
                         onChange={this.onChange.bind(this, "industry")}
                       />
                     </InputGroup>
@@ -137,6 +144,7 @@ class Industry extends Component {
         </Row>
         <ReactTable
           {...this.tableProps}
+          style={{ background: "white" }}
           data={this.props.industries}
           loading={this.props.fetchLoading}
           defaultFilterMethod={filterCaseInsensitive}

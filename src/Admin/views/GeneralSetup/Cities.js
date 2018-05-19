@@ -32,7 +32,13 @@ import {
   onDistrictList,
   onStateList,
   handleOnCityFilterChange,
-  handleSortChangeCity
+  handleSortChangeCity,
+  onCityDelete,
+  onClearCityFilters,
+  onUnmountCountry,
+  onUnmountState,
+  onUnmountDistrict,
+  onUnmountCity
 } from "../../actions";
 
 class Cities extends Component {
@@ -58,7 +64,7 @@ class Cities extends Component {
         sortable: false,
         width: 70
       },
-      { Header: "City", accessor: "name" },
+      { Header: "City", accessor: "name", id: "city" },
       {
         Header: "District",
         accessor: "district",
@@ -138,7 +144,7 @@ class Cities extends Component {
         accessor: "id",
         filterable: false,
         sortable: false,
-        width: 140,
+        width: 145,
         Cell: ({ value }) => (
           <div>
             <Button
@@ -150,25 +156,20 @@ class Cities extends Component {
             </Button>
             <PopoverDelete
               id={`delete-${value}`}
-              onClick={() => console.log({ id: value })}
+              onClick={() => this.props.onCityDelete({ id: value })}
             />
           </div>
         )
       }
     ],
     onFilteredChange: (column, value) =>
-      value.id === "name" && this.debouncedSearch(column),
+      value.id === "city" && this.debouncedSearch(column),
     manual: true,
     filterable: true,
     minRows: 5,
     className: "-striped -highlight",
     PaginationComponent
   };
-
-  debouncedSearch = debounce(
-    column => this.props.handleOnCityFilterChange({ keyword: column[0].value }),
-    200
-  );
 
   componentDidMount() {
     this.props.onCountryList();
@@ -180,6 +181,27 @@ class Cities extends Component {
   componentDidUpdate = (prevProps, prevState, snapshot) => {
     if (prevState.citySubmit && prevProps.loading) this.focusableInput.focus();
   };
+
+  componentWillUnmount() {
+    this.props.onUnmountCountry();
+    this.props.onUnmountState();
+    this.props.onUnmountDistrict();
+    this.props.onUnmountCity();
+    this.props.onClearCityFilters();
+  }
+
+  debouncedSearch = debounce(
+    column =>
+      this.props.handleOnCityFilterChange({
+        name: column.length ? column[0].value : ""
+      }),
+    200
+  );
+
+  onChange = (key, event) =>
+    this.setState({
+      [key]: event.target.value.replace(/\b\w/g, l => l.toUpperCase())
+    });
 
   onFormSubmit = event => {
     event.preventDefault();
@@ -193,11 +215,6 @@ class Cities extends Component {
       })
     );
   };
-
-  onChange = (key, event) =>
-    this.setState({
-      [key]: event.target.value.replace(/\b\w/g, l => l.toUpperCase())
-    });
 
   handleSelectChange = (key, value) => {
     this.setState({ [key]: value });
@@ -230,10 +247,8 @@ class Cities extends Component {
         newFilterState = newFilterState.filter(filter => {
           let found = false;
           for (let i = 0; i < filterCountry.length; i++) {
-            const states = this.props.states
-              .filter(state => state.country === filterCountry[i].id)
-              .map(state => state.id);
-            found = found || states.includes(filter.id);
+            found = found || filter.country === filterCountry[i].id;
+            if (found) break;
           }
           return found;
         });
@@ -242,15 +257,12 @@ class Cities extends Component {
     if (filterDistrict.length) {
       if (newFilterState.length) {
         newFilterDistrict = filterDistrict.filter(filter => {
-          const tempFilterState = newFilterState;
           let found = false;
-          for (let i = 0; i < tempFilterState.length; i++) {
-            const districts = this.props.districts
-              .filter(district => district.state === tempFilterState[i].id)
-              .map(district => district.id);
-            found = found || districts.includes(filter.id);
+          for (let i = 0; i < newFilterState.length; i++) {
+            found = found || filter.state === newFilterState[i].id;
+            if (found) break;
           }
-          if (!found) changedDistrict = true;
+          changedDistrict = !found;
           return found;
         });
       } else if (filterCountry.length) {
@@ -260,16 +272,15 @@ class Cities extends Component {
             const states = this.props.states
               .filter(state => state.country === filterCountry[i].id)
               .map(state => state.id);
-            const districts = this.props.districts
-              .filter(district => states.includes(district.state))
-              .map(district => district.id);
-            found = found || districts.includes(filter.id);
+            found = found || states.includes(filter.state);
+            if (found) break;
           }
-          if (!found) changedDistrict = true;
+          changedDistrict = !found;
           return found;
         });
       }
     }
+
     const toUpdate = {};
     toUpdate.filterState = newFilterState;
     toUpdate.filterCountry = filterCountry;
@@ -297,6 +308,7 @@ class Cities extends Component {
                           autosize
                           clearable
                           required
+                          disabled={this.props.loading}
                           name="countries"
                           className="select-industry"
                           value={this.state.country}
@@ -317,6 +329,7 @@ class Cities extends Component {
                           autosize
                           clearable
                           required
+                          disabled={this.props.loading}
                           name="states"
                           className="select-industry"
                           value={this.state.state}
@@ -334,6 +347,7 @@ class Cities extends Component {
                           autosize
                           clearable
                           required
+                          disabled={this.props.loading}
                           name="District"
                           className="select-industry"
                           value={this.state.district}
@@ -383,7 +397,7 @@ class Cities extends Component {
           style={{ background: "white" }}
           data={this.props.cities}
           defaultPageSize={this.props.rows}
-          defaultSorted={this.props.sort_by}
+          defaultSorted={this.props.sortby}
           loading={this.props.fetchLoading}
           onPageChange={pageIndex => {
             this.props.onCityList({ page: pageIndex + 1 });
@@ -429,6 +443,12 @@ export default connect(
     onDistrictList,
     onStateList,
     handleOnCityFilterChange,
-    handleSortChangeCity
+    handleSortChangeCity,
+    onCityDelete,
+    onClearCityFilters,
+    onUnmountCountry,
+    onUnmountState,
+    onUnmountDistrict,
+    onUnmountCity
   }
 )(Cities);

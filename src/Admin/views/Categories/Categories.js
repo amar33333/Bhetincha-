@@ -17,7 +17,11 @@ import {
 
 import { connect } from "react-redux";
 import ReactTable from "react-table";
-import { PopoverDelete, Select } from "../../../Common/components";
+import {
+  PopoverDelete,
+  Select,
+  PaginationComponent
+} from "../../../Common/components";
 import filterCaseInsensitive from "../../../Common/utils/filterCaseInsesitive";
 import "react-table/react-table.css";
 
@@ -36,22 +40,24 @@ import {
 } from "../../actions";
 
 class Categories extends Component {
+  static getDerivedStateFromProps = (nextProps, prevState) =>
+    prevState.categorySubmit && !nextProps.error && !nextProps.loading
+      ? { category: "", categorySubmit: false }
+      : null;
+
   state = {
     category: "",
-    industry: ""
+    industry: "",
+    categorySubmit: false
   };
-
-  access_token = this.props.cookies
-    ? this.props.cookies.token_data.access_token
-    : null;
 
   tableProps = {
     columns: [
       {
-        Header: "S. No.",
+        Header: "SN",
         accessor: "s_no",
         filterable: false,
-        searchable: false,
+        sortable: false,
         width: 70
       },
       { Header: "Category", accessor: "name" },
@@ -59,12 +65,11 @@ class Categories extends Component {
         Header: "Industry",
         accessor: "industry",
         Cell: ({ value }) => {
-          const industry = this.props.industries.industries.find(
+          const industry = this.props.industries.find(
             industry => industry.id === value
           );
           return industry ? industry.name : "Not Found";
         },
-        // Multiple filter option
         filterMethod: (filter, row) => {
           if (filter && filter.value && filter.value.length > 0) {
             let found = false;
@@ -74,9 +79,6 @@ class Categories extends Component {
             return found;
           } else return true;
         },
-        // Single filter option
-        // filterMethod: (filter, row) =>
-        //   filter && filter.value ? filter.value.id === row.industry : true,
         Filter: ({ filter, onChange }) => (
           <Select
             clearable
@@ -85,7 +87,7 @@ class Categories extends Component {
             onChange={onChange}
             valueKey="id"
             labelKey="name"
-            options={this.props.industries.industries}
+            options={this.props.industries}
           />
         )
       },
@@ -95,7 +97,7 @@ class Categories extends Component {
         accessor: "id",
         filterable: false,
         sortable: false,
-        width: 130,
+        width: 145,
         Cell: ({ value, original: { id, industry, name } }) => (
           <div>
             <Button
@@ -118,22 +120,29 @@ class Categories extends Component {
     minRows: 5,
     defaultPageSize: 20,
     className: "-striped -highlight",
-    filterable: true
+    filterable: true,
+    PaginationComponent
   };
 
-  componentWillMount() {
+  componentDidMount() {
     this.props.onIndustryList();
     this.props.onCategoryList();
   }
+
+  componentDidUpdate = (prevProps, prevState, snapshot) => {
+    if (prevState.categorySubmit && prevProps.loading)
+      this.focusableInput.focus();
+  };
 
   componentWillUnmount() {
     this.props.onUnmountIndustry();
     this.props.onUnmountCategory();
   }
 
-  onChange = (key, event) => {
-    this.setState({ [key]: event.target.value });
-  };
+  onChange = (key, event) =>
+    this.setState({
+      [key]: event.target.value.replace(/\b\w/g, l => l.toUpperCase())
+    });
 
   onFormSubmit = event => {
     event.preventDefault();
@@ -145,12 +154,12 @@ class Categories extends Component {
       access_token: this.access_token
     });
     this.setState({ category: "", industry: "" });
+    this.setState({ categorySubmit: true }, () =>
+      this.props.onCategorySubmit({ industry: industry.id, category })
+    );
   };
 
-  handleIndustryChange = industry => {
-    this.setState({ industry });
-    // console.log(`Selected: ${industry.label}`);
-  };
+  handleIndustryChange = industry => this.setState({ industry });
 
   render() {
     const industries = this.props.industries.industries;
@@ -179,7 +188,7 @@ class Categories extends Component {
                           required
                           name="Industries"
                           className="select-industry"
-                          value={value}
+                          value={this.state.industry}
                           onChange={this.handleIndustryChange}
                           options={industries}
                           valueKey="id"
@@ -198,13 +207,11 @@ class Categories extends Component {
                             </InputGroupText>
                           </InputGroupAddon>
                           <Input
-                            autoFocus
                             required
+                            innerRef={ref => (this.focusableInput = ref)}
                             type="text"
                             placeholder="Type Category Name"
-                            value={this.state.category.replace(/\b\w/g, l =>
-                              l.toUpperCase()
-                            )}
+                            value={this.state.category}
                             onChange={this.onChange.bind(this, "category")}
                           />
                         </InputGroup>
@@ -223,8 +230,9 @@ class Categories extends Component {
         </Row>
         <ReactTable
           {...this.tableProps}
-          data={this.props.categories.categories}
-          loading={this.props.categories.fetchLoading}
+          style={{ background: "white" }}
+          data={this.props.categories}
+          loading={this.props.fetchLoading}
           defaultFilterMethod={filterCaseInsensitive}
         />
         <CustomModal
@@ -245,10 +253,9 @@ class Categories extends Component {
 }
 
 export default connect(
-  ({ AdminContainer: { industries, categories }, auth }) => ({
+  ({ AdminContainer: { industries: { industries }, categories } }) => ({
     industries,
-    categories,
-    ...auth
+    ...categories
   }),
   {
     onCategorySubmit,
