@@ -56,14 +56,12 @@ class Industry extends Component {
         filterable: false,
         sortable: false,
         width: 145,
-        Cell: ({ value, original: { name } }) => (
+        Cell: ({ value, original: { id, name } }) => (
           <div>
             <Button
               color="secondary"
               className="mr-l"
-              onClick={() =>
-                this.props.toggleIndustryEditModal({ value, name })
-              }
+              onClick={() => this.props.toggleIndustryEditModal({ id, name })}
             >
               Edit
             </Button>

@@ -19,7 +19,10 @@ import {
   onCityEachGetAjax,
   onAreaPostAjax,
   onAreaGetAjax,
-  onAreaEachDeleteAjax
+  onAreaEachDeleteAjax,
+  onCountryPut,
+  onStatePut,
+  onDistrictPut
 } from "../config/adminServerCall";
 
 import {
@@ -36,6 +39,9 @@ import {
   FETCH_COUNTRY_EACH_FULFILLED,
   FETCH_COUNTRY_EACH_REJECTED,
   FETCH_COUNTRY_EACH_PENDING,
+  EDIT_COUNTRY_FULFILLED,
+  EDIT_COUNTRY_PENDING,
+  EDIT_COUNTRY_REJECTED,
   UNMOUNT_COUNTRY,
   // STATE
   CREATE_STATE_FULFILLED,
@@ -47,6 +53,9 @@ import {
   FETCH_STATE_EACH_FULFILLED,
   FETCH_STATE_EACH_REJECTED,
   FETCH_STATE_EACH_PENDING,
+  EDIT_STATE_FULFILLED,
+  EDIT_STATE_PENDING,
+  EDIT_STATE_REJECTED,
   DELETE_STATE_PENDING,
   DELETE_STATE_FULFILLED,
   DELETE_STATE_REJECTED,
@@ -61,6 +70,9 @@ import {
   FETCH_DISTRICT_EACH_FULFILLED,
   FETCH_DISTRICT_EACH_REJECTED,
   FETCH_DISTRICT_EACH_PENDING,
+  EDIT_DISTRICT_FULFILLED,
+  EDIT_DISTRICT_PENDING,
+  EDIT_DISTRICT_REJECTED,
   DELETE_DISTRICT_PENDING,
   DELETE_DISTRICT_FULFILLED,
   DELETE_DISTRICT_REJECTED,
@@ -98,7 +110,12 @@ import {
   FETCH_ADDRESS_TREE_LIST_PENDING,
   FETCH_ADDRESS_TREE_FULFILLED,
   FETCH_ADDRESS_TREE_REJECTED,
-  FETCH_ADDRESS_TREE_PENDING
+  FETCH_ADDRESS_TREE_PENDING,
+  TOGGLE_COUNTRY_EDIT_MODAL,
+  TOGGLE_STATE_EDIT_MODAL,
+  TOGGLE_DISTRICT_EDIT_MODAL,
+  TOGGLE_CITY_EDIT_MODAL,
+  TOGGLE_AREA_EDIT_MODAL
 } from "./types";
 
 const epics = [];
@@ -149,6 +166,39 @@ epics.push((action$, { getState }) =>
       }))
       .catch(ajaxError => Observable.of({ type: FETCH_COUNTRY_REJECTED }))
   )
+);
+
+export const onCountryEdit = payload => ({
+  type: EDIT_COUNTRY_PENDING,
+  payload
+});
+
+epics.push((action$, { getState }) =>
+  action$.ofType(EDIT_COUNTRY_PENDING).mergeMap(({ payload }) => {
+    const { country } = payload;
+    const access_token = getState().auth.cookies.token_data.access_token;
+
+    return onCountryPut({ country, access_token })
+      .concatMap(({ response }) => {
+        if (response.msg === "success") {
+          toast.success("country Updated successfully!");
+          return [
+            { type: EDIT_COUNTRY_FULFILLED },
+            { type: FETCH_COUNTRY_PENDING },
+            { type: TOGGLE_COUNTRY_EDIT_MODAL }
+          ];
+        } else {
+          throw new Error(response.msg[Object.keys(response.msg)[0]][0]);
+        }
+      })
+      .catch(ajaxError => {
+        toast.error(ajaxError.toString());
+        return Observable.of({
+          type: EDIT_COUNTRY_REJECTED,
+          payload: ajaxError
+        });
+      });
+  })
 );
 
 export const onCountryDelete = payload => ({
@@ -246,6 +296,39 @@ epics.push((action$, { getState }) =>
   )
 );
 
+export const onStateEdit = payload => ({
+  type: EDIT_STATE_PENDING,
+  payload
+});
+
+epics.push((action$, { getState }) =>
+  action$.ofType(EDIT_STATE_PENDING).mergeMap(({ payload }) => {
+    const { country, state } = payload;
+    const access_token = getState().auth.cookies.token_data.access_token;
+
+    return onStatePut({ country, state, access_token })
+      .concatMap(({ response }) => {
+        if (response.msg === "success") {
+          toast.success("State Updated successfully!");
+          return [
+            { type: EDIT_STATE_FULFILLED },
+            { type: FETCH_STATE_PENDING },
+            { type: TOGGLE_STATE_EDIT_MODAL }
+          ];
+        } else {
+          throw new Error(response.msg[Object.keys(response.msg)[0]][0]);
+        }
+      })
+      .catch(ajaxError => {
+        toast.error(ajaxError.toString());
+        return Observable.of({
+          type: EDIT_STATE_REJECTED,
+          payload: ajaxError
+        });
+      });
+  })
+);
+
 export const onStateDelete = payload => ({
   type: DELETE_STATE_PENDING,
   payload
@@ -339,6 +422,39 @@ epics.push((action$, { getState }) =>
       }))
       .catch(ajaxError => Observable.of({ type: FETCH_DISTRICT_REJECTED }))
   )
+);
+
+export const onDistrictEdit = payload => ({
+  type: EDIT_DISTRICT_PENDING,
+  payload
+});
+
+epics.push((action$, { getState }) =>
+  action$.ofType(EDIT_DISTRICT_PENDING).mergeMap(({ payload }) => {
+    const { country, state, district } = payload;
+    const access_token = getState().auth.cookies.token_data.access_token;
+
+    return onDistrictPut({ district, state, country, access_token })
+      .concatMap(({ response }) => {
+        if (response.msg === "success") {
+          toast.success("State Updated successfully!");
+          return [
+            { type: EDIT_DISTRICT_FULFILLED },
+            { type: FETCH_DISTRICT_PENDING },
+            { type: TOGGLE_DISTRICT_EDIT_MODAL }
+          ];
+        } else {
+          throw new Error(response.msg[Object.keys(response.msg)[0]][0]);
+        }
+      })
+      .catch(ajaxError => {
+        toast.error(ajaxError.toString());
+        return Observable.of({
+          type: EDIT_DISTRICT_REJECTED,
+          payload: ajaxError
+        });
+      });
+  })
 );
 
 export const onDistrictDelete = payload => ({
@@ -739,6 +855,31 @@ epics.push((action$, { getState }) =>
       return Observable.of({ type: FETCH_ADDRESS_TREE_REJECTED });
     })
 );
+
+export const toggleCountryEditModal = payload => ({
+  type: TOGGLE_COUNTRY_EDIT_MODAL,
+  payload
+});
+
+export const toggleStateEditModal = payload => ({
+  type: TOGGLE_STATE_EDIT_MODAL,
+  payload
+});
+
+export const toggleDistrictEditModal = payload => ({
+  type: TOGGLE_DISTRICT_EDIT_MODAL,
+  payload
+});
+
+export const toggleCityEditModal = payload => ({
+  type: TOGGLE_CITY_EDIT_MODAL,
+  payload
+});
+
+export const toggleAreaEditModal = payload => ({
+  type: TOGGLE_AREA_EDIT_MODAL,
+  payload
+});
 
 // export const onAddressTreeList = ({
 //   id,

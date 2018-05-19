@@ -21,6 +21,8 @@ import {
   EDIT_BUSINESS_PENDING,
   EDIT_BUSINESS_REJECTED,
   TOGGLE_EDIT,
+  TOGGLE_COMPANY_TYPE_EDIT_MODAL,
+  TOGGLE_PAYMENT_METHOD_EDIT_MODAL,
   UNMOUNT_PAYMENT_METHOD,
   UNMOUNT_COMPANY_TYPE
 } from "../actions/types";
@@ -44,7 +46,10 @@ const INITIAL_STATE = {
   pages: 1,
   fetchLoading: false,
   businessGet: false,
-  rowCount: 0
+  rowCount: 0,
+
+  companyTypeEditModal: false,
+  paymentMethodEditModal: false
 };
 
 export default function(state = INITIAL_STATE, action) {
@@ -160,6 +165,20 @@ export default function(state = INITIAL_STATE, action) {
 
     case TOGGLE_EDIT:
       return { ...state, EDIT: action.payload, loading: false };
+
+    case TOGGLE_COMPANY_TYPE_EDIT_MODAL:
+      return {
+        ...state,
+        companyTypeEditModal: !state.companyTypeEditModal,
+        companyTypeEditData: action.payload
+      };
+
+    case TOGGLE_PAYMENT_METHOD_EDIT_MODAL:
+      return {
+        ...state,
+        paymentMethodEditModal: !state.paymentMethodEditModal,
+        paymentMethodEditData: action.payload
+      };
 
     default:
       return state;

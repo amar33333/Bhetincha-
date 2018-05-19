@@ -24,10 +24,15 @@ import {
 } from "../../../Common/components";
 import filterCaseInsensitive from "../../../Common/utils/filterCaseInsesitive";
 
+import CustomModal from "../../../Common/components/CustomModal";
+import StateEditModal from "../../../Common/components/CustomModal/ModalTemplates/StateEditModal";
+
 import {
   onStateSubmit,
   onCountryList,
   onStateList,
+  onStateEdit,
+  toggleStateEditModal,
   onStateDelete,
   onUnmountCountry,
   onUnmountState
@@ -88,12 +93,14 @@ class States extends Component {
         filterable: false,
         sortable: false,
         width: 145,
-        Cell: ({ value }) => (
+        Cell: ({ value, original: { id, country, name } }) => (
           <div>
             <Button
               color="secondary"
               className="mr-l"
-              onClick={event => console.log("Edit clicked for id: ", value)}
+              onClick={() =>
+                this.props.toggleStateEditModal({ id, country, name })
+              }
             >
               Edit
             </Button>
@@ -213,6 +220,18 @@ class States extends Component {
           loading={this.props.fetchLoading}
           defaultFilterMethod={filterCaseInsensitive}
         />
+        <CustomModal
+          title="Edit State Data"
+          isOpen={this.props.stateEditModal}
+          toggle={this.props.toggleStateEditModal}
+          className={"modal-xs" + this.props.className}
+        >
+          <StateEditModal
+            data={this.props.stateEditData}
+            onStateEdit={this.props.onStateEdit}
+            countries={this.props.countries}
+          />
+        </CustomModal>
       </div>
     );
   }
@@ -222,12 +241,16 @@ export default connect(
   ({ AdminContainer: { general_setup } }) => ({
     countries: general_setup.countries,
     states: general_setup.states,
+    stateEditModal: general_setup.stateEditModal,
+    stateEditData: general_setup.stateEditData,
     fetchLoading: general_setup.statesFetchLoading,
     loading: general_setup.stateLoading,
     error: general_setup.stateError
   }),
   {
     onStateSubmit,
+    onStateEdit,
+    toggleStateEditModal,
     onCountryList,
     onStateList,
     onStateDelete,

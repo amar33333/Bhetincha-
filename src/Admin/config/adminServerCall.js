@@ -36,6 +36,19 @@ export const onCompanyTypePost = ({ company_type, access_token }) => {
   });
 };
 
+export const onCompanyTypePut = ({ company_type, access_token }) =>
+  ajax({
+    method: "PUT",
+    url: `${COMPANY_TYPE_URL}${company_type.id}/`,
+    body: {
+      name: company_type.name
+    },
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
 export const onCompanyTypePostAjax = ({ company_type, access_token }) =>
   ajax({
     method: "post",
@@ -63,6 +76,19 @@ export const onPaymentMethodPost = ({ payment_method, access_token }) =>
     url: PAYMENT_METHOD_URL,
     data: {
       name: payment_method
+    },
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
+export const onPaymentMethodPut = ({ payment_method, access_token }) =>
+  ajax({
+    method: "PUT",
+    url: `${PAYMENT_METHOD_URL}${payment_method.id}/`,
+    body: {
+      name: payment_method.name
     },
     headers: {
       "Content-Type": "application/json",
@@ -107,7 +133,7 @@ export const onIndustryPost = ({ industry, access_token }) =>
 export const onIndustryPut = ({ industry, access_token }) =>
   ajax({
     method: "PUT",
-    url: `${INDUSTRY_URL}${industry.value}/`,
+    url: `${INDUSTRY_URL}${industry.id}/`,
     body: {
       name: industry.name
     },
@@ -285,6 +311,22 @@ export const onSubCategoryPost = ({
   });
 };
 
+export const onSubCategoryPut = ({ sub_category, industry, access_token }) => {
+  console.log("sub cate edit: ", sub_category);
+  return ajax({
+    method: "PUT",
+    url: `${SUB_CATEGORY_URL}${sub_category.id}/`,
+    body: {
+      name: sub_category.name,
+      industry
+    },
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+};
+
 export const onSubCategoryPostAjax = ({
   category,
   extraSection,
@@ -363,6 +405,19 @@ export const onCountryPost = ({ country, access_token }) =>
     url: COUNTRY_URL,
     data: {
       name: country
+    },
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
+export const onCountryPut = ({ country, access_token }) =>
+  ajax({
+    method: "PUT",
+    url: `${COUNTRY_URL}${country.id}/`,
+    body: {
+      name: country.name
     },
     headers: {
       "Content-Type": "application/json",
@@ -481,6 +536,20 @@ export const onStateGetAjax = ({ access_token }) =>
     }
   });
 
+export const onStatePut = ({ state, country, access_token }) =>
+  ajax({
+    method: "PUT",
+    url: `${STATE_URL}${state.id}/`,
+    body: {
+      name: state.name,
+      country
+    },
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
 export const onStateEachGet = ({ id, access_token }) =>
   axios({
     method: "get",
@@ -565,6 +634,21 @@ export const onDistrictGetAjax = ({ access_token }) =>
   ajax({
     method: "get",
     url: DISTRICT_URL,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
+export const onDistrictPut = ({ district, state, country, access_token }) =>
+  ajax({
+    method: "PUT",
+    url: `${DISTRICT_URL}${district.id}/`,
+    body: {
+      name: district.name,
+      country,
+      state
+    },
     headers: {
       "Content-Type": "application/json",
       Authorization: "Bearer " + access_token

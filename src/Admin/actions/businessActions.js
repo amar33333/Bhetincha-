@@ -11,7 +11,9 @@ import {
   onDistrictEachGet,
   onCityEachGet,
   onCountryEachGetAjax,
-  onStateEachGetAjax
+  onStateEachGetAjax,
+  onCompanyTypePut,
+  onPaymentMethodPut
 } from "../config/adminServerCall";
 
 import {
@@ -79,6 +81,14 @@ import {
   EDIT_BUSINESS_REJECTED,
   FETCH_ADDRESS_TREE_GET_PENDING,
   TOGGLE_EDIT,
+  TOGGLE_COMPANY_TYPE_EDIT_MODAL,
+  TOGGLE_PAYMENT_METHOD_EDIT_MODAL,
+  EDIT_COMPANY_TYPE_PENDING,
+  EDIT_COMPANY_TYPE_FULFILLED,
+  EDIT_COMPANY_TYPE_REJECTED,
+  EDIT_PAYMENT_METHOD_FULFILLED,
+  EDIT_PAYMENT_METHOD_PENDING,
+  EDIT_PAYMENT_METHOD_REJECTED,
   UNMOUNT_COMPANY_TYPE,
   UNMOUNT_PAYMENT_METHOD
 } from "./types";
@@ -678,6 +688,74 @@ epics.push((action$, { getState }) =>
   })
 );
 
+export const onCompanyTypeEdit = payload => ({
+  type: EDIT_COMPANY_TYPE_PENDING,
+  payload
+});
+
+epics.push((action$, { getState }) =>
+  action$.ofType(EDIT_COMPANY_TYPE_PENDING).mergeMap(({ payload }) => {
+    const { company_type } = payload;
+    const access_token = getState().auth.cookies.token_data.access_token;
+
+    return onCompanyTypePut({ company_type, access_token })
+      .concatMap(({ response }) => {
+        if (response.msg === "success") {
+          toast.success("company_type Updated successfully!");
+          return [
+            { type: EDIT_COMPANY_TYPE_FULFILLED },
+            { type: FETCH_COMPANY_TYPE_PENDING },
+            { type: TOGGLE_COMPANY_TYPE_EDIT_MODAL }
+          ];
+        } else {
+          throw new Error(response.msg[Object.keys(response.msg)[0]][0]);
+        }
+      })
+      .catch(ajaxError => {
+        toast.error(ajaxError.toString());
+        return Observable.of({
+          type: EDIT_COMPANY_TYPE_REJECTED,
+          payload: ajaxError
+        });
+      });
+  })
+);
+
+export const onCompanyTypeDelete = payload => ({
+  type: DELETE_COMPANY_TYPE_PENDING,
+  payload
+});
+
+epics.push((action$, { getState }) =>
+  action$.ofType(DELETE_COMPANY_TYPE_PENDING).mergeMap(({ payload }) =>
+    onCompanyTypeEachDeleteAjax({
+      id: payload.id,
+      access_token: getState().auth.cookies.token_data.access_token
+    })
+      .concatMap(() => {
+        toast.success("Deleted Successfully!");
+        return [
+          { type: FETCH_COMPANY_TYPE_PENDING },
+          { type: DELETE_COMPANY_TYPE_FULFILLED }
+        ];
+      })
+      .catch(ajaxError => {
+        toast.error("Error Deleting Country");
+        return Observable.of({ type: DELETE_COMPANY_TYPE_REJECTED });
+      })
+  )
+);
+
+export const toggleCompanyTypeEditModal = payload => ({
+  type: TOGGLE_COMPANY_TYPE_EDIT_MODAL,
+  payload
+});
+
+export const togglePaymentMethodEditModal = payload => ({
+  type: TOGGLE_PAYMENT_METHOD_EDIT_MODAL,
+  payload
+});
+
 // export const onCompanyTypeList = ({ access_token }) => dispatch => {
 //   onCompanyTypeGet({ access_token })
 //     .then(response =>
@@ -718,6 +796,39 @@ epics.push((action$, { getState }) =>
   })
 );
 
+export const onPaymentMethodEdit = payload => ({
+  type: EDIT_PAYMENT_METHOD_PENDING,
+  payload
+});
+
+epics.push((action$, { getState }) =>
+  action$.ofType(EDIT_PAYMENT_METHOD_PENDING).mergeMap(({ payload }) => {
+    const { payment_method } = payload;
+    const access_token = getState().auth.cookies.token_data.access_token;
+
+    return onPaymentMethodPut({ payment_method, access_token })
+      .concatMap(({ response }) => {
+        if (response.msg === "success") {
+          toast.success("payment_method Updated successfully!");
+          return [
+            { type: EDIT_PAYMENT_METHOD_FULFILLED },
+            { type: FETCH_PAYMENT_METHODS_PENDING },
+            { type: TOGGLE_PAYMENT_METHOD_EDIT_MODAL }
+          ];
+        } else {
+          throw new Error(response.msg[Object.keys(response.msg)[0]][0]);
+        }
+      })
+      .catch(ajaxError => {
+        toast.error(ajaxError.toString());
+        return Observable.of({
+          type: EDIT_PAYMENT_METHOD_REJECTED,
+          payload: ajaxError
+        });
+      });
+  })
+);
+
 // export const onPaymentMethodsList = ({ access_token }) => dispatch => {
 //   onPaymentMethodsGet({ access_token })
 //     .then(response =>
@@ -731,31 +842,6 @@ epics.push((action$, { getState }) =>
 //     );
 //   dispatch({ type: FETCH_PAYMENT_METHODS_PENDING });
 // };
-
-export const onCompanyTypeDelete = payload => ({
-  type: DELETE_COMPANY_TYPE_PENDING,
-  payload
-});
-
-epics.push((action$, { getState }) =>
-  action$.ofType(DELETE_COMPANY_TYPE_PENDING).mergeMap(({ payload }) =>
-    onCompanyTypeEachDeleteAjax({
-      id: payload.id,
-      access_token: getState().auth.cookies.token_data.access_token
-    })
-      .concatMap(() => {
-        toast.success("Deleted Successfully!");
-        return [
-          { type: FETCH_COMPANY_TYPE_PENDING },
-          { type: DELETE_COMPANY_TYPE_FULFILLED }
-        ];
-      })
-      .catch(ajaxError => {
-        toast.error("Error Deleting Country");
-        return Observable.of({ type: DELETE_COMPANY_TYPE_REJECTED });
-      })
-  )
-);
 
 export const onPaymentMethodDelete = payload => ({
   type: DELETE_PAYMENT_METHODS_PENDING,

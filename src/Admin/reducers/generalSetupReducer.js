@@ -43,7 +43,12 @@ import {
   UNMOUNT_AREA,
   FETCH_ADDRESS_TREE_FULFILLED,
   FETCH_ADDRESS_TREE_REJECTED,
-  FETCH_ADDRESS_TREE_PENDING
+  FETCH_ADDRESS_TREE_PENDING,
+  TOGGLE_COUNTRY_EDIT_MODAL,
+  TOGGLE_STATE_EDIT_MODAL,
+  TOGGLE_DISTRICT_EDIT_MODAL,
+  TOGGLE_CITY_EDIT_MODAL,
+  TOGGLE_AREA_EDIT_MODAL
 } from "../actions/types";
 
 const INITIAL_STATE = {
@@ -79,7 +84,12 @@ const INITIAL_STATE = {
   areaError: false,
   areaData: [],
   statusClass: "",
-  loading: false
+  loading: false,
+  countryEditModal: false,
+  stateEditModal: false,
+  districtEditModal: false,
+  cityEditModal: false,
+  areaEditModal: false
 };
 
 export default function(state = INITIAL_STATE, action) {
@@ -316,6 +326,41 @@ export default function(state = INITIAL_STATE, action) {
 
     case FETCH_ADDRESS_TREE_REJECTED:
       return { ...state, loading: false };
+
+    case TOGGLE_COUNTRY_EDIT_MODAL:
+      return {
+        ...state,
+        countryEditModal: !state.countryEditModal,
+        countryEditData: action.payload
+      };
+
+    case TOGGLE_STATE_EDIT_MODAL:
+      return {
+        ...state,
+        stateEditModal: !state.stateEditModal,
+        stateEditData: action.payload
+      };
+
+    case TOGGLE_DISTRICT_EDIT_MODAL:
+      return {
+        ...state,
+        districtEditModal: !state.districtEditModal,
+        districtEditData: action.payload
+      };
+
+    case TOGGLE_CITY_EDIT_MODAL:
+      return {
+        ...state,
+        cityEditModal: !state.cityEditModal,
+        cityEditData: action.payload
+      };
+
+    case TOGGLE_AREA_EDIT_MODAL:
+      return {
+        ...state,
+        areaEditModal: !state.areaEditModal,
+        areaEditData: action.payload
+      };
 
     default:
       return state;

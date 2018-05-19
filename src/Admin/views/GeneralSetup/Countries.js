@@ -18,9 +18,14 @@ import ReactTable from "react-table";
 import { PopoverDelete, PaginationComponent } from "../../../Common/components";
 import filterCaseInsensitive from "../../../Common/utils/filterCaseInsesitive";
 
+import CustomModal from "../../../Common/components/CustomModal";
+import CountryEditModal from "../../../Common/components/CustomModal/ModalTemplates/CountryEditModal";
+
 import {
   onCountrySubmit,
   onCountryList,
+  onCountryEdit,
+  toggleCountryEditModal,
   onCountryDelete,
   onUnmountCountry
 } from "../../actions";
@@ -50,12 +55,12 @@ class Countries extends Component {
         filterable: false,
         sortable: false,
         width: 145,
-        Cell: ({ value }) => (
+        Cell: ({ value, original: { id, name } }) => (
           <div>
             <Button
               color="secondary"
               className="mr-l"
-              onClick={event => console.log("Edit clicked for id: ", value)}
+              onClick={() => this.props.toggleCountryEditModal({ id, name })}
             >
               Edit
             </Button>
@@ -142,6 +147,17 @@ class Countries extends Component {
           loading={this.props.fetchLoading}
           defaultFilterMethod={filterCaseInsensitive}
         />
+        <CustomModal
+          title="Edit Industry Data"
+          isOpen={this.props.countryEditModal}
+          toggle={this.props.toggleCountryEditModal}
+          className={"modal-xs" + this.props.className}
+        >
+          <CountryEditModal
+            data={this.props.countryEditData}
+            onCountryEdit={this.props.onCountryEdit}
+          />
+        </CustomModal>
       </div>
     );
   }
@@ -150,6 +166,8 @@ class Countries extends Component {
 export default connect(
   ({ AdminContainer: { general_setup } }) => ({
     countries: general_setup.countries,
+    countryEditModal: general_setup.countryEditModal,
+    countryEditData: general_setup.countryEditData,
     fetchLoading: general_setup.countriesFetchLoading,
     loading: general_setup.countryLoading,
     error: general_setup.countryError
@@ -157,6 +175,8 @@ export default connect(
   {
     onCountrySubmit,
     onCountryList,
+    onCountryEdit,
+    toggleCountryEditModal,
     onCountryDelete,
     onUnmountCountry
   }

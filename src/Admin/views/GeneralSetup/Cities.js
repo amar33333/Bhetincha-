@@ -334,7 +334,9 @@ class Cities extends Component {
                           className="select-industry"
                           value={this.state.state}
                           onChange={this.handleSelectChange.bind(this, "state")}
-                          options={this.props.partialStates}
+                          options={
+                            this.state.country ? this.props.partialStates : []
+                          }
                           valueKey="id"
                           labelKey="name"
                         />
@@ -355,7 +357,9 @@ class Cities extends Component {
                             this,
                             "district"
                           )}
-                          options={this.props.partialDistricts}
+                          options={
+                            this.state.state ? this.props.partialDistricts : []
+                          }
                           valueKey="id"
                           labelKey="name"
                         />
