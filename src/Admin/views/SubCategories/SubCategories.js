@@ -280,7 +280,11 @@ class SubCategories extends Component {
                             this,
                             "category"
                           )}
-                          options={this.props.industries.industriesData}
+                          options={
+                            this.state.industry
+                              ? this.props.industries.industriesData
+                              : []
+                          }
                           valueKey="id"
                           labelKey="name"
                         />
