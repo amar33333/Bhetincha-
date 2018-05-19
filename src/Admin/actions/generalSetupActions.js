@@ -19,7 +19,8 @@ import {
   onCityEachGetAjax,
   onAreaPostAjax,
   onAreaGetAjax,
-  onAreaEachDeleteAjax
+  onAreaEachDeleteAjax,
+  onCountryPut
 } from "../config/adminServerCall";
 
 import {
@@ -36,6 +37,9 @@ import {
   FETCH_COUNTRY_EACH_FULFILLED,
   FETCH_COUNTRY_EACH_REJECTED,
   FETCH_COUNTRY_EACH_PENDING,
+  EDIT_COUNTRY_FULFILLED,
+  EDIT_COUNTRY_PENDING,
+  EDIT_COUNTRY_REJECTED,
   UNMOUNT_COUNTRY,
   // STATE
   CREATE_STATE_FULFILLED,
@@ -98,7 +102,12 @@ import {
   FETCH_ADDRESS_TREE_LIST_PENDING,
   FETCH_ADDRESS_TREE_FULFILLED,
   FETCH_ADDRESS_TREE_REJECTED,
-  FETCH_ADDRESS_TREE_PENDING
+  FETCH_ADDRESS_TREE_PENDING,
+  TOGGLE_COUNTRY_EDIT_MODAL,
+  TOGGLE_STATE_EDIT_MODAL,
+  TOGGLE_DISTRICT_EDIT_MODAL,
+  TOGGLE_CITY_EDIT_MODAL,
+  TOGGLE_AREA_EDIT_MODAL
 } from "./types";
 
 const epics = [];
@@ -149,6 +158,39 @@ epics.push((action$, { getState }) =>
       }))
       .catch(ajaxError => Observable.of({ type: FETCH_COUNTRY_REJECTED }))
   )
+);
+
+export const onCountryEdit = payload => ({
+  type: EDIT_COUNTRY_PENDING,
+  payload
+});
+
+epics.push((action$, { getState }) =>
+  action$.ofType(EDIT_COUNTRY_PENDING).mergeMap(({ payload }) => {
+    const { country } = payload;
+    const access_token = getState().auth.cookies.token_data.access_token;
+
+    return onCountryPut({ country, access_token })
+      .concatMap(({ response }) => {
+        if (response.msg === "success") {
+          toast.success("country Updated successfully!");
+          return [
+            { type: EDIT_COUNTRY_FULFILLED },
+            { type: FETCH_COUNTRY_PENDING },
+            { type: TOGGLE_COUNTRY_EDIT_MODAL }
+          ];
+        } else {
+          throw new Error(response.msg[Object.keys(response.msg)[0]][0]);
+        }
+      })
+      .catch(ajaxError => {
+        toast.error(ajaxError.toString());
+        return Observable.of({
+          type: EDIT_COUNTRY_REJECTED,
+          payload: ajaxError
+        });
+      });
+  })
 );
 
 export const onCountryDelete = payload => ({
@@ -739,6 +781,31 @@ epics.push((action$, { getState }) =>
       return Observable.of({ type: FETCH_ADDRESS_TREE_REJECTED });
     })
 );
+
+export const toggleCountryEditModal = payload => ({
+  type: TOGGLE_COUNTRY_EDIT_MODAL,
+  payload
+});
+
+export const toggleStateEditModal = payload => ({
+  type: TOGGLE_STATE_EDIT_MODAL,
+  payload
+});
+
+export const toggleDistrictditModal = payload => ({
+  type: TOGGLE_DISTRICT_EDIT_MODAL,
+  payload
+});
+
+export const toggleCityEditModal = payload => ({
+  type: TOGGLE_CITY_EDIT_MODAL,
+  payload
+});
+
+export const toggleAreaEditModal = payload => ({
+  type: TOGGLE_AREA_EDIT_MODAL,
+  payload
+});
 
 // export const onAddressTreeList = ({
 //   id,

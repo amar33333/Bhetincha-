@@ -18,9 +18,14 @@ import ReactTable from "react-table";
 import { PopoverDelete, PaginationComponent } from "../../../Common/components";
 import filterCaseInsensitive from "../../../Common/utils/filterCaseInsesitive";
 
+import CustomModal from "../../../Common/components/CustomModal";
+import CompanyTypeEditModal from "../../../Common/components/CustomModal/ModalTemplates/CompanyTypeEditModal";
+
 import {
   onCompanyTypeSubmit,
   onCompanyTypeList,
+  onCompanyTypeEdit,
+  toggleCompanyTypeEditModal,
   onCompanyTypeDelete,
   onUnmountCompanyType
 } from "../../actions";
@@ -50,12 +55,14 @@ class CompanyType extends Component {
         filterable: false,
         sortable: false,
         width: 145,
-        Cell: ({ value }) => (
+        Cell: ({ value, original: { id, name } }) => (
           <div>
             <Button
               color="secondary"
               className="mr-l"
-              onClick={event => console.log("Edit clicked for id: ", value)}
+              onClick={() =>
+                this.props.toggleCompanyTypeEditModal({ id, name })
+              }
             >
               Edit
             </Button>
@@ -141,6 +148,17 @@ class CompanyType extends Component {
           loading={this.props.fetchLoading}
           defaultFilterMethod={filterCaseInsensitive}
         />
+        <CustomModal
+          title="Edit Company Type Data"
+          isOpen={this.props.companyTypeEditModal}
+          toggle={this.props.toggleCompanyTypeEditModal}
+          className={"modal-xs" + this.props.className}
+        >
+          <CompanyTypeEditModal
+            data={this.props.companyTypeEditData}
+            onCompanyTypeEdit={this.props.onCompanyTypeEdit}
+          />
+        </CustomModal>
       </div>
     );
   }
@@ -149,12 +167,16 @@ class CompanyType extends Component {
 export default connect(
   ({ AdminContainer: { business_reducer } }) => ({
     company_types: business_reducer.company_types,
+    companyTypeEditModal: business_reducer.companyTypeEditModal,
+    companyTypeEditData: business_reducer.companyTypeEditData,
     fetchLoading: business_reducer.companyTypesFetchLoading,
     loading: business_reducer.companyTypeLoading,
     error: business_reducer.companyTypeError
   }),
   {
     onCompanyTypeSubmit,
+    onCompanyTypeEdit,
+    toggleCompanyTypeEditModal,
     onCompanyTypeList,
     onCompanyTypeDelete,
     onUnmountCompanyType

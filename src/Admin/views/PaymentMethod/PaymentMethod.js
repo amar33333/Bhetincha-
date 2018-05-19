@@ -18,9 +18,14 @@ import ReactTable from "react-table";
 import { PopoverDelete, PaginationComponent } from "../../../Common/components";
 import filterCaseInsensitive from "../../../Common/utils/filterCaseInsesitive";
 
+import CustomModal from "../../../Common/components/CustomModal";
+import PaymentMethodEditModal from "../../../Common/components/CustomModal/ModalTemplates/PaymentMethodEditModal";
+
 import {
   onPaymentMethodSubmit,
   onPaymentMethodsList,
+  onPaymentMethodEdit,
+  togglePaymentMethodEditModal,
   onPaymentMethodDelete,
   onUnmountPaymentMethod
 } from "../../actions";
@@ -50,12 +55,14 @@ class PaymentMethod extends Component {
         filterable: false,
         sortable: false,
         width: 145,
-        Cell: ({ value }) => (
+        Cell: ({ value, original: { id, name } }) => (
           <div>
             <Button
               color="secondary"
               className="mr-l"
-              onClick={event => console.log("Edit clicked for id: ", value)}
+              onClick={() =>
+                this.props.togglePaymentMethodEditModal({ id, name })
+              }
             >
               Edit
             </Button>
@@ -141,6 +148,17 @@ class PaymentMethod extends Component {
           loading={this.props.fetchLoading}
           defaultFilterMethod={filterCaseInsensitive}
         />
+        <CustomModal
+          title="Edit Payment Method Data"
+          isOpen={this.props.paymentMethodEditModal}
+          toggle={this.props.togglePaymentMethodEditModal}
+          className={"modal-xs" + this.props.className}
+        >
+          <PaymentMethodEditModal
+            data={this.props.paymentMethodEditData}
+            onPaymentMethodEdit={this.props.onPaymentMethodEdit}
+          />
+        </CustomModal>
       </div>
     );
   }
@@ -149,6 +167,8 @@ class PaymentMethod extends Component {
 export default connect(
   ({ AdminContainer: { business_reducer } }) => ({
     payment_methods: business_reducer.payment_methods,
+    paymentMethodEditData: business_reducer.paymentMethodEditData,
+    paymentMethodEditModal: business_reducer.paymentMethodEditModal,
     fetchLoading: business_reducer.paymentMethodsFetchLoading,
     loading: business_reducer.paymentMethodLoading,
     error: business_reducer.paymentMethodError
@@ -156,6 +176,8 @@ export default connect(
   {
     onPaymentMethodSubmit,
     onPaymentMethodsList,
+    onPaymentMethodEdit,
+    togglePaymentMethodEditModal,
     onPaymentMethodDelete,
     onUnmountPaymentMethod
   }

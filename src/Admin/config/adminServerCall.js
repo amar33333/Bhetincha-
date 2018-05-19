@@ -36,6 +36,19 @@ export const onCompanyTypePost = ({ company_type, access_token }) => {
   });
 };
 
+export const onCompanyTypePut = ({ company_type, access_token }) =>
+  ajax({
+    method: "PUT",
+    url: `${COMPANY_TYPE_URL}${company_type.id}/`,
+    body: {
+      name: company_type.name
+    },
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
 export const onCompanyTypePostAjax = ({ company_type, access_token }) =>
   ajax({
     method: "post",
@@ -63,6 +76,19 @@ export const onPaymentMethodPost = ({ payment_method, access_token }) =>
     url: PAYMENT_METHOD_URL,
     data: {
       name: payment_method
+    },
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
+export const onPaymentMethodPut = ({ payment_method, access_token }) =>
+  ajax({
+    method: "PUT",
+    url: `${PAYMENT_METHOD_URL}${payment_method.id}/`,
+    body: {
+      name: payment_method.name
     },
     headers: {
       "Content-Type": "application/json",
@@ -107,7 +133,7 @@ export const onIndustryPost = ({ industry, access_token }) =>
 export const onIndustryPut = ({ industry, access_token }) =>
   ajax({
     method: "PUT",
-    url: `${INDUSTRY_URL}${industry.value}/`,
+    url: `${INDUSTRY_URL}${industry.id}/`,
     body: {
       name: industry.name
     },
@@ -363,6 +389,19 @@ export const onCountryPost = ({ country, access_token }) =>
     url: COUNTRY_URL,
     data: {
       name: country
+    },
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
+export const onCountryPut = ({ country, access_token }) =>
+  ajax({
+    method: "PUT",
+    url: `${COUNTRY_URL}${country.id}/`,
+    body: {
+      name: country.name
     },
     headers: {
       "Content-Type": "application/json",
