@@ -20,7 +20,9 @@ import {
   onAreaPostAjax,
   onAreaGetAjax,
   onAreaEachDeleteAjax,
-  onCountryPut
+  onCountryPut,
+  onStatePut,
+  onDistrictPut
 } from "../config/adminServerCall";
 
 import {
@@ -51,6 +53,9 @@ import {
   FETCH_STATE_EACH_FULFILLED,
   FETCH_STATE_EACH_REJECTED,
   FETCH_STATE_EACH_PENDING,
+  EDIT_STATE_FULFILLED,
+  EDIT_STATE_PENDING,
+  EDIT_STATE_REJECTED,
   DELETE_STATE_PENDING,
   DELETE_STATE_FULFILLED,
   DELETE_STATE_REJECTED,
@@ -65,6 +70,9 @@ import {
   FETCH_DISTRICT_EACH_FULFILLED,
   FETCH_DISTRICT_EACH_REJECTED,
   FETCH_DISTRICT_EACH_PENDING,
+  EDIT_DISTRICT_FULFILLED,
+  EDIT_DISTRICT_PENDING,
+  EDIT_DISTRICT_REJECTED,
   DELETE_DISTRICT_PENDING,
   DELETE_DISTRICT_FULFILLED,
   DELETE_DISTRICT_REJECTED,
@@ -288,6 +296,39 @@ epics.push((action$, { getState }) =>
   )
 );
 
+export const onStateEdit = payload => ({
+  type: EDIT_STATE_PENDING,
+  payload
+});
+
+epics.push((action$, { getState }) =>
+  action$.ofType(EDIT_STATE_PENDING).mergeMap(({ payload }) => {
+    const { country, state } = payload;
+    const access_token = getState().auth.cookies.token_data.access_token;
+
+    return onStatePut({ country, state, access_token })
+      .concatMap(({ response }) => {
+        if (response.msg === "success") {
+          toast.success("State Updated successfully!");
+          return [
+            { type: EDIT_STATE_FULFILLED },
+            { type: FETCH_STATE_PENDING },
+            { type: TOGGLE_STATE_EDIT_MODAL }
+          ];
+        } else {
+          throw new Error(response.msg[Object.keys(response.msg)[0]][0]);
+        }
+      })
+      .catch(ajaxError => {
+        toast.error(ajaxError.toString());
+        return Observable.of({
+          type: EDIT_STATE_REJECTED,
+          payload: ajaxError
+        });
+      });
+  })
+);
+
 export const onStateDelete = payload => ({
   type: DELETE_STATE_PENDING,
   payload
@@ -381,6 +422,39 @@ epics.push((action$, { getState }) =>
       }))
       .catch(ajaxError => Observable.of({ type: FETCH_DISTRICT_REJECTED }))
   )
+);
+
+export const onDistrictEdit = payload => ({
+  type: EDIT_DISTRICT_PENDING,
+  payload
+});
+
+epics.push((action$, { getState }) =>
+  action$.ofType(EDIT_DISTRICT_PENDING).mergeMap(({ payload }) => {
+    const { country, state, district } = payload;
+    const access_token = getState().auth.cookies.token_data.access_token;
+
+    return onDistrictPut({ district, state, country, access_token })
+      .concatMap(({ response }) => {
+        if (response.msg === "success") {
+          toast.success("State Updated successfully!");
+          return [
+            { type: EDIT_DISTRICT_FULFILLED },
+            { type: FETCH_DISTRICT_PENDING },
+            { type: TOGGLE_DISTRICT_EDIT_MODAL }
+          ];
+        } else {
+          throw new Error(response.msg[Object.keys(response.msg)[0]][0]);
+        }
+      })
+      .catch(ajaxError => {
+        toast.error(ajaxError.toString());
+        return Observable.of({
+          type: EDIT_DISTRICT_REJECTED,
+          payload: ajaxError
+        });
+      });
+  })
 );
 
 export const onDistrictDelete = payload => ({
@@ -792,7 +866,7 @@ export const toggleStateEditModal = payload => ({
   payload
 });
 
-export const toggleDistrictditModal = payload => ({
+export const toggleDistrictEditModal = payload => ({
   type: TOGGLE_DISTRICT_EDIT_MODAL,
   payload
 });

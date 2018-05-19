@@ -31,12 +31,17 @@ import {
 } from "../../../Common/components";
 // import filterCaseInsensitive from "../../../Common/utils/filterCaseInsesitive";
 
+import CustomModal from "../../../Common/components/CustomModal";
+import SubCategoryEditModal from "../../../Common/components/CustomModal/ModalTemplates/SubCategoryEditModal";
+
 import {
   onIndustryList,
   onIndustryEachList,
   onExtraSectionList,
   onSubCategorySubmit,
   onSubCategoryList,
+  onSubCategoryEdit,
+  toggleSubCategoryEditModal,
   onCategoryList,
   onSubCategoryDelete,
   onUnmountIndustry,
@@ -170,12 +175,15 @@ class SubCategories extends Component {
         filterable: false,
         sortable: false,
         width: 145,
-        Cell: ({ value }) => (
+        Cell: ({ value, original }) => (
           <div>
             <Button
               color="secondary"
               className="mr-l"
-              onClick={event => console.log("Edit clicked for id: ", value)}
+              onClick={
+                () => console.log("sub cat table: ", original)
+                //this.props.toggleSubCategoryEditModal({ id, industry, name })
+              }
             >
               Edit
             </Button>
@@ -390,6 +398,7 @@ class SubCategories extends Component {
   updateData = params => this.setState(params, () => this.updateTable());
 
   render() {
+    console.log("sub cat props: ", this.props);
     return (
       <div className="animated fadeIn">
         <Row className="hr-centered">
@@ -536,6 +545,19 @@ class SubCategories extends Component {
           }}
           loading={this.props.fetchLoading}
         />
+        <CustomModal
+          title="Edit Sub Category Data"
+          isOpen={this.props.SubCategoryEditModal}
+          toggle={this.props.toggleSubCategoryEditModal}
+          className={"modal-xs" + this.props.className}
+        >
+          <SubCategoryEditModal
+            data={this.props.subCategoryEditData}
+            onCategoryEdit={this.props.onSubCategoryEdit}
+            industries={this.props.industries}
+            categories={this.props.categories}
+          />
+        </CustomModal>
       </div>
     );
   }
@@ -562,6 +584,8 @@ export default connect(
     onExtraSectionList,
     onSubCategorySubmit,
     onSubCategoryList,
+    onSubCategoryEdit,
+    toggleSubCategoryEditModal,
     onCategoryList,
     onSubCategoryDelete,
     onUnmountIndustry,

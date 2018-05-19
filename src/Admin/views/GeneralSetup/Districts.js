@@ -26,12 +26,17 @@ import {
   PaginationComponent
 } from "../../../Common/components";
 
+import CustomModal from "../../../Common/components/CustomModal";
+import DistrictEditModal from "../../../Common/components/CustomModal/ModalTemplates/DistrictEditModal";
+
 import {
   onCountryList,
   onCountryEachList,
   onStateList,
   onDistrictList,
   onDistrictSubmit,
+  onDistrictEdit,
+  toggleDistrictEditModal,
   onDistrictDelete,
   onUnmountCountry,
   onUnmountState,
@@ -131,12 +136,14 @@ class Districts extends Component {
         filterable: false,
         sortable: false,
         width: 145,
-        Cell: ({ value }) => (
+        Cell: ({ value, original: { id, country, state, name } }) => (
           <div>
             <Button
               color="secondary"
               className="mr-l"
-              onClick={event => console.log("Edit clicked for id: ", value)}
+              onClick={() =>
+                this.props.toggleDistrictEditModal({ id, country, state, name })
+              }
             >
               Edit
             </Button>
@@ -376,7 +383,9 @@ class Districts extends Component {
                           className="select-industry"
                           value={this.state.state}
                           onChange={this.handleSelectChange.bind(this, "state")}
-                          options={this.props.partialStates}
+                          options={
+                            this.state.country ? this.props.partialStates : []
+                          }
                           valueKey="id"
                           labelKey="name"
                         />
@@ -456,6 +465,19 @@ class Districts extends Component {
           }}
           loading={this.props.fetchLoading}
         />
+        <CustomModal
+          title="Edit District Data"
+          isOpen={this.props.districtEditModal}
+          toggle={this.props.toggleDistrictEditModal}
+          className={"modal-xs" + this.props.className}
+        >
+          <DistrictEditModal
+            data={this.props.districtEditData}
+            onDistrictEdit={this.props.onDistrictEdit}
+            countries={this.props.countries}
+            states={this.props.partialStates}
+          />
+        </CustomModal>
       </div>
     );
   }
@@ -467,6 +489,8 @@ export default connect(
     partialStates: general_setup.countryData,
     states: general_setup.states,
     districts: general_setup.districts,
+    districtEditModal: general_setup.districtEditModal,
+    districtEditData: general_setup.districtEditData,
     fetchLoading: general_setup.districtsFetchLoading,
     loading: general_setup.districtLoading,
     error: general_setup.districtError
@@ -474,6 +498,8 @@ export default connect(
   {
     onStateList,
     onDistrictSubmit,
+    onDistrictEdit,
+    toggleDistrictEditModal,
     onCountryList,
     onDistrictList,
     onCountryEachList,

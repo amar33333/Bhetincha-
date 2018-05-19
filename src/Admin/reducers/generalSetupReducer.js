@@ -86,10 +86,10 @@ const INITIAL_STATE = {
   statusClass: "",
   loading: false,
   countryEditModal: false,
-  countryEditModal: false,
-  countryEditModal: false,
-  countryEditModal: false,
-  countryEditModal: false
+  stateEditModal: false,
+  districtEditModal: false,
+  cityEditModal: false,
+  areaEditModal: false
 };
 
 export default function(state = INITIAL_STATE, action) {

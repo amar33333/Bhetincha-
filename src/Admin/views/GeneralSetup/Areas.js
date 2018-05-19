@@ -360,6 +360,7 @@ class Areas extends Component {
   };
 
   render() {
+    console.log("areas props: ", this.props);
     return (
       <div className="animated fadeIn">
         <Row className="hr-centered">
@@ -405,7 +406,9 @@ class Areas extends Component {
                           className="select-industry"
                           value={this.state.state}
                           onChange={this.handleSelectChange.bind(this, "state")}
-                          options={this.props.partialStates}
+                          options={
+                            this.state.country ? this.props.partialStates : []
+                          }
                           valueKey="id"
                           labelKey="name"
                         />
@@ -426,7 +429,9 @@ class Areas extends Component {
                             this,
                             "district"
                           )}
-                          options={this.props.partialDistricts}
+                          options={
+                            this.state.state ? this.props.partialDistricts : []
+                          }
                           valueKey="id"
                           labelKey="name"
                         />
@@ -444,7 +449,9 @@ class Areas extends Component {
                           className="select-industry"
                           value={this.state.city}
                           onChange={this.handleSelectChange.bind(this, "city")}
-                          options={this.props.partialCities}
+                          options={
+                            this.state.district ? this.props.partialCities : []
+                          }
                           valueKey="id"
                           labelKey="name"
                         />
