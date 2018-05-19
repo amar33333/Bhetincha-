@@ -19,7 +19,8 @@ const INITIAL_STATE = {
   fetchLoading: false,
   error: false,
   categories: [],
-  categoryData: []
+  categoryData: [],
+  categoryEditModal: false
 };
 
 export default function(state = INITIAL_STATE, action) {
@@ -108,6 +109,7 @@ export default function(state = INITIAL_STATE, action) {
       };
 
     case TOGGLE_CATEGORY_EDIT_MODAL:
+      console.log("cat edit: ", action);
       return {
         ...state,
         categoryEditModal: !state.categoryEditModal,

@@ -162,11 +162,6 @@ class Categories extends Component {
   handleIndustryChange = industry => this.setState({ industry });
 
   render() {
-    const industries = this.props.industries.industries;
-
-    const { industry } = this.state;
-    const value = industry && industry.id;
-
     return (
       <div className="animated fadeIn">
         <Row className="hr-centered">
@@ -190,7 +185,7 @@ class Categories extends Component {
                           className="select-industry"
                           value={this.state.industry}
                           onChange={this.handleIndustryChange}
-                          options={industries}
+                          options={this.props.industries}
                           valueKey="id"
                           labelKey="name"
                         />
@@ -237,14 +232,14 @@ class Categories extends Component {
         />
         <CustomModal
           title="Edit Category Data"
-          isOpen={this.props.categories.categoryEditModal}
-          toggle={this.props.categories.toggleCategoryEditModal}
+          isOpen={this.props.categoryEditModal}
+          toggle={this.props.toggleCategoryEditModal}
           className={"modal-xs" + this.props.className}
         >
           <CategoryEditModal
-            data={this.props.categories.categoryEditData}
+            data={this.props.categoryEditData}
             onCategoryEdit={this.props.onCategoryEdit}
-            industries={industries}
+            industries={this.props.industries}
           />
         </CustomModal>
       </div>
