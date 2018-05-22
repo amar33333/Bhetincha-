@@ -259,7 +259,7 @@ export default function(state = INITIAL_STATE, action) {
       const countries = state.countries;
       const payload = action.payload;
 
-      console.log("address payload: ", payload);
+      // console.log("address payload: ", payload);
       return {
         ...state,
         countries: countries.map(country => {

@@ -115,7 +115,7 @@ class SubBusinessAbout extends Component {
   };
   render() {
     if (this.props.about) console.log("about props: ", this.props.about);
-    console.log("about state: ", this.state);
+    // console.log("about state: ", this.state);
     const companyTypes = this.props.company_types;
 
     let yesterday = Datetime.moment().subtract(1, "day");

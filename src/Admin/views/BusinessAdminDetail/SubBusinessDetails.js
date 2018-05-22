@@ -35,11 +35,11 @@ class SubBusinessDetail extends Component {
   static getDerivedStateFromProps = nextProps => {
     const { businessData } = nextProps;
 
-    console.log("subbusiness detail props: ", nextProps);
+    // console.log("subbusiness detail props: ", nextProps);
     if (!nextProps.businessGet && businessData && nextProps.EDIT) {
-      console.log("sbbusines detail: ", nextProps);
+      // console.log("sbbusines detail: ", nextProps);
       nextProps.onInitialPropsReceived();
-      console.log("sbbusines detail: ", nextProps);
+      // console.log("sbbusines detail: ", nextProps);
 
       return {
         business_name: businessData.business_name
@@ -273,7 +273,7 @@ class SubBusinessDetail extends Component {
                   <FormGroup>
                     <Label for="business_email">Business Email</Label>
                     <Input
-                      required
+                      //required
                       type="email"
                       value={this.state.business_email}
                       onKeyDown={this._handleKeyPress}

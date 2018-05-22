@@ -7,6 +7,7 @@ import generalSetupEpics from "./generalSetupActions";
 import filterCityEpics from "./filterCityActions";
 import filterAreaEpics from "./filterAreaActions";
 import extraSectionEpics from "./extraSectionActions";
+import userEpics from "./userActions";
 
 export * from "./industryActions";
 export * from "./categoryActions";
@@ -18,6 +19,7 @@ export * from "./businessActions";
 export * from "./filterBusinessActions";
 export * from "./filterCityActions";
 export * from "./filterAreaActions";
+export * from "./userActions";
 
 export default [
   ...industryEpics,
@@ -28,5 +30,6 @@ export default [
   ...generalSetupEpics,
   ...filterCityEpics,
   ...filterAreaEpics,
-  ...extraSectionEpics
+  ...extraSectionEpics,
+  ...userEpics
 ];

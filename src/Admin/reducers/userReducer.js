@@ -5,21 +5,53 @@ import {
   CREATE_USER_FULFILLED,
   CREATE_USER_REJECTED,
   CREATE_USER_PENDING,
-  FETCH_GROUP_FULFILLED,
-  FETCH_GROUP_REJECTED,
-  FETCH_GROUP_PENDING,
+  FETCH_GROUPS_FULFILLED,
+  FETCH_GROUPS_REJECTED,
+  FETCH_GROUPS_PENDING,
   FETCH_USER_FULFILLED,
   FETCH_USER_REJECTED,
-  FETCH_USER_PENDING
+  FETCH_USER_PENDING,
+  PERMISSIONS_LIST_PENDING,
+  PERMISSIONS_LIST_REJECTED,
+  PERMISSIONS_LIST_FULFILLED,
+  TOGGLE_PERMISSION_PENDING,
+  TOGGLE_PERMISSION_FULFILLED,
+  TOGGLE_PERMISSION_REJECTED
 } from "../actions/types";
 
 const INITIAL_STATE = {
   loading: false,
-  statusClass: ""
+  statusClass: "",
+  permissions_list: [],
+  groups: []
 };
 
 export default function(state = INITIAL_STATE, action) {
   switch (action.type) {
+    case TOGGLE_PERMISSION_PENDING:
+      return { ...state, loading: true, statusClass: "pending" };
+
+    case TOGGLE_PERMISSION_FULFILLED:
+      return {
+        ...state,
+        loading: false
+      };
+
+    case TOGGLE_PERMISSION_REJECTED:
+      return { ...state, loading: false };
+
+    case PERMISSIONS_LIST_PENDING:
+      return { ...state, loading: true };
+
+    case PERMISSIONS_LIST_FULFILLED:
+      return {
+        ...state,
+        permissions_list: action.payload
+      };
+
+    case PERMISSIONS_LIST_REJECTED:
+      return { ...state, loading: false, statusClass: "rejected" };
+
     case CREATE_GROUP_PENDING:
       return { ...state, loading: true, statusClass: "pending" };
 
@@ -48,10 +80,10 @@ export default function(state = INITIAL_STATE, action) {
     case CREATE_USER_REJECTED:
       return { ...state, loading: false, statusClass: "rejected" };
 
-    case FETCH_GROUP_PENDING:
+    case FETCH_GROUPS_PENDING:
       return { ...state, loading: true, statusClass: "pending" };
 
-    case FETCH_GROUP_FULFILLED:
+    case FETCH_GROUPS_FULFILLED:
       return {
         ...state,
         groups: action.payload,
@@ -59,7 +91,7 @@ export default function(state = INITIAL_STATE, action) {
         statusClass: "fulfilled"
       };
 
-    case FETCH_GROUP_REJECTED:
+    case FETCH_GROUPS_REJECTED:
       return { ...state, loading: false, statusClass: "rejected" };
 
     case FETCH_USER_PENDING:

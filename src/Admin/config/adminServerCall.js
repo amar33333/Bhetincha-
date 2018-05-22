@@ -9,7 +9,9 @@ import {
   CITY_URL,
   AREA_URL,
   USER_GROUPS_URL,
-  USERS_URL
+  USERS_URL,
+  PERMISSIONS_ALL_LIST_URL,
+  TOGGLE_PERMISSION_URL
 } from "./ADMIN_API";
 
 import {
@@ -21,6 +23,47 @@ import axios from "axios";
 
 import { ajax } from "rxjs/observable/dom/ajax";
 import querystring from "querystring";
+
+export const onPermissionsGet = ({ access_token }) =>
+  ajax({
+    method: "GET",
+    url: PERMISSIONS_ALL_LIST_URL,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
+export const onTogglePermissionPost = ({
+  group_id,
+  global_permission,
+  checked,
+  access_token
+}) =>
+  ajax({
+    method: "POST",
+    url: TOGGLE_PERMISSION_URL,
+    headers: {
+      Authorization: "Bearer " + access_token,
+      "Content-Type": "application/json"
+    },
+    body: {
+      group_id,
+      global_permission,
+      checked,
+      access_token
+    }
+  });
+
+export const onGroupsGet = ({ access_token }) =>
+  ajax({
+    method: "GET",
+    url: USER_GROUPS_URL,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
 
 export const onCompanyTypePost = ({ company_type, access_token }) => {
   return axios({

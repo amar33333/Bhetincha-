@@ -7,6 +7,7 @@ import AddUser from "./Users/Manage Users/Add User";
 import Industry from "../views/Industry/Industry";
 import Categories from "../views/Categories/Categories";
 import SubCategories from "../views/SubCategories/SubCategories";
+import AppBusinessReview from "../views/BusinessAdminDetail/AppBusinessReview";
 import {
   Areas,
   Cities,
@@ -20,6 +21,7 @@ import PaymentMethod from "./PaymentMethod/PaymentMethod";
 import BusinessAdminDetail from "./BusinessAdminDetail";
 import BusinessList from "./BusinessAdminDetail/BusinessList";
 import BusinessEdit from "./BusinessAdminDetail/BusinessEdit";
+import AppBusinessList from "./BusinessAdminDetail/AppBusinessList";
 
 export {
   Dashboard,
@@ -40,5 +42,7 @@ export {
   PaymentMethod,
   BusinessAdminDetail,
   BusinessList,
-  BusinessEdit
+  BusinessEdit,
+  AppBusinessList,
+  AppBusinessReview
 };

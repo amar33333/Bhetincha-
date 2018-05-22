@@ -1,5 +1,6 @@
 import {
   BUSINESS_URL,
+  APP_BUSINESS_APPROVAL_URL,
   PAYMENT_METHOD_URL,
   COMPANY_TYPE_URL,
   ALBUM_URL,
@@ -121,6 +122,26 @@ export const onBusinessAllGetAjax = ({ access_token, params }) =>
     }
   });
 
+export const onAppBusinessGet = ({ access_token, params }) =>
+  ajax({
+    method: "GET",
+    url: `${APP_BUSINESS_APPROVAL_URL}?${querystring.stringify(params)}`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
+export const onAppBusinessEachGet = ({ username, access_token }) =>
+  axios({
+    method: "get",
+    url: `${APP_BUSINESS_APPROVAL_URL}${username}/`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
 export const onBusinessEachGet = ({ username, access_token }) =>
   axios({
     method: "get",
@@ -144,6 +165,16 @@ export const onBusinessEachDeleteAjax = ({ id, access_token }) =>
   ajax({
     method: "DELETE",
     url: `${BUSINESS_URL}${id}`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
+export const onAppBusinessEachDelete = ({ id, access_token }) =>
+  ajax({
+    method: "DELETE",
+    url: `${APP_BUSINESS_APPROVAL_URL}${id}`,
     headers: {
       "Content-Type": "application/json",
       Authorization: "Bearer " + access_token
