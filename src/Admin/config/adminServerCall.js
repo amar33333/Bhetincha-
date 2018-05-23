@@ -50,8 +50,7 @@ export const onTogglePermissionPost = ({
     body: {
       group_id,
       global_permission,
-      checked,
-      access_token
+      checked
     }
   });
 
@@ -893,7 +892,7 @@ export const onUserPost = ({
   username,
   password,
   email,
-  group,
+  groups,
   access_token
 }) =>
   axios({
@@ -909,7 +908,7 @@ export const onUserPost = ({
       username,
       password,
       email,
-      group
+      groups
     }
   });
 

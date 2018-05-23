@@ -101,10 +101,19 @@ epics.push((action$, { getState }) =>
 
 export const onGroupSubmit = ({ group, access_token }) => dispatch => {
   onGroupPost({ group, access_token })
-    .then(response =>
-      dispatch({ type: CREATE_GROUP_FULFILLED, payload: response.data })
-    )
-    .catch(error => dispatch({ type: CREATE_GROUP_REJECTED, payload: error }));
+    .then(response => {
+      if (response.data.msg === "success") {
+        toast.success("Group Created Successfully!");
+        dispatch({ type: CREATE_GROUP_FULFILLED, payload: response.data });
+      } else {
+        toast.error("Error !!!");
+      }
+    })
+    .catch(error => {
+      toast.error("Error !!!");
+
+      dispatch({ type: CREATE_GROUP_REJECTED, payload: error });
+    });
   dispatch({ type: CREATE_GROUP_PENDING });
 };
 
@@ -125,7 +134,7 @@ export const onUserSubmit = ({
   username,
   email,
   password,
-  group,
+  groups,
   access_token
 }) => dispatch => {
   onUserPost({
@@ -134,13 +143,22 @@ export const onUserSubmit = ({
     username,
     email,
     password,
-    group,
+    groups,
     access_token
   })
-    .then(response =>
-      dispatch({ type: CREATE_USER_FULFILLED, payload: response.data })
-    )
-    .catch(error => dispatch({ type: CREATE_USER_REJECTED, payload: error }));
+    .then(response => {
+      if (response.data.msg === "success") {
+        toast.success("User Created Successfully!");
+        dispatch({ type: CREATE_USER_FULFILLED, payload: response.data });
+      } else {
+        toast.error("Error !!!");
+      }
+    })
+    .catch(error => {
+      toast.error("Error !!!");
+
+      dispatch({ type: CREATE_USER_REJECTED, payload: error });
+    });
   dispatch({ type: CREATE_USER_PENDING });
 };
 

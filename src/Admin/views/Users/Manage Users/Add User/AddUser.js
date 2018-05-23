@@ -59,7 +59,7 @@ class AddUser extends Component {
       username,
       email,
       password,
-      group,
+      groups: [group.id],
       access_token: this.access_token
     });
     this.clearState();
@@ -104,7 +104,7 @@ class AddUser extends Component {
 
   render() {
     const { group } = this.state;
-    const value = group && group.value;
+    const value = group && group.id;
 
     return (
       <div className="animated fadeIn">

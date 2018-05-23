@@ -81,54 +81,13 @@ class Permissions extends Component {
   }
 
   onCheckboxChanged(event, checkbox_id, group_id) {
-    event.target.disabled = true;
     let checked = event.target.checked;
-    // console.log('target', checked);
 
     this.props.onTogglePermission({
       group_id,
       global_permission: checkbox_id,
       checked
     });
-
-    // axios({
-    //   method: "POST",
-    //   url: `${ADD_PERMISSION}/`,
-    //   headers: {
-    //     Authorization: "Bearer " + this.state.access_token,
-    //     "Content-Type": "application/json"
-    //   },
-    //   data: {
-    //     group_id: group_id,
-    //     global_permission: checkbox_id,
-    //     checked: checked
-    //   }
-    // })
-    //   .then(response => {
-    //     // console.log('add permision: resposne: ', response);
-    //     // if (response.data.msg === 'sucess') {
-    //     if (checked === false) {
-    //       // console.log('changed to false from: ', event.target.checked)
-    //       event.target.checked = false;
-    //       // console.log('changed to : ', event.target.checked)
-    //     } else {
-    //       // console.log('changed to true from : ', event.target.checked)
-    //       event.target.checked = true;
-    //       // console.log('changed to : ', event.target.checked)
-    //     }
-
-    //     event.target.disabled = false;
-
-    //     this.requestData(this.state.access_token);
-
-    //     // console.log('success in updateing...');
-    //   })
-    //   .catch(error => {
-    //     // console.log('addpermisso error: ', error);
-    //     event.target.disabled = false;
-
-    //     // toast.error("Error! Refresh the page");
-    //   });
   }
 
   renderCheckboxes() {
