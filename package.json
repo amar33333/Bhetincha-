@@ -28,6 +28,7 @@
     "react-fontawesome": "^1.6.1",
     "react-google-maps": "^9.4.5",
     "react-grid-gallery": "^0.4.8",
+    "react-grid-layout": "^0.16.6",
     "react-image-gallery": "^0.8.7",
     "react-ladda": "^6.0.0",
     "react-photo-gallery": "^6.0.25",

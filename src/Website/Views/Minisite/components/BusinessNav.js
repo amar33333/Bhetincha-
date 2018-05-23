@@ -5,6 +5,10 @@ import { NavHashLink } from "react-router-hash-link";
 import { MAIN_URL } from "../config/MINISITE_API";
 import "../minisite.css";
 
+import { Responsive as ResponsiveGridLayout } from "react-grid-layout";
+import "react-grid-layout/css/styles.css";
+import "react-resizable/css/styles.css";
+
 import {
   Collapse,
   Navbar,
@@ -17,9 +21,28 @@ import {
 import { onEditMainClicked } from "../actions";
 
 class BusinessNav extends Component {
-  state = { isOpen: false };
+  state = { isOpen: false, layout: [] };
 
   toggle = () => this.setState({ isOpen: !this.state.isOpen });
+
+  onItemDragged = layout => {
+    this.setState({
+      layout: layout
+    });
+  };
+
+  onNavDragStop = items => {
+    items.forEach(item => {
+      item.y = 0;
+    });
+  };
+  onNavClicked = e => {
+    if (this.props.mainEdit) {
+      e.preventDefault();
+      console.log(e);
+      return false;
+    }
+  };
 
   render() {
     return (
@@ -35,40 +58,99 @@ class BusinessNav extends Component {
           <NavbarToggler onClick={this.toggle} />
           <Collapse isOpen={this.state.isOpen} navbar>
             <Nav className="ml-5" navbar>
-              <NavItem>
-                <Link
-                  to={`/${this.props.businessName}`}
-                  className="nav-link minisite_business__nav__item"
+              <ResponsiveGridLayout
+                className="layout"
+                breakpoints={{ lg: 1200, md: 996, sm: 768, xs: 480, xxs: 0 }}
+                // cols={{ lg: 12, md: 10, sm: 6, xs: 4, xxs: 2 }}
+                cols={{ md: 24 }}
+                rowHeight={30}
+                width={1200}
+                isDraggable={this.props.mainEdit ? true : false}
+                onLayoutChange={this.onItemDragged}
+                preventCollision={false}
+                compactType="horizontal"
+                onDragStart={this.onNavDragStart}
+                onDragStop={this.onNavDragStop}
+              >
+                <NavItem
+                  key="home"
+                  data-grid={{
+                    x: 0,
+                    y: 0,
+                    w: 2,
+                    h: 1,
+                    isResizable: false
+                  }}
                 >
-                  Home
-                </Link>
-              </NavItem>
-              <NavItem>
-                <NavHashLink
-                  to={`/${this.props.businessName}#about-us`}
-                  className="nav-link minisite_business__nav__item"
-                  smooth
+                  <Link
+                    onClick={this.onNavClicked}
+                    draggable="false"
+                    to={`/${this.props.businessName}`}
+                    className="nav-link minisite_business__nav__item"
+                  >
+                    Home
+                  </Link>
+                </NavItem>
+                <NavItem
+                  key="about"
+                  data-grid={{
+                    x: 2,
+                    y: 0,
+                    w: 2,
+                    h: 1,
+                    isResizable: false
+                  }}
                 >
-                  About
-                </NavHashLink>
-              </NavItem>
-              <NavItem>
-                <Link
-                  to={`/${this.props.businessName}/gallery`}
-                  className="nav-link minisite_business__nav__item"
+                  <NavHashLink
+                    onClick={this.onNavClicked}
+                    draggable="false"
+                    to={`/${this.props.businessName}#about-us`}
+                    className="nav-link minisite_business__nav__item"
+                    smooth
+                  >
+                    About
+                  </NavHashLink>
+                </NavItem>
+                <NavItem
+                  key="gallery"
+                  data-grid={{
+                    x: 4,
+                    y: 0,
+                    w: 2,
+                    h: 1,
+                    isResizable: false
+                  }}
                 >
-                  Gallery
-                </Link>
-              </NavItem>
-              <NavItem>
-                <NavHashLink
-                  to={`#contact-us`}
-                  className="nav-link minisite_business__nav__item"
-                  smooth
+                  <Link
+                    onClick={this.onNavClicked}
+                    draggable="false"
+                    to={`/${this.props.businessName}/gallery`}
+                    className="nav-link minisite_business__nav__item"
+                  >
+                    Gallery
+                  </Link>
+                </NavItem>
+                <NavItem
+                  key="contact"
+                  data-grid={{
+                    x: 6,
+                    y: 0,
+                    w: 2,
+                    h: 1,
+                    isResizable: false
+                  }}
                 >
-                  Contact
-                </NavHashLink>
-              </NavItem>
+                  <NavHashLink
+                    onClick={this.onNavClicked}
+                    draggable="false"
+                    to={`#contact-us`}
+                    className="nav-link minisite_business__nav__item"
+                    smooth
+                  >
+                    Contact
+                  </NavHashLink>
+                </NavItem>
+              </ResponsiveGridLayout>
             </Nav>
           </Collapse>
           {this.props.cookies &&
