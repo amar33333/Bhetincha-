@@ -22,7 +22,8 @@ import {
   BusinessList,
   BusinessEdit,
   AppBusinessList,
-  AppBusinessReview
+  AppBusinessReview,
+  BusinessAssign
 } from "../views";
 
 import CustomRoute from "../../Common/utils/CustomRoute";
@@ -69,6 +70,12 @@ class AdminRoute extends Component {
           path="/admin/add-business"
           name="Add Business"
           component={BusinessAdminDetail}
+          permission="CAN_ADD_BUSINESS"
+        />
+        <CustomRoute
+          path="/admin/business-assign"
+          name="Assign Business"
+          component={BusinessAssign}
           permission="CAN_ADD_BUSINESS"
         />
         <Route

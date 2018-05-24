@@ -62,6 +62,12 @@ const items = {
       permission: "CAN_VIEW_BUSINESS"
     },
     {
+      name: "Assign Business",
+      url: "/admin/business-assign",
+      icon: "fa fa-industry",
+      permission: "CAN_ADD_BUSINESS"
+    },
+    {
       name: "List App Business",
       url: "/admin/approve-app-business",
       icon: "fa fa-industry"
