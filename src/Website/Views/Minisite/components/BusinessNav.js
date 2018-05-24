@@ -38,9 +38,9 @@ class BusinessNav extends Component {
   };
   onNavClicked = e => {
     if (this.props.mainEdit) {
-      e.preventDefault();
-      console.log(e);
-      return false;
+      e.stopPropagation();
+      console.log("Nav Clicked", e);
+      // return false;
     }
   };
 
