@@ -27,6 +27,7 @@ export default function(state = INITIAL_STATE, action) {
       return { ...state, loading: true };
 
     case FETCH_USER_FULFILLED:
+      console.log("user: ", action.payload);
       return { ...state, ...action.payload, loading: false, error: false };
 
     case FETCH_USER_REJECTED:

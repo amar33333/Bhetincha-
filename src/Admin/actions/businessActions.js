@@ -24,7 +24,11 @@ import {
   onBusinessAllGetAjax,
   onBusinessEachGet,
   onBusinessEachDeleteAjax,
-  onBusinessEachGetAjax
+  onBusinessEachGetAjax,
+  onAppBusinessPost,
+  onAppBusinessGet,
+  onAppBusinessEachGet,
+  onAppBusinessEachDelete
 } from "../../Business/config/businessServerCall";
 
 import {
@@ -89,6 +93,18 @@ import {
   EDIT_PAYMENT_METHOD_FULFILLED,
   EDIT_PAYMENT_METHOD_PENDING,
   EDIT_PAYMENT_METHOD_REJECTED,
+  FETCH_APP_BUSINESS_FULFILLED,
+  FETCH_APP_BUSINESS_REJECTED,
+  FETCH_APP_BUSINESS_PENDING,
+  DELETE_APP_BUSINESS_FULFILLED,
+  DELETE_APP_BUSINESS_REJECTED,
+  DELETE_APP_BUSINESS_PENDING,
+  FETCH_APP_BUSINESS_EACH_FULFILLED,
+  FETCH_APP_BUSINESS_EACH_REJECTED,
+  FETCH_APP_BUSINESS_EACH_PENDING,
+  APPROVE_BUSINESS_FULFILLED,
+  APPROVE_BUSINESS_PENDING,
+  APPROVE_BUSINESS_REJECTED,
   UNMOUNT_COMPANY_TYPE,
   UNMOUNT_PAYMENT_METHOD
 } from "./types";
@@ -145,6 +161,136 @@ epics.push((action$, { getState }) =>
   })
 );
 
+export const onAppBusinessList = payload => ({
+  type: FETCH_APP_BUSINESS_PENDING,
+  payload
+});
+
+epics.push((action$, { getState }) =>
+  action$.ofType(FETCH_APP_BUSINESS_PENDING).switchMap(({ payload }) => {
+    const filterValue = getState().AdminContainer.filterBusiness;
+    const params = {};
+    params.rows = filterValue.rows;
+    params.page = filterValue.page;
+    params.q = filterValue.q;
+    params.sort_by = filterValue.sort_by.map(
+      data => `${data.id}-${data.desc ? "desc" : "asc"}`
+    );
+    params.industry = filterValue.industry
+      ? filterValue.industry.map(industry => industry.id)
+      : [];
+
+    if (payload) {
+      if (payload.rows) params.rows = payload.rows;
+      if (payload.page) params.page = payload.page;
+    }
+
+    return onAppBusinessGet({
+      access_token: getState().auth.cookies.token_data.access_token,
+      params
+    })
+      .map(({ response }) => {
+        if (
+          response !== null &&
+          typeof response === "object" &&
+          Array.isArray(response) === false
+        ) {
+          toast.success("Businesses fetched successfully!");
+          return {
+            type: FETCH_APP_BUSINESS_FULFILLED,
+            payload: response
+          };
+        } else {
+          throw new Error("Error");
+        }
+      })
+      .catch(ajaxError => {
+        toast.error("Error Fetching Businesses");
+        return Observable.of({ type: FETCH_APP_BUSINESS_REJECTED });
+      });
+  })
+);
+
+export const onAppBusinessEachList = ({
+  username,
+  access_token
+}) => dispatch => {
+  onAppBusinessEachGet({ username, access_token })
+    .then(response => {
+      // console.log("asdadsadADasd: ", response.data);
+
+      const industryId = response.data.industry
+        ? response.data.industry.id
+        : "";
+      const countryId = response.data.address.country
+        ? response.data.address.country.id
+        : "";
+      const stateId = response.data.address.state
+        ? response.data.address.state.id
+        : "";
+      const districtId = response.data.address.district
+        ? response.data.address.district.id
+        : "";
+      const cityId = response.data.address.city
+        ? response.data.address.city.id
+        : "";
+
+      if (industryId !== "")
+        onIndustryEachGet({ id: industryId, access_token })
+          .then(newResponse => {
+            console.log("industry each: ", newResponse);
+            dispatch({
+              type: FETCH_INDUSTRY_EACH_FULFILLED,
+              payload: newResponse.data
+            });
+          })
+
+          .catch(err =>
+            dispatch({ type: FETCH_INDUSTRY_EACH_REJECTED, payload: err })
+          );
+
+      // This below `dispatch` causes error of payload = undefined in industryEachList Action epics
+      // dispatch({ type: FETCH_INDUSTRY_EACH_PENDING });
+
+      //For Primary Address
+      getAddressTree(
+        countryId,
+        stateId,
+        districtId,
+        cityId,
+        access_token,
+        dispatch
+      );
+
+      // For Branch Address
+      response.data.branchAddress.map(each => {
+        const branchcountryId = each.country ? each.country.id : "";
+        const branchstateId = each.state ? each.state.id : "";
+        const branchdistrictId = each.district ? each.district.id : "";
+        const branchcityId = each.city ? each.city.id : "";
+
+        getAddressTree(
+          branchcountryId,
+          branchstateId,
+          branchdistrictId,
+          branchcityId,
+          access_token,
+          dispatch
+        );
+      });
+
+      dispatch({ type: FETCH_ADDRESS_TREE_PENDING });
+      dispatch({
+        type: FETCH_APP_BUSINESS_EACH_FULFILLED,
+        payload: response.data
+      });
+    })
+    .catch(error =>
+      dispatch({ type: FETCH_APP_BUSINESS_EACH_REJECTED, payload: error })
+    );
+  dispatch({ type: FETCH_APP_BUSINESS_EACH_PENDING });
+};
+
 export const onBusinessEachDelete = payload => ({
   type: DELETE_BUSINESS_PENDING,
   payload
@@ -159,6 +305,24 @@ epics.push((action$, { getState }) =>
       .catch(ajaxError => {
         console.log(ajaxError);
         return Observable.of({ type: DELETE_BUSINESS_REJECTED });
+      });
+  })
+);
+
+export const onAppBusinessEachRemove = payload => ({
+  type: DELETE_APP_BUSINESS_PENDING,
+  payload
+});
+
+epics.push((action$, { getState }) =>
+  action$.ofType(DELETE_APP_BUSINESS_PENDING).mergeMap(action => {
+    const { id } = action.payload;
+    const { access_token } = getState().auth.cookies.token_data;
+    return onAppBusinessEachDelete({ id, access_token })
+      .mergeMap(({ response }) => console.log(response))
+      .catch(ajaxError => {
+        console.log(ajaxError);
+        return Observable.of({ type: DELETE_APP_BUSINESS_REJECTED });
       });
   })
 );
@@ -191,6 +355,66 @@ epics.push((action$, { getState }) =>
       });
   })
 );
+
+export const onAppBusinessApproval = payload => ({
+  type: APPROVE_BUSINESS_PENDING,
+  payload
+});
+
+epics.push((action$, { getState }) =>
+  action$.ofType(APPROVE_BUSINESS_PENDING).mergeMap(({ payload }) => {
+    const { data } = payload;
+    const access_token = getState().auth.cookies.token_data.access_token;
+
+    return onBusinessPost({ data, access_token })
+      .map(({ response }) => {
+        if (response.msg === "success") {
+          toast.success("App Business Approved Successfully!");
+          return { type: APPROVE_BUSINESS_FULFILLED };
+        } else {
+          throw new Error(response.msg[Object.keys(response.msg)[0]][0]);
+        }
+      })
+      .catch(ajaxError => {
+        toast.error(ajaxError.toString());
+        return Observable.of({
+          type: APPROVE_BUSINESS_REJECTED,
+          payload: ajaxError
+        });
+      });
+  })
+);
+
+export const onAppBusinessApprovalS = ({
+  data,
+  access_token,
+  EDIT
+}) => dispatch => {
+  onBusinessPost({ data, access_token })
+    .then(response => {
+      dispatch({
+        type: TOGGLE_EDIT,
+        payload: !EDIT
+      });
+
+      if (response.data.msg === "success") {
+        toast.success("App Business Approved Successfully!");
+        console.log("bussiness acction toogle called: ", EDIT);
+        dispatch({ type: APPROVE_BUSINESS_FULFILLED, payload: response.data });
+      } else {
+        toast.error("Error in Updating!!!");
+        dispatch({
+          type: APPROVE_BUSINESS_REJECTED,
+          payload: response.data.msg
+        });
+      }
+    })
+    .catch(error => {
+      toast.error("Error in Approving Business!!!");
+      dispatch({ type: APPROVE_BUSINESS_REJECTED, payload: error });
+    });
+  dispatch({ type: APPROVE_BUSINESS_PENDING });
+};
 
 // export const onBusinessCreate = ({ data, access_token }) => dispatch => {
 //   onBusinessPost({ data, access_token })

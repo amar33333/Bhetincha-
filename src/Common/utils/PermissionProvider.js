@@ -2,47 +2,29 @@ import React, { Component } from "react";
 import Cookies from "universal-cookie";
 
 const cookies = new Cookies();
-let permissions_set = [];
 
-const user_data = cookies.get("user_data");
-// if(user_data) {
-//     // permissions_set = user_data.permissions.map(permission => permission.name);
-//     permissions_set = user_data;
-//     // // console.log('adduser cookies: ', user_data);
-//     // console.log('PERMISION PROVIDER adduser cookies: ', permissions_set);
-// } else {
-//     // console.log('PERMISSION PROVIDER user_data error');
-// }
-// try {
-//     user_data = cookies.get('user_data');
-//     permissions_set = user_data.permissions.map(permission => permission.name);
-
-//     // console.log('adduser cookies: ', user_data);
-// } catch(error) {
-//     // console.log('user_data error: ', error);
-// }
-
-// permissions_set = [
-//     'CAN_ADD_USER',
-//     'CAN_VIEW_USERS',
-//     'CAN_VIEW_GROUPS',
-//     'CAN_VIEW_PERMISSIONS',
-//     'CAN_ACCESS_FOOD_CATEGORIES',
-//     'CAN_ACCESS_FOOD_CATEGORY',
-//     'CAN_ACCESS_FOOD_ITEMS',
-//     'CAN_ACCESS_FOOD_ITEM',
-//     'CAN_ACCESS_INVENTORY',
-//     'CAN_ACCESS_BILL',
-//     'CAN_ACCESS_INVENTORY',
-// ];
-
-// console.log('permission cookeies: ', permissions_set);
+let permissions_set = [
+  // "CAN_VIEW_USER",
+  // "CAN_ADD_USER",
+  // "CAN_VIEW_COUNTRY",
+  // "CAN_VIEW_STATE",
+  // "CAN_VIEW_DISTRICT",
+  // "CAN_VIEW_CITY",
+  // "CAN_VIEW_AREA",
+  // "CAN_ADD_BUSINESS",
+  // "CAN_VIEW_BUSINESS",
+  // "CAN_VIEW_INDUSTRY",
+  // "CAN_VIEW_CATEGORY",
+  // "CAN_VIEW_SUB_CATEGORY",
+  // "CAN_VIEW_COMPANY_TYPE",
+  // "CAN_VIEW_PAYMENT_METHOD",
+  // "CAN_VIEW_LOGS",
+  // "CAN_VIEW_TELE_CALLING",
+  // "CAN_VIEW_GROUP",
+  // "CAN_VIEW_PERMISSION"
+];
 
 class PermissionProvider extends Component {
-  constructor(props) {
-    super(props);
-  }
-
   static updatePermissionList() {
     const user_data = cookies.get("user_data");
 
@@ -52,7 +34,7 @@ class PermissionProvider extends Component {
       );
       // permissions_set = user_data;
       // // console.log('adduser cookies: ', user_data);
-      // console.log('PERMISION PROVIDER adduser cookies: ', permissions_set);
+      console.log("PERMISION PROVIDER adduser cookies: ", permissions_set);
     } else {
       // console.log('PERMISSION PROVIDER user_data error');
     }
@@ -61,13 +43,7 @@ class PermissionProvider extends Component {
   static hasPermission(permission) {
     this.updatePermissionList();
     // console.log('permissionperovider: ssdfsdf: ', this.state);
-    if (
-      permissions_set.includes(permission) ||
-      permission === "CAN_VIEW_DASHBOARD" ||
-      permission === "CAN_VIEW_SETTINGS" ||
-      permission === "CAN_LOGOUT"
-    )
-      return true;
+    if (permissions_set.includes(permission)) return true;
 
     return false;
   }

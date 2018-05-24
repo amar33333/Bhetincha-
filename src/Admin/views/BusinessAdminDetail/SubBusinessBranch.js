@@ -59,13 +59,13 @@ class SubBusinessBranch extends Component {
       : null;
   }
   onChangeLatLng = ({ latLng }) => {
-    console.log("latLang: ", this.state.latitude, this.state.longitude);
+    // console.log("latLang: ", this.state.latitude, this.state.longitude);
     this.setState({ latitude: latLng.lat(), longitude: latLng.lng() });
   };
 
   static getDerivedStateFromProps = (nextProps, prevState) => {
     const { branch } = nextProps;
-    console.log("branchprops: ", nextProps);
+    // console.log("branchprops: ", nextProps);
     // console.log("branch onlytoogle props branch: ", nextProps);
     if (branch && nextProps.EDIT) {
       console.log("branch if run");
@@ -303,7 +303,7 @@ class SubBusinessBranch extends Component {
 
   render() {
     // console.log("branch props:", this.props);
-    console.log("branch state:", this.state);
+    // console.log("branch state:", this.state);
     // console.log("branch onlytoogle state branch: ", this.state);
 
     this.countries = this.props.countries;

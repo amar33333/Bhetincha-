@@ -116,7 +116,7 @@ class SubBusinessPrimaryAddress extends Component {
         }
       };
     } else {
-      console.log("new initial state not loaded");
+      // console.log("new initial state not loaded");
       return null;
     }
   };
@@ -362,7 +362,7 @@ class SubBusinessPrimaryAddress extends Component {
       this.states = [];
     }
 
-    console.log("states: ", this.states);
+    // console.log("states: ", this.states);
 
     try {
       if (this.props.countries) {

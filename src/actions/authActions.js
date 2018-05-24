@@ -49,7 +49,7 @@ epics.push(action$ =>
       })
       .concatMap(({ response }) => {
         CookiesProvider.setCookies("user_data", response, "/", expiryDate);
-
+        console.log("cookei: ", response);
         return [
           { type: TOGGLE_LOGIN_MODAL },
           {

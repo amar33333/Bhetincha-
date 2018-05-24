@@ -14,7 +14,7 @@ import {
   FormGroup
 } from "reactstrap";
 
-import { onUserSubmit, onGroupList } from "../../../../actions";
+import { onUserSubmit, onGroupsList } from "../../../../actions";
 
 class AddUser extends Component {
   constructor(props) {
@@ -34,7 +34,7 @@ class AddUser extends Component {
   }
 
   componentWillMount() {
-    this.props.onGroupList({ access_token: this.access_token });
+    this.props.onGroupsList();
   }
 
   onChange = (key, event) => this.setState({ [key]: event.target.value });
@@ -59,7 +59,7 @@ class AddUser extends Component {
       username,
       email,
       password,
-      group,
+      groups: [group.id],
       access_token: this.access_token
     });
     this.clearState();
@@ -103,14 +103,8 @@ class AddUser extends Component {
   };
 
   render() {
-    const groups = this.props.user_reducer.groups
-      ? this.props.user_reducer.groups.map(group => {
-          return { value: group.id, label: group.name };
-        })
-      : null;
-
     const { group } = this.state;
-    const value = group && group.value;
+    const value = group && group.id;
 
     return (
       <div className="animated fadeIn">
@@ -134,7 +128,9 @@ class AddUser extends Component {
                         name="group"
                         value={value}
                         onChange={this.handleSelectChange}
-                        options={groups}
+                        options={this.props.groups}
+                        valueKey="id"
+                        labelKey="name"
                       />
                     </FormGroup>
                   </Col>
@@ -229,6 +225,9 @@ class AddUser extends Component {
 }
 
 export default connect(
-  ({ AdminContainer: { user_reducer }, auth }) => ({ user_reducer, ...auth }),
-  { onUserSubmit, onGroupList }
+  ({ AdminContainer: { user_reducer }, auth }) => ({
+    ...user_reducer,
+    ...auth
+  }),
+  { onUserSubmit, onGroupsList }
 )(AddUser);

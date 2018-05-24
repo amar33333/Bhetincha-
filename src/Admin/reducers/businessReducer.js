@@ -23,6 +23,12 @@ import {
   TOGGLE_EDIT,
   TOGGLE_COMPANY_TYPE_EDIT_MODAL,
   TOGGLE_PAYMENT_METHOD_EDIT_MODAL,
+  FETCH_APP_BUSINESS_FULFILLED,
+  FETCH_APP_BUSINESS_REJECTED,
+  FETCH_APP_BUSINESS_PENDING,
+  FETCH_APP_BUSINESS_EACH_FULFILLED,
+  FETCH_APP_BUSINESS_EACH_REJECTED,
+  FETCH_APP_BUSINESS_EACH_PENDING,
   UNMOUNT_PAYMENT_METHOD,
   UNMOUNT_COMPANY_TYPE
 } from "../actions/types";
@@ -67,6 +73,19 @@ export default function(state = INITIAL_STATE, action) {
         rowCount: action.payload.rowCount
       };
 
+    case FETCH_APP_BUSINESS_PENDING:
+      return { ...state, fetchLoading: true };
+    case FETCH_APP_BUSINESS_REJECTED:
+      return { ...state, fetchLoading: false };
+    case FETCH_APP_BUSINESS_FULFILLED:
+      return {
+        ...state,
+        fetchLoading: false,
+        appBusinesses: action.payload.data,
+        pages: action.payload.pages,
+        rowCount: action.payload.rowCount
+      };
+
     case EDIT_BUSINESS_PENDING:
       return { ...state, fetchLoading: true, businessGet: true };
     case EDIT_BUSINESS_REJECTED:
@@ -87,6 +106,18 @@ export default function(state = INITIAL_STATE, action) {
       return {
         ...state,
         businessData: action.payload,
+        fetchLoading: false,
+        businessGet: false
+      };
+
+    case FETCH_APP_BUSINESS_EACH_PENDING:
+      return { ...state, fetchLoading: true, businessGet: true };
+    case FETCH_APP_BUSINESS_EACH_REJECTED:
+      return { ...state, fetchLoading: false, businessGet: false };
+    case FETCH_APP_BUSINESS_EACH_FULFILLED:
+      return {
+        ...state,
+        appBusinessData: action.payload,
         fetchLoading: false,
         businessGet: false
       };
