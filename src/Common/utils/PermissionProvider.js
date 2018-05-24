@@ -34,7 +34,7 @@ class PermissionProvider extends Component {
       );
       // permissions_set = user_data;
       // // console.log('adduser cookies: ', user_data);
-      console.log("PERMISION PROVIDER adduser cookies: ", permissions_set);
+      // console.log("PERMISION PROVIDER adduser cookies: ", permissions_set);
     } else {
       // console.log('PERMISSION PROVIDER user_data error');
     }
