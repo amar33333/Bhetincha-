@@ -34,7 +34,10 @@ import {
   CREATE_NEW_ALBUM_PENDING,
   CREATE_NEW_ALBUM_FULFILLED,
   CREATE_NEW_ALBUM_REJECTED,
-  CLEAR_MINISITE_DATA
+  CLEAR_MINISITE_DATA,
+  UPDATE_NAV_LAYOUT_PENDING,
+  UPDATE_NAV_LAYOUT_FULFILLED,
+  UPDATE_NAV_LAYOUT_REJECTED
 } from "./types";
 
 const epics = [];
@@ -82,6 +85,15 @@ epics.push((action$, { getState }) =>
           rejected: CREATE_NEW_ALBUM_REJECTED
         };
         successToasts.push("New Album Created");
+        break;
+
+      case "nav_layout":
+        TYPE = {
+          pending: UPDATE_NAV_LAYOUT_PENDING,
+          fulfilled: UPDATE_NAV_LAYOUT_FULFILLED,
+          rejected: UPDATE_NAV_LAYOUT_REJECTED
+        };
+        successToasts.push("Nav Layout repositioned");
         break;
 
       default:
@@ -219,6 +231,7 @@ epics.push(action$ =>
         payload.slug = response.slug;
 
         if (response.about) payload.about = response.about;
+        if (response.nav_layout) payload.nav_layout = response.nav_layout;
 
         return { type: FETCH_BUSINESS_FULFILLED, payload };
       })

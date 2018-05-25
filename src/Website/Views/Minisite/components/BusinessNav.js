@@ -5,7 +5,7 @@ import { NavHashLink } from "react-router-hash-link";
 import { MAIN_URL } from "../config/MINISITE_API";
 import "../minisite.css";
 
-import { Responsive as ResponsiveGridLayout } from "react-grid-layout";
+import GridLayout from "react-grid-layout";
 import "react-grid-layout/css/styles.css";
 import "react-resizable/css/styles.css";
 
@@ -18,16 +18,23 @@ import {
   Button
 } from "reactstrap";
 
-import { onEditMainClicked } from "../actions";
+import { onEditMainClicked, onBusinessUpdate } from "../actions";
 
 class BusinessNav extends Component {
-  state = { isOpen: false, layout: [] };
+  static getDerivedStateFromProps = nextProps => ({
+    nav_layout: nextProps.nav_layout
+  });
+
+  state = {
+    isOpen: false,
+    nav_layout: []
+  };
 
   toggle = () => this.setState({ isOpen: !this.state.isOpen });
 
   onItemDragged = layout => {
     this.setState({
-      layout: layout
+      nav_layout: layout
     });
   };
 
@@ -35,13 +42,22 @@ class BusinessNav extends Component {
     items.forEach(item => {
       item.y = 0;
     });
+    console.log(items);
   };
   onNavClicked = e => {
     if (this.props.mainEdit) {
-      e.stopPropagation();
-      console.log("Nav Clicked", e);
-      // return false;
+      e.preventDefault();
+      console.log("Nav Clicked, Nav Disabled", e);
+      return false;
+    } else {
+      return true;
     }
+  };
+
+  onNavChanged = () => {
+    this.props.onBusinessUpdate({
+      body: { nav_layout: this.state.nav_layout }
+    });
   };
 
   render() {
@@ -58,11 +74,10 @@ class BusinessNav extends Component {
           <NavbarToggler onClick={this.toggle} />
           <Collapse isOpen={this.state.isOpen} navbar>
             <Nav className="ml-5" navbar>
-              <ResponsiveGridLayout
+              <GridLayout
                 className="layout"
-                breakpoints={{ lg: 1200, md: 996, sm: 768, xs: 480, xxs: 0 }}
-                // cols={{ lg: 12, md: 10, sm: 6, xs: 4, xxs: 2 }}
-                cols={{ md: 24 }}
+                layout={this.state.nav_layout}
+                cols={24}
                 rowHeight={30}
                 width={1200}
                 isDraggable={this.props.mainEdit ? true : false}
@@ -72,16 +87,7 @@ class BusinessNav extends Component {
                 onDragStart={this.onNavDragStart}
                 onDragStop={this.onNavDragStop}
               >
-                <NavItem
-                  key="home"
-                  data-grid={{
-                    x: 0,
-                    y: 0,
-                    w: 2,
-                    h: 1,
-                    isResizable: false
-                  }}
-                >
+                <NavItem key="home">
                   <Link
                     onClick={this.onNavClicked}
                     draggable="false"
@@ -91,16 +97,7 @@ class BusinessNav extends Component {
                     Home
                   </Link>
                 </NavItem>
-                <NavItem
-                  key="about"
-                  data-grid={{
-                    x: 2,
-                    y: 0,
-                    w: 2,
-                    h: 1,
-                    isResizable: false
-                  }}
-                >
+                <NavItem key="about">
                   <NavHashLink
                     onClick={this.onNavClicked}
                     draggable="false"
@@ -111,16 +108,7 @@ class BusinessNav extends Component {
                     About
                   </NavHashLink>
                 </NavItem>
-                <NavItem
-                  key="gallery"
-                  data-grid={{
-                    x: 4,
-                    y: 0,
-                    w: 2,
-                    h: 1,
-                    isResizable: false
-                  }}
-                >
+                <NavItem key="gallery">
                   <Link
                     onClick={this.onNavClicked}
                     draggable="false"
@@ -130,16 +118,7 @@ class BusinessNav extends Component {
                     Gallery
                   </Link>
                 </NavItem>
-                <NavItem
-                  key="contact"
-                  data-grid={{
-                    x: 6,
-                    y: 0,
-                    w: 2,
-                    h: 1,
-                    isResizable: false
-                  }}
-                >
+                <NavItem key="contact">
                   <NavHashLink
                     onClick={this.onNavClicked}
                     draggable="false"
@@ -150,7 +129,7 @@ class BusinessNav extends Component {
                     Contact
                   </NavHashLink>
                 </NavItem>
-              </ResponsiveGridLayout>
+              </GridLayout>
             </Nav>
           </Collapse>
           {this.props.cookies &&
@@ -159,6 +138,17 @@ class BusinessNav extends Component {
                 {this.props.mainEdit ? "Preview" : "Edit Data"}
               </Button>
             )}
+          {this.props.mainEdit ? (
+            <Button
+              color="success"
+              onClick={this.onNavChanged}
+              style={{ marginLeft: 20 }}
+            >
+              <i className="fa fa-save" /> Save Nav
+            </Button>
+          ) : (
+            ""
+          )}
         </Navbar>
       </div>
     );
@@ -166,10 +156,14 @@ class BusinessNav extends Component {
 }
 
 export default connect(
-  ({ MinisiteContainer: { edit, crud }, auth: { cookies } }) => ({
+  ({
+    MinisiteContainer: { edit, crud: { logo, nav_layout } },
+    auth: { cookies }
+  }) => ({
     cookies,
     mainEdit: edit.main,
-    logo: crud.logo
+    logo,
+    nav_layout
   }),
-  { onEditMainClicked }
+  { onEditMainClicked, onBusinessUpdate }
 )(BusinessNav);
