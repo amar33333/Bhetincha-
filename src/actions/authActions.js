@@ -48,7 +48,7 @@ epics.push(action$ =>
     return onLogin({ username, password })
       .mergeMap(({ response }) => {
         CookiesProvider.setCookies("token_data", response, "/", expiryDate);
-        cookies.set("token_data", response, "/", expiryDate);
+        // cookies.set("token_data", response, "/", expiryDate);
 
         return onUserGet({ access_token: response.access_token });
       })
@@ -89,14 +89,12 @@ epics.push(action$ =>
             name,
             phone_confirmed,
             phone_number,
-            slug,
-            is_active,
-            is_staff
+            slug
           },
           "/",
           expiryDate
         );
-        cookies.set("user_data", response, "/", expiryDate);
+        // cookies.set("user_data", response, "/", expiryDate);
         console.log("cookei: ", CookiesProvider.getAllCookies());
         return [
           { type: TOGGLE_LOGIN_MODAL },

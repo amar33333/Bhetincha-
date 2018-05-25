@@ -97,7 +97,11 @@ class BusinessAssign extends Component {
               </form>
             </CardBody>
           </Card>
-          <UserComponent />
+          <UserComponent
+            salesUser={
+              this.state.sales_username ? this.state.sales_username : ""
+            }
+          />
           <BusinessTableComponent />
         </Col>
       </div>

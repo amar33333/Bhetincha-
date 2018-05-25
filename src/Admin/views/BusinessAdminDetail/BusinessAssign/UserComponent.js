@@ -21,10 +21,11 @@ import MapComponent from "../../../../Common/components/MapComponent";
 
 class UserComponent extends Component {
   render() {
+    console.log("user compo: ", this.props);
     return (
       <Card>
         <CardHeader>
-          <strong>Sales User: {this.props.username}</strong>
+          <strong>Sales User: {this.props.salesUser.username}</strong>
         </CardHeader>
         <CardBody>
           <p> hello </p>
