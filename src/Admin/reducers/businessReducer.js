@@ -29,6 +29,9 @@ import {
   FETCH_APP_BUSINESS_EACH_FULFILLED,
   FETCH_APP_BUSINESS_EACH_REJECTED,
   FETCH_APP_BUSINESS_EACH_PENDING,
+  FETCH_SALES_USERS_FULFILLED,
+  FETCH_SALES_USERS_PENDING,
+  FETCH_SALES_USERS_REJECTED,
   UNMOUNT_PAYMENT_METHOD,
   UNMOUNT_COMPANY_TYPE
 } from "../actions/types";
@@ -55,11 +58,22 @@ const INITIAL_STATE = {
   rowCount: 0,
 
   companyTypeEditModal: false,
-  paymentMethodEditModal: false
+  paymentMethodEditModal: false,
+  salesUser: []
 };
 
 export default function(state = INITIAL_STATE, action) {
   switch (action.type) {
+    case FETCH_SALES_USERS_PENDING:
+      return { ...state, fetchLoading: true };
+    case FETCH_SALES_USERS_REJECTED:
+      return { ...state, fetchLoading: false };
+    case FETCH_SALES_USERS_FULFILLED:
+      return {
+        ...state,
+        salesUsers: action.payload
+      };
+
     case FETCH_BUSINESS_PENDING:
       return { ...state, fetchLoading: true };
     case FETCH_BUSINESS_REJECTED:

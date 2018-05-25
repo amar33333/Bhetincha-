@@ -28,7 +28,8 @@ import {
   onAppBusinessPost,
   onAppBusinessGet,
   onAppBusinessEachGet,
-  onAppBusinessEachDelete
+  onAppBusinessEachDelete,
+  onSalesUserGet
 } from "../../Business/config/businessServerCall";
 
 import {
@@ -105,11 +106,38 @@ import {
   APPROVE_BUSINESS_FULFILLED,
   APPROVE_BUSINESS_PENDING,
   APPROVE_BUSINESS_REJECTED,
+  FETCH_SALES_USERS_FULFILLED,
+  FETCH_SALES_USERS_PENDING,
+  FETCH_SALES_USERS_REJECTED,
   UNMOUNT_COMPANY_TYPE,
   UNMOUNT_PAYMENT_METHOD
 } from "./types";
 
 const epics = [];
+
+export const onSalesUserList = payload => ({
+  type: FETCH_SALES_USERS_PENDING,
+  payload
+});
+
+epics.push((action$, { getState }) =>
+  action$.ofType(FETCH_SALES_USERS_PENDING).mergeMap(action => {
+    const access_token = getState().auth.cookies.token_data.access_token;
+
+    return onSalesUserGet({ access_token })
+      .map(({ response }) => ({
+        type: FETCH_SALES_USERS_FULFILLED,
+        payload: response
+      }))
+      .catch(ajaxError => {
+        toast.error(ajaxError.toString());
+        return Observable.of({
+          type: FETCH_SALES_USERS_REJECTED,
+          payload: ajaxError
+        });
+      });
+  })
+);
 
 export const onBusinessAllGet = payload => ({
   type: FETCH_BUSINESS_PENDING,

@@ -5,11 +5,22 @@ import {
   COMPANY_TYPE_URL,
   ALBUM_URL,
   BUSINESS_PUT_URL,
-  PHOTO_URL
+  PHOTO_URL,
+  SALES_USERS_LIST_URL
 } from "./BUSINESS_API";
 import axios from "axios";
 import { ajax } from "rxjs/observable/dom/ajax";
 import querystring from "querystring";
+
+export const onSalesUserGet = ({ access_token }) =>
+  ajax({
+    method: "GET",
+    url: `${SALES_USERS_LIST_URL}`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
 
 export const onBusinessPost = ({ data, access_token }) => {
   const category_list = data.categories

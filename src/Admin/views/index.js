@@ -8,7 +8,7 @@ import Industry from "../views/Industry/Industry";
 import Categories from "../views/Categories/Categories";
 import SubCategories from "../views/SubCategories/SubCategories";
 import AppBusinessReview from "../views/BusinessAdminDetail/AppBusinessReview";
-import BusinessAssign from "./BusinessAdminDetail/BusinessAssign";
+import BusinessAssign from "./BusinessAdminDetail/BusinessAssign/BusinessAssign";
 
 import {
   Areas,
