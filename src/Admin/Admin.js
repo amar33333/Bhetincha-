@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Container } from "reactstrap";
-
+import "react-table/react-table.css";
 import {
   Header,
   Sidebar,

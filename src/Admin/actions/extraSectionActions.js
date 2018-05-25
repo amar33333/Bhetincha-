@@ -1,4 +1,6 @@
-import { onExtraSectionGet } from "../config/adminServerCall";
+import { Observable } from "rxjs/Observable";
+
+import { onExtraSectionGetAjax } from "../config/adminServerCall";
 import {
   FETCH_EXTRA_SECTION_FULFILLED,
   FETCH_EXTRA_SECTION_REJECTED,
@@ -6,21 +8,26 @@ import {
   UNMOUNT_EXTRA_SECTION
 } from "./types";
 
-export const onExtraSectionList = ({ access_token }) => dispatch => {
-  onExtraSectionGet({
-    access_token
-  })
-    .then(response =>
-      dispatch({ type: FETCH_EXTRA_SECTION_FULFILLED, payload: response.data })
-    )
-    .catch(error =>
-      dispatch({ type: FETCH_EXTRA_SECTION_REJECTED, payload: error })
-    );
+const epics = [];
 
-  dispatch({ type: FETCH_EXTRA_SECTION_PENDING });
-};
+export const onExtraSectionList = () => ({ type: FETCH_EXTRA_SECTION_PENDING });
+
+epics.push((action$, { getState }) =>
+  action$.ofType(FETCH_EXTRA_SECTION_PENDING).mergeMap(action =>
+    onExtraSectionGetAjax({
+      access_token: getState().auth.cookies.token_data.access_token
+    })
+      .map(({ response }) => ({
+        type: FETCH_EXTRA_SECTION_FULFILLED,
+        payload: response
+      }))
+      .catch(ajaxError => Observable.of({ type: FETCH_EXTRA_SECTION_REJECTED }))
+  )
+);
 
 export const onUnmountExtraSection = () => ({
   type: UNMOUNT_EXTRA_SECTION,
   payload: null
 });
+
+export default epics;

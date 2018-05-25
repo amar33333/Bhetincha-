@@ -1,6 +1,13 @@
 import React, { Component } from "react";
 import TagsInput from "react-tagsinput";
+import { connect } from "react-redux";
+import orderBy from "lodash.orderby";
+import debounce from "lodash.debounce";
+import ReactTable from "react-table";
+
+import "react-table/react-table.css";
 import "react-tagsinput/react-tagsinput.css";
+
 import {
   Button,
   Col,
@@ -17,11 +24,15 @@ import {
   FormGroup
 } from "reactstrap";
 
-import { connect } from "react-redux";
-import { Select, PopoverDelete } from "../../../Common/components";
-import filterCaseInsensitive from "../../../Common/utils/filterCaseInsesitive";
-import ReactTable from "react-table";
-import "react-table/react-table.css";
+import {
+  Select,
+  PopoverDelete,
+  PaginationComponent
+} from "../../../Common/components";
+// import filterCaseInsensitive from "../../../Common/utils/filterCaseInsesitive";
+
+import CustomModal from "../../../Common/components/CustomModal";
+import SubCategoryEditModal from "../../../Common/components/CustomModal/ModalTemplates/SubCategoryEditModal";
 
 import {
   onIndustryList,
@@ -29,100 +40,104 @@ import {
   onExtraSectionList,
   onSubCategorySubmit,
   onSubCategoryList,
+  onSubCategoryEdit,
+  toggleSubCategoryEditModal,
   onCategoryList,
   onSubCategoryDelete,
+  onUnmountIndustry,
   onUnmountCategory,
   onUnmountExtraSection,
   onUnmountSubCategory
 } from "../../actions";
 
+const SUB_CATEGORIES_CHANGED = "SUB_CATEGORIES_CHANGED";
+
 class SubCategories extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      subCategory: "",
-      category: "",
-      industry: "",
-      extraSections: [],
-      tags: []
-    };
-    this.access_token = this.props.cookies
-      ? this.props.cookies.token_data.access_token
+  static getDerivedStateFromProps = (nextProps, prevState) =>
+    prevState.subCategorySubmit && !nextProps.error && !nextProps.loading
+      ? {
+          extraSections: [],
+          tags: [],
+          subCategory: "",
+          subCategorySubmit: false
+        }
       : null;
 
-    this.props.onSubCategoryList();
-    this.props.onCategoryList();
-    this.props.onIndustryList();
-    this.props.onExtraSectionList({ access_token: this.access_token });
-  }
+  state = {
+    subCategory: "",
+    category: "",
+    industry: "",
+    extraSections: [],
+    tags: [],
+    subCategorySubmit: false,
+    filterIndustry: [],
+    filterCategory: [],
+    filterExtrasection: [],
+    filterText: [],
+    sortedData: [],
+    pages: 1,
+    page: 0,
+    rows: 20,
+    rowCount: 0,
+    subCategories: []
+  };
 
   tableProps = {
     columns: [
       {
-        Header: "S. No.",
+        Header: "SN",
         accessor: "s_no",
         filterable: false,
-        searchable: false,
+        sortable: false,
         width: 70
       },
       { Header: "Sub-Category", accessor: "name" },
       {
         Header: "Extra Sections",
         accessor: "extra_section",
-        Cell: ({ value }) => value.join(","),
-        // Multiple filter option
-        filterMethod: (filter, row) => {
-          if (filter && filter.value && filter.value.length > 0) {
-            let found = false;
-            for (let i = 0; i < filter.value.length; i++) {
-              found =
-                found || row.extra_section.includes(filter.value[i].value);
-            }
-            return found;
-          } else return true;
-        },
-        Filter: ({ filter, onChange }) => (
+        Cell: ({ value }) => value.join(", "),
+        sortable: false,
+        Filter: () => (
           <Select
             clearable
             multi
-            value={filter ? filter.value : null}
-            onChange={onChange}
+            value={this.state.filterExtrasection}
+            onChange={this.handleSelectChange.bind(this, "filterExtrasection")}
             options={this.props.extra_sections.data}
           />
         )
+      },
+      {
+        Header: "Tags",
+        accessor: "tags",
+        Cell: ({ value }) => value.join(", "),
+        sortable: false
       },
       {
         Header: "Category",
         accessor: "category",
         id: "category",
         Cell: ({ value }) => {
-          const category = this.props.categories.categories.find(
+          const category = this.props.categories.find(
             category => category.id === value
           );
           return category ? category.name : "Not Found";
         },
-        // Multiple filter option
-        filterMethod: (filter, row) => {
-          if (filter && filter.value && filter.value.length > 0) {
-            let found = false;
-            for (let i = 0; i < filter.value.length; i++) {
-              found = found || filter.value[i].id === row.category;
-            }
-            return found;
-          } else return true;
-        },
-        // Single filter option
-        // filterMethod: (filter, row) =>
-        //   filter && filter.value ? filter.value.id === row.category : true,
-        Filter: ({ filter, onChange }) => (
+        Filter: () => (
           <Select
             clearable
             multi
-            value={filter ? filter.value : null}
-            onChange={onChange}
+            value={this.state.filterCategory}
+            onChange={this.handleSelectChange.bind(this, "filterCategory")}
             valueKey="id"
             labelKey="name"
-            options={this.props.categories.categories}
+            options={this.props.categories.filter(category => {
+              const { filterIndustry } = this.state;
+              if (filterIndustry.length === 0) return true;
+              for (let i = 0; i < filterIndustry.length; i++)
+                if (category.industry === filterIndustry[i].id) return true;
+              return false;
+            })}
           />
         )
       },
@@ -131,38 +146,25 @@ class SubCategories extends Component {
         accessor: "category",
         id: "industry",
         Cell: ({ value }) => {
-          const category = this.props.categories.categories.find(
+          const category = this.props.categories.find(
             category => category.id === value
           );
           if (category) {
-            const industry = this.props.industries.industries.find(
+            const industry = this.props.industries.find(
               industry => industry.id === category.industry
             );
             return industry ? industry.name : "Not Found";
           } else return "Not Found";
         },
-        // Multiple filter option
-        filterMethod: (filter, row) => {
-          if (filter && filter.value && filter.value.length > 0) {
-            let found = false;
-            for (let i = 0; i < filter.value.length; i++) {
-              const categories = this.props.categories.categories
-                .filter(category => category.industry === filter.value[i].id)
-                .map(category => category.id);
-              found = found || categories.includes(row.category);
-            }
-            return found;
-          } else return true;
-        },
-        Filter: ({ filter, onChange }) => (
+        Filter: () => (
           <Select
             clearable
             multi
-            value={filter ? filter.value : null}
-            onChange={onChange}
+            value={this.state.filterIndustry}
+            onChange={this.handleSelectChange.bind(this, "filterIndustry")}
             valueKey="id"
             labelKey="name"
-            options={this.props.industries.industries}
+            options={this.props.industries}
           />
         )
       },
@@ -172,13 +174,16 @@ class SubCategories extends Component {
         accessor: "id",
         filterable: false,
         sortable: false,
-        width: 130,
-        Cell: ({ value }) => (
+        width: 145,
+        Cell: ({ value, original }) => (
           <div>
             <Button
               color="secondary"
               className="mr-l"
-              onClick={event => console.log("Edit clicked for id: ", value)}
+              onClick={
+                () => console.log("sub cat table: ", original)
+                //this.props.toggleSubCategoryEditModal({ id, industry, name })
+              }
             >
               Edit
             </Button>
@@ -190,52 +195,210 @@ class SubCategories extends Component {
         )
       }
     ],
+    manual: true,
     minRows: 5,
-    defaultPageSize: 20,
     className: "-striped -highlight",
-    filterable: true
+    filterable: true,
+    PaginationComponent
+  };
+
+  componentDidMount() {
+    this.props.onSubCategoryList();
+    this.props.onCategoryList();
+    this.props.onIndustryList();
+    this.props.onExtraSectionList();
+  }
+
+  getSnapshotBeforeUpdate(prevProps, prevState) {
+    if (prevProps.subCategories !== this.props.subCategories) {
+      return SUB_CATEGORIES_CHANGED;
+    }
+    return null;
+  }
+
+  componentDidUpdate = (prevProps, prevState, snapshot) => {
+    if (prevState.subCategorySubmit && prevProps.loading)
+      this.focusableInput.focus();
+
+    if (snapshot === SUB_CATEGORIES_CHANGED) this.updateTable();
   };
 
   componentWillUnmount() {
+    this.props.onUnmountIndustry();
     this.props.onUnmountCategory();
+    this.props.onUnmountSubCategory();
     this.props.onUnmountExtraSection();
   }
 
-  onChange = (key, event) => {
-    this.setState({ [key]: event.target.value });
-  };
-
-  handleSelectChange = (key, value) => {
-    this.setState({ [key]: value });
-  };
-
-  handleIndustryChange = value =>
-    this.setState(
-      { industry: value, category: "" },
-      () =>
-        this.state.industry && this.props.onIndustryEachList({ id: value.id })
-    );
+  onChange = (key, event) =>
+    this.setState({
+      [key]: event.target.value.replace(/\b\w/g, l => l.toUpperCase())
+    });
 
   onFormSubmit = event => {
     event.preventDefault();
     const { category, subCategory, extraSections, tags } = this.state;
-    console.log(category, extraSections, subCategory, tags);
-    console.log("tags:::::", tags);
-    this.props.onSubCategorySubmit({
-      category: category.id,
-      extraSection: extraSections.map(extraSection => extraSection.value),
-      subCategory,
-      tags,
-      access_token: this.access_token
-    });
-    this.setState({ subCategory: "", extraSections: [], tags: [] });
+    this.setState({ subCategorySubmit: true }, () =>
+      this.props.onSubCategorySubmit({
+        category: category.id,
+        extraSection: extraSections.map(extraSection => extraSection.value),
+        subCategory,
+        tags
+      })
+    );
   };
 
-  handleTagsChange = tags => {
-    this.setState({ tags });
+  handleTagsChange = tags => this.setState({ tags });
+
+  handleSelectChange = (key, value) => {
+    this.setState(
+      { [key]: value },
+      () =>
+        (key === "filterIndustry" ||
+          key === "filterCategory" ||
+          key === "filterExtrasection") &&
+        this.updateTable()
+    );
+    if (key === "industry") {
+      this.setState({ category: "" });
+      value && this.props.onIndustryEachList({ id: value.id });
+    }
+    if (
+      key === "filterIndustry" &&
+      value.length > 0 &&
+      this.state.filterCategory.length > 0
+    ) {
+      let changed = false;
+      let filterCategory = this.state.filterCategory.filter(filter => {
+        let found = false;
+        for (let i = 0; i < value.length; i++) {
+          found = found || value[i].id === filter.industry;
+          if (found) break;
+        }
+        changed = !found;
+        return found;
+      });
+      changed && this.updateData({ filterCategory });
+    }
   };
+
+  updateTable = () => {
+    const {
+      page,
+      rows,
+      filterText,
+      filterCategory,
+      filterIndustry,
+      filterExtrasection,
+      sortedData
+    } = this.state;
+
+    let subCategories = this.props.subCategories;
+    // filter
+    if (filterText.length) {
+      filterText.forEach(filter => {
+        subCategories = subCategories.filter(subCategory => {
+          const text =
+            filter.id === "tags"
+              ? String(subCategory[filter.id].join(", ")).toLowerCase()
+              : String(subCategory[filter.id]).toLowerCase();
+          return text.indexOf(filter.value.toLowerCase()) !== -1;
+        });
+      });
+    }
+    if (filterExtrasection.length) {
+      filterExtrasection.forEach(filter => {
+        subCategories = subCategories.filter(
+          subCategory =>
+            String(subCategory.extra_section.join(", "))
+              .toLowerCase()
+              .indexOf(filter.value.toLowerCase()) !== -1
+        );
+      });
+    }
+    if (filterCategory.length) {
+      subCategories = subCategories.filter(subCategory => {
+        let found = false;
+        for (let i = 0; i < filterCategory.length; i++) {
+          found = found || filterCategory[i].id === subCategory.category;
+          if (found) break;
+        }
+        return found;
+      });
+    } else if (filterIndustry.length) {
+      subCategories = subCategories.filter(subCategory => {
+        let found = false;
+        for (let i = 0; i < filterIndustry.length; i++) {
+          const categories = this.props.categories
+            .filter(category => category.industry === filterIndustry[i].id)
+            .map(category => category.id);
+          found = found || categories.includes(subCategory.category);
+          if (found) break;
+        }
+        return found;
+      });
+    }
+    // sort
+    if (sortedData.length > 0) {
+      subCategories = subCategories.map(subCategory => {
+        const category = this.props.categories.find(
+          category => category.id === subCategory.category
+        );
+
+        const industry = this.props.industries.find(
+          industry => (category ? category.industry === industry.id : false)
+        );
+
+        return {
+          ...subCategory,
+          categoryName: category ? category.name : "Not Found",
+          industryName: industry ? industry.name : "Not Found"
+        };
+      });
+      subCategories = orderBy(
+        subCategories,
+        sortedData.map(sort => {
+          let id;
+          switch (sort.id) {
+            case "category":
+              id = "categoryName";
+              break;
+            case "industry":
+              id = "industryName";
+              break;
+            default:
+              id = sort.id;
+          }
+          return row => {
+            if (row[id] === null || row[id] === undefined) {
+              return -Infinity;
+            }
+            return typeof row[id] === "string"
+              ? row[id].toLowerCase()
+              : row[id];
+          };
+        }),
+        sortedData.map(d => (d.desc ? "desc" : "asc"))
+      );
+    }
+
+    // pagination
+    let newPage = subCategories.length <= rows * page ? 0 : page;
+
+    this.setState({
+      rowCount: subCategories.length,
+      subCategories: subCategories.slice(rows * newPage, rows * newPage + rows),
+      page: newPage,
+      pages: Math.ceil(subCategories.length / rows)
+    });
+  };
+
+  debouncedUpdate = debounce(this.updateTable, 100);
+
+  updateData = params => this.setState(params, () => this.updateTable());
 
   render() {
+    console.log("sub cat props: ", this.props);
     return (
       <div className="animated fadeIn">
         <Row className="hr-centered">
@@ -252,14 +415,18 @@ class SubCategories extends Component {
                         <Label> Industry </Label>
                         <Select
                           autosize
+                          autoFocus
                           clearable
                           required
+                          disabled={this.props.loading}
                           name="Industry"
                           className="select-category"
-                          disabled={this.props.industries.fetchLoading}
                           value={this.state.industry}
-                          onChange={this.handleIndustryChange}
-                          options={this.props.industries.industries}
+                          onChange={this.handleSelectChange.bind(
+                            this,
+                            "industry"
+                          )}
+                          options={this.props.industries}
                           valueKey="id"
                           labelKey="name"
                         />
@@ -271,16 +438,20 @@ class SubCategories extends Component {
                         <Select
                           autosize
                           clearable
+                          disabled={this.props.loading}
                           required
                           name="Category"
                           className="select-category"
-                          disabled={this.props.industries.fetchLoadingData}
                           value={this.state.category}
                           onChange={this.handleSelectChange.bind(
                             this,
                             "category"
                           )}
-                          options={this.props.industries.industriesData}
+                          options={
+                            this.state.industry
+                              ? this.props.partialCategories
+                              : []
+                          }
                           valueKey="id"
                           labelKey="name"
                         />
@@ -295,13 +466,12 @@ class SubCategories extends Component {
                       </InputGroupText>
                     </InputGroupAddon>
                     <Input
-                      autoFocus
                       required
+                      innerRef={ref => (this.focusableInput = ref)}
+                      disabled={this.props.loading}
                       type="text"
                       placeholder="New Sub Category Name"
-                      value={this.state.subCategory.replace(/\b\w/g, l =>
-                        l.toUpperCase()
-                      )}
+                      value={this.state.subCategory}
                       onChange={this.onChange.bind(this, "subCategory")}
                     />
                   </InputGroup>
@@ -309,6 +479,7 @@ class SubCategories extends Component {
                     <Col xs="12" md="12">
                       <TagsInput
                         onlyUnique
+                        disabled={this.props.loading}
                         addKeys={[9, 32, 188]}
                         value={this.state.tags}
                         onChange={this.handleTagsChange}
@@ -320,6 +491,7 @@ class SubCategories extends Component {
                     <Select
                       autosize
                       clearable
+                      disabled={this.props.loading}
                       required
                       multi
                       name="Extra-Sections"
@@ -334,7 +506,11 @@ class SubCategories extends Component {
                   </FormGroup>
                   <Row>
                     <Col xs="6">
-                      <Button color="primary" className="px-4">
+                      <Button
+                        color="primary"
+                        disabled={this.props.loading}
+                        className="px-4"
+                      >
                         Add
                       </Button>
                     </Col>
@@ -346,10 +522,42 @@ class SubCategories extends Component {
         </Row>
         <ReactTable
           {...this.tableProps}
-          data={this.props.sub_categories.subCategories}
-          loading={this.props.sub_categories.fetchLoading}
-          defaultFilterMethod={filterCaseInsensitive}
+          style={{ background: "white" }}
+          data={this.state.subCategories}
+          pages={this.state.pages}
+          pageSize={this.state.rows}
+          rowCount={this.state.rowCount}
+          onPageChange={pageIndex => {
+            this.updateData({ page: pageIndex });
+          }}
+          onPageSizeChange={(pageSize, pageIndex) =>
+            this.updateData({
+              page: pageIndex,
+              rows: pageSize
+            })
+          }
+          onSortedChange={newSorted =>
+            this.updateData({ sortedData: newSorted })
+          }
+          onFilteredChange={(column, value) => {
+            (value.id === "tags" || value.id === "name") &&
+              this.setState({ filterText: column }, this.debouncedUpdate);
+          }}
+          loading={this.props.fetchLoading}
         />
+        <CustomModal
+          title="Edit Sub Category Data"
+          isOpen={this.props.SubCategoryEditModal}
+          toggle={this.props.toggleSubCategoryEditModal}
+          className={"modal-xs" + this.props.className}
+        >
+          <SubCategoryEditModal
+            data={this.props.subCategoryEditData}
+            onCategoryEdit={this.props.onSubCategoryEdit}
+            industries={this.props.industries}
+            categories={this.props.categories}
+          />
+        </CustomModal>
       </div>
     );
   }
@@ -357,14 +565,18 @@ class SubCategories extends Component {
 
 export default connect(
   ({
-    AdminContainer: { sub_categories, categories, extra_sections, industries },
-    auth
+    AdminContainer: {
+      sub_categories,
+      categories: { categories },
+      extra_sections,
+      industries: { industries, industriesData }
+    }
   }) => ({
     industries,
+    partialCategories: industriesData,
     categories,
     extra_sections,
-    sub_categories,
-    ...auth
+    ...sub_categories
   }),
   {
     onIndustryList,
@@ -372,8 +584,11 @@ export default connect(
     onExtraSectionList,
     onSubCategorySubmit,
     onSubCategoryList,
+    onSubCategoryEdit,
+    toggleSubCategoryEditModal,
     onCategoryList,
     onSubCategoryDelete,
+    onUnmountIndustry,
     onUnmountCategory,
     onUnmountExtraSection,
     onUnmountSubCategory

@@ -20,151 +20,166 @@ import {
   PaymentMethod,
   BusinessAdminDetail,
   BusinessList,
-  BusinessEdit
+  BusinessEdit,
+  AppBusinessList,
+  AppBusinessReview,
+  BusinessAssign
 } from "../views";
+
+import CustomRoute from "../../Common/utils/CustomRoute";
 
 class AdminRoute extends Component {
   render() {
     // const MATCH_URL = this.props.match.url;
     return (
       <Switch>
-        <Route
-          path="/admin/dashboard"
-          name="Dashboard"
-          component={Dashboard}
-          permission="CAN_VIEW_DASHBOARD"
-        />
+        <Route path="/admin/dashboard" name="Dashboard" component={Dashboard} />
         {/* {this.getPermissionRoutes(permissions_set)} */}
-        <Route
-          path="/admin/areas"
-          name="Industry"
-          component={Areas}
-          permission="CAN_VIEW_DASHBOARD"
-        />
-        <Route
-          path="/admin/cities"
-          name="Cities"
-          component={Cities}
-          permission="CAN_VIEW_DASHBOARD"
-        />
-        <Route
-          path="/admin/districts"
-          name="Districts"
-          component={Districts}
-          permission="CAN_VIEW_DASHBOARD"
-        />
-        <Route
+        <CustomRoute
           path="/admin/countries"
           name="Countries"
           component={Countries}
-          permission="CAN_VIEW_DASHBOARD"
+          permission="CAN_VIEW_COUNTRY"
         />
-        <Route
+        <CustomRoute
+          path="/admin/areas"
+          name="Industry"
+          component={Areas}
+          permission="CAN_VIEW_AREA"
+        />
+        <CustomRoute
+          path="/admin/cities"
+          name="Cities"
+          component={Cities}
+          permission="CAN_VIEW_CITY"
+        />
+        <CustomRoute
+          path="/admin/districts"
+          name="Districts"
+          component={Districts}
+          permission="CAN_VIEW_DISTRICT"
+        />
+
+        <CustomRoute
           path="/admin/states"
           name="States"
           component={States}
-          permission="CAN_VIEW_DASHBOARD"
+          permission="CAN_VIEW_STATE"
         />
-        <Route
+        <CustomRoute
           path="/admin/add-business"
           name="Add Business"
           component={BusinessAdminDetail}
-          permission="CAN_VIEW_DASHBOARD"
+          permission="CAN_ADD_BUSINESS"
+        />
+        <CustomRoute
+          path="/admin/business-assign"
+          name="Assign Business"
+          component={BusinessAssign}
+          permission="CAN_ADD_BUSINESS"
+        />
+        <Route
+          path="/admin/approve-app-business/:businessSlug/review"
+          name="Review App Business"
+          component={AppBusinessReview}
+          //permission="CAN_VIEW_DASHBOARD"
         />
         <Route
           path="/admin/list-business/:businessSlug/edit"
           name="List Business"
           component={BusinessEdit}
-          permission="CAN_VIEW_DASHBOARD"
+          //permission="CAN_VIEW_DASHBOARD"
         />
         <Route
+          path="/admin/approve-app-business"
+          name="List App Business"
+          component={AppBusinessList}
+          //permission="CAN_VIEW_DASHBOARD"
+        />
+
+        <CustomRoute
           path="/admin/list-business"
           name="List Business"
           component={BusinessList}
-          permission="CAN_VIEW_DASHBOARD"
+          permission="CAN_VIEW_BUSINESS"
         />
-        <Route
+        <CustomRoute
           path="/admin/industry"
           name="Industry"
           component={Industry}
-          permission="CAN_VIEW_DASHBOARD"
+          permission="CAN_VIEW_INDUSTRY"
         />
-        <Route
+        <CustomRoute
           path="/admin/categories"
           name="Categories"
           component={Categories}
-          permission="CAN_VIEW_DASHBOARD"
+          permission="CAN_VIEW_CATEGORY"
         />
-        <Route
+        <CustomRoute
           path="/admin/sub-categories"
           name="Sub Categories"
           component={SubCategories}
-          permission="CAN_VIEW_DASHBOARD"
+          permission="CAN_VIEW_SUB_CATEGORY"
         />
-        <Route
+        <CustomRoute
           path="/admin/company-type"
           name="CompanyType"
           component={CompanyType}
-          permission="CAN_VIEW_DASHBOARD"
+          permission="CAN_VIEW_COMPANY_TYPE"
         />
-        <Route
+        <CustomRoute
           path="/admin/payment-method"
           name="PaymentMethod"
           component={PaymentMethod}
-          permission="CAN_VIEW_DASHBOARD"
+          permission="CAN_VIEW_PAYMENT_METHOD"
         />
-        {/* <Route
+        {/* <CustomRoute
           path="/admin/sections"
           name="Sections"
           component={Sections}
           permission="CAN_VIEW_DASHBOARD"
         /> */}
-        <Route
+        <CustomRoute
           exact
           path="/admin/users"
           name="Users"
           component={ManageUsers}
-          permission="CAN_VIEW_USERS"
+          permission="CAN_VIEW_USER"
         />
-        <Route
+        <CustomRoute
           path="/admin/users/manage-users"
           name="Manage Users"
           component={ManageUsers}
-          permission="CAN_VIEW_USERS"
+          permission="CAN_VIEW_USER"
         />
-        <Route
+        <CustomRoute
           path="/admin/users/add-user"
           name="Add User"
           component={AddUser}
-          permission="CAN_ADD_USERS"
+          permission="CAN_ADD_USER"
         />
-        <Route
+        <CustomRoute
           path="/admin/users/groups"
           name="Groups"
           component={Groups}
-          permission="CAN_VIEW_GROUPS"
+          permission="CAN_VIEW_GROUP"
         />
-        <Route
+        <CustomRoute
           path="/admin/users/permissions"
           name="Permissions"
           component={Permissions}
-          permission="CAN_VIEW_PERMISSIONS"
+          permission="CAN_VIEW_PERMISSION"
         />
 
-        <Route
-          path="/admin/settings"
-          name="Settings"
-          component={Settings}
-          permission="CAN_VIEW_SETTINGS"
-        />
+        <Route path="/admin/settings" name="Settings" component={Settings} />
 
         <Redirect from="/admin" to="/admin/dashboard" />
-        {/* <Route
+        {/* <CustomRoute
           path={`${MATCH_URL}/component2`}
           name="Component 2"
           component={Component2}
         />
-        <Route
+        <CustomRoute
           path={`${MATCH_URL}/dashboard`}
           name="Admin Dashboard"
           component={Dashboard}

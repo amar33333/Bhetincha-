@@ -55,7 +55,7 @@ class SubBusinessCoverImage extends Component {
     ) : null;
 
   render() {
-    console.log("logo: ", this.props);
+    // console.log("logo: ", this.props);
     return (
       <div className="animated fadeIn">
         <Card>

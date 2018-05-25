@@ -15,36 +15,44 @@ import {
   CardBody,
   CardHeader
 } from "reactstrap";
-
 import ReactTable from "react-table";
+
 import {
   PopoverDelete,
   Select,
   PaginationComponent
 } from "../../../Common/components";
 import filterCaseInsensitive from "../../../Common/utils/filterCaseInsesitive";
-import "react-table/react-table.css";
+
+import CustomModal from "../../../Common/components/CustomModal";
+import StateEditModal from "../../../Common/components/CustomModal/ModalTemplates/StateEditModal";
 
 import {
   onStateSubmit,
   onCountryList,
   onStateList,
-  onStateDelete
+  onStateEdit,
+  toggleStateEditModal,
+  onStateDelete,
+  onUnmountCountry,
+  onUnmountState
 } from "../../actions";
 
 class States extends Component {
-  state = { state: "", country: "" };
-  access_token = this.props.cookies
-    ? this.props.cookies.token_data.access_token
-    : null;
+  static getDerivedStateFromProps = (nextProps, prevState) =>
+    prevState.stateSubmit && !nextProps.error && !nextProps.loading
+      ? { state: "", stateSubmit: false }
+      : null;
+
+  state = { state: "", country: "", stateSubmit: false };
 
   tableProps = {
     columns: [
       {
-        Header: "S. No.",
+        Header: "SN",
         accessor: "s_no",
         filterable: false,
-        searchable: false,
+        sortable: false,
         width: 70
       },
       { Header: "State", accessor: "name" },
@@ -84,13 +92,15 @@ class States extends Component {
         accessor: "id",
         filterable: false,
         sortable: false,
-        width: 130,
-        Cell: ({ value }) => (
+        width: 145,
+        Cell: ({ value, original: { id, country, name } }) => (
           <div>
             <Button
               color="secondary"
               className="mr-l"
-              onClick={event => console.log("Edit clicked for id: ", value)}
+              onClick={() =>
+                this.props.toggleStateEditModal({ id, country, name })
+              }
             >
               Edit
             </Button>
@@ -109,40 +119,39 @@ class States extends Component {
     PaginationComponent
   };
 
-  componentWillMount() {
-    this.props.onCountryList({ access_token: this.access_token });
-    this.props.onStateList({ access_token: this.access_token });
+  componentDidMount() {
+    this.props.onCountryList();
+    this.props.onStateList();
+  }
+
+  componentDidUpdate = (prevProps, prevState) => {
+    if (prevState.stateSubmit && prevProps.loading) this.focusableInput.focus();
+  };
+
+  componentWillUnmount() {
+    this.props.onUnmountCountry();
+    this.props.onUnmountState();
   }
 
   onFormSubmit = event => {
     event.preventDefault();
-
     const { state, country } = this.state;
-
-    this.props.onStateSubmit({
-      state,
-      country: country.id,
-      access_token: this.access_token
-    });
-    this.setState({ state: "", country: "" });
+    this.setState({ stateSubmit: true }, () =>
+      this.props.onStateSubmit({
+        state,
+        country: country.id
+      })
+    );
   };
 
-  onChange = (key, event) => {
+  onChange = (key, event) =>
     this.setState({
       [key]: event.target.value.replace(/\b\w/g, l => l.toUpperCase())
     });
-  };
 
-  handleSelectChange = country => {
-    this.setState({ country });
-  };
+  handleSelectChange = country => this.setState({ country });
 
   render() {
-    const countries = this.props.general_setup.countries;
-
-    const { country } = this.state;
-    const value = country && country.id;
-
     return (
       <div className="animated fadeIn">
         <Row className="hr-centered">
@@ -162,11 +171,12 @@ class States extends Component {
                           autosize
                           clearable
                           required
+                          disabled={this.props.loading}
                           name="Industies"
                           className="select-industry mb-2"
-                          value={value}
+                          value={this.state.country}
                           onChange={this.handleSelectChange}
-                          options={countries}
+                          options={this.props.countries}
                           valueKey="id"
                           labelKey="name"
                         />
@@ -182,8 +192,9 @@ class States extends Component {
                           </InputGroupText>
                         </InputGroupAddon>
                         <Input
-                          autoFocus
                           required
+                          disabled={this.props.loading}
+                          innerRef={ref => (this.focusableInput = ref)}
                           type="text"
                           placeholder="Type State Name"
                           value={this.state.state}
@@ -204,26 +215,46 @@ class States extends Component {
         </Row>
         <ReactTable
           {...this.tableProps}
+          style={{ background: "white" }}
           data={this.props.states}
-          // loading={this.props.categories.fetchLoading}
+          loading={this.props.fetchLoading}
           defaultFilterMethod={filterCaseInsensitive}
         />
+        <CustomModal
+          title="Edit State Data"
+          isOpen={this.props.stateEditModal}
+          toggle={this.props.toggleStateEditModal}
+          className={"modal-xs" + this.props.className}
+        >
+          <StateEditModal
+            data={this.props.stateEditData}
+            onStateEdit={this.props.onStateEdit}
+            countries={this.props.countries}
+          />
+        </CustomModal>
       </div>
     );
   }
 }
 
 export default connect(
-  ({ AdminContainer: { general_setup }, auth }) => ({
-    general_setup,
+  ({ AdminContainer: { general_setup } }) => ({
     countries: general_setup.countries,
     states: general_setup.states,
-    ...auth
+    stateEditModal: general_setup.stateEditModal,
+    stateEditData: general_setup.stateEditData,
+    fetchLoading: general_setup.statesFetchLoading,
+    loading: general_setup.stateLoading,
+    error: general_setup.stateError
   }),
   {
     onStateSubmit,
+    onStateEdit,
+    toggleStateEditModal,
     onCountryList,
     onStateList,
-    onStateDelete
+    onStateDelete,
+    onUnmountCountry,
+    onUnmountState
   }
 )(States);

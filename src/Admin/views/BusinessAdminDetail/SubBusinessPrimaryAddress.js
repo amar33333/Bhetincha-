@@ -116,7 +116,7 @@ class SubBusinessPrimaryAddress extends Component {
         }
       };
     } else {
-      console.log("new initial state not loaded");
+      // console.log("new initial state not loaded");
       return null;
     }
   };
@@ -268,6 +268,21 @@ class SubBusinessPrimaryAddress extends Component {
     );
   };
 
+  // DO NOT DELETE THIS COMMENTED CODE
+
+  // onContactDelete(index) {
+  //   return () => {
+  //     this.setState(
+  //       {
+  //         contactPerson: this.state.contactPerson.filter(
+  //           (contact, sub_index) => index !== sub_index
+  //         )
+  //       },
+  //       () => toast.success(`Contact - ${index + 1} Deleted Successfully`)
+  //     );
+  //   };
+  // }
+
   onContactDelete = index => () => {
     this.setState(
       {
@@ -347,7 +362,7 @@ class SubBusinessPrimaryAddress extends Component {
       this.states = [];
     }
 
-    console.log("states: ", this.states);
+    // console.log("states: ", this.states);
 
     try {
       if (this.props.countries) {

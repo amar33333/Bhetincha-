@@ -126,6 +126,7 @@ class BusinessList extends Component {
     manual: true,
     sortable: true,
     minRows: 5,
+    className: "-striped -highlight",
     PaginationComponent
   };
 
@@ -239,26 +240,25 @@ class BusinessList extends Component {
         <Row>
           <Col xs="12">
             <ReactTable
+              {...this.tableProps}
               style={{ background: "white" }}
-              className="-striped -highlight"
               data={this.props.businesses}
               defaultPageSize={this.props.rows}
               defaultSorted={this.props.sort_by}
               loading={this.props.fetchLoading}
               onPageChange={pageIndex => {
-                this.props.onBusinessAllGet({ page: ++pageIndex });
+                this.props.onBusinessAllGet({ page: pageIndex + 1 });
               }}
               onPageSizeChange={(pageSize, pageIndex) =>
                 this.props.onBusinessAllGet({
-                  page: ++pageIndex,
+                  page: pageIndex + 1,
                   rows: pageSize
                 })
               }
               onSortedChange={this.props.handleSortChangeBusiness}
               page={this.props.page - 1}
               pages={this.props.pages}
-              rowCount={100}
-              {...this.tableProps}
+              rowCount={this.props.rowCount}
             />
           </Col>
         </Row>
@@ -270,7 +270,7 @@ class BusinessList extends Component {
 export default connect(
   ({
     AdminContainer: {
-      business_reducer: { businesses, fetchLoading, pages },
+      business_reducer: { businesses, fetchLoading, pages, rowCount },
       filterBusiness,
       industries
     }
@@ -279,6 +279,7 @@ export default connect(
     industryLoading: industries.loading,
     businesses,
     pages,
+    rowCount,
     fetchLoading,
     ...filterBusiness
   }),

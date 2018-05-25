@@ -2,11 +2,11 @@ import { Observable } from "rxjs/Observable";
 import { toast } from "react-toastify";
 
 import {
-  onCategoryPost,
-  onCategoryGet,
+  onCategoryPostAjax,
   onCategoryEachDeleteAjax,
   onCategoryGetAjax,
-  onCategoryEachGet
+  onCategoryEachGet,
+  onCategoryPut
 } from "../config/adminServerCall";
 
 import {
@@ -25,6 +25,10 @@ import {
   DELETE_CATEGORY_PENDING,
   DELETE_CATEGORY_FULFILLED,
   DELETE_CATEGORY_REJECTED,
+  EDIT_CATEGORY_FULFILLED,
+  EDIT_CATEGORY_PENDING,
+  EDIT_CATEGORY_REJECTED,
+  TOGGLE_CATEGORY_EDIT_MODAL,
   UNMOUNT_CATEGORY_DATA,
   UNMOUNT_SUB_CATEGORY,
   UNMOUNT_CATEGORY
@@ -32,33 +36,70 @@ import {
 
 const epics = [];
 
-export const onCategorySubmit = ({
-  category,
-  industry,
-  access_token
-}) => dispatch => {
-  onCategoryPost({
-    category,
-    industry,
-    access_token
-  })
-    .then(response => {
-      if (response.data.msg === "success") {
-        toast.success("New Category Created Successfully!");
-      } else {
-        response.data.msg.name.map(msg => {
-          toast.error(msg);
+export const onCategorySubmit = payload => ({
+  type: CREATE_CATEGORY_PENDING,
+  payload
+});
+
+epics.push((action$, { getState }) =>
+  action$.ofType(CREATE_CATEGORY_PENDING).mergeMap(({ payload }) => {
+    const { category, industry } = payload;
+    const access_token = getState().auth.cookies.token_data.access_token;
+
+    return onCategoryPostAjax({ category, industry, access_token })
+      .concatMap(({ response }) => {
+        if (response.msg === "success") {
+          toast.success("Category added successfully!");
+          return [
+            { type: CREATE_CATEGORY_FULFILLED },
+            { type: FETCH_CATEGORY_PENDING }
+          ];
+        } else {
+          throw new Error(response.msg[Object.keys(response.msg)[0]][0]);
+        }
+      })
+      .catch(ajaxError => {
+        toast.error(ajaxError.toString());
+        return Observable.of({
+          type: CREATE_CATEGORY_REJECTED,
+          payload: ajaxError
         });
-      }
-      dispatch({ type: CREATE_CATEGORY_FULFILLED, payload: response.data });
-      dispatch({ type: FETCH_CATEGORY_PENDING });
-    })
-    .catch(error => {
-      toast.error("Category Not created!");
-      dispatch({ type: CREATE_CATEGORY_REJECTED, payload: error });
-    });
-  dispatch({ type: CREATE_CATEGORY_PENDING });
-};
+      });
+  })
+);
+
+export const onCategoryEdit = payload => ({
+  type: EDIT_CATEGORY_PENDING,
+  payload
+});
+
+epics.push((action$, { getState }) =>
+  action$.ofType(EDIT_CATEGORY_PENDING).mergeMap(({ payload }) => {
+    const { category, industry } = payload;
+    const access_token = getState().auth.cookies.token_data.access_token;
+
+    return onCategoryPut({ category, industry, access_token })
+      .concatMap(({ response }) => {
+        if (response.msg === "success") {
+          toast.success("Category Updated successfully!");
+          return [
+            { type: EDIT_CATEGORY_FULFILLED },
+            { type: FETCH_CATEGORY_PENDING },
+            { type: TOGGLE_CATEGORY_EDIT_MODAL }
+          ];
+        } else {
+          throw new Error(response.msg[Object.keys(response.msg)[0]][0]);
+        }
+      })
+      .catch(ajaxError => {
+        toast.error(ajaxError.toString());
+        return Observable.of({
+          type: EDIT_CATEGORY_REJECTED,
+          payload: ajaxError
+        });
+      });
+  })
+);
 
 export const onCategoryList = () => ({ type: FETCH_CATEGORY_PENDING });
 
@@ -74,19 +115,6 @@ epics.push((action$, { getState }) =>
       .catch(ajaxError => Observable.of({ type: FETCH_CATEGORY_REJECTED }))
   )
 );
-
-// export const onCategoryList = ({ access_token }) => dispatch => {
-//   onCategoryGet({
-//     access_token
-//   })
-//     .then(response =>
-//       dispatch({ type: FETCH_CATEGORY_FULFILLED, payload: response.data })
-//     )
-//     .catch(error =>
-//       dispatch({ type: FETCH_CATEGORY_REJECTED, payload: error })
-//     );
-//   dispatch({ type: FETCH_CATEGORY_PENDING });
-// };
 
 export const onCategoryDelete = payload => ({
   type: DELETE_CATEGORY_PENDING,
@@ -126,6 +154,11 @@ export const onCategoryEachList = ({ id, access_token }) => dispatch => {
   dispatch({ type: FETCH_CATEGORY_EACH_PENDING });
 };
 
+export const toggleCategoryEditModal = payload => ({
+  type: TOGGLE_CATEGORY_EDIT_MODAL,
+  payload
+});
+
 export const onRemoveCategoryData = ({ obj }) => {
   return {
     type: REMOVE_CATEGORY_DATA_FULFILLED,
@@ -133,10 +166,7 @@ export const onRemoveCategoryData = ({ obj }) => {
   };
 };
 
-export const onUnmountCategory = () => ({
-  type: UNMOUNT_CATEGORY,
-  payload: []
-});
+export const onUnmountCategory = () => ({ type: UNMOUNT_CATEGORY });
 
 export const onUnmountCategoryData = () => ({
   type: UNMOUNT_CATEGORY_DATA,

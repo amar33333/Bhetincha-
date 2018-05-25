@@ -1,135 +1,257 @@
 import {
-  FETCH_AREA_FULFILLED,
-  FETCH_AREA_PENDING,
-  FETCH_AREA_REJECTED,
-  FETCH_CITY_FULFILLED,
-  FETCH_CITY_PENDING,
-  FETCH_CITY_REJECTED,
-  FETCH_DISTRICT_FULFILLED,
-  FETCH_DISTRICT_PENDING,
-  FETCH_DISTRICT_REJECTED,
-  FETCH_STATE_FULFILLED,
-  FETCH_STATE_PENDING,
-  FETCH_STATE_REJECTED,
+  CREATE_COUNTRY_FULFILLED,
+  CREATE_COUNTRY_PENDING,
+  CREATE_COUNTRY_REJECTED,
   FETCH_COUNTRY_FULFILLED,
   FETCH_COUNTRY_PENDING,
   FETCH_COUNTRY_REJECTED,
   FETCH_COUNTRY_EACH_FULFILLED,
-  FETCH_COUNTRY_EACH_REJECTED,
-  FETCH_COUNTRY_EACH_PENDING,
+  UNMOUNT_COUNTRY,
+  CREATE_STATE_FULFILLED,
+  CREATE_STATE_PENDING,
+  CREATE_STATE_REJECTED,
+  FETCH_STATE_FULFILLED,
+  FETCH_STATE_PENDING,
+  FETCH_STATE_REJECTED,
+  UNMOUNT_STATE,
+  CREATE_DISTRICT_FULFILLED,
+  CREATE_DISTRICT_PENDING,
+  CREATE_DISTRICT_REJECTED,
+  FETCH_DISTRICT_FULFILLED,
+  FETCH_DISTRICT_PENDING,
+  FETCH_DISTRICT_REJECTED,
   FETCH_DISTRICT_EACH_FULFILLED,
-  FETCH_DISTRICT_EACH_REJECTED,
-  FETCH_DISTRICT_EACH_PENDING,
+  UNMOUNT_DISTRICT,
+  CREATE_CITY_PENDING,
+  CREATE_CITY_FULFILLED,
+  CREATE_CITY_REJECTED,
+  FETCH_CITY_FULFILLED,
+  FETCH_CITY_PENDING,
+  FETCH_CITY_REJECTED,
+  FETCH_CITY_AUTOCOMPLETE_FULFILLED,
+  FETCH_CITY_AUTOCOMPLETE_PENDING,
+  FETCH_CITY_AUTOCOMPLETE_REJECTED,
   FETCH_STATE_EACH_FULFILLED,
-  FETCH_STATE_EACH_REJECTED,
-  FETCH_STATE_EACH_PENDING,
+  FETCH_CITY_EACH_FULFILLED,
+  UNMOUNT_CITY,
+  CREATE_AREA_PENDING,
+  CREATE_AREA_FULFILLED,
+  CREATE_AREA_REJECTED,
+  FETCH_AREA_FULFILLED,
+  FETCH_AREA_PENDING,
+  FETCH_AREA_REJECTED,
+  UNMOUNT_AREA,
   FETCH_ADDRESS_TREE_FULFILLED,
   FETCH_ADDRESS_TREE_REJECTED,
   FETCH_ADDRESS_TREE_PENDING,
-  FETCH_CITY_EACH_FULFILLED,
-  FETCH_CITY_EACH_REJECTED,
-  FETCH_CITY_EACH_PENDING,
-  UNMOUNT_DISTRICT,
-  UNMOUNT_CITY,
-  UNMOUNT_AREA
+  TOGGLE_COUNTRY_EDIT_MODAL,
+  TOGGLE_STATE_EDIT_MODAL,
+  TOGGLE_DISTRICT_EDIT_MODAL,
+  TOGGLE_CITY_EDIT_MODAL,
+  TOGGLE_AREA_EDIT_MODAL
 } from "../actions/types";
 
 const INITIAL_STATE = {
-  loading: false,
-  statusClass: "",
   countries: [],
+  countriesFetchLoading: false,
+  countryLoading: false,
+  countryError: false,
+  countryData: [],
   states: [],
+  statesFetchLoading: false,
+  stateLoading: false,
+  stateError: false,
+  stateData: [],
   districts: [],
-  countryEach: []
+  districtsFetchLoading: false,
+  districtLoading: false,
+  districtError: false,
+  districtData: [],
+  cities: [],
+  citiesPages: 1,
+  citiesRowCount: 0,
+  citiesFetchLoading: false,
+  cityLoading: false,
+  cityError: false,
+  cityData: [],
+  citiesAutocomplete: [],
+  citiesAutocompleteLoading: false,
+  areas: [],
+  areasPages: 1,
+  areasRowCount: 0,
+  areasFetchLoading: false,
+  areaLoading: false,
+  areaError: false,
+  areaData: [],
+  statusClass: "",
+  loading: false,
+  countryEditModal: false,
+  stateEditModal: false,
+  districtEditModal: false,
+  cityEditModal: false,
+  areaEditModal: false
 };
 
 export default function(state = INITIAL_STATE, action) {
   switch (action.type) {
-    case FETCH_COUNTRY_PENDING:
-      return { ...state, loading: true };
+    // COUNTRY
+    case CREATE_COUNTRY_PENDING:
+      ``;
+      return { ...state, countryLoading: true, countryError: false };
+    case CREATE_COUNTRY_FULFILLED:
+      return { ...state, countryLoading: false, countryError: false };
+    case CREATE_COUNTRY_REJECTED:
+      return { ...state, countryLoading: false, countryError: true };
 
+    case FETCH_COUNTRY_PENDING:
+      return { ...state, countriesFetchLoading: true };
     case FETCH_COUNTRY_FULFILLED:
       return {
         ...state,
-        countries: action.payload,
-        loading: false,
-        statusClass: "fulfilled"
+        countries: action.payload.map((country, i) => ({
+          ...country,
+          s_no: i + 1
+        })),
+        countriesFetchLoading: false
       };
-
     case FETCH_COUNTRY_REJECTED:
-      return { ...state, loading: false };
+      return { ...state, countriesFetchLoading: false };
+
+    case FETCH_COUNTRY_EACH_FULFILLED:
+      return { ...state, countryData: action.payload.states };
+
+    case UNMOUNT_COUNTRY:
+      return { ...state, countries: [] };
+
+    // STATE
+    case CREATE_STATE_PENDING:
+      return { ...state, stateLoading: true, stateError: false };
+    case CREATE_STATE_FULFILLED:
+      return { ...state, stateLoading: false, stateError: false };
+    case CREATE_STATE_REJECTED:
+      return { ...state, stateLoading: false, stateError: true };
 
     case FETCH_STATE_PENDING:
-      return { ...state, loading: true };
-
+      return { ...state, statesFetchLoading: true };
     case FETCH_STATE_FULFILLED:
       return {
         ...state,
-        states: action.payload,
-        loading: false,
-        statusClass: "fulfilled"
+        states: action.payload.map((state, i) => ({
+          ...state,
+          s_no: i + 1
+        })),
+        statesFetchLoading: false
       };
-
     case FETCH_STATE_REJECTED:
-      return { ...state, loading: false };
+      return { ...state, statesFetchLoading: false };
+
+    case FETCH_STATE_EACH_FULFILLED:
+      return { ...state, stateData: action.payload.districts };
+
+    case UNMOUNT_STATE:
+      return { ...state, states: [] };
+
+    // DISTRICT
+    case CREATE_DISTRICT_PENDING:
+      return { ...state, districtLoading: true, districtError: false };
+    case CREATE_DISTRICT_FULFILLED:
+      return { ...state, districtLoading: false, districtError: false };
+    case CREATE_DISTRICT_REJECTED:
+      return { ...state, districtLoading: false, districtError: true };
 
     case FETCH_DISTRICT_PENDING:
-      return { ...state, loading: true };
-
+      return { ...state, districtsFetchLoading: true };
     case FETCH_DISTRICT_FULFILLED:
       return {
         ...state,
-        districts: action.payload,
-        loading: false,
-        statusClass: "fulfilled"
+        districts: action.payload.map((district, i) => ({
+          ...district,
+          s_no: i + 1
+        })),
+        districtsFetchLoading: false
       };
-
     case FETCH_DISTRICT_REJECTED:
-      return { ...state, loading: false };
+      return { ...state, districtsFetchLoading: false };
+
+    case FETCH_DISTRICT_EACH_FULFILLED:
+      return { ...state, districtData: action.payload.cities };
+
+    case UNMOUNT_DISTRICT:
+      return { ...state, districts: [] };
+
+    // CITY
+    case CREATE_CITY_PENDING:
+      return { ...state, cityLoading: true, cityError: false };
+    case CREATE_CITY_FULFILLED:
+      return { ...state, cityLoading: false, cityError: false };
+    case CREATE_CITY_REJECTED:
+      return { ...state, cityLoading: false, cityError: true };
 
     case FETCH_CITY_PENDING:
-      return { ...state, loading: true };
-
+      return { ...state, citiesFetchLoading: true };
     case FETCH_CITY_FULFILLED:
       return {
         ...state,
-        cities: action.payload,
-        loading: false,
-        statusClass: "fulfilled"
+        cities: action.payload.data.map((city, i) => ({
+          ...city,
+          s_no: action.payload.rows * (action.payload.page - 1) + i + 1
+        })),
+        citiesPages: action.payload.pages,
+        citiesRowCount: action.payload.rowCount,
+        citiesFetchLoading: false
       };
-
     case FETCH_CITY_REJECTED:
-      return { ...state, loading: false };
+      return { ...state, citiesFetchLoading: false };
+
+    case FETCH_CITY_AUTOCOMPLETE_FULFILLED:
+      return {
+        ...state,
+        citiesAutocomplete: action.payload,
+        citiesAutocompleteLoading: false
+      };
+    case FETCH_CITY_AUTOCOMPLETE_PENDING:
+      return {
+        ...state,
+        citiesAutocomplete: [],
+        citiesAutocompleteLoading: true
+      };
+    case FETCH_CITY_AUTOCOMPLETE_REJECTED:
+      return { ...state, citiesAutocompleteLoading: false };
+
+    case FETCH_CITY_EACH_FULFILLED:
+      return { ...state, cityData: action.payload.areas };
+
+    case UNMOUNT_CITY:
+      return { ...state, cities: [] };
+
+    // AREA
+    case CREATE_AREA_PENDING:
+      return { ...state, areaLoading: true, areaError: false };
+    case CREATE_AREA_FULFILLED:
+      return { ...state, areaLoading: false, areaError: false };
+    case CREATE_AREA_REJECTED:
+      return { ...state, areaLoading: false, areaError: true };
 
     case FETCH_AREA_PENDING:
-      return { ...state, loading: true };
-
+      return { ...state, areasFetchLoading: true };
     case FETCH_AREA_FULFILLED:
       return {
         ...state,
-        areas: action.payload,
-        loading: false,
-        statusClass: "fulfilled"
+        areas: action.payload.data.map((area, i) => ({
+          ...area,
+          s_no: action.payload.rows * (action.payload.page - 1) + i + 1
+        })),
+        areasPages: action.payload.pages,
+        areasRowCount: action.payload.rowCount,
+        areasFetchLoading: false
       };
-
     case FETCH_AREA_REJECTED:
-      return { ...state, loading: false };
+      return { ...state, areasFetchLoading: false };
 
-    case FETCH_COUNTRY_EACH_PENDING:
-      return { ...state, loading: true };
+    case UNMOUNT_AREA:
+      return { ...state, areas: [] };
 
-    case FETCH_COUNTRY_EACH_FULFILLED:
-      return {
-        ...state,
-        countryData: action.payload,
-        countryEach: action.payload.states,
-        loading: false,
-        statusClass: "fulfilled"
-      };
-
-    case FETCH_COUNTRY_EACH_REJECTED:
-      return { ...state, loading: false };
-
+    // OTHERS
     case FETCH_ADDRESS_TREE_PENDING:
       return { ...state, loading: true };
 
@@ -137,7 +259,7 @@ export default function(state = INITIAL_STATE, action) {
       const countries = state.countries;
       const payload = action.payload;
 
-      // console.log("payload: ", payload);
+      // console.log("address payload: ", payload);
       return {
         ...state,
         countries: countries.map(country => {
@@ -205,67 +327,39 @@ export default function(state = INITIAL_STATE, action) {
     case FETCH_ADDRESS_TREE_REJECTED:
       return { ...state, loading: false };
 
-    case FETCH_STATE_EACH_PENDING:
-      return { ...state, loading: true };
-
-    case FETCH_STATE_EACH_FULFILLED:
+    case TOGGLE_COUNTRY_EDIT_MODAL:
       return {
         ...state,
-        stateData: action.payload,
-        loading: false,
-        statusClass: "fulfilled"
+        countryEditModal: !state.countryEditModal,
+        countryEditData: action.payload
       };
 
-    case FETCH_STATE_EACH_REJECTED:
-      return { ...state, loading: false };
-
-    case FETCH_DISTRICT_EACH_PENDING:
-      return { ...state, loading: true };
-    case FETCH_DISTRICT_EACH_FULFILLED:
-      console.log(action.payload);
+    case TOGGLE_STATE_EDIT_MODAL:
       return {
         ...state,
-        districtData: action.payload,
-        loading: false,
-        statusClass: "fulfilled"
+        stateEditModal: !state.stateEditModal,
+        stateEditData: action.payload
       };
 
-    case FETCH_DISTRICT_EACH_REJECTED:
-      return { ...state, loading: false };
-
-    case FETCH_CITY_EACH_PENDING:
-      return { ...state, loading: true };
-
-    case FETCH_CITY_EACH_FULFILLED:
+    case TOGGLE_DISTRICT_EDIT_MODAL:
       return {
         ...state,
-        cityData: action.payload,
-        loading: false,
-        statusClass: "fulfilled"
+        districtEditModal: !state.districtEditModal,
+        districtEditData: action.payload
       };
 
-    case FETCH_CITY_EACH_REJECTED:
-      return { ...state, loading: false };
-
-    case UNMOUNT_DISTRICT:
+    case TOGGLE_CITY_EDIT_MODAL:
       return {
         ...state,
-        loading: false,
-        stateData: action.payload
+        cityEditModal: !state.cityEditModal,
+        cityEditData: action.payload
       };
 
-    case UNMOUNT_CITY:
+    case TOGGLE_AREA_EDIT_MODAL:
       return {
         ...state,
-        loading: false,
-        districtData: action.payload
-      };
-
-    case UNMOUNT_AREA:
-      return {
-        ...state,
-        loading: false,
-        cityData: action.payload
+        areaEditModal: !state.areaEditModal,
+        areaEditData: action.payload
       };
 
     default:

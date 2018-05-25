@@ -1,6 +1,8 @@
 import { Observable } from "rxjs/Observable";
 import { toast } from "react-toastify";
 
+import Cookies from "universal-cookie";
+
 import {
   FETCH_USER_FULFILLED,
   FETCH_USER_REJECTED,
@@ -26,6 +28,7 @@ import CookiesProvider from "../Common/utils/CookiesProvider";
 import { onLogin, onRegister, onUserGet } from "../Common/utils/serverCall";
 
 const epics = [];
+const cookies = new Cookies();
 
 export const loadCookies = () => ({
   type: COOKIES_LOAD_FULFILLED,
@@ -45,16 +48,61 @@ epics.push(action$ =>
     return onLogin({ username, password })
       .mergeMap(({ response }) => {
         CookiesProvider.setCookies("token_data", response, "/", expiryDate);
+        // cookies.set("token_data", response, "/", expiryDate);
+
         return onUserGet({ access_token: response.access_token });
       })
       .concatMap(({ response }) => {
-        CookiesProvider.setCookies("user_data", response, "/", expiryDate);
-
+        console.log("user repsose: ", response);
+        const {
+          id,
+          permissions,
+          groups,
+          username,
+          date_joined,
+          email,
+          email_confirmed,
+          first_name,
+          last_login,
+          last_name,
+          name,
+          phone_confirmed,
+          phone_number,
+          slug,
+          is_active,
+          is_staff,
+          is_superuser
+        } = response;
+        CookiesProvider.setCookies(
+          "user_data",
+          {
+            id,
+            permissions,
+            groups,
+            username,
+            date_joined,
+            email,
+            email_confirmed,
+            first_name,
+            last_login,
+            last_name,
+            name,
+            phone_confirmed,
+            phone_number,
+            slug
+          },
+          "/",
+          expiryDate
+        );
+        // cookies.set("user_data", response, "/", expiryDate);
+        console.log("cookei: ", CookiesProvider.getAllCookies());
         return [
           { type: TOGGLE_LOGIN_MODAL },
           {
             type: FETCH_USER_FULFILLED,
-            payload: { cookies: CookiesProvider.getAllCookies() },
+            payload: {
+              cookies: CookiesProvider.getAllCookies()
+            },
             history
           }
         ];

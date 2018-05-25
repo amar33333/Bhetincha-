@@ -1,14 +1,26 @@
 import {
   BUSINESS_URL,
+  APP_BUSINESS_APPROVAL_URL,
   PAYMENT_METHOD_URL,
   COMPANY_TYPE_URL,
   ALBUM_URL,
   BUSINESS_PUT_URL,
-  PHOTO_URL
+  PHOTO_URL,
+  SALES_USERS_LIST_URL
 } from "./BUSINESS_API";
 import axios from "axios";
 import { ajax } from "rxjs/observable/dom/ajax";
 import querystring from "querystring";
+
+export const onSalesUserGet = ({ access_token }) =>
+  ajax({
+    method: "GET",
+    url: `${SALES_USERS_LIST_URL}`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
 
 export const onBusinessPost = ({ data, access_token }) => {
   const category_list = data.categories
@@ -46,10 +58,10 @@ export const onBusinessPost = ({ data, access_token }) => {
 
   console.log("server_droasd: ", server_format_data);
 
-  return axios({
+  return ajax({
     method: "post",
     url: BUSINESS_URL,
-    data: server_format_data,
+    body: server_format_data,
     headers: {
       "Content-Type": "application/json",
       Authorization: "Bearer " + access_token
@@ -121,6 +133,26 @@ export const onBusinessAllGetAjax = ({ access_token, params }) =>
     }
   });
 
+export const onAppBusinessGet = ({ access_token, params }) =>
+  ajax({
+    method: "GET",
+    url: `${APP_BUSINESS_APPROVAL_URL}?${querystring.stringify(params)}`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
+export const onAppBusinessEachGet = ({ username, access_token }) =>
+  axios({
+    method: "get",
+    url: `${APP_BUSINESS_APPROVAL_URL}${username}/`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
 export const onBusinessEachGet = ({ username, access_token }) =>
   axios({
     method: "get",
@@ -144,6 +176,16 @@ export const onBusinessEachDeleteAjax = ({ id, access_token }) =>
   ajax({
     method: "DELETE",
     url: `${BUSINESS_URL}${id}`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
+export const onAppBusinessEachDelete = ({ id, access_token }) =>
+  ajax({
+    method: "DELETE",
+    url: `${APP_BUSINESS_APPROVAL_URL}${id}`,
     headers: {
       "Content-Type": "application/json",
       Authorization: "Bearer " + access_token
@@ -221,7 +263,7 @@ export const onBusinessEachAlbumEachPhotosDelete = ({
   });
 
 export const onPaymentMethodsGet = ({ access_token }) =>
-  axios({
+  ajax({
     method: "get",
     url: `${PAYMENT_METHOD_URL}`,
     headers: {
@@ -231,7 +273,7 @@ export const onPaymentMethodsGet = ({ access_token }) =>
   });
 
 export const onCompanyTypeGet = ({ access_token }) =>
-  axios({
+  ajax({
     method: "get",
     url: `${COMPANY_TYPE_URL}`,
     headers: {

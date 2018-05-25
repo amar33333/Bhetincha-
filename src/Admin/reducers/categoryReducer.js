@@ -6,21 +6,36 @@ import {
   FETCH_CATEGORY_EACH_REJECTED,
   FETCH_CATEGORY_EACH_PENDING,
   REMOVE_CATEGORY_DATA_FULFILLED,
+  TOGGLE_CATEGORY_EDIT_MODAL,
   UNMOUNT_CATEGORY_DATA,
+  CREATE_CATEGORY_FULFILLED,
+  CREATE_CATEGORY_PENDING,
+  CREATE_CATEGORY_REJECTED,
   UNMOUNT_CATEGORY
 } from "../actions/types";
 
 const INITIAL_STATE = {
   loading: false,
   fetchLoading: false,
+  error: false,
   categories: [],
-  categoryData: []
+  categoryData: [],
+  categoryEditModal: false
 };
 
 export default function(state = INITIAL_STATE, action) {
   switch (action.type) {
     case UNMOUNT_CATEGORY:
       return { ...state, categories: [] };
+
+    case CREATE_CATEGORY_PENDING:
+      return { ...state, loading: true, error: false };
+
+    case CREATE_CATEGORY_REJECTED:
+      return { ...state, loading: false, error: true };
+
+    case CREATE_CATEGORY_FULFILLED:
+      return { ...state, loading: false, error: false };
 
     case FETCH_CATEGORY_PENDING:
       return { ...state, fetchLoading: true };
@@ -91,6 +106,14 @@ export default function(state = INITIAL_STATE, action) {
             return true;
           }
         })
+      };
+
+    case TOGGLE_CATEGORY_EDIT_MODAL:
+      console.log("cat edit: ", action);
+      return {
+        ...state,
+        categoryEditModal: !state.categoryEditModal,
+        categoryEditData: action.payload
       };
 
     case UNMOUNT_CATEGORY_DATA:

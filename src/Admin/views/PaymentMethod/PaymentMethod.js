@@ -14,31 +14,94 @@ import {
   CardHeader
 } from "reactstrap";
 import { connect } from "react-redux";
+import ReactTable from "react-table";
+import { PopoverDelete, PaginationComponent } from "../../../Common/components";
+import filterCaseInsensitive from "../../../Common/utils/filterCaseInsesitive";
 
-import { onPaymentMethodSubmit } from "../../actions";
+import CustomModal from "../../../Common/components/CustomModal";
+import PaymentMethodEditModal from "../../../Common/components/CustomModal/ModalTemplates/PaymentMethodEditModal";
+
+import {
+  onPaymentMethodSubmit,
+  onPaymentMethodsList,
+  onPaymentMethodEdit,
+  togglePaymentMethodEditModal,
+  onPaymentMethodDelete,
+  onUnmountPaymentMethod
+} from "../../actions";
 
 class PaymentMethod extends Component {
-  state = {
-    payment_method: ""
+  static getDerivedStateFromProps = (nextProps, prevState) =>
+    prevState.paymentMethodSubmit && !nextProps.error && !nextProps.loading
+      ? { payment_method: "", paymentMethodSubmit: false }
+      : null;
+
+  state = { payment_method: "", paymentMethodSubmit: false };
+
+  tableProps = {
+    columns: [
+      {
+        Header: "SN",
+        accessor: "s_no",
+        filterable: false,
+        sortable: false,
+        width: 70
+      },
+      { Header: "Payment Method", accessor: "name" },
+      {
+        Header: "Actions",
+        id: "edit",
+        accessor: "id",
+        filterable: false,
+        sortable: false,
+        width: 145,
+        Cell: ({ value, original: { id, name } }) => (
+          <div>
+            <Button
+              color="secondary"
+              className="mr-l"
+              onClick={() =>
+                this.props.togglePaymentMethodEditModal({ id, name })
+              }
+            >
+              Edit
+            </Button>
+            <PopoverDelete
+              id={`delete-${value}`}
+              onClick={() => this.props.onPaymentMethodDelete({ id: value })}
+            />
+          </div>
+        )
+      }
+    ],
+    minRows: 5,
+    defaultPageSize: 20,
+    className: "-striped -highlight",
+    filterable: true,
+    PaginationComponent
   };
 
-  access_token = this.props.cookies
-    ? this.props.cookies.token_data.access_token
-    : null;
+  componentDidMount = () => this.props.onPaymentMethodsList();
+
+  componentDidUpdate = (prevProps, prevState) => {
+    if (prevState.paymentMethodSubmit && prevProps.loading)
+      this.focusableInput.focus();
+  };
+
+  componentWillUnmount = () => this.props.onUnmountPaymentMethod();
 
   onFormSubmit = event => {
     event.preventDefault();
     const { payment_method } = this.state;
-    this.props.onPaymentMethodSubmit({
-      payment_method,
-      access_token: this.access_token
-    });
-    this.setState({ payment_method: "" });
+    this.setState({ paymentMethodSubmit: true }, () =>
+      this.props.onPaymentMethodSubmit({ payment_method })
+    );
   };
 
-  onChange = (key, event) => {
-    this.setState({ [key]: event.target.value });
-  };
+  onChange = (key, event) =>
+    this.setState({
+      [key]: event.target.value.replace(/\b\w/g, l => l.toUpperCase())
+    });
 
   render() {
     return (
@@ -60,6 +123,8 @@ class PaymentMethod extends Component {
                       </InputGroupAddon>
                       <Input
                         autoFocus
+                        innerRef={ref => (this.focusableInput = ref)}
+                        disabled={this.props.loading}
                         required
                         type="text"
                         placeholder="Type Payment Method"
@@ -76,15 +141,44 @@ class PaymentMethod extends Component {
             </Card>
           </Col>
         </Row>
+        <ReactTable
+          {...this.tableProps}
+          style={{ background: "white" }}
+          data={this.props.payment_methods}
+          loading={this.props.fetchLoading}
+          defaultFilterMethod={filterCaseInsensitive}
+        />
+        <CustomModal
+          title="Edit Payment Method Data"
+          isOpen={this.props.paymentMethodEditModal}
+          toggle={this.props.togglePaymentMethodEditModal}
+          className={"modal-xs" + this.props.className}
+        >
+          <PaymentMethodEditModal
+            data={this.props.paymentMethodEditData}
+            onPaymentMethodEdit={this.props.onPaymentMethodEdit}
+          />
+        </CustomModal>
       </div>
     );
   }
 }
 
 export default connect(
-  ({ AdminContainer: { business_reducer }, auth }) => ({
-    ...business_reducer,
-    ...auth
+  ({ AdminContainer: { business_reducer } }) => ({
+    payment_methods: business_reducer.payment_methods,
+    paymentMethodEditData: business_reducer.paymentMethodEditData,
+    paymentMethodEditModal: business_reducer.paymentMethodEditModal,
+    fetchLoading: business_reducer.paymentMethodsFetchLoading,
+    loading: business_reducer.paymentMethodLoading,
+    error: business_reducer.paymentMethodError
   }),
-  { onPaymentMethodSubmit }
+  {
+    onPaymentMethodSubmit,
+    onPaymentMethodsList,
+    onPaymentMethodEdit,
+    togglePaymentMethodEditModal,
+    onPaymentMethodDelete,
+    onUnmountPaymentMethod
+  }
 )(PaymentMethod);

@@ -19,16 +19,21 @@ import { PopoverDelete, PaginationComponent } from "../../../Common/components";
 import filterCaseInsensitive from "../../../Common/utils/filterCaseInsesitive";
 import "react-table/react-table.css";
 
+import CustomModal from "../../../Common/components/CustomModal";
+import IndustryEditModal from "../../../Common/components/CustomModal/ModalTemplates/IndustryEditModal";
+
 import {
   onIndustrySubmit,
   onIndustryList,
   onUnmountIndustry,
-  onIndustryDelete
+  onIndustryDelete,
+  toggleIndustryEditModal,
+  onIndustryEdit
 } from "../../actions";
 
 class Industry extends Component {
   static getDerivedStateFromProps = (nextProps, prevState) =>
-    !nextProps.loading && prevState.industrySubmit
+    prevState.industrySubmit && !nextProps.error && !nextProps.loading
       ? { industry: "", industrySubmit: false }
       : null;
 
@@ -37,10 +42,10 @@ class Industry extends Component {
   tableProps = {
     columns: [
       {
-        Header: "S. No.",
+        Header: "SN",
         accessor: "s_no",
         filterable: false,
-        searchable: false,
+        sortable: false,
         width: 70
       },
       { Header: "Industry", accessor: "name" },
@@ -50,13 +55,13 @@ class Industry extends Component {
         accessor: "id",
         filterable: false,
         sortable: false,
-        width: 130,
-        Cell: ({ value }) => (
+        width: 145,
+        Cell: ({ value, original: { id, name } }) => (
           <div>
             <Button
               color="secondary"
               className="mr-l"
-              onClick={event => console.log("Edit clicked for id: ", value)}
+              onClick={() => this.props.toggleIndustryEditModal({ id, name })}
             >
               Edit
             </Button>
@@ -77,9 +82,17 @@ class Industry extends Component {
 
   componentDidMount = () => this.props.onIndustryList();
 
+  componentDidUpdate = (prevProps, prevState, snapshot) => {
+    if (prevState.industrySubmit && prevProps.loading)
+      this.focusableInput.focus();
+  };
+
   componentWillUnmount = () => this.props.onUnmountIndustry();
 
-  onChange = (key, event) => this.setState({ [key]: event.target.value });
+  onChange = (key, event) =>
+    this.setState({
+      [key]: event.target.value.replace(/\b\w/g, l => l.toUpperCase())
+    });
 
   onFormSubmit = event => {
     event.preventDefault();
@@ -109,13 +122,12 @@ class Industry extends Component {
                       </InputGroupAddon>
                       <Input
                         autoFocus
-                        disabled={this.props.loading}
                         required
+                        disabled={this.props.loading}
+                        innerRef={ref => (this.focusableInput = ref)}
                         type="text"
                         placeholder="Type Industry Name"
-                        value={this.state.industry.replace(/\b\w/g, l =>
-                          l.toUpperCase()
-                        )}
+                        value={this.state.industry}
                         onChange={this.onChange.bind(this, "industry")}
                       />
                     </InputGroup>
@@ -128,13 +140,25 @@ class Industry extends Component {
             </Card>
           </Col>
         </Row>
-
         <ReactTable
           {...this.tableProps}
+          style={{ background: "white" }}
           data={this.props.industries}
           loading={this.props.fetchLoading}
           defaultFilterMethod={filterCaseInsensitive}
         />
+        <CustomModal
+          title="Edit Industry Data"
+          isOpen={this.props.industryEditModal}
+          toggle={this.props.toggleIndustryEditModal}
+          className={"modal-xs" + this.props.className}
+        >
+          <IndustryEditModal
+            data={this.props.industryEditData}
+            onIndustryEdit={this.props.onIndustryEdit}
+          />
+        </CustomModal>
+        );
       </div>
     );
   }
@@ -142,5 +166,12 @@ class Industry extends Component {
 
 export default connect(
   ({ AdminContainer: { industries } }) => ({ ...industries }),
-  { onIndustrySubmit, onIndustryList, onUnmountIndustry, onIndustryDelete }
+  {
+    onIndustrySubmit,
+    onIndustryList,
+    onUnmountIndustry,
+    onIndustryDelete,
+    onIndustryEdit,
+    toggleIndustryEditModal
+  }
 )(Industry);

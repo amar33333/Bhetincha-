@@ -3,7 +3,7 @@ import {
   BUSINESS_FILTER_ON_CHANGE,
   CLEAR_BUSINESS_FILTER,
   FETCH_BUSINESS_FULFILLED,
-  SET_SORT_BY
+  BUSINESS_SET_SORT_BY
 } from "../actions/types";
 
 const INITIAL_STATE = {
@@ -22,7 +22,7 @@ export default function(state = INITIAL_STATE, action) {
     case BUSINESS_FILTER_ON_CHANGE:
       return { ...state, ...action.payload };
 
-    case SET_SORT_BY:
+    case BUSINESS_SET_SORT_BY:
       return { ...state, sort_by: action.payload };
 
     case CLEAR_BUSINESS_FILTER:

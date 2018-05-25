@@ -2,13 +2,11 @@ import { Observable } from "rxjs/Observable";
 import { toast } from "react-toastify";
 
 import {
-  onIndustryPost,
-  onIndustryGet,
-  onIndustryEachGet,
   onIndustryPostAjax,
   onIndustryGetAjax,
   onIndustryEachGetAjax,
-  onIndustryEachDeleteAjax
+  onIndustryEachDeleteAjax,
+  onIndustryPut
 } from "../config/adminServerCall";
 
 import {
@@ -24,6 +22,10 @@ import {
   DELETE_INDUSTRY_PENDING,
   DELETE_INDUSTRY_FULFILLED,
   DELETE_INDUSTRY_REJECTED,
+  TOGGLE_INDUSTRY_EDIT_MODAL,
+  EDIT_INDUSTRY_FULFILLED,
+  EDIT_INDUSTRY_PENDING,
+  EDIT_INDUSTRY_REJECTED,
   UNMOUNT_INDUSTRY_DATA,
   UNMOUNT_INDUSTRY
 } from "./types";
@@ -56,6 +58,39 @@ epics.push((action$, { getState }) =>
         toast.error(ajaxError.toString());
         return Observable.of({
           type: CREATE_INDUSTRY_REJECTED,
+          payload: ajaxError
+        });
+      });
+  })
+);
+
+export const onIndustryEdit = payload => ({
+  type: EDIT_INDUSTRY_PENDING,
+  payload
+});
+
+epics.push((action$, { getState }) =>
+  action$.ofType(EDIT_INDUSTRY_PENDING).mergeMap(({ payload }) => {
+    const { industry } = payload;
+    const access_token = getState().auth.cookies.token_data.access_token;
+
+    return onIndustryPut({ industry, access_token })
+      .concatMap(({ response }) => {
+        if (response.msg === "success") {
+          toast.success("Industry Updated successfully!");
+          return [
+            { type: EDIT_INDUSTRY_FULFILLED },
+            { type: FETCH_INDUSTRY_PENDING },
+            { type: TOGGLE_INDUSTRY_EDIT_MODAL }
+          ];
+        } else {
+          throw new Error(response.msg[Object.keys(response.msg)[0]][0]);
+        }
+      })
+      .catch(ajaxError => {
+        toast.error(ajaxError.toString());
+        return Observable.of({
+          type: EDIT_INDUSTRY_REJECTED,
           payload: ajaxError
         });
       });
@@ -123,6 +158,7 @@ epics.push((action$, { getState }) =>
       })
   )
 );
+
 // export const onIndustryEachList = ({ id, access_token }) => dispatch => {
 //   onIndustryEachGet({ id, access_token })
 //     .then(response =>
@@ -135,10 +171,17 @@ epics.push((action$, { getState }) =>
 //   dispatch({ type: FETCH_INDUSTRY_EACH_PENDING });
 // };
 
-export const onUnmountIndustry = () => ({
-  type: UNMOUNT_INDUSTRY,
-  payload: null
+export const toggleIndustryEditModal = payload => ({
+  type: TOGGLE_INDUSTRY_EDIT_MODAL,
+  payload
 });
+
+// export const onUnmountIndustry = () => ({
+//   type: UNMOUNT_INDUSTRY,
+//   payload: null
+// });
+
+export const onUnmountIndustry = () => ({ type: UNMOUNT_INDUSTRY });
 
 export const onUnmountIndustryData = () => ({
   type: UNMOUNT_INDUSTRY_DATA,

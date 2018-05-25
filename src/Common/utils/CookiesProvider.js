@@ -33,11 +33,14 @@ class CookiesProvider {
       path,
       expires
     });
+    console.log("done: ", cookies.get(key));
   };
 
   static getAllCookies = () => {
     const token_data = cookies.get("token_data");
     const user_data = cookies.get("user_data");
+
+    console.log("cookeis gt: ", cookies.get("user_data"));
 
     if (token_data && user_data)
       return {
@@ -45,6 +48,8 @@ class CookiesProvider {
         user_data
       };
     else return null;
+
+    // return cookies.getAll();
   };
 
   static removeAllCookies = () => {

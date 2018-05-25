@@ -7,6 +7,10 @@ import generalSetupReducer from "./generalSetupReducer";
 import userReducer from "./userReducer";
 import BusinessReducer from "./businessReducer";
 import filterBusiness from "./filterBusinessReducer";
+import filterCity from "./filterCityReducer";
+import filterArea from "./filterAreaReducer";
+import filterAppBusiness from "./filterAppBusinessReducer";
+import filterAssignBusiness from "./filterAssignBusinessReducer";
 
 const createReducer = combineReducers({
   industries: IndustryReducer,
@@ -16,7 +20,11 @@ const createReducer = combineReducers({
   general_setup: generalSetupReducer,
   user_reducer: userReducer,
   business_reducer: BusinessReducer,
-  filterBusiness
+  filterBusiness,
+  filterCity,
+  filterArea,
+  filterAppBusiness,
+  filterAssignBusiness
 });
 
 export default createReducer;

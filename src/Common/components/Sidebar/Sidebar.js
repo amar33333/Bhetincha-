@@ -7,6 +7,8 @@ import SidebarForm from "./../SidebarForm";
 import SidebarHeader from "./../SidebarHeader";
 import SidebarMinimizer from "./../SidebarMinimizer";
 
+import PermissionProvider from "../../utils/PermissionProvider";
+
 class Sidebar extends Component {
   constructor(props) {
     super(props);
@@ -95,8 +97,10 @@ class Sidebar extends Component {
       return navLink(item, key, classes);
     };
 
+    // My Custom Permission code here ...
     // nav item with nav link
     const navItem = (item, key) => {
+      // console.log("permission item: ", item);
       const classes = {
         item: classNames(item.class),
         link: classNames(
@@ -105,7 +109,10 @@ class Sidebar extends Component {
         ),
         icon: classNames(item.icon)
       };
-      return navLink(item, key, classes);
+
+      if (!item.permission || PermissionProvider.hasPermission(item.permission))
+        return navLink(item, key, classes);
+      return null;
     };
 
     // nav link
@@ -135,21 +142,23 @@ class Sidebar extends Component {
       );
     };
 
+    // Disable the main Title or the title with children (i.e dropdown) on sidebar
     // nav dropdown
     const navDropdown = (item, key) => {
-      return (
-        <li key={key} className={this.activeRoute(item.url, props)}>
-          <a
-            className="nav-link nav-dropdown-toggle"
-            href="#"
-            onClick={this.handleClick}
-          >
-            <i className={item.icon} />
-            {item.name}
-          </a>
-          <ul className="nav-dropdown-items">{navList(item.children)}</ul>
-        </li>
-      );
+      if (!item.permission || PermissionProvider.hasPermission(item.permission))
+        return (
+          <li key={key} className={this.activeRoute(item.url, props)}>
+            <a
+              className="nav-link nav-dropdown-toggle"
+              href="#"
+              onClick={this.handleClick}
+            >
+              <i className={item.icon} />
+              {item.name}
+            </a>
+            <ul className="nav-dropdown-items">{navList(item.children)}</ul>
+          </li>
+        );
     };
 
     // nav type
