@@ -26,15 +26,14 @@ import {
 } from "../../../Common/components";
 
 import {
-  onBusinessAllGet,
+  onAppBusinessList,
   onBusinessEachDelete,
   onIndustryList,
-  onFilterCleared,
-  handleOnBusinessFilterChange,
-  handleSearchKeywordCleared,
+  onFilterClearedAppBusiness,
+  handleOnAppBusinessFilterChange,
+  handleSearchKeywordClearedAppBusiness,
   onUnmountIndustry,
-  handleSortChangeBusiness,
-  onAppBusinessList,
+  handleSortChangeAppBusiness,
   onAppBusinessEachRemove
 } from "../../actions";
 
@@ -134,7 +133,7 @@ class AppBusinessList extends Component {
 
   componentDidMount = () => {
     this.props.onIndustryList();
-    // this.props.onBusinessAllGet();
+    // this.props.onAppBusinessList();
     this.props.onAppBusinessList();
   };
 
@@ -143,10 +142,10 @@ class AppBusinessList extends Component {
   };
 
   handleChange = (key, event) =>
-    this.props.handleOnBusinessFilterChange({ [key]: event.target.value });
+    this.props.handleOnAppBusinessFilterChange({ [key]: event.target.value });
 
   handleIndustryChange = industry =>
-    this.props.handleOnBusinessFilterChange({ industry });
+    this.props.handleOnAppBusinessFilterChange({ industry });
 
   handleSearchKeywordSubmit = event => {
     event.preventDefault();
@@ -183,7 +182,7 @@ class AppBusinessList extends Component {
                   <Col xs="1" md="1">
                     <Button
                       color="primary"
-                      onClick={this.props.onBusinessAllGet}
+                      onClick={this.props.onAppBusinessList}
                     >
                       <i className="fa fa-filter" /> Filter
                     </Button>
@@ -192,7 +191,7 @@ class AppBusinessList extends Component {
                     <FormGroup>
                       <Button
                         color="danger"
-                        onClick={this.props.onFilterCleared}
+                        onClick={this.props.onFilterClearedAppBusiness}
                       >
                         <i className="fa fa-close" /> Clear
                       </Button>
@@ -229,7 +228,9 @@ class AppBusinessList extends Component {
                     <FormGroup>
                       <Button
                         color="danger"
-                        onClick={this.props.handleSearchKeywordCleared}
+                        onClick={
+                          this.props.handleSearchKeywordClearedAppBusiness
+                        }
                       >
                         <i className="fa fa-close" /> Clear Search
                       </Button>
@@ -248,7 +249,7 @@ class AppBusinessList extends Component {
               data={this.props.appBusinesses}
               defaultPageSize={this.props.rows}
               defaultSorted={this.props.sort_by}
-              loading={this.props.fetchLoading}
+              loading={this.props.fetchAppBusinessLoading}
               onPageChange={pageIndex => {
                 this.props.onAppBusinessList({ page: pageIndex + 1 });
               }}
@@ -258,10 +259,10 @@ class AppBusinessList extends Component {
                   rows: pageSize
                 })
               }
-              onSortedChange={this.props.handleSortChangeBusiness}
+              onSortedChange={this.props.handleSortChangeAppBusiness}
               page={this.props.page - 1}
-              pages={this.props.pages}
-              rowCount={this.props.rowCount}
+              pages={this.props.pagesAppBusiness}
+              rowCount={this.props.rowCountAppBusiness}
             />
           </Col>
         </Row>
@@ -273,29 +274,33 @@ class AppBusinessList extends Component {
 export default connect(
   ({
     AdminContainer: {
-      business_reducer: { appBusinesses, fetchLoading, pages, rowCount },
-      filterBusiness,
+      business_reducer: {
+        appBusinesses,
+        fetchAppBusinessLoading,
+        pagesAppBusiness,
+        rowCountAppBusiness
+      },
+      filterAppBusiness,
       industries
     }
   }) => ({
     industries: industries.industries,
     industryLoading: industries.loading,
     appBusinesses,
-    pages,
-    rowCount,
-    fetchLoading,
-    ...filterBusiness
+    pagesAppBusiness,
+    rowCountAppBusiness,
+    fetchAppBusinessLoading,
+    ...filterAppBusiness
   }),
   {
-    onBusinessAllGet,
     onAppBusinessList,
     onAppBusinessEachRemove,
     onBusinessEachDelete,
     onIndustryList,
-    onFilterCleared,
-    handleOnBusinessFilterChange,
-    handleSearchKeywordCleared,
-    handleSortChangeBusiness,
+    onFilterClearedAppBusiness,
+    handleOnAppBusinessFilterChange,
+    handleSearchKeywordClearedAppBusiness,
+    handleSortChangeAppBusiness,
     onUnmountIndustry
   }
 )(AppBusinessList);

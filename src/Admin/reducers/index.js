@@ -9,6 +9,8 @@ import BusinessReducer from "./businessReducer";
 import filterBusiness from "./filterBusinessReducer";
 import filterCity from "./filterCityReducer";
 import filterArea from "./filterAreaReducer";
+import filterAppBusiness from "./filterAppBusinessReducer";
+import filterAssignBusiness from "./filterAssignBusinessReducer";
 
 const createReducer = combineReducers({
   industries: IndustryReducer,
@@ -20,7 +22,9 @@ const createReducer = combineReducers({
   business_reducer: BusinessReducer,
   filterBusiness,
   filterCity,
-  filterArea
+  filterArea,
+  filterAppBusiness,
+  filterAssignBusiness
 });
 
 export default createReducer;

@@ -8,6 +8,8 @@ import filterCityEpics from "./filterCityActions";
 import filterAreaEpics from "./filterAreaActions";
 import extraSectionEpics from "./extraSectionActions";
 import userEpics from "./userActions";
+import filterAppBusinessEpics from "./filterAppBusinessActions";
+import filterAssignBusinessEpics from "./filterAssignBusinessActions";
 
 export * from "./industryActions";
 export * from "./categoryActions";
@@ -20,6 +22,8 @@ export * from "./filterBusinessActions";
 export * from "./filterCityActions";
 export * from "./filterAreaActions";
 export * from "./userActions";
+export * from "./filterAppBusinessActions";
+export * from "./filterAssignBusinessActions";
 
 export default [
   ...industryEpics,
@@ -31,5 +35,7 @@ export default [
   ...filterCityEpics,
   ...filterAreaEpics,
   ...extraSectionEpics,
-  ...userEpics
+  ...userEpics,
+  ...filterAppBusinessEpics,
+  ...filterAssignBusinessEpics
 ];
