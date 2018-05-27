@@ -29,6 +29,9 @@ import {
   FETCH_APP_BUSINESS_EACH_FULFILLED,
   FETCH_APP_BUSINESS_EACH_REJECTED,
   FETCH_APP_BUSINESS_EACH_PENDING,
+  FETCH_ASSIGN_BUSINESS_FULFILLED,
+  FETCH_ASSIGN_BUSINESS_REJECTED,
+  FETCH_ASSIGN_BUSINESS_PENDING,
   FETCH_SALES_USERS_FULFILLED,
   FETCH_SALES_USERS_PENDING,
   FETCH_SALES_USERS_REJECTED,
@@ -56,6 +59,18 @@ const INITIAL_STATE = {
   fetchLoading: false,
   businessGet: false,
   rowCount: 0,
+
+  appBusinesses: [],
+  pagesAppBusiness: 1,
+  fetchAppBusinessLoading: false,
+  // businessGet: false,
+  rowCountAppBusiness: 0,
+
+  assignBusinesses: [],
+  pagesAssignBusiness: 1,
+  fetchAssignBusinessLoading: false,
+  // businessGet: false,
+  rowCountAssignBusiness: 0,
 
   companyTypeEditModal: false,
   paymentMethodEditModal: false,
@@ -88,16 +103,29 @@ export default function(state = INITIAL_STATE, action) {
       };
 
     case FETCH_APP_BUSINESS_PENDING:
-      return { ...state, fetchLoading: true };
+      return { ...state, fetchAppBusinessLoading: true };
     case FETCH_APP_BUSINESS_REJECTED:
-      return { ...state, fetchLoading: false };
+      return { ...state, fetchAppBusinessLoading: false };
     case FETCH_APP_BUSINESS_FULFILLED:
       return {
         ...state,
-        fetchLoading: false,
+        fetchAppBusinessLoading: false,
         appBusinesses: action.payload.data,
-        pages: action.payload.pages,
-        rowCount: action.payload.rowCount
+        pagesAppBusiness: action.payload.pages,
+        rowCountAppBusiness: action.payload.rowCount
+      };
+
+    case FETCH_ASSIGN_BUSINESS_PENDING:
+      return { ...state, fetchAssignBusinessLoading: true };
+    case FETCH_ASSIGN_BUSINESS_REJECTED:
+      return { ...state, fetchAssignBusinessLoading: false };
+    case FETCH_ASSIGN_BUSINESS_FULFILLED:
+      return {
+        ...state,
+        fetchAssignBusinessLoading: false,
+        assignBusinesses: action.payload.data,
+        pagesAssignBusiness: action.payload.pages,
+        rowCountAssignBusiness: action.payload.rowCount
       };
 
     case EDIT_BUSINESS_PENDING:

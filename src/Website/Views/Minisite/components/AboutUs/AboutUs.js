@@ -1,8 +1,10 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Container, Row, Col } from "reactstrap";
+import CircularProgressbar from "react-circular-progressbar";
 
 import "react-quill/dist/quill.snow.css";
+import "react-circular-progressbar/dist/styles.css";
 import "../../minisite.css";
 
 import { onEditAboutUsClicked } from "../../actions";
@@ -51,17 +53,46 @@ class AboutUs extends Component {
               )
             ) : (
               <div>
-                <div>Tagline {this.props.data.tagline}</div>
-                <div>Established Year {this.props.data.establishedYear}</div>
-                {/* <div>Company Type {this.props.data.companyType}</div> */}
+                <div className="text-center">
+                  <h2>&#8220;{this.props.data.tagline}&#8221;</h2>
+                </div>
                 <div
                   className="quill ql-editor"
                   dangerouslySetInnerHTML={{
                     __html: this.props.data.aboutUs
                   }}
                 />
+
+                <div>Established Year {this.props.data.establishedYear}</div>
+                {/* <div>Company Type {this.props.data.companyType}</div> */}
               </div>
             )}
+          </Col>
+        </Row>
+        <Row>
+          <Col md="2">
+            <CircularProgressbar
+              initialAnimation
+              percentage={100}
+              className="progressbar-blue"
+              // textForPercentage={() => "90% is cool"}
+            />
+          </Col>
+          <Col md="2">
+            <CircularProgressbar
+              initialAnimation
+              percentage={20}
+              className="progressbar-red"
+              // textForPercentage={() => "90% is cool"}
+            />
+          </Col>
+          <Col md="2">
+            <CircularProgressbar
+              initialAnimation
+              percentage={40}
+              className="progressbar-red"
+              // textForPercentage={() => "90% is cool"}
+            />
           </Col>
         </Row>
       </Container>

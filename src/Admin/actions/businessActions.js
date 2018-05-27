@@ -97,6 +97,9 @@ import {
   FETCH_APP_BUSINESS_FULFILLED,
   FETCH_APP_BUSINESS_REJECTED,
   FETCH_APP_BUSINESS_PENDING,
+  FETCH_ASSIGN_BUSINESS_FULFILLED,
+  FETCH_ASSIGN_BUSINESS_REJECTED,
+  FETCH_ASSIGN_BUSINESS_PENDING,
   DELETE_APP_BUSINESS_FULFILLED,
   DELETE_APP_BUSINESS_REJECTED,
   DELETE_APP_BUSINESS_PENDING,
@@ -196,7 +199,7 @@ export const onAppBusinessList = payload => ({
 
 epics.push((action$, { getState }) =>
   action$.ofType(FETCH_APP_BUSINESS_PENDING).switchMap(({ payload }) => {
-    const filterValue = getState().AdminContainer.filterBusiness;
+    const filterValue = getState().AdminContainer.filterAppBusiness;
     const params = {};
     params.rows = filterValue.rows;
     params.page = filterValue.page;
@@ -235,6 +238,56 @@ epics.push((action$, { getState }) =>
       .catch(ajaxError => {
         toast.error("Error Fetching Businesses");
         return Observable.of({ type: FETCH_APP_BUSINESS_REJECTED });
+      });
+  })
+);
+
+export const onAssignBusinessList = payload => ({
+  type: FETCH_ASSIGN_BUSINESS_PENDING,
+  payload
+});
+
+epics.push((action$, { getState }) =>
+  action$.ofType(FETCH_ASSIGN_BUSINESS_PENDING).switchMap(({ payload }) => {
+    const filterValue = getState().AdminContainer.filterAssignBusiness;
+    const params = {};
+    params.rows = filterValue.rows;
+    params.page = filterValue.page;
+    params.q = filterValue.q;
+    params.sort_by = filterValue.sort_by.map(
+      data => `${data.id}-${data.desc ? "desc" : "asc"}`
+    );
+    params.industry = filterValue.industry
+      ? filterValue.industry.map(industry => industry.id)
+      : [];
+
+    if (payload) {
+      if (payload.rows) params.rows = payload.rows;
+      if (payload.page) params.page = payload.page;
+    }
+
+    return onBusinessAllGetAjax({
+      access_token: getState().auth.cookies.token_data.access_token,
+      params
+    })
+      .map(({ response }) => {
+        if (
+          response !== null &&
+          typeof response === "object" &&
+          Array.isArray(response) === false
+        ) {
+          toast.success("Businesses fetched successfully!");
+          return {
+            type: FETCH_ASSIGN_BUSINESS_FULFILLED,
+            payload: response
+          };
+        } else {
+          throw new Error("Error");
+        }
+      })
+      .catch(ajaxError => {
+        toast.error("Error Fetching Businesses");
+        return Observable.of({ type: FETCH_ASSIGN_BUSINESS_REJECTED });
       });
   })
 );
