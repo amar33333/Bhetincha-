@@ -9,6 +9,20 @@ import store from "./config/store";
 import App from "./App";
 import registerServiceWorker from "./registerServiceWorker";
 
+import * as firebase from "firebase";
+
+// Initialize Firebase
+var config = {
+  apiKey: "AIzaSyCVe593c4dXDDGizPWlic90OSHUHGY6DD0",
+  authDomain: "bhetincha-c316f.firebaseapp.com",
+  databaseURL: "https://bhetincha-c316f.firebaseio.com",
+  projectId: "bhetincha-c316f",
+  storageBucket: "",
+  messagingSenderId: "786592356787"
+};
+
+firebase.initializeApp(config);
+
 if (process.env.NODE_ENV === "production") {
   Raven.config(
     "https://f0ac1ed091a946b1a7688a9b8baceaef@sentry.io/1188153"

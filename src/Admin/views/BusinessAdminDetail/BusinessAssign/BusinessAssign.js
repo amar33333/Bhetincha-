@@ -19,6 +19,8 @@ import {
   Label
 } from "reactstrap";
 
+import * as firebase from "firebase";
+
 import Select from "react-select";
 
 import MapComponent from "../../../../Common/components/MapComponent";
@@ -27,13 +29,24 @@ import BusinessTableComponent from "./BusinessTableComponent";
 
 class BusinessAssign extends Component {
   state = {
-    latitude: 27.7172453,
-    longitude: 85.32391758465576,
+    latitude: "",
+    longitude: "",
 
     sales_username: ""
   };
 
   componentDidMount() {
+    const rootRef = firebase
+      .database()
+      .ref()
+      .child("Location");
+
+    rootRef.on("value", snapshot => {
+      this.setState({
+        latitude: snapshot.child("latitude").val(),
+        longitude: snapshot.child("longitude").val()
+      });
+    });
     this.props.onSalesUserList();
   }
 
@@ -41,8 +54,13 @@ class BusinessAssign extends Component {
 
   handleSelectChange = sales_username => this.setState({ sales_username });
 
+  renderUserComponent = () =>
+    this.state.sales_username ? (
+      <UserComponent salesUser={this.state.sales_username} />
+    ) : null;
+
   render() {
-    console.log("sales user: ", this.state);
+    console.log("bussines assign state: ", this.state);
     return (
       <div className="animated fadeIn">
         <Col>
@@ -74,34 +92,29 @@ class BusinessAssign extends Component {
               <strong>Search Sales User</strong>
             </CardHeader>
             <CardBody>
-              <form onSubmit={this.onFormSubmit}>
-                <Row>
-                  <Col xs="12" md="12">
-                    <FormGroup>
-                      <Select
-                        autoFocus
-                        required
-                        name="sales_username"
-                        value={
-                          this.state.sales_username &&
-                          this.state.sales_username.id
-                        }
-                        onChange={this.handleSelectChange}
-                        options={this.props.salesUsers}
-                        valueKey="id"
-                        labelKey="username"
-                      />
-                    </FormGroup>
-                  </Col>
-                </Row>
-              </form>
+              <Row>
+                <Col xs="12" md="12">
+                  <FormGroup>
+                    <Select
+                      autoFocus
+                      required
+                      name="sales_username"
+                      placeholder="Select a User ... "
+                      value={
+                        this.state.sales_username &&
+                        this.state.sales_username.id
+                      }
+                      onChange={this.handleSelectChange}
+                      options={this.props.salesUsers}
+                      valueKey="id"
+                      labelKey="username"
+                    />
+                  </FormGroup>
+                </Col>
+              </Row>
             </CardBody>
+            <CardBody>{this.renderUserComponent()}</CardBody>
           </Card>
-          <UserComponent
-            salesUser={
-              this.state.sales_username ? this.state.sales_username : ""
-            }
-          />
           <BusinessTableComponent />
         </Col>
       </div>
