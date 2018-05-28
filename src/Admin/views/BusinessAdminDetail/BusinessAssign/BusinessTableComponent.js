@@ -24,7 +24,8 @@ import Select from "react-select";
 import {
   Tooltip,
   PopoverDelete,
-  PaginationComponent
+  PaginationComponent,
+  Chip
 } from "../../../../Common/components";
 
 import {
@@ -35,40 +36,51 @@ import {
   handleSortChangeAssignBusiness,
   // onAssignBusinessEachRemove,
   onIndustryList,
-  onUnmountIndustry
+  onUnmountIndustry,
+  onAssignedPathList
 } from "../../../actions";
 
 class BusinessTableComponent extends Component {
-  state = { selectedBusiness: [] };
+  state = { selectedBusiness: [], path: "" };
+
   tableProps = {
     columns: [
       {
         Header: "Assign",
         accessor: "id",
         id: "assign",
-        Cell: ({ value }) => (
-          <FormGroup check>
-            <Label check>
-              <Input
-                checked={this.state.selectedBusiness.includes(value)}
-                onChange={() => {
-                  console.log(value);
-                  this.setState({
-                    selectedBusiness: this.state.selectedBusiness.includes(
-                      value
-                    )
-                      ? this.state.selectedBusiness.filter(
-                          business => business !== value
-                        )
-                      : [...this.state.selectedBusiness, value]
-                  });
-                }}
-                type="checkbox"
-              />{" "}
-              Check to assign
-            </Label>
-          </FormGroup>
-        )
+        Cell: ({ value, original: { business_name, id } }) => {
+          return (
+            <FormGroup check>
+              <Label check>
+                <Input
+                  checked={
+                    this.state.selectedBusiness.find(
+                      business => id === business.id
+                    ) !== undefined
+                  }
+                  onChange={() => {
+                    // console.log(value);
+                    this.setState({
+                      selectedBusiness: this.state.selectedBusiness.find(
+                        business => id === business.id
+                      )
+                        ? this.state.selectedBusiness.filter(
+                            business => business.id !== id
+                          )
+                        : [
+                            ...this.state.selectedBusiness,
+                            { id, business_name }
+                          ]
+                    });
+                  }}
+                  type="checkbox"
+                />
+                Check to assign
+              </Label>
+            </FormGroup>
+          );
+        }
       },
       {
         Header: "Business Name",
@@ -164,8 +176,8 @@ class BusinessTableComponent extends Component {
 
   componentDidMount = () => {
     this.props.onIndustryList();
-    // this.props.onAssignBusinessList();
     this.props.onAssignBusinessList();
+    // this.props.onAssignedPathList();
   };
 
   componentWillUnmount = () => {
@@ -183,6 +195,18 @@ class BusinessTableComponent extends Component {
   handleSearchKeywordSubmit = event => {
     event.preventDefault();
     this.props.onAssignBusinessList();
+  };
+
+  assignBusinessSubmit = event => {
+    event.preventDefault();
+    console.log(
+      "name",
+      this.state.path,
+      "selectedBusinesses",
+      this.state.selectedBusiness,
+      "sales user id",
+      this.props.selectedUser.id
+    );
   };
 
   render() {
@@ -280,8 +304,51 @@ class BusinessTableComponent extends Component {
                 </Card>
               </Col>
             </Row>
-            {this.state.selectedBusiness}
-
+            <Card>
+              <CardHeader>
+                <strong>Assign Path</strong>
+              </CardHeader>
+              <CardBody>
+                {!this.props.selectedUser ? (
+                  <div>Select User to Assign Path</div>
+                ) : (
+                  <Form onSubmit={this.assignBusinessSubmit}>
+                    <Row>
+                      <Input
+                        placeholder="Enter Path Name"
+                        required
+                        onChange={event =>
+                          this.setState({ path: event.target.value })
+                        }
+                        value={this.state.path}
+                      />
+                    </Row>
+                    <Row>
+                      {this.state.selectedBusiness.map(business => (
+                        <Chip
+                          key={business.id}
+                          title={business.business_name}
+                          onClose={() =>
+                            this.setState({
+                              selectedBusiness: this.state.selectedBusiness.filter(
+                                b => b.id !== business.id
+                              )
+                            })
+                          }
+                        />
+                      ))}
+                    </Row>
+                    <Row>
+                      {!this.state.selectedBusiness.length ? (
+                        <div>Select atleast one business</div>
+                      ) : (
+                        <Button color="primary">Assign</Button>
+                      )}
+                    </Row>
+                  </Form>
+                )}
+              </CardBody>
+            </Card>
             <ReactTable
               {...this.tableProps}
               style={{ background: "white" }}
@@ -340,6 +407,7 @@ export default connect(
     handleOnAssignBusinessFilterChange,
     handleSearchKeywordClearedAssignBusiness,
     handleSortChangeAssignBusiness,
-    onUnmountIndustry
+    onUnmountIndustry,
+    onAssignedPathList
   }
 )(BusinessTableComponent);

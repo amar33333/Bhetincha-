@@ -1,8 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-
 import { onSalesUserList } from "../../../actions";
-
 import {
   Container,
   Card,
@@ -18,9 +16,7 @@ import {
   FormGroup,
   Label
 } from "reactstrap";
-
 import * as firebase from "firebase";
-
 import Select from "react-select";
 
 import MapComponent from "../../../../Common/components/MapComponent";
@@ -126,7 +122,7 @@ class BusinessAssign extends Component {
             </CardBody>
             <CardBody>{this.renderUserComponent()}</CardBody>
           </Card>
-          <BusinessTableComponent />
+          <BusinessTableComponent selectedUser={this.state.sales_username} />
         </Col>
       </div>
     );
