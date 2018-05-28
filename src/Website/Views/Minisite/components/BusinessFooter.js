@@ -1,9 +1,11 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import { Container, Row, Col } from "reactstrap";
 
 class BusinessFooter extends Component {
   render() {
+    console.log(this.props);
     return (
       <div id="contact-us" className={`footer footer-${this.props.theme} p-3`}>
         <Container>
@@ -13,12 +15,12 @@ class BusinessFooter extends Component {
               <p className="m-0">
                 <strong>Head Office</strong>
               </p>
-              <p className="m-0">Tech Kunja Pvt. Ltd.</p>
+              <p className="m-0">{this.props.business_name}</p>
               <p>Anamnagar, Kathmandu, Nepal</p>
               <span className="fa fa-envelope">
                 <a href="mailto:mail@techkunja.com.np">
                   {" "}
-                  mail@techkunja.com.np{" "}
+                  {this.props.user_data.email}{" "}
                 </a>
               </span>
               <br />
@@ -85,4 +87,13 @@ class BusinessFooter extends Component {
   }
 }
 
-export default BusinessFooter;
+export default connect(
+  ({
+    MinisiteContainer: { crud: { logo, business_name } },
+    auth: { cookies: { user_data } }
+  }) => ({
+    user_data,
+    logo,
+    business_name
+  })
+)(BusinessFooter);
