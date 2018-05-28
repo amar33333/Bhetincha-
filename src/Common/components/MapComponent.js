@@ -1,16 +1,50 @@
+/* global google */
+
 import React, { Component } from "react";
 import {
   withScriptjs,
   withGoogleMap,
   GoogleMap,
-  Marker
+  Marker,
+  DirectionsRenderer
 } from "react-google-maps";
 import { GOOGLE_MAPS_URL } from "../utils/API";
+
+const pathCoordinates = [
+  { lat: 27.7192453, lng: 85.3263975 },
+  { lat: 27.7152453, lng: 85.32639491 },
+  { lat: 27.7172453, lng: 85.323913975 },
+  { lat: 27.7172455, lng: 85.32645 },
+  { lat: 27.7172455, lng: 85.32877 }
+];
 
 class GoogleMapComponent extends Component {
   componentDidMount() {
     this.props.setRef(this.gEl);
+
+    const DirectionsService = new google.maps.DirectionsService();
   }
+
+  onMarkerClicked = each => () => {
+    console.log("marker cicked: ", each.Id);
+  };
+
+  renderMarkers = () =>
+    this.props.position.length
+      ? this.props.position.map(each => (
+          <Marker
+            key={each.Id}
+            position={{
+              lat: each.Location.Latitude,
+              lng: each.Location.Longitude
+            }}
+            draggable={false}
+            onClick={this.onMarkerClicked(each)}
+            onDragEnd={this.props.onDragEnd}
+          />
+        ))
+      : null;
+
   render() {
     return (
       <GoogleMap
@@ -19,11 +53,8 @@ class GoogleMapComponent extends Component {
         defaultCenter={{ lat: 27.7172453, lng: 85.32391758465576 }}
         onClick={({ latLng }) => this.props.onClick({ latLng })}
       >
-        <Marker
-          position={this.props.position}
-          draggable
-          onDragEnd={this.props.onDragEnd}
-        />
+        {this.renderMarkers()}
+        <DirectionsRenderer directions={pathCoordinates} />
       </GoogleMap>
     );
   }

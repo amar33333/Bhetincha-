@@ -29,24 +29,39 @@ import BusinessTableComponent from "./BusinessTableComponent";
 
 class BusinessAssign extends Component {
   state = {
-    latitude: "",
-    longitude: "",
-
-    sales_username: ""
+    sales_username: "",
+    salesUsersLocation: []
   };
 
   componentDidMount() {
     const rootRef = firebase
       .database()
       .ref()
-      .child("Location");
+      .child("Users");
 
     rootRef.on("value", snapshot => {
-      this.setState({
-        latitude: snapshot.child("latitude").val(),
-        longitude: snapshot.child("longitude").val()
+      let salesUsersLocation = [];
+
+      snapshot.forEach(childSnapshot => {
+        const key = childSnapshot.key;
+        const Id = childSnapshot.child("Id").val();
+
+        rootRef
+          .child(key)
+          .child("Location")
+          .orderByKey()
+          .limitToLast(1)
+          .once("child_added", locationSnapShot => {
+            salesUsersLocation.push({
+              Id: Id,
+              Username: childSnapshot.child("Username").val(),
+              Location: locationSnapShot.val()
+            });
+          });
       });
+      this.setState({ salesUsersLocation });
     });
+
     this.props.onSalesUserList();
   }
 
@@ -60,7 +75,6 @@ class BusinessAssign extends Component {
     ) : null;
 
   render() {
-    console.log("bussines assign state: ", this.state);
     return (
       <div className="animated fadeIn">
         <Col>
@@ -75,10 +89,7 @@ class BusinessAssign extends Component {
                     <strong className="mb-2">Sales Team Location</strong>
                     <MapComponent
                       ref={ref => (this.mapComponentEl = ref)}
-                      position={{
-                        lat: this.state.latitude,
-                        lng: this.state.longitude
-                      }}
+                      position={this.state.salesUsersLocation}
                       onClick={this.onChangeLatLng}
                       onDragEnd={this.onChangeLatLng}
                     />

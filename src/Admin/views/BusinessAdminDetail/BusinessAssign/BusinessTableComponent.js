@@ -193,7 +193,6 @@ class BusinessTableComponent extends Component {
             <strong>Business table</strong>
           </CardHeader>
           <CardBody>
-            <p> hello </p>
             <Row>
               <Col xs="12" md="12">
                 <Card>
