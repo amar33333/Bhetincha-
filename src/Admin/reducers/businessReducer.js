@@ -95,7 +95,7 @@ export default function(state = INITIAL_STATE, action) {
     case FETCH_ASSIGNED_PATH_FULFILLED:
       return {
         ...state,
-        assignedPath: action.payload
+        assignedPaths: action.payload
       };
 
     case FETCH_SALES_USERS_PENDING:
