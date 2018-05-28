@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { onSalesUserList } from "../../../actions";
+import { onSalesUserList, onAssignedPathEachList } from "../../../actions";
 import {
   Container,
   Card,
@@ -63,7 +63,14 @@ class BusinessAssign extends Component {
 
   onChange = (key, event) => this.setState({ [key]: event.target.value });
 
-  handleSelectChange = sales_username => this.setState({ sales_username });
+  handleSelectChange = sales_username =>
+    this.setState({ sales_username }, () => {
+      return this.state.sales_username
+        ? this.props.onAssignedPathEachList({
+            id: this.state.sales_username.mongo_id
+          })
+        : null;
+    });
 
   renderUserComponent = () =>
     this.state.sales_username ? (
@@ -131,9 +138,11 @@ class BusinessAssign extends Component {
 
 export default connect(
   ({ AdminContainer: { business_reducer } }) => ({
-    salesUsers: business_reducer.salesUsers
+    salesUsers: business_reducer.salesUsers,
+    assignedPath: business_reducer.assignedPath
   }),
   {
-    onSalesUserList
+    onSalesUserList,
+    onAssignedPathEachList
   }
 )(BusinessAssign);

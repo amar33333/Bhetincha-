@@ -14,7 +14,8 @@ import {
   onStateEachGetAjax,
   onCompanyTypePut,
   onPaymentMethodPut,
-  onAssignedPathPost
+  onAssignedPathPost,
+  onAssignedPathEachGet
 } from "../config/adminServerCall";
 
 import {
@@ -116,11 +117,39 @@ import {
   FETCH_SALES_USERS_FULFILLED,
   FETCH_SALES_USERS_PENDING,
   FETCH_SALES_USERS_REJECTED,
+  FETCH_ASSIGNED_PATH_PENDING,
+  FETCH_ASSIGNED_PATH_FULFILLED,
+  FETCH_ASSIGNED_PATH_REJECTED,
   UNMOUNT_COMPANY_TYPE,
   UNMOUNT_PAYMENT_METHOD
 } from "./types";
 
 const epics = [];
+
+export const onAssignedPathEachList = payload => ({
+  type: FETCH_ASSIGNED_PATH_PENDING,
+  payload
+});
+
+epics.push((action$, { getState }) =>
+  action$.ofType(FETCH_ASSIGNED_PATH_PENDING).mergeMap(action => {
+    const access_token = getState().auth.cookies.token_data.access_token;
+    const { id } = action.payload;
+
+    return onAssignedPathEachGet({ access_token, id })
+      .map(({ response }) => ({
+        type: FETCH_ASSIGNED_PATH_FULFILLED,
+        payload: response
+      }))
+      .catch(ajaxError => {
+        toast.error(ajaxError.toString());
+        return Observable.of({
+          type: FETCH_ASSIGNED_PATH_REJECTED,
+          payload: ajaxError
+        });
+      });
+  })
+);
 
 export const onAssignedPathSubmit = payload => ({
   type: CREATE_ASSIGNED_PATH_PENDING,

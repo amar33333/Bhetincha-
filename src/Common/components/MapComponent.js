@@ -19,10 +19,33 @@ const pathCoordinates = [
 ];
 
 class GoogleMapComponent extends Component {
+  state = { directions: [] };
+
   componentDidMount() {
     this.props.setRef(this.gEl);
 
     const DirectionsService = new google.maps.DirectionsService();
+    DirectionsService.route(
+      {
+        origin: new google.maps.LatLng(27.709686, 85.326621),
+        destination: new google.maps.LatLng(27.719697, 85.331191),
+        waypoints: [
+          { location: new google.maps.LatLng(27.7172453, 85.32391758465576) },
+          { location: new google.maps.LatLng(27.717555, 85.34491758465576) }
+        ],
+        travelMode: google.maps.TravelMode.DRIVING
+      },
+      (result, status) => {
+        if (status === google.maps.DirectionsStatus.OK) {
+          console.log("directions: ", result);
+          this.setState({
+            directions: result
+          });
+        } else {
+          console.error(`error fetching directions ${result}`);
+        }
+      }
+    );
   }
 
   onMarkerClicked = each => () => {
@@ -51,10 +74,10 @@ class GoogleMapComponent extends Component {
         ref={ref => (this.gEl = ref)}
         defaultZoom={15}
         defaultCenter={{ lat: 27.7172453, lng: 85.32391758465576 }}
-        onClick={({ latLng }) => this.props.onClick({ latLng })}
+        //onClick={({ latLng }) => this.props.onClick({ latLng })}
       >
-        {this.renderMarkers()}
-        <DirectionsRenderer directions={pathCoordinates} />
+        {/* {this.renderMarkers()} */}
+        <DirectionsRenderer directions={this.state.directions} />
       </GoogleMap>
     );
   }

@@ -25,6 +25,16 @@ import axios from "axios";
 import { ajax } from "rxjs/observable/dom/ajax";
 import querystring from "querystring";
 
+export const onAssignedPathEachGet = ({ access_token, id }) =>
+  ajax({
+    method: "GET",
+    url: `${ASSIGNED_PATH_URL}${id}/`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
 export const onAssignedPathPost = ({ access_token, body }) =>
   ajax({
     method: "POST",

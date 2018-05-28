@@ -35,6 +35,9 @@ import {
   FETCH_SALES_USERS_FULFILLED,
   FETCH_SALES_USERS_PENDING,
   FETCH_SALES_USERS_REJECTED,
+  FETCH_ASSIGNED_PATH_PENDING,
+  FETCH_ASSIGNED_PATH_FULFILLED,
+  FETCH_ASSIGNED_PATH_REJECTED,
   CREATE_ASSIGNED_PATH_FULFILLED,
   CREATE_ASSIGNED_PATH_PENDING,
   CREATE_ASSIGNED_PATH_REJECTED,
@@ -85,6 +88,16 @@ const INITIAL_STATE = {
 
 export default function(state = INITIAL_STATE, action) {
   switch (action.type) {
+    case FETCH_ASSIGNED_PATH_PENDING:
+      return { ...state, fetchLoading: true };
+    case FETCH_ASSIGNED_PATH_REJECTED:
+      return { ...state, fetchLoading: false };
+    case FETCH_ASSIGNED_PATH_FULFILLED:
+      return {
+        ...state,
+        assignedPath: action.payload
+      };
+
     case FETCH_SALES_USERS_PENDING:
       return { ...state, fetchLoading: true };
     case FETCH_SALES_USERS_REJECTED:
