@@ -13,6 +13,7 @@ import PopoverDelete from "./PopoverDelete";
 import CustomModal from "./CustomModal";
 import Select from "./ReactSelect/ReactSelect";
 import PaginationComponent from "./CBReactTablePagination";
+import Chip from "./Chip";
 
 export {
   Aside,
@@ -29,5 +30,6 @@ export {
   PopoverDelete,
   CustomModal,
   Select,
-  PaginationComponent
+  PaginationComponent,
+  Chip
 };

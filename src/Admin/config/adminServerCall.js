@@ -11,7 +11,8 @@ import {
   USER_GROUPS_URL,
   USERS_URL,
   PERMISSIONS_ALL_LIST_URL,
-  TOGGLE_PERMISSION_URL
+  TOGGLE_PERMISSION_URL,
+  ASSIGNED_PATH_URL
 } from "./ADMIN_API";
 
 import {
@@ -23,6 +24,27 @@ import axios from "axios";
 
 import { ajax } from "rxjs/observable/dom/ajax";
 import querystring from "querystring";
+
+export const onAssignedPathEachGet = ({ access_token, id }) =>
+  ajax({
+    method: "GET",
+    url: `${ASSIGNED_PATH_URL}${id}/`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
+export const onAssignedPathPost = ({ access_token, body }) =>
+  ajax({
+    method: "POST",
+    url: ASSIGNED_PATH_URL,
+    body,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
 
 export const onPermissionsGet = ({ access_token }) =>
   ajax({

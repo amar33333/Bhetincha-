@@ -22,15 +22,31 @@ import MapComponent from "../../../../Common/components/MapComponent";
 class UserComponent extends Component {
   render() {
     console.log("user compo: ", this.props);
+    const {
+      username,
+      first_name,
+      last_name,
+      email,
+      groups,
+      phone_number
+    } = this.props.salesUser;
+
     return (
-      <Card>
-        <CardHeader>
-          <strong>Sales User: {this.props.salesUser.username}</strong>
-        </CardHeader>
-        <CardBody>
-          <p> hello </p>
-        </CardBody>
-      </Card>
+      <div className="animated fadeIn">
+        <Card>
+          <CardHeader>
+            <strong>Sales User: {username}</strong>
+          </CardHeader>
+          <CardBody>
+            <p>
+              Name : {first_name} {last_name}
+            </p>
+            <p> Email : {email}</p>
+            <p> Department : {groups[0].name}</p>
+            <p> Contact Number : {phone_number} </p>
+          </CardBody>
+        </Card>
+      </div>
     );
   }
 }

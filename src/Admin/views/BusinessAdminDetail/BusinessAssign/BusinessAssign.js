@@ -1,8 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-
-import { onSalesUserList } from "../../../actions";
-
+import { onSalesUserList, onAssignedPathEachList } from "../../../actions";
 import {
   Container,
   Card,
@@ -18,7 +16,7 @@ import {
   FormGroup,
   Label
 } from "reactstrap";
-
+import * as firebase from "firebase";
 import Select from "react-select";
 
 import MapComponent from "../../../../Common/components/MapComponent";
@@ -27,22 +25,59 @@ import BusinessTableComponent from "./BusinessTableComponent";
 
 class BusinessAssign extends Component {
   state = {
-    latitude: 27.7172453,
-    longitude: 85.32391758465576,
-
-    sales_username: ""
+    sales_username: "",
+    salesUsersLocation: []
   };
 
   componentDidMount() {
+    const rootRef = firebase
+      .database()
+      .ref()
+      .child("Users");
+
+    rootRef.on("value", snapshot => {
+      let salesUsersLocation = [];
+
+      snapshot.forEach(childSnapshot => {
+        const key = childSnapshot.key;
+        const Id = childSnapshot.child("Id").val();
+
+        rootRef
+          .child(key)
+          .child("Location")
+          .orderByKey()
+          .limitToLast(1)
+          .once("child_added", locationSnapShot => {
+            salesUsersLocation.push({
+              Id: Id,
+              Username: childSnapshot.child("Username").val(),
+              Location: locationSnapShot.val()
+            });
+          });
+      });
+      this.setState({ salesUsersLocation });
+    });
+
     this.props.onSalesUserList();
   }
 
   onChange = (key, event) => this.setState({ [key]: event.target.value });
 
-  handleSelectChange = sales_username => this.setState({ sales_username });
+  handleSelectChange = sales_username =>
+    this.setState({ sales_username }, () => {
+      return this.state.sales_username
+        ? this.props.onAssignedPathEachList({
+            id: this.state.sales_username.mongo_id
+          })
+        : null;
+    });
+
+  renderUserComponent = () =>
+    this.state.sales_username ? (
+      <UserComponent salesUser={this.state.sales_username} />
+    ) : null;
 
   render() {
-    console.log("sales user: ", this.state);
     return (
       <div className="animated fadeIn">
         <Col>
@@ -57,10 +92,7 @@ class BusinessAssign extends Component {
                     <strong className="mb-2">Sales Team Location</strong>
                     <MapComponent
                       ref={ref => (this.mapComponentEl = ref)}
-                      position={{
-                        lat: this.state.latitude,
-                        lng: this.state.longitude
-                      }}
+                      position={this.state.salesUsersLocation}
                       onClick={this.onChangeLatLng}
                       onDragEnd={this.onChangeLatLng}
                     />
@@ -74,35 +106,30 @@ class BusinessAssign extends Component {
               <strong>Search Sales User</strong>
             </CardHeader>
             <CardBody>
-              <form onSubmit={this.onFormSubmit}>
-                <Row>
-                  <Col xs="12" md="12">
-                    <FormGroup>
-                      <Select
-                        autoFocus
-                        required
-                        name="sales_username"
-                        value={
-                          this.state.sales_username &&
-                          this.state.sales_username.id
-                        }
-                        onChange={this.handleSelectChange}
-                        options={this.props.salesUsers}
-                        valueKey="id"
-                        labelKey="username"
-                      />
-                    </FormGroup>
-                  </Col>
-                </Row>
-              </form>
+              <Row>
+                <Col xs="12" md="12">
+                  <FormGroup>
+                    <Select
+                      autoFocus
+                      required
+                      name="sales_username"
+                      placeholder="Select a User ... "
+                      value={
+                        this.state.sales_username &&
+                        this.state.sales_username.id
+                      }
+                      onChange={this.handleSelectChange}
+                      options={this.props.salesUsers}
+                      valueKey="id"
+                      labelKey="username"
+                    />
+                  </FormGroup>
+                </Col>
+              </Row>
             </CardBody>
+            <CardBody>{this.renderUserComponent()}</CardBody>
           </Card>
-          <UserComponent
-            salesUser={
-              this.state.sales_username ? this.state.sales_username : ""
-            }
-          />
-          <BusinessTableComponent />
+          <BusinessTableComponent selectedUser={this.state.sales_username} />
         </Col>
       </div>
     );
@@ -111,9 +138,11 @@ class BusinessAssign extends Component {
 
 export default connect(
   ({ AdminContainer: { business_reducer } }) => ({
-    salesUsers: business_reducer.salesUsers
+    salesUsers: business_reducer.salesUsers,
+    assignedPath: business_reducer.assignedPath
   }),
   {
-    onSalesUserList
+    onSalesUserList,
+    onAssignedPathEachList
   }
 )(BusinessAssign);

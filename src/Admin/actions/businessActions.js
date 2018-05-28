@@ -13,7 +13,9 @@ import {
   onCountryEachGetAjax,
   onStateEachGetAjax,
   onCompanyTypePut,
-  onPaymentMethodPut
+  onPaymentMethodPut,
+  onAssignedPathPost,
+  onAssignedPathEachGet
 } from "../config/adminServerCall";
 
 import {
@@ -100,6 +102,9 @@ import {
   FETCH_ASSIGN_BUSINESS_FULFILLED,
   FETCH_ASSIGN_BUSINESS_REJECTED,
   FETCH_ASSIGN_BUSINESS_PENDING,
+  CREATE_ASSIGNED_PATH_FULFILLED,
+  CREATE_ASSIGNED_PATH_PENDING,
+  CREATE_ASSIGNED_PATH_REJECTED,
   DELETE_APP_BUSINESS_FULFILLED,
   DELETE_APP_BUSINESS_REJECTED,
   DELETE_APP_BUSINESS_PENDING,
@@ -112,11 +117,65 @@ import {
   FETCH_SALES_USERS_FULFILLED,
   FETCH_SALES_USERS_PENDING,
   FETCH_SALES_USERS_REJECTED,
+  FETCH_ASSIGNED_PATH_PENDING,
+  FETCH_ASSIGNED_PATH_FULFILLED,
+  FETCH_ASSIGNED_PATH_REJECTED,
   UNMOUNT_COMPANY_TYPE,
   UNMOUNT_PAYMENT_METHOD
 } from "./types";
 
 const epics = [];
+
+export const onAssignedPathEachList = payload => ({
+  type: FETCH_ASSIGNED_PATH_PENDING,
+  payload
+});
+
+epics.push((action$, { getState }) =>
+  action$.ofType(FETCH_ASSIGNED_PATH_PENDING).mergeMap(action => {
+    const access_token = getState().auth.cookies.token_data.access_token;
+    const { id } = action.payload;
+
+    return onAssignedPathEachGet({ access_token, id })
+      .map(({ response }) => ({
+        type: FETCH_ASSIGNED_PATH_FULFILLED,
+        payload: response
+      }))
+      .catch(ajaxError => {
+        toast.error(ajaxError.toString());
+        return Observable.of({
+          type: FETCH_ASSIGNED_PATH_REJECTED,
+          payload: ajaxError
+        });
+      });
+  })
+);
+
+export const onAssignedPathSubmit = payload => ({
+  type: CREATE_ASSIGNED_PATH_PENDING,
+  payload
+});
+
+epics.push((action$, { getState }) =>
+  action$.ofType(CREATE_ASSIGNED_PATH_PENDING).mergeMap(action => {
+    const access_token = getState().auth.cookies.token_data.access_token;
+    const { body } = action.payload;
+
+    return onAssignedPathPost({ body, access_token })
+      .map(({ response }) => {
+        if (response.msg === "success") {
+          toast.success("Path Assigned Successfully!");
+          return { type: CREATE_ASSIGNED_PATH_FULFILLED };
+        } else {
+          throw new Error(response.msg[Object.keys(response.msg)[0]][0]);
+        }
+      })
+      .catch(ajaxError => {
+        toast.error(ajaxError.toString());
+        return Observable.of({ type: CREATE_ASSIGNED_PATH_REJECTED });
+      });
+  })
+);
 
 export const onSalesUserList = payload => ({
   type: FETCH_SALES_USERS_PENDING,

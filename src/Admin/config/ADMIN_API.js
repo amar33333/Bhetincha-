@@ -22,6 +22,7 @@ const PERMISSIONS_ALL_LIST = "listpermissions";
 const GROUP = "group/";
 const EXTRA_SECTION_GET = "category/getsectionlist/";
 const EDIT_PERMISSION = "editpermission";
+const ASSIGNED_PATH = "businessCollection/sales-table/";
 
 export const COUNTRY_URL = `${MAIN_URL}/${ADDRESS}/${COUNTRY}`;
 export const DISTRICT_URL = `${MAIN_URL}/${ADDRESS}/${DISTRICT}`;
@@ -39,3 +40,5 @@ export const USERS_URL = `${MAIN_URL}/${API}/${ACCOUNTS}/${USER}`;
 export const USER_GROUPS_URL = `${MAIN_URL}/${PERMISSION}/${GROUP}`;
 export const PERMISSIONS_ALL_LIST_URL = `${MAIN_URL}/${PERMISSION}/${PERMISSIONS_ALL_LIST}/`;
 export const TOGGLE_PERMISSION_URL = `${MAIN_URL}/${PERMISSION}/${EDIT_PERMISSION}/`;
+
+export const ASSIGNED_PATH_URL = `${MAIN_URL}/${ASSIGNED_PATH}`;
