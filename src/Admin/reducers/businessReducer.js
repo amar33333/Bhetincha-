@@ -35,6 +35,9 @@ import {
   FETCH_SALES_USERS_FULFILLED,
   FETCH_SALES_USERS_PENDING,
   FETCH_SALES_USERS_REJECTED,
+  CREATE_ASSIGNED_PATH_FULFILLED,
+  CREATE_ASSIGNED_PATH_PENDING,
+  CREATE_ASSIGNED_PATH_REJECTED,
   UNMOUNT_PAYMENT_METHOD,
   UNMOUNT_COMPANY_TYPE
 } from "../actions/types";
@@ -74,7 +77,10 @@ const INITIAL_STATE = {
 
   companyTypeEditModal: false,
   paymentMethodEditModal: false,
-  salesUser: []
+  salesUser: [],
+
+  assignedPathLoading: false,
+  assignedPathError: false
 };
 
 export default function(state = INITIAL_STATE, action) {
@@ -251,6 +257,25 @@ export default function(state = INITIAL_STATE, action) {
         ...state,
         paymentMethodEditModal: !state.paymentMethodEditModal,
         paymentMethodEditData: action.payload
+      };
+
+    case CREATE_ASSIGNED_PATH_PENDING:
+      return {
+        ...state,
+        assignedPathLoading: true,
+        assignedPathError: false
+      };
+    case CREATE_ASSIGNED_PATH_FULFILLED:
+      return {
+        ...state,
+        assignedPathLoading: false,
+        assignedPathError: false
+      };
+    case CREATE_ASSIGNED_PATH_REJECTED:
+      return {
+        ...state,
+        assignedPathLoading: false,
+        assignedPathError: true
       };
 
     default:

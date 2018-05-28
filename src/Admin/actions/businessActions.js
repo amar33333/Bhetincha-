@@ -14,7 +14,7 @@ import {
   onStateEachGetAjax,
   onCompanyTypePut,
   onPaymentMethodPut,
-  onAssignedPathGet
+  onAssignedPathPost
 } from "../config/adminServerCall";
 
 import {
@@ -101,9 +101,9 @@ import {
   FETCH_ASSIGN_BUSINESS_FULFILLED,
   FETCH_ASSIGN_BUSINESS_REJECTED,
   FETCH_ASSIGN_BUSINESS_PENDING,
-  FETCH_ASSIGNED_PATH_FULFILLED,
-  FETCH_ASSIGNED_PATH_PENDING,
-  FETCH_ASSIGNED_PATH_REJECTED,
+  CREATE_ASSIGNED_PATH_FULFILLED,
+  CREATE_ASSIGNED_PATH_PENDING,
+  CREATE_ASSIGNED_PATH_REJECTED,
   DELETE_APP_BUSINESS_FULFILLED,
   DELETE_APP_BUSINESS_REJECTED,
   DELETE_APP_BUSINESS_PENDING,
@@ -122,29 +122,28 @@ import {
 
 const epics = [];
 
-export const onAssignedPathList = payload => ({
-  type: FETCH_ASSIGNED_PATH_PENDING,
+export const onAssignedPathSubmit = payload => ({
+  type: CREATE_ASSIGNED_PATH_PENDING,
   payload
 });
 
 epics.push((action$, { getState }) =>
-  action$.ofType(FETCH_ASSIGNED_PATH_PENDING).mergeMap(action => {
+  action$.ofType(CREATE_ASSIGNED_PATH_PENDING).mergeMap(action => {
     const access_token = getState().auth.cookies.token_data.access_token;
+    const { body } = action.payload;
 
-    return onAssignedPathGet({ access_token })
+    return onAssignedPathPost({ body, access_token })
       .map(({ response }) => {
-        console.log(response);
-        return {
-          type: FETCH_ASSIGNED_PATH_FULFILLED,
-          payload: response
-        };
+        if (response.msg === "success") {
+          toast.success("Path Assigned Successfully!");
+          return { type: CREATE_ASSIGNED_PATH_FULFILLED };
+        } else {
+          throw new Error(response.msg[Object.keys(response.msg)[0]][0]);
+        }
       })
       .catch(ajaxError => {
         toast.error(ajaxError.toString());
-        return Observable.of({
-          type: FETCH_ASSIGNED_PATH_REJECTED,
-          payload: ajaxError
-        });
+        return Observable.of({ type: CREATE_ASSIGNED_PATH_REJECTED });
       });
   })
 );

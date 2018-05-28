@@ -37,11 +37,16 @@ import {
   // onAssignBusinessEachRemove,
   onIndustryList,
   onUnmountIndustry,
-  onAssignedPathList
+  onAssignedPathSubmit
 } from "../../../actions";
 
 class BusinessTableComponent extends Component {
-  state = { selectedBusiness: [], path: "" };
+  static getDerivedStateFromProps = (nextProps, prevState) =>
+    prevState.assignedPathSubmit && !nextProps.error && !nextProps.loading
+      ? { path: "", selectedBusiness: [], assignedPathSubmit: false }
+      : null;
+
+  state = { selectedBusiness: [], path: "", assignedPathSubmit: false };
 
   tableProps = {
     columns: [
@@ -177,7 +182,6 @@ class BusinessTableComponent extends Component {
   componentDidMount = () => {
     this.props.onIndustryList();
     this.props.onAssignBusinessList();
-    // this.props.onAssignedPathList();
   };
 
   componentWillUnmount = () => {
@@ -205,7 +209,23 @@ class BusinessTableComponent extends Component {
       "selectedBusinesses",
       this.state.selectedBusiness,
       "sales user id",
-      this.props.selectedUser.id
+      this.props.selectedUser
+    );
+
+    this.setState({ assignedPathSubmit: true }, () =>
+      this.props.onAssignedPathSubmit({
+        body: {
+          user: this.props.selectedUser.mongo_id,
+          paths: [
+            {
+              name: this.state.path,
+              bs: this.state.selectedBusiness.map(business => ({
+                business: business.id
+              }))
+            }
+          ]
+        }
+      })
     );
   };
 
@@ -306,7 +326,11 @@ class BusinessTableComponent extends Component {
             </Row>
             <Card>
               <CardHeader>
-                <strong>Assign Path</strong>
+                <strong>
+                  Assign Path
+                  {this.props.selectedUser &&
+                    ` to ${this.props.selectedUser.username}`}
+                </strong>
               </CardHeader>
               <CardBody>
                 {!this.props.selectedUser ? (
@@ -384,7 +408,9 @@ export default connect(
         assignBusinesses,
         fetchAssignBusinessLoading,
         pagesAssignBusiness,
-        rowCountAssignBusiness
+        rowCountAssignBusiness,
+        assignedPathLoading,
+        assignedPathError
       },
       filterAssignBusiness,
       industries
@@ -392,6 +418,8 @@ export default connect(
   }) => ({
     industries: industries.industries,
     industryLoading: industries.loading,
+    loading: assignedPathLoading,
+    error: assignedPathError,
     assignBusinesses,
     pagesAssignBusiness,
     rowCountAssignBusiness,
@@ -408,6 +436,6 @@ export default connect(
     handleSearchKeywordClearedAssignBusiness,
     handleSortChangeAssignBusiness,
     onUnmountIndustry,
-    onAssignedPathList
+    onAssignedPathSubmit
   }
 )(BusinessTableComponent);
