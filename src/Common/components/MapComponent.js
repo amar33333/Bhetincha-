@@ -76,7 +76,7 @@ class GoogleMapComponent extends Component {
         defaultCenter={{ lat: 27.7172453, lng: 85.32391758465576 }}
         //onClick={({ latLng }) => this.props.onClick({ latLng })}
       >
-        {/* {this.renderMarkers()} */}
+        {this.renderMarkers()}
         <DirectionsRenderer directions={this.state.directions} />
       </GoogleMap>
     );
@@ -91,6 +91,8 @@ class MapComponent extends Component {
     });
   }
   render() {
+    console.log("map props: ", this.props);
+
     const MyMapComponent = this.state.MyMapComponent;
     return (
       <div>

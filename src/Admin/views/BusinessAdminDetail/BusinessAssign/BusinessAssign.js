@@ -97,6 +97,7 @@ class BusinessAssign extends Component {
                       position={this.state.salesUsersLocation}
                       onClick={this.onChangeLatLng}
                       onDragEnd={this.onChangeLatLng}
+                      assignedPaths={this.props.assignedPaths}
                     />
                   </Card>
                 </Col>
@@ -141,7 +142,7 @@ class BusinessAssign extends Component {
 export default connect(
   ({ AdminContainer: { business_reducer } }) => ({
     salesUsers: business_reducer.salesUsers,
-    assignedPath: business_reducer.assignedPath
+    assignedPaths: business_reducer.assignedPaths
   }),
   {
     onSalesUserList,
