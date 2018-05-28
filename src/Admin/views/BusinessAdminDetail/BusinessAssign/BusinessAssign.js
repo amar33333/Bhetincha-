@@ -14,7 +14,9 @@ import {
   InputGroupAddon,
   InputGroupText,
   FormGroup,
-  Label
+  Label,
+  Nav,
+  NavItem
 } from "reactstrap";
 import * as firebase from "firebase";
 import Select from "react-select";
