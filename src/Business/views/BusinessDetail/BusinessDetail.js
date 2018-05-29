@@ -111,6 +111,7 @@ class BusinessDetail extends Component {
   onInitialPropsReceived = () => this.props.ToogleEDIT(!this.props.EDIT);
 
   render() {
+    console.log("CHECK");
     const data = this.props.businessData;
     console.log("business dashboard props: ", this.props);
 

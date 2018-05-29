@@ -46,7 +46,11 @@ class Minisite extends Component {
         ) : (
           <MinisiteRoutes params={this.props.match.params} />
         )}
-        <BusinessFooter theme="dark" />
+        <BusinessFooter
+          businessName={this.props.match.params[ROUTE_PARAMS_BUSINESS_NAME]}
+          sabai={this.props}
+          theme="dark"
+        />
       </div>
     );
   }
