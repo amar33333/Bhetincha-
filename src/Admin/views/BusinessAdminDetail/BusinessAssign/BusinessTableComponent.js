@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import ReactTable from "react-table";
 import moment from "moment";
+import debounce from "lodash.debounce";
 import {
   Container,
   Card,
@@ -34,6 +35,8 @@ import {
   handleOnAssignBusinessFilterChange,
   handleSearchKeywordClearedAssignBusiness,
   handleSortChangeAssignBusiness,
+  onAreaList,
+  handleOnAreaFilterChange,
   // onAssignBusinessEachRemove,
   onIndustryList,
   onUnmountIndustry,
@@ -139,36 +142,6 @@ class BusinessTableComponent extends Component {
         Cell: ({ value }) => <div>{value ? "Verified" : "Not Verified"}</div>,
         sortable: false,
         filterable: false
-      },
-      {
-        Header: "Actions",
-        accessor: "slug",
-        width: 170,
-        Cell: props => (
-          <div>
-            <Button
-              color="primary"
-              className="mr-2"
-              onClick={() => {
-                this.props.history.push(
-                  `${this.props.match.path}/${props.value}/review`
-                );
-              }}
-            >
-              <i className="fa fa-pencil" /> Review
-            </Button>
-
-            {/* <PopoverDelete
-              id={`delete-${props.original.id}`}
-              onClick={
-                () => console.log(props.original.id)
-                // this.props.onAssignBusinessEachRemove({ id: props.original.id })
-              }
-            /> */}
-          </div>
-        ),
-        sortable: false,
-        filterable: false
       }
     ],
     pageSizeOptions: [5, 10, 20, 25, 50, 100],
@@ -181,6 +154,7 @@ class BusinessTableComponent extends Component {
 
   componentDidMount = () => {
     this.props.onIndustryList();
+    this.props.onAreaList({ page: 1, rows: 15 });
     this.props.onAssignBusinessList();
   };
 
@@ -193,8 +167,8 @@ class BusinessTableComponent extends Component {
       [key]: event.target.value
     });
 
-  handleIndustryChange = industry =>
-    this.props.handleOnAssignBusinessFilterChange({ industry });
+  // handleIndustryChange = industry =>
+  //   this.props.handleOnAssignBusinessFilterChange({ industry });
 
   handleSearchKeywordSubmit = event => {
     event.preventDefault();
@@ -229,6 +203,11 @@ class BusinessTableComponent extends Component {
     );
   };
 
+  debouncedAreaAutocomplete = debounce(
+    name => this.props.handleOnAreaFilterChange({ name }),
+    200
+  );
+
   render() {
     return (
       <div>
@@ -253,11 +232,38 @@ class BusinessTableComponent extends Component {
                             isLoading={this.props.industryLoading}
                             labelKey="name"
                             multi
-                            onChange={this.handleIndustryChange}
+                            onChange={industry =>
+                              this.props.handleOnAssignBusinessFilterChange({
+                                industry
+                              })
+                            }
                             options={this.props.industries}
                             placeholder="Filter Industry"
                             value={this.props.industry}
                             valueKey="id"
+                          />
+
+                          <Select
+                            clearable
+                            multi
+                            isLoading={this.props.areasFetchLoading}
+                            onInputChange={this.debouncedAreaAutocomplete}
+                            value={this.props.area}
+                            onChange={area =>
+                              this.props.handleOnAssignBusinessFilterChange({
+                                area
+                              })
+                            }
+                            valueKey="id"
+                            labelKey="name"
+                            filterOptions={options => options}
+                            options={this.props.areas.filter(
+                              area =>
+                                !this.props.area
+                                  .map(filter => filter.id)
+                                  .includes(area.id)
+                            )}
+                            placeholder="Filter Area"
                           />
                         </FormGroup>
                       </Col>
@@ -413,7 +419,8 @@ export default connect(
         assignedPathError
       },
       filterAssignBusiness,
-      industries
+      industries,
+      general_setup: { areas, areasFetchLoading }
     }
   }) => ({
     industries: industries.industries,
@@ -424,6 +431,8 @@ export default connect(
     pagesAssignBusiness,
     rowCountAssignBusiness,
     fetchAssignBusinessLoading,
+    areas,
+    areasFetchLoading,
     ...filterAssignBusiness
   }),
   {
@@ -436,6 +445,8 @@ export default connect(
     handleSearchKeywordClearedAssignBusiness,
     handleSortChangeAssignBusiness,
     onUnmountIndustry,
-    onAssignedPathSubmit
+    onAssignedPathSubmit,
+    handleOnAreaFilterChange,
+    onAreaList
   }
 )(BusinessTableComponent);

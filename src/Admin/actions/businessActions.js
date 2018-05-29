@@ -319,6 +319,7 @@ epics.push((action$, { getState }) =>
     params.industry = filterValue.industry
       ? filterValue.industry.map(industry => industry.id)
       : [];
+    params.area = filterValue.area ? filterValue.area.map(area => area.id) : [];
 
     if (payload) {
       if (payload.rows) params.rows = payload.rows;
