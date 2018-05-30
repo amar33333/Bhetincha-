@@ -42,6 +42,8 @@ import {
   onAssignedPathSubmit
 } from "../../../actions";
 
+import { MAIN_URL } from "../../../config/ADMIN_API";
+
 class BusinessTableComponent extends Component {
   static getDerivedStateFromProps = (nextProps, prevState) =>
     prevState.assignedPathSubmit && !nextProps.error && !nextProps.loading
@@ -87,10 +89,10 @@ class BusinessTableComponent extends Component {
         id: "assign",
         filterable: false,
         sortable: false,
-        Cell: ({ value, original: { business_name, id, branches } }) => {
+        Cell: ({ original: { business_name, id, branches, logo } }) => {
           if (!branches || !branches.length) return <div />;
           return branches.map(branch => (
-            <div>
+            <div key={branch.addressID}>
               <FormGroup check>
                 <Label check>
                   <Input
@@ -103,7 +105,14 @@ class BusinessTableComponent extends Component {
                       ) !== undefined
                     }
                     onChange={() => {
-                      // console.log(value);
+                      // // console.log(value);
+                      // console.log(
+                      //   this.state.selectedBusiness.find(
+                      //     business =>
+                      //       id === business.id &&
+                      //       branch.addressID === business.addressID
+                      //   )
+                      // );
                       this.setState({
                         selectedBusiness: this.state.selectedBusiness.find(
                           business =>
@@ -112,7 +121,7 @@ class BusinessTableComponent extends Component {
                         )
                           ? this.state.selectedBusiness.filter(
                               business =>
-                                business.id !== id &&
+                                business.id !== id ||
                                 branch.addressID !== business.addressID
                             )
                           : [
@@ -121,14 +130,16 @@ class BusinessTableComponent extends Component {
                                 id,
                                 business_name,
                                 addressID: branch.addressID,
-                                addressName: branch.name
+                                addressName: branch.name,
+                                logoURI: `${MAIN_URL}${logo}`,
+                                landmark: branch.landmark
                               }
                             ]
                       });
                     }}
                     type="checkbox"
                   />
-                  {branch.name}
+                  {branch.name}, {branch.landmark}
                 </Label>
               </FormGroup>
             </div>
@@ -193,25 +204,18 @@ class BusinessTableComponent extends Component {
 
   assignBusinessSubmit = event => {
     event.preventDefault();
-    console.log(
-      "name",
-      this.state.path,
-      "selectedBusinesses",
-      this.state.selectedBusiness,
-      "sales user id",
-      this.props.selectedUser
-    );
+
+    const mongoId = this.props.selectedUser.mongo_id;
+    const name = this.state.path;
+    const bs = this.state.selectedBusiness.map(business => ({
+      business: business.id,
+      addressID: business.addressID
+    }));
 
     this.setState({ assignedPathSubmit: true }, () =>
       this.props.onAssignedPathSubmit({
-        mongoId: this.props.selectedUser.mongo_id,
-        body: {
-          name: this.state.path,
-          bs: this.state.selectedBusiness.map(business => ({
-            business: business.id,
-            addressID: business.addressID
-          }))
-        }
+        mongoId,
+        body: { name, bs }
       })
     );
   };
@@ -358,14 +362,17 @@ class BusinessTableComponent extends Component {
                     <Row>
                       {this.state.selectedBusiness.map(business => (
                         <Chip
-                          key={business.id}
+                          key={business.addressID}
                           title={business.business_name}
-                          subtitle={business.addressName}
+                          subtitle={`${business.addressName},${
+                            business.landmark
+                          }`}
+                          uri={business.logoURI}
                           onClose={() =>
                             this.setState({
                               selectedBusiness: this.state.selectedBusiness.filter(
                                 b =>
-                                  b.id !== business.id &&
+                                  b.id !== business.id ||
                                   b.addressID !== business.addressID
                               )
                             })
