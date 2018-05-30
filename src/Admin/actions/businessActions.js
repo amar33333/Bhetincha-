@@ -159,9 +159,9 @@ export const onAssignedPathSubmit = payload => ({
 epics.push((action$, { getState }) =>
   action$.ofType(CREATE_ASSIGNED_PATH_PENDING).mergeMap(action => {
     const access_token = getState().auth.cookies.token_data.access_token;
-    const { body } = action.payload;
+    const { body, mongoId } = action.payload;
 
-    return onAssignedPathPost({ body, access_token })
+    return onAssignedPathPost({ body, mongoId, access_token })
       .map(({ response }) => {
         if (response.msg === "success") {
           toast.success("Path Assigned Successfully!");
