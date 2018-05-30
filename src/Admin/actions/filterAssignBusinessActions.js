@@ -13,6 +13,12 @@ export const handleOnAssignBusinessFilterChange = payload => ({
   payload
 });
 
+epics.push(action$ =>
+  action$
+    .ofType(ASSIGN_BUSINESS_FILTER_ON_CHANGE)
+    .mapTo({ type: FETCH_ASSIGN_BUSINESS_PENDING })
+);
+
 export const onFilterClearedAssignBusiness = () => ({
   type: CLEAR_ASSIGN_BUSINESS_FILTER
 });

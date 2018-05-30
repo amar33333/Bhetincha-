@@ -35,10 +35,10 @@ export const onAssignedPathEachGet = ({ access_token, id }) =>
     }
   });
 
-export const onAssignedPathPost = ({ access_token, body }) =>
+export const onAssignedPathPost = ({ access_token, body, mongoId }) =>
   ajax({
     method: "POST",
-    url: ASSIGNED_PATH_URL,
+    url: `${ASSIGNED_PATH_URL}${mongoId}/`,
     body,
     headers: {
       "Content-Type": "application/json",

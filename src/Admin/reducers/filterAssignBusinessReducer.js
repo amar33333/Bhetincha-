@@ -9,7 +9,8 @@ import {
 const INITIAL_STATE = {
   q: "",
   sort_by: [],
-  industry: "",
+  industry: [],
+  area: [],
   rows: 20,
   page: 1
 };

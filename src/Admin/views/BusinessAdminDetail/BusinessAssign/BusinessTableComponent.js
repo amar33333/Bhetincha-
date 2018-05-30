@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import ReactTable from "react-table";
 import moment from "moment";
+import debounce from "lodash.debounce";
 import {
   Container,
   Card,
@@ -20,12 +21,11 @@ import {
   Label
 } from "reactstrap";
 
-import Select from "react-select";
 import {
   Tooltip,
-  PopoverDelete,
   PaginationComponent,
-  Chip
+  Chip,
+  Select
 } from "../../../../Common/components";
 
 import {
@@ -34,6 +34,8 @@ import {
   handleOnAssignBusinessFilterChange,
   handleSearchKeywordClearedAssignBusiness,
   handleSortChangeAssignBusiness,
+  onAreaList,
+  handleOnAreaFilterChange,
   // onAssignBusinessEachRemove,
   onIndustryList,
   onUnmountIndustry,
@@ -51,47 +53,10 @@ class BusinessTableComponent extends Component {
   tableProps = {
     columns: [
       {
-        Header: "Assign",
-        accessor: "id",
-        id: "assign",
-        Cell: ({ value, original: { business_name, id } }) => {
-          return (
-            <FormGroup check>
-              <Label check>
-                <Input
-                  checked={
-                    this.state.selectedBusiness.find(
-                      business => id === business.id
-                    ) !== undefined
-                  }
-                  onChange={() => {
-                    // console.log(value);
-                    this.setState({
-                      selectedBusiness: this.state.selectedBusiness.find(
-                        business => id === business.id
-                      )
-                        ? this.state.selectedBusiness.filter(
-                            business => business.id !== id
-                          )
-                        : [
-                            ...this.state.selectedBusiness,
-                            { id, business_name }
-                          ]
-                    });
-                  }}
-                  type="checkbox"
-                />
-                Check to assign
-              </Label>
-            </FormGroup>
-          );
-        }
-      },
-      {
         Header: "Business Name",
         id: "name",
         accessor: "business_name",
-        minWidth: 150,
+        width: 220,
         Cell: props => {
           const business = props.original;
           return (
@@ -117,6 +82,60 @@ class BusinessTableComponent extends Component {
         }
       },
       {
+        Header: "Assign",
+        accessor: "id",
+        id: "assign",
+        filterable: false,
+        sortable: false,
+        Cell: ({ value, original: { business_name, id, branches } }) => {
+          if (!branches || !branches.length) return <div />;
+          return branches.map(branch => (
+            <div>
+              <FormGroup check>
+                <Label check>
+                  <Input
+                    disabled={branch.assigned}
+                    checked={
+                      this.state.selectedBusiness.find(
+                        business =>
+                          id === business.id &&
+                          branch.addressID === business.addressID
+                      ) !== undefined
+                    }
+                    onChange={() => {
+                      // console.log(value);
+                      this.setState({
+                        selectedBusiness: this.state.selectedBusiness.find(
+                          business =>
+                            id === business.id &&
+                            branch.addressID === business.addressID
+                        )
+                          ? this.state.selectedBusiness.filter(
+                              business =>
+                                business.id !== id &&
+                                branch.addressID !== business.addressID
+                            )
+                          : [
+                              ...this.state.selectedBusiness,
+                              {
+                                id,
+                                business_name,
+                                addressID: branch.addressID,
+                                addressName: branch.name
+                              }
+                            ]
+                      });
+                    }}
+                    type="checkbox"
+                  />
+                  {branch.name}
+                </Label>
+              </FormGroup>
+            </div>
+          ));
+        }
+      },
+      {
         Header: "Profile",
         accessor: "is_active",
         width: 110,
@@ -139,36 +158,6 @@ class BusinessTableComponent extends Component {
         Cell: ({ value }) => <div>{value ? "Verified" : "Not Verified"}</div>,
         sortable: false,
         filterable: false
-      },
-      {
-        Header: "Actions",
-        accessor: "slug",
-        width: 170,
-        Cell: props => (
-          <div>
-            <Button
-              color="primary"
-              className="mr-2"
-              onClick={() => {
-                this.props.history.push(
-                  `${this.props.match.path}/${props.value}/review`
-                );
-              }}
-            >
-              <i className="fa fa-pencil" /> Review
-            </Button>
-
-            {/* <PopoverDelete
-              id={`delete-${props.original.id}`}
-              onClick={
-                () => console.log(props.original.id)
-                // this.props.onAssignBusinessEachRemove({ id: props.original.id })
-              }
-            /> */}
-          </div>
-        ),
-        sortable: false,
-        filterable: false
       }
     ],
     pageSizeOptions: [5, 10, 20, 25, 50, 100],
@@ -181,6 +170,7 @@ class BusinessTableComponent extends Component {
 
   componentDidMount = () => {
     this.props.onIndustryList();
+    this.props.onAreaList({ page: 1, rows: 15 });
     this.props.onAssignBusinessList();
   };
 
@@ -193,8 +183,8 @@ class BusinessTableComponent extends Component {
       [key]: event.target.value
     });
 
-  handleIndustryChange = industry =>
-    this.props.handleOnAssignBusinessFilterChange({ industry });
+  // handleIndustryChange = industry =>
+  //   this.props.handleOnAssignBusinessFilterChange({ industry });
 
   handleSearchKeywordSubmit = event => {
     event.preventDefault();
@@ -214,20 +204,22 @@ class BusinessTableComponent extends Component {
 
     this.setState({ assignedPathSubmit: true }, () =>
       this.props.onAssignedPathSubmit({
+        mongoId: this.props.selectedUser.mongo_id,
         body: {
-          user: this.props.selectedUser.mongo_id,
-          paths: [
-            {
-              name: this.state.path,
-              bs: this.state.selectedBusiness.map(business => ({
-                business: business.id
-              }))
-            }
-          ]
+          name: this.state.path,
+          bs: this.state.selectedBusiness.map(business => ({
+            business: business.id,
+            addressID: business.addressID
+          }))
         }
       })
     );
   };
+
+  debouncedAreaAutocomplete = debounce(
+    name => this.props.handleOnAreaFilterChange({ name }),
+    200
+  );
 
   render() {
     return (
@@ -253,21 +245,48 @@ class BusinessTableComponent extends Component {
                             isLoading={this.props.industryLoading}
                             labelKey="name"
                             multi
-                            onChange={this.handleIndustryChange}
+                            onChange={industry =>
+                              this.props.handleOnAssignBusinessFilterChange({
+                                industry
+                              })
+                            }
                             options={this.props.industries}
                             placeholder="Filter Industry"
                             value={this.props.industry}
                             valueKey="id"
                           />
+
+                          <Select
+                            clearable
+                            multi
+                            isLoading={this.props.areasFetchLoading}
+                            onInputChange={this.debouncedAreaAutocomplete}
+                            value={this.props.area}
+                            onChange={area =>
+                              this.props.handleOnAssignBusinessFilterChange({
+                                area
+                              })
+                            }
+                            valueKey="id"
+                            labelKey="name"
+                            filterOptions={options => options}
+                            options={this.props.areas.filter(
+                              area =>
+                                !this.props.area
+                                  .map(filter => filter.id)
+                                  .includes(area.id)
+                            )}
+                            placeholder="Filter Area"
+                          />
                         </FormGroup>
                       </Col>
                       <Col xs="1" md="1">
-                        <Button
+                        {/* <Button
                           color="primary"
                           onClick={this.props.onAssignBusinessList}
                         >
                           <i className="fa fa-filter" /> Filter
-                        </Button>
+                        </Button> */}
                       </Col>
                       <Col xs="1" md="1">
                         <FormGroup>
@@ -293,17 +312,6 @@ class BusinessTableComponent extends Component {
                               </Button>
                             </InputGroupAddon>
                           </InputGroup>
-                          {/* <Input
-                        placeholder="Search for Business Name"
-                        onChange={this.handleChange.bind(null, "q")}
-                        value={this.props.q}
-                      />
-
-                      <FormGroup>
-                        <Button color="primary">
-                          <i className="fa fa-search" /> Search
-                        </Button>
-                      </FormGroup> */}
                         </Form>
                       </Col>
                       <Col xs="2" md="1">
@@ -352,10 +360,13 @@ class BusinessTableComponent extends Component {
                         <Chip
                           key={business.id}
                           title={business.business_name}
+                          subtitle={business.addressName}
                           onClose={() =>
                             this.setState({
                               selectedBusiness: this.state.selectedBusiness.filter(
-                                b => b.id !== business.id
+                                b =>
+                                  b.id !== business.id &&
+                                  b.addressID !== business.addressID
                               )
                             })
                           }
@@ -373,27 +384,31 @@ class BusinessTableComponent extends Component {
                 )}
               </CardBody>
             </Card>
-            <ReactTable
-              {...this.tableProps}
-              style={{ background: "white" }}
-              data={this.props.assignBusinesses}
-              defaultPageSize={this.props.rows}
-              defaultSorted={this.props.sort_by}
-              loading={this.props.fetchAssignBusinessLoading}
-              onPageChange={pageIndex => {
-                this.props.onAssignBusinessList({ page: pageIndex + 1 });
-              }}
-              onPageSizeChange={(pageSize, pageIndex) =>
-                this.props.onAssignBusinessList({
-                  page: pageIndex + 1,
-                  rows: pageSize
-                })
-              }
-              onSortedChange={this.props.handleSortChangeAssignBusiness}
-              page={this.props.page - 1}
-              pages={this.props.pagesAssignBusiness}
-              rowCount={this.props.rowCountAssignBusiness}
-            />
+            {!this.props.area.length ? (
+              <p>Area filter must be selected</p>
+            ) : (
+              <ReactTable
+                {...this.tableProps}
+                style={{ background: "white" }}
+                data={this.props.assignBusinesses}
+                defaultPageSize={this.props.rows}
+                defaultSorted={this.props.sort_by}
+                loading={this.props.fetchAssignBusinessLoading}
+                onPageChange={pageIndex => {
+                  this.props.onAssignBusinessList({ page: pageIndex + 1 });
+                }}
+                onPageSizeChange={(pageSize, pageIndex) =>
+                  this.props.onAssignBusinessList({
+                    page: pageIndex + 1,
+                    rows: pageSize
+                  })
+                }
+                onSortedChange={this.props.handleSortChangeAssignBusiness}
+                page={this.props.page - 1}
+                pages={this.props.pagesAssignBusiness}
+                rowCount={this.props.rowCountAssignBusiness}
+              />
+            )}
           </CardBody>
         </Card>
       </div>
@@ -413,7 +428,8 @@ export default connect(
         assignedPathError
       },
       filterAssignBusiness,
-      industries
+      industries,
+      general_setup: { areas, areasFetchLoading }
     }
   }) => ({
     industries: industries.industries,
@@ -424,6 +440,8 @@ export default connect(
     pagesAssignBusiness,
     rowCountAssignBusiness,
     fetchAssignBusinessLoading,
+    areas,
+    areasFetchLoading,
     ...filterAssignBusiness
   }),
   {
@@ -436,6 +454,8 @@ export default connect(
     handleSearchKeywordClearedAssignBusiness,
     handleSortChangeAssignBusiness,
     onUnmountIndustry,
-    onAssignedPathSubmit
+    onAssignedPathSubmit,
+    handleOnAreaFilterChange,
+    onAreaList
   }
 )(BusinessTableComponent);
