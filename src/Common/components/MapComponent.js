@@ -23,16 +23,60 @@ class GoogleMapComponent extends Component {
 
   componentDidMount() {
     this.props.setRef(this.gEl);
+  }
+
+  onMarkerClicked = each => () => {
+    console.log("marker cicked: ", each);
+    console.log(
+      "wapoitns: ",
+      this.props.assignedPaths &&
+        this.props.assignedPaths.paths.map(eachPath => {
+          return eachPath.bs.map(eachBusiness => {
+            return {
+              lat: eachBusiness.location.latitude,
+              lng: eachBusiness.location.longitude
+            };
+          });
+        })
+    );
 
     const DirectionsService = new google.maps.DirectionsService();
+    let waypoints =
+      this.props.assignedPaths &&
+      this.props.assignedPaths.paths.map(eachPath => {
+        return eachPath.bs.map(eachBusiness => {
+          console.log("waypoints error ...");
+          return {
+            location: new google.maps.LatLng(
+              eachBusiness.location.latitude,
+              eachBusiness.location.longitude
+            )
+          };
+        });
+      });
+
+    console.log("actual wayping: ", waypoints);
+
+    // waypoints = [
+    //   { location: new google.maps.LatLng(27.719697, 85.331191) },
+    //   { location: new google.maps.LatLng(27.729697, 85.331191) },
+    //   { location: new google.maps.LatLng(27.739697, 85.331191) },
+    //   { location: new google.maps.LatLng(27.739697, 85.331191) },
+    //   { location: new google.maps.LatLng(27.739697, 85.331191) }
+    // ];
+
+    console.log("actual wayping 2: ", waypoints);
+
     DirectionsService.route(
       {
-        origin: new google.maps.LatLng(27.709686, 85.326621),
+        origin: new google.maps.LatLng(
+          each.Location.Latitude,
+          each.Location.Longitude
+        ),
         destination: new google.maps.LatLng(27.719697, 85.331191),
-        waypoints: [
-          { location: new google.maps.LatLng(27.7172453, 85.32391758465576) },
-          { location: new google.maps.LatLng(27.717555, 85.34491758465576) }
-        ],
+        waypoints: waypoints[0],
+        optimizeWaypoints: true,
+
         travelMode: google.maps.TravelMode.DRIVING
       },
       (result, status) => {
@@ -46,10 +90,6 @@ class GoogleMapComponent extends Component {
         }
       }
     );
-  }
-
-  onMarkerClicked = each => () => {
-    console.log("marker cicked: ", each.Id);
   };
 
   renderMarkers = () =>
@@ -69,6 +109,8 @@ class GoogleMapComponent extends Component {
       : null;
 
   render() {
+    console.log("assigned patha: ", this.props.assignedPaths);
+
     return (
       <GoogleMap
         ref={ref => (this.gEl = ref)}
@@ -90,9 +132,22 @@ class MapComponent extends Component {
       MyMapComponent: withScriptjs(withGoogleMap(GoogleMapComponent))
     });
   }
-  render() {
-    console.log("map props: ", this.props);
 
+  getFormattedData = assignedPaths => {
+    console.log("assinged: ", assignedPaths && assignedPaths.id);
+    const a =
+      assignedPaths &&
+      assignedPaths.paths.map(eachPath => {
+        return eachPath.bs.map(eachBusiness => {
+          return { lat: eachBusiness.latitude, lng: eachBusiness.longitude };
+        });
+      });
+
+    console.log("aaa: ", a);
+  };
+
+  render() {
+    console.log("map posp: ", this.props);
     const MyMapComponent = this.state.MyMapComponent;
     return (
       <div>
@@ -100,6 +155,7 @@ class MapComponent extends Component {
           <MyMapComponent
             setRef={ref => (this.googleMapEl = ref)}
             position={this.props.position}
+            assignedPaths={this.props.assignedPaths}
             onClick={this.props.onClick}
             onDragEnd={this.props.onDragEnd}
             googleMapURL={GOOGLE_MAPS_URL}

@@ -40,8 +40,8 @@ class SubBusinessPrimaryAddress extends Component {
       addressLine2: "",
       po_box: "",
       tollFreeNumber: "",
-      latitude: 27.7172453,
-      longitude: 85.32391758465576,
+      latitude: 27.7172455,
+      longitude: 85.32877,
       contactPerson: []
     };
 
