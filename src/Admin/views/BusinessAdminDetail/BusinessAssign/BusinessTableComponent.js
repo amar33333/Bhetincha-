@@ -21,12 +21,11 @@ import {
   Label
 } from "reactstrap";
 
-import Select from "react-select";
 import {
   Tooltip,
-  PopoverDelete,
   PaginationComponent,
-  Chip
+  Chip,
+  Select
 } from "../../../../Common/components";
 
 import {
@@ -54,47 +53,10 @@ class BusinessTableComponent extends Component {
   tableProps = {
     columns: [
       {
-        Header: "Assign",
-        accessor: "id",
-        id: "assign",
-        Cell: ({ value, original: { business_name, id } }) => {
-          return (
-            <FormGroup check>
-              <Label check>
-                <Input
-                  checked={
-                    this.state.selectedBusiness.find(
-                      business => id === business.id
-                    ) !== undefined
-                  }
-                  onChange={() => {
-                    // console.log(value);
-                    this.setState({
-                      selectedBusiness: this.state.selectedBusiness.find(
-                        business => id === business.id
-                      )
-                        ? this.state.selectedBusiness.filter(
-                            business => business.id !== id
-                          )
-                        : [
-                            ...this.state.selectedBusiness,
-                            { id, business_name }
-                          ]
-                    });
-                  }}
-                  type="checkbox"
-                />
-                Check to assign
-              </Label>
-            </FormGroup>
-          );
-        }
-      },
-      {
         Header: "Business Name",
         id: "name",
         accessor: "business_name",
-        minWidth: 150,
+        width: 220,
         Cell: props => {
           const business = props.original;
           return (
@@ -117,6 +79,60 @@ class BusinessTableComponent extends Component {
               )}
             </div>
           );
+        }
+      },
+      {
+        Header: "Assign",
+        accessor: "id",
+        id: "assign",
+        filterable: false,
+        sortable: false,
+        Cell: ({ value, original: { business_name, id, branches } }) => {
+          if (!branches || !branches.length) return <div />;
+          return branches.map(branch => (
+            <div>
+              <FormGroup check>
+                <Label check>
+                  <Input
+                    disabled={branch.assigned}
+                    checked={
+                      this.state.selectedBusiness.find(
+                        business =>
+                          id === business.id &&
+                          branch.addressID === business.addressID
+                      ) !== undefined
+                    }
+                    onChange={() => {
+                      // console.log(value);
+                      this.setState({
+                        selectedBusiness: this.state.selectedBusiness.find(
+                          business =>
+                            id === business.id &&
+                            branch.addressID === business.addressID
+                        )
+                          ? this.state.selectedBusiness.filter(
+                              business =>
+                                business.id !== id &&
+                                branch.addressID !== business.addressID
+                            )
+                          : [
+                              ...this.state.selectedBusiness,
+                              {
+                                id,
+                                business_name,
+                                addressID: branch.addressID,
+                                addressName: branch.name
+                              }
+                            ]
+                      });
+                    }}
+                    type="checkbox"
+                  />
+                  {branch.name}
+                </Label>
+              </FormGroup>
+            </div>
+          ));
         }
       },
       {
@@ -188,16 +204,13 @@ class BusinessTableComponent extends Component {
 
     this.setState({ assignedPathSubmit: true }, () =>
       this.props.onAssignedPathSubmit({
+        mongoId: this.props.selectedUser.mongo_id,
         body: {
-          user: this.props.selectedUser.mongo_id,
-          paths: [
-            {
-              name: this.state.path,
-              bs: this.state.selectedBusiness.map(business => ({
-                business: business.id
-              }))
-            }
-          ]
+          name: this.state.path,
+          bs: this.state.selectedBusiness.map(business => ({
+            business: business.id,
+            addressID: business.addressID
+          }))
         }
       })
     );
@@ -268,12 +281,12 @@ class BusinessTableComponent extends Component {
                         </FormGroup>
                       </Col>
                       <Col xs="1" md="1">
-                        <Button
+                        {/* <Button
                           color="primary"
                           onClick={this.props.onAssignBusinessList}
                         >
                           <i className="fa fa-filter" /> Filter
-                        </Button>
+                        </Button> */}
                       </Col>
                       <Col xs="1" md="1">
                         <FormGroup>
@@ -299,17 +312,6 @@ class BusinessTableComponent extends Component {
                               </Button>
                             </InputGroupAddon>
                           </InputGroup>
-                          {/* <Input
-                        placeholder="Search for Business Name"
-                        onChange={this.handleChange.bind(null, "q")}
-                        value={this.props.q}
-                      />
-
-                      <FormGroup>
-                        <Button color="primary">
-                          <i className="fa fa-search" /> Search
-                        </Button>
-                      </FormGroup> */}
                         </Form>
                       </Col>
                       <Col xs="2" md="1">
@@ -358,10 +360,13 @@ class BusinessTableComponent extends Component {
                         <Chip
                           key={business.id}
                           title={business.business_name}
+                          subtitle={business.addressName}
                           onClose={() =>
                             this.setState({
                               selectedBusiness: this.state.selectedBusiness.filter(
-                                b => b.id !== business.id
+                                b =>
+                                  b.id !== business.id &&
+                                  b.addressID !== business.addressID
                               )
                             })
                           }
@@ -379,27 +384,31 @@ class BusinessTableComponent extends Component {
                 )}
               </CardBody>
             </Card>
-            <ReactTable
-              {...this.tableProps}
-              style={{ background: "white" }}
-              data={this.props.assignBusinesses}
-              defaultPageSize={this.props.rows}
-              defaultSorted={this.props.sort_by}
-              loading={this.props.fetchAssignBusinessLoading}
-              onPageChange={pageIndex => {
-                this.props.onAssignBusinessList({ page: pageIndex + 1 });
-              }}
-              onPageSizeChange={(pageSize, pageIndex) =>
-                this.props.onAssignBusinessList({
-                  page: pageIndex + 1,
-                  rows: pageSize
-                })
-              }
-              onSortedChange={this.props.handleSortChangeAssignBusiness}
-              page={this.props.page - 1}
-              pages={this.props.pagesAssignBusiness}
-              rowCount={this.props.rowCountAssignBusiness}
-            />
+            {!this.props.area.length ? (
+              <p>Area filter must be selected</p>
+            ) : (
+              <ReactTable
+                {...this.tableProps}
+                style={{ background: "white" }}
+                data={this.props.assignBusinesses}
+                defaultPageSize={this.props.rows}
+                defaultSorted={this.props.sort_by}
+                loading={this.props.fetchAssignBusinessLoading}
+                onPageChange={pageIndex => {
+                  this.props.onAssignBusinessList({ page: pageIndex + 1 });
+                }}
+                onPageSizeChange={(pageSize, pageIndex) =>
+                  this.props.onAssignBusinessList({
+                    page: pageIndex + 1,
+                    rows: pageSize
+                  })
+                }
+                onSortedChange={this.props.handleSortChangeAssignBusiness}
+                page={this.props.page - 1}
+                pages={this.props.pagesAssignBusiness}
+                rowCount={this.props.rowCountAssignBusiness}
+              />
+            )}
           </CardBody>
         </Card>
       </div>

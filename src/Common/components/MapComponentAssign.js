@@ -1,14 +1,17 @@
 /* global google */
+
 import React, { Component } from "react";
 import {
   withScriptjs,
   withGoogleMap,
   GoogleMap,
-  Marker
+  Marker,
+  DirectionsRenderer
 } from "react-google-maps";
 import { GOOGLE_MAPS_URL } from "../utils/API";
 
 class GoogleMapComponent extends Component {
+  state = { directions: [] };
   componentDidMount() {
     this.props.setRef(this.gEl);
   }
@@ -33,7 +36,6 @@ class GoogleMapComponent extends Component {
       this.props.assignedPaths &&
       this.props.assignedPaths.paths.map(eachPath => {
         return eachPath.bs.map(eachBusiness => {
-          console.log("waypoints error ...");
           return {
             location: new google.maps.LatLng(
               eachBusiness.location.latitude,
@@ -63,7 +65,7 @@ class GoogleMapComponent extends Component {
         ),
         destination: new google.maps.LatLng(27.719697, 85.331191),
         waypoints: waypoints[0],
-        optimizeWaypoints: true,
+        optimizeWaypoints: false,
 
         travelMode: google.maps.TravelMode.DRIVING
       },
@@ -106,11 +108,8 @@ class GoogleMapComponent extends Component {
         defaultCenter={{ lat: 27.7172453, lng: 85.32391758465576 }}
         onClick={({ latLng }) => this.props.onClick({ latLng })}
       >
-        <Marker
-          position={this.props.position}
-          draggable
-          onDragEnd={this.props.onDragEnd}
-        />
+        {this.renderMarkers()}
+        <DirectionsRenderer directions={this.state.directions} />
       </GoogleMap>
     );
   }
@@ -138,7 +137,6 @@ class MapComponent extends Component {
   };
 
   render() {
-    console.log("map posp: ", this.props);
     const MyMapComponent = this.state.MyMapComponent;
     return (
       <div>
