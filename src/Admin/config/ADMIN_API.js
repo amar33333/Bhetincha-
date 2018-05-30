@@ -22,7 +22,7 @@ const PERMISSIONS_ALL_LIST = "listpermissions";
 const GROUP = "group/";
 const EXTRA_SECTION_GET = "category/getsectionlist/";
 const EDIT_PERMISSION = "editpermission";
-const ASSIGNED_PATH = "businessCollection/path-create/";
+const ASSIGNED_PATH = "businessCollection/sales-table/";
 
 export { MAIN_URL };
 

@@ -20,7 +20,7 @@
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  margin-top: 2rem;
+  margin-top: 5rem;
   margin-bottom: 3rem;
 }
 
@@ -55,19 +55,37 @@
 .minisite_banner__wrapper {
   position: relative;
 }
+
+.minisite_banner__img__text__overlay {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  position: absolute;
+  padding-left: 3rem;
+  padding-right: 2rem;
+  background-color: rgba(1, 6, 15, 0.61);
+  right: 0;
+  top: 0;
+  z-index: 99;
+  width: 50%;
+  height: 100%;
+  color: cornsilk;
+}
+
 .minisite_banner__img__change__overlay {
   position: absolute;
   padding: 0.7rem;
-  background-color: cornflowerblue;
-  right: 1%;
+  /* background-color: cornflowerblue; */
+  left: 1%;
   top: 10%;
   z-index: 99;
   color: cornsilk;
-  display: none;
-}
-.minisite_banner__img__change__overlay:hover {
   display: block;
 }
+/* .minisite_banner__img__change__overlay:hover {
+  display: block;
+} */
 
 .minisite_banner__img__change__overlay a,
 .minisite_banner__img__change__overlay a:hover {
@@ -79,11 +97,21 @@
   display: block;
 }
 
+/* ==============About us=================== */
 .minisite_about__edit__icon {
   display: inline-block;
   font-size: 1.3rem;
   margin-left: 1.2rem;
 }
+
+.minisite_about__wrapper {
+  padding: 20px;
+  padding-top: 5rem;
+  background-color: rgb(145, 68, 218);
+  color: whitesmoke;
+}
+
+/* ============About us ================= */
 
 .gallery-wrapper {
   /* position: relative; */

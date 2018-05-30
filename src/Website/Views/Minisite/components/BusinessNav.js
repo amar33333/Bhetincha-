@@ -32,17 +32,24 @@ class BusinessNav extends Component {
 
   toggle = () => this.setState({ isOpen: !this.state.isOpen });
 
-  onItemDragged = layout => {
-    this.setState({
-      nav_layout: layout
-    });
-  };
+  // onItemDragged = layout => {
+  //   this.setState({
+  //     nav_layout: layout,
+  //     height: null
+  //   });
+  // };
 
   onNavDragStop = items => {
     items.forEach(item => {
       item.y = 0;
+      item.moved = true;
+      console.log("X:", item.x, item.i, item.moved);
     });
-    console.log(items);
+    this.setState({
+      nav_layout: items,
+      height: null
+    });
+    // console.log(items);
   };
   onNavClicked = e => {
     if (this.props.mainEdit) {
@@ -61,6 +68,7 @@ class BusinessNav extends Component {
   };
 
   render() {
+    console.log("Nav_layout:", this.state.nav_layout);
     return (
       <div>
         <Navbar color="faded" light expand="md">
@@ -81,10 +89,10 @@ class BusinessNav extends Component {
                 rowHeight={30}
                 width={1200}
                 isDraggable={this.props.mainEdit ? true : false}
-                onLayoutChange={this.onItemDragged}
+                // onLayoutChange={this.onItemDragged}
                 preventCollision={false}
                 compactType="horizontal"
-                onDragStart={this.onNavDragStart}
+                // onDragStart={this.onNavDragStart}
                 onDragStop={this.onNavDragStop}
               >
                 <NavItem key="home">
@@ -146,9 +154,7 @@ class BusinessNav extends Component {
             >
               <i className="fa fa-save" /> Save Nav
             </Button>
-          ) : (
-            ""
-          )}
+          ) : null}
         </Navbar>
       </div>
     );
@@ -157,7 +163,10 @@ class BusinessNav extends Component {
 
 export default connect(
   ({
-    MinisiteContainer: { edit, crud: { logo, nav_layout } },
+    MinisiteContainer: {
+      edit,
+      crud: { logo, nav_layout }
+    },
     auth: { cookies }
   }) => ({
     cookies,
