@@ -377,6 +377,6 @@ export const ToogleEDIT = value => ({
   payload: value
 });
 // export const onUnmountBusiness = () => ({
-//   type: UNMOUNT_BUSINESS,
+//   type: UNMOUNT_BUSINESS,onBusinessEachGet
 //   payload: null
 // });

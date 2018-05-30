@@ -74,7 +74,11 @@ class BusinessAssign extends Component {
 
   renderUserComponent = () =>
     this.state.sales_username ? (
-      <UserComponent salesUser={this.state.sales_username} />
+      <UserComponent
+        assignedPaths={this.props.assignedPaths}
+        // activeTab={this.props.firstAssignedPathID}
+        salesUser={this.state.sales_username}
+      />
     ) : null;
 
   render() {
