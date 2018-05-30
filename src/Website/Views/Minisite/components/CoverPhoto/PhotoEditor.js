@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Row, Col, ListGroupItem } from "reactstrap";
+import { Row, Col, ListGroupItem, Button, Input, FormGroup } from "reactstrap";
 import AvatarEditor from "react-avatar-editor";
 import Slider from "rc-slider";
 import "rc-slider/assets/index.css";
@@ -47,7 +47,7 @@ class PhotoEditor extends Component {
   updateDimensions = () => {
     const bodyWidth = this.editorBody.offsetWidth;
     const logo = { WIDTH: bodyWidth / 2, HEIGHT: bodyWidth / 2 };
-    const cover = { WIDTH: bodyWidth * 0.9, HEIGHT: bodyWidth * 0.9 / 3 };
+    const cover = { WIDTH: bodyWidth * 0.9, HEIGHT: (bodyWidth * 0.9) / 3 };
     this.setState({
       logo: { ...this.state.logo, ...logo },
       cover: { ...this.state.cover, ...cover }
@@ -97,25 +97,30 @@ class PhotoEditor extends Component {
           </Col>
           <Col xs="12" md="9">
             <div ref={ref => (this.editorBody = ref)}>
-              <div>
-                <button
-                  onClick={() => this[`${this.state.active}UploadEl`].click()}
-                >
-                  Add New Photo
-                </button>
-                <input
-                  style={{ display: "none" }}
-                  ref={ref => (this.logoUploadEl = ref)}
-                  type="file"
-                  onChange={this.handleUploadPhoto}
-                />
-                <input
-                  style={{ display: "none" }}
-                  ref={ref => (this.coverUploadEl = ref)}
-                  type="file"
-                  onChange={this.handleUploadPhoto}
-                />
-              </div>
+              <Row>
+                <FormGroup>
+                  <Button
+                    color="primary"
+                    onClick={() => this[`${this.state.active}UploadEl`].click()}
+                  >
+                    Add New Photo
+                  </Button>
+                </FormGroup>
+                <FormGroup>
+                  <Input
+                    style={{ display: "none" }}
+                    ref={ref => (this.logoUploadEl = ref)}
+                    type="file"
+                    onChange={this.handleUploadPhoto}
+                  />
+                  <Input
+                    style={{ display: "none" }}
+                    ref={ref => (this.coverUploadEl = ref)}
+                    type="file"
+                    onChange={this.handleUploadPhoto}
+                  />
+                </FormGroup>
+              </Row>
               <AvatarEditor
                 ref={ref => (this[`imageEditorEl`] = ref)}
                 width={this.state[this.state.active].WIDTH}
@@ -131,16 +136,20 @@ class PhotoEditor extends Component {
               <div style={{ margin: "20px", width: "160px" }}>
                 <span>Zoom</span>
                 <Slider
-                  min={100}
+                  min={80}
                   max={300}
                   value={this.state[this.state.active].zoomSlider}
                   onChange={this.handleSliderChange}
                 />
               </div>
             </div>
-            <button disabled={this.props.loading} onClick={this.onImageSave}>
+            <Button
+              color="success"
+              disabled={this.props.loading}
+              onClick={this.onImageSave}
+            >
               Upload
-            </button>
+            </Button>
           </Col>
         </Row>
       </div>
