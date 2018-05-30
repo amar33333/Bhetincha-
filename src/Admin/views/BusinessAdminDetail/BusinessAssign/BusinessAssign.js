@@ -19,7 +19,7 @@ import {
 import * as firebase from "firebase";
 import Select from "react-select";
 
-import MapComponent from "../../../../Common/components/MapComponent";
+import MapComponent from "../../../../Common/components/MapComponentAssign";
 import UserComponent from "./UserComponent";
 import BusinessTableComponent from "./BusinessTableComponent";
 
