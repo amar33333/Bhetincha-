@@ -36,8 +36,22 @@ class UserComponent extends Component {
     this.toggleActivePathTab = this.toggleActivePathTab.bind(this);
     this.state = {
       activeTab: "",
+      activeIndex: 0,
       activeBusinessTab: ""
     };
+
+    if (this.props.assignedPaths) {
+      console.log(
+        "user component: ",
+        this.state.activeIndex,
+        this.props.assignedPaths
+      );
+      this.props.salesUserActivePath({
+        activePath: this.props.assignedPaths[this.state.activeIndex]
+      });
+    } else {
+      console.log("else user componenet");
+    }
   }
 
   toggleActivePathTab(tabID) {
@@ -90,10 +104,25 @@ class UserComponent extends Component {
   //   console.log("panes: ", panes);
   // };
 
-  render() {
-    console.log("Assigned Paths: ", this.props.assignedPaths);
-    console.log("activeTab:", this.state.activeTab);
+  handleTabChange = (e, { activeIndex }) => {
+    console.log("tab change: ", activeIndex);
+    this.setState({ activeIndex }, () => {
+      if (this.props.assignedPaths) {
+        console.log(
+          "user component: ",
+          this.state.activeIndex,
+          this.props.assignedPaths.paths[activeIndex]
+        );
+        this.props.salesUserActivePath(
+          this.props.assignedPaths.paths[activeIndex]
+        );
+      } else {
+        console.log("else user componenet");
+      }
+    });
+  };
 
+  render() {
     const {
       username,
       first_name,
@@ -118,34 +147,41 @@ class UserComponent extends Component {
             <p> Department : {groups[0].name}</p>
             <p> Contact Number : {phone_number} </p>
             <Tab
+              activeIndex={this.state.activeIndex}
+              onTabChange={this.handleTabChange}
               panes={
                 this.props.assignedPaths &&
-                this.props.assignedPaths.paths.map((path, index) => ({
-                  menuItem: path.name,
-                  render: () => (
-                    <Tab.Pane>
-                      <Tab
-                        menu={{ fluid: true, vertical: true }}
-                        menuPosition="left"
-                        panes={path.bs.map(bs => ({
-                          menuItem: bs.business_name,
-                          render: () => (
-                            <Tab.Pane>
-                              <Label>Notes</Label>
-                              <Card>
-                                <CardBody>{bs.notes}</CardBody>
-                              </Card>
-                              <Label>Remainder</Label>
-                              <Card>
-                                <CardBody />
-                              </Card>
-                            </Tab.Pane>
-                          )
-                        }))}
-                      />
-                    </Tab.Pane>
-                  )
-                }))
+                this.props.assignedPaths.paths.map((path, index) => {
+                  {
+                    /* this.props.salesUserActivePath({ activePath: path }); */
+                  }
+                  return {
+                    menuItem: path.name,
+                    render: () => (
+                      <Tab.Pane>
+                        <Tab
+                          menu={{ fluid: true, vertical: true }}
+                          menuPosition="left"
+                          panes={path.bs.map(bs => ({
+                            menuItem: bs.business_name,
+                            render: () => (
+                              <Tab.Pane>
+                                <Label>Notes</Label>
+                                <Card>
+                                  <CardBody>{bs.notes}</CardBody>
+                                </Card>
+                                <Label>Remainder</Label>
+                                <Card>
+                                  <CardBody />
+                                </Card>
+                              </Tab.Pane>
+                            )
+                          }))}
+                        />
+                      </Tab.Pane>
+                    )
+                  };
+                })
               }
             />
           </CardBody>

@@ -26,7 +26,8 @@ import BusinessTableComponent from "./BusinessTableComponent";
 class BusinessAssign extends Component {
   state = {
     sales_username: "",
-    salesUsersLocation: []
+    salesUsersLocation: [],
+    activePath: ""
   };
 
   componentDidMount() {
@@ -63,8 +64,22 @@ class BusinessAssign extends Component {
 
   onChange = (key, event) => this.setState({ [key]: event.target.value });
 
+  salesUserActivePath = activePath =>
+    this.setState({ activePath }, () =>
+      console.log("state active path: ", activePath)
+    );
+
+  setSalesUserFromMapMarker = payload => {
+    const salesUser = this.props.salesUsers.find(
+      each => each.mongo_id === payload.mongo_id
+    );
+
+    this.handleSelectChange(salesUser);
+  };
+
   handleSelectChange = sales_username =>
     this.setState({ sales_username }, () => {
+      console.log("sales; ", sales_username);
       return this.state.sales_username
         ? this.props.onAssignedPathEachList({
             id: this.state.sales_username.mongo_id
@@ -78,6 +93,7 @@ class BusinessAssign extends Component {
         assignedPaths={this.props.assignedPaths}
         // activeTab={this.props.firstAssignedPathID}
         salesUser={this.state.sales_username}
+        salesUserActivePath={this.salesUserActivePath}
       />
     ) : null;
 
@@ -100,6 +116,8 @@ class BusinessAssign extends Component {
                       onClick={this.onChangeLatLng}
                       onDragEnd={this.onChangeLatLng}
                       assignedPaths={this.props.assignedPaths}
+                      setSalesUserFromMapMarker={this.setSalesUserFromMapMarker}
+                      activePath={this.state.activePath}
                     />
                   </Card>
                 </Col>

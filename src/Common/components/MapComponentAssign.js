@@ -17,69 +17,10 @@ class GoogleMapComponent extends Component {
   }
 
   onMarkerClicked = each => () => {
-    console.log("marker cicked: ", each);
-    console.log(
-      "wapoitns: ",
-      this.props.assignedPaths &&
-        this.props.assignedPaths.paths.map(eachPath => {
-          return eachPath.bs.map(eachBusiness => {
-            return {
-              lat: eachBusiness.location.latitude,
-              lng: eachBusiness.location.longitude
-            };
-          });
-        })
-    );
-
-    const DirectionsService = new google.maps.DirectionsService();
-    let waypoints =
-      this.props.assignedPaths &&
-      this.props.assignedPaths.paths.map(eachPath => {
-        return eachPath.bs.map(eachBusiness => {
-          return {
-            location: new google.maps.LatLng(
-              eachBusiness.location.latitude,
-              eachBusiness.location.longitude
-            )
-          };
-        });
-      });
-
-    console.log("actual wayping: ", waypoints);
-
-    // waypoints = [
-    //   { location: new google.maps.LatLng(27.719697, 85.331191) },
-    //   { location: new google.maps.LatLng(27.729697, 85.331191) },
-    //   { location: new google.maps.LatLng(27.739697, 85.331191) },
-    //   { location: new google.maps.LatLng(27.739697, 85.331191) },
-    //   { location: new google.maps.LatLng(27.739697, 85.331191) }
-    // ];
-
-    console.log("actual wayping 2: ", waypoints);
-
-    DirectionsService.route(
-      {
-        origin: new google.maps.LatLng(
-          each.Location.Latitude,
-          each.Location.Longitude
-        ),
-        destination: new google.maps.LatLng(27.719697, 85.331191),
-        waypoints: waypoints[0],
-        optimizeWaypoints: false,
-
-        travelMode: google.maps.TravelMode.DRIVING
-      },
-      (result, status) => {
-        if (status === google.maps.DirectionsStatus.OK) {
-          console.log("directions: ", result);
-          this.setState({
-            directions: result
-          });
-        } else {
-          console.error(`error fetching directions ${result}`);
-        }
-      }
-    );
+    this.props.setSalesUserFromMapMarker({
+      mongo_id: "5b0e2349c1ddbb7a83ded7b0",
+      username: "ramesh"
+    });
   };
 
   renderMarkers = () =>
@@ -98,6 +39,68 @@ class GoogleMapComponent extends Component {
         ))
       : null;
 
+  directionRenderer = () => {
+    const DirectionsService = new google.maps.DirectionsService();
+    console.log("active path: ", this.props.activePath);
+
+    // let waypoints = this.props.assignedPaths.paths.map(eachPath => {
+    //   return eachPath.bs.map(eachBusiness => {
+    //     return {
+    //       location: new google.maps.LatLng(
+    //         eachBusiness.location.latitude,
+    //         eachBusiness.location.longitude
+    //       )
+    //     };
+    //   });
+    // });
+
+    let waypoints =
+      this.props.activePath &&
+      this.props.activePath.bs.map(eachBusiness => {
+        return {
+          location: new google.maps.LatLng(
+            eachBusiness.location.latitude,
+            eachBusiness.location.longitude
+          )
+        };
+      });
+
+    console.log("actual wayping: ", waypoints);
+
+    // waypoints = [
+    //   { location: new google.maps.LatLng(27.719697, 85.331191) },
+    //   { location: new google.maps.LatLng(27.729697, 85.331191) },
+    //   { location: new google.maps.LatLng(27.739697, 85.331191) },
+    //   { location: new google.maps.LatLng(27.739697, 85.331191) },
+    //   { location: new google.maps.LatLng(27.739697, 85.331191) }
+    // ];
+
+    console.log("actual wayping 2: ", waypoints);
+
+    DirectionsService.route(
+      {
+        origin: new google.maps.LatLng(27.709697, 85.331191),
+        destination: new google.maps.LatLng(27.719697, 85.331191),
+        waypoints: waypoints,
+        optimizeWaypoints: true,
+
+        travelMode: google.maps.TravelMode.DRIVING
+      },
+      (result, status) => {
+        if (status === google.maps.DirectionsStatus.OK) {
+          console.log("directions: ", result);
+          this.setState({
+            directions: result
+          });
+        } else {
+          console.error(`error fetching directions ${result}`);
+        }
+      }
+    );
+
+    return <DirectionsRenderer directions={this.state.directions} />;
+  };
+
   render() {
     console.log("assigned patha: ", this.props.assignedPaths);
 
@@ -106,10 +109,10 @@ class GoogleMapComponent extends Component {
         ref={ref => (this.gEl = ref)}
         defaultZoom={15}
         defaultCenter={{ lat: 27.7172453, lng: 85.32391758465576 }}
-        onClick={({ latLng }) => this.props.onClick({ latLng })}
+        //onClick={({ latLng }) => this.props.onClick({ latLng })}
       >
         {this.renderMarkers()}
-        <DirectionsRenderer directions={this.state.directions} />
+        {this.directionRenderer()}
       </GoogleMap>
     );
   }
@@ -157,6 +160,8 @@ class MapComponent extends Component {
             mapElement={
               this.props.mapElement || <div style={{ height: `100%` }} />
             }
+            setSalesUserFromMapMarker={this.props.setSalesUserFromMapMarker}
+            activePath={this.props.activePath}
           />
         )}
       </div>
