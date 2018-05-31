@@ -7,10 +7,14 @@ import { MAIN_URL } from "../../config/MINISITE_API";
 import { onBusinessUpdate } from "../../actions";
 import { CustomModal } from "../../../../../Common/components";
 
+import { Button } from "reactstrap";
+
 class CoverPhoto extends Component {
   state = { PhotoEditorComponent: null, isOpen: false };
 
-  componentDidMount = () => this.props.mainEdit && this.renderPhotoComponent();
+  componentDidMount = () => {
+    this.props.mainEdit && this.renderPhotoComponent();
+  };
 
   componentDidUpdate(prevProps) {
     if (prevProps.mainEdit !== this.props.mainEdit) {
@@ -34,11 +38,28 @@ class CoverPhoto extends Component {
           src={`${MAIN_URL}${this.props.cover_photo}`}
           alt="banner"
         />
+        <div className="minisite_banner__img__text__overlay">
+          <h1>We are best in Town,</h1>
+          <h1>We get things Done!</h1>
+          <p style={{ marginTop: 20 }}>
+            We get things done in no time. Rember us for every digital needs.
+            Lorem ipsum dolor sit amet consectetur adipisicing elit.
+            Consequuntur quasi soluta dolorem, dignissimos nostrum voluptatibus
+            et reiciendis quas cum. Sapiente a, enim molestiae cumque
+            reprehenderit quos! Neque culpa dolor doloribus.
+          </p>
+          <Button outline color="warning" size="lg">
+            Contact now
+          </Button>
+        </div>
         {this.props.mainEdit && (
           <div className="minisite_banner__img__change__overlay">
-            <button onClick={() => this.setState({ isOpen: true })}>
-              Open Image Editor
-            </button>
+            <Button
+              color="primary"
+              onClick={() => this.setState({ isOpen: true })}
+            >
+              <i className="fa fa-camera" /> Open Image Editor
+            </Button>
           </div>
         )}
         {this.props.mainEdit && (
@@ -69,7 +90,12 @@ class CoverPhoto extends Component {
 }
 
 export default connect(
-  ({ MinisiteContainer: { crud: { cover_photo, logo }, edit } }) => ({
+  ({
+    MinisiteContainer: {
+      crud: { cover_photo, logo },
+      edit
+    }
+  }) => ({
     cover_photo,
     logo,
     mainEdit: edit.main,

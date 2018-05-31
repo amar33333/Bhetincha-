@@ -24,6 +24,8 @@ const EXTRA_SECTION_GET = "category/getsectionlist/";
 const EDIT_PERMISSION = "editpermission";
 const ASSIGNED_PATH = "businessCollection/sales-table/";
 
+export { MAIN_URL };
+
 export const COUNTRY_URL = `${MAIN_URL}/${ADDRESS}/${COUNTRY}`;
 export const DISTRICT_URL = `${MAIN_URL}/${ADDRESS}/${DISTRICT}`;
 export const STATE_URL = `${MAIN_URL}/${ADDRESS}/${STATE}`;

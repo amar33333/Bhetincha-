@@ -34,7 +34,6 @@ class Minisite extends Component {
   componentWillUnmount() {
     this.props.clearBusiness();
   }
-
   render() {
     return (
       <div>
