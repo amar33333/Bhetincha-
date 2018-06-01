@@ -11,15 +11,27 @@ import {
 import { GOOGLE_MAPS_URL } from "../utils/API";
 
 class GoogleMapComponent extends Component {
-  state = { directions: [] };
+  state = { directions: [], selectedSalesUser: "" };
   componentDidMount() {
     this.props.setRef(this.gEl);
   }
+  static getDerivedStateFromProps = nextProps => {
+    console.log("derived state crom props: ", nextProps);
+    return nextProps.selectedSalesUser
+      ? {
+          selectedSalesUser: nextProps.selectedSalesUser
+        }
+      : "";
+  };
 
   onMarkerClicked = each => () => {
+    console.log("marker clicked: ", each);
+    this.setState({ selectedSalesUser: each }, () =>
+      console.log("sate: ", this.state)
+    );
     this.props.setSalesUserFromMapMarker({
-      mongo_id: "5b0e2349c1ddbb7a83ded7b0",
-      username: "ramesh"
+      mongo_id: each.id,
+      username: each.username
     });
   };
 
@@ -27,10 +39,10 @@ class GoogleMapComponent extends Component {
     this.props.position.length
       ? this.props.position.map(each => (
           <Marker
-            key={each.Id}
+            key={each.id}
             position={{
-              lat: each.Location.Latitude,
-              lng: each.Location.Longitude
+              lat: each.location.latitude,
+              lng: each.location.longitude
             }}
             draggable={false}
             onClick={this.onMarkerClicked(each)}
@@ -62,10 +74,9 @@ class GoogleMapComponent extends Component {
             eachBusiness.location.latitude,
             eachBusiness.location.longitude
           )
+          //stopover: false
         };
       });
-
-    console.log("actual wayping: ", waypoints);
 
     // waypoints = [
     //   { location: new google.maps.LatLng(27.719697, 85.331191) },
@@ -75,11 +86,16 @@ class GoogleMapComponent extends Component {
     //   { location: new google.maps.LatLng(27.739697, 85.331191) }
     // ];
 
-    console.log("actual wayping 2: ", waypoints);
-
     DirectionsService.route(
       {
-        origin: new google.maps.LatLng(27.709697, 85.331191),
+        origin: new google.maps.LatLng(
+          this.state.selectedSalesUser
+            ? this.state.selectedSalesUser.location.latitude
+            : "",
+          this.state.selectedSalesUser
+            ? this.state.selectedSalesUser.location.longitude
+            : ""
+        ),
         destination: new google.maps.LatLng(27.719697, 85.331191),
         waypoints: waypoints,
         optimizeWaypoints: true,
@@ -102,7 +118,7 @@ class GoogleMapComponent extends Component {
   };
 
   render() {
-    console.log("assigned patha: ", this.props.assignedPaths);
+    console.log("assigned patha: ", this.state);
 
     return (
       <GoogleMap
@@ -162,6 +178,7 @@ class MapComponent extends Component {
             }
             setSalesUserFromMapMarker={this.props.setSalesUserFromMapMarker}
             activePath={this.props.activePath}
+            selectedSalesUser={this.props.selectedSalesUser}
           />
         )}
       </div>

@@ -41,22 +41,24 @@ class BusinessAssign extends Component {
 
       snapshot.forEach(childSnapshot => {
         const key = childSnapshot.key;
-        const Id = childSnapshot.child("Id").val();
+        const Id = childSnapshot.child("id").val();
 
         rootRef
           .child(key)
-          .child("Location")
+          .child("location")
           .orderByKey()
           .limitToLast(1)
           .once("child_added", locationSnapShot => {
             salesUsersLocation.push({
-              Id: Id,
-              Username: childSnapshot.child("Username").val(),
-              Location: locationSnapShot.val()
+              id: Id,
+              username: childSnapshot.child("username").val(),
+              location: locationSnapShot.val()
             });
           });
       });
-      this.setState({ salesUsersLocation });
+      this.setState({ salesUsersLocation }, () =>
+        console.log("buseinss state: ", this.state)
+      );
     });
 
     this.props.onSalesUserList();
@@ -64,10 +66,12 @@ class BusinessAssign extends Component {
 
   onChange = (key, event) => this.setState({ [key]: event.target.value });
 
-  salesUserActivePath = activePath =>
+  salesUserActivePath = activePath => {
+    console.log("obetained activepath; ", activePath);
     this.setState({ activePath }, () =>
       console.log("state active path: ", activePath)
     );
+  };
 
   setSalesUserFromMapMarker = payload => {
     const salesUser = this.props.salesUsers.find(
@@ -79,7 +83,7 @@ class BusinessAssign extends Component {
 
   handleSelectChange = sales_username =>
     this.setState({ sales_username }, () => {
-      console.log("sales; ", sales_username);
+      console.log("sales; ", this.state.sales_username);
       return this.state.sales_username
         ? this.props.onAssignedPathEachList({
             id: this.state.sales_username.mongo_id
@@ -118,6 +122,15 @@ class BusinessAssign extends Component {
                       assignedPaths={this.props.assignedPaths}
                       setSalesUserFromMapMarker={this.setSalesUserFromMapMarker}
                       activePath={this.state.activePath}
+                      selectedSalesUser={
+                        this.state.salesUsersLocation &&
+                        this.state.sales_username
+                          ? this.state.salesUsersLocation.find(
+                              each =>
+                                each.id === this.state.sales_username.mongo_id
+                            )
+                          : ""
+                      }
                     />
                   </Card>
                 </Col>

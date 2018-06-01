@@ -46,9 +46,13 @@ class UserComponent extends Component {
         this.state.activeIndex,
         this.props.assignedPaths
       );
-      this.props.salesUserActivePath({
-        activePath: this.props.assignedPaths[this.state.activeIndex]
-      });
+      console.log(
+        "active index: ",
+        this.props.assignedPaths[this.state.activeIndex]
+      );
+      this.props.salesUserActivePath(
+        this.props.assignedPaths[this.state.activeIndex]
+      );
     } else {
       console.log("else user componenet");
     }
