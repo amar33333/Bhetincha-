@@ -12,7 +12,8 @@ import {
   USERS_URL,
   PERMISSIONS_ALL_LIST_URL,
   TOGGLE_PERMISSION_URL,
-  ASSIGNED_PATH_URL
+  ASSIGNED_PATH_URL,
+  ASSIGNED_PATH_POST_URL
 } from "./ADMIN_API";
 
 import {
@@ -38,7 +39,7 @@ export const onAssignedPathEachGet = ({ access_token, id }) =>
 export const onAssignedPathPost = ({ access_token, body, mongoId }) =>
   ajax({
     method: "POST",
-    url: `${ASSIGNED_PATH_URL}${mongoId}/`,
+    url: `${ASSIGNED_PATH_POST_URL}${mongoId}/`,
     body,
     headers: {
       "Content-Type": "application/json",

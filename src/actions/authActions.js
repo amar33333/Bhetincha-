@@ -10,6 +10,7 @@ import {
   CREATE_USER_FULFILLED,
   CREATE_USER_REJECTED,
   CREATE_USER_PENDING,
+  COOKIES_LOAD_PENDING,
   COOKIES_LOAD_FULFILLED,
   LOGOUT_USER
 } from "./types";
@@ -28,12 +29,43 @@ import CookiesProvider from "../Common/utils/CookiesProvider";
 import { onLogin, onRegister, onUserGet } from "../Common/utils/serverCall";
 
 const epics = [];
-const cookies = new Cookies();
 
 export const loadCookies = () => ({
   type: COOKIES_LOAD_FULFILLED,
   payload: { cookies: CookiesProvider.getAllCookies() }
 });
+
+export const loadPermissions = () => ({
+  type: COOKIES_LOAD_PENDING
+});
+
+epics.push(action$ =>
+  action$.ofType(COOKIES_LOAD_PENDING).mergeMap(action => {
+    // console.log("acccc: ", CookiesProvider.getAccessToken());
+    const access_token = CookiesProvider.getAccessToken();
+    // if (access_token) {
+    return onUserGet({ access_token }).map(({ response }) => {
+      return {
+        type: COOKIES_LOAD_FULFILLED,
+        payload: {
+          cookies: {
+            token_data: CookiesProvider.getTokenData(),
+            user_data: {
+              ...CookiesProvider.getUserData(),
+              permissions: response.permissions
+            }
+          }
+        }
+      };
+    });
+    // } else {
+    //   console.log(
+    //     "no access token: i.e cookies: ",
+    //     CookiesProvider.getAllCookies()
+    //   );
+    // }
+  })
+);
 
 export const onSubmit = payload => ({
   type: FETCH_USER_PENDING,
@@ -54,54 +86,20 @@ epics.push(action$ =>
       })
       .concatMap(({ response }) => {
         console.log("user repsose: ", response);
-        const {
-          id,
-          permissions,
-          groups,
-          username,
-          date_joined,
-          email,
-          email_confirmed,
-          first_name,
-          last_login,
-          last_name,
-          name,
-          phone_confirmed,
-          phone_number,
-          slug,
-          is_active,
-          is_staff,
-          is_superuser
-        } = response;
-        CookiesProvider.setCookies(
-          "user_data",
-          {
-            id,
-            permissions,
-            groups,
-            username,
-            date_joined,
-            email,
-            email_confirmed,
-            first_name,
-            last_login,
-            last_name,
-            name,
-            phone_confirmed,
-            phone_number,
-            slug
-          },
-          "/",
-          expiryDate
-        );
-        // cookies.set("user_data", response, "/", expiryDate);
+        const { permissions, ...rest } = response;
+        console.log("permis rest: ", permissions, rest);
+
+        CookiesProvider.setCookies("user_data", rest, "/", expiryDate);
         console.log("cookei: ", CookiesProvider.getAllCookies());
         return [
           { type: TOGGLE_LOGIN_MODAL },
           {
             type: FETCH_USER_FULFILLED,
             payload: {
-              cookies: CookiesProvider.getAllCookies()
+              cookies: {
+                token_data: CookiesProvider.getTokenData(),
+                user_data: { ...CookiesProvider.getUserData(), permissions }
+              }
             },
             history
           }

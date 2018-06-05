@@ -10,6 +10,36 @@ import {
 } from "react-google-maps";
 import { GOOGLE_MAPS_URL } from "../utils/API";
 
+const calculateDistance = (lat1, long1, lat2, long2) => {
+  // radians
+  lat1 = (lat1 * 2.0 * Math.PI) / 60.0 / 360.0;
+  long1 = (long1 * 2.0 * Math.PI) / 60.0 / 360.0;
+  lat2 = (lat2 * 2.0 * Math.PI) / 60.0 / 360.0;
+  long2 = (long2 * 2.0 * Math.PI) / 60.0 / 360.0;
+
+  // use to different earth axis length
+  const a = 6378137.0; // Earth Major Axis (WGS84)
+  const b = 6356752.3142; // Minor Axis
+  const f = (a - b) / a; // "Flattening"
+  const e = 2.0 * f - f * f; // "Eccentricity"
+
+  let beta = a / Math.sqrt(1.0 - e * Math.sin(lat1) * Math.sin(lat1));
+  let cos = Math.cos(lat1);
+  let x = beta * cos * Math.cos(long1);
+  let y = beta * cos * Math.sin(long1);
+  let z = beta * (1 - e) * Math.sin(lat1);
+
+  beta = a / Math.sqrt(1.0 - e * Math.sin(lat2) * Math.sin(lat2));
+  cos = Math.cos(lat2);
+  x -= beta * cos * Math.cos(long2);
+  y -= beta * cos * Math.sin(long2);
+  z -= beta * (1 - e) * Math.sin(lat2);
+
+  return Math.sqrt(x * x + y * y + z * z) / 1000;
+};
+
+const image = "https://maps.google.com/mapfiles/ms/icons/green-dot.png";
+
 class GoogleMapComponent extends Component {
   state = { directions: [], selectedSalesUser: "" };
   componentDidMount() {
@@ -44,6 +74,7 @@ class GoogleMapComponent extends Component {
               lat: each.location.latitude,
               lng: each.location.longitude
             }}
+            icon={each.status === "Online" ? image : null}
             draggable={false}
             onClick={this.onMarkerClicked(each)}
             onDragEnd={this.props.onDragEnd}
@@ -78,6 +109,32 @@ class GoogleMapComponent extends Component {
         };
       });
 
+    const destination = {};
+    let max = 0;
+    this.props.activePath &&
+      this.props.activePath.bs.forEach(business => {
+        const latitude = this.state.selectedSalesUser
+          ? this.state.selectedSalesUser.location.latitude
+          : "";
+        const longitude = this.state.selectedSalesUser
+          ? this.state.selectedSalesUser.location.longitude
+          : "";
+
+        const dist = calculateDistance(
+          latitude,
+          longitude,
+          parseFloat(business.location.latitude),
+          parseFloat(business.location.longitude)
+        );
+        if (dist > max) {
+          max = dist;
+          destination.latitude = business.location.latitude;
+          destination.longitude = business.location.longitude;
+        }
+      });
+
+    console.log("destinaton: ", destination, waypoints);
+
     // waypoints = [
     //   { location: new google.maps.LatLng(27.719697, 85.331191) },
     //   { location: new google.maps.LatLng(27.729697, 85.331191) },
@@ -96,7 +153,10 @@ class GoogleMapComponent extends Component {
             ? this.state.selectedSalesUser.location.longitude
             : ""
         ),
-        destination: new google.maps.LatLng(27.719697, 85.331191),
+        destination: new google.maps.LatLng(
+          destination.latitude,
+          destination.longitude
+        ),
         waypoints: waypoints,
         optimizeWaypoints: true,
 
@@ -124,7 +184,7 @@ class GoogleMapComponent extends Component {
       <GoogleMap
         ref={ref => (this.gEl = ref)}
         defaultZoom={15}
-        defaultCenter={{ lat: 27.7172453, lng: 85.32391758465576 }}
+        defaultCenter={{ lat: 27.6999572, lng: 85.3275043 }}
         //onClick={({ latLng }) => this.props.onClick({ latLng })}
       >
         {this.renderMarkers()}

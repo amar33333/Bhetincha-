@@ -168,7 +168,7 @@ class AdminRoute extends Component {
           path="/admin/users/permissions"
           name="Permissions"
           component={Permissions}
-          permission="CAN_VIEW_PERMISSION"
+          permission="CAN_ACCESS_PERMISSION"
         />
 
         <Route path="/admin/settings" name="Settings" component={Settings} />

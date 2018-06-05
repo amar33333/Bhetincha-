@@ -23,6 +23,7 @@ const GROUP = "group/";
 const EXTRA_SECTION_GET = "category/getsectionlist/";
 const EDIT_PERMISSION = "editpermission";
 const ASSIGNED_PATH = "businessCollection/sales-table/";
+const ASSIGNED_PATH_POST = "businessCollection/path-create/";
 
 export { MAIN_URL };
 
@@ -44,3 +45,4 @@ export const PERMISSIONS_ALL_LIST_URL = `${MAIN_URL}/${PERMISSION}/${PERMISSIONS
 export const TOGGLE_PERMISSION_URL = `${MAIN_URL}/${PERMISSION}/${EDIT_PERMISSION}/`;
 
 export const ASSIGNED_PATH_URL = `${MAIN_URL}/${ASSIGNED_PATH}`;
+export const ASSIGNED_PATH_POST_URL = `${MAIN_URL}/${ASSIGNED_PATH_POST}`;

@@ -15,7 +15,7 @@ import "./static/scss/style.css";
 
 import { MainRoute } from "./config/routes";
 
-import { loadCookies } from "./actions";
+import { loadCookies, loadPermissions } from "./actions";
 
 import { ToastContainer } from "react-toastify";
 import { NOTIFICATION_TIME } from "./config/CONSTANTS";
@@ -23,7 +23,10 @@ import { NOTIFICATION_TIME } from "./config/CONSTANTS";
 class App extends Component {
   componentWillMount() {
     this.props.loadCookies();
+
+    this.props.loadPermissions();
   }
+
   render() {
     return (
       <div>
@@ -34,4 +37,7 @@ class App extends Component {
   }
 }
 
-export default connect(null, { loadCookies })(App);
+export default connect(
+  null,
+  { loadCookies, loadPermissions }
+)(App);

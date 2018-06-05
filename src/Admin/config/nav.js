@@ -127,7 +127,7 @@ const items = {
       name: "Logs",
       url: "/admin/users",
       icon: "fa fa-list",
-      permission: "CAN_VIEW_LOGS"
+      permission: "CAN_ACCESS_LOGS"
     },
     {
       title: true,
@@ -137,7 +137,7 @@ const items = {
       name: "Tele-Calling",
       url: "/admin/users",
       icon: "fa fa-headphones",
-      permission: "CAN_VIEW_TELE_CALLING"
+      permission: "CAN_VIEW_USER"
     },
     {
       title: true,
@@ -165,7 +165,7 @@ const items = {
           name: "Permissions",
           url: "/admin/users/permissions",
           icon: "icon-tag",
-          permission: "CAN_VIEW_PERMISSION"
+          permission: "CAN_ACCESS_PERMISSION"
         }
       ]
     },

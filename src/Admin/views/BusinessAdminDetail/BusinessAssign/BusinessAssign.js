@@ -41,7 +41,9 @@ class BusinessAssign extends Component {
 
       snapshot.forEach(childSnapshot => {
         const key = childSnapshot.key;
-        const Id = childSnapshot.child("id").val();
+        const id = childSnapshot.child("id").val();
+        const status = childSnapshot.child("status").val();
+        const username = childSnapshot.child("username").val();
 
         rootRef
           .child(key)
@@ -50,9 +52,10 @@ class BusinessAssign extends Component {
           .limitToLast(1)
           .once("child_added", locationSnapShot => {
             salesUsersLocation.push({
-              id: Id,
-              username: childSnapshot.child("username").val(),
-              location: locationSnapShot.val()
+              id,
+              username,
+              location: locationSnapShot.val(),
+              status
             });
           });
       });
@@ -92,7 +95,7 @@ class BusinessAssign extends Component {
     });
 
   renderUserComponent = () =>
-    this.state.sales_username ? (
+    this.state.sales_username && this.props.assignedPaths ? (
       <UserComponent
         assignedPaths={this.props.assignedPaths}
         // activeTab={this.props.firstAssignedPathID}
@@ -102,6 +105,7 @@ class BusinessAssign extends Component {
     ) : null;
 
   render() {
+    console.log("tab props: ", this.props.assignedPaths);
     return (
       <div className="animated fadeIn">
         <Col>

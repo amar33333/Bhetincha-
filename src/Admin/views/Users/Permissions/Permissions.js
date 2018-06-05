@@ -96,6 +96,8 @@ class Permissions extends Component {
         ? this.state.permissions_list
         : this.state.excluded_permissions_list;
 
+    console.log("checkbox perm list: ", checkbox_perm_list);
+
     return checkbox_perm_list.map((item, i) => (
       <ListGroupItem
         key={i}

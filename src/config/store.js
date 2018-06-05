@@ -20,7 +20,10 @@ if (process.env.NODE_ENV === "development") {
 //store instantiation
 const store = createStore(
   createReducer(),
-  compose(applyMiddleware(...middleware), ...enhancers)
+  compose(
+    applyMiddleware(...middleware),
+    ...enhancers
+  )
 );
 
 // Extra functionality to the store
