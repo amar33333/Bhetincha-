@@ -24,6 +24,7 @@ const EXTRA_SECTION_GET = "category/getsectionlist/";
 const EDIT_PERMISSION = "editpermission";
 const ASSIGNED_PATH = "businessCollection/sales-table/";
 const ASSIGNED_PATH_POST = "businessCollection/path-create/";
+const ASSIGNED_LIST = "business/assign-list/";
 
 export { MAIN_URL };
 
@@ -44,5 +45,6 @@ export const USER_GROUPS_URL = `${MAIN_URL}/${PERMISSION}/${GROUP}`;
 export const PERMISSIONS_ALL_LIST_URL = `${MAIN_URL}/${PERMISSION}/${PERMISSIONS_ALL_LIST}/`;
 export const TOGGLE_PERMISSION_URL = `${MAIN_URL}/${PERMISSION}/${EDIT_PERMISSION}/`;
 
+export const ASSIGNED_LIST_URL = `${MAIN_URL}/${ASSIGNED_LIST}`;
 export const ASSIGNED_PATH_URL = `${MAIN_URL}/${ASSIGNED_PATH}`;
 export const ASSIGNED_PATH_POST_URL = `${MAIN_URL}/${ASSIGNED_PATH_POST}`;

@@ -15,7 +15,8 @@ import {
   onCompanyTypePut,
   onPaymentMethodPut,
   onAssignedPathPost,
-  onAssignedPathEachGet
+  onAssignedPathEachGet,
+  onAssignedBusinessAllGetAjax
 } from "../config/adminServerCall";
 
 import {
@@ -235,7 +236,7 @@ epics.push((action$, { getState }) =>
           typeof response === "object" &&
           Array.isArray(response) === false
         ) {
-          toast.success("Businesses fetched successfully!");
+          // toast.success("Businesses fetched successfully!");
           return {
             type: FETCH_BUSINESS_FULFILLED,
             payload: response
@@ -285,7 +286,7 @@ epics.push((action$, { getState }) =>
           typeof response === "object" &&
           Array.isArray(response) === false
         ) {
-          toast.success("Businesses fetched successfully!");
+          // toast.success("Businesses fetched successfully!");
           return {
             type: FETCH_APP_BUSINESS_FULFILLED,
             payload: response
@@ -316,17 +317,16 @@ epics.push((action$, { getState }) =>
     params.sort_by = filterValue.sort_by.map(
       data => `${data.id}-${data.desc ? "desc" : "asc"}`
     );
-    params.industry = filterValue.industry
-      ? filterValue.industry.map(industry => industry.id)
-      : [];
-    params.area = filterValue.area ? filterValue.area.map(area => area.id) : [];
+    if (filterValue.industry.length)
+      params.industry = filterValue.industry.map(industry => industry.id);
+    if (filterValue.area) params.area = filterValue.area.id;
 
     if (payload) {
       if (payload.rows) params.rows = payload.rows;
       if (payload.page) params.page = payload.page;
     }
 
-    return onBusinessAllGetAjax({
+    return onAssignedBusinessAllGetAjax({
       access_token: getState().auth.cookies.token_data.access_token,
       params
     })
@@ -336,7 +336,7 @@ epics.push((action$, { getState }) =>
           typeof response === "object" &&
           Array.isArray(response) === false
         ) {
-          toast.success("Businesses fetched successfully!");
+          // toast.success("Businesses fetched successfully!");
           return {
             type: FETCH_ASSIGN_BUSINESS_FULFILLED,
             payload: response

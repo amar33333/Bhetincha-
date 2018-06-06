@@ -13,7 +13,8 @@ import {
   PERMISSIONS_ALL_LIST_URL,
   TOGGLE_PERMISSION_URL,
   ASSIGNED_PATH_URL,
-  ASSIGNED_PATH_POST_URL
+  ASSIGNED_PATH_POST_URL,
+  ASSIGNED_LIST_URL
 } from "./ADMIN_API";
 
 import {
@@ -25,6 +26,16 @@ import axios from "axios";
 
 import { ajax } from "rxjs/observable/dom/ajax";
 import querystring from "querystring";
+
+export const onAssignedBusinessAllGetAjax = ({ access_token, params }) =>
+  ajax({
+    method: "GET",
+    url: `${ASSIGNED_LIST_URL}?${querystring.stringify(params)}`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
 
 export const onAssignedPathEachGet = ({ access_token, id }) =>
   ajax({
