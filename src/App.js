@@ -17,6 +17,8 @@ import { MainRoute } from "./config/routes";
 
 import { loadCookies, loadPermissions } from "./actions";
 
+import CookiesProvider from "./Common/utils/CookiesProvider";
+
 import { ToastContainer } from "react-toastify";
 import { NOTIFICATION_TIME } from "./config/CONSTANTS";
 
@@ -24,7 +26,7 @@ class App extends Component {
   componentWillMount() {
     this.props.loadCookies();
 
-    this.props.loadPermissions();
+    if (CookiesProvider.getAccessToken()) this.props.loadPermissions();
   }
 
   render() {
