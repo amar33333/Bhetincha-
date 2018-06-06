@@ -7,9 +7,12 @@ import {
   FETCH_USER_FULFILLED,
   FETCH_USER_REJECTED,
   FETCH_USER_PENDING,
-  CREATE_USER_FULFILLED,
-  CREATE_USER_REJECTED,
-  CREATE_USER_PENDING,
+  CREATE_BUSINESS_USER_FULFILLED,
+  CREATE_BUSINESS_USER_REJECTED,
+  CREATE_BUSINESS_USER_PENDING,
+  CREATE_INDIVIDUAL_USER_FULFILLED,
+  CREATE_INDIVIDUAL_USER_REJECTED,
+  CREATE_INDIVIDUAL_USER_PENDING,
   COOKIES_LOAD_PENDING,
   COOKIES_LOAD_FULFILLED,
   LOGOUT_USER
@@ -26,7 +29,12 @@ import {
 } from "../config/CONSTANTS";
 
 import CookiesProvider from "../Common/utils/CookiesProvider";
-import { onLogin, onRegister, onUserGet } from "../Common/utils/serverCall";
+import {
+  onLogin,
+  onBusinessRegister,
+  onIndividualRegister,
+  onUserGet
+} from "../Common/utils/serverCall";
 
 const epics = [];
 
@@ -131,26 +139,65 @@ epics.push((action$, { getState }) =>
     .ignoreElements()
 );
 
-export const onRegisterSubmit = payload => ({
-  type: CREATE_USER_PENDING,
+export const onBusinessRegisterSubmit = payload => ({
+  type: CREATE_BUSINESS_USER_PENDING,
   payload
 });
 
 epics.push(action$ =>
   action$
-    .ofType(CREATE_USER_PENDING)
-    .mergeMap(action => onRegister({ ...action.payload }))
+    .ofType(CREATE_BUSINESS_USER_PENDING)
+    .mergeMap(action => onBusinessRegister({ ...action.payload }))
     .concatMap(({ response }) => {
-      toast.success("Registered Successfully");
+      if (response.msg === "success") {
+        toast.success("Registered Successfully");
 
-      return [
-        { type: TOGGLE_REGISTER_MODAL },
-        { type: CREATE_USER_FULFILLED, payload: response }
-      ];
+        return [
+          { type: TOGGLE_REGISTER_MODAL },
+          { type: CREATE_BUSINESS_USER_FULFILLED, payload: response }
+        ];
+      } else {
+        throw new Error(response.msg[Object.keys(response.msg)[0]][0]);
+      }
     })
-    .catch(ajaxError =>
-      Observable.of({ type: CREATE_USER_REJECTED, payload: ajaxError })
-    )
+    .catch(ajaxError => {
+      toast.error(ajaxError.toString());
+      return Observable.of({
+        type: CREATE_BUSINESS_USER_REJECTED,
+        payload: ajaxError
+      });
+    })
+);
+
+export const onIndividualRegisterSubmit = payload => ({
+  type: CREATE_INDIVIDUAL_USER_PENDING,
+  payload
+});
+
+epics.push(action$ =>
+  action$
+    .ofType(CREATE_INDIVIDUAL_USER_PENDING)
+    .mergeMap(action => onIndividualRegister({ ...action.payload }))
+    .concatMap(({ response }) => {
+      if (response.msg === "success") {
+        toast.success("Registered Successfully");
+
+        return [
+          { type: TOGGLE_REGISTER_MODAL },
+          { type: CREATE_INDIVIDUAL_USER_FULFILLED, payload: response }
+        ];
+      } else {
+        throw new Error(response.msg[Object.keys(response.msg)[0]][0]);
+      }
+    })
+    .catch(ajaxError => {
+      toast.error(ajaxError.toString());
+
+      return Observable.of({
+        type: CREATE_INDIVIDUAL_USER_REJECTED,
+        payload: ajaxError
+      });
+    })
 );
 
 export const onLogout = () => ({

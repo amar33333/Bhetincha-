@@ -33,23 +33,28 @@ class RegisterModal extends Component {
 
   renderModal = () => {
     return this.state.businessRegisterModal ? (
-      <BusinessRegisterModal />
-    ) : (
-      <IndividualRegisterModal />
-    );
-  };
-
-  render() {
-    return (
       <div>
-        {this.renderModal()}
+        <BusinessRegisterModal />
         <span>
           <a href="#" onClick={this.onToggleVisible}>
             Register as Individual{" "}
           </a>
         </span>
       </div>
+    ) : (
+      <div>
+        <IndividualRegisterModal />
+        <span>
+          <a href="#" onClick={this.onToggleVisible}>
+            Register as Business{" "}
+          </a>
+        </span>
+      </div>
     );
+  };
+
+  render() {
+    return this.renderModal();
   }
 }
 

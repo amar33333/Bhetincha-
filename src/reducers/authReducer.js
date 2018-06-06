@@ -2,9 +2,12 @@ import {
   FETCH_USER_PENDING,
   FETCH_USER_FULFILLED,
   FETCH_USER_REJECTED,
-  CREATE_USER_PENDING,
-  CREATE_USER_FULFILLED,
-  CREATE_USER_REJECTED,
+  CREATE_BUSINESS_USER_FULFILLED,
+  CREATE_BUSINESS_USER_REJECTED,
+  CREATE_BUSINESS_USER_PENDING,
+  CREATE_INDIVIDUAL_USER_FULFILLED,
+  CREATE_INDIVIDUAL_USER_REJECTED,
+  CREATE_INDIVIDUAL_USER_PENDING,
   COOKIES_LOAD_FULFILLED,
   LOGOUT_USER
 } from "../actions/types";
@@ -33,13 +36,22 @@ export default function(state = INITIAL_STATE, action) {
     case FETCH_USER_REJECTED:
       return { ...state, loading: false, error: true };
 
-    case CREATE_USER_PENDING:
+    case CREATE_BUSINESS_USER_PENDING:
       return { ...state, loading: true };
 
-    case CREATE_USER_FULFILLED:
+    case CREATE_BUSINESS_USER_FULFILLED:
       return { ...state, data: action.payload, loading: false };
 
-    case CREATE_USER_REJECTED:
+    case CREATE_BUSINESS_USER_REJECTED:
+      return { ...state, loading: false };
+
+    case CREATE_INDIVIDUAL_USER_PENDING:
+      return { ...state, loading: true };
+
+    case CREATE_INDIVIDUAL_USER_FULFILLED:
+      return { ...state, data: action.payload, loading: false };
+
+    case CREATE_INDIVIDUAL_USER_REJECTED:
       return { ...state, loading: false };
 
     default:
