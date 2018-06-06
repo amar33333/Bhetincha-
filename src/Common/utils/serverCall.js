@@ -2,7 +2,8 @@ import {
   O_TOKEN_URL,
   CLIENT_ID,
   CLIENT_SECRET,
-  REGISTER_URL,
+  BUSINESS_REGISTER_URL,
+  INDIVIDUAL_REGISTER_URL,
   GET_USER_INFO_URL
 } from "./API";
 import querystring from "querystring";
@@ -34,15 +35,44 @@ export const onUserGet = ({ access_token }) =>
     }
   });
 
-export const onRegister = ({ username, password, email, business_name }) =>
+export const onBusinessRegister = ({
+  username,
+  password,
+  email,
+  business_name
+}) =>
   ajax({
     method: "post",
-    url: REGISTER_URL,
+    url: BUSINESS_REGISTER_URL,
     body: {
       username,
       password,
       email,
       business_name
+    },
+    headers: {
+      "Content-Type": "application/json"
+    }
+  });
+
+export const onIndividualRegister = ({
+  username,
+  password,
+  email,
+  first_name,
+  last_name,
+  phone_number
+}) =>
+  ajax({
+    method: "post",
+    url: INDIVIDUAL_REGISTER_URL,
+    body: {
+      username,
+      password,
+      email,
+      first_name,
+      last_name,
+      phone_number
     },
     headers: {
       "Content-Type": "application/json"

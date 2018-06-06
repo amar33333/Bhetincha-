@@ -16,7 +16,7 @@ import { toast } from "react-toastify";
 
 import { connect } from "react-redux";
 
-import { onRegisterSubmit } from "../../../../actions";
+import { onIndividualRegisterSubmit } from "../../../../actions";
 
 class IndidividualRegisterModal extends Component {
   state = {
@@ -26,6 +26,7 @@ class IndidividualRegisterModal extends Component {
     email: "",
     first_name: "",
     last_name: "",
+    phone_number: "",
     checked: false
   };
 
@@ -43,17 +44,19 @@ class IndidividualRegisterModal extends Component {
       email,
       first_name,
       last_name,
+      phone_number,
       checked
     } = this.state;
 
     if (password === confirm_password) {
       if (checked) {
-        this.props.onRegisterSubmit({
+        this.props.onIndividualRegisterSubmit({
           username,
           password,
           email,
           first_name,
-          last_name
+          last_name,
+          phone_number
         });
       } else toast.error("You have to agree to our User Agreement Policy");
     } else {
@@ -77,6 +80,36 @@ class IndidividualRegisterModal extends Component {
             placeholder="First Name"
             value={this.state.first_name}
             onChange={this.onChange.bind(this, "first_name")}
+          />
+        </InputGroup>
+        <InputGroup className="mb-3">
+          <InputGroupAddon addonType="prepend">
+            <InputGroupText>
+              <i className="icon-user" />
+            </InputGroupText>
+          </InputGroupAddon>
+          <Input
+            autoFocus
+            required
+            type="text"
+            placeholder="Last Name"
+            value={this.state.last_name}
+            onChange={this.onChange.bind(this, "last_name")}
+          />
+        </InputGroup>
+        <InputGroup className="mb-3">
+          <InputGroupAddon addonType="prepend">
+            <InputGroupText>
+              <i className="icon-user" />
+            </InputGroupText>
+          </InputGroupAddon>
+          <Input
+            autoFocus
+            required
+            type="text"
+            placeholder="Phone Number"
+            value={this.state.phone_number}
+            onChange={this.onChange.bind(this, "phone_number")}
           />
         </InputGroup>
         <InputGroup className="mb-3">
@@ -200,5 +233,5 @@ const mapStateToProps = ({ auth }) => {
 
 export default connect(
   mapStateToProps,
-  { onRegisterSubmit }
+  { onIndividualRegisterSubmit }
 )(IndidividualRegisterModal);

@@ -10,6 +10,7 @@ export const GOOGLE_MAPS_URL = `https://maps.googleapis.com/maps/api/js?key=${MA
 const GET_USER_INFO = "api/accounts/getuserinfo/";
 
 const BUSINESS_INFO = "business/business/";
+const INDIVIDUAL_REGISTER = "individual/register/";
 const BUSINESS_LIST = "business/business/";
 const API = "api";
 const ACCOUNTS = "accounts";
@@ -22,7 +23,8 @@ export const CLIENT_SECRET =
 export const GET_USER_INFO_URL = `${MAIN_URL}/${GET_USER_INFO}`;
 export const BUSINESS_INFO_URL = `${MAIN_URL}/${BUSINESS_INFO}`;
 export const BUSINESS_LIST_URL = `${MAIN_URL}/${BUSINESS_LIST}`;
-export const REGISTER_URL = `${MAIN_URL}/${BUSINESS_INFO}`;
+export const BUSINESS_REGISTER_URL = `${MAIN_URL}/${BUSINESS_INFO}`;
+export const INDIVIDUAL_REGISTER_URL = `${MAIN_URL}/${INDIVIDUAL_REGISTER}`;
 // export const REGISTER_URL = `${MAIN_URL}/${API}/${ACCOUNTS}/${USER}`;
 
 export const O_TOKEN_URL = `${MAIN_URL}/${O_TOKEN}`;

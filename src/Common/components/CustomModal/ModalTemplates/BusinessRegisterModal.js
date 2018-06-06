@@ -16,7 +16,7 @@ import { toast } from "react-toastify";
 
 import { connect } from "react-redux";
 
-import { onRegisterSubmit } from "../../../../actions";
+import { onBusinessRegisterSubmit } from "../../../../actions";
 
 class BusinessRegisterModal extends Component {
   state = {
@@ -46,7 +46,7 @@ class BusinessRegisterModal extends Component {
 
     if (password === confirm_password) {
       if (checked) {
-        this.props.onRegisterSubmit({
+        this.props.onBusinessRegisterSubmit({
           username,
           password,
           email,
@@ -197,5 +197,5 @@ const mapStateToProps = ({ auth }) => {
 
 export default connect(
   mapStateToProps,
-  { onRegisterSubmit }
+  { onBusinessRegisterSubmit }
 )(BusinessRegisterModal);
