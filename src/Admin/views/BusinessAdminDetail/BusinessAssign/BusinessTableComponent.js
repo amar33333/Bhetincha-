@@ -383,9 +383,9 @@ class BusinessTableComponent extends Component {
                         <Chip
                           key={business.addressID}
                           title={business.business_name}
-                          subtitle={`${business.addressName},${
-                            business.landmark
-                          }`}
+                          subtitle={`${
+                            business.addressName
+                          },${business.landmark || ""}`}
                           uri={business.logoURI}
                           onClose={() =>
                             this.setState({
