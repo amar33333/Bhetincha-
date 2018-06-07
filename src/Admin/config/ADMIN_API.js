@@ -25,6 +25,7 @@ const EDIT_PERMISSION = "editpermission";
 const ASSIGNED_PATH = "businessCollection/sales-table/";
 const ASSIGNED_PATH_POST = "businessCollection/path-create/";
 const ASSIGNED_LIST = "business/assign-list/";
+const VERIFY_BUSINESS = "business/business/";
 
 export { MAIN_URL };
 
@@ -48,3 +49,4 @@ export const TOGGLE_PERMISSION_URL = `${MAIN_URL}/${PERMISSION}/${EDIT_PERMISSIO
 export const ASSIGNED_LIST_URL = `${MAIN_URL}/${ASSIGNED_LIST}`;
 export const ASSIGNED_PATH_URL = `${MAIN_URL}/${ASSIGNED_PATH}`;
 export const ASSIGNED_PATH_POST_URL = `${MAIN_URL}/${ASSIGNED_PATH_POST}`;
+export const VERIFY_BUSINESS_URL = `${MAIN_URL}/${VERIFY_BUSINESS}`;
