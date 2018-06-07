@@ -170,9 +170,9 @@ class UserComponent extends Component {
                                 <Card>
                                   <CardBody>{bs.notes}</CardBody>
                                 </Card>
-                                <Label>Remainder</Label>
+                                <Label>Reminder</Label>
                                 <Card>
-                                  <CardBody />
+                                  <CardBody>{bs.reminder}</CardBody>
                                 </Card>
                               </Tab.Pane>
                             )
