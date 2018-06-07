@@ -25,29 +25,34 @@ body {
   position: absolute;
   left: 10%;
 }
+
+.business-navbar {
+  border-bottom: 1px solid rgba(202, 206, 209, 0.3);
+}
+
 .main-nav li {
   list-style-type: none !important;
 }
 
 input.main-nav-search {
-  background: transparent !important;
-  border: 1px cornsilk solid !important;
-  color: cornsilk !important;
+  background: white !important;
+  border: 1px lightgrey solid !important;
+  color: darkslategrey !important;
   width: 40vw !important;
 }
 
 input.main-nav-search::-moz-placeholder {
-  color: cornsilk;
+  color: darkslategrey;
   opacity: 0.7;
 }
 
 input.main-nav-search::-ms-input-placeholder {
-  color: cornsilk;
+  color: darkslategrey;
   opacity: 0.7;
 }
 
 input.main-nav-search::placeholder {
-  color: cornsilk;
+  color: darkslategrey;
   opacity: 0.7;
 }
 .main-nav-search i {

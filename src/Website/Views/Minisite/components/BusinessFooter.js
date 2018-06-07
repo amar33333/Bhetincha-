@@ -89,8 +89,12 @@ class BusinessFooter extends Component {
 
 export default connect(
   ({
-    MinisiteContainer: { crud: { logo, business_name } },
-    auth: { cookies: { user_data } }
+    MinisiteContainer: {
+      crud: { logo, business_name }
+    },
+    auth: {
+      cookies: { user_data }
+    }
   }) => ({
     user_data,
     logo,
