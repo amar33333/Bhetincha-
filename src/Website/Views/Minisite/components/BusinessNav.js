@@ -134,7 +134,7 @@ class BusinessNav extends Component {
                     draggable="false"
                     to={`/${this.props.businessName}/contact`}
                     className="nav-link minisite_business__nav__item"
-                    smooth
+                    // smooth
                   >
                     Contact
                   </Link>
