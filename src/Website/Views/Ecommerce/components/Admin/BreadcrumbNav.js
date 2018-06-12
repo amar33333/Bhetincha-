@@ -25,7 +25,6 @@ class BreadcrumbNav extends Component {
                       style={{ cursor: "pointer" }}
                       onClick={() => {
                         this.props.onChangeActiveCategory(item.uid);
-                        console.log("clicked home", item.uid);
                       }}
                     >
                       {item.name}
