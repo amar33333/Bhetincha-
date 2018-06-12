@@ -27,12 +27,12 @@ class EcommerceAdmin extends Component {
               categories={this.props.categories}
               activeCategory={this.props.activeCategory}
               onChangeActiveCategory={this.props.onChangeActiveCategory}
+              isOpen={this.props.isOpenCategories}
             />
           </Col>
           <Col xs="12" md="9">
             <BreadcrumbNav
-              categories={this.props.categories}
-              activeCategory={this.props.activeCategory}
+              category={this.props.selectedCategoryDetail}
               onChangeActiveCategory={this.props.onChangeActiveCategory}
             />
             <CategoryDetailView
@@ -48,11 +48,18 @@ class EcommerceAdmin extends Component {
 export default connect(
   ({
     EcommerceContainer: {
-      admin: { categories, activeCategory }
+      admin: {
+        categories,
+        activeCategory,
+        isOpenCategories,
+        selectedCategoryDetail
+      }
     }
   }) => ({
     categories,
-    activeCategory
+    activeCategory,
+    isOpenCategories,
+    selectedCategoryDetail
   }),
   { onCategoriesList, onChangeActiveCategory, onCategorySubmit }
 )(EcommerceAdmin);

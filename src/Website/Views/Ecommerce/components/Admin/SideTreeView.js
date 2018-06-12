@@ -4,7 +4,7 @@ import { Treebeard } from "react-treebeard";
 class SideTreeView extends Component {
   constructor(props) {
     super(props);
-    this.state = { isOpen: [], active: [], categories: {} };
+    this.state = { categories: {} };
   }
 
   updateCategories = category => {
@@ -17,59 +17,27 @@ class SideTreeView extends Component {
     }
     return {
       ...rest,
-      toggled: this.state.isOpen.includes(category.uid),
-      active: this.state.active.includes(category.uid),
+      toggled: this.props.isOpen.includes(category.uid),
+      active: this.props.activeCategory === category.uid,
       ...extra
     };
   };
 
   componentDidUpdate(prevProps) {
-    if (prevProps.categories !== this.props.categories) {
+    if (
+      prevProps.categories !== this.props.categories ||
+      (!prevProps.activeCategory && this.props.activeCategory) ||
+      prevProps.isOpen !== this.props.isOpen
+    ) {
+      // console.log("called", this.props.activeCategory);
       this.setState({
         categories: this.updateCategories(this.props.categories)
       });
     }
-
-    if (!prevProps.activeCategory && this.props.activeCategory) {
-      this.setState(
-        {
-          active: [this.props.activeCategory],
-          isOpen: [this.props.activeCategory]
-        },
-        () => {
-          this.setState({
-            categories: this.updateCategories(this.props.categories)
-          });
-        }
-      );
-    }
   }
 
-  onToggle = (node, toggled) => {
-    let active = this.props.activeCategory
-      ? this.state.active.filter(uid => uid !== this.props.activeCategory)
-      : this.state.active;
-
-    if (active.includes(node.uid)) {
-      active = active.filter(uid => uid !== node.uid);
-    } else {
-      active.push(node.uid);
-    }
-
-    let isOpen = this.state.isOpen;
-    if (toggled) {
-      isOpen.push(node.uid);
-    } else {
-      isOpen = isOpen.filter(uid => uid !== node.uid);
-    }
-
-    this.setState({ active, isOpen }, () => {
-      this.setState({
-        categories: this.updateCategories(this.state.categories)
-      });
-    });
-
-    this.props.onChangeActiveCategory(node.uid);
+  onToggle = ({ uid }) => {
+    this.props.onChangeActiveCategory(uid, this.props.activeCategory);
   };
 
   render() {

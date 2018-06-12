@@ -19,3 +19,12 @@ export const onCategoryPost = ({ name, parent }) =>
       "Content-Type": "application/json"
     }
   });
+
+export const onCategoryDetailGet = ({ uid }) =>
+  ajax({
+    method: "GET",
+    url: `${CATEGORY_URL}${uid}/`,
+    headers: {
+      "Content-Type": "application/json"
+    }
+  });
