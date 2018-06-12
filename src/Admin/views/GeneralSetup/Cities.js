@@ -42,11 +42,6 @@ import {
 } from "../../actions";
 
 class Cities extends Component {
-  static getDerivedStateFromProps = (nextProps, prevState) =>
-    prevState.citySubmit && !nextProps.error && !nextProps.loading
-      ? { city: "", citySubmit: false }
-      : null;
-
   state = {
     country: "",
     state: "",
@@ -179,7 +174,13 @@ class Cities extends Component {
   }
 
   componentDidUpdate = (prevProps, prevState, snapshot) => {
-    if (prevState.citySubmit && prevProps.loading) this.focusableInput.focus();
+    if (prevState.citySubmit && !this.props.loading) {
+      const updates = { citySubmit: false };
+      if (!this.props.error) {
+        updates.city = "";
+      }
+      this.setState(updates, () => this.focusableInput.focus());
+    }
   };
 
   componentWillUnmount() {

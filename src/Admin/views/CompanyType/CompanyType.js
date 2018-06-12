@@ -31,11 +31,6 @@ import {
 } from "../../actions";
 
 class CompanyType extends Component {
-  static getDerivedStateFromProps = (nextProps, prevState) =>
-    prevState.companyTypeSubmit && !nextProps.error && !nextProps.loading
-      ? { company_type: "", companyTypeSubmit: false }
-      : null;
-
   state = { company_type: "", companyTypeSubmit: false };
 
   tableProps = {
@@ -84,8 +79,13 @@ class CompanyType extends Component {
   componentDidMount = () => this.props.onCompanyTypeList();
 
   componentDidUpdate = (prevProps, prevState) => {
-    if (prevState.companyTypeSubmit && prevProps.loading)
-      this.focusableInput.focus();
+    if (prevState.companyTypeSubmit && !this.props.loading) {
+      const updates = { companyTypeSubmit: false };
+      if (!this.props.error) {
+        updates.company_type = "";
+      }
+      this.setState(updates, () => this.focusableInput.focus());
+    }
   };
 
   componentWillUnmount = () => this.props.onUnmountCompanyType();

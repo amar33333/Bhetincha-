@@ -43,11 +43,6 @@ import {
 } from "../../actions";
 
 class Areas extends Component {
-  static getDerivedStateFromProps = (nextProps, prevState) =>
-    prevState.areaSubmit && !nextProps.error && !nextProps.loading
-      ? { area: "", areaSubmit: false }
-      : null;
-
   state = {
     country: "",
     state: "",
@@ -205,7 +200,13 @@ class Areas extends Component {
   }
 
   componentDidUpdate = (prevProps, prevState, snapshot) => {
-    if (prevState.areaSubmit && prevProps.loading) this.focusableInput.focus();
+    if (prevState.areaSubmit && !this.props.loading) {
+      const updates = { areaSubmit: false };
+      if (!this.props.error) {
+        updates.area = "";
+      }
+      this.setState(updates, () => this.focusableInput.focus());
+    }
   };
 
   componentWillUnmount() {

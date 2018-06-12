@@ -31,11 +31,6 @@ import {
 } from "../../actions";
 
 class PaymentMethod extends Component {
-  static getDerivedStateFromProps = (nextProps, prevState) =>
-    prevState.paymentMethodSubmit && !nextProps.error && !nextProps.loading
-      ? { payment_method: "", paymentMethodSubmit: false }
-      : null;
-
   state = { payment_method: "", paymentMethodSubmit: false };
 
   tableProps = {
@@ -84,8 +79,13 @@ class PaymentMethod extends Component {
   componentDidMount = () => this.props.onPaymentMethodsList();
 
   componentDidUpdate = (prevProps, prevState) => {
-    if (prevState.paymentMethodSubmit && prevProps.loading)
-      this.focusableInput.focus();
+    if (prevState.paymentMethodSubmit && !this.props.loading) {
+      const updates = { paymentMethodSubmit: false };
+      if (!this.props.error) {
+        updates.payment_method = "";
+      }
+      this.setState(updates, () => this.focusableInput.focus());
+    }
   };
 
   componentWillUnmount = () => this.props.onUnmountPaymentMethod();
