@@ -3,7 +3,6 @@ import DynamicImport from "../../Common/utils/DynamicImport";
 import { Route, Switch } from "react-router-dom";
 import { Loading } from "../../Common/pages";
 import { Home, BusinessList } from "../Views";
-import EcommerceAdmin from "../Views/Ecommerce/EcommerceAdmin";
 import {
   ROUTE_PARAMS_BUSINESS_NAME,
   ROUTE_PARAMS_MINISITE_BUSINESS_ROUTE

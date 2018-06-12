@@ -1,9 +1,17 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Row, Col, Container } from "reactstrap";
-import { SideTreeView } from "./components/Admin";
+import {
+  SideTreeView,
+  BreadcrumbNav,
+  CategoryDetailView
+} from "./components/Admin";
 
-import { onCategoriesList } from "./actions";
+import {
+  onCategoriesList,
+  onChangeActiveCategory,
+  onCategorySubmit
+} from "./actions";
 
 class EcommerceAdmin extends Component {
   componentDidMount() {
@@ -15,10 +23,21 @@ class EcommerceAdmin extends Component {
       <Container fluid>
         <Row>
           <Col xs="12" md="3">
-            <SideTreeView categories={this.props.categories} />
+            <SideTreeView
+              categories={this.props.categories}
+              activeCategory={this.props.activeCategory}
+              onChangeActiveCategory={this.props.onChangeActiveCategory}
+            />
           </Col>
           <Col xs="12" md="9">
-            <div>Detail View</div>
+            <BreadcrumbNav
+              categories={this.props.categories}
+              activeCategory={this.props.activeCategory}
+              onChangeActiveCategory={this.props.onChangeActiveCategory}
+            />
+            <CategoryDetailView
+              onCategorySubmit={this.props.onCategorySubmit}
+            />
           </Col>
         </Row>
       </Container>
@@ -29,10 +48,11 @@ class EcommerceAdmin extends Component {
 export default connect(
   ({
     EcommerceContainer: {
-      admin: { categories }
+      admin: { categories, activeCategory }
     }
   }) => ({
-    categories
+    categories,
+    activeCategory
   }),
-  { onCategoriesList }
+  { onCategoriesList, onChangeActiveCategory, onCategorySubmit }
 )(EcommerceAdmin);

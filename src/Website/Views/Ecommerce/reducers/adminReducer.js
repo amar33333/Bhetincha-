@@ -1,11 +1,13 @@
 import {
   FETCH_CATEGORIES_FULFILLED,
   FETCH_CATEGORIES_PENDING,
-  FETCH_CATEGORIES_REJECTED
+  FETCH_CATEGORIES_REJECTED,
+  CHANGE_ACTIVE_CATEGORY
 } from "../actions/types";
 
 const INITIAL_STATE = {
-  categories: {}
+  categories: {},
+  activeCategory: ""
 };
 
 export default function(state = INITIAL_STATE, action) {
@@ -13,34 +15,11 @@ export default function(state = INITIAL_STATE, action) {
     case FETCH_CATEGORIES_FULFILLED:
       return {
         ...state,
-        categories: {
-          name: "root",
-          toggled: true,
-          children: [
-            {
-              name: "parent",
-              children: [{ name: "child1" }, { name: "child2" }]
-            },
-            {
-              name: "loading parent",
-              loading: true,
-              children: []
-            },
-            {
-              name: "parent",
-              children: [
-                {
-                  name: "nested parent",
-                  children: [
-                    { name: "nested child 1" },
-                    { name: "nested child 2" }
-                  ]
-                }
-              ]
-            }
-          ]
-        }
+        categories: action.payload
       };
+
+    case CHANGE_ACTIVE_CATEGORY:
+      return { ...state, activeCategory: action.payload };
 
     default:
       return state;
