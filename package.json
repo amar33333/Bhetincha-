@@ -17,6 +17,7 @@
     "moment": "^2.22.1",
     "prop-types": "^15.6.1",
     "querystring": "^0.2.0",
+    "raf": "^3.4.0",
     "raven-js": "^3.24.1",
     "rc-slider": "^8.6.1",
     "react": "^16.3.1",

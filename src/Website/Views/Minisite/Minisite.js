@@ -35,6 +35,7 @@ class Minisite extends Component {
     this.props.clearBusiness();
   }
   render() {
+    console.log("props in minisite:", this.props);
     return (
       <div>
         <BusinessNav

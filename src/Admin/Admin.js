@@ -25,8 +25,8 @@ class Admin extends Component {
       "app",
       "header-fixed",
       "sidebar-fixed",
-      "aside-menu-fixed",
-      "aside-menu-hidden"
+      "aside-menu-fixed"
+      // "aside-menu-hidden"
     );
   }
 
@@ -39,6 +39,67 @@ class Admin extends Component {
       "aside-menu-hidden"
     );
   }
+
+  icons = [
+    {
+      name: "icon-list"
+    },
+    {
+      name: "icon-speech"
+    }
+  ];
+  data = [
+    [
+      {
+        business_name: "naam",
+        address_name: "address_name",
+        reminder: new Date().toISOString(),
+        note: "note"
+      },
+      {
+        business_name: "naam2",
+        address_name: "address_name2",
+        reminder: new Date().toISOString(),
+        note: "note2"
+      }
+    ],
+    [
+      {
+        business_name: "naam",
+        address_name: "address_name",
+        reminder: new Date().toISOString(),
+        note: "note"
+      },
+      {
+        business_name: "naam2",
+        address_name: "address_name2",
+        reminder: new Date().toISOString(),
+        note: "note2"
+      }
+    ]
+  ];
+
+  renderContent = row => (
+    <div className="callout callout-warning m-0 py-3">
+      <div className="avatar float-right">
+        <img
+          src={"img/avatars/7.jpg"}
+          className="img-avatar"
+          alt="admin@bootstrapmaster.com"
+        />
+      </div>
+      <div>
+        Meeting with <strong>{row.business_name}</strong>
+      </div>
+      <small className="text-muted mr-3">
+        <i className="icon-calendar" />&nbsp; 1 - 3pm
+      </small>
+      <small className="text-muted">
+        <i className="icon-location-pin" />&nbsp; Palo Alto, CA
+      </small>
+    </div>
+  );
+
   render() {
     return (
       <div className="app">
@@ -51,7 +112,11 @@ class Admin extends Component {
               <AdminRoute {...this.props} />
             </Container>
           </main>
-          <Aside />
+          <Aside
+            icons={this.icons}
+            renderContent={this.renderContent}
+            data={this.data}
+          />
         </div>
         <Footer />
       </div>

@@ -5,6 +5,9 @@ import { NavHashLink } from "react-router-hash-link";
 import { MAIN_URL } from "../config/MINISITE_API";
 import "../minisite.css";
 
+import { ScrollInNav } from "../../../components";
+import PermissionProvider from "../../../../Common/utils/PermissionProvider";
+
 import GridLayout from "react-grid-layout";
 import "react-grid-layout/css/styles.css";
 import "react-resizable/css/styles.css";
@@ -71,7 +74,7 @@ class BusinessNav extends Component {
     console.log("Nav_layout:", this.state.nav_layout);
     return (
       <div>
-        <Navbar color="faded" light expand="md">
+        <Navbar color="faded" light expand="md" className="business-navbar">
           <Link to={`/${this.props.businessName}`} className="navbar-brand">
             <img
               src={`${MAIN_URL}${this.props.logo}`}
@@ -106,15 +109,14 @@ class BusinessNav extends Component {
                   </Link>
                 </NavItem>
                 <NavItem key="about">
-                  <NavHashLink
+                  <Link
                     onClick={this.onNavClicked}
                     draggable="false"
-                    to={`/${this.props.businessName}#about-us`}
+                    to={`/${this.props.businessName}/about`}
                     className="nav-link minisite_business__nav__item"
-                    smooth
                   >
                     About
-                  </NavHashLink>
+                  </Link>
                 </NavItem>
                 <NavItem key="gallery">
                   <Link
@@ -127,25 +129,24 @@ class BusinessNav extends Component {
                   </Link>
                 </NavItem>
                 <NavItem key="contact">
-                  <NavHashLink
+                  <Link
                     onClick={this.onNavClicked}
                     draggable="false"
-                    to={`#contact-us`}
+                    to={`/${this.props.businessName}/contact`}
                     className="nav-link minisite_business__nav__item"
-                    smooth
+                    // smooth
                   >
                     Contact
-                  </NavHashLink>
+                  </Link>
                 </NavItem>
               </GridLayout>
             </Nav>
           </Collapse>
-          {this.props.cookies &&
-            this.props.businessName === this.props.cookies.user_data.slug && (
-              <Button color="primary" onClick={this.props.onEditMainClicked}>
-                {this.props.mainEdit ? "Preview" : "Edit Data"}
-              </Button>
-            )}
+          {/* <PermissionProvider permission="CAN_EDIT_MINISITE"> */}
+          <Button color="primary" onClick={this.props.onEditMainClicked}>
+            {this.props.mainEdit ? "Preview" : "Edit Data"}
+          </Button>
+
           {this.props.mainEdit ? (
             <Button
               color="success"
@@ -155,6 +156,7 @@ class BusinessNav extends Component {
               <i className="fa fa-save" /> Save Nav
             </Button>
           ) : null}
+          {/* </PermissionProvider> */}
         </Navbar>
       </div>
     );

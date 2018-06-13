@@ -14,7 +14,8 @@ import {
   TOGGLE_PERMISSION_URL,
   ASSIGNED_PATH_URL,
   ASSIGNED_PATH_POST_URL,
-  ASSIGNED_LIST_URL
+  ASSIGNED_LIST_URL,
+  VERIFY_BUSINESS_URL
 } from "./ADMIN_API";
 
 import {
@@ -26,6 +27,17 @@ import axios from "axios";
 
 import { ajax } from "rxjs/observable/dom/ajax";
 import querystring from "querystring";
+
+export const onBusinessVerifyPost = ({ id, body, access_token }) =>
+  ajax({
+    method: "PUT",
+    url: `${VERIFY_BUSINESS_URL}${id}/`,
+    body,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
 
 export const onAssignedBusinessAllGetAjax = ({ access_token, params }) =>
   ajax({
