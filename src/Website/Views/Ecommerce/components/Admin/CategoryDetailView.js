@@ -15,12 +15,16 @@ import {
 class CategoryDetailView extends Component {
   state = { category: "" };
 
-  onChangeCategory = event => this.setState({ category: event.target.value });
+  onChangeCategory = event =>
+    this.setState({
+      category: event.target.value.replace(/\b\w/g, l => l.toUpperCase())
+    });
 
   onFormSubmit = event => {
     event.preventDefault();
-    console.log(this.state.category);
+    // console.log(this.state.category);
     this.props.onCategorySubmit({ name: this.state.category });
+    this.setState({ category: "" });
   };
 
   render() {

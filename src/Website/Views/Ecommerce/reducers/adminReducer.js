@@ -1,7 +1,8 @@
 import {
   FETCH_ECOMMERCE_CATEGORIES_FULFILLED,
   CHANGE_ACTIVE_ECOMMERCE_CATEGORY,
-  FETCH_ECOMMERCE_CATEGORY_FULFILLED
+  FETCH_ECOMMERCE_CATEGORY_FULFILLED,
+  OPEN_ALL_ON_SEARCH
 } from "../actions/types";
 
 const INITIAL_STATE = {
@@ -12,6 +13,8 @@ const INITIAL_STATE = {
 };
 
 export default function(state = INITIAL_STATE, action) {
+  let isOpenCategories;
+
   switch (action.type) {
     case FETCH_ECOMMERCE_CATEGORIES_FULFILLED:
       return {
@@ -22,7 +25,8 @@ export default function(state = INITIAL_STATE, action) {
     case CHANGE_ACTIVE_ECOMMERCE_CATEGORY:
       const extra = {};
       const uid = action.payload;
-      let { isOpenCategories, activeCategory } = state;
+      isOpenCategories = state.isOpenCategories;
+      let { activeCategory } = state;
       if (isOpenCategories.includes(uid)) {
         isOpenCategories = isOpenCategories.filter(data => data !== uid);
       } else {
@@ -35,6 +39,28 @@ export default function(state = INITIAL_STATE, action) {
 
     case FETCH_ECOMMERCE_CATEGORY_FULFILLED:
       return { ...state, selectedCategoryDetail: action.payload };
+
+    case OPEN_ALL_ON_SEARCH:
+      isOpenCategories = [...state, isOpenCategories];
+
+      const updateIsOpenCategories = category => {
+        const { children, uid } = category;
+        const extra = {};
+        if (children && children.length) {
+          extra.children = children.map(subCategory =>
+            updateIsOpenCategories(subCategory)
+          );
+        }
+
+        if (!isOpenCategories.includes(uid)) {
+          isOpenCategories.push(uid);
+        }
+        return category;
+      };
+
+      updateIsOpenCategories(action.payload);
+
+      return { ...state, isOpenCategories };
 
     default:
       return state;

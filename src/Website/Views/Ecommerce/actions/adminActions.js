@@ -9,6 +9,7 @@ import {
   CREATE_ECOMMERCE_CATEGORIES_PENDING,
   CREATE_ECOMMERCE_CATEGORIES_REJECTED,
   CHANGE_ACTIVE_ECOMMERCE_CATEGORY,
+  OPEN_ALL_ON_SEARCH,
   FETCH_ECOMMERCE_CATEGORY_FULFILLED,
   FETCH_ECOMMERCE_CATEGORY_PENDING,
   FETCH_ECOMMERCE_CATEGORY_REJECTED
@@ -108,5 +109,10 @@ epics.push((action$, { getState }) =>
     })
     .startWith({ type: FETCH_ECOMMERCE_CATEGORY_PENDING })
 );
+
+export const openAllOnSearch = payload => ({
+  type: OPEN_ALL_ON_SEARCH,
+  payload
+});
 
 export default epics;

@@ -10,7 +10,8 @@ import {
 import {
   onCategoriesList,
   onChangeActiveCategory,
-  onCategorySubmit
+  onCategorySubmit,
+  openAllOnSearch
 } from "./actions";
 
 class EcommerceAdmin extends Component {
@@ -28,6 +29,7 @@ class EcommerceAdmin extends Component {
               activeCategory={this.props.activeCategory}
               onChangeActiveCategory={this.props.onChangeActiveCategory}
               isOpen={this.props.isOpenCategories}
+              openAllOnSearch={this.props.openAllOnSearch}
             />
           </Col>
           <Col xs="12" md="9">
@@ -61,5 +63,10 @@ export default connect(
     isOpenCategories,
     selectedCategoryDetail
   }),
-  { onCategoriesList, onChangeActiveCategory, onCategorySubmit }
+  {
+    onCategoriesList,
+    onChangeActiveCategory,
+    onCategorySubmit,
+    openAllOnSearch
+  }
 )(EcommerceAdmin);
