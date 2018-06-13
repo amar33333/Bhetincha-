@@ -21,6 +21,7 @@ class SubBusinessDetail extends Component {
     this.state = {
       business_name: "",
       business_email: "",
+      business_phone: "",
       industry: "",
       categories: [],
       sub_categories: [],
@@ -44,6 +45,9 @@ class SubBusinessDetail extends Component {
       return {
         business_name: businessData.business_name
           ? businessData.business_name
+          : "",
+        business_phone: businessData.business_phone
+          ? businessData.business_phone
           : "",
         business_email: businessData.business_email
           ? businessData.business_email
@@ -169,6 +173,7 @@ class SubBusinessDetail extends Component {
   clearState = () => {
     this.setState({
       business_name: "",
+      business_phone: "",
       business_email: "",
       industry: "",
       categories: [],
@@ -177,7 +182,32 @@ class SubBusinessDetail extends Component {
     });
   };
 
-  getState = () => this.state;
+  getState = () => {
+    console.log("business details: ", this.state);
+    const category_list = this.state.categories.map(category => category.id);
+
+    const sub_category_list = this.state.sub_categories.map(
+      sub_category => sub_category.id
+    );
+
+    const payment_methods_list = this.state.paymentMethod.map(
+      payment_method => payment_method.id
+    );
+
+    return {
+      ...this.state,
+      categories: category_list,
+      sub_categories: sub_category_list,
+      paymentMethod: payment_methods_list,
+      industry: this.state.industry ? this.state.industry.id : undefined,
+      business_email: this.state.business_email
+        ? this.state.business_email
+        : undefined,
+      business_phone: this.state.business_phone
+        ? this.state.business_phone
+        : undefined
+    };
+  };
 
   render() {
     // console.log("props subbusiness: ", this.props);
@@ -265,6 +295,17 @@ class SubBusinessDetail extends Component {
                       type="text"
                       value={this.state.business_name}
                       onChange={this.onChange.bind(this, "business_name")}
+                      onKeyDown={this._handleKeyPress}
+                    />
+                  </FormGroup>
+                </Col>
+                <Col xs="12" md="6">
+                  <FormGroup>
+                    <Label for="bphone">Business Phone</Label>
+                    <Input
+                      type="text"
+                      value={this.state.business_phone}
+                      onChange={this.onChange.bind(this, "business_phone")}
                       onKeyDown={this._handleKeyPress}
                     />
                   </FormGroup>

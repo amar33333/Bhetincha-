@@ -1,8 +1,13 @@
-import { TOGGLE_LOGIN_MODAL, TOGGLE_REGISTER_MODAL } from "../actions/types";
+import {
+  TOGGLE_LOGIN_MODAL,
+  TOGGLE_REGISTER_MODAL,
+  TOGGLE_PHONE_VERIFICATION_MODAL
+} from "../actions/types";
 
 const INITIAL_STATE = {
   loginModal: false,
   registerModal: false
+  // phoneVerificationModal: false
 };
 
 export default function(state = INITIAL_STATE, action) {
@@ -12,6 +17,12 @@ export default function(state = INITIAL_STATE, action) {
 
     case TOGGLE_REGISTER_MODAL:
       return { ...state, registerModal: !state.registerModal };
+
+    // case TOGGLE_PHONE_VERIFICATION_MODAL:
+    //   return {
+    //     ...state,
+    //     phoneVerificationModal: !state.phoneVerificationModal
+    //   };
 
     default:
       return state;

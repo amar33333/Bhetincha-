@@ -13,6 +13,12 @@ import {
   CREATE_INDIVIDUAL_USER_FULFILLED,
   CREATE_INDIVIDUAL_USER_REJECTED,
   CREATE_INDIVIDUAL_USER_PENDING,
+  REQUEST_PHONE_VERIFICATION_FULFILLED,
+  REQUEST_PHONE_VERIFICATION_PENDING,
+  REQUEST_PHONE_VERIFICATION_REJECTED,
+  SEND_PHONE_VERIFICATION_TOKEN_FULFILLED,
+  SEND_PHONE_VERIFICATION_TOKEN_PENDING,
+  SEND_PHONE_VERIFICATION_TOKEN_REJECTED,
   COOKIES_LOAD_PENDING,
   COOKIES_LOAD_FULFILLED,
   LOGOUT_USER
@@ -33,7 +39,9 @@ import {
   onLogin,
   onBusinessRegister,
   onIndividualRegister,
-  onUserGet
+  onUserGet,
+  onPhoneVerificationRequestPost,
+  onPhoneVerificationTokenPost
 } from "../Common/utils/serverCall";
 
 const epics = [];
@@ -137,6 +145,66 @@ epics.push((action$, { getState }) =>
       }
     })
     .ignoreElements()
+);
+
+export const onPhoneVerificationRequest = payload => ({
+  type: REQUEST_PHONE_VERIFICATION_PENDING,
+  payload
+});
+
+epics.push(action$ =>
+  action$.ofType(REQUEST_PHONE_VERIFICATION_PENDING).mergeMap(action =>
+    onPhoneVerificationRequestPost({ ...action.payload })
+      .map(({ response }) => {
+        if (response.msg === "success") {
+          toast.success("Request Sent Successfully");
+
+          return {
+            type: REQUEST_PHONE_VERIFICATION_FULFILLED,
+            payload: true
+          };
+        } else {
+          throw new Error(response.msg);
+        }
+      })
+      .catch(ajaxError => {
+        toast.error(ajaxError.toString());
+        return Observable.of({
+          type: REQUEST_PHONE_VERIFICATION_REJECTED,
+          payload: false
+        });
+      })
+  )
+);
+
+export const onPhoneVerificationTokenSend = payload => ({
+  type: SEND_PHONE_VERIFICATION_TOKEN_PENDING,
+  payload
+});
+
+epics.push(action$ =>
+  action$.ofType(SEND_PHONE_VERIFICATION_TOKEN_PENDING).mergeMap(action =>
+    onPhoneVerificationTokenPost({ ...action.payload })
+      .map(({ response }) => {
+        if (response.msg === "success") {
+          // toast.success("Request Sent Successfully");
+
+          return {
+            type: SEND_PHONE_VERIFICATION_TOKEN_FULFILLED,
+            payload: response
+          };
+        } else {
+          throw new Error(response.msg);
+        }
+      })
+      .catch(ajaxError => {
+        toast.error(ajaxError.toString());
+        return Observable.of({
+          type: SEND_PHONE_VERIFICATION_TOKEN_REJECTED,
+          payload: ajaxError
+        });
+      })
+  )
 );
 
 export const onBusinessRegisterSubmit = payload => ({

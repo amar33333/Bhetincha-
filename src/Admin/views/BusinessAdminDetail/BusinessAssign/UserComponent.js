@@ -78,6 +78,7 @@ class UserComponent extends Component {
     // } else {
     //   console.log("else user componenet");
     // }
+    return null;
   };
 
   toggleActivePathTab(tabID) {

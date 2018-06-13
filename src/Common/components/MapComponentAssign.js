@@ -41,7 +41,7 @@ const calculateDistance = (lat1, long1, lat2, long2) => {
 const image = "https://maps.google.com/mapfiles/ms/icons/green-dot.png";
 
 class GoogleMapComponent extends Component {
-  state = { directions: [], selectedSalesUser: "" };
+  state = { directions: "", selectedSalesUser: "" };
   componentDidMount() {
     this.props.setRef(this.gEl);
   }
@@ -97,17 +97,17 @@ class GoogleMapComponent extends Component {
     //   });
     // });
 
-    let waypoints =
-      this.props.activePath &&
-      this.props.activePath.bs.map(eachBusiness => {
-        return {
-          location: new google.maps.LatLng(
-            eachBusiness.location.latitude,
-            eachBusiness.location.longitude
-          )
-          //stopover: false
-        };
-      });
+    let waypoints = this.props.activePath
+      ? this.props.activePath.bs.map(eachBusiness => {
+          return {
+            location: new google.maps.LatLng(
+              eachBusiness.location.latitude,
+              eachBusiness.location.longitude
+            )
+            //stopover: false
+          };
+        })
+      : [];
 
     const destination = {};
     let max = 0;
@@ -169,7 +169,7 @@ class GoogleMapComponent extends Component {
             directions: result
           });
         } else {
-          console.error(`error fetching directions ${result}`);
+          // console.error(`error fetching directions ${result}`);
         }
       }
     );
@@ -188,7 +188,7 @@ class GoogleMapComponent extends Component {
         //onClick={({ latLng }) => this.props.onClick({ latLng })}
       >
         {this.renderMarkers()}
-        {this.directionRenderer()}
+        {this.state.selectedSalesUser && this.directionRenderer()}
       </GoogleMap>
     );
   }

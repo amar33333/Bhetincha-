@@ -9,13 +9,21 @@ import {
   CREATE_INDIVIDUAL_USER_REJECTED,
   CREATE_INDIVIDUAL_USER_PENDING,
   COOKIES_LOAD_FULFILLED,
+  REQUEST_PHONE_VERIFICATION_FULFILLED,
+  REQUEST_PHONE_VERIFICATION_PENDING,
+  REQUEST_PHONE_VERIFICATION_REJECTED,
   LOGOUT_USER
 } from "../actions/types";
+
+import { TOGGLE_PHONE_VERIFICATION_MODAL } from "../Website/actions/types";
+import { stat } from "fs";
 
 const INITIAL_STATE = {
   loading: false,
   error: false,
-  cookies: null
+  cookies: null,
+  phone_verification_request: false,
+  phoneVerificationModal: false
 };
 
 export default function(state = INITIAL_STATE, action) {
@@ -53,6 +61,26 @@ export default function(state = INITIAL_STATE, action) {
 
     case CREATE_INDIVIDUAL_USER_REJECTED:
       return { ...state, loading: false };
+
+    case REQUEST_PHONE_VERIFICATION_PENDING:
+      return { ...state, loading: true };
+
+    case REQUEST_PHONE_VERIFICATION_FULFILLED:
+      return {
+        ...state,
+        phone_verification_request: action.payload,
+        loading: false
+      };
+
+    case REQUEST_PHONE_VERIFICATION_REJECTED:
+      return { ...state, loading: false };
+
+    case TOGGLE_PHONE_VERIFICATION_MODAL:
+      return {
+        ...state,
+        phoneVerificationModal: !state.phoneVerificationModal,
+        phone_verification_request: false
+      };
 
     default:
       return state;
