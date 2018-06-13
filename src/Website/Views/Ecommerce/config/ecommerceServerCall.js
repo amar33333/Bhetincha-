@@ -28,3 +28,13 @@ export const onCategoryDetailGet = ({ uid }) =>
       "Content-Type": "application/json"
     }
   });
+
+export const onCategoryDetailPost = ({ uid, body }) =>
+  ajax({
+    method: "POST",
+    url: `${CATEGORY_URL}${uid}/`,
+    body,
+    headers: {
+      "Content-Type": "application/json"
+    }
+  });

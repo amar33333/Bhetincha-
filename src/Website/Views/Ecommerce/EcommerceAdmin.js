@@ -4,6 +4,7 @@ import { Row, Col, Container } from "reactstrap";
 import {
   SideTreeView,
   BreadcrumbNav,
+  CategoryEditView,
   CategoryDetailView
 } from "./components/Admin";
 
@@ -36,6 +37,10 @@ class EcommerceAdmin extends Component {
             <BreadcrumbNav
               category={this.props.selectedCategoryDetail}
               onChangeActiveCategory={this.props.onChangeActiveCategory}
+            />
+            <CategoryEditView
+              onCategorySubmit={this.props.onCategorySubmit}
+              category={this.props.selectedCategoryDetail}
             />
             <CategoryDetailView
               onCategorySubmit={this.props.onCategorySubmit}

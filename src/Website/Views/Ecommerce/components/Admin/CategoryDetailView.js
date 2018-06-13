@@ -22,7 +22,6 @@ class CategoryDetailView extends Component {
 
   onFormSubmit = event => {
     event.preventDefault();
-    // console.log(this.state.category);
     this.props.onCategorySubmit({ name: this.state.category });
     this.setState({ category: "" });
   };
@@ -47,7 +46,6 @@ class CategoryDetailView extends Component {
                   <Input
                     autoFocus
                     required
-                    // disabled={this.props.loading}
                     innerRef={ref => (this.focusableInput = ref)}
                     type="text"
                     placeholder="Type New Category Name"
