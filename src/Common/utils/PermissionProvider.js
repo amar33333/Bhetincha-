@@ -107,6 +107,10 @@ class PermissionProvider extends Component {
       ? this.props.children
       : null; // You can replace ``this.constructor`` with ``ClassName`` i.e PermissionProvider
   }
+
+  // render() {
+  //   return this.props.children;
+  // }
 }
 
 export default connect(({ auth }) => ({ ...auth }))(PermissionProvider);
