@@ -53,8 +53,9 @@ class SideTreeView extends Component {
       this.props.categories,
       searchKeyword
     );
-    this.props.openAllOnSearch(categories);
-    console.log("treeview");
+    this.props.openAllOnSearch(
+      filters.expandFilteredNodes(categories, searchKeyword)
+    );
     this.setState({ searchKeyword });
   };
 

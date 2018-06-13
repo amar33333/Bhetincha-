@@ -12,13 +12,17 @@ import {
   OPEN_ALL_ON_SEARCH,
   FETCH_ECOMMERCE_CATEGORY_FULFILLED,
   FETCH_ECOMMERCE_CATEGORY_PENDING,
-  FETCH_ECOMMERCE_CATEGORY_REJECTED
+  FETCH_ECOMMERCE_CATEGORY_REJECTED,
+  UPDATE_ECOMMERCE_CATEGORY_FULFILLED,
+  UPDATE_ECOMMERCE_CATEGORY_PENDING,
+  UPDATE_ECOMMERCE_CATEGORY_REJECTED
 } from "./types";
 
 import {
   onCategoriesGet,
   onCategoryPost,
-  onCategoryDetailGet
+  onCategoryDetailGet,
+  onCategoryDetailPost
 } from "../config/ecommerceServerCall";
 
 const epics = [];
@@ -80,6 +84,31 @@ epics.push((action$, { getState }) =>
   })
 );
 
+export const onCategoryUpdate = payload => ({
+  type: UPDATE_ECOMMERCE_CATEGORY_PENDING,
+  payload
+});
+
+epics.push((action$, { getState }) =>
+  action$.ofType(UPDATE_ECOMMERCE_CATEGORY_PENDING).mergeMap(action => {
+    const uid = getState().EcommerceContainer.admin.activeCategory;
+    const { body } = action.payload;
+
+    return onCategoryDetailPost({ body, uid })
+      .concatMap(({ response }) => {
+        toast.success("Category updated successfully");
+        return [
+          { type: UPDATE_ECOMMERCE_CATEGORY_FULFILLED },
+          { type: FETCH_ECOMMERCE_CATEGORIES_PENDING }
+        ];
+      })
+      .catch(ajaxError => {
+        toast.error("Error updating Categories");
+        return Observable.of({ type: UPDATE_ECOMMERCE_CATEGORY_REJECTED });
+      });
+  })
+);
+
 export const onChangeActiveCategory = (newCategory, oldCategory) => ({
   type: CHANGE_ACTIVE_ECOMMERCE_CATEGORY,
   payload: newCategory,
@@ -91,7 +120,7 @@ epics.push((action$, { getState }) =>
     .ofType(CHANGE_ACTIVE_ECOMMERCE_CATEGORY)
     .mergeMap(action => {
       const { payload: newCategory, oldCategory } = action;
-      if (newCategory !== oldCategory) {
+      if (!oldCategory || newCategory !== oldCategory) {
         return onCategoryDetailGet({ uid: newCategory })
           .map(({ response }) => {
             return {

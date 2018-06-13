@@ -12,7 +12,8 @@ import {
   onCategoriesList,
   onChangeActiveCategory,
   onCategorySubmit,
-  openAllOnSearch
+  openAllOnSearch,
+  onCategoryUpdate
 } from "./actions";
 
 class EcommerceAdmin extends Component {
@@ -34,17 +35,24 @@ class EcommerceAdmin extends Component {
             />
           </Col>
           <Col xs="12" md="9">
-            <BreadcrumbNav
-              category={this.props.selectedCategoryDetail}
-              onChangeActiveCategory={this.props.onChangeActiveCategory}
-            />
-            <CategoryEditView
-              onCategorySubmit={this.props.onCategorySubmit}
-              category={this.props.selectedCategoryDetail}
-            />
-            <CategoryDetailView
-              onCategorySubmit={this.props.onCategorySubmit}
-            />
+            {this.props.selectedCategoryDetail && (
+              <div>
+                <BreadcrumbNav
+                  breadCrumbs={this.props.selectedCategoryDetail.breadCrumbs}
+                  onChangeActiveCategory={this.props.onChangeActiveCategory}
+                />
+                <CategoryEditView
+                  onCategoryUpdate={this.props.onCategoryUpdate}
+                  name={this.props.selectedCategoryDetail.name}
+                  hasProduct={this.props.selectedCategoryDetail.hasProduct}
+                />
+                {!this.props.selectedCategoryDetail.hasProduct && (
+                  <CategoryDetailView
+                    onCategorySubmit={this.props.onCategorySubmit}
+                  />
+                )}
+              </div>
+            )}
           </Col>
         </Row>
       </Container>
@@ -72,6 +80,7 @@ export default connect(
     onCategoriesList,
     onChangeActiveCategory,
     onCategorySubmit,
-    openAllOnSearch
+    openAllOnSearch,
+    onCategoryUpdate
   }
 )(EcommerceAdmin);

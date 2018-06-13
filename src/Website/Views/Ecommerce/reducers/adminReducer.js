@@ -41,7 +41,8 @@ export default function(state = INITIAL_STATE, action) {
       return { ...state, selectedCategoryDetail: action.payload };
 
     case OPEN_ALL_ON_SEARCH:
-      isOpenCategories = [...state, isOpenCategories];
+      // isOpenCategories = [...state, isOpenCategories];
+      isOpenCategories = [];
 
       const updateIsOpenCategories = category => {
         const { children, uid } = category;
@@ -52,7 +53,7 @@ export default function(state = INITIAL_STATE, action) {
           );
         }
 
-        if (!isOpenCategories.includes(uid)) {
+        if (category.toggled) {
           isOpenCategories.push(uid);
         }
         return category;

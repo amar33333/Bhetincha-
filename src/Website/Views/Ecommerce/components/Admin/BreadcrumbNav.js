@@ -10,29 +10,28 @@ class BreadcrumbNav extends Component {
   render() {
     return (
       <Breadcrumb>
-        {this.props.category &&
-          this.props.category.breadCrumbs
-            .slice()
-            .reverse()
-            .map((item, index) => {
-              const last = index === this.props.category.breadCrumbs.length - 1;
-              return (
-                <BreadcrumbItem key={item.uid} active={last}>
-                  {last ? (
-                    item.name
-                  ) : (
-                    <span
-                      style={{ cursor: "pointer" }}
-                      onClick={() => {
-                        this.props.onChangeActiveCategory(item.uid);
-                      }}
-                    >
-                      {item.name}
-                    </span>
-                  )}
-                </BreadcrumbItem>
-              );
-            })}
+        {this.props.breadCrumbs
+          .slice()
+          .reverse()
+          .map((item, index) => {
+            const last = index === this.props.breadCrumbs.length - 1;
+            return (
+              <BreadcrumbItem key={item.uid} active={last}>
+                {last ? (
+                  item.name
+                ) : (
+                  <span
+                    style={{ cursor: "pointer" }}
+                    onClick={() => {
+                      this.props.onChangeActiveCategory(item.uid);
+                    }}
+                  >
+                    {item.name}
+                  </span>
+                )}
+              </BreadcrumbItem>
+            );
+          })}
       </Breadcrumb>
     );
   }

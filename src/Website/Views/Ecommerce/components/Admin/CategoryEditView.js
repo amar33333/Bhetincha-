@@ -14,12 +14,18 @@ import {
 } from "reactstrap";
 
 class CategoryEditView extends Component {
-  state = { name: "", hasProduct: "" };
+  constructor(props) {
+    super(props);
+    const { name, hasProduct } = props;
+    this.state = { name, hasProduct };
+  }
 
   componentDidUpdate(prevProps) {
-    console.log("category", prevProps.category);
-    if (prevProps.category !== this.props.category) {
-      const { name, hasProduct } = this.props.category;
+    if (
+      prevProps.name !== this.props.name ||
+      prevProps.hasProduct !== this.props.hasProduct
+    ) {
+      const { name, hasProduct } = this.props;
       this.setState({ name, hasProduct });
     }
   }
@@ -31,8 +37,17 @@ class CategoryEditView extends Component {
 
   onFormSubmit = event => {
     event.preventDefault();
-    // this.props.onCategorySubmit({ name: this.state.name });
-    // this.setState({ name: "" });
+    const { name, hasProduct } = this.state;
+    let body = {};
+    if (name !== this.props.name) {
+      body.name = name;
+    }
+    if (hasProduct !== this.props.hasProduct) {
+      body.hasProduct = hasProduct;
+    }
+    if (Object.keys(body).length) {
+      this.props.onCategoryUpdate({ body });
+    }
   };
 
   render() {
@@ -63,7 +78,7 @@ class CategoryEditView extends Component {
                 <Label check>
                   <Input
                     type="checkbox"
-                    value={this.state.hasProduct}
+                    checked={this.state.hasProduct}
                     onClick={event =>
                       this.setState({ hasProduct: event.target.checked })
                     }
