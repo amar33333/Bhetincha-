@@ -21,13 +21,34 @@ import moment from "moment";
 import { onBusinessUpdate } from "../../actions";
 
 class AboutUsEdit extends Component {
-  static getDerivedStateFromProps = ({ initialValue }) => ({
-    tagline: initialValue.tagline,
-    aboutUs: initialValue.aboutUs,
-    establishedYear: initialValue.establishedYear
-  });
+  // static getDerivedStateFromProps = ({ initialValue }) => {
+  //   console.log("updated");
+  //   return {
+  //     tagline: initialValue.tagline,
+  //     aboutUs: initialValue.aboutUs,
+  //     establishedYear: initialValue.establishedYear
+  //   };
+  // };
 
   state = { aboutUs: "", establishedYear: "", tagline: "" };
+
+  componentDidMount() {
+    if (this.props.initialValue) this.updateData(this.props.initialValue);
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.initialValue !== this.props.initialValue) {
+      this.updateData(this.props.initialValue);
+    }
+  }
+
+  updateData = initialValue => {
+    this.setState({
+      tagline: initialValue.tagline,
+      aboutUs: initialValue.aboutUs,
+      establishedYear: initialValue.establishedYear
+    });
+  };
 
   handleChange = value => this.setState({ aboutUs: value });
 

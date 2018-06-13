@@ -56,9 +56,12 @@ class AboutUs extends Component {
                 )
               ) : (
                 <div>
-                  <div className="text-center">
-                    <h2>&#8220;{this.props.data.tagline}&#8221;</h2>
-                  </div>
+                  {this.props.data.tagline && (
+                    <div className="text-center">
+                      <h2>&#8220;{this.props.data.tagline}&#8221;</h2>
+                    </div>
+                  )}
+
                   <div
                     className="quill ql-editor"
                     dangerouslySetInnerHTML={{
@@ -72,7 +75,7 @@ class AboutUs extends Component {
               )}
             </Col>
           </Row>
-          <Row>
+          {/* <Row>
             <Col md="2">
               <CircularProgressbar
                 initialAnimation
@@ -81,23 +84,7 @@ class AboutUs extends Component {
                 // textForPercentage={() => "90% is cool"}
               />
             </Col>
-            <Col md="2">
-              <CircularProgressbar
-                initialAnimation
-                percentage={20}
-                className="progressbar-red"
-                // textForPercentage={() => "90% is cool"}
-              />
-            </Col>
-            <Col md="2">
-              <CircularProgressbar
-                initialAnimation
-                percentage={40}
-                className="progressbar-red"
-                // textForPercentage={() => "90% is cool"}
-              />
-            </Col>
-          </Row>
+          </Row> */}
         </Container>
       </div>
     );

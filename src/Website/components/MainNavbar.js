@@ -18,9 +18,11 @@ class MainNavbar extends Component {
               icon="search"
               placeholder="Search..."
               className="main-nav-search"
+              size="lg"
             />
           </NavItem>
-          <NavItem>{this.props.cookies && <Avatar />}</NavItem>
+          {/* {this.props.cookies && <Avatar />} */}
+          <NavItem right>{this.props.cookies && <Avatar />}</NavItem>
         </Navbar>
       </div>
     );

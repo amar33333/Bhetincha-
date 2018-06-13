@@ -19,17 +19,19 @@ class MainPage extends Component {
         <div className="body-wrapper">
           <div className="minisite_about__wrapper">
             <Container>
-              <Row>
-                <Col xs="12" md="4">
-                  <h2>About Us</h2>
-                  <p
-                    style={aboutUsstyle}
-                    dangerouslySetInnerHTML={{
-                      __html: this.props.data.aboutUs
-                    }}
-                  />
-                </Col>
-              </Row>
+              {this.props.data.aboutUs && (
+                <Row>
+                  <Col xs="12" md="4">
+                    <h2>About Us</h2>
+                    <p
+                      style={aboutUsstyle}
+                      dangerouslySetInnerHTML={{
+                        __html: this.props.data.aboutUs
+                      }}
+                    />
+                  </Col>
+                </Row>
+              )}
             </Container>
           </div>
         </div>

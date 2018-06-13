@@ -13,6 +13,8 @@ import "react-toastify/dist/ReactToastify.css";
 import "./static/scss/style.css";
 // import "../node_modules/@coreui/styles/scss/_dropdown-menu-right.scss";
 
+import "semantic-ui-css/semantic.min.css";
+
 import { MainRoute } from "./config/routes";
 
 import { loadCookies } from "./actions";
@@ -34,4 +36,7 @@ class App extends Component {
   }
 }
 
-export default connect(null, { loadCookies })(App);
+export default connect(
+  null,
+  { loadCookies }
+)(App);
