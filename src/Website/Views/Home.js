@@ -89,8 +89,8 @@ class Home extends Component {
                 onSearchComplete={keyword => {
                   this.props.history.push({
                     pathname: "/businesses",
-                    query: keyword
-                    //search: `?query=${keyword}`
+                    //query: keyword
+                    search: `?query=${keyword}`
                     // state: { detail: response.data }
                   });
                 }}

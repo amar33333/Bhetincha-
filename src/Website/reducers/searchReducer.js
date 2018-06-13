@@ -9,6 +9,7 @@ import {
 
 const INITIAL_STATE = {
   loading: false,
+  search_results_page_loading: false,
   data: [],
   search_results_page_data: []
 };
@@ -37,7 +38,7 @@ export default function(state = INITIAL_STATE, action) {
     case SEARCH_RESULTS_PAGE_PENDING:
       return {
         ...state,
-        loading: true
+        search_results_page_loading: true
       };
 
     case SEARCH_RESULTS_PAGE_FULFILLED:
@@ -46,13 +47,13 @@ export default function(state = INITIAL_STATE, action) {
         search_results_page_data: action.payload.hits.map(hit => ({
           ...hit._source
         })),
-        loading: false
+        search_results_page_loading: false
       };
 
     case SEARCH_RESULTS_PAGE_REJECTED:
       return {
         ...state,
-        loading: false
+        search_results_page_loading: false
       };
 
     default:
