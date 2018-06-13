@@ -40,28 +40,29 @@ export const onBusinessPost = ({ data, access_token }) => {
 
   console.log("final: data: ", data);
 
-  const server_format_data = {
-    about: data.about,
-    business_name: data.business_name,
-    business_email: data.business_email,
-    address: data.address,
-    branchAddress: data.branchAddress,
-    logo: data.logo.base64,
-    cover_photo: data.cover_photo.base64,
-    industry: data.industry ? data.industry.id : undefined,
-    categories: category_list,
-    sub_categories: sub_category_list,
-    paymentMethod: payment_methods_list,
-    workingHour: data.workingHour,
-    alwaysOpen: data.alwaysOpen
-  };
+  // const server_format_data = {
+  //   about: data.about,
+  //   business_name: data.business_name,
+  //   business_email: data.business_email,
+  //   business_phone: data.business_phone,
+  //   address: data.address,
+  //   branchAddress: data.branchAddress,
+  //   logo: data.logo.base64,
+  //   cover_photo: data.cover_photo.base64,
+  //   industry: data.industry ? data.industry.id : undefined,
+  //   categories: category_list,
+  //   sub_categories: sub_category_list,
+  //   paymentMethod: payment_methods_list,
+  //   workingHour: data.workingHour,
+  //   alwaysOpen: data.alwaysOpen
+  // };
 
-  console.log("server_droasd: ", server_format_data);
+  // console.log("server_droasd: ", server_format_data);
 
   return ajax({
     method: "post",
     url: BUSINESS_URL,
-    body: server_format_data,
+    body: data,
     headers: {
       "Content-Type": "application/json",
       Authorization: "Bearer " + access_token
@@ -84,28 +85,29 @@ export const onBusinessPut = ({ id, access_token, data }) => {
 
   console.log("final: data edit: ", data);
 
-  const server_format_data = {
-    about: data.about,
-    business_name: data.business_name,
-    business_email: data.business_email,
-    address: data.address,
-    branchAddress: data.branchAddress,
-    logo: data.logo.base64,
-    cover_photo: data.cover_photo.base64,
-    industry: data.industry ? data.industry.id : undefined,
-    categories: category_list,
-    sub_categories: sub_category_list,
-    paymentMethod: payment_methods_list,
-    workingHour: data.workingHour,
-    alwaysOpen: data.alwaysOpen
-  };
+  // const server_format_data = {
+  //   about: data.about,
+  //   business_name: data.business_name,
+  //   business_email: data.business_email,
+  //   business_phone: data.business_phone,
+  //   address: data.address,
+  //   branchAddress: data.branchAddress,
+  //   logo: data.logo.base64,
+  //   cover_photo: data.cover_photo.base64,
+  //   industry: data.industry ? data.industry.id : undefined,
+  //   categories: category_list,
+  //   sub_categories: sub_category_list,
+  //   paymentMethod: payment_methods_list,
+  //   workingHour: data.workingHour,
+  //   alwaysOpen: data.alwaysOpen
+  // };
 
-  console.log("server_edit: ", server_format_data);
+  // console.log("server_edit: ", server_format_data);
 
   return axios({
     method: "PUT",
     url: `${BUSINESS_PUT_URL}/${id}/`,
-    data: server_format_data,
+    data: data,
     headers: {
       "Content-Type": "application/json",
       Authorization: "Bearer " + access_token

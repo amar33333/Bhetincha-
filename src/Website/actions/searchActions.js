@@ -1,11 +1,14 @@
 import { Observable } from "rxjs/Observable";
-import { onSearch } from "../config/websiteServerCall";
+import { onSearch, onSearchResultsGet } from "../config/websiteServerCall";
 
 import {
   SEARCH_QUERY,
   SEARCH_QUERY_PENDING,
   SEARCH_QUERY_FULFILLED,
-  SEARCH_QUERY_REJECTED
+  SEARCH_QUERY_REJECTED,
+  SEARCH_RESULTS_PAGE_FULFILLED,
+  SEARCH_RESULTS_PAGE_PENDING,
+  SEARCH_RESULTS_PAGE_REJECTED
 } from "./types";
 
 const epics = [];
@@ -28,6 +31,22 @@ epics.push(action$ =>
         .catch(ajaxError => Observable.of({ type: SEARCH_QUERY_REJECTED }))
         .startWith({ type: SEARCH_QUERY_PENDING })
     )
+);
+
+export const onSearchResultsList = payload => ({
+  type: SEARCH_RESULTS_PAGE_PENDING,
+  payload
+});
+
+epics.push(action$ =>
+  action$.ofType(SEARCH_RESULTS_PAGE_PENDING).mergeMap(action =>
+    onSearchResultsGet({ query: action.payload.query })
+      .map(({ response }) => ({
+        type: SEARCH_RESULTS_PAGE_FULFILLED,
+        payload: response.hits
+      }))
+      .catch(ajaxError => Observable.of({ type: SEARCH_RESULTS_PAGE_REJECTED }))
+  )
 );
 
 export default epics;

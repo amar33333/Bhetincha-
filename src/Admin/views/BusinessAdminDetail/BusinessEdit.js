@@ -68,7 +68,7 @@ class BusinessEdit extends Component {
   onEditFormSubmit = event => {
     event.preventDefault();
 
-    console.log("onformEDIT");
+    console.log("onformEDIT: ", this.subBusinessAdminDetailRef.getState());
     this.propsData = {
       ...this.subBusinessAdminDetailRef.getState(),
       ...this.subBusinessAboutRef.getState(),
@@ -128,6 +128,7 @@ class BusinessEdit extends Component {
       businessData = {
         business_name: data.business_name,
         business_email: data.business_email,
+        business_phone: data.business_phone,
         payment_method: data.paymentMethod,
         industry: data.industry,
         categories: data.categories,

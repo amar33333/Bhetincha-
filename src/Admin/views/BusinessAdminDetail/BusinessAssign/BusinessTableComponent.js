@@ -275,6 +275,8 @@ class BusinessTableComponent extends Component {
   );
 
   render() {
+    console.log("path props: ", this.props);
+
     return (
       <div>
         <Card>
@@ -314,11 +316,16 @@ class BusinessTableComponent extends Component {
                             isLoading={this.props.areasFetchLoading}
                             onInputChange={this.debouncedAreaAutocomplete}
                             value={this.props.area}
-                            onChange={area =>
+                            onChange={area => {
+                              this.setState({
+                                path: `${
+                                  this.props.selectedUser.username
+                                }-${area && area.name}`
+                              });
                               this.props.handleOnAssignBusinessFilterChange({
                                 area
-                              })
-                            }
+                              });
+                            }}
                             valueKey="id"
                             labelKey="name"
                             filterOptions={options => options}

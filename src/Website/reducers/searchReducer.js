@@ -1,12 +1,16 @@
 import {
   SEARCH_QUERY_PENDING,
   SEARCH_QUERY_FULFILLED,
-  SEARCH_QUERY_REJECTED
+  SEARCH_QUERY_REJECTED,
+  SEARCH_RESULTS_PAGE_FULFILLED,
+  SEARCH_RESULTS_PAGE_PENDING,
+  SEARCH_RESULTS_PAGE_REJECTED
 } from "../actions/types";
 
 const INITIAL_STATE = {
   loading: false,
-  data: []
+  data: [],
+  search_results_page_data: []
 };
 
 export default function(state = INITIAL_STATE, action) {
@@ -25,6 +29,27 @@ export default function(state = INITIAL_STATE, action) {
       };
 
     case SEARCH_QUERY_REJECTED:
+      return {
+        ...state,
+        loading: false
+      };
+
+    case SEARCH_RESULTS_PAGE_PENDING:
+      return {
+        ...state,
+        loading: true
+      };
+
+    case SEARCH_RESULTS_PAGE_FULFILLED:
+      return {
+        ...state,
+        search_results_page_data: action.payload.hits.map(hit => ({
+          ...hit._source
+        })),
+        loading: false
+      };
+
+    case SEARCH_RESULTS_PAGE_REJECTED:
       return {
         ...state,
         loading: false
