@@ -41,7 +41,6 @@ export default function(state = INITIAL_STATE, action) {
       return { ...state, selectedCategoryDetail: action.payload };
 
     case OPEN_ALL_ON_SEARCH:
-      // isOpenCategories = [...state, isOpenCategories];
       isOpenCategories = [];
 
       const updateIsOpenCategories = category => {

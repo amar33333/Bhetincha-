@@ -13,7 +13,8 @@ import {
   onChangeActiveCategory,
   onCategorySubmit,
   openAllOnSearch,
-  onCategoryUpdate
+  onCategoryUpdate,
+  onCategoryDelete
 } from "./actions";
 
 class EcommerceAdmin extends Component {
@@ -41,6 +42,15 @@ class EcommerceAdmin extends Component {
                   breadCrumbs={this.props.selectedCategoryDetail.breadCrumbs}
                   onChangeActiveCategory={this.props.onChangeActiveCategory}
                 />
+                <button
+                  onClick={() =>
+                    this.props.onCategoryDelete({
+                      uid: this.props.selectedCategoryDetail.uid
+                    })
+                  }
+                >
+                  Delete
+                </button>
                 <CategoryEditView
                   onCategoryUpdate={this.props.onCategoryUpdate}
                   name={this.props.selectedCategoryDetail.name}
@@ -81,6 +91,7 @@ export default connect(
     onChangeActiveCategory,
     onCategorySubmit,
     openAllOnSearch,
-    onCategoryUpdate
+    onCategoryUpdate,
+    onCategoryDelete
   }
 )(EcommerceAdmin);

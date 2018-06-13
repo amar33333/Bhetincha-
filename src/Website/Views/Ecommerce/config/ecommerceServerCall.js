@@ -38,3 +38,12 @@ export const onCategoryDetailPost = ({ uid, body }) =>
       "Content-Type": "application/json"
     }
   });
+
+export const onCategoryDetailDelete = ({ uid }) =>
+  ajax({
+    method: "DELETE",
+    url: `${CATEGORY_URL}${uid}/`,
+    headers: {
+      "Content-Type": "application/json"
+    }
+  });
