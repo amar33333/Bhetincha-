@@ -41,7 +41,10 @@ class SubCategoryEditModal extends Component {
 
   onFormEdit = event => {
     event.preventDefault();
-    const { category, industry: { id } } = this.state;
+    const {
+      category,
+      industry: { id }
+    } = this.state;
     this.props.onCategoryEdit({ category, industry: id });
   };
 

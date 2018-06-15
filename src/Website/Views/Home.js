@@ -18,6 +18,7 @@ import {
 } from "../actions";
 
 import { BottomFooter } from "../components";
+import querystring from "querystring";
 
 class Home extends Component {
   state = { query: "", result: "" };
@@ -90,7 +91,12 @@ class Home extends Component {
                   this.props.history.push({
                     pathname: "/businesses",
                     //query: keyword
-                    search: `?query=${keyword}`
+                    //search: `?query=${keyword}&frm=0&size=5`
+                    search: `?${querystring.stringify({
+                      query: keyword,
+                      frm: 0,
+                      size: 5
+                    })}`
                     // state: { detail: response.data }
                   });
                 }}

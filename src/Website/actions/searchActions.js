@@ -39,14 +39,17 @@ export const onSearchResultsList = payload => ({
 });
 
 epics.push(action$ =>
-  action$.ofType(SEARCH_RESULTS_PAGE_PENDING).mergeMap(action =>
-    onSearchResultsGet({ query: action.payload.query })
+  action$.ofType(SEARCH_RESULTS_PAGE_PENDING).mergeMap(action => {
+    const { query, frm, size } = action.payload;
+    return onSearchResultsGet({ query, frm, size })
       .map(({ response }) => ({
         type: SEARCH_RESULTS_PAGE_FULFILLED,
         payload: response.hits
       }))
-      .catch(ajaxError => Observable.of({ type: SEARCH_RESULTS_PAGE_REJECTED }))
-  )
+      .catch(ajaxError =>
+        Observable.of({ type: SEARCH_RESULTS_PAGE_REJECTED })
+      );
+  })
 );
 
 export default epics;

@@ -6,7 +6,8 @@ import { Navbar, NavItem, Input } from "reactstrap";
 import Avatar from "./Avatar";
 import AutoSuggestion from "./AutoSuggestion";
 
-import { onSearchQuerySubmit } from "../actions";
+import { onSearchQuerySubmit, onSearchResultsList } from "../actions";
+import querystring from "querystring";
 
 class MainNavbar extends Component {
   render() {
@@ -39,9 +40,14 @@ class MainNavbar extends Component {
               }}
               onSearchComplete={keyword => {
                 this.props.history.push({
-                  // pathname: "/businesses",
+                  pathname: "/businesses",
                   //query: keyword
-                  search: `?query=${keyword}`
+                  //search: `?query=${keyword}&frm=0&size=5`
+                  search: `?${querystring.stringify({
+                    query: keyword,
+                    frm: 0,
+                    size: 5
+                  })}`
                   // state: { detail: response.data }
                 });
               }}
@@ -60,5 +66,8 @@ export default connect(
     cookies,
     search_result
   }),
-  { onSearchQuerySubmit }
+  {
+    onSearchQuerySubmit,
+    onSearchResultsList
+  }
 )(MainNavbar);
