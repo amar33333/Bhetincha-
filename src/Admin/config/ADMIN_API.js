@@ -26,6 +26,8 @@ const ASSIGNED_PATH = "businessCollection/sales-table/";
 const ASSIGNED_PATH_POST = "businessCollection/path-create/";
 const ASSIGNED_LIST = "business/assign-list/";
 const VERIFY_BUSINESS = "business/business/";
+const BUSINESS_TELE_CALLING = "search/business-tc/";
+const LOCATION = "address/list-places/";
 
 export { MAIN_URL };
 
@@ -50,3 +52,6 @@ export const ASSIGNED_LIST_URL = `${MAIN_URL}/${ASSIGNED_LIST}`;
 export const ASSIGNED_PATH_URL = `${MAIN_URL}/${ASSIGNED_PATH}`;
 export const ASSIGNED_PATH_POST_URL = `${MAIN_URL}/${ASSIGNED_PATH_POST}`;
 export const VERIFY_BUSINESS_URL = `${MAIN_URL}/${VERIFY_BUSINESS}`;
+
+export const BUSINESS_TELE_CALLING_URL = `${MAIN_URL}/${BUSINESS_TELE_CALLING}`;
+export const LOCATION_URL = `${MAIN_URL}/${LOCATION}`;
