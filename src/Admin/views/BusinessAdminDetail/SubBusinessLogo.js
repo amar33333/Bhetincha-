@@ -34,7 +34,9 @@ class SubBusinessLogo extends Component {
     });
   };
 
-  getState = () => (this.state ? this.state : null);
+  getState = () => ({
+    logo: this.state.logo ? this.state.logo.base64 : undefined
+  });
 
   displayImage = () =>
     this.props.imagePath ? (

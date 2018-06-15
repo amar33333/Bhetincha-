@@ -15,7 +15,9 @@ import {
   onCompanyTypePut,
   onPaymentMethodPut,
   onAssignedPathPost,
-  onAssignedPathEachGet
+  onAssignedPathEachGet,
+  onAssignedBusinessAllGetAjax,
+  onBusinessVerifyPost
 } from "../config/adminServerCall";
 
 import {
@@ -120,11 +122,40 @@ import {
   FETCH_ASSIGNED_PATH_PENDING,
   FETCH_ASSIGNED_PATH_FULFILLED,
   FETCH_ASSIGNED_PATH_REJECTED,
+  CREATE_VERIFIED_BUSINESS_FULFILLED,
+  CREATE_VERIFIED_BUSINESS_PENDING,
+  CREATE_VERIFIED_BUSINESS_REJECTED,
   UNMOUNT_COMPANY_TYPE,
   UNMOUNT_PAYMENT_METHOD
 } from "./types";
 
 const epics = [];
+
+export const onBusinessVerify = payload => ({
+  type: CREATE_VERIFIED_BUSINESS_PENDING,
+  payload
+});
+
+epics.push((action$, { getState }) =>
+  action$.ofType(CREATE_VERIFIED_BUSINESS_PENDING).mergeMap(action => {
+    const access_token = getState().auth.cookies.token_data.access_token;
+    const { id, body } = action.payload;
+
+    return onBusinessVerifyPost({ id, body, access_token })
+      .map(({ response }) => {
+        if (response.msg === "success") {
+          toast.success("Business Verified Successfully!");
+          return { type: CREATE_VERIFIED_BUSINESS_FULFILLED };
+        } else {
+          throw new Error(response.msg[Object.keys(response.msg)[0]][0]);
+        }
+      })
+      .catch(ajaxError => {
+        toast.error(ajaxError.toString());
+        return Observable.of({ type: CREATE_VERIFIED_BUSINESS_REJECTED });
+      });
+  })
+);
 
 export const onAssignedPathEachList = payload => ({
   type: FETCH_ASSIGNED_PATH_PENDING,
@@ -235,7 +266,7 @@ epics.push((action$, { getState }) =>
           typeof response === "object" &&
           Array.isArray(response) === false
         ) {
-          toast.success("Businesses fetched successfully!");
+          // toast.success("Businesses fetched successfully!");
           return {
             type: FETCH_BUSINESS_FULFILLED,
             payload: response
@@ -285,7 +316,7 @@ epics.push((action$, { getState }) =>
           typeof response === "object" &&
           Array.isArray(response) === false
         ) {
-          toast.success("Businesses fetched successfully!");
+          // toast.success("Businesses fetched successfully!");
           return {
             type: FETCH_APP_BUSINESS_FULFILLED,
             payload: response
@@ -316,17 +347,16 @@ epics.push((action$, { getState }) =>
     params.sort_by = filterValue.sort_by.map(
       data => `${data.id}-${data.desc ? "desc" : "asc"}`
     );
-    params.industry = filterValue.industry
-      ? filterValue.industry.map(industry => industry.id)
-      : [];
-    params.area = filterValue.area ? filterValue.area.map(area => area.id) : [];
+    if (filterValue.industry.length)
+      params.industry = filterValue.industry.map(industry => industry.id);
+    if (filterValue.area) params.area = filterValue.area.id;
 
     if (payload) {
       if (payload.rows) params.rows = payload.rows;
       if (payload.page) params.page = payload.page;
     }
 
-    return onBusinessAllGetAjax({
+    return onAssignedBusinessAllGetAjax({
       access_token: getState().auth.cookies.token_data.access_token,
       params
     })
@@ -336,7 +366,7 @@ epics.push((action$, { getState }) =>
           typeof response === "object" &&
           Array.isArray(response) === false
         ) {
-          toast.success("Businesses fetched successfully!");
+          // toast.success("Businesses fetched successfully!");
           return {
             type: FETCH_ASSIGN_BUSINESS_FULFILLED,
             payload: response

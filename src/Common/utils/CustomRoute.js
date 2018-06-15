@@ -15,6 +15,7 @@ class CustomRoute extends Component {
     // console.log('name: ', name, ' exact: ', exact, ' path: ', path, ' component: ', component);
 
     // let permissionProvider = new PermissionProvider();
+
     if (PermissionProvider.hasPermission(this.props.permission)) {
       console.log("permission granted");
       return (

@@ -17,7 +17,9 @@ import "semantic-ui-css/semantic.min.css";
 
 import { MainRoute } from "./config/routes";
 
-import { loadCookies } from "./actions";
+import { loadCookies, loadPermissions } from "./actions";
+
+import CookiesProvider from "./Common/utils/CookiesProvider";
 
 import { ToastContainer } from "react-toastify";
 import { NOTIFICATION_TIME } from "./config/CONSTANTS";
@@ -25,7 +27,10 @@ import { NOTIFICATION_TIME } from "./config/CONSTANTS";
 class App extends Component {
   componentWillMount() {
     this.props.loadCookies();
+
+    if (CookiesProvider.getAccessToken()) this.props.loadPermissions();
   }
+
   render() {
     return (
       <div>
@@ -38,5 +43,5 @@ class App extends Component {
 
 export default connect(
   null,
-  { loadCookies }
+  { loadCookies, loadPermissions }
 )(App);

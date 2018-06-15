@@ -32,11 +32,9 @@ import {
   onAssignBusinessList,
   onFilterClearedAssignBusiness,
   handleOnAssignBusinessFilterChange,
-  handleSearchKeywordClearedAssignBusiness,
   handleSortChangeAssignBusiness,
   onAreaList,
   handleOnAreaFilterChange,
-  // onAssignBusinessEachRemove,
   onIndustryList,
   onUnmountIndustry,
   onAssignedPathSubmit
@@ -67,7 +65,7 @@ class BusinessTableComponent extends Component {
                 <strong>{props.value}</strong>
               </Link>
               <div>Email: {business.business_email}</div>
-              <div>Mobile: {business.phone_number}</div>
+              <div>Mobile: {business.phone_numberspan}</div>
               {business.creation && (
                 <Tooltip
                   content={business.creation.created_date.slice(0, 10)}
@@ -84,7 +82,66 @@ class BusinessTableComponent extends Component {
         }
       },
       {
-        Header: "Assign",
+        Header: ({ data }) => {
+          const businessess = [];
+          let checked = false;
+          if (data.length && data[0]._original.branches) {
+            data.forEach(
+              ({ _original: { id, business_name, branches, logo } }) => {
+                branches.forEach(branch => {
+                  businessess.push({
+                    id,
+                    business_name,
+                    addressID: branch.addressID,
+                    addressName: branch.name,
+                    logoURI: `${MAIN_URL}${logo}`,
+                    landmark: branch.landmark
+                  });
+                });
+              }
+            );
+            checked = true;
+            businessess.forEach(b => {
+              checked =
+                checked &&
+                this.state.selectedBusiness.find(
+                  sB => b.id === sB.id && b.addressID === sB.addressID
+                ) !== undefined;
+            });
+          }
+
+          return (
+            <FormGroup check>
+              <Label check>
+                <Input
+                  type="checkbox"
+                  checked={checked}
+                  onChange={({ target: { checked } }) => {
+                    let selectedBusiness = [...this.state.selectedBusiness];
+                    if (checked) {
+                      businessess.forEach(b => {
+                        if (
+                          !selectedBusiness.find(
+                            sB => sB.id === b.id && sB.addressID === b.addressID
+                          )
+                        ) {
+                          selectedBusiness.push(b);
+                        }
+                      });
+                    } else {
+                      businessess.forEach(b => {
+                        selectedBusiness = selectedBusiness.filter(
+                          sB => sB.id === b.id || sB.addressID === b.addressID
+                        );
+                      });
+                    }
+                    this.setState({ selectedBusiness });
+                  }}
+                />Assign
+              </Label>
+            </FormGroup>
+          );
+        },
         accessor: "id",
         id: "assign",
         filterable: false,
@@ -105,14 +162,6 @@ class BusinessTableComponent extends Component {
                       ) !== undefined
                     }
                     onChange={() => {
-                      // // console.log(value);
-                      // console.log(
-                      //   this.state.selectedBusiness.find(
-                      //     business =>
-                      //       id === business.id &&
-                      //       branch.addressID === business.addressID
-                      //   )
-                      // );
                       this.setState({
                         selectedBusiness: this.state.selectedBusiness.find(
                           business =>
@@ -181,8 +230,8 @@ class BusinessTableComponent extends Component {
 
   componentDidMount = () => {
     this.props.onIndustryList();
-    this.props.onAreaList({ page: 1, rows: 15 });
-    this.props.onAssignBusinessList();
+    // this.props.onAreaList({ page: 1, rows: 15 });
+    // this.props.onAssignBusinessList();
   };
 
   componentWillUnmount = () => {
@@ -226,6 +275,8 @@ class BusinessTableComponent extends Component {
   );
 
   render() {
+    console.log("path props: ", this.props);
+
     return (
       <div>
         <Card>
@@ -262,35 +313,39 @@ class BusinessTableComponent extends Component {
 
                           <Select
                             clearable
-                            multi
                             isLoading={this.props.areasFetchLoading}
                             onInputChange={this.debouncedAreaAutocomplete}
                             value={this.props.area}
-                            onChange={area =>
+                            onChange={area => {
+                              this.setState({
+                                path: `${
+                                  this.props.selectedUser.username
+                                }-${area && area.name}`
+                              });
                               this.props.handleOnAssignBusinessFilterChange({
                                 area
-                              })
-                            }
+                              });
+                            }}
                             valueKey="id"
                             labelKey="name"
                             filterOptions={options => options}
-                            options={this.props.areas.filter(
-                              area =>
-                                !this.props.area
-                                  .map(filter => filter.id)
-                                  .includes(area.id)
-                            )}
+                            options={
+                              this.props.areaSearchText
+                                ? this.props.areas.filter(
+                                    area =>
+                                      !this.props.area ||
+                                      !this.props.area.id.includes(area.id)
+                                  )
+                                : []
+                            }
                             placeholder="Filter Area"
+                            noResultsText={
+                              this.props.areaSearchText
+                                ? "No Results Found"
+                                : "Start Typing..."
+                            }
                           />
                         </FormGroup>
-                      </Col>
-                      <Col xs="1" md="1">
-                        {/* <Button
-                          color="primary"
-                          onClick={this.props.onAssignBusinessList}
-                        >
-                          <i className="fa fa-filter" /> Filter
-                        </Button> */}
                       </Col>
                       <Col xs="1" md="1">
                         <FormGroup>
@@ -299,35 +354,6 @@ class BusinessTableComponent extends Component {
                             onClick={this.props.onFilterClearedAssignBusiness}
                           >
                             <i className="fa fa-close" /> Clear
-                          </Button>
-                        </FormGroup>
-                      </Col>
-                      <Col xs="6" md="4">
-                        <Form onSubmit={this.handleSearchKeywordSubmit}>
-                          <InputGroup>
-                            <Input
-                              placeholder="Search for Business Name"
-                              onChange={this.handleChange.bind(null, "q")}
-                              value={this.props.q}
-                            />
-                            <InputGroupAddon addonType="append">
-                              <Button color="warning">
-                                <i className="fa fa-search" /> Search{" "}
-                              </Button>
-                            </InputGroupAddon>
-                          </InputGroup>
-                        </Form>
-                      </Col>
-                      <Col xs="2" md="1">
-                        <FormGroup>
-                          <Button
-                            color="danger"
-                            onClick={
-                              this.props
-                                .handleSearchKeywordClearedAssignBusiness
-                            }
-                          >
-                            <i className="fa fa-close" /> Clear Search
                           </Button>
                         </FormGroup>
                       </Col>
@@ -364,9 +390,9 @@ class BusinessTableComponent extends Component {
                         <Chip
                           key={business.addressID}
                           title={business.business_name}
-                          subtitle={`${business.addressName},${
-                            business.landmark
-                          }`}
+                          subtitle={`${
+                            business.addressName
+                          },${business.landmark || ""}`}
                           uri={business.logoURI}
                           onClose={() =>
                             this.setState({
@@ -391,7 +417,7 @@ class BusinessTableComponent extends Component {
                 )}
               </CardBody>
             </Card>
-            {!this.props.area.length ? (
+            {!this.props.area ? (
               <p>Area filter must be selected</p>
             ) : (
               <ReactTable
@@ -436,7 +462,8 @@ export default connect(
       },
       filterAssignBusiness,
       industries,
-      general_setup: { areas, areasFetchLoading }
+      general_setup: { areas, areasFetchLoading },
+      filterArea: { name: areaSearchText }
     }
   }) => ({
     industries: industries.industries,
@@ -449,16 +476,14 @@ export default connect(
     fetchAssignBusinessLoading,
     areas,
     areasFetchLoading,
+    areaSearchText,
     ...filterAssignBusiness
   }),
   {
     onAssignBusinessList,
-    // onAssignBusinessEachRemove,
-    // onBusinessEachDelete,
     onIndustryList,
     onFilterClearedAssignBusiness,
     handleOnAssignBusinessFilterChange,
-    handleSearchKeywordClearedAssignBusiness,
     handleSortChangeAssignBusiness,
     onUnmountIndustry,
     onAssignedPathSubmit,

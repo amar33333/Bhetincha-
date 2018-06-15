@@ -42,7 +42,11 @@ class SubBusinessCoverImage extends Component {
     });
   };
 
-  getState = () => (this.state ? this.state : null);
+  getState = () => ({
+    cover_photo: this.state.cover_photo
+      ? this.state.cover_photo.base64
+      : undefined
+  });
 
   displayImage = () =>
     this.props.imagePath ? (

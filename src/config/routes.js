@@ -35,6 +35,7 @@ const AsyncBusiness = props => (
 
 class MainRoute extends Component {
   render() {
+    console.log("mainroute");
     return (
       <BrowserRouter>
         <Switch>

@@ -40,19 +40,46 @@ class UserComponent extends Component {
       activeBusinessTab: ""
     };
 
+    console.log("tab user props: ", this.props.assignedPaths);
     if (this.props.assignedPaths) {
       console.log(
-        "user component: ",
+        "tab user component: ",
         this.state.activeIndex,
         this.props.assignedPaths
       );
-      this.props.salesUserActivePath({
-        activePath: this.props.assignedPaths[this.state.activeIndex]
-      });
+      console.log(
+        "tab active index: ",
+        this.props.assignedPaths.paths[this.state.activeIndex]
+      );
+      this.props.salesUserActivePath(
+        this.props.assignedPaths.paths[this.state.activeIndex]
+      );
     } else {
-      console.log("else user componenet");
+      console.log("tab else user componenet");
     }
   }
+
+  static getDerivedStateFromProps = (nextProps, prevState) => {
+    // console.log("aaa: , prevstate", prevState);
+    // console.log("aaa: nextProps: ", nextProps);
+    // if (nextProps.assignedPaths) {
+    //   console.log(
+    //     "user component: ",
+    //     prevState.activeIndex,
+    //     nextProps.assignedPaths
+    //   );
+    //   console.log(
+    //     "active index: ",
+    //     nextProps.assignedPaths[prevState.activeIndex]
+    //   );
+    //   nextProps.salesUserActivePath(
+    //     nextProps.assignedPaths[prevState.activeIndex]
+    //   );
+    // } else {
+    //   console.log("else user componenet");
+    // }
+    return null;
+  };
 
   toggleActivePathTab(tabID) {
     if (this.state.activeTab !== tabID) {
@@ -105,13 +132,17 @@ class UserComponent extends Component {
   // };
 
   handleTabChange = (e, { activeIndex }) => {
-    console.log("tab change: ", activeIndex);
+    console.log("tab change: ", activeIndex, this.props.assignedPaths);
     this.setState({ activeIndex }, () => {
       if (this.props.assignedPaths) {
         console.log(
           "user component: ",
           this.state.activeIndex,
           this.props.assignedPaths.paths[activeIndex]
+        );
+        console.log(
+          "tab active index: ",
+          this.props.assignedPaths.paths[this.state.activeIndex]
         );
         this.props.salesUserActivePath(
           this.props.assignedPaths.paths[activeIndex]

@@ -6,6 +6,7 @@ import { MAIN_URL } from "../config/MINISITE_API";
 import "../minisite.css";
 
 import { ScrollInNav } from "../../../components";
+import PermissionProvider from "../../../../Common/utils/PermissionProvider";
 
 import GridLayout from "react-grid-layout";
 
@@ -155,7 +156,7 @@ class BusinessNav extends Component {
                     draggable="false"
                     to={`/${this.props.businessName}/contact`}
                     className="nav-link minisite_business__nav__item"
-                    smooth
+                    // smooth
                   >
                     Contact
                   </Link>
@@ -164,13 +165,12 @@ class BusinessNav extends Component {
               </GridLayout>
             </Nav>
           </Collapse>
-          {this.props.cookies &&
-            this.props.businessName === this.props.cookies.user_data.slug && (
-              <Button color="primary" onClick={this.props.onEditMainClicked}>
-                {this.props.mainEdit ? "Preview" : "Edit Data"}
-              </Button>
-            )}
-          {/* {this.props.mainEdit ? (
+          {/* <PermissionProvider permission="CAN_EDIT_MINISITE"> */}
+          <Button color="primary" onClick={this.props.onEditMainClicked}>
+            {this.props.mainEdit ? "Preview" : "Edit Data"}
+          </Button>
+
+          {this.props.mainEdit ? (
             <Button
               color="success"
               onClick={this.onNavChanged}
@@ -178,7 +178,8 @@ class BusinessNav extends Component {
             >
               <i className="fa fa-save" /> Save Nav
             </Button>
-          ) : null} */}
+          ) : null}
+          {/* </PermissionProvider> */}
         </Navbar>
       </div>
     );

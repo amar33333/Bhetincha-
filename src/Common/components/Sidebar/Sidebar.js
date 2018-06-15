@@ -7,6 +7,7 @@ import SidebarForm from "./../SidebarForm";
 import SidebarHeader from "./../SidebarHeader";
 import SidebarMinimizer from "./../SidebarMinimizer";
 
+// import { PermissionProvider } from "../../utils/PermissionProvider";
 import PermissionProvider from "../../utils/PermissionProvider";
 
 class Sidebar extends Component {
@@ -110,6 +111,8 @@ class Sidebar extends Component {
         icon: classNames(item.icon)
       };
 
+      // let permissionProvider = new PermissionProvider();
+
       if (!item.permission || PermissionProvider.hasPermission(item.permission))
         return navLink(item, key, classes);
       return null;
@@ -143,8 +146,11 @@ class Sidebar extends Component {
     };
 
     // Disable the main Title or the title with children (i.e dropdown) on sidebar
+    // My Custom Permission code here ...
     // nav dropdown
     const navDropdown = (item, key) => {
+      // let permissionProvider = new PermissionProvider();
+
       if (!item.permission || PermissionProvider.hasPermission(item.permission))
         return (
           <li key={key} className={this.activeRoute(item.url, props)}>

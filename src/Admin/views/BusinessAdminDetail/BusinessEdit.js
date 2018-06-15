@@ -18,6 +18,7 @@ import {
   onBusinessEdit,
   onUnmountIndustryData,
   onUnmountCategoryData,
+  onBusinessVerify,
   ToogleEDIT
 } from "../../actions";
 
@@ -67,7 +68,7 @@ class BusinessEdit extends Component {
   onEditFormSubmit = event => {
     event.preventDefault();
 
-    console.log("onformEDIT");
+    console.log("onformEDIT: ", this.subBusinessAdminDetailRef.getState());
     this.propsData = {
       ...this.subBusinessAdminDetailRef.getState(),
       ...this.subBusinessAboutRef.getState(),
@@ -127,6 +128,7 @@ class BusinessEdit extends Component {
       businessData = {
         business_name: data.business_name,
         business_email: data.business_email,
+        business_phone: data.business_phone,
         payment_method: data.paymentMethod,
         industry: data.industry,
         categories: data.categories,
@@ -257,8 +259,28 @@ class BusinessEdit extends Component {
                 />
                 <Row>
                   <Col xs="12">
-                    <Button color="primary" size="lg">
+                    <Button
+                      color="primary"
+                      size="lg"
+                      style={{ marginRight: 20 }}
+                    >
                       EDIT
+                    </Button>
+
+                    <Button
+                      color="success"
+                      size="lg"
+                      onClick={() => {
+                        console.log("verify button clicked: ", this.props);
+                        this.props.onBusinessVerify({
+                          id: this.props.businessData.id,
+                          body: {
+                            verified: true
+                          }
+                        });
+                      }}
+                    >
+                      VERIFY
                     </Button>
                   </Col>
                 </Row>
@@ -303,6 +325,7 @@ export default connect(
     onBusinessEdit,
     onUnmountIndustryData,
     onUnmountCategoryData,
+    onBusinessVerify,
     ToogleEDIT
   }
 )(BusinessEdit);

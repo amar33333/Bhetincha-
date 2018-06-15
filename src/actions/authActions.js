@@ -7,9 +7,19 @@ import {
   FETCH_USER_FULFILLED,
   FETCH_USER_REJECTED,
   FETCH_USER_PENDING,
-  CREATE_USER_FULFILLED,
-  CREATE_USER_REJECTED,
-  CREATE_USER_PENDING,
+  CREATE_BUSINESS_USER_FULFILLED,
+  CREATE_BUSINESS_USER_REJECTED,
+  CREATE_BUSINESS_USER_PENDING,
+  CREATE_INDIVIDUAL_USER_FULFILLED,
+  CREATE_INDIVIDUAL_USER_REJECTED,
+  CREATE_INDIVIDUAL_USER_PENDING,
+  REQUEST_PHONE_VERIFICATION_FULFILLED,
+  REQUEST_PHONE_VERIFICATION_PENDING,
+  REQUEST_PHONE_VERIFICATION_REJECTED,
+  SEND_PHONE_VERIFICATION_TOKEN_FULFILLED,
+  SEND_PHONE_VERIFICATION_TOKEN_PENDING,
+  SEND_PHONE_VERIFICATION_TOKEN_REJECTED,
+  COOKIES_LOAD_PENDING,
   COOKIES_LOAD_FULFILLED,
   LOGOUT_USER
 } from "./types";
@@ -25,15 +35,53 @@ import {
 } from "../config/CONSTANTS";
 
 import CookiesProvider from "../Common/utils/CookiesProvider";
-import { onLogin, onRegister, onUserGet } from "../Common/utils/serverCall";
+import {
+  onLogin,
+  onBusinessRegister,
+  onIndividualRegister,
+  onUserGet,
+  onPhoneVerificationRequestPost,
+  onPhoneVerificationTokenPost
+} from "../Common/utils/serverCall";
 
 const epics = [];
-const cookies = new Cookies();
 
 export const loadCookies = () => ({
   type: COOKIES_LOAD_FULFILLED,
   payload: { cookies: CookiesProvider.getAllCookies() }
 });
+
+export const loadPermissions = () => ({
+  type: COOKIES_LOAD_PENDING
+});
+
+epics.push(action$ =>
+  action$.ofType(COOKIES_LOAD_PENDING).mergeMap(action => {
+    // console.log("acccc: ", CookiesProvider.getAccessToken());
+    const access_token = CookiesProvider.getAccessToken();
+    // if (access_token) {
+    return onUserGet({ access_token }).map(({ response }) => {
+      return {
+        type: COOKIES_LOAD_FULFILLED,
+        payload: {
+          cookies: {
+            token_data: CookiesProvider.getTokenData(),
+            user_data: {
+              ...CookiesProvider.getUserData(),
+              permissions: response.permissions
+            }
+          }
+        }
+      };
+    });
+    // } else {
+    //   console.log(
+    //     "no access token: i.e cookies: ",
+    //     CookiesProvider.getAllCookies()
+    //   );
+    // }
+  })
+);
 
 export const onSubmit = payload => ({
   type: FETCH_USER_PENDING,
@@ -54,54 +102,20 @@ epics.push(action$ =>
       })
       .concatMap(({ response }) => {
         console.log("user repsose: ", response);
-        const {
-          id,
-          permissions,
-          groups,
-          username,
-          date_joined,
-          email,
-          email_confirmed,
-          first_name,
-          last_login,
-          last_name,
-          name,
-          phone_confirmed,
-          phone_number,
-          slug,
-          is_active,
-          is_staff,
-          is_superuser
-        } = response;
-        CookiesProvider.setCookies(
-          "user_data",
-          {
-            id,
-            permissions,
-            groups,
-            username,
-            date_joined,
-            email,
-            email_confirmed,
-            first_name,
-            last_login,
-            last_name,
-            name,
-            phone_confirmed,
-            phone_number,
-            slug
-          },
-          "/",
-          expiryDate
-        );
-        // cookies.set("user_data", response, "/", expiryDate);
+        const { permissions, ...rest } = response;
+        console.log("permis rest: ", permissions, rest);
+
+        CookiesProvider.setCookies("user_data", rest, "/", expiryDate);
         console.log("cookei: ", CookiesProvider.getAllCookies());
         return [
           { type: TOGGLE_LOGIN_MODAL },
           {
             type: FETCH_USER_FULFILLED,
             payload: {
-              cookies: CookiesProvider.getAllCookies()
+              cookies: {
+                token_data: CookiesProvider.getTokenData(),
+                user_data: { ...CookiesProvider.getUserData(), permissions }
+              }
             },
             history
           }
@@ -133,26 +147,125 @@ epics.push((action$, { getState }) =>
     .ignoreElements()
 );
 
-export const onRegisterSubmit = payload => ({
-  type: CREATE_USER_PENDING,
+export const onPhoneVerificationRequest = payload => ({
+  type: REQUEST_PHONE_VERIFICATION_PENDING,
+  payload
+});
+
+epics.push(action$ =>
+  action$.ofType(REQUEST_PHONE_VERIFICATION_PENDING).mergeMap(action =>
+    onPhoneVerificationRequestPost({ ...action.payload })
+      .map(({ response }) => {
+        if (response.msg === "success") {
+          toast.success("Request Sent Successfully");
+
+          return {
+            type: REQUEST_PHONE_VERIFICATION_FULFILLED,
+            payload: true
+          };
+        } else {
+          throw new Error(response.msg);
+        }
+      })
+      .catch(ajaxError => {
+        toast.error(ajaxError.toString());
+        return Observable.of({
+          type: REQUEST_PHONE_VERIFICATION_REJECTED,
+          payload: false
+        });
+      })
+  )
+);
+
+export const onPhoneVerificationTokenSend = payload => ({
+  type: SEND_PHONE_VERIFICATION_TOKEN_PENDING,
+  payload
+});
+
+epics.push(action$ =>
+  action$.ofType(SEND_PHONE_VERIFICATION_TOKEN_PENDING).mergeMap(action =>
+    onPhoneVerificationTokenPost({ ...action.payload })
+      .map(({ response }) => {
+        if (response.msg === "success") {
+          // toast.success("Request Sent Successfully");
+
+          return {
+            type: SEND_PHONE_VERIFICATION_TOKEN_FULFILLED,
+            payload: response
+          };
+        } else {
+          throw new Error(response.msg);
+        }
+      })
+      .catch(ajaxError => {
+        toast.error(ajaxError.toString());
+        return Observable.of({
+          type: SEND_PHONE_VERIFICATION_TOKEN_REJECTED,
+          payload: ajaxError
+        });
+      })
+  )
+);
+
+export const onBusinessRegisterSubmit = payload => ({
+  type: CREATE_BUSINESS_USER_PENDING,
   payload
 });
 
 epics.push(action$ =>
   action$
-    .ofType(CREATE_USER_PENDING)
-    .mergeMap(action => onRegister({ ...action.payload }))
+    .ofType(CREATE_BUSINESS_USER_PENDING)
+    .mergeMap(action => onBusinessRegister({ ...action.payload }))
     .concatMap(({ response }) => {
-      toast.success("Registered Successfully");
+      if (response.msg === "success") {
+        toast.success("Registered Successfully");
 
-      return [
-        { type: TOGGLE_REGISTER_MODAL },
-        { type: CREATE_USER_FULFILLED, payload: response }
-      ];
+        return [
+          { type: TOGGLE_REGISTER_MODAL },
+          { type: CREATE_BUSINESS_USER_FULFILLED, payload: response }
+        ];
+      } else {
+        throw new Error(response.msg[Object.keys(response.msg)[0]][0]);
+      }
     })
-    .catch(ajaxError =>
-      Observable.of({ type: CREATE_USER_REJECTED, payload: ajaxError })
-    )
+    .catch(ajaxError => {
+      toast.error(ajaxError.toString());
+      return Observable.of({
+        type: CREATE_BUSINESS_USER_REJECTED,
+        payload: ajaxError
+      });
+    })
+);
+
+export const onIndividualRegisterSubmit = payload => ({
+  type: CREATE_INDIVIDUAL_USER_PENDING,
+  payload
+});
+
+epics.push(action$ =>
+  action$
+    .ofType(CREATE_INDIVIDUAL_USER_PENDING)
+    .mergeMap(action => onIndividualRegister({ ...action.payload }))
+    .concatMap(({ response }) => {
+      if (response.msg === "success") {
+        toast.success("Registered Successfully");
+
+        return [
+          { type: TOGGLE_REGISTER_MODAL },
+          { type: CREATE_INDIVIDUAL_USER_FULFILLED, payload: response }
+        ];
+      } else {
+        throw new Error(response.msg[Object.keys(response.msg)[0]][0]);
+      }
+    })
+    .catch(ajaxError => {
+      toast.error(ajaxError.toString());
+
+      return Observable.of({
+        type: CREATE_INDIVIDUAL_USER_REJECTED,
+        payload: ajaxError
+      });
+    })
 );
 
 export const onLogout = () => ({

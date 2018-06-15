@@ -275,6 +275,8 @@ class SubBusinessBranch extends Component {
   };
 
   getState = () => {
+    console.log("branch props ok: ", this.props);
+
     let contactPerson = this.state.contactPerson.map(eachItem => {
       let contactReformed = {};
       for (var property in eachItem) {
@@ -290,8 +292,10 @@ class SubBusinessBranch extends Component {
     });
     contactPerson = contactPerson.length > 0 ? contactPerson : undefined;
 
+    console.log("contectPerson: ", contactPerson);
     return {
       ...this.state,
+      id: this.props.branch.id,
       // country: this.state.country ? this.state.country.id : "",
       // state: this.state.state ? this.state.state.id : "",
       // district: this.state.district ? this.state.district.id : "",
