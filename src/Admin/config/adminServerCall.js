@@ -15,7 +15,9 @@ import {
   ASSIGNED_PATH_URL,
   ASSIGNED_PATH_POST_URL,
   ASSIGNED_LIST_URL,
-  VERIFY_BUSINESS_URL
+  VERIFY_BUSINESS_URL,
+  BUSINESS_TELE_CALLING_URL,
+  LOCATION_URL
 } from "./ADMIN_API";
 
 import {
@@ -27,6 +29,17 @@ import axios from "axios";
 
 import { ajax } from "rxjs/observable/dom/ajax";
 import querystring from "querystring";
+
+export const onBusinessTeleCallingGetAjax = ({ access_token, body }) =>
+  ajax({
+    method: "POST",
+    url: BUSINESS_TELE_CALLING_URL,
+    body,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
 
 export const onBusinessVerifyPost = ({ id, body, access_token }) =>
   ajax({
@@ -199,6 +212,16 @@ export const onPaymentMethodEachDeleteAjax = ({ id, access_token }) =>
   ajax({
     method: "delete",
     url: `${PAYMENT_METHOD_URL}${id}/`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
+export const onLocationGetAjax = ({ access_token, params }) =>
+  ajax({
+    method: "GET",
+    url: `${LOCATION_URL}?${querystring.stringify(params)}`,
     headers: {
       "Content-Type": "application/json",
       Authorization: "Bearer " + access_token
