@@ -214,7 +214,7 @@ input.main-nav-search::placeholder {
 
 .profile-dropdown__icon {
   margin-right: 2rem;
-  color: cornsilk;
+  color: grey;
   cursor: pointer;
 }
 
@@ -435,6 +435,7 @@ input.main-nav-search::placeholder {
 /* Result list */
 .result-header__text {
   color: rgb(36, 36, 206);
+  margin-bottom: 5px;
 }
 
 .result-page__thumbnail {

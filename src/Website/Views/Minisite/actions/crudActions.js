@@ -229,6 +229,10 @@ epics.push(action$ =>
         payload.id = response.id;
         payload.albums = response.albums;
         payload.slug = response.slug;
+        payload.business_email = response.business_email;
+        payload.business_phone = response.business_phone;
+        payload.address = response.address;
+        payload.branchAddress = response.branchAddress;
 
         if (response.about) payload.about = response.about;
         if (response.nav_layout) payload.nav_layout = response.nav_layout;

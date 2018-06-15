@@ -5,19 +5,30 @@ import {
   Row,
   Col,
   Media,
-  Card,
-  CardBody,
-  CardFooter,
+  // Card,
+  // CardBody,
+  // CardFooter,
   Badge
 } from "reactstrap";
 
-import avatar from "../../static/img/avatar.jpg";
+import { MAIN_URL } from "../../Common/utils/API";
+
+import { Card } from "semantic-ui-react";
+
+// import avatar from "../../static/img/avatar.jpg";
 
 import { togglePhoneVerificationModal, onSearchResultsList } from "../actions";
 import CustomModal from "../../Common/components/CustomModal";
 import PhoneVerificationModal from "../../Common/components/CustomModal/ModalTemplates/PhoneVerificationModal";
 
+// const defaultLogo = {`${}/media/default_logo.png`};
+
+import { AutoSuggestion } from "../components";
+
 class BusinessList extends Component {
+  state = {
+    verifiedTooltipOpen: false
+  };
   componentDidMount() {
     console.log("business list: ", this.props);
     this.props.onSearchResultsList({
@@ -29,6 +40,11 @@ class BusinessList extends Component {
     this.props.togglePhoneVerificationModal();
   };
 
+  toggleVerifiedTooltip = () => {
+    this.setState({
+      verifiedTooltipOpen: !this.state.verifiedTooltipOpen
+    });
+  };
   renderSearchResults = () => {
     // console.log("search results: ", this.props);
     if (!this.props.search_results_page_loading)
@@ -37,60 +53,85 @@ class BusinessList extends Component {
       else
         return this.props.search_results_page_data.map(each_search_result => {
           return (
-            <Card>
-              <CardBody>
+            <Card fluid>
+              <Card.Content>
                 <Media>
                   <Media left href="#">
                     <Media
                       object
                       // data-src={avatar}
-                      src={avatar}
+                      src={
+                        each_search_result.logo
+                          ? `${MAIN_URL}${each_search_result.logo}`
+                          : `${MAIN_URL}/media/default_logo.png`
+                      }
                       className="result-page__thumbnail"
                       alt="Generic placeholder image"
                     />
                   </Media>
                   <Media body>
                     <Media heading className="result-header__text">
-                      {each_search_result.business_name}
-                      <i
-                        className="fa fa-check-circle"
-                        style={{ color: "green" }}
-                      />
+                      {each_search_result.business_name}{" "}
+                      {each_search_result.verified && (
+                        <span data-tooltip="Verified">
+                          <i
+                            className="fa fa-check-circle"
+                            style={{ color: "green" }}
+                            // data-tooltip="Add users to your feed"
+                          />
+                        </span>
+                      )}
                     </Media>
-                    <i className="fa fa-map-marker" /> Hattiban, lalitpur, Nepal{" "}
-                    <br />
-                    <div
-                      className="fa-stack fa-sm"
-                      style={{ color: "#0719ece0" }}
-                    >
-                      <i className="fa fa-circle-thin fa-stack-2x" />
-                      <i className="fa fa-phone fa-stack-1x" />
+                    <div className="mb-1">
+                      <Badge color="warning" pill>
+                        {each_search_result.industry}
+                      </Badge>
+                      {each_search_result.categories &&
+                        each_search_result.categories.map(category => (
+                          <Badge color="info" pill style={{ color: "white" }}>
+                            {category}
+                          </Badge>
+                        ))}
                     </div>
-                    <div
-                      className="fa-stack fa-sm"
-                      style={{ color: "#0719ece0" }}
+                    <span
+                      data-tooltip="Get Direction"
+                      data-position="right center"
                     >
-                      <i className="fa fa-circle-thin fa-stack-2x" />
-                      <i className="fa fa-envelope fa-stack-1x" />
-                    </div>
-                    <div
+                      <i className="fa fa-map-marker" />{" "}
+                      {each_search_result.address.area.area},{" "}
+                      {each_search_result.address.area.city} <br />
+                    </span>
+                    {each_search_result.business_phone ? (
+                      <div style={{ color: "rgb(35, 35, 34)" }}>
+                        <i className="fa fa-phone" />{" "}
+                        {each_search_result.business_phone}
+                      </div>
+                    ) : null}
+                    {each_search_result.business_email ? (
+                      <div style={{ color: "rgb(35, 35, 34)" }}>
+                        <i className="fa fa-envelope" />{" "}
+                        {each_search_result.business_email}
+                      </div>
+                    ) : null}
+
+                    {/* <div
                       className="fa-stack fa-sm"
-                      style={{ color: "#0719ece0" }}
+                      style={{ color: "rgb(35, 35, 34)" }}
                     >
                       <i className="fa fa-circle-thin fa-stack-2x" />
                       <i className="fa fa-globe fa-stack-1x" />
-                    </div>
+                    </div> */}
                   </Media>
                 </Media>
-              </CardBody>
-              <CardFooter>
+              </Card.Content>
+              <Card.Content>
                 <Row>
-                  <Col sm="1">
+                  {/* <Col sm="2">
                     <i className="fa fa-thumbs-up" />
                     <Badge color="warning" pill>
                       23
                     </Badge>
-                  </Col>
+                  </Col> */}
                   <Col
                     sm="2"
                     style={{ cursor: "pointer" }}
@@ -98,7 +139,7 @@ class BusinessList extends Component {
                   >
                     <i className="fa fa-unlock" /> Claim
                   </Col>
-                  <Col sm="3">
+                  {/* <Col sm="3">
                     <i className="fa fa-list" /> Improve Listing
                   </Col>
                   <Col sm="2">
@@ -109,10 +150,10 @@ class BusinessList extends Component {
                   </Col>
                   <Col sm="2">
                     <i className="fa fa-star" /> 4.5
-                  </Col>
+                  </Col> */}
                 </Row>
-              </CardFooter>
-              <div
+              </Card.Content>
+              {/* <div
                 style={{
                   position: "absolute",
                   backgroundColor: "#0719ece0",
@@ -124,7 +165,7 @@ class BusinessList extends Component {
                 }}
               >
                 Business
-              </div>
+              </div> */}
             </Card>
           );
         });
@@ -132,161 +173,10 @@ class BusinessList extends Component {
 
   render() {
     return (
-      <div className="body-wrapper">
+      <div className="body-wrapper mb-5">
         <Container fluid>
           <Row style={{ marginTop: 20 }}>
             <Col xs="12" md="8">
-              {/*
-                <Card>
-                  <CardBody>
-                    <Media>
-                      <Media left href="#">
-                        <Media
-                          object
-                          // data-src={avatar}
-                          src={avatar}
-                          className="result-page__thumbnail"
-                          alt="Generic placeholder image"
-                        />
-                      </Media>
-                      <Media body>
-                        <Media heading className="result-header__text">
-                          Samsung J7
-                        </Media>
-                        Cras sit amet nibh libero, in gravida nulla. Nulla vel
-                        metus scelerisque ante sollicitudin commodo. Cras purus
-                        odio, vestibulum in vulputate at, tempus viverra turpis.
-                        Fusce condimentum nunc ac nisi vulputate fringilla. Donec
-                        lacinia congue felis in faucibus.
-                      </Media>
-                    </Media>
-                  </CardBody>
-                  <CardFooter>
-                    <Row>
-                      <Col sm="1">
-                        <i className="fa fa-thumbs-up" />
-                      </Col>
-                      <Col sm="2">
-                        <i className="fa fa-unlock" /> Claim
-                      </Col>
-                      <Col sm="3">
-                        <i className="fa fa-list" /> Improve Listing
-                      </Col>
-                      <Col sm="2">
-                        <i className="fa fa-eye" /> 222
-                      </Col>
-                      <Col sm="2">
-                        <i className="fa fa-search" /> 5555
-                      </Col>
-                      <Col sm="2">
-                        <i className="fa fa-star" /> 4.5
-                      </Col>
-                    </Row>
-                  </CardFooter>
-                  <div
-                    style={{
-                      position: "absolute",
-                      backgroundColor: "#0719ece0",
-                      // opacity: 0.5,
-                      padding: 10,
-                      color: "white",
-                      top: 0,
-                      right: 0
-                    }}
-                  >
-                    Product
-                  </div>
-                </Card>
-                <Card>
-                  <CardBody>
-                    <Media>
-                      <Media left href="#">
-                        <Media
-                          object
-                          // data-src={avatar}
-                          src={avatar}
-                          className="result-page__thumbnail"
-                          alt="Generic placeholder image"
-                        />
-                      </Media>
-                      <Media body>
-                        <Media heading className="result-header__text">
-                          Tech Kunja{" "}
-                          <i
-                            className="fa fa-check-circle"
-                            style={{ color: "green" }}
-                          />
-                        </Media>
-                        <i className="fa fa-map-marker" /> Hattiban, lalitpur,
-                        Nepal <br />
-                        <div
-                          className="fa-stack fa-sm"
-                          style={{ color: "#0719ece0" }}
-                        >
-                          <i className="fa fa-circle-thin fa-stack-2x" />
-                          <i className="fa fa-phone fa-stack-1x" />
-                        </div>
-                        <div
-                          className="fa-stack fa-sm"
-                          style={{ color: "#0719ece0" }}
-                        >
-                          <i className="fa fa-circle-thin fa-stack-2x" />
-                          <i className="fa fa-envelope fa-stack-1x" />
-                        </div>
-                        <div
-                          className="fa-stack fa-sm"
-                          style={{ color: "#0719ece0" }}
-                        >
-                          <i className="fa fa-circle-thin fa-stack-2x" />
-                          <i className="fa fa-globe fa-stack-1x" />
-                        </div>
-                      </Media>
-                    </Media>
-                  </CardBody>
-                  <CardFooter>
-                    <Row>
-                      <Col sm="1">
-                        <i className="fa fa-thumbs-up" />
-                        <Badge color="warning" pill>
-                          23
-                        </Badge>
-                      </Col>
-                      <Col
-                        sm="2"
-                        style={{ cursor: "pointer" }}
-                        onClick={this.onClaimed}
-                      >
-                        <i className="fa fa-unlock" /> Claim
-                      </Col>
-                      <Col sm="3">
-                        <i className="fa fa-list" /> Improve Listing
-                      </Col>
-                      <Col sm="2">
-                        <i className="fa fa-eye" /> 222
-                      </Col>
-                      <Col sm="2">
-                        <i className="fa fa-search" /> 5555
-                      </Col>
-                      <Col sm="2">
-                        <i className="fa fa-star" /> 4.5
-                      </Col>
-                    </Row>
-                  </CardFooter>
-                  <div
-                    style={{
-                      position: "absolute",
-                      backgroundColor: "#0719ece0",
-                      // opacity: 0.5,
-                      padding: 10,
-                      color: "white",
-                      top: 0,
-                      right: 0
-                    }}
-                  >
-                    Business
-                  </div>
-                </Card>
-              */}
               {this.renderSearchResults()}
             </Col>
           </Row>
