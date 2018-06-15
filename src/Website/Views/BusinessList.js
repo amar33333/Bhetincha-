@@ -12,6 +12,7 @@ import {
 } from "reactstrap";
 
 import avatar from "../../static/img/avatar.jpg";
+import querystring from "querystring";
 
 import { togglePhoneVerificationModal, onSearchResultsList } from "../actions";
 import CustomModal from "../../Common/components/CustomModal";
@@ -20,10 +21,26 @@ import PhoneVerificationModal from "../../Common/components/CustomModal/ModalTem
 class BusinessList extends Component {
   componentDidMount() {
     console.log("business list: ", this.props);
+    const parsedUrlStringObject = querystring.parse(this.props.location.search);
+
     this.props.onSearchResultsList({
-      query: this.props.location.search.split("=")[1]
+      query: parsedUrlStringObject["?query"],
+      frm: parsedUrlStringObject["frm"],
+      size: parsedUrlStringObject["size"]
     });
   }
+
+  componentDidUpdate(prevProps, prevState) {
+    const parsedUrlStringObject = querystring.parse(this.props.location.search);
+
+    if (this.props.location.search !== prevProps.location.search)
+      this.props.onSearchResultsList({
+        query: parsedUrlStringObject["?query"],
+        frm: parsedUrlStringObject["frm"],
+        size: parsedUrlStringObject["size"]
+      });
+  }
+
   onClaimed = () => {
     console.log("claimed");
     this.props.togglePhoneVerificationModal();

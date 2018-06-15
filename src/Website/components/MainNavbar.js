@@ -4,6 +4,10 @@ import { Link } from "react-router-dom";
 import { Navbar, NavItem, Input } from "reactstrap";
 
 import Avatar from "./Avatar";
+import AutoSuggestion from "./AutoSuggestion";
+
+import { onSearchQuerySubmit, onSearchResultsList } from "../actions";
+import querystring from "querystring";
 
 class MainNavbar extends Component {
   render() {
@@ -14,10 +18,27 @@ class MainNavbar extends Component {
             Bhetincha
           </Link>
           <NavItem>
-            <Input
-              icon="search"
-              placeholder="Search..."
-              className="main-nav-search"
+            <AutoSuggestion
+              placeholder="Search anything..."
+              valueKey="business_name"
+              suggestions={this.props.search_result.data}
+              onSuggestionsFetchRequested={this.props.onSearchQuerySubmit}
+              onSearchItemSelected={business => {
+                this.props.history.push(`/${business.slug}`);
+              }}
+              onSearchComplete={keyword => {
+                this.props.history.push({
+                  pathname: "/businesses",
+                  //query: keyword
+                  //search: `?query=${keyword}&frm=0&size=5`
+                  search: `?${querystring.stringify({
+                    query: keyword,
+                    frm: 0,
+                    size: 5
+                  })}`
+                  // state: { detail: response.data }
+                });
+              }}
             />
           </NavItem>
           <NavItem>{this.props.cookies && <Avatar />}</NavItem>
@@ -27,4 +48,13 @@ class MainNavbar extends Component {
   }
 }
 
-export default connect(({ auth: { cookies } }) => ({ cookies }))(MainNavbar);
+export default connect(
+  ({ auth: { cookies }, search_result }) => ({
+    cookies,
+    search_result
+  }),
+  {
+    onSearchQuerySubmit,
+    onSearchResultsList
+  }
+)(MainNavbar);

@@ -9,6 +9,9 @@ import {
   CREATE_INDIVIDUAL_USER_REJECTED,
   CREATE_INDIVIDUAL_USER_PENDING,
   COOKIES_LOAD_FULFILLED,
+  PERMISSIONS_LOAD_PENDING,
+  PERMISSIONS_LOAD_FULFILLED,
+  PERMISSIONS_LOAD_REJECTED,
   REQUEST_PHONE_VERIFICATION_FULFILLED,
   REQUEST_PHONE_VERIFICATION_PENDING,
   REQUEST_PHONE_VERIFICATION_REJECTED,
@@ -22,6 +25,7 @@ const INITIAL_STATE = {
   loading: false,
   error: false,
   cookies: null,
+  permissions_loading: false,
   phone_verification_request: false,
   phoneVerificationModal: false
 };
@@ -33,6 +37,15 @@ export default function(state = INITIAL_STATE, action) {
 
     case COOKIES_LOAD_FULFILLED:
       return { ...state, ...action.payload };
+
+    case PERMISSIONS_LOAD_PENDING:
+      return { ...state, ...action.payload, permissions_loading: true };
+
+    case PERMISSIONS_LOAD_REJECTED:
+      return { ...state, ...action.payload, permissions_loading: false };
+
+    case PERMISSIONS_LOAD_FULFILLED:
+      return { ...state, ...action.payload, permissions_loading: false };
 
     case FETCH_USER_PENDING:
       return { ...state, loading: true };

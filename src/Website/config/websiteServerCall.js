@@ -2,6 +2,16 @@ import { AUTO_COMPLETE_SEARCH_URL, SEARCH_URL } from "./WEBSITE_API";
 import { ajax } from "rxjs/observable/dom/ajax";
 import querystring from "querystring";
 
+const weekday = [
+  "Sunday",
+  "Monday",
+  "Tuesday",
+  "Wednesday",
+  "Thursday",
+  "Friday",
+  "Saturday"
+];
+
 const getISOStringStrippedSecMilliSec = val => {
   const splittedVal = val.split(":");
 
@@ -20,19 +30,25 @@ export const onSearch = ({ query }) =>
     }
   });
 
-export const onSearchResultsGet = ({ query }) =>
-  ajax({
+export const onSearchResultsGet = ({ query, frm, size }) => {
+  const currentDateTime = new Date();
+
+  console.log("blah blah: ", query, frm, size);
+  return ajax({
     method: "POST",
     url: `${SEARCH_URL}`,
     body: {
       query,
-      time: getISOStringStrippedSecMilliSec(new Date().toISOString()),
-      day: "Thursday"
+      time: getISOStringStrippedSecMilliSec(currentDateTime.toISOString()),
+      day: weekday[currentDateTime.getDay()],
+      frm,
+      size
     },
     headers: {
       "Content-Type": "application/json"
     }
   });
+};
 
 // import axios from "axios";
 

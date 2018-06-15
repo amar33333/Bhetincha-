@@ -9,7 +9,7 @@ class Website extends Component {
     const { pathname } = this.props.location;
     return (
       <div className="main-wrapper">
-        {pathname !== "/" && <MainNavbar />}
+        {pathname !== "/" && <MainNavbar history={this.props.history} />}
         <WebsiteRoutes />
         {pathname !== "/" && <BottomFooter theme="dark" />}
       </div>

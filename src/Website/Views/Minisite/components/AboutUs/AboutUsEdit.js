@@ -21,11 +21,14 @@ import moment from "moment";
 import { onBusinessUpdate } from "../../actions";
 
 class AboutUsEdit extends Component {
-  static getDerivedStateFromProps = ({ initialValue }) => ({
-    tagline: initialValue.tagline,
-    aboutUs: initialValue.aboutUs,
-    establishedYear: initialValue.establishedYear
-  });
+  static getDerivedStateFromProps = ({ initialValue }, prevState) => {
+    console.log("getderivedstate: ", prevState);
+    return {
+      tagline: initialValue.tagline,
+      aboutUs: initialValue.aboutUs,
+      establishedYear: initialValue.establishedYear
+    };
+  };
 
   state = { aboutUs: "", establishedYear: "", tagline: "" };
 
@@ -35,10 +38,16 @@ class AboutUsEdit extends Component {
 
   onChangeEstablishedYear = year => {
     console.log("Year: ", year);
-    console.log("Year after moment: ", moment.utc(year).format("YYYY"));
-    this.setState({
-      establishedYear: moment.utc(year).format("YYYY")
-    });
+    const establishedYear = moment.utc(year).format("YYYY");
+    console.log("Year after moment: ", establishedYear);
+    this.setState(
+      {
+        establishedYear: establishedYear
+      },
+      () => {
+        console.log("estab state: ", this.state);
+      }
+    );
   };
   onSaveChanges = () => {
     const { tagline, aboutUs, establishedYear } = this.props.initialValue;

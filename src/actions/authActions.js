@@ -19,7 +19,9 @@ import {
   SEND_PHONE_VERIFICATION_TOKEN_FULFILLED,
   SEND_PHONE_VERIFICATION_TOKEN_PENDING,
   SEND_PHONE_VERIFICATION_TOKEN_REJECTED,
-  COOKIES_LOAD_PENDING,
+  PERMISSIONS_LOAD_PENDING,
+  PERMISSIONS_LOAD_FULFILLED,
+  PERMISSIONS_LOAD_REJECTED,
   COOKIES_LOAD_FULFILLED,
   LOGOUT_USER
 } from "./types";
@@ -52,28 +54,31 @@ export const loadCookies = () => ({
 });
 
 export const loadPermissions = () => ({
-  type: COOKIES_LOAD_PENDING
+  type: PERMISSIONS_LOAD_PENDING
 });
 
 epics.push(action$ =>
-  action$.ofType(COOKIES_LOAD_PENDING).mergeMap(action => {
+  action$.ofType(PERMISSIONS_LOAD_PENDING).mergeMap(action => {
     // console.log("acccc: ", CookiesProvider.getAccessToken());
     const access_token = CookiesProvider.getAccessToken();
     // if (access_token) {
-    return onUserGet({ access_token }).map(({ response }) => {
-      return {
-        type: COOKIES_LOAD_FULFILLED,
-        payload: {
-          cookies: {
-            token_data: CookiesProvider.getTokenData(),
-            user_data: {
-              ...CookiesProvider.getUserData(),
-              permissions: response.permissions
+    return onUserGet({ access_token })
+      .map(({ response }) => {
+        return {
+          type: PERMISSIONS_LOAD_FULFILLED,
+          payload: {
+            cookies: {
+              token_data: CookiesProvider.getTokenData(),
+              user_data: {
+                ...CookiesProvider.getUserData(),
+                permissions: response.permissions
+              }
             }
           }
-        }
-      };
-    });
+        };
+      })
+      .catch(ajaxError => Observable.of({ type: PERMISSIONS_LOAD_REJECTED }));
+
     // } else {
     //   console.log(
     //     "no access token: i.e cookies: ",

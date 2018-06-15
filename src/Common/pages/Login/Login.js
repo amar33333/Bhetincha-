@@ -21,7 +21,7 @@ class Login extends Component {
   state = { username: "", password: "" };
 
   static getDerivedStateFromProps(nextProps, prevState) {
-    // console.log("next prosp login: ", nextProps);
+    console.log("next prosp login: ", nextProps);
 
     if (nextProps.statusClass === "fulfilled")
       nextProps.history.push("/admin/dashboard");
@@ -39,7 +39,7 @@ class Login extends Component {
 
   render() {
     const { loading } = this.props;
-    console.log("login props: ", this.props);
+    // console.log("login props: ", this.props);
     return (
       <div className="app flex-row align-items-center">
         <Container>
