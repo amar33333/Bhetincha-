@@ -16,16 +16,13 @@ import {
 class CategoryEditView extends Component {
   constructor(props) {
     super(props);
-    const { name, hasProduct } = props;
+    const { name, hasProduct } = props.category;
     this.state = { name, hasProduct };
   }
 
   componentDidUpdate(prevProps) {
-    if (
-      prevProps.name !== this.props.name ||
-      prevProps.hasProduct !== this.props.hasProduct
-    ) {
-      const { name, hasProduct } = this.props;
+    if (prevProps.category !== this.props.category) {
+      const { name, hasProduct } = this.props.category;
       this.setState({ name, hasProduct });
     }
   }
@@ -39,10 +36,10 @@ class CategoryEditView extends Component {
     event.preventDefault();
     const { name, hasProduct } = this.state;
     let body = {};
-    if (name !== this.props.name) {
+    if (name !== this.props.category.name) {
       body.name = name;
     }
-    if (hasProduct !== this.props.hasProduct) {
+    if (hasProduct !== this.props.category.hasProduct) {
       body.hasProduct = hasProduct;
     }
     if (Object.keys(body).length) {
@@ -52,47 +49,45 @@ class CategoryEditView extends Component {
 
   render() {
     return (
-      <div>
-        <Card>
-          <CardHeader>
-            <strong>Update Category</strong>
-          </CardHeader>
-          <CardBody>
-            <Form onSubmit={this.onFormSubmit} inline>
-              <FormGroup className="mb-2 mr-sm-2 mb-sm-0">
-                <InputGroup>
-                  <InputGroupAddon addonType="prepend">
-                    <InputGroupText>
-                      <i className="fa fa-industry" />
-                    </InputGroupText>
-                  </InputGroupAddon>
-                  <Input
-                    innerRef={ref => (this.focusableInput = ref)}
-                    type="text"
-                    value={this.state.name}
-                    onChange={this.onChangeName}
-                  />
-                </InputGroup>
-              </FormGroup>
-              <FormGroup check>
-                <Label check>
-                  <Input
-                    type="checkbox"
-                    checked={this.state.hasProduct}
-                    onClick={event =>
-                      this.setState({ hasProduct: event.target.checked })
-                    }
-                  />
-                  Has Products
-                </Label>
-              </FormGroup>
-              <Button color="primary">
-                <span className="fa fa-plus" /> Update
-              </Button>
-            </Form>
-          </CardBody>
-        </Card>
-      </div>
+      <Card>
+        <CardHeader>
+          <strong>Update Category</strong>
+        </CardHeader>
+        <CardBody>
+          <Form onSubmit={this.onFormSubmit} inline>
+            <FormGroup className="mb-2 mr-sm-2 mb-sm-0">
+              <InputGroup>
+                <InputGroupAddon addonType="prepend">
+                  <InputGroupText>
+                    <i className="fa fa-industry" />
+                  </InputGroupText>
+                </InputGroupAddon>
+                <Input
+                  innerRef={ref => (this.focusableInput = ref)}
+                  type="text"
+                  value={this.state.name}
+                  onChange={this.onChangeName}
+                />
+              </InputGroup>
+            </FormGroup>
+            <FormGroup check>
+              <Label check>
+                <Input
+                  type="checkbox"
+                  checked={this.state.hasProduct}
+                  onClick={event =>
+                    this.setState({ hasProduct: event.target.checked })
+                  }
+                />
+                Has Products
+              </Label>
+            </FormGroup>
+            <Button color="primary">
+              <span className="fa fa-plus" /> Update
+            </Button>
+          </Form>
+        </CardBody>
+      </Card>
     );
   }
 }

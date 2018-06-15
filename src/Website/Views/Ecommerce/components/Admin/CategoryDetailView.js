@@ -29,10 +29,9 @@ class CategoryDetailView extends Component {
   render() {
     return (
       <div>
-        <div>Category Detail View</div>
         <Card>
           <CardHeader>
-            <strong>Add New Category</strong>
+            <strong>Add New Category inside {this.props.name}</strong>
           </CardHeader>
           <CardBody>
             <Form onSubmit={this.onFormSubmit} inline>
@@ -44,7 +43,6 @@ class CategoryDetailView extends Component {
                     </InputGroupText>
                   </InputGroupAddon>
                   <Input
-                    autoFocus
                     required
                     innerRef={ref => (this.focusableInput = ref)}
                     type="text"

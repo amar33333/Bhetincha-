@@ -78,34 +78,35 @@ let permissions_set = [
 */
 
 class PermissionProvider extends Component {
-  static permissions_set = store
-    .getState()
-    .auth.cookies.user_data.permissions.map(each => each.name);
-  // static updatePermissionList() {
-  //   const user_data = cookies.get("user_data");
+  // static permissions_set = store
+  //   .getState()
+  //   .auth.cookies.user_data.permissions.map(each => each.name);
+  // // static updatePermissionList() {
+  // //   const user_data = cookies.get("user_data");
 
-  //   if (user_data) {
-  //     permissions_set = user_data.permissions.map(
-  //       permission => permission.name
-  //     );
-  //     // permissions_set = user_data;
-  //     // // console.log('adduser cookies: ', user_data);
-  //     // console.log("PERMISION PROVIDER adduser cookies: ", permissions_set);
-  //   } else {
-  //     // console.log('PERMISSION PROVIDER user_data error');
-  //   }
+  // //   if (user_data) {
+  // //     permissions_set = user_data.permissions.map(
+  // //       permission => permission.name
+  // //     );
+  // //     // permissions_set = user_data;
+  // //     // // console.log('adduser cookies: ', user_data);
+  // //     // console.log("PERMISION PROVIDER adduser cookies: ", permissions_set);
+  // //   } else {
+  // //     // console.log('PERMISSION PROVIDER user_data error');
+  // //   }
+  // // }
+
+  // static hasPermission(permission) {
+  //   if (this.permissions_set.includes(permission)) return true;
+
+  //   return false;
   // }
 
-  static hasPermission(permission) {
-    if (this.permissions_set.includes(permission)) return true;
-
-    return false;
-  }
-
   render() {
-    return this.constructor.hasPermission(this.props.permission)
-      ? this.props.children
-      : null; // You can replace ``this.constructor`` with ``ClassName`` i.e PermissionProvider
+    return this.props.children;
+    // return this.constructor.hasPermission(this.props.permission)
+    //   ? this.props.children
+    //   : null; // You can replace ``this.constructor`` with ``ClassName`` i.e PermissionProvider
   }
 }
 

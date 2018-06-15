@@ -1,6 +1,27 @@
-import { CATEGORY_URL } from "./ECOMMERCE_API";
+import { CATEGORY_URL, ATTRIBUTE_URL } from "./ECOMMERCE_API";
 import { ajax } from "rxjs/observable/dom/ajax";
 
+// attribute
+export const onAttributesGet = () =>
+  ajax({
+    method: "GET",
+    url: ATTRIBUTE_URL,
+    headers: {
+      "Content-Type": "application/json"
+    }
+  });
+
+export const onPropertiesPost = ({ body }) =>
+  ajax({
+    method: "POST",
+    url: ATTRIBUTE_URL,
+    body,
+    headers: {
+      "Content-Type": "application/json"
+    }
+  });
+
+// categories
 export const onCategoriesGet = () =>
   ajax({
     method: "GET",

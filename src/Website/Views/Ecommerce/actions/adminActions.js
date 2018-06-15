@@ -18,7 +18,13 @@ import {
   UPDATE_ECOMMERCE_CATEGORY_REJECTED,
   DELETE_ECOMMERCE_CATEGORY_FULFILLED,
   DELETE_ECOMMERCE_CATEGORY_PENDING,
-  DELETE_ECOMMERCE_CATEGORY_REJECTED
+  DELETE_ECOMMERCE_CATEGORY_REJECTED,
+  FETCH_ECOMMERCE_ATTRIBUTES_PENDING,
+  FETCH_ECOMMERCE_ATTRIBUTES_FULFILLED,
+  FETCH_ECOMMERCE_ATTRIBUTES_REJECTED,
+  CREATE_PROPERTY_CATEGORY_FULFILLED,
+  CREATE_PROPERTY_CATEGORY_PENDING,
+  CREATE_PROPERTY_CATEGORY_REJECTED
 } from "./types";
 
 import {
@@ -26,11 +32,63 @@ import {
   onCategoryPost,
   onCategoryDetailGet,
   onCategoryDetailPost,
-  onCategoryDetailDelete
+  onCategoryDetailDelete,
+  onAttributesGet,
+  onPropertiesPost
 } from "../config/ecommerceServerCall";
 
 const epics = [];
 
+// attirbutes
+export const onAttributesList = () => ({
+  type: FETCH_ECOMMERCE_ATTRIBUTES_PENDING
+});
+
+epics.push((action$, { getState }) =>
+  action$.ofType(FETCH_ECOMMERCE_ATTRIBUTES_PENDING).mergeMap(action =>
+    onAttributesGet()
+      .map(({ response }) => ({
+        type: FETCH_ECOMMERCE_ATTRIBUTES_FULFILLED,
+        payload: response
+      }))
+      .catch(ajaxError => {
+        console.log(ajaxError);
+        toast.error("Error Fetching Attributes");
+        return Observable.of({ type: FETCH_ECOMMERCE_ATTRIBUTES_REJECTED });
+      })
+  )
+);
+
+export const onPropertySubmit = payload => ({
+  type: CREATE_PROPERTY_CATEGORY_PENDING,
+  payload
+});
+
+epics.push((action$, { getState }) =>
+  action$.ofType(CREATE_PROPERTY_CATEGORY_PENDING).mergeMap(action => {
+    // const parent = getState().EcommerceContainer.admin.activeCategory;
+    const { body } = action.payload;
+
+    return onPropertiesPost({ body })
+      .concatMap(({ response }) => {
+        if (response.msg === "success") {
+          toast.success("Attribute created successfully");
+          return [
+            { type: CREATE_PROPERTY_CATEGORY_FULFILLED }
+            // { type: FETCH_ECOMMERCE_CATEGORIES_PENDING }
+          ];
+        } else {
+          throw new Error(response.msg);
+        }
+      })
+      .catch(ajaxError => {
+        toast.error(ajaxError.toString());
+        return Observable.of({ type: CREATE_PROPERTY_CATEGORY_REJECTED });
+      });
+  })
+);
+
+// categories
 export const onCategoriesList = () => ({
   type: FETCH_ECOMMERCE_CATEGORIES_PENDING,
   first: true
@@ -75,14 +133,18 @@ epics.push((action$, { getState }) =>
 
     return onCategoryPost({ name, parent })
       .concatMap(({ response }) => {
-        toast.success("Category created successfully");
-        return [
-          { type: CREATE_ECOMMERCE_CATEGORIES_FULFILLED },
-          { type: FETCH_ECOMMERCE_CATEGORIES_PENDING }
-        ];
+        if (response.msg === "success") {
+          toast.success("Category created successfully");
+          return [
+            { type: CREATE_ECOMMERCE_CATEGORIES_FULFILLED },
+            { type: FETCH_ECOMMERCE_CATEGORIES_PENDING }
+          ];
+        } else {
+          throw new Error(response.msg);
+        }
       })
       .catch(ajaxError => {
-        toast.error("Error Creating Categories");
+        toast.error(ajaxError.toString());
         return Observable.of({ type: CREATE_ECOMMERCE_CATEGORIES_REJECTED });
       });
   })
@@ -100,14 +162,20 @@ epics.push((action$, { getState }) =>
 
     return onCategoryDetailPost({ body, uid })
       .concatMap(({ response }) => {
-        toast.success("Category updated successfully");
-        return [
-          { type: UPDATE_ECOMMERCE_CATEGORY_FULFILLED },
-          { type: FETCH_ECOMMERCE_CATEGORIES_PENDING }
-        ];
+        if (response.msg === "success") {
+          toast.success("Category updated successfully");
+          return [
+            { type: UPDATE_ECOMMERCE_CATEGORY_FULFILLED },
+            { type: FETCH_ECOMMERCE_CATEGORIES_PENDING },
+            { type: CHANGE_ACTIVE_ECOMMERCE_CATEGORY, payload: uid }
+          ];
+        } else {
+          toast.error(response.msg);
+          return [{ type: CHANGE_ACTIVE_ECOMMERCE_CATEGORY, payload: uid }];
+        }
       })
       .catch(ajaxError => {
-        toast.error("Error updating Categories");
+        toast.error(ajaxError.toString());
         return Observable.of({ type: UPDATE_ECOMMERCE_CATEGORY_REJECTED });
       });
   })
@@ -124,14 +192,18 @@ epics.push((action$, { getState }) =>
 
     return onCategoryDetailDelete({ uid })
       .concatMap(({ response }) => {
-        toast.success("Category deleted successfully");
-        return [
-          { type: DELETE_ECOMMERCE_CATEGORY_FULFILLED },
-          { type: FETCH_ECOMMERCE_CATEGORIES_PENDING, first: true }
-        ];
+        if (response.msg === "success") {
+          toast.success("Category deleted successfully");
+          return [
+            { type: DELETE_ECOMMERCE_CATEGORY_FULFILLED },
+            { type: FETCH_ECOMMERCE_CATEGORIES_PENDING, first: true }
+          ];
+        } else {
+          throw new Error(response.msg);
+        }
       })
       .catch(ajaxError => {
-        toast.error("Error deleting Categories");
+        toast.error(ajaxError.toString());
         return Observable.of({ type: DELETE_ECOMMERCE_CATEGORY_REJECTED });
       });
   })

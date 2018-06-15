@@ -5,7 +5,9 @@ import {
   SideTreeView,
   BreadcrumbNav,
   CategoryEditView,
-  CategoryDetailView
+  CategoryDetailView,
+  PropertyList,
+  PropertyItemAddNew
 } from "./components/Admin";
 
 import {
@@ -14,12 +16,15 @@ import {
   onCategorySubmit,
   openAllOnSearch,
   onCategoryUpdate,
-  onCategoryDelete
+  onCategoryDelete,
+  onAttributesList,
+  onPropertySubmit
 } from "./actions";
 
 class EcommerceAdmin extends Component {
   componentDidMount() {
     this.props.onCategoriesList();
+    this.props.onAttributesList();
   }
 
   render() {
@@ -53,14 +58,20 @@ class EcommerceAdmin extends Component {
                 </button>
                 <CategoryEditView
                   onCategoryUpdate={this.props.onCategoryUpdate}
-                  name={this.props.selectedCategoryDetail.name}
-                  hasProduct={this.props.selectedCategoryDetail.hasProduct}
+                  category={this.props.selectedCategoryDetail}
                 />
                 {!this.props.selectedCategoryDetail.hasProduct && (
                   <CategoryDetailView
+                    name={this.props.selectedCategoryDetail.name}
                     onCategorySubmit={this.props.onCategorySubmit}
                   />
                 )}
+                <PropertyItemAddNew
+                  activeCategory={this.props.activeCategory}
+                  attributes={this.props.attributes}
+                  onPropertySubmit={this.props.onPropertySubmit}
+                />
+                <PropertyList />
               </div>
             )}
           </Col>
@@ -77,14 +88,16 @@ export default connect(
         categories,
         activeCategory,
         isOpenCategories,
-        selectedCategoryDetail
+        selectedCategoryDetail,
+        attributes
       }
     }
   }) => ({
     categories,
     activeCategory,
     isOpenCategories,
-    selectedCategoryDetail
+    selectedCategoryDetail,
+    attributes
   }),
   {
     onCategoriesList,
@@ -92,6 +105,8 @@ export default connect(
     onCategorySubmit,
     openAllOnSearch,
     onCategoryUpdate,
-    onCategoryDelete
+    onCategoryDelete,
+    onAttributesList,
+    onPropertySubmit
   }
 )(EcommerceAdmin);

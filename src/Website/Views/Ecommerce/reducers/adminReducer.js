@@ -2,6 +2,7 @@ import {
   FETCH_ECOMMERCE_CATEGORIES_FULFILLED,
   CHANGE_ACTIVE_ECOMMERCE_CATEGORY,
   FETCH_ECOMMERCE_CATEGORY_FULFILLED,
+  FETCH_ECOMMERCE_ATTRIBUTES_FULFILLED,
   OPEN_ALL_ON_SEARCH
 } from "../actions/types";
 
@@ -9,13 +10,17 @@ const INITIAL_STATE = {
   categories: {},
   activeCategory: "",
   isOpenCategories: [],
-  selectedCategoryDetail: null
+  selectedCategoryDetail: null,
+  attributes: []
 };
 
 export default function(state = INITIAL_STATE, action) {
   let isOpenCategories;
 
   switch (action.type) {
+    case FETCH_ECOMMERCE_ATTRIBUTES_FULFILLED:
+      return { ...state, attributes: action.payload };
+
     case FETCH_ECOMMERCE_CATEGORIES_FULFILLED:
       return {
         ...state,
