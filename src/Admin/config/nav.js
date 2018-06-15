@@ -135,7 +135,7 @@ const items = {
     },
     {
       name: "Tele-Calling",
-      url: "/admin/users",
+      url: "/admin/tele-calling",
       icon: "fa fa-headphones",
       permission: "CAN_VIEW_USER"
     },

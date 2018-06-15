@@ -20,11 +20,8 @@ import { onBusinessRegisterSubmit } from "../../../../actions";
 
 class BusinessRegisterModal extends Component {
   state = {
-    username: "",
-    password: "",
-    confirm_password: "",
-    email: "",
     business_name: "",
+    mobile_number: "",
     checked: false
   };
 
@@ -35,27 +32,12 @@ class BusinessRegisterModal extends Component {
   //Change this.....
   onFormSubmit = event => {
     event.preventDefault();
-    const {
-      username,
-      password,
-      confirm_password,
-      email,
-      business_name,
-      checked
-    } = this.state;
+    const { business_name, mobile_number, checked } = this.state;
 
-    if (password === confirm_password) {
-      if (checked) {
-        this.props.onBusinessRegisterSubmit({
-          username,
-          password,
-          email,
-          business_name
-        });
-      } else toast.error("You have to agree to our User Agreement Policy");
-    } else {
-      toast.error("Password Mismatch");
-    }
+    this.props.onBusinessRegisterSubmit({
+      business_name,
+      mobile_number
+    });
   };
 
   render() {
@@ -79,58 +61,18 @@ class BusinessRegisterModal extends Component {
         <InputGroup className="mb-3">
           <InputGroupAddon addonType="prepend">
             <InputGroupText>
-              <i className="icon-user" />
+              <i className="icon-phone" />
             </InputGroupText>
           </InputGroupAddon>
           <Input
             required
             type="text"
-            placeholder="Username"
-            value={this.state.username}
-            onChange={this.onChange.bind(this, "username")}
+            placeholder="Mobile Number"
+            value={this.state.mobile_number}
+            onChange={this.onChange.bind(this, "mobile_number")}
           />
         </InputGroup>
-        <InputGroup className="mb-3">
-          <InputGroupAddon addonType="prepend">
-            <InputGroupText>@</InputGroupText>
-          </InputGroupAddon>
-          <Input
-            required
-            type="text"
-            placeholder="Email"
-            value={this.state.email}
-            onChange={this.onChange.bind(this, "email")}
-          />
-        </InputGroup>
-        <InputGroup className="mb-3">
-          <InputGroupAddon addonType="prepend">
-            <InputGroupText>
-              <i className="icon-lock" />
-            </InputGroupText>
-          </InputGroupAddon>
-          <Input
-            required
-            type="password"
-            value={this.state.password}
-            onChange={this.onChange.bind(this, "password")}
-            placeholder="Password"
-          />
-        </InputGroup>
-        <InputGroup className="mb-4">
-          <InputGroupAddon addonType="prepend">
-            <InputGroupText>
-              <i className="icon-lock" />
-            </InputGroupText>
-          </InputGroupAddon>
-          <Input
-            required
-            value={this.state.confirm_password}
-            type="password"
-            placeholder="Repeat password"
-            onChange={this.onChange.bind(this, "confirm_password")}
-          />
-        </InputGroup>
-        <FormGroup check>
+        {/* <FormGroup check>
           <Col sm={{ size: 10 }}>
             <FormGroup check>
               <Label check>
@@ -163,7 +105,7 @@ class BusinessRegisterModal extends Component {
               </Label>
             </FormGroup>
           </Col>
-        </FormGroup>
+        </FormGroup> */}
 
         <Button
           className="register-button"
@@ -171,7 +113,7 @@ class BusinessRegisterModal extends Component {
           block
           //onClick={() => this.onRegisterBtnClick()}
         >
-          Create Account
+          Register Business
         </Button>
 
         {/* <Divider horizontal>Or</Divider> */}

@@ -23,7 +23,8 @@ import {
   BusinessEdit,
   AppBusinessList,
   AppBusinessReview,
-  BusinessAssign
+  BusinessAssign,
+  TeleCalling
 } from "../views";
 
 import CustomRoute from "../../Common/utils/CustomRoute";
@@ -139,6 +140,13 @@ class AdminRoute extends Component {
           component={Sections}
           permission="CAN_VIEW_DASHBOARD"
         /> */}
+        <CustomRoute
+          exact
+          path="/admin/tele-calling"
+          name="Tele-Calling"
+          component={TeleCalling}
+          permission="CAN_VIEW_USER"
+        />
         <CustomRoute
           exact
           path="/admin/users"
