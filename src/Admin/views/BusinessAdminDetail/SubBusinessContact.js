@@ -59,11 +59,18 @@ class SubBusinessContact extends Component {
 
   onChange = (key, event) => {
     if (key === "name" || key === "department" || key === "designation") {
-      this.setState({
-        [key]: event.target.value.replace(/\b\w/g, l => l.toUpperCase())
-      });
+      this.setState(
+        {
+          [key]: event.target.value.replace(/\b\w/g, l => l.toUpperCase())
+        },
+        () => {
+          this.props.onContactSave(this.state);
+        }
+      );
     } else {
-      this.setState({ [key]: event.target.value });
+      this.setState({ [key]: event.target.value }, () => {
+        this.props.onContactSave(this.state);
+      });
     }
   };
 
@@ -203,14 +210,14 @@ class SubBusinessContact extends Component {
                 </Col>
               </Row>
               <Row style={{ marginBottom: 15 }}>
-                <Col xs="6" md="6">
+                {/* <Col xs="6" md="6">
                   <Button
                     color="success"
                     onClick={() => this.props.onContactSave(this.state)}
                   >
                     <i className="fa fa-save" /> SAVE CONTACT
                   </Button>
-                </Col>
+                </Col> */}
                 <Col xs="6" md="6">
                   <Button color="danger" onClick={this.onContactDelete}>
                     <i className="fa fa-remove" /> DELETE

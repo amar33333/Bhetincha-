@@ -264,7 +264,7 @@ class BusinessEdit extends Component {
                       size="lg"
                       style={{ marginRight: 20 }}
                     >
-                      EDIT
+                      SAVE
                     </Button>
 
                     <Button
