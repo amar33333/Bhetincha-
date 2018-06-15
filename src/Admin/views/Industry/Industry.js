@@ -32,11 +32,6 @@ import {
 } from "../../actions";
 
 class Industry extends Component {
-  static getDerivedStateFromProps = (nextProps, prevState) =>
-    prevState.industrySubmit && !nextProps.error && !nextProps.loading
-      ? { industry: "", industrySubmit: false }
-      : null;
-
   state = { industry: "", industrySubmit: false };
 
   tableProps = {
@@ -83,8 +78,13 @@ class Industry extends Component {
   componentDidMount = () => this.props.onIndustryList();
 
   componentDidUpdate = (prevProps, prevState, snapshot) => {
-    if (prevState.industrySubmit && prevProps.loading)
-      this.focusableInput.focus();
+    if (prevState.industrySubmit && !this.props.loading) {
+      const updates = { industrySubmit: false };
+      if (!this.props.error) {
+        updates.industry = "";
+      }
+      this.setState(updates, () => this.focusableInput.focus());
+    }
   };
 
   componentWillUnmount = () => this.props.onUnmountIndustry();

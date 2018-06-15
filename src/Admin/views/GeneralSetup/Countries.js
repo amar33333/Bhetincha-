@@ -31,11 +31,6 @@ import {
 } from "../../actions";
 
 class Countries extends Component {
-  static getDerivedStateFromProps = (nextProps, prevState) =>
-    prevState.countrySubmit && !nextProps.error && !nextProps.loading
-      ? { country: "", countrySubmit: false }
-      : null;
-
   state = { country: "", countrySubmit: false };
 
   tableProps = {
@@ -82,8 +77,13 @@ class Countries extends Component {
   componentDidMount = () => this.props.onCountryList();
 
   componentDidUpdate = (prevProps, prevState) => {
-    if (prevState.countrySubmit && prevProps.loading)
-      this.focusableInput.focus();
+    if (prevState.countrySubmit && !this.props.loading) {
+      const updates = { countrySubmit: false };
+      if (!this.props.error) {
+        updates.country = "";
+      }
+      this.setState(updates, () => this.focusableInput.focus());
+    }
   };
 
   componentWillUnmount = () => this.props.onUnmountCountry();

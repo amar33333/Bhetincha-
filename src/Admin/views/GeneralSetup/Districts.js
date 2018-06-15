@@ -46,11 +46,6 @@ import {
 const DISTRICTS_CHANGED = " districts_changed";
 
 class Districts extends Component {
-  static getDerivedStateFromProps = (nextProps, prevState) =>
-    prevState.districtSubmit && !nextProps.error && !nextProps.loading
-      ? { district: "", districtCode: "", districtSubmit: false }
-      : null;
-
   state = {
     country: "",
     state: "",
@@ -176,8 +171,14 @@ class Districts extends Component {
   }
 
   componentDidUpdate = (prevProps, prevState, snapshot) => {
-    if (prevState.districtSubmit && prevProps.loading)
-      this.focusableInput.focus();
+    if (prevState.districtSubmit && !this.props.loading) {
+      const updates = { districtSubmit: false };
+      if (!this.props.error) {
+        updates.district = "";
+        updates.districtCode = "";
+      }
+      this.setState(updates, () => this.focusableInput.focus());
+    }
 
     if (snapshot === DISTRICTS_CHANGED) this.updateTable();
   };

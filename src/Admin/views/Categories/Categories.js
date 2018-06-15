@@ -40,11 +40,6 @@ import {
 } from "../../actions";
 
 class Categories extends Component {
-  static getDerivedStateFromProps = (nextProps, prevState) =>
-    prevState.categorySubmit && !nextProps.error && !nextProps.loading
-      ? { category: "", categorySubmit: false }
-      : null;
-
   state = {
     category: "",
     industry: "",
@@ -130,8 +125,13 @@ class Categories extends Component {
   }
 
   componentDidUpdate = (prevProps, prevState, snapshot) => {
-    if (prevState.categorySubmit && prevProps.loading)
-      this.focusableInput.focus();
+    if (prevState.categorySubmit && !this.props.loading) {
+      const updates = { categorySubmit: false };
+      if (!this.props.error) {
+        updates.category = "";
+      }
+      this.setState(updates, () => this.focusableInput.focus());
+    }
   };
 
   componentWillUnmount() {
@@ -147,13 +147,6 @@ class Categories extends Component {
   onFormSubmit = event => {
     event.preventDefault();
     const { category, industry } = this.state;
-    console.log("asdqwew;asdad;A: ", category, industry);
-    this.props.onCategorySubmit({
-      industry: industry.id,
-      category,
-      access_token: this.access_token
-    });
-    this.setState({ category: "", industry: "" });
     this.setState({ categorySubmit: true }, () =>
       this.props.onCategorySubmit({ industry: industry.id, category })
     );
@@ -248,7 +241,12 @@ class Categories extends Component {
 }
 
 export default connect(
-  ({ AdminContainer: { industries: { industries }, categories } }) => ({
+  ({
+    AdminContainer: {
+      industries: { industries },
+      categories
+    }
+  }) => ({
     industries,
     ...categories
   }),

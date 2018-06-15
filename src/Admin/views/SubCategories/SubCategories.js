@@ -53,16 +53,6 @@ import {
 const SUB_CATEGORIES_CHANGED = "SUB_CATEGORIES_CHANGED";
 
 class SubCategories extends Component {
-  static getDerivedStateFromProps = (nextProps, prevState) =>
-    prevState.subCategorySubmit && !nextProps.error && !nextProps.loading
-      ? {
-          extraSections: [],
-          tags: [],
-          subCategory: "",
-          subCategorySubmit: false
-        }
-      : null;
-
   state = {
     subCategory: "",
     category: "",
@@ -217,6 +207,17 @@ class SubCategories extends Component {
   }
 
   componentDidUpdate = (prevProps, prevState, snapshot) => {
+    if (prevState.subCategorySubmit && !this.props.loading) {
+      const updates = { subCategorySubmit: false };
+      if (!this.props.error) {
+        updates.extraSections = [];
+        updates.tags = [];
+        updates.subCategory = "";
+        updates.subCategorySubmit = false;
+      }
+      this.setState(updates, () => this.focusableInput.focus());
+    }
+
     if (prevState.subCategorySubmit && prevProps.loading)
       this.focusableInput.focus();
 
