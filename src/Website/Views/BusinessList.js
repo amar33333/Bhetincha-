@@ -14,13 +14,13 @@ import {
 import avatar from "../../static/img/avatar.jpg";
 import querystring from "querystring";
 
-import { togglePhoneVerificationModal, onSearchResultsList } from "../actions";
+import { togglePhoneVerificationModal } from "../../actions";
+import { onSearchResultsList } from "../actions";
 import CustomModal from "../../Common/components/CustomModal";
 import PhoneVerificationModal from "../../Common/components/CustomModal/ModalTemplates/PhoneVerificationModal";
 
 class BusinessList extends Component {
   componentDidMount() {
-    console.log("business list: ", this.props);
     const parsedUrlStringObject = querystring.parse(this.props.location.search);
 
     this.props.onSearchResultsList({
@@ -41,9 +41,9 @@ class BusinessList extends Component {
       });
   }
 
-  onClaimed = () => {
+  onClaimed = id => () => {
     console.log("claimed");
-    this.props.togglePhoneVerificationModal();
+    this.props.togglePhoneVerificationModal({ id });
   };
 
   renderSearchResults = () => {
@@ -111,7 +111,7 @@ class BusinessList extends Component {
                   <Col
                     sm="2"
                     style={{ cursor: "pointer" }}
-                    onClick={this.onClaimed}
+                    onClick={this.onClaimed(each_search_result._id)}
                   >
                     <i className="fa fa-unlock" /> Claim
                   </Col>
@@ -148,6 +148,8 @@ class BusinessList extends Component {
   };
 
   render() {
+    console.log("business list: ", this.props);
+
     return (
       <div className="body-wrapper">
         <Container fluid>
