@@ -108,7 +108,7 @@ input.main-nav-search::placeholder {
 }
 .react-autosuggest__input {
   width: 100% !important;
-  height: auto !important;
+  height: 50px !important;
   padding: 10px 20px;
   /* font-family: Helvetica, sans-serif; */
   font-weight: 300;

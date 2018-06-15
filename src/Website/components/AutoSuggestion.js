@@ -11,6 +11,13 @@ class AutoSuggestion extends Component {
     return suggestion[this.props.valueKey];
   };
 
+  // renderInputComponent = inputProps => (
+  //   <div className="inputContainer">
+  //     <input {...inputProps} />
+  //     <i className="fa fa-search" />
+  //   </div>
+  // );
+
   renderSuggestion = suggestion => <div>{suggestion[this.props.valueKey]}</div>;
 
   render() {
@@ -42,8 +49,23 @@ class AutoSuggestion extends Component {
                 {...inputProps}
                 autoFocus
                 style={{
-                  border: "1px solid #aaa",
-                  borderRadius: "0px"
+                  // border: "1px solid #aaa",
+                  border: "none",
+                  borderRadius: "0px",
+                  backgroundColor: "white",
+                  webkitBoxShadow: "0px 1px 6px 1px rgba(196,174,196,0.79)",
+                  mozBoxShadow: "0px 1px 6px 1px rgba(196,174,196,0.79)",
+                  boxShadow: "0px 2px 4px 1px rgba(196,174,196,0.79)"
+                }}
+              />
+              <i
+                className="fa fa-search"
+                style={{
+                  position: "absolute",
+                  right: "10px",
+                  top: "25%",
+                  fontSize: "20px",
+                  color: "grey"
                 }}
               />
             </form>
