@@ -168,7 +168,7 @@ export const onBusinessEachGet = ({ username, access_token }) =>
 export const onBusinessEachGetAjax = ({ slug }) =>
   ajax({
     method: "GET",
-    url: `${BUSINESS_URL}${slug}`,
+    url: `${BUSINESS_URL}${slug}/`,
     headers: {
       "Content-Type": "application/json"
     }
