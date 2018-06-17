@@ -16,7 +16,7 @@ class PropertyList extends Component {
 
     this.state = {
       properties: props.category.breadCrumbs
-        ? this.mapProperties(props.category.breadCrumbs)
+        ? this.mapProperties(props.category)
         : []
     };
   }
@@ -25,13 +25,14 @@ class PropertyList extends Component {
     if (this.props.category !== prevProps.category) {
       this.setState({
         properties: this.props.category.breadCrumbs
-          ? this.mapProperties(this.props.category.breadCrumbs)
+          ? this.mapProperties(this.props.category)
           : []
       });
     }
   }
 
-  mapProperties = breadCrumbs => {
+  mapProperties = category => {
+    const { breadCrumbs } = category;
     let properties = [];
     let len = 0;
     breadCrumbs.forEach(breadcrumb => {
@@ -42,7 +43,8 @@ class PropertyList extends Component {
           filterAble: property.filterAble ? "Yes" : "No",
           s_no: ++len,
           category: breadcrumb.name,
-          uidCategory: breadcrumb.uid
+          uidCategory: breadcrumb.uid,
+          uidPage: category.uid
         }))
       );
     });
@@ -76,32 +78,21 @@ class PropertyList extends Component {
         filterable: false,
         sortable: false,
         width: 100,
-        Cell: ({ value, original: { uidAttributeType, uidCategory } }) => (
-          <div>
-            {/* <Button
-              color="secondary"
-              className="mr-l"
-              onClick={() => this.props.toggleIndustryEditModal({ id, name })}
-            >
-              Edit
-            </Button> */}
-            {/* {
-    "categoryId":"0f5daa61bcf54871be75bb8554271e07",
-    "attributeTypeId":"79e3af2d51514e33a5614c961fb17417",
-    "relationshipId":"97cc9832949149cfa5e4b667857e32ad"
-    
-} */}
-            <PopoverDelete
-              id={`delete-${value}`}
-              onClick={() =>
-                this.props.onPropertyRemove({
-                  categoryId: uidCategory,
-                  attributeTypeId: uidAttributeType,
-                  relationshipId: value
-                })
-              }
-            />
-          </div>
+        Cell: ({
+          value,
+          original: { uidAttributeType, uidCategory, uidPage }
+        }) => (
+          <PopoverDelete
+            id={`delete-${value}`}
+            disabled={uidPage !== uidCategory}
+            onClick={() =>
+              this.props.onPropertyRemove({
+                categoryId: uidCategory,
+                attributeTypeId: uidAttributeType,
+                relationshipId: value
+              })
+            }
+          />
         )
       }
     ],
