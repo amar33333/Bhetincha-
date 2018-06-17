@@ -29,9 +29,31 @@ class PropertyItemAddNew extends Component {
       defaultValueInteger: 0,
       defaultValueFloat: 0,
       options: [],
-      filterable: false
+      filterable: false,
+      loading: false,
+      error: false,
+      propertySubmit: false
     };
   }
+
+  componentDidUpdate = (prevProps, prevState, snapshot) => {
+    if (prevState.propertySubmit && !this.props.loading) {
+      const updates = { propertySubmit: false };
+      if (!this.props.error) {
+        updates.name = "";
+        updates.fieldType = null;
+        updates.required = false;
+        updates.defaultValueString = "";
+        updates.defaultValueDateTime = new Date();
+        updates.defaultValueChoices = null;
+        updates.defaultValueInteger = 0;
+        updates.defaultValueFloat = 0;
+        updates.options = [];
+        updates.filterable = false;
+      }
+      this.setState(updates, () => this.focusableInput.focus());
+    }
+  };
 
   onChangeName = event =>
     this.onChange(
@@ -91,7 +113,9 @@ class PropertyItemAddNew extends Component {
       }
     }
 
-    this.props.onPropertySubmit({ body });
+    this.setState({ propertySubmit: true }, () =>
+      this.props.onPropertySubmit({ body })
+    );
   };
 
   render() {
@@ -196,7 +220,6 @@ class PropertyItemAddNew extends Component {
                             <Col sm={9}>
                               <Input
                                 required
-                                innerRef={ref => (this.focusableInput = ref)}
                                 placeholder="Default Value"
                                 value={this.state.defaultValueString}
                                 onChange={event =>
@@ -215,7 +238,6 @@ class PropertyItemAddNew extends Component {
                             <Col sm={9}>
                               <Input
                                 required
-                                innerRef={ref => (this.focusableInput = ref)}
                                 type="number"
                                 placeholder="Default Value"
                                 value={this.state.defaultValueInteger}
@@ -235,7 +257,6 @@ class PropertyItemAddNew extends Component {
                             <Col sm={9}>
                               <Input
                                 required
-                                innerRef={ref => (this.focusableInput = ref)}
                                 type="number"
                                 step="0.01"
                                 placeholder="Default Value"

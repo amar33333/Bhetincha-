@@ -23,11 +23,6 @@ class PropertyList extends Component {
 
   componentDidUpdate(prevProps) {
     if (this.props.category !== prevProps.category) {
-      console.log(
-        "from here",
-        this.mapProperties(this.props.category.breadCrumbs)
-      );
-
       this.setState({
         properties: this.props.category.breadCrumbs
           ? this.mapProperties(this.props.category.breadCrumbs)
@@ -46,7 +41,8 @@ class PropertyList extends Component {
           required: property.required ? "Yes" : "No",
           filterAble: property.filterAble ? "Yes" : "No",
           s_no: ++len,
-          category: breadcrumb.name
+          category: breadcrumb.name,
+          uidCategory: breadcrumb.uid
         }))
       );
     });
@@ -76,11 +72,11 @@ class PropertyList extends Component {
       {
         Header: "Actions",
         id: "edit",
-        accessor: "uidAttributeType",
+        accessor: "uid",
         filterable: false,
         sortable: false,
         width: 100,
-        Cell: ({ value, original: { id, name } }) => (
+        Cell: ({ value, original: { uidAttributeType, uidCategory } }) => (
           <div>
             {/* <Button
               color="secondary"
@@ -89,9 +85,21 @@ class PropertyList extends Component {
             >
               Edit
             </Button> */}
+            {/* {
+    "categoryId":"0f5daa61bcf54871be75bb8554271e07",
+    "attributeTypeId":"79e3af2d51514e33a5614c961fb17417",
+    "relationshipId":"97cc9832949149cfa5e4b667857e32ad"
+    
+} */}
             <PopoverDelete
               id={`delete-${value}`}
-              onClick={() => this.props.onIndustryDelete({ id: value })}
+              onClick={() =>
+                this.props.onPropertyRemove({
+                  categoryId: uidCategory,
+                  attributeTypeId: uidAttributeType,
+                  relationshipId: value
+                })
+              }
             />
           </div>
         )

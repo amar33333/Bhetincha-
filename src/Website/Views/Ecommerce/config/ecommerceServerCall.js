@@ -21,6 +21,16 @@ export const onPropertiesPost = ({ body }) =>
     }
   });
 
+export const onPropertiesDelete = ({ body }) =>
+  ajax({
+    method: "DELETE",
+    url: ATTRIBUTE_URL,
+    body,
+    headers: {
+      "Content-Type": "application/json"
+    }
+  });
+
 // categories
 export const onCategoriesGet = () =>
   ajax({

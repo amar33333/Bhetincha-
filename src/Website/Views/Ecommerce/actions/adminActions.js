@@ -24,7 +24,10 @@ import {
   FETCH_ECOMMERCE_ATTRIBUTES_REJECTED,
   CREATE_PROPERTY_CATEGORY_FULFILLED,
   CREATE_PROPERTY_CATEGORY_PENDING,
-  CREATE_PROPERTY_CATEGORY_REJECTED
+  CREATE_PROPERTY_CATEGORY_REJECTED,
+  DELETE_PROPERTY_CATEGORY_FULFILLED,
+  DELETE_PROPERTY_CATEGORY_PENDING,
+  DELETE_PROPERTY_CATEGORY_REJECTED
 } from "./types";
 
 import {
@@ -34,7 +37,8 @@ import {
   onCategoryDetailPost,
   onCategoryDetailDelete,
   onAttributesGet,
-  onPropertiesPost
+  onPropertiesPost,
+  onPropertiesDelete
 } from "../config/ecommerceServerCall";
 
 const epics = [];
@@ -84,6 +88,35 @@ epics.push((action$, { getState }) =>
       .catch(ajaxError => {
         toast.error(ajaxError.toString());
         return Observable.of({ type: CREATE_PROPERTY_CATEGORY_REJECTED });
+      });
+  })
+);
+
+export const onPropertyRemove = payload => ({
+  type: DELETE_PROPERTY_CATEGORY_PENDING,
+  payload
+});
+
+epics.push((action$, { getState }) =>
+  action$.ofType(DELETE_PROPERTY_CATEGORY_PENDING).mergeMap(action => {
+    const payload = getState().EcommerceContainer.admin.activeCategory;
+    const body = action.payload;
+
+    return onPropertiesDelete({ body })
+      .concatMap(({ response }) => {
+        if (response.msg === "success") {
+          toast.success("Attribute Deleted Successfully");
+          return [
+            { type: DELETE_PROPERTY_CATEGORY_FULFILLED },
+            { type: CHANGE_ACTIVE_ECOMMERCE_CATEGORY, payload }
+          ];
+        } else {
+          throw new Error(response.msg);
+        }
+      })
+      .catch(ajaxError => {
+        toast.error(ajaxError.toString());
+        return Observable.of({ type: DELETE_PROPERTY_CATEGORY_REJECTED });
       });
   })
 );
