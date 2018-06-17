@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Row, Col, Container } from "reactstrap";
+import { Grid, Rail, Segment, Sticky } from "semantic-ui-react";
+
 import {
   SideTreeView,
   BreadcrumbNav,
@@ -10,6 +12,7 @@ import {
   PropertyItemAddNew
 } from "./components/Admin";
 
+import { PopoverDelete } from "../../../Common/components";
 import {
   onCategoriesList,
   onChangeActiveCategory,
@@ -22,12 +25,44 @@ import {
 } from "./actions";
 
 class EcommerceAdmin extends Component {
+  state = {};
+
   componentDidMount() {
     this.props.onCategoriesList();
     this.props.onAttributesList();
   }
 
+  handleContextRef = contextRef => this.setState({ contextRef });
+
   render() {
+    const { contextRef } = this.state;
+    // return (
+    //   <Grid centered columns={3}>
+    //     <Grid.Column>
+    //       <div ref={this.handleContextRef}>
+    //         <Segment>
+    //           {_.times(10, i => <Placeholder key={i} />)}
+
+    //           <Rail position='left'>
+    //             {_.times(3, i => <Placeholder key={i} />)}
+
+    //             <Sticky context={contextRef}>
+    //               <Header as='h3'>Stuck Content</Header>
+    //               <Image src='/assets/images/wireframe/image.png' />
+    //             </Sticky>
+    //           </Rail>
+
+    //           <Rail position='right'>
+    //             <Sticky context={contextRef}>
+    //               <Header as='h3'>Stuck Content</Header>
+    //               <Image src='/assets/images/wireframe/image.png' />
+    //             </Sticky>
+    //           </Rail>
+    //         </Segment>
+    //       </div>
+    //     </Grid.Column>
+    //   </Grid>
+    // )
     return (
       <Container fluid>
         <Row>
@@ -47,15 +82,13 @@ class EcommerceAdmin extends Component {
                   breadCrumbs={this.props.selectedCategoryDetail.breadCrumbs}
                   onChangeActiveCategory={this.props.onChangeActiveCategory}
                 />
-                <button
+                <PopoverDelete
                   onClick={() =>
                     this.props.onCategoryDelete({
                       uid: this.props.selectedCategoryDetail.uid
                     })
                   }
-                >
-                  Delete
-                </button>
+                />
                 <CategoryEditView
                   onCategoryUpdate={this.props.onCategoryUpdate}
                   category={this.props.selectedCategoryDetail}
@@ -71,7 +104,7 @@ class EcommerceAdmin extends Component {
                   attributes={this.props.attributes}
                   onPropertySubmit={this.props.onPropertySubmit}
                 />
-                <PropertyList />
+                <PropertyList category={this.props.selectedCategoryDetail} />
               </div>
             )}
           </Col>

@@ -66,7 +66,7 @@ export const onPropertySubmit = payload => ({
 
 epics.push((action$, { getState }) =>
   action$.ofType(CREATE_PROPERTY_CATEGORY_PENDING).mergeMap(action => {
-    // const parent = getState().EcommerceContainer.admin.activeCategory;
+    const payload = getState().EcommerceContainer.admin.activeCategory;
     const { body } = action.payload;
 
     return onPropertiesPost({ body })
@@ -74,8 +74,8 @@ epics.push((action$, { getState }) =>
         if (response.msg === "success") {
           toast.success("Attribute created successfully");
           return [
-            { type: CREATE_PROPERTY_CATEGORY_FULFILLED }
-            // { type: FETCH_ECOMMERCE_CATEGORIES_PENDING }
+            { type: CREATE_PROPERTY_CATEGORY_FULFILLED },
+            { type: CHANGE_ACTIVE_ECOMMERCE_CATEGORY, payload }
           ];
         } else {
           throw new Error(response.msg);

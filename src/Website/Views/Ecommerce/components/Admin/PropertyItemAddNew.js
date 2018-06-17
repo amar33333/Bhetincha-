@@ -152,6 +152,8 @@ class PropertyItemAddNew extends Component {
                               this.onChange("options", options)
                             }
                             value={this.state.options}
+                            noResultsText="Type option and press tab or enter"
+                            placeholder="Create options"
                           />
                         </Col>
                       </FormGroup>
