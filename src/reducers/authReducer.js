@@ -15,10 +15,10 @@ import {
   REQUEST_PHONE_VERIFICATION_FULFILLED,
   REQUEST_PHONE_VERIFICATION_PENDING,
   REQUEST_PHONE_VERIFICATION_REJECTED,
+  TOGGLE_PHONE_VERIFICATION_MODAL,
   LOGOUT_USER
 } from "../actions/types";
 
-import { TOGGLE_PHONE_VERIFICATION_MODAL } from "../Website/actions/types";
 import { stat } from "fs";
 
 const INITIAL_STATE = {
@@ -89,6 +89,7 @@ export default function(state = INITIAL_STATE, action) {
       return { ...state, loading: false };
 
     case TOGGLE_PHONE_VERIFICATION_MODAL:
+      console.log("togl phon: ", action.payload);
       return {
         ...state,
         phoneVerificationModal: !state.phoneVerificationModal,

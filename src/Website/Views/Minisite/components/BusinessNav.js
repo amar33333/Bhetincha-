@@ -9,6 +9,8 @@ import { ScrollInNav } from "../../../components";
 import PermissionProvider from "../../../../Common/utils/PermissionProvider";
 
 import GridLayout from "react-grid-layout";
+
+// import { Responsive, WidthProvider } from "react-grid-layout";
 import "react-grid-layout/css/styles.css";
 import "react-resizable/css/styles.css";
 
@@ -22,6 +24,8 @@ import {
 } from "reactstrap";
 
 import { onEditMainClicked, onBusinessUpdate } from "../actions";
+
+// const ResponsiveGridLayout = WidthProvider(Responsive);
 
 class BusinessNav extends Component {
   static getDerivedStateFromProps = nextProps => ({
@@ -43,16 +47,7 @@ class BusinessNav extends Component {
   // };
 
   onNavDragStop = items => {
-    items.forEach(item => {
-      item.y = 0;
-      item.moved = true;
-      console.log("X:", item.x, item.i, item.moved);
-    });
-    this.setState({
-      nav_layout: items,
-      height: null
-    });
-    // console.log(items);
+    console.log("onstop items:", items);
   };
   onNavClicked = e => {
     if (this.props.mainEdit) {
@@ -64,14 +59,28 @@ class BusinessNav extends Component {
     }
   };
 
-  onNavChanged = () => {
-    this.props.onBusinessUpdate({
-      body: { nav_layout: this.state.nav_layout }
+  onNavChanged = layout => {
+    layout.forEach(item => {
+      item.y = 0;
+      // item.moved = true;
     });
+    this.setState(
+      {
+        nav_layout: layout
+        // height: null
+      },
+      () => {
+        console.log("on save nav:", this.state.nav_layout);
+        console.log("on save nav, layout:", layout);
+        this.props.mainEdit &&
+          this.props.onBusinessUpdate({
+            body: { nav_layout: layout }
+          });
+      }
+    );
   };
 
   render() {
-    console.log("Nav_layout:", this.state.nav_layout);
     return (
       <div>
         <Navbar color="faded" light expand="md" className="business-navbar">
@@ -85,18 +94,31 @@ class BusinessNav extends Component {
           <NavbarToggler onClick={this.toggle} />
           <Collapse isOpen={this.state.isOpen} navbar>
             <Nav className="ml-5" navbar>
+              {/* <ResponsiveGridLayout
+                className="layout"
+                layouts={this.state.nav_layout}
+                breakpoints={{ lg: 1200 }}
+                cols={{ lg: 12, md: 12, sm: 2, xs: 2, xxs: 2 }}
+                rowHeight={30}
+                width={1200}
+                // preventCollision={false}
+                // compactType="horizontal"
+                onLayoutChange={this.onNavChanged}
+                onDragStop={this.onNavDragStop}
+              > */}
               <GridLayout
                 className="layout"
+                // layout={this.state.nav_layout}
                 layout={this.state.nav_layout}
                 cols={24}
                 rowHeight={30}
                 width={1200}
                 isDraggable={this.props.mainEdit ? true : false}
-                // onLayoutChange={this.onItemDragged}
+                onLayoutChange={this.onNavChanged}
                 preventCollision={false}
                 compactType="horizontal"
                 // onDragStart={this.onNavDragStart}
-                onDragStop={this.onNavDragStop}
+                // onDragStop={this.onNavDragStop}
               >
                 <NavItem key="home">
                   <Link
@@ -139,6 +161,7 @@ class BusinessNav extends Component {
                     Contact
                   </Link>
                 </NavItem>
+                {/* </ResponsiveGridLayout> */}
               </GridLayout>
             </Nav>
           </Collapse>

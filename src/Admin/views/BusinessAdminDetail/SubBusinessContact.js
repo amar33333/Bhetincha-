@@ -18,11 +18,11 @@ class SubBusinessContact extends Component {
     super(props);
 
     this.state = {
-      name: "",
-      email: "",
-      designation: "",
-      mobileNumber: "",
-      department: "",
+      name: props.contact.name,
+      email: props.contact.email,
+      designation: props.contact.designation,
+      mobileNumber: props.contact.mobileNumber,
+      department: props.contact.department,
       collapsed: false
     };
   }
@@ -32,24 +32,45 @@ class SubBusinessContact extends Component {
     });
   };
 
-  static getDerivedStateFromProps = nextProps =>
-    nextProps.contact
-      ? {
-          name: nextProps.contact.name,
-          email: nextProps.contact.email,
-          designation: nextProps.contact.designation,
-          mobileNumber: nextProps.contact.mobileNumber,
-          department: nextProps.contact.department
-        }
-      : null;
+  componentDidUpdate(prevProps) {
+    if (prevProps.contact !== this.props.contact) {
+      return {
+        name: this.props.contact.name,
+        email: this.props.contact.email,
+        designation: this.props.contact.designation,
+        mobileNumber: this.props.contact.mobileNumber,
+        department: this.props.contact.department
+      };
+    }
+  }
+
+  // static getDerivedStateFromProps = nextProps => {
+  //   console.log("getssdsdfsdfdf");
+  //   return nextProps.contact
+  //     ? {
+  //         name: nextProps.contact.name,
+  //         email: nextProps.contact.email,
+  //         designation: nextProps.contact.designation,
+  //         mobileNumber: nextProps.contact.mobileNumber,
+  //         department: nextProps.contact.department
+  //       }
+  //     : null;
+  // };
 
   onChange = (key, event) => {
     if (key === "name" || key === "department" || key === "designation") {
-      this.setState({
-        [key]: event.target.value.replace(/\b\w/g, l => l.toUpperCase())
-      });
+      this.setState(
+        {
+          [key]: event.target.value.replace(/\b\w/g, l => l.toUpperCase())
+        },
+        () => {
+          this.props.onContactSave(this.state);
+        }
+      );
     } else {
-      this.setState({ [key]: event.target.value });
+      this.setState({ [key]: event.target.value }, () => {
+        this.props.onContactSave(this.state);
+      });
     }
   };
 
@@ -189,14 +210,14 @@ class SubBusinessContact extends Component {
                 </Col>
               </Row>
               <Row style={{ marginBottom: 15 }}>
-                <Col xs="6" md="6">
+                {/* <Col xs="6" md="6">
                   <Button
                     color="success"
                     onClick={() => this.props.onContactSave(this.state)}
                   >
                     <i className="fa fa-save" /> SAVE CONTACT
                   </Button>
-                </Col>
+                </Col> */}
                 <Col xs="6" md="6">
                   <Button color="danger" onClick={this.onContactDelete}>
                     <i className="fa fa-remove" /> DELETE

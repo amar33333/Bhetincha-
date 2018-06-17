@@ -23,6 +23,7 @@ import {
   PERMISSIONS_LOAD_FULFILLED,
   PERMISSIONS_LOAD_REJECTED,
   COOKIES_LOAD_FULFILLED,
+  TOGGLE_PHONE_VERIFICATION_MODAL,
   LOGOUT_USER
 } from "./types";
 
@@ -217,6 +218,11 @@ export const onBusinessRegisterSubmit = payload => ({
   payload
 });
 
+export const togglePhoneVerificationModal = payload => ({
+  type: TOGGLE_PHONE_VERIFICATION_MODAL,
+  payload
+});
+
 epics.push(action$ =>
   action$
     .ofType(CREATE_BUSINESS_USER_PENDING)
@@ -226,6 +232,7 @@ epics.push(action$ =>
         toast.success("Registered Successfully");
 
         return [
+          { type: TOGGLE_PHONE_VERIFICATION_MODAL },
           { type: TOGGLE_REGISTER_MODAL },
           { type: CREATE_BUSINESS_USER_FULFILLED, payload: response }
         ];

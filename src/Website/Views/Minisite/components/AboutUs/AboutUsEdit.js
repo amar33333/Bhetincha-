@@ -32,6 +32,24 @@ class AboutUsEdit extends Component {
 
   state = { aboutUs: "", establishedYear: "", tagline: "" };
 
+  componentDidMount() {
+    if (this.props.initialValue) this.updateData(this.props.initialValue);
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.initialValue !== this.props.initialValue) {
+      this.updateData(this.props.initialValue);
+    }
+  }
+
+  updateData = initialValue => {
+    this.setState({
+      tagline: initialValue.tagline,
+      aboutUs: initialValue.aboutUs,
+      establishedYear: initialValue.establishedYear
+    });
+  };
+
   handleChange = value => this.setState({ aboutUs: value });
 
   onChange = (key, event) => this.setState({ [key]: event.target.value });

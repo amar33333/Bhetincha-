@@ -13,11 +13,23 @@ class MainNavbar extends Component {
   render() {
     return (
       <div>
-        <Navbar color="light" light expand="md" className="main-nav">
+        <Navbar
+          color="light"
+          light
+          expand="md"
+          className="main-nav"
+          style={{ height: "85px" }}
+        >
           <Link to="/" className="navbar-brand">
             Bhetincha
           </Link>
-          <NavItem>
+          <NavItem style={{ width: "50%", marginRight: "30px" }}>
+            {/* <Input
+              icon="search"
+              placeholder="Search..."
+              className="main-nav-search"
+              size="lg"
+            /> */}
             <AutoSuggestion
               placeholder="Search anything..."
               valueKey="business_name"
@@ -41,7 +53,8 @@ class MainNavbar extends Component {
               }}
             />
           </NavItem>
-          <NavItem>{this.props.cookies && <Avatar />}</NavItem>
+          {/* {this.props.cookies && <Avatar />} */}
+          <NavItem right>{this.props.cookies && <Avatar />}</NavItem>
         </Navbar>
       </div>
     );

@@ -29,8 +29,8 @@ class BottomFooter extends Component {
           </Row>
           <div className="bottom-footer__meta">
             <p>
-              &copy; {new Date().getFullYear()}, {OWNER}. All rights reserved |
-              Powered by{" "}
+              &copy; {new Date().getFullYear()}, {OWNER}. All rights reserved
+              {/* Powered by{" "}
               <a
                 href="http://techkunja.com.np"
                 rel="noopener noreferrer"
@@ -38,7 +38,7 @@ class BottomFooter extends Component {
                 className="footer-link"
               >
                 {DEVELOPER}
-              </a>
+              </a> */}
             </p>
           </div>
         </Container>

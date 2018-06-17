@@ -14,7 +14,7 @@ import {
 
 import { toast } from "react-toastify";
 
-import BusinessRegisterModal from "./BusinessRegisterModal";
+import BusinessRegisterModal_1 from "./BusinessRegisterModal_1";
 import IndividualRegisterModal from "./IndividualRegisterModal";
 
 class RegisterModal extends Component {
@@ -34,7 +34,7 @@ class RegisterModal extends Component {
   renderModal = () => {
     return this.state.businessRegisterModal ? (
       <div>
-        <BusinessRegisterModal />
+        <BusinessRegisterModal_1 />
         <span>
           <a href="#" onClick={this.onToggleVisible}>
             Register as Individual{" "}

@@ -14,16 +14,19 @@ class BusinessFooter extends Component {
               <h4>Contact us</h4>
               <p className="m-0">
                 <strong>Head Office</strong>
+                <p className="m-0">
+                  <strong>{this.props.business_name}</strong>
+                </p>
+                <p>{this.props.address && this.props.address.addressLine1}</p>
               </p>
-              <p className="m-0">{this.props.business_name}</p>
-              <p>Anamnagar, Kathmandu, Nepal</p>
+              <p>{""}</p>
               <span className="fa fa-envelope">
-                <a href="mailto:mail@techkunja.com.np">
+                <a href={`mailto:${this.props.business_email}`}>
                   {" "}
-                  {this.props.user_data.email}{" "}
+                  {this.props.business_email}{" "}
                 </a>
               </span>
-              <br />
+              {/* <br />
               <span className="fa fa-globe">
                 {" "}
                 <a
@@ -32,26 +35,28 @@ class BusinessFooter extends Component {
                   target="_blank"
                 >
                   {" "}
-                  www.techkunja.com.np
                 </a>
-              </span>
+              </span> */}
             </Col>
             <Col xs="12" md="2">
               <h4>Find us</h4>
             </Col>
             <Col xs="12" md="3">
-              <div className="m-0">
+              <div className="mb-3">
                 <h4>Explore</h4>
               </div>
               <ul>
                 <li>
+                  <Link to="#">Home</Link>
+                </li>
+                <li>
+                  <Link to="#">About</Link>
+                </li>
+                <li>
                   <Link to="#">Gallery</Link>
                 </li>
                 <li>
-                  <Link to="#">Products</Link>
-                </li>
-                <li>
-                  <Link to="#">Jobs</Link>
+                  <Link to="#">Contact</Link>
                 </li>
               </ul>
             </Col>
@@ -74,9 +79,11 @@ class BusinessFooter extends Component {
               <Row>
                 <div className="toll-free">
                   <h4>Call us Now!</h4>
-                  <h3>
-                    <a href="tel:16600102030">01-5262626</a>
-                  </h3>
+                  <h2>
+                    <a href={`tel:${this.props.business_phone}`}>
+                      {this.props.business_phone}
+                    </a>
+                  </h2>
                 </div>
               </Row>
             </Col>
@@ -90,14 +97,13 @@ class BusinessFooter extends Component {
 export default connect(
   ({
     MinisiteContainer: {
-      crud: { logo, business_name }
-    },
-    auth: {
-      cookies: { user_data }
+      crud: { logo, business_name, business_email, business_phone, address }
     }
   }) => ({
-    user_data,
     logo,
-    business_name
+    business_name,
+    business_email,
+    business_phone,
+    address
   })
 )(BusinessFooter);
