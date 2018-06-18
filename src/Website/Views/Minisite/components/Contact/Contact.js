@@ -36,25 +36,53 @@ class Contact extends Component {
           <Card>
             <Card.Content header="Head Office" />
             <Card.Content>
+              {(this.props.address.addressLine1 ||
+                this.props.address.addressLine2) && (
+                <p>
+                  {this.props.address.addressLine1}
+                  {this.props.address.addressLine1 && `, `}
+                  {this.props.address.addressLine2}
+                </p>
+              )}
               <p>{`${this.props.address.area.name}, ${
                 this.props.address.city.name
               }, ${this.props.address.district.name}`}</p>
-              <p>{this.props.address.landmark}</p>
+              <p>
+                {this.props.address.landmark &&
+                  `(${this.props.address.landmark})`}
+              </p>
+              {this.props.address.landlineNumber && (
+                <p>
+                  <i className="fa fa-phone" />{" "}
+                  {this.props.address.landlineNumber}
+                </p>
+              )}
+              {this.props.address.email && (
+                <p>
+                  <i className="fa fa-envelope" /> {this.props.address.email}
+                </p>
+              )}
               {this.props.address.contactPerson.map(person => (
                 <div>
                   <p className="mt-3">
                     <i className="fa fa-user" /> <strong>{person.name}</strong>
-                    <small>{` (${person.department})`}</small>
+                    <small>
+                      {person.department && ` (${person.department})`}
+                    </small>
                   </p>
                   {person.mobileNumber ? (
                     <p>
-                      <i className="fa fa-phone"> {person.mobileNumber}</i>
+                      <i className="fa fa-mobile"> {person.mobileNumber}</i>
                     </p>
                   ) : null}
                 </div>
               ))}
               <a
-                href={`tel:${this.props.address.contactPerson[0].mobileNumber}`}
+                href={
+                  this.props.address.contactPerson &&
+                  this.props.address.contactPerson[0] &&
+                  `tel:${this.props.address.contactPerson[0].mobileNumber}`
+                }
               >
                 <Button primary className="mt-2">
                   Contact Now
@@ -80,30 +108,50 @@ class Contact extends Component {
           <Card>
             <Card.Content header={`${branch.area.name} Branch`} />
             <Card.Content>
+              {(branch.addressLine1 || branch.addressLine2) && (
+                <p>
+                  {branch.addressLine1}
+                  {branch.addressLine1 && `,`} {branch.addressLine2}{" "}
+                </p>
+              )}
               <p>{`${branch.area.name}, ${branch.city.name}, ${
                 branch.district.name
               }`}</p>
-              <p>{branch.landmark}</p>
-              {this.props.branchAddress.contactPerson &&
-                this.props.branchAddress.contactPerson.map(person => (
+              <p>{branch.landmark && `(${branch.landmark})`}</p>
+              {branch.landlineNumber && (
+                <p>
+                  <i className="fa fa-phone" /> {branch.landlineNumber}{" "}
+                </p>
+              )}
+              {branch.email && (
+                <p>
+                  <i className="fa fa-envelope" /> {branch.email}{" "}
+                </p>
+              )}
+              {branch.contactPerson &&
+                branch.contactPerson.map(person => (
                   <div>
                     <p className="mt-3">
                       <i className="fa fa-user" />{" "}
                       <strong>{person.name}</strong>
-                      <small>{` (${person.department})`}</small>
+                      <small>
+                        {person.department && ` (${person.department})`}
+                      </small>
                     </p>
                     {person.mobileNumber ? (
                       <p>
-                        <i className="fa fa-phone"> {person.mobileNumber}</i>
+                        <i className="fa fa-mobile"> {person.mobileNumber}</i>
                       </p>
                     ) : null}
                   </div>
                 ))}
               <a
-                href={`tel:${this.props.branchAddress.contactPerson &&
-                  this.props.branchAddress.contactPerson[0].mobileNumber}`}
+                href={`tel:${branch.contactPerson &&
+                  branch.contactPerson[0].mobileNumber}`}
               >
-                <Button primary>Contact Now</Button>
+                <Button primary className="mt-2">
+                  Contact Now
+                </Button>
               </a>
             </Card.Content>
             {/* <Card.Content extra>
@@ -136,7 +184,14 @@ class Contact extends Component {
               </h2>
             </Col>
           </Row>
-          <Row className="mt-5 mb-5">
+          <Row
+            className="mt-5 mb-5"
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "center"
+            }}
+          >
             {this.renderPrimaryAddress()}
             {this.renderBranchAddress()}
           </Row>

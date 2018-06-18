@@ -36,6 +36,7 @@
     "react-image-gallery": "^0.8.7",
     "react-image-show": "^0.2.4",
     "react-ladda": "^6.0.0",
+    "react-native-maps-directions": "^1.6.0",
     "react-photo-gallery": "^6.0.25",
     "react-quill": "^1.2.7",
     "react-redux": "^5.0.7",

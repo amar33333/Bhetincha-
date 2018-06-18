@@ -16,7 +16,7 @@ import { MAIN_URL } from "../../Common/utils/API";
 import { Card } from "semantic-ui-react";
 
 // import avatar from "../../static/img/avatar.jpg";
-import avatar from "../../static/img/avatar.jpg";
+// import avatar from "../../static/img/avatar.jpg";
 import querystring from "querystring";
 
 import { togglePhoneVerificationModal, onSearchResultsList } from "../actions";
@@ -101,12 +101,17 @@ class BusinessList extends Component {
                       )}
                     </Media>
                     <div className="mb-1">
-                      <Badge color="warning" pill>
+                      <Badge color="warning" pill className="mr-1">
                         {each_search_result.industry}
                       </Badge>
                       {each_search_result.categories &&
                         each_search_result.categories.map(category => (
-                          <Badge color="info" pill style={{ color: "white" }}>
+                          <Badge
+                            color="info"
+                            pill
+                            className="mr-1"
+                            style={{ color: "white" }}
+                          >
                             {category}
                           </Badge>
                         ))}

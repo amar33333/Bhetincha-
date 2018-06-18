@@ -233,6 +233,7 @@ epics.push(action$ =>
         payload.business_phone = response.business_phone;
         payload.address = response.address;
         payload.branchAddress = response.branchAddress;
+        payload.tollfreeNumber = response.tollfreeNumber;
 
         if (response.about) payload.about = response.about;
         if (response.nav_layout) payload.nav_layout = response.nav_layout;
