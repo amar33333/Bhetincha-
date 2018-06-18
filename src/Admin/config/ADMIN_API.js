@@ -55,3 +55,7 @@ export const VERIFY_BUSINESS_URL = `${MAIN_URL}/${VERIFY_BUSINESS}`;
 
 export const BUSINESS_TELE_CALLING_URL = `${MAIN_URL}/${BUSINESS_TELE_CALLING}`;
 export const LOCATION_URL = `${MAIN_URL}/${LOCATION}`;
+
+// ecommerce
+export const ECOMMERCE_CATEGORY_URL = `${MAIN_URL}/ecommerce/category/`;
+export const ECOMMERCE_ATTRIBUTE_URL = `${MAIN_URL}/ecommerce/attribute/`;

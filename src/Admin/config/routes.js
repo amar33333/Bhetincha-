@@ -27,6 +27,8 @@ import {
   TeleCalling
 } from "../views";
 
+import { ManageCategories } from "../views/Ecommerce";
+
 import CustomRoute from "../../Common/utils/CustomRoute";
 
 class AdminRoute extends Component {
@@ -146,6 +148,12 @@ class AdminRoute extends Component {
           name="Tele-Calling"
           component={TeleCalling}
           permission="CAN_VIEW_USER"
+        />
+        <Route
+          exact
+          path="/admin/ecommerce/categories"
+          name="Ecommerce-categories"
+          component={ManageCategories}
         />
         <CustomRoute
           exact

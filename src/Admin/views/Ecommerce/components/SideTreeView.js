@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Treebeard } from "react-treebeard";
-import * as filters from "../../config/filterTreeView";
+import * as filters from "../../../config/filterTreeView";
 
 class SideTreeView extends Component {
   constructor(props) {

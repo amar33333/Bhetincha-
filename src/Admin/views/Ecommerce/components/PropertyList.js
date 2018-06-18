@@ -6,8 +6,8 @@ import "react-table/react-table.css";
 import {
   PaginationComponent,
   PopoverDelete
-} from "../../../../../Common/components";
-import filterCaseInsesitive from "../../../../../Common/utils/filterCaseInsesitive";
+} from "../../../../Common/components";
+import filterCaseInsesitive from "../../../../Common/utils/filterCaseInsesitive";
 
 class PropertyList extends Component {
   constructor(props) {

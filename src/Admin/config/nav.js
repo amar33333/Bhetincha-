@@ -141,6 +141,24 @@ const items = {
     },
     {
       title: true,
+      name: "Ecommerce"
+    },
+    {
+      name: "Ecommerce",
+      url: "/admin/ecommerce",
+      icon: "fa fa-users",
+      // permission: "CAN_VIEW_USER",
+      children: [
+        {
+          name: "Manage Categories",
+          url: "/admin/ecommerce/categories",
+          icon: "icon-user-follow"
+          // permission: "CAN_VIEW_USER"
+        }
+      ]
+    },
+    {
+      title: true,
       name: "User Management"
     },
     {

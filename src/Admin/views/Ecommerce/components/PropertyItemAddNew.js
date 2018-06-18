@@ -13,7 +13,7 @@ import {
 import DateTime from "react-datetime";
 import "react-datetime/css/react-datetime.css";
 
-import { Select } from "../../../../../Common/components";
+import { Select } from "../../../../Common/components";
 
 class PropertyItemAddNew extends Component {
   constructor(props) {

@@ -25,8 +25,8 @@ class Admin extends Component {
       "app",
       "header-fixed",
       "sidebar-fixed",
-      "aside-menu-fixed"
-      // "aside-menu-hidden"
+      "aside-menu-fixed",
+      "aside-menu-hidden"
     );
   }
 
