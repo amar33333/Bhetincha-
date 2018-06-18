@@ -77,6 +77,7 @@ class Categories extends Component {
         Filter: ({ filter, onChange }) => (
           <Select
             clearable
+            tabSelectsValue={false}
             multi
             value={filter ? filter.value : null}
             onChange={onChange}

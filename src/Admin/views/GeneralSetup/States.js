@@ -78,6 +78,7 @@ class States extends Component {
             valueKey="id"
             labelKey="name"
             options={this.props.countries}
+            tabSelectsValue={false}
           />
         )
       },

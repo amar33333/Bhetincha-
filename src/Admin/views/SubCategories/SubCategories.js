@@ -90,6 +90,7 @@ class SubCategories extends Component {
         Filter: () => (
           <Select
             clearable
+            tabSelectsValue={false}
             multi
             value={this.state.filterExtrasection}
             onChange={this.handleSelectChange.bind(this, "filterExtrasection")}
@@ -116,6 +117,7 @@ class SubCategories extends Component {
         Filter: () => (
           <Select
             clearable
+            tabSelectsValue={false}
             multi
             value={this.state.filterCategory}
             onChange={this.handleSelectChange.bind(this, "filterCategory")}
@@ -149,6 +151,7 @@ class SubCategories extends Component {
         Filter: () => (
           <Select
             clearable
+            tabSelectsValue={false}
             multi
             value={this.state.filterIndustry}
             onChange={this.handleSelectChange.bind(this, "filterIndustry")}
@@ -494,6 +497,7 @@ class SubCategories extends Component {
                       clearable
                       disabled={this.props.loading}
                       required
+                      tabSelectsValue={false}
                       multi
                       name="Extra-Sections"
                       className="select-extra-sections"

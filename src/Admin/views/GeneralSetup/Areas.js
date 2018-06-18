@@ -68,6 +68,7 @@ class Areas extends Component {
         Filter: () => (
           <Select
             clearable
+            tabSelectsValue={false}
             multi
             isLoading={this.props.citiesAutocompleteLoading}
             onInputChange={this.debouncedAutocomplete}
@@ -91,6 +92,7 @@ class Areas extends Component {
         Filter: () => (
           <Select
             clearable
+            tabSelectsValue={false}
             multi
             value={this.props.filterDistrict}
             onChange={this.handleFilterSelectChange.bind(
@@ -128,6 +130,7 @@ class Areas extends Component {
         Filter: () => (
           <Select
             clearable
+            tabSelectsValue={false}
             multi
             value={this.props.filterState}
             onChange={this.handleFilterSelectChange.bind(this, "filterState")}
@@ -149,6 +152,7 @@ class Areas extends Component {
         Filter: () => (
           <Select
             clearable
+            tabSelectsValue={false}
             multi
             value={this.props.filterCountry}
             onChange={this.handleFilterSelectChange.bind(this, "filterCountry")}
