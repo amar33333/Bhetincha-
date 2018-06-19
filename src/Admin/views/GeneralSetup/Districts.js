@@ -84,6 +84,7 @@ class Districts extends Component {
         Filter: () => (
           <Select
             clearable
+            tabSelectsValue={false}
             multi
             value={this.state.filterState}
             onChange={this.handleSelectChange.bind(this, "filterState")}
@@ -116,6 +117,7 @@ class Districts extends Component {
           <Select
             clearable
             multi
+            tabSelectsValue={false}
             value={this.state.filterCountry}
             onChange={this.handleSelectChange.bind(this, "filterCountry")}
             valueKey="id"

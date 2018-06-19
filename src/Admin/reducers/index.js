@@ -13,6 +13,7 @@ import filterAppBusiness from "./filterAppBusinessReducer";
 import filterAssignBusiness from "./filterAssignBusinessReducer";
 import tele_calling from "./teleCallingReducer";
 import location from "./locationReducer";
+import ecommerce from "./ecommerceReducer";
 
 const createReducer = combineReducers({
   industries: IndustryReducer,
@@ -28,7 +29,8 @@ const createReducer = combineReducers({
   filterAppBusiness,
   filterAssignBusiness,
   tele_calling,
-  location
+  location,
+  ecommerce
 });
 
 export default createReducer;

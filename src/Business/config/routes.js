@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Route, Switch, Redirect } from "react-router-dom";
 
-import { Dashboard, BusinessDetail } from "../views";
+import { Dashboard, BusinessDetail, ManageProducts } from "../views";
 import {
   ROUTE_PARAMS_BUSINESS_NAME,
   ROUTE_PARAMS_BUSINESS_ROUTE
@@ -23,7 +23,11 @@ class BusinessRoute extends Component {
           name="Business Detail"
           component={BusinessDetail}
         />
-
+        <Route
+          path={`/${businessName}/dashboard/ecommerce/products`}
+          name="manage-ecommerce-products"
+          component={ManageProducts}
+        />
         <Redirect
           from={`/${businessName}/dashboard/${businessRoute}`}
           to={`/${businessName}/dashboard/home`}

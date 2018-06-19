@@ -9,9 +9,11 @@ import {
 } from "../Common/components";
 import nav from "./config/nav";
 
+import { combineEpics } from "redux-observable";
 import BusinessRoute from "./config/routes";
 import withRepics from "../config/withRepics";
 import businessReducers from "./reducers";
+import businessEpics from "./config/epics";
 
 import { ROUTE_PARAMS_BUSINESS_NAME } from "../config/CONSTANTS";
 
@@ -109,4 +111,8 @@ class Business extends Component {
   }
 }
 
-export default withRepics("BusinessContainer", businessReducers)(Business);
+export default withRepics(
+  "BusinessContainer",
+  businessReducers,
+  combineEpics(...businessEpics)
+)(Business);

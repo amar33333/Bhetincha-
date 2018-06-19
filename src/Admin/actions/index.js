@@ -12,6 +12,7 @@ import filterAppBusinessEpics from "./filterAppBusinessActions";
 import filterAssignBusinessEpics from "./filterAssignBusinessActions";
 import teleCallingEpics from "./teleCallingActions";
 import locationEpics from "./locationActions";
+import ecommerceEpics from "./ecommerceActions";
 
 export * from "./industryActions";
 export * from "./categoryActions";
@@ -28,6 +29,7 @@ export * from "./filterAppBusinessActions";
 export * from "./filterAssignBusinessActions";
 export * from "./teleCallingActions";
 export * from "./locationActions";
+export * from "./ecommerceActions";
 
 export default [
   ...industryEpics,
@@ -43,5 +45,6 @@ export default [
   ...filterAppBusinessEpics,
   ...filterAssignBusinessEpics,
   ...teleCallingEpics,
-  ...locationEpics
+  ...locationEpics,
+  ...ecommerceEpics
 ];

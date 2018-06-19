@@ -17,7 +17,10 @@ import {
   ASSIGNED_LIST_URL,
   VERIFY_BUSINESS_URL,
   BUSINESS_TELE_CALLING_URL,
-  LOCATION_URL
+  LOCATION_URL,
+  ECOMMERCE_CATEGORY_URL,
+  ECOMMERCE_ATTRIBUTE_URL,
+  ECOMMERCE_PRODUCT_ATTRIBUTE_URL
 } from "./ADMIN_API";
 
 import {
@@ -988,5 +991,94 @@ export const onUserGet = ({ access_token }) =>
     headers: {
       "Content-Type": "application/json",
       Authorization: "Bearer " + access_token
+    }
+  });
+
+// ecommerce
+// attribute
+export const onEcommerceAttributesGet = () =>
+  ajax({
+    method: "GET",
+    url: ECOMMERCE_ATTRIBUTE_URL,
+    headers: {
+      "Content-Type": "application/json"
+    }
+  });
+
+export const onEcommercePropertiesPost = ({ body }) =>
+  ajax({
+    method: "POST",
+    url: ECOMMERCE_ATTRIBUTE_URL,
+    body,
+    headers: {
+      "Content-Type": "application/json"
+    }
+  });
+
+export const onEcommercePropertiesDelete = ({ body }) =>
+  ajax({
+    method: "DELETE",
+    url: ECOMMERCE_ATTRIBUTE_URL,
+    body,
+    headers: {
+      "Content-Type": "application/json"
+    }
+  });
+
+// categories
+export const onEcommerceCategoriesGet = () =>
+  ajax({
+    method: "GET",
+    url: ECOMMERCE_CATEGORY_URL,
+    headers: {
+      "Content-Type": "application/json"
+    }
+  });
+
+export const onEcommerceCategoryPost = ({ name, parent }) =>
+  ajax({
+    method: "POST",
+    url: ECOMMERCE_CATEGORY_URL,
+    body: { name, parent },
+    headers: {
+      "Content-Type": "application/json"
+    }
+  });
+
+export const onEcommerceCategoryDetailGet = ({ uid }) =>
+  ajax({
+    method: "GET",
+    url: `${ECOMMERCE_CATEGORY_URL}${uid}/`,
+    headers: {
+      "Content-Type": "application/json"
+    }
+  });
+
+export const onEcommerceCategoryDetailPost = ({ uid, body }) =>
+  ajax({
+    method: "POST",
+    url: `${ECOMMERCE_CATEGORY_URL}${uid}/`,
+    body,
+    headers: {
+      "Content-Type": "application/json"
+    }
+  });
+
+export const onEcommerceCategoryDetailDelete = ({ uid }) =>
+  ajax({
+    method: "DELETE",
+    url: `${ECOMMERCE_CATEGORY_URL}${uid}/`,
+    headers: {
+      "Content-Type": "application/json"
+    }
+  });
+
+export const onEcommerceCategoryAttributesGet = ({ body }) =>
+  ajax({
+    method: "POST",
+    url: ECOMMERCE_PRODUCT_ATTRIBUTE_URL,
+    body,
+    headers: {
+      "Content-Type": "application/json"
     }
   });
