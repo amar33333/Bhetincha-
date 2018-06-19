@@ -61,4 +61,5 @@ export const LOCATION_URL = `${MAIN_URL}/${LOCATION}`;
 // ecommerce
 export const ECOMMERCE_CATEGORY_URL = `${MAIN_URL}/${ECOMMERCE}/category/`;
 export const ECOMMERCE_ATTRIBUTE_URL = `${MAIN_URL}/${ECOMMERCE}/attribute/`;
-export const ECOMMERCE_PRODUCT_ATTRIBUTE_URL = `${MAIN_URL}/${ECOMMERCE}/product/attributes/`;
+export const ECOMMERCE_PRODUCT_URL = `${MAIN_URL}/${ECOMMERCE}/product/`;
+export const ECOMMERCE_PRODUCT_ATTRIBUTE_URL = `${ECOMMERCE_PRODUCT_URL}attributes/`;

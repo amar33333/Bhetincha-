@@ -20,7 +20,8 @@ import {
   LOCATION_URL,
   ECOMMERCE_CATEGORY_URL,
   ECOMMERCE_ATTRIBUTE_URL,
-  ECOMMERCE_PRODUCT_ATTRIBUTE_URL
+  ECOMMERCE_PRODUCT_ATTRIBUTE_URL,
+  ECOMMERCE_PRODUCT_URL
 } from "./ADMIN_API";
 
 import {
@@ -1090,5 +1091,15 @@ export const onEcommerceCategoryAttributesGet = ({ body }) =>
     body,
     headers: {
       "Content-Type": "application/json"
+    }
+  });
+
+export const onEcommerceCategoryProductsGet = ({ access_token, params }) =>
+  ajax({
+    method: "GET",
+    url: `${ECOMMERCE_PRODUCT_URL}?${querystring.stringify(params)}`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
     }
   });
