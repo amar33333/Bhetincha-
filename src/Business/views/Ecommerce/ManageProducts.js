@@ -6,16 +6,9 @@ class ManageProducts extends Component {
     return (
       <div>
         <div className="animated fadeIn">Hello ManageProducts</div>
-        {this.renderTest()}
       </div>
     );
   }
-
-  renderTest = () => (
-    <div>
-      <p>Test render method</p>
-    </div>
-  );
 }
 
 export default connect(

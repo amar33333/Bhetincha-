@@ -6,16 +6,9 @@ class Dashboard extends Component {
     return (
       <div>
         <div className="animated fadeIn">Hello Dashboard</div>
-        {this.renderTest()}
       </div>
     );
   }
-
-  renderTest = () => (
-    <div>
-      <p>Test render method</p>
-    </div>
-  );
 }
 
 export default connect(

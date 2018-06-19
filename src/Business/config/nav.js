@@ -5,8 +5,8 @@ const items = {
     {
       name: "Dashboard",
       url: `/${ROUTE_PARAMS_BUSINESS_NAME}/dashboard/home`,
-      icon: "icon-speedometer",
-      permission: "CAN_VIEW_DASHBOARD"
+      icon: "icon-speedometer"
+      // permission: "CAN_VIEW_DASHBOARD"
     },
     {
       title: true,
@@ -15,8 +15,8 @@ const items = {
     {
       name: "Business Detail",
       url: `/${ROUTE_PARAMS_BUSINESS_NAME}/dashboard/business-detail`,
-      icon: "fa fa-map-o",
-      permission: "CAN_VIEW_USERS"
+      icon: "fa fa-map-o"
+      // permission: "CAN_VIEW_USERS"
     },
     {
       name: "Ecommerce",
