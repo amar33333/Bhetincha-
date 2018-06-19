@@ -262,7 +262,7 @@ epics.push((action$, { getState }) =>
             };
           })
           .catch(ajaxError => {
-            toast.error("Error Creating Categories");
+            toast.error("Error fetching Categories");
             return Observable.of({ type: FETCH_ECOMMERCE_CATEGORY_REJECTED });
           });
       } else {

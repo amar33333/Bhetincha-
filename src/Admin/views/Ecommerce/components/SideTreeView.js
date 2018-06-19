@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Treebeard } from "react-treebeard";
+import debounce from "lodash.debounce";
 import * as filters from "../../../config/filterTreeView";
 
 class SideTreeView extends Component {
@@ -47,8 +48,8 @@ class SideTreeView extends Component {
     return filters.filterTree(categories, keyword);
   };
 
-  onSearchKeywordChange = event => {
-    const searchKeyword = event.target.value;
+  onSearchKeywordChange = debounce(() => {
+    const { searchKeyword } = this.state;
     let categories = this.filterUsingSearch(
       this.props.categories,
       searchKeyword
@@ -56,11 +57,15 @@ class SideTreeView extends Component {
     this.props.openAllOnSearch(
       filters.expandFilteredNodes(categories, searchKeyword)
     );
-    this.setState({ searchKeyword });
-  };
+    // this.setState({ searchKeyword });
+  }, 100);
 
-  onToggle = ({ uid }) => {
-    this.props.onChangeActiveCategory(uid, this.props.activeCategory);
+  onToggle = ({ uid, children }) => {
+    this.props.onChangeActiveCategory(
+      uid,
+      this.props.activeCategory,
+      this.props.leafDetect ? !(children && children.length) : false
+    );
   };
 
   render() {
@@ -68,7 +73,12 @@ class SideTreeView extends Component {
       <div>
         <input
           value={this.state.searchKeyword}
-          onChange={this.onSearchKeywordChange}
+          onChange={event =>
+            this.setState(
+              { searchKeyword: event.target.value },
+              this.onSearchKeywordChange
+            )
+          }
           placeholder="Search Here..."
         />
         <Treebeard data={this.state.categories} onToggle={this.onToggle} />

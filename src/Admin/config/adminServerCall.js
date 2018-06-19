@@ -19,7 +19,8 @@ import {
   BUSINESS_TELE_CALLING_URL,
   LOCATION_URL,
   ECOMMERCE_CATEGORY_URL,
-  ECOMMERCE_ATTRIBUTE_URL
+  ECOMMERCE_ATTRIBUTE_URL,
+  ECOMMERCE_PRODUCT_ATTRIBUTE_URL
 } from "./ADMIN_API";
 
 import {
@@ -1067,6 +1068,16 @@ export const onEcommerceCategoryDetailDelete = ({ uid }) =>
   ajax({
     method: "DELETE",
     url: `${ECOMMERCE_CATEGORY_URL}${uid}/`,
+    headers: {
+      "Content-Type": "application/json"
+    }
+  });
+
+export const onEcommerceCategoryAttributesGet = ({ body }) =>
+  ajax({
+    method: "POST",
+    url: ECOMMERCE_PRODUCT_ATTRIBUTE_URL,
+    body,
     headers: {
       "Content-Type": "application/json"
     }

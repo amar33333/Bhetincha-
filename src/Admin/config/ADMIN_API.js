@@ -29,6 +29,8 @@ const VERIFY_BUSINESS = "business/business/";
 const BUSINESS_TELE_CALLING = "search/business-tc/";
 const LOCATION = "address/list-places/";
 
+const ECOMMERCE = "ecommerce";
+
 export { MAIN_URL };
 
 export const COUNTRY_URL = `${MAIN_URL}/${ADDRESS}/${COUNTRY}`;
@@ -57,5 +59,6 @@ export const BUSINESS_TELE_CALLING_URL = `${MAIN_URL}/${BUSINESS_TELE_CALLING}`;
 export const LOCATION_URL = `${MAIN_URL}/${LOCATION}`;
 
 // ecommerce
-export const ECOMMERCE_CATEGORY_URL = `${MAIN_URL}/ecommerce/category/`;
-export const ECOMMERCE_ATTRIBUTE_URL = `${MAIN_URL}/ecommerce/attribute/`;
+export const ECOMMERCE_CATEGORY_URL = `${MAIN_URL}/${ECOMMERCE}/category/`;
+export const ECOMMERCE_ATTRIBUTE_URL = `${MAIN_URL}/${ECOMMERCE}/attribute/`;
+export const ECOMMERCE_PRODUCT_ATTRIBUTE_URL = `${MAIN_URL}/${ECOMMERCE}/product/attributes/`;

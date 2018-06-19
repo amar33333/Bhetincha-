@@ -4,12 +4,14 @@ import BusinessReducer from "./businessReducer";
 import Industry from "./industryReducer";
 import Category from "./categoryReducer";
 import PrimaryAddress from "./primaryAddressReducer";
+import ecommerce from "./ecommerceReducer";
 
 const createReducer = combineReducers({
   business_reducer: BusinessReducer,
   industries: Industry,
   categories: Category,
-  primary_address: PrimaryAddress
+  primary_address: PrimaryAddress,
+  ecommerce
 });
 
 export default createReducer;

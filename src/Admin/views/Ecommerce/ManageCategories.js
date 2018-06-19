@@ -43,7 +43,7 @@ class ManageCategories extends Component {
                   this.props.onChangeActiveCategoryEcommerce
                 }
                 isOpen={this.props.isOpenCategories}
-                openAllOnSearch={this.props.openAllOnSearch}
+                openAllOnSearch={this.props.openAllOnSearchEcommerce}
               />
             </Col>
             <Col xs="12" md="9">

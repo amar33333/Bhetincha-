@@ -88,7 +88,7 @@ class PropertyItemAddNew extends Component {
     };
 
     if (fieldType.name === "Choices") {
-      body.options = options;
+      body.options = options.map(({ value }) => value);
     }
 
     if (required) {
@@ -100,7 +100,7 @@ class PropertyItemAddNew extends Component {
           body.defaultValue = defaultValueString;
           break;
         case "Choices":
-          body.defaultValue = defaultValueChoices;
+          body.defaultValue = defaultValueChoices.value;
           break;
         case "Float":
           body.defaultValue = defaultValueFloat;
