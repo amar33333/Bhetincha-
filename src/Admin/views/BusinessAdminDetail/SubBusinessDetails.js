@@ -354,7 +354,7 @@ class SubBusinessDetail extends Component {
                       )}
                       options={categories}
                       multi
-                      closeOnSelect={false}
+                      //closeOnSelect={false}
                       valueKey="id"
                       labelKey="name"
                     />
@@ -371,7 +371,7 @@ class SubBusinessDetail extends Component {
                       noResultsText="No Data Found"
                       multi
                       //removeSelected={false}
-                      closeOnSelect={false}
+                      //closeOnSelect={false}
                       value={this.state.sub_categories}
                       onChange={this.handleSelectChange.bind(
                         this,

@@ -233,7 +233,7 @@ epics.push(action$ =>
 
         return [
           { type: TOGGLE_PHONE_VERIFICATION_MODAL },
-          { type: TOGGLE_REGISTER_MODAL },
+          // { type: TOGGLE_REGISTER_MODAL },
           { type: CREATE_BUSINESS_USER_FULFILLED, payload: response }
         ];
       } else {
