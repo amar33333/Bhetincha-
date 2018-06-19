@@ -3,6 +3,7 @@ import { toast } from "react-toastify";
 
 import {
   onGroupPost,
+  onGroupsEachDelete,
   onUserPost,
   onUserGet,
   onGroupsGet,
@@ -27,7 +28,10 @@ import {
   PERMISSIONS_LIST_FULFILLED,
   TOGGLE_PERMISSION_PENDING,
   TOGGLE_PERMISSION_FULFILLED,
-  TOGGLE_PERMISSION_REJECTED
+  TOGGLE_PERMISSION_REJECTED,
+  DELETE_USER_GROUPS_FULFILLED,
+  DELETE_USER_GROUPS_PENDING,
+  DELETE_USER_GROUPS_REJECTED
 } from "./types";
 
 const epics = [];
@@ -116,6 +120,32 @@ export const onGroupSubmit = ({ group, access_token }) => dispatch => {
     });
   dispatch({ type: CREATE_GROUP_PENDING });
 };
+
+export const onGroupDelete = payload => ({
+  type: DELETE_USER_GROUPS_PENDING,
+  payload
+});
+
+epics.push((action$, { getState }) =>
+  action$.ofType(DELETE_USER_GROUPS_PENDING).mergeMap(({ payload }) =>
+    onGroupsEachDelete({
+      id: payload.id,
+      access_token: getState().auth.cookies.token_data.access_token
+    })
+      .concatMap(() => {
+        toast.success("Deleted Successfully!");
+        return [
+          { type: FETCH_GROUPS_PENDING },
+          { type: DELETE_USER_GROUPS_FULFILLED }
+        ];
+      })
+      .catch(ajaxError => {
+        toast.error("Error Deleting group");
+        console.log(ajaxError);
+        return Observable.of({ type: DELETE_USER_GROUPS_REJECTED });
+      })
+  )
+);
 
 // export const onGroupList = ({ access_token }) => dispatch => {
 //   onGroupGet({ access_token })

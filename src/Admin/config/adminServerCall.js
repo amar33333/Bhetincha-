@@ -948,6 +948,16 @@ export const onGroupPost = ({ group, access_token }) =>
     }
   });
 
+export const onGroupsEachDelete = ({ id, access_token }) =>
+  ajax({
+    method: "delete",
+    url: `${USER_GROUPS_URL}${id}/`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
 export const onGroupGet = ({ access_token }) =>
   axios({
     method: "get",
