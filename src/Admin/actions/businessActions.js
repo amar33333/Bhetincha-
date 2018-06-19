@@ -472,7 +472,13 @@ epics.push((action$, { getState }) =>
     const { id } = action.payload;
     const { access_token } = getState().auth.cookies.token_data;
     return onBusinessEachDeleteAjax({ id, access_token })
-      .mergeMap(({ response }) => console.log(response))
+      .concatMap(({ response }) => {
+        toast.success("Deleted Successfully!");
+        return [
+          { type: FETCH_BUSINESS_PENDING },
+          { type: DELETE_BUSINESS_FULFILLED }
+        ];
+      })
       .catch(ajaxError => {
         console.log(ajaxError);
         return Observable.of({ type: DELETE_BUSINESS_REJECTED });
