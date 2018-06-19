@@ -148,14 +148,17 @@ export const onUserSubmit = ({
   })
     .then(response => {
       if (response.data.msg === "success") {
-        toast.success("User Created Successfully!");
+        toast.success("User Created Successfully!: ");
         dispatch({ type: CREATE_USER_FULFILLED, payload: response.data });
       } else {
-        toast.error("Error !!!");
+        throw new Error(
+          response.data.msg[Object.keys(response.data.msg)[0]][0]
+        );
+        // toast.error("Error !!!");
       }
     })
     .catch(error => {
-      toast.error("Error !!!");
+      toast.error("Error : " + error.message);
 
       dispatch({ type: CREATE_USER_REJECTED, payload: error });
     });

@@ -78,9 +78,13 @@ let permissions_set = [
 */
 
 class PermissionProvider extends Component {
+  /* Below code gives outdated value so if needed
+   * call the whole function `store`
+  */
   static permissions_set = store
     .getState()
     .auth.cookies.user_data.permissions.map(each => each.name);
+
   // static updatePermissionList() {
   //   const user_data = cookies.get("user_data");
 
@@ -97,7 +101,10 @@ class PermissionProvider extends Component {
   // }
 
   static hasPermission(permission) {
-    if (this.permissions_set.includes(permission)) return true;
+    const permissions_set = store
+      .getState()
+      .auth.cookies.user_data.permissions.map(each => each.name);
+    if (permissions_set.includes(permission)) return true;
 
     return false;
   }

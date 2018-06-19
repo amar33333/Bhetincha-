@@ -4,6 +4,8 @@ import { connect } from "react-redux";
 import CookiesProvider from "./CookiesProvider";
 import { onLogout } from "../../actions";
 
+import store from "../../config/store";
+
 class Logout extends Component {
   constructor(props) {
     super(props);
@@ -11,9 +13,10 @@ class Logout extends Component {
   }
 
   logout() {
-    console.log("Logout");
     CookiesProvider.removeAllCookies();
     this.props.onLogout();
+    console.log("Logout: ", CookiesProvider.getAllCookies());
+    console.log("Logout2: ", store.getState().auth.cookies);
 
     this.props.history.push("/");
   }
@@ -23,4 +26,7 @@ class Logout extends Component {
   }
 }
 
-export default connect(null, { onLogout })(Logout);
+export default connect(
+  null,
+  { onLogout }
+)(Logout);
