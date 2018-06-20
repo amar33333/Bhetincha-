@@ -157,84 +157,131 @@ class BusinessList extends Component {
           <Col xs="12" md="12">
             <Card>
               <CardHeader>
-                <strong>Filter and Search</strong>
+                <strong>Filters</strong>
+                <Button
+                  className="pull-right"
+                  color="link"
+                  onClick={this.props.onFilterCleared}
+                >
+                  <i className="fa fa-close" /> Clear Filter
+                </Button>
               </CardHeader>
               <CardBody>
-                <Row>
-                  <Col xs="6" md="4">
-                    <FormGroup>
-                      <Select
-                        // autosize
-                        disabled={this.props.industryLoading}
-                        isLoading={this.props.industryLoading}
-                        labelKey="name"
-                        multi
-                        onChange={this.handleIndustryChange}
-                        options={this.props.industries}
-                        placeholder="Filter Industry"
-                        value={this.props.industry}
-                        valueKey="id"
-                      />
-                    </FormGroup>
-                  </Col>
-                  <Col xs="1" md="1">
-                    <Button
-                      color="primary"
-                      onClick={this.props.onBusinessAllGet}
-                    >
-                      <i className="fa fa-filter" /> Filter
-                    </Button>
-                  </Col>
-                  <Col xs="1" md="1">
-                    <FormGroup>
-                      <Button
-                        color="danger"
-                        onClick={this.props.onFilterCleared}
-                      >
-                        <i className="fa fa-close" /> Clear
-                      </Button>
-                    </FormGroup>
-                  </Col>
-                  <Col xs="6" md="4">
-                    <Form onSubmit={this.handleSearchKeywordSubmit}>
-                      <InputGroup>
-                        <Input
-                          placeholder="Search for Business Name"
-                          onChange={this.handleChange.bind(null, "q")}
-                          value={this.props.q}
-                        />
-                        <InputGroupAddon addonType="append">
-                          <Button color="warning">
-                            <i className="fa fa-search" /> Search{" "}
-                          </Button>
-                        </InputGroupAddon>
-                      </InputGroup>
-                      {/* <Input
-                        placeholder="Search for Business Name"
-                        onChange={this.handleChange.bind(null, "q")}
-                        value={this.props.q}
-                      />
-
+                <Form>
+                  <Row>
+                    <Col xs="12" md="4">
                       <FormGroup>
-                        <Button color="primary">
-                          <i className="fa fa-search" /> Search
-                        </Button>
-                      </FormGroup> */}
-                    </Form>
-                  </Col>
-                  <Col xs="2" md="1">
-                    <FormGroup>
-                      <Button
-                        color="danger"
-                        onClick={this.props.handleSearchKeywordCleared}
-                      >
-                        <i className="fa fa-close" /> Clear Search
-                      </Button>
-                    </FormGroup>
-                  </Col>
-                </Row>
+                        <Label for="filterIndustry">Industry</Label>
+
+                        <Select
+                          id="filterIndustry"
+                          disabled={this.props.industryLoading}
+                          isLoading={this.props.industryLoading}
+                          labelKey="name"
+                          multi
+                          onChange={this.handleIndustryChange}
+                          options={this.props.industries}
+                          placeholder="Filter Industry"
+                          value={this.props.industry}
+                          valueKey="id"
+                        />
+                      </FormGroup>
+                    </Col>
+                    <Col xs="12" md="4">
+                      <FormGroup>
+                        <Label for="filterCategory">Category</Label>
+
+                        <Select
+                          id="filterCategory"
+                          disabled={this.props.industryLoading}
+                          isLoading={this.props.industryLoading}
+                          labelKey="name"
+                          multi
+                          onChange={this.handleIndustryChange}
+                          options={this.props.industries}
+                          placeholder="Filter Category"
+                          value={this.props.industry}
+                          valueKey="id"
+                        />
+                      </FormGroup>
+                    </Col>
+                    <Col xs="12" md="4">
+                      <FormGroup>
+                        <Label for="filterSubCategory">Sub Category</Label>
+
+                        <Select
+                          id="filterSubCategory"
+                          disabled={this.props.industryLoading}
+                          isLoading={this.props.industryLoading}
+                          labelKey="name"
+                          multi
+                          onChange={this.handleIndustryChange}
+                          options={this.props.industries}
+                          placeholder="Filter Sub Category"
+                          value={this.props.industry}
+                          valueKey="id"
+                        />
+                      </FormGroup>
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col xs="12" md="4">
+                      <FormGroup>
+                        <Label for="filterArea">Area</Label>
+
+                        <Select
+                          id="filterArea"
+                          disabled={this.props.industryLoading}
+                          isLoading={this.props.industryLoading}
+                          labelKey="name"
+                          multi
+                          onChange={this.handleIndustryChange}
+                          options={this.props.industries}
+                          placeholder="Filter Area"
+                          value={this.props.industry}
+                          valueKey="id"
+                        />
+                      </FormGroup>
+                    </Col>
+                  </Row>
+                </Form>
+                {/* <Button color="primary" onClick={this.props.onBusinessAllGet}>
+                  <i className="fa fa-filter" /> Filter
+                </Button>
+                <FormGroup>
+                  <Button color="danger" onClick={this.props.onFilterCleared}>
+                    <i className="fa fa-close" /> Clear
+                  </Button>
+                </FormGroup> */}
               </CardBody>
             </Card>
+          </Col>
+        </Row>
+        <Row>
+          <Col xs="12">
+            <Button
+              className="float-right"
+              color="link"
+              onClick={this.props.handleSearchKeywordCleared}
+            >
+              <i className="fa fa-close" /> Clear Search
+            </Button>
+            <Form onSubmit={this.handleSearchKeywordSubmit}>
+              <FormGroup>
+                <InputGroup>
+                  <Input
+                    placeholder="Search for Business Name"
+                    onChange={this.handleChange.bind(null, "q")}
+                    value={this.props.q}
+                  />
+                  <InputGroupAddon addonType="append">
+                    <Button color="warning">
+                      <i className="fa fa-search" /> Search{" "}
+                    </Button>
+                  </InputGroupAddon>
+                </InputGroup>
+              </FormGroup>
+            </Form>
           </Col>
         </Row>
         <Row>
