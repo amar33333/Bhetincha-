@@ -63,21 +63,11 @@ export const onUserGet = ({ access_token }) =>
     }
   });
 
-export const onBusinessRegister = ({
-  username,
-  password,
-  email,
-  business_name
-}) =>
+export const onBusinessRegister = ({ body }) =>
   ajax({
     method: "post",
     url: BUSINESS_REGISTER_URL,
-    body: {
-      username,
-      password,
-      email,
-      business_name
-    },
+    body,
     headers: {
       "Content-Type": "application/json"
     }

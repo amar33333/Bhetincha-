@@ -9,6 +9,9 @@ import {
   FETCH_USER_PENDING,
   CREATE_BUSINESS_USER_FULFILLED,
   CREATE_BUSINESS_USER_REJECTED,
+  CREATE_USER_PENDING,
+  CREATE_USER_FULFILLED,
+  CREATE_USER_REJECTED,
   CREATE_BUSINESS_USER_PENDING,
   CREATE_INDIVIDUAL_USER_FULFILLED,
   CREATE_INDIVIDUAL_USER_REJECTED,
@@ -213,6 +216,33 @@ epics.push(action$ =>
   )
 );
 
+export const onUserRegisterSubmit = payload => ({
+  type: CREATE_USER_PENDING,
+  payload
+});
+
+epics.push(action$ =>
+  action$
+    .ofType(CREATE_USER_PENDING)
+    .mergeMap(action => onBusinessRegister({ ...action.payload }))
+    .concatMap(({ response }) => {
+      if (response.msg === "success") {
+        toast.success("Registered Successfully");
+
+        return [{ type: CREATE_USER_FULFILLED, payload: response }];
+      } else {
+        throw new Error(response.msg[Object.keys(response.msg)[0]][0]);
+      }
+    })
+    .catch(ajaxError => {
+      toast.error(ajaxError.toString());
+      return Observable.of({
+        type: CREATE_USER_REJECTED,
+        payload: ajaxError
+      });
+    })
+);
+
 export const onBusinessRegisterSubmit = payload => ({
   type: CREATE_BUSINESS_USER_PENDING,
   payload
@@ -231,11 +261,7 @@ epics.push(action$ =>
       if (response.msg === "success") {
         toast.success("Registered Successfully");
 
-        return [
-          { type: TOGGLE_PHONE_VERIFICATION_MODAL },
-          // { type: TOGGLE_REGISTER_MODAL },
-          { type: CREATE_BUSINESS_USER_FULFILLED, payload: response }
-        ];
+        return [{ type: CREATE_BUSINESS_USER_FULFILLED, payload: response }];
       } else {
         throw new Error(response.msg[Object.keys(response.msg)[0]][0]);
       }

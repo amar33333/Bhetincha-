@@ -23,32 +23,32 @@ class DynamicImport extends Component {
     //   else redirect to "/"
     // else proceed with acync module load
 
-    const loadModule = () =>
-      this.props
-        .load()
-        .then(module => this.setState(() => ({ component: module.default })));
+    // const loadModule = () =>
+    this.props
+      .load()
+      .then(module => this.setState(() => ({ component: module.default })));
 
-    const replaceRoute = path => this.props.history.replace(path);
+    // const replaceRoute = path => this.props.history.replace(path);
 
-    if (this.props.group) {
-      if (this.props.cookies && CookiesProvider.getTokenData()) {
-        const group = this.props.cookies.user_data.groups[0].name;
-        if (
-          group === this.props.group ||
-          (group !== USER_GROUP_BUSINESS &&
-            group !== USER_GROUP_INDIVIDUAL &&
-            this.props.group === USER_GROUP_ADMIN)
-        ) {
-          loadModule();
-        } else {
-          this.props.history && replaceRoute("/");
-        }
-      } else {
-        this.props.history && replaceRoute("/");
-      }
-    } else {
-      loadModule();
-    }
+    // if (this.props.group) {
+    //   if (this.props.cookies && CookiesProvider.getTokenData()) {
+    //     const group = this.props.cookies.user_data.groups[0].name;
+    //     if (
+    //       group === this.props.group ||
+    //       (group !== USER_GROUP_BUSINESS &&
+    //         group !== USER_GROUP_INDIVIDUAL &&
+    //         this.props.group === USER_GROUP_ADMIN)
+    //     ) {
+    //       loadModule();
+    //     } else {
+    //       this.props.history && replaceRoute("/");
+    //     }
+    //   } else {
+    //     this.props.history && replaceRoute("/");
+    //   }
+    // } else {
+    //   loadModule();
+    // }
 
     // if (this.props.cookies) {
     //   const group = this.props.cookies.user_data.groups[0].name;
