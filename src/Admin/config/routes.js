@@ -24,7 +24,8 @@ import {
   AppBusinessList,
   AppBusinessReview,
   BusinessAssign,
-  TeleCalling
+  TeleCalling,
+  ManageBranchs
 } from "../views";
 
 import { ManageCategories } from "../views/Ecommerce";
@@ -91,6 +92,12 @@ class AdminRoute extends Component {
           path="/admin/list-business/:businessSlug/edit"
           name="List Business"
           component={BusinessEdit}
+          //permission="CAN_VIEW_DASHBOARD"
+        />
+        <Route
+          path="/admin/list-business/:businessSlug/manage-branchs"
+          name="Add Branch Address"
+          component={ManageBranchs}
           //permission="CAN_VIEW_DASHBOARD"
         />
         <Route

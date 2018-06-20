@@ -14,6 +14,8 @@ import {
   Form
 } from "reactstrap";
 
+import { toast } from "react-toastify";
+import querystring from "querystring";
 import { connect } from "react-redux";
 
 import { onUserRegisterSubmit } from "../../../actions";
@@ -28,15 +30,24 @@ class UserRegister extends Component {
   onFormSubmit = event => {
     event.preventDefault();
     const { username, password, confirm_password, email } = this.state;
-
-    this.props.onUserRegisterSubmit({
-      body: {
-        username,
-        password,
-        email,
-        busines_email: email
-      }
-    });
+    const { "?id": id } = querystring.parse(this.props.location.search);
+    console.log("user regos; ", this.props);
+    if (password === confirm_password)
+      this.props.onUserRegisterSubmit({
+        id,
+        body: {
+          username,
+          password,
+          email
+        },
+        history: this.props.history,
+        slug: this.props.phone_verification_response
+          ? this.props.phone_verification_response.slug
+          : null
+      });
+    else {
+      toast.error("Password Mismatch !!!");
+    }
   };
 
   render() {

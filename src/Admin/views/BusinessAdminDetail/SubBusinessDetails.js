@@ -354,6 +354,7 @@ class SubBusinessDetail extends Component {
                       )}
                       options={categories}
                       multi
+                      tabSelectsValue={false}
                       //closeOnSelect={false}
                       valueKey="id"
                       labelKey="name"
@@ -370,6 +371,7 @@ class SubBusinessDetail extends Component {
                       placeholder="Select Sub Category (Multiple if any)"
                       noResultsText="No Data Found"
                       multi
+                      tabSelectsValue={false}
                       //removeSelected={false}
                       //closeOnSelect={false}
                       value={this.state.sub_categories}
@@ -389,7 +391,8 @@ class SubBusinessDetail extends Component {
                     <Select
                       name="Payment Method"
                       multi
-                      closeOnSelect={false}
+                      tabSelectsValue={false}
+                      //closeOnSelect={false}
                       placeholder="Select Payment Methods (Multiple if any)"
                       noResultsText="No Data Found"
                       value={valuePaymentMethod}

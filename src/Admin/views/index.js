@@ -10,6 +10,7 @@ import SubCategories from "../views/SubCategories/SubCategories";
 import AppBusinessReview from "../views/BusinessAdminDetail/AppBusinessReview";
 import BusinessAssign from "./BusinessAdminDetail/BusinessAssign/BusinessAssign";
 import TeleCalling from "./TeleCalling/TeleCalling";
+import ManageBranchs from "./BusinessAdminDetail/ManageBranchs";
 
 import {
   Areas,
@@ -49,5 +50,6 @@ export {
   AppBusinessList,
   AppBusinessReview,
   BusinessAssign,
-  TeleCalling
+  TeleCalling,
+  ManageBranchs
 };

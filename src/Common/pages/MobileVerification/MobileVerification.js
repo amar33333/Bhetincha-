@@ -14,11 +14,18 @@ import {
   Container
 } from "reactstrap";
 
+import querystring from "querystring";
+
 import { connect } from "react-redux";
-import { onPhoneVerificationTokenSend } from "../../../actions";
+import {
+  onPhoneVerificationTokenSend,
+  onResendTokenRequest
+} from "../../../actions";
 
 class MobileVerification extends Component {
   state = { verificationToken: "" };
+
+  componentDidMount() {}
 
   onChange = (key, event) => {
     this.setState({ [key]: event.target.value });
@@ -29,13 +36,23 @@ class MobileVerification extends Component {
     const { verificationToken } = this.state;
     console.log("mobile verif - props: ", this.props);
 
+    const { "?id": id } = querystring.parse(this.props.location.search);
+
     this.props.onPhoneVerificationTokenSend({
-      id: "5b1d12b6c1ddbb3e3d05bf88",
-      verificationToken
+      id,
+      verificationToken,
+      history: this.props.history
     });
   };
 
+  onResendToken = () => {
+    const { "?id": id } = querystring.parse(this.props.location.search);
+
+    this.props.onResendTokenRequest({ id });
+  };
+
   render() {
+    console.log("mobile props: ", this.props);
     return (
       <div className="app flex-row align-items-center">
         <Container>
@@ -65,6 +82,15 @@ class MobileVerification extends Component {
                     </InputGroup>
                     <Row>
                       <Col xs="6">
+                        <span>
+                          <a href="#" onClick={this.onResendToken}>
+                            Resend Code
+                          </a>
+                        </span>
+                      </Col>
+                    </Row>
+                    <Row>
+                      <Col xs="6">
                         <Button
                           //loading={this.props.loading}
                           data-size={S}
@@ -91,5 +117,5 @@ const mapStateToProps = ({ auth }) => {
 
 export default connect(
   mapStateToProps,
-  { onPhoneVerificationTokenSend }
+  { onPhoneVerificationTokenSend, onResendTokenRequest }
 )(MobileVerification);
