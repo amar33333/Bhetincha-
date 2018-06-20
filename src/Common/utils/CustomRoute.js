@@ -23,7 +23,7 @@ class CustomRoute extends Component {
       );
     } else {
       console.log("no permission");
-      return <Redirect to="/Page404" />;
+      return <Redirect to="/404" />;
     }
   }
 }

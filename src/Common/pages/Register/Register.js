@@ -10,10 +10,34 @@ import {
   InputGroup,
   InputGroupAddon,
   InputGroupText,
-  Row
+  Row,
+  Form
 } from "reactstrap";
 
+import { connect } from "react-redux";
+
+import { onBusinessRegisterSubmit } from "../../../actions";
+
 class Register extends Component {
+  state = { business_name: "", mobile_number: "" };
+
+  onChange = (key, event) => {
+    this.setState({ [key]: event.target.value });
+  };
+
+  onFormSubmit = event => {
+    event.preventDefault();
+    const { business_name, mobile_number } = this.state;
+
+    this.props.onBusinessRegisterSubmit({
+      body: {
+        business_name,
+        business_phone: mobile_number,
+        register: true
+      }
+    });
+  };
+
   render() {
     return (
       <div className="app flex-row align-items-center">
@@ -22,41 +46,43 @@ class Register extends Component {
             <Col md="6">
               <Card className="mx-4">
                 <CardBody className="p-4">
-                  <h1>Register</h1>
+                  <h1>Register - Business</h1>
                   <p className="text-muted">Create your account</p>
-                  <InputGroup className="mb-3">
-                    <InputGroupAddon addonType="prepend">
-                      <InputGroupText>
-                        <i className="icon-user" />
-                      </InputGroupText>
-                    </InputGroupAddon>
-                    <Input type="text" placeholder="Username" />
-                  </InputGroup>
-                  <InputGroup className="mb-3">
-                    <InputGroupAddon addonType="prepend">
-                      <InputGroupText>@</InputGroupText>
-                    </InputGroupAddon>
-                    <Input type="text" placeholder="Email" />
-                  </InputGroup>
-                  <InputGroup className="mb-3">
-                    <InputGroupAddon addonType="prepend">
-                      <InputGroupText>
-                        <i className="icon-lock" />
-                      </InputGroupText>
-                    </InputGroupAddon>
-                    <Input type="password" placeholder="Password" />
-                  </InputGroup>
-                  <InputGroup className="mb-4">
-                    <InputGroupAddon addonType="prepend">
-                      <InputGroupText>
-                        <i className="icon-lock" />
-                      </InputGroupText>
-                    </InputGroupAddon>
-                    <Input type="password" placeholder="Repeat password" />
-                  </InputGroup>
-                  <Button color="success" block>
-                    Create Account
-                  </Button>
+                  <Form onSubmit={this.onFormSubmit}>
+                    <InputGroup className="mb-3">
+                      <InputGroupAddon addonType="prepend">
+                        <InputGroupText>
+                          <i className="icon-user" />
+                        </InputGroupText>
+                      </InputGroupAddon>
+                      <Input
+                        autoFocus
+                        required
+                        type="text"
+                        placeholder="Business Name"
+                        value={this.state.business_name}
+                        onChange={this.onChange.bind(this, "business_name")}
+                      />
+                    </InputGroup>
+                    <InputGroup className="mb-3">
+                      <InputGroupAddon addonType="prepend">
+                        <InputGroupText>
+                          <i className="icon-phone" />
+                        </InputGroupText>
+                      </InputGroupAddon>
+                      <Input
+                        required
+                        type="text"
+                        placeholder="Mobile Number"
+                        value={this.state.mobile_number}
+                        onChange={this.onChange.bind(this, "mobile_number")}
+                      />
+                    </InputGroup>
+
+                    <Button color="success" block>
+                      Create Account
+                    </Button>
+                  </Form>
                 </CardBody>
                 <CardFooter className="p-4">
                   <Row>
@@ -81,4 +107,15 @@ class Register extends Component {
   }
 }
 
-export default Register;
+const mapStateToProps = ({ auth }) => {
+  return {
+    ...auth
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  {
+    onBusinessRegisterSubmit
+  }
+)(Register);
