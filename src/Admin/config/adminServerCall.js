@@ -383,10 +383,10 @@ export const onCategoryGet = ({ access_token }) =>
     }
   });
 
-export const onCategoryGetAjax = ({ access_token }) =>
+export const onCategoryGetAjax = ({ access_token, params }) =>
   ajax({
     method: "get",
-    url: CATEGORY_URL,
+    url: `${CATEGORY_URL}?${querystring.stringify(params)}`,
     headers: {
       "Content-Type": "application/json",
       Authorization: "Bearer " + access_token
@@ -474,10 +474,10 @@ export const onSubCategoryEachGet = ({ id, access_token }) =>
     }
   });
 
-export const onSubCategoryGetAjax = ({ access_token }) =>
+export const onSubCategoryGetAjax = ({ access_token, params }) =>
   ajax({
     method: "get",
-    url: SUB_CATEGORY_URL,
+    url: `${SUB_CATEGORY_URL}?${querystring.stringify(params)}`,
     headers: {
       "Content-Type": "application/json",
       Authorization: "Bearer " + access_token

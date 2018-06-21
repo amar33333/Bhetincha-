@@ -56,6 +56,7 @@ class States extends Component {
       {
         Header: "Country",
         accessor: "country",
+        sortable: false,
         Filter: () => (
           <Select
             clearable
@@ -113,7 +114,7 @@ class States extends Component {
     this.props.onStateList();
   }
 
-  componentDidUpdate = (prevProps, prevState) => {
+  componentDidUpdate = (_, prevState) => {
     if (prevState.stateSubmit && !this.props.loading) {
       const updates = { stateSubmit: false };
       if (!this.props.error) {

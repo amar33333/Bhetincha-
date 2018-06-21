@@ -70,6 +70,7 @@ class Areas extends Component {
       {
         Header: "City",
         accessor: "city",
+        sortable: false,
         Filter: () => (
           <Select
             clearable
@@ -111,6 +112,7 @@ class Areas extends Component {
       {
         Header: "District",
         accessor: "district",
+        sortable: false,
         Filter: () => (
           <Select
             clearable
@@ -154,6 +156,7 @@ class Areas extends Component {
       {
         Header: "State",
         accessor: "state",
+        sortable: false,
         Filter: () => (
           <Select
             clearable
@@ -195,6 +198,7 @@ class Areas extends Component {
       {
         Header: "Country",
         accessor: "country",
+        sortable: false,
         Filter: () => (
           <Select
             clearable

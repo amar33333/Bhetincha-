@@ -11,6 +11,8 @@ import filterState from "./filterStateReducer";
 import filterDistrict from "./filterDistrictReducer";
 import filterCity from "./filterCityReducer";
 import filterArea from "./filterAreaReducer";
+import filterCategory from "./filterCategoryReducer";
+import filterSubCategory from "./filterSubCategoryReducer";
 import filterAppBusiness from "./filterAppBusinessReducer";
 import filterAssignBusiness from "./filterAssignBusinessReducer";
 import tele_calling from "./teleCallingReducer";
@@ -30,6 +32,8 @@ const createReducer = combineReducers({
   filterDistrict,
   filterCity,
   filterArea,
+  filterCategory,
+  filterSubCategory,
   filterAppBusiness,
   filterAssignBusiness,
   tele_calling,
