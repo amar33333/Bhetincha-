@@ -40,9 +40,12 @@ class ManageBranchs extends Component {
     return (
       <div className="animated fadeIn">
         <Link
-          to={`/admin/list-business/${
-            this.props.match.params.businessSlug
-          }/manage-branchs/add-branch`}
+          to={{
+            pathname: `/admin/list-business/${
+              this.props.match.params.businessSlug
+            }/manage-branchs/add-branch`,
+            state: this.props.location.state
+          }}
         >
           <Button variant="raised" color="primary">
             Add New Branch

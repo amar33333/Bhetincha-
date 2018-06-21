@@ -12,6 +12,17 @@ import axios from "axios";
 import { ajax } from "rxjs/observable/dom/ajax";
 import querystring from "querystring";
 
+export const onBranchPost = ({ access_token, id, body }) =>
+  ajax({
+    method: "PUT",
+    url: `${BUSINESS_URL}${id}/`,
+    body,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
 export const onSalesUserGet = ({ access_token }) =>
   ajax({
     method: "GET",

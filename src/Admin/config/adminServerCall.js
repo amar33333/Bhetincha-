@@ -26,7 +26,8 @@ import {
 
 import {
   PAYMENT_METHOD_URL,
-  COMPANY_TYPE_URL
+  COMPANY_TYPE_URL,
+  BUSINESS_PUT_URL
 } from "../../Business/config/BUSINESS_API";
 
 import axios from "axios";

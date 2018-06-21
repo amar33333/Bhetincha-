@@ -26,7 +26,7 @@ import { NOTIFICATION_TIME } from "./config/CONSTANTS";
 
 class App extends Component {
   componentWillMount() {
-    this.props.loadCookies();
+    // this.props.loadCookies();
 
     if (CookiesProvider.getAccessToken()) this.props.loadPermissions();
   }
