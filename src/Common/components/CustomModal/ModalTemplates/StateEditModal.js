@@ -50,9 +50,6 @@ class StateEditModal extends Component {
     console.log("state edit props: ", this.props);
     console.log("state edit state: ", this.state);
 
-    const { country } = this.state;
-    const value = country && country.id;
-
     return (
       <Form onSubmit={this.onFormEdit}>
         <Row>
@@ -66,7 +63,7 @@ class StateEditModal extends Component {
                 required
                 name="Industries"
                 className="select-country"
-                value={value}
+                value={this.state.country}
                 onChange={this.handleSelectChange}
                 options={this.props.countries}
                 valueKey="id"
@@ -85,7 +82,7 @@ class StateEditModal extends Component {
                   </InputGroupText>
                 </InputGroupAddon>
                 <Input
-                  autoFocus
+                  //autoFocus
                   required
                   disabled={this.props.loading}
                   type="text"

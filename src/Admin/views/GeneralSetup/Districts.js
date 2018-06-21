@@ -131,13 +131,22 @@ class Districts extends Component {
         filterable: false,
         sortable: false,
         width: 145,
-        Cell: ({ value, original: { id, country, state, name } }) => (
+        Cell: ({
+          value,
+          original: { id, country, state, name, districtCode }
+        }) => (
           <div>
             <Button
               color="secondary"
               className="mr-l"
               onClick={() =>
-                this.props.toggleDistrictEditModal({ id, country, state, name })
+                this.props.toggleDistrictEditModal({
+                  id,
+                  country,
+                  state,
+                  name,
+                  districtCode
+                })
               }
             >
               Edit
@@ -227,6 +236,7 @@ class Districts extends Component {
   };
 
   render() {
+    console.log("district props: ", this.props);
     return (
       <div className="animated fadeIn">
         <Row className="hr-centered">

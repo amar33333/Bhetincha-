@@ -114,6 +114,9 @@ class SubBusinessDetail extends Component {
       if (value) {
         console.log("indsutry each Called: ", value);
 
+        this.props.onUnmountIndustryData();
+        this.props.onUnmountCategoryData();
+
         this.props.onIndustryEachList({
           id: value.id,
           access_token: this.access_token
