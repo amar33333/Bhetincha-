@@ -16,7 +16,9 @@ const API = "api";
 const ACCOUNTS = "accounts";
 const USER = "user/";
 const PHONE_VERIFICATION_REQUEST = "business/claim/";
-const PHONE_VERIFICATION_TOKEN_SEND = "business/verify/";
+const PHONE_VERIFICATION_TOKEN_SEND = "business/claim-at-register/";
+const USER_REGISTER = "business/user-at-register/";
+const RESEND_TOKEN = "business/resend-code/";
 
 const O_TOKEN = "o/token/";
 export const CLIENT_ID = "z5LMYuXtl4eFF7iyMIKA0LzZSu4awMBGg8hUsXH4";
@@ -28,7 +30,9 @@ export const BUSINESS_LIST_URL = `${MAIN_URL}/${BUSINESS_LIST}`;
 export const BUSINESS_REGISTER_URL = `${MAIN_URL}/${BUSINESS_INFO}`;
 export const INDIVIDUAL_REGISTER_URL = `${MAIN_URL}/${INDIVIDUAL_REGISTER}`;
 export const PHONE_VERIFICATION_REQUEST_URL = `${MAIN_URL}/${PHONE_VERIFICATION_REQUEST}`;
-export const PHONE_VERIFICATION_TOKEN_SNED = `${MAIN_URL}/${PHONE_VERIFICATION_TOKEN_SEND}`;
+export const PHONE_VERIFICATION_TOKEN_SEND_URL = `${MAIN_URL}/${PHONE_VERIFICATION_TOKEN_SEND}`;
+export const USER_REGISTER_URL = `${MAIN_URL}/${USER_REGISTER}`;
+export const RESEND_TOKEN_URL = `${MAIN_URL}/${RESEND_TOKEN}`;
 // export const REGISTER_URL = `${MAIN_URL}/${API}/${ACCOUNTS}/${USER}`;
 
 export const O_TOKEN_URL = `${MAIN_URL}/${O_TOKEN}`;

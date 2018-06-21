@@ -33,7 +33,8 @@ import {
   handleOnBusinessFilterChange,
   handleSearchKeywordCleared,
   onUnmountIndustry,
-  handleSortChangeBusiness
+  handleSortChangeBusiness,
+  onBusinessVerify
 } from "../../actions";
 
 class BusinessList extends Component {
@@ -116,6 +117,40 @@ class BusinessList extends Component {
                 this.props.onBusinessEachDelete({ id: props.original.id })
               }
             />
+
+            <Button
+              color="primary"
+              className="mr-2"
+              onClick={() =>
+                this.props.history.push({
+                  pathname: `${this.props.match.path}/${
+                    props.value
+                  }/manage-branchs`,
+                  state: {
+                    id: props.original.id,
+                    slug: props.original.slug
+                  }
+                })
+              }
+            >
+              <i className="fa fa-pencil" /> Manage Branchs
+            </Button>
+
+            <Button
+              color="success"
+              className="mr-2"
+              onClick={() => {
+                console.log("verify button clicked: ", props);
+                this.props.onBusinessVerify({
+                  id: props.original.id,
+                  body: {
+                    verified: true
+                  }
+                });
+              }}
+            >
+              <i className="fa fa-pencil" /> Verify
+            </Button>
           </div>
         ),
         sortable: false,
@@ -338,6 +373,7 @@ export default connect(
     handleOnBusinessFilterChange,
     handleSearchKeywordCleared,
     handleSortChangeBusiness,
-    onUnmountIndustry
+    onUnmountIndustry,
+    onBusinessVerify
   }
 )(BusinessList);

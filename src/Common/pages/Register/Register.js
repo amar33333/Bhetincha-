@@ -34,7 +34,8 @@ class Register extends Component {
         business_name,
         business_phone: mobile_number,
         register: true
-      }
+      },
+      history: this.props.history
     });
   };
 

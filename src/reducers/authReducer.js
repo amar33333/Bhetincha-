@@ -16,6 +16,9 @@ import {
   REQUEST_PHONE_VERIFICATION_PENDING,
   REQUEST_PHONE_VERIFICATION_REJECTED,
   TOGGLE_PHONE_VERIFICATION_MODAL,
+  SEND_PHONE_VERIFICATION_TOKEN_FULFILLED,
+  SEND_PHONE_VERIFICATION_TOKEN_PENDING,
+  SEND_PHONE_VERIFICATION_TOKEN_REJECTED,
   LOGOUT_USER
 } from "../actions/types";
 
@@ -27,7 +30,9 @@ const INITIAL_STATE = {
   cookies: null,
   permissions_loading: false,
   phone_verification_request: false,
-  phoneVerificationModal: false
+  phone_verification_response: null,
+  phoneVerificationModal: false,
+  data: null
 };
 
 export default function(state = INITIAL_STATE, action) {
@@ -61,7 +66,7 @@ export default function(state = INITIAL_STATE, action) {
       return { ...state, loading: true };
 
     case CREATE_BUSINESS_USER_FULFILLED:
-      return { ...state, data: action.payload, loading: false };
+      return { ...state, business_user: action.payload, loading: false };
 
     case CREATE_BUSINESS_USER_REJECTED:
       return { ...state, loading: false };
@@ -70,7 +75,7 @@ export default function(state = INITIAL_STATE, action) {
       return { ...state, loading: true };
 
     case CREATE_INDIVIDUAL_USER_FULFILLED:
-      return { ...state, data: action.payload, loading: false };
+      return { ...state, individual_user: action.payload, loading: false };
 
     case CREATE_INDIVIDUAL_USER_REJECTED:
       return { ...state, loading: false };
@@ -86,6 +91,19 @@ export default function(state = INITIAL_STATE, action) {
       };
 
     case REQUEST_PHONE_VERIFICATION_REJECTED:
+      return { ...state, loading: false };
+
+    case SEND_PHONE_VERIFICATION_TOKEN_PENDING:
+      return { ...state, loading: true };
+
+    case SEND_PHONE_VERIFICATION_TOKEN_FULFILLED:
+      return {
+        ...state,
+        phone_verification_response: action.payload,
+        loading: false
+      };
+
+    case SEND_PHONE_VERIFICATION_TOKEN_REJECTED:
       return { ...state, loading: false };
 
     case TOGGLE_PHONE_VERIFICATION_MODAL:
