@@ -642,10 +642,10 @@ export const onStateGet = ({ access_token }) =>
     }
   });
 
-export const onStateGetAjax = ({ access_token }) =>
+export const onStateGetAjax = ({ access_token, params }) =>
   ajax({
     method: "get",
-    url: STATE_URL,
+    url: `${STATE_URL}?${querystring.stringify(params)}`,
     headers: {
       "Content-Type": "application/json",
       Authorization: "Bearer " + access_token
@@ -746,10 +746,10 @@ export const onDistrictGet = ({ access_token }) =>
     }
   });
 
-export const onDistrictGetAjax = ({ access_token }) =>
+export const onDistrictGetAjax = ({ access_token, params }) =>
   ajax({
     method: "get",
-    url: DISTRICT_URL,
+    url: `${DISTRICT_URL}?${querystring.stringify(params)}`,
     headers: {
       "Content-Type": "application/json",
       Authorization: "Bearer " + access_token

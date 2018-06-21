@@ -31,6 +31,7 @@ class MainNavbar extends Component {
               size="lg"
             /> */}
             <AutoSuggestion
+              initialQuery={this.props.initialQuery}
               placeholder="Search anything..."
               valueKey="business_name"
               suggestions={this.props.search_result.data}

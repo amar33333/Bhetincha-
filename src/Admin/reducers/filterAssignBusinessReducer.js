@@ -10,7 +10,7 @@ const INITIAL_STATE = {
   q: "",
   sort_by: [],
   industry: [],
-  area: null,
+  area: [],
   rows: 20,
   page: 1
 };

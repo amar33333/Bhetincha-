@@ -4,6 +4,8 @@ import filterBusinessEpics from "./filterBusinessActions";
 import categoryEpics from "./categoryActions";
 import subCategoryEpics from "./subCategoryActions";
 import generalSetupEpics from "./generalSetupActions";
+import filterStateEpics from "./filterStateActions";
+import filterDistrictEpics from "./filterDistrictActions";
 import filterCityEpics from "./filterCityActions";
 import filterAreaEpics from "./filterAreaActions";
 import extraSectionEpics from "./extraSectionActions";
@@ -22,6 +24,8 @@ export * from "./generalSetupActions";
 export * from "./userActions";
 export * from "./businessActions";
 export * from "./filterBusinessActions";
+export * from "./filterStateActions";
+export * from "./filterDistrictActions";
 export * from "./filterCityActions";
 export * from "./filterAreaActions";
 export * from "./userActions";
@@ -38,6 +42,8 @@ export default [
   ...categoryEpics,
   ...subCategoryEpics,
   ...generalSetupEpics,
+  ...filterStateEpics,
+  ...filterDistrictEpics,
   ...filterCityEpics,
   ...filterAreaEpics,
   ...extraSectionEpics,

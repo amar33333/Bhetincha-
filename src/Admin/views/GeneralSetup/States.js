@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import debounce from "lodash.debounce";
 import {
   Button,
   Col,
@@ -22,7 +23,6 @@ import {
   Select,
   PaginationComponent
 } from "../../../Common/components";
-import filterCaseInsensitive from "../../../Common/utils/filterCaseInsesitive";
 
 import CustomModal from "../../../Common/components/CustomModal";
 import StateEditModal from "../../../Common/components/CustomModal/ModalTemplates/StateEditModal";
@@ -31,6 +31,8 @@ import {
   onStateSubmit,
   onCountryList,
   onStateList,
+  handleSortChangeState,
+  handleOnStateFilterChange,
   onStateEdit,
   toggleStateEditModal,
   onStateDelete,
@@ -50,35 +52,22 @@ class States extends Component {
         sortable: false,
         width: 70
       },
-      { Header: "State", accessor: "name" },
+      { Header: "State", accessor: "name", id: "state" },
       {
         Header: "Country",
         accessor: "country",
-        Cell: ({ value }) => {
-          const country = this.props.countries.find(
-            country => country.id === value
-          );
-          return country ? country.name : "Not Found";
-        },
-        filterMethod: (filter, row) => {
-          if (filter && filter.value && filter.value.length > 0) {
-            let found = false;
-            for (let i = 0; i < filter.value.length; i++) {
-              found = found || filter.value[i].id === row.country;
-            }
-            return found;
-          } else return true;
-        },
-        Filter: ({ filter, onChange }) => (
+        Filter: () => (
           <Select
             clearable
+            tabSelectsValue={false}
             multi
-            value={filter ? filter.value : null}
-            onChange={onChange}
+            value={this.props.filterCountry}
+            onChange={filterCountry =>
+              this.props.handleOnStateFilterChange({ filterCountry })
+            }
             valueKey="id"
             labelKey="name"
             options={this.props.countries}
-            tabSelectsValue={false}
           />
         )
       },
@@ -108,10 +97,14 @@ class States extends Component {
         )
       }
     ],
-    minRows: 5,
-    defaultPageSize: 20,
-    className: "-striped -highlight",
+    onFilteredChange: (column, value) => {
+      value.id === "state" && this.debouncedSearch(column);
+    },
+    manual: true,
+    sortable: true,
     filterable: true,
+    minRows: 5,
+    className: "-striped -highlight",
     PaginationComponent
   };
 
@@ -134,6 +127,14 @@ class States extends Component {
     this.props.onUnmountCountry();
     this.props.onUnmountState();
   }
+
+  debouncedSearch = debounce(
+    column =>
+      this.props.handleOnStateFilterChange({
+        name: column.length ? column[0].value : ""
+      }),
+    200
+  );
 
   onFormSubmit = event => {
     event.preventDefault();
@@ -219,8 +220,19 @@ class States extends Component {
           {...this.tableProps}
           style={{ background: "white" }}
           data={this.props.states}
+          defaultPageSize={this.props.rows}
+          defaultSorted={this.props.sort_by}
           loading={this.props.fetchLoading}
-          defaultFilterMethod={filterCaseInsensitive}
+          onPageChange={pageIndex =>
+            this.props.onStateList({ page: pageIndex + 1 })
+          }
+          onPageSizeChange={(pageSize, pageIndex) =>
+            this.props.onStateList({ page: pageIndex + 1, rows: pageSize })
+          }
+          onSortedChange={this.props.handleSortChangeState}
+          page={this.props.page - 1}
+          pages={this.props.pages}
+          rowCount={this.props.rowCount}
         />
         <CustomModal
           title="Edit State Data"
@@ -240,14 +252,32 @@ class States extends Component {
 }
 
 export default connect(
-  ({ AdminContainer: { general_setup } }) => ({
-    countries: general_setup.countries,
-    states: general_setup.states,
-    stateEditModal: general_setup.stateEditModal,
-    stateEditData: general_setup.stateEditData,
-    fetchLoading: general_setup.statesFetchLoading,
-    loading: general_setup.stateLoading,
-    error: general_setup.stateError
+  ({
+    AdminContainer: {
+      general_setup: {
+        countries,
+        states,
+        statesPages,
+        statesRowCount,
+        stateEditModal,
+        stateEditData,
+        statesFetchLoading,
+        stateLoading,
+        stateError
+      },
+      filterState
+    }
+  }) => ({
+    countries,
+    states,
+    pages: statesPages,
+    rowCount: statesRowCount,
+    stateEditModal,
+    stateEditData,
+    fetchLoading: statesFetchLoading,
+    loading: stateLoading,
+    error: stateError,
+    ...filterState
   }),
   {
     onStateSubmit,
@@ -255,6 +285,8 @@ export default connect(
     toggleStateEditModal,
     onCountryList,
     onStateList,
+    handleOnStateFilterChange,
+    handleSortChangeState,
     onStateDelete,
     onUnmountCountry,
     onUnmountState

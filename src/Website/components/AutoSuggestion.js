@@ -2,7 +2,14 @@ import React, { Component } from "react";
 import Autosuggest from "react-autosuggest";
 
 class AutoSuggestion extends Component {
-  state = { value: "", selected: false };
+  constructor(props) {
+    super(props);
+    this.state = {
+      value: "",
+      // value: (props.initialQuery && props.initialQuery.query) || "",
+      selected: false
+    };
+  }
 
   onSuggestionsClearRequested = () => {};
 
@@ -43,11 +50,12 @@ class AutoSuggestion extends Component {
                 this.state.selected
                   ? this.setState({ selected: false })
                   : this.props.onSearchComplete(this.state.value);
+                // this.props.onSearchComplete(this.state.value);
               }}
             >
               <input
                 {...inputProps}
-                autoFocus
+                autoFocus={this.props.autoFocus}
                 style={{
                   // border: "1px solid #aaa",
                   border: "none",

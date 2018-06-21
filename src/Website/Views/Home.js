@@ -82,6 +82,7 @@ class Home extends Component {
               <AutoSuggestion
                 placeholder="Search anything..."
                 valueKey="business_name"
+                autoFocus
                 suggestions={this.props.search_result.data}
                 onSuggestionsFetchRequested={this.props.onSearchQuerySubmit}
                 onSearchItemSelected={business => {

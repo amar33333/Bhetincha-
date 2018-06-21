@@ -377,9 +377,12 @@ epics.push((action$, { getState }) =>
     params.sort_by = filterValue.sort_by.map(
       data => `${data.id}-${data.desc ? "desc" : "asc"}`
     );
-    if (filterValue.industry.length)
+    if (filterValue.industry.length) {
       params.industry = filterValue.industry.map(industry => industry.id);
-    if (filterValue.area) params.area = filterValue.area.id;
+    }
+    if (filterValue.area.length) {
+      params.area = filterValue.area.map(area => area.id);
+    }
 
     if (payload) {
       if (payload.rows) params.rows = payload.rows;

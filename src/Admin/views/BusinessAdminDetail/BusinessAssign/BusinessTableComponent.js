@@ -48,7 +48,12 @@ class BusinessTableComponent extends Component {
       ? { path: "", selectedBusiness: [], assignedPathSubmit: false }
       : null;
 
-  state = { selectedBusiness: [], path: "", assignedPathSubmit: false };
+  state = {
+    selectedBusiness: [],
+    path: "",
+    assignedPathSubmit: false,
+    areaSearchText: ""
+  };
 
   tableProps = {
     columns: [
@@ -275,8 +280,6 @@ class BusinessTableComponent extends Component {
   );
 
   render() {
-    console.log("path props: ", this.props);
-
     return (
       <div>
         <Card>
@@ -288,7 +291,14 @@ class BusinessTableComponent extends Component {
               <Col xs="12" md="12">
                 <Card>
                   <CardHeader>
-                    <strong>Filter and Search</strong>
+                    <strong>Filters</strong>
+                    <Button
+                      className="pull-right"
+                      color="link"
+                      onClick={this.props.onFilterClearedAssignBusiness}
+                    >
+                      <i className="fa fa-close" /> Clear Filter
+                    </Button>
                   </CardHeader>
                   <CardBody>
                     <Row>
@@ -313,8 +323,16 @@ class BusinessTableComponent extends Component {
 
                           <Select
                             clearable
+                            multi
                             isLoading={this.props.areasFetchLoading}
-                            onInputChange={this.debouncedAreaAutocomplete}
+                            onInputChange={areaSearchText => {
+                              this.setState(
+                                { areaSearchText },
+                                () =>
+                                  areaSearchText &&
+                                  this.debouncedAreaAutocomplete(areaSearchText)
+                              );
+                            }}
                             value={this.props.area}
                             onChange={area => {
                               this.setState({
@@ -330,24 +348,28 @@ class BusinessTableComponent extends Component {
                             labelKey="name"
                             filterOptions={options => options}
                             options={
-                              this.props.areaSearchText
+                              this.state.areaSearchText &&
+                              !this.props.areasFetchLoading
                                 ? this.props.areas.filter(
                                     area =>
-                                      !this.props.area ||
-                                      !this.props.area.id.includes(area.id)
+                                      !this.props.area.length ||
+                                      !this.props.area
+                                        .map(x => x.id)
+                                        .includes(area.id)
                                   )
                                 : []
                             }
                             placeholder="Filter Area"
                             noResultsText={
-                              this.props.areaSearchText
+                              this.state.areaSearchText &&
+                              !this.props.areasFetchLoading
                                 ? "No Results Found"
                                 : "Start Typing..."
                             }
                           />
                         </FormGroup>
                       </Col>
-                      <Col xs="1" md="1">
+                      {/* <Col xs="1" md="1">
                         <FormGroup>
                           <Button
                             color="danger"
@@ -356,7 +378,7 @@ class BusinessTableComponent extends Component {
                             <i className="fa fa-close" /> Clear
                           </Button>
                         </FormGroup>
-                      </Col>
+                      </Col> */}
                     </Row>
                   </CardBody>
                 </Card>
@@ -462,8 +484,7 @@ export default connect(
       },
       filterAssignBusiness,
       industries,
-      general_setup: { areas, areasFetchLoading },
-      filterArea: { name: areaSearchText }
+      general_setup: { areas, areasFetchLoading }
     }
   }) => ({
     industries: industries.industries,
@@ -476,7 +497,6 @@ export default connect(
     fetchAssignBusinessLoading,
     areas,
     areasFetchLoading,
-    areaSearchText,
     ...filterAssignBusiness
   }),
   {
