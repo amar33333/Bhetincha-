@@ -7,6 +7,7 @@ import generalSetupReducer from "./generalSetupReducer";
 import userReducer from "./userReducer";
 import BusinessReducer from "./businessReducer";
 import filterBusiness from "./filterBusinessReducer";
+import filterState from "./filterStateReducer";
 import filterCity from "./filterCityReducer";
 import filterArea from "./filterAreaReducer";
 import filterAppBusiness from "./filterAppBusinessReducer";
@@ -24,6 +25,7 @@ const createReducer = combineReducers({
   user_reducer: userReducer,
   business_reducer: BusinessReducer,
   filterBusiness,
+  filterState,
   filterCity,
   filterArea,
   filterAppBusiness,

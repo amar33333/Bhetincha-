@@ -58,6 +58,8 @@ const INITIAL_STATE = {
   countryError: false,
   countryData: [],
   states: [],
+  statesPages: 1,
+  statesRowCount: 0,
   statesFetchLoading: false,
   stateLoading: false,
   stateError: false,
@@ -96,7 +98,6 @@ export default function(state = INITIAL_STATE, action) {
   switch (action.type) {
     // COUNTRY
     case CREATE_COUNTRY_PENDING:
-      ``;
       return { ...state, countryLoading: true, countryError: false };
     case CREATE_COUNTRY_FULFILLED:
       return { ...state, countryLoading: false, countryError: false };
@@ -136,10 +137,12 @@ export default function(state = INITIAL_STATE, action) {
     case FETCH_STATE_FULFILLED:
       return {
         ...state,
-        states: action.payload.map((state, i) => ({
+        states: action.payload.data.map((state, i) => ({
           ...state,
-          s_no: i + 1
+          s_no: action.payload.rows * (action.payload.page - 1) + i + 1
         })),
+        statesPages: action.payload.pages,
+        statesRowCount: action.payload.rowCount,
         statesFetchLoading: false
       };
     case FETCH_STATE_REJECTED:

@@ -641,10 +641,10 @@ export const onStateGet = ({ access_token }) =>
     }
   });
 
-export const onStateGetAjax = ({ access_token }) =>
+export const onStateGetAjax = ({ access_token, params }) =>
   ajax({
     method: "get",
-    url: STATE_URL,
+    url: `${STATE_URL}?${querystring.stringify(params)}`,
     headers: {
       "Content-Type": "application/json",
       Authorization: "Bearer " + access_token

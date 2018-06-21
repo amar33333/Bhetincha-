@@ -281,19 +281,48 @@ epics.push((action$, { getState }) =>
   })
 );
 
-export const onStateList = () => ({ type: FETCH_STATE_PENDING });
+export const onStateList = payload => ({ type: FETCH_STATE_PENDING, payload });
 
 epics.push((action$, { getState }) =>
-  action$.ofType(FETCH_STATE_PENDING).mergeMap(action =>
-    onStateGetAjax({
-      access_token: getState().auth.cookies.token_data.access_token
+  action$.ofType(FETCH_STATE_PENDING).mergeMap(({ payload }) => {
+    const {
+      rows,
+      page,
+      name,
+      filterCountry,
+      sortby
+    } = getState().AdminContainer.filterState;
+    const params = {};
+    params.rows = rows;
+    params.page = page;
+    if (name) {
+      params.name = name;
+    }
+    params.sortby = sortby.map(
+      data =>
+        `${data.id === "name" ? "state" : data.id}${data.desc ? "-desc" : ""}`
+    );
+    if (payload) {
+      if (payload.rows) {
+        params.rows = payload.rows;
+      }
+      if (payload.page) {
+        params.page = payload.page;
+      }
+    }
+    if (filterCountry.length) {
+      params.country = filterCountry.map(country => country.id);
+    }
+    return onStateGetAjax({
+      access_token: getState().auth.cookies.token_data.access_token,
+      params
     })
       .map(({ response }) => ({
         type: FETCH_STATE_FULFILLED,
         payload: response
       }))
-      .catch(ajaxError => Observable.of({ type: FETCH_STATE_REJECTED }))
-  )
+      .catch(ajaxError => Observable.of({ type: FETCH_STATE_REJECTED }));
+  })
 );
 
 export const onStateEdit = payload => ({
