@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import TagsInput from "react-tagsinput";
 import { connect } from "react-redux";
-import orderBy from "lodash.orderby";
 import debounce from "lodash.debounce";
 import ReactTable from "react-table";
 
