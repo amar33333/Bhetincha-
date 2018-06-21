@@ -19,9 +19,12 @@ class DistrictEditModal extends Component {
 
   componentDidMount() {
     this.setState({
-      state: this.props.data ? this.props.data : "",
+      district: this.props.data ? this.props.data : "",
       country: this.props.data
         ? { id: this.props.data.country, name: this.props.data.country }
+        : "",
+      state: this.props.data
+        ? { id: this.props.data.state, name: this.props.data.state }
         : ""
     });
   }
@@ -105,7 +108,7 @@ class DistrictEditModal extends Component {
                 type="text"
                 innerRef={ref => (this.focusableInput = ref)}
                 placeholder="Type District Name"
-                value={this.state.district}
+                value={this.state.district ? this.state.district.name : ""}
                 onChange={this.onChange.bind(this, "district")}
               />
             </InputGroup>
@@ -122,7 +125,9 @@ class DistrictEditModal extends Component {
                 type="text"
                 disabled={this.props.loading}
                 placeholder="Type District Code"
-                value={this.state.districtCode}
+                value={
+                  this.state.district ? this.state.district.districtCode : ""
+                }
                 onChange={this.onChange.bind(this, "districtCode")}
               />
             </InputGroup>

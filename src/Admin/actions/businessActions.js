@@ -33,13 +33,17 @@ import {
   onAppBusinessGet,
   onAppBusinessEachGet,
   onAppBusinessEachDelete,
-  onSalesUserGet
+  onSalesUserGet,
+  onBranchPost
 } from "../../Business/config/businessServerCall";
 
 import {
   CREATE_COMPANY_TYPE_FULFILLED,
   CREATE_COMPANY_TYPE_PENDING,
   CREATE_COMPANY_TYPE_REJECTED,
+  CREATE_BRANCH_FULFILLED,
+  CREATE_BRANCH_PENDING,
+  CREATE_BRANCH_REJECTED,
   DELETE_COMPANY_TYPE_FULFILLED,
   DELETE_COMPANY_TYPE_PENDING,
   DELETE_COMPANY_TYPE_REJECTED,
@@ -130,6 +134,32 @@ import {
 } from "./types";
 
 const epics = [];
+
+export const onBranchAdd = payload => ({
+  type: CREATE_BRANCH_PENDING,
+  payload
+});
+
+epics.push((action$, { getState }) =>
+  action$.ofType(CREATE_BRANCH_PENDING).mergeMap(action => {
+    const access_token = getState().auth.cookies.token_data.access_token;
+    const { id, body } = action.payload;
+
+    return onBranchPost({ id, body, access_token })
+      .map(({ response }) => {
+        if (response.msg === "success") {
+          toast.success("Branch Added Successfully!");
+          return { type: CREATE_BRANCH_FULFILLED };
+        } else {
+          throw new Error(response.msg[Object.keys(response.msg)[0]][0]);
+        }
+      })
+      .catch(ajaxError => {
+        toast.error(ajaxError.toString());
+        return Observable.of({ type: CREATE_BRANCH_REJECTED });
+      });
+  })
+);
 
 export const onBusinessVerify = payload => ({
   type: CREATE_VERIFIED_BUSINESS_PENDING,

@@ -22,14 +22,13 @@ import { connect } from "react-redux";
 import SubBusinessContact from "./SubBusinessContact";
 
 import {
-  onBusinessAllGet,
-  onBusinessEachDelete,
-  onIndustryList,
-  onFilterCleared,
-  handleOnBusinessFilterChange,
-  handleSearchKeywordCleared,
-  onUnmountIndustry,
-  handleSortChangeBusiness
+  onAddressTreeList,
+  onCountryList,
+  onCountryEachList,
+  onStateEachList,
+  onDistrictEachList,
+  onCityEachList,
+  onBranchAdd
 } from "../../actions";
 
 class AddBranch extends Component {
@@ -63,55 +62,60 @@ class AddBranch extends Component {
     this.areas = [];
 
     this.propsData = {};
+    console.log("add branch props: ", this.props);
   }
 
-  static getDerivedStateFromProps = (nextProps, prevState) => {
-    const { branch } = nextProps;
-    // console.log("branchprops: ", nextProps);
-    // console.log("branch onlytoogle props branch: ", nextProps);
-    if (branch && nextProps.EDIT) {
-      console.log("branch if run");
-      return {
-        contactPerson: branch.contactPerson ? branch.contactPerson : [],
-        landlineNumber: branch.landlineNumber ? branch.landlineNumber : "",
-        otherLandlineNumber: branch.otherLandlineNumber
-          ? branch.otherLandlineNumber
-          : "",
-        house_no: branch.house_no ? branch.house_no : "",
-        landmark: branch.landmark ? branch.landmark : "",
-        addressLine1: branch.addressLine1 ? branch.addressLine1 : "",
-        addressLine2: branch.addressLine2 ? branch.addressLine2 : "",
-        po_box: branch.po_box ? branch.po_box : "",
-        tollFreeNumber: branch.tollFreeNumber ? branch.tollFreeNumber : "",
-        email: branch.email ? branch.email : "",
-        latitude: branch.latitude ? branch.latitude : 27.7172453,
-        longitude: branch.longitude ? branch.longitude : 85.32391758465576,
-        country: {
-          id: branch.country ? branch.country.id : "",
-          name: branch.country ? branch.country.name : ""
-        },
-        state: {
-          id: branch.state ? branch.state.id : "",
-          name: branch.state ? branch.state.name : ""
-        },
-        district: {
-          id: branch.district ? branch.district.id : "",
-          name: branch.district ? branch.district.name : ""
-        },
-        city: {
-          id: branch.city ? branch.city.id : "",
-          name: branch.city ? branch.city.name : ""
-        },
-        area: {
-          id: branch.area ? branch.area.id : "",
-          name: branch.area ? branch.area.name : ""
-        }
-      };
-    } else {
-      console.log("branchs else run");
-      return null;
-    }
-  };
+  componentDidMount() {
+    this.props.onCountryList();
+  }
+
+  // static getDerivedStateFromProps = (nextProps, prevState) => {
+  //   const { branch } = nextProps;
+  //   // console.log("branchprops: ", nextProps);
+  //   // console.log("branch onlytoogle props branch: ", nextProps);
+  //   if (branch && nextProps.EDIT) {
+  //     console.log("branch if run");
+  //     return {
+  //       contactPerson: branch.contactPerson ? branch.contactPerson : [],
+  //       landlineNumber: branch.landlineNumber ? branch.landlineNumber : "",
+  //       otherLandlineNumber: branch.otherLandlineNumber
+  //         ? branch.otherLandlineNumber
+  //         : "",
+  //       house_no: branch.house_no ? branch.house_no : "",
+  //       landmark: branch.landmark ? branch.landmark : "",
+  //       addressLine1: branch.addressLine1 ? branch.addressLine1 : "",
+  //       addressLine2: branch.addressLine2 ? branch.addressLine2 : "",
+  //       po_box: branch.po_box ? branch.po_box : "",
+  //       tollFreeNumber: branch.tollFreeNumber ? branch.tollFreeNumber : "",
+  //       email: branch.email ? branch.email : "",
+  //       latitude: branch.latitude ? branch.latitude : 27.7172453,
+  //       longitude: branch.longitude ? branch.longitude : 85.32391758465576,
+  //       country: {
+  //         id: branch.country ? branch.country.id : "",
+  //         name: branch.country ? branch.country.name : ""
+  //       },
+  //       state: {
+  //         id: branch.state ? branch.state.id : "",
+  //         name: branch.state ? branch.state.name : ""
+  //       },
+  //       district: {
+  //         id: branch.district ? branch.district.id : "",
+  //         name: branch.district ? branch.district.name : ""
+  //       },
+  //       city: {
+  //         id: branch.city ? branch.city.id : "",
+  //         name: branch.city ? branch.city.name : ""
+  //       },
+  //       area: {
+  //         id: branch.area ? branch.area.id : "",
+  //         name: branch.area ? branch.area.name : ""
+  //       }
+  //     };
+  //   } else {
+  //     console.log("branchs else run");
+  //     return null;
+  //   }
+  // };
 
   onChange = (key, event) => {
     if (key === "addressLine1" || key === "addressLine2") {
@@ -274,7 +278,32 @@ class AddBranch extends Component {
     );
   };
 
-  getState = () => {
+  refineBranchState = () => {
+    let reformed = {};
+    for (var property in this.state) {
+      const temp = {
+        ...this.state,
+        country: this.state.country ? this.state.country.id : "",
+        state: this.state.state ? this.state.state.id : "",
+        district: this.state.district ? this.state.district.id : "",
+        city: this.state.city ? this.state.city.id : "",
+        area: this.state.area ? this.state.area.id : ""
+      };
+
+      console.log("property: ", property, this.state[property]);
+
+      reformed =
+        temp[property] !== "" &&
+        temp[property] !== null &&
+        temp[property] !== undefined
+          ? { ...reformed, [property]: temp[property] }
+          : reformed;
+    }
+    console.log("branch address reformed: ", reformed);
+    return reformed;
+  };
+
+  getRefinedState = () => {
     console.log("branch props ok: ", this.props);
 
     let contactPerson = this.state.contactPerson.map(eachItem => {
@@ -294,15 +323,18 @@ class AddBranch extends Component {
 
     console.log("contectPerson: ", contactPerson);
     return {
-      ...this.state,
-      id: this.props.branch.id,
-      // country: this.state.country ? this.state.country.id : "",
-      // state: this.state.state ? this.state.state.id : "",
-      // district: this.state.district ? this.state.district.id : "",
-      // city: this.state.city ? this.state.city.id : "",
-      // area: this.state.area ? this.state.area.id : "",
+      ...this.refineBranchState(),
       contactPerson
     };
+  };
+
+  onBranchSave = () => {
+    this.props.onBranchAdd({
+      body: {
+        branchAddress: [this.getRefinedState()]
+      },
+      id: this.props.location.state.id
+    });
   };
 
   render() {
@@ -683,14 +715,7 @@ class AddBranch extends Component {
             /> */}
             <Row style={{ marginBottom: 15 }}>
               <Col xs="6" md="6">
-                <Button
-                  color="success"
-                  onClick={() =>
-                    this.props.onBranchSave(this.getState(), {
-                      /* this.subBusinessBranchContactWrapperRef.getState() */
-                    })
-                  }
-                >
+                <Button color="success" onClick={() => this.onBranchSave()}>
                   <i className="fa fa-save" /> SAVE BRANCH
                 </Button>
               </Col>
@@ -709,29 +734,17 @@ class AddBranch extends Component {
 }
 
 export default connect(
-  ({
-    AdminContainer: {
-      business_reducer: { businesses, fetchLoading, pages, rowCount },
-      filterBusiness,
-      industries
-    }
-  }) => ({
-    industries: industries.industries,
-    industryLoading: industries.loading,
-    businesses,
-    pages,
-    rowCount,
-    fetchLoading,
-    ...filterBusiness
+  ({ AdminContainer: { business_reducer, general_setup } }) => ({
+    ...business_reducer,
+    ...general_setup
   }),
   {
-    onBusinessAllGet,
-    onBusinessEachDelete,
-    onIndustryList,
-    onFilterCleared,
-    handleOnBusinessFilterChange,
-    handleSearchKeywordCleared,
-    handleSortChangeBusiness,
-    onUnmountIndustry
+    onAddressTreeList,
+    onCountryList,
+    onCountryEachList,
+    onStateEachList,
+    onDistrictEachList,
+    onCityEachList,
+    onBranchAdd
   }
 )(AddBranch);
