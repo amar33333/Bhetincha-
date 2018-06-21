@@ -745,10 +745,10 @@ export const onDistrictGet = ({ access_token }) =>
     }
   });
 
-export const onDistrictGetAjax = ({ access_token }) =>
+export const onDistrictGetAjax = ({ access_token, params }) =>
   ajax({
     method: "get",
-    url: DISTRICT_URL,
+    url: `${DISTRICT_URL}?${querystring.stringify(params)}`,
     headers: {
       "Content-Type": "application/json",
       Authorization: "Bearer " + access_token

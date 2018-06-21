@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import debounce from "lodash.debounce";
 import {
   Button,
   Col,
@@ -22,7 +23,6 @@ import {
   Select,
   PaginationComponent
 } from "../../../Common/components";
-import filterCaseInsensitive from "../../../Common/utils/filterCaseInsesitive";
 
 import CustomModal from "../../../Common/components/CustomModal";
 import StateEditModal from "../../../Common/components/CustomModal/ModalTemplates/StateEditModal";
@@ -52,7 +52,7 @@ class States extends Component {
         sortable: false,
         width: 70
       },
-      { Header: "State", accessor: "name" },
+      { Header: "State", accessor: "name", id: "state" },
       {
         Header: "Country",
         accessor: "country",
@@ -97,8 +97,10 @@ class States extends Component {
         )
       }
     ],
+    onFilteredChange: (column, value) => {
+      value.id === "state" && this.debouncedSearch(column);
+    },
     manual: true,
-    pageSizeOptions: [5, 10, 20, 25, 50, 100],
     sortable: true,
     filterable: true,
     minRows: 5,
@@ -125,6 +127,14 @@ class States extends Component {
     this.props.onUnmountCountry();
     this.props.onUnmountState();
   }
+
+  debouncedSearch = debounce(
+    column =>
+      this.props.handleOnStateFilterChange({
+        name: column.length ? column[0].value : ""
+      }),
+    200
+  );
 
   onFormSubmit = event => {
     event.preventDefault();

@@ -353,7 +353,9 @@ class BusinessTableComponent extends Component {
                                 ? this.props.areas.filter(
                                     area =>
                                       !this.props.area.length ||
-                                      !this.props.area.includes(area.id)
+                                      !this.props.area
+                                        .map(x => x.id)
+                                        .includes(area.id)
                                   )
                                 : []
                             }

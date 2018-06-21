@@ -84,9 +84,9 @@ import {
   FETCH_CITY_FULFILLED,
   FETCH_CITY_PENDING,
   FETCH_CITY_REJECTED,
-  FETCH_CITY_AUTOCOMPLETE_FULFILLED,
-  FETCH_CITY_AUTOCOMPLETE_PENDING,
-  FETCH_CITY_AUTOCOMPLETE_REJECTED,
+  // FETCH_CITY_AUTOCOMPLETE_FULFILLED,
+  // FETCH_CITY_AUTOCOMPLETE_PENDING,
+  // FETCH_CITY_AUTOCOMPLETE_REJECTED,
   FETCH_CITY_EACH_FULFILLED,
   FETCH_CITY_EACH_REJECTED,
   FETCH_CITY_EACH_PENDING,
@@ -298,10 +298,10 @@ epics.push((action$, { getState }) =>
     if (name) {
       params.name = name;
     }
-    params.sortby = sortby.map(
-      data =>
-        `${data.id === "name" ? "state" : data.id}${data.desc ? "-desc" : ""}`
-    );
+    params.sortby = sortby.map(data => `${data.id}${data.desc ? "-desc" : ""}`);
+    if (filterCountry.length) {
+      params.country = filterCountry.map(country => country.id);
+    }
     if (payload) {
       if (payload.rows) {
         params.rows = payload.rows;
@@ -309,9 +309,9 @@ epics.push((action$, { getState }) =>
       if (payload.page) {
         params.page = payload.page;
       }
-    }
-    if (filterCountry.length) {
-      params.country = filterCountry.map(country => country.id);
+      if (payload.filterCountry) {
+        params.country = payload.filterCountry.map(country => country.id);
+      }
     }
     return onStateGetAjax({
       access_token: getState().auth.cookies.token_data.access_token,
@@ -438,19 +438,58 @@ epics.push((action$, { getState }) =>
   })
 );
 
-export const onDistrictList = () => ({ type: FETCH_DISTRICT_PENDING });
+export const onDistrictList = payload => ({
+  type: FETCH_DISTRICT_PENDING,
+  payload
+});
 
 epics.push((action$, { getState }) =>
-  action$.ofType(FETCH_DISTRICT_PENDING).mergeMap(action =>
-    onDistrictGetAjax({
-      access_token: getState().auth.cookies.token_data.access_token
+  action$.ofType(FETCH_DISTRICT_PENDING).mergeMap(({ payload }) => {
+    const {
+      rows,
+      page,
+      name,
+      filterCountry,
+      filterState,
+      sortby
+    } = getState().AdminContainer.filterDistrict;
+    const params = {};
+    params.rows = rows;
+    params.page = page;
+    if (name) {
+      params.name = name;
+    }
+    params.sortby = sortby.map(data => `${data.id}${data.desc ? "-desc" : ""}`);
+    if (filterCountry.length) {
+      params.country = filterCountry.map(country => country.id);
+    }
+    if (filterState.length) {
+      params.state = filterState.map(state => state.id);
+    }
+    if (payload) {
+      if (payload.rows) {
+        params.rows = payload.rows;
+      }
+      if (payload.page) {
+        params.page = payload.page;
+      }
+      if (payload.filterCountry) {
+        params.country = payload.filterCountry.map(country => country.id);
+      }
+      if (payload.filterState) {
+        params.state = payload.filterState.map(state => state.id);
+      }
+    }
+    return onDistrictGetAjax({
+      access_token: getState().auth.cookies.token_data.access_token,
+      params
     })
       .map(({ response }) => ({
         type: FETCH_DISTRICT_FULFILLED,
         payload: response
       }))
-      .catch(ajaxError => Observable.of({ type: FETCH_DISTRICT_REJECTED }))
-  )
+      .catch(ajaxError => Observable.of({ type: FETCH_DISTRICT_REJECTED }));
+  })
 );
 
 export const onDistrictEdit = payload => ({
@@ -585,17 +624,32 @@ epics.push((action$, { getState }) =>
     if (name) params.name = name;
     params.sortby = sortby.map(data => `${data.id}${data.desc ? "-desc" : ""}`);
 
-    if (payload) {
-      if (payload.rows) params.rows = payload.rows;
-      if (payload.page) params.page = payload.page;
-    }
-
-    if (filterDistrict.length)
+    if (filterDistrict.length) {
       params.district = filterDistrict.map(district => district.id);
-    if (filterState.length) params.state = filterState.map(state => state.id);
-    if (filterCountry.length)
+    }
+    if (filterState.length) {
+      params.state = filterState.map(state => state.id);
+    }
+    if (filterCountry.length) {
       params.country = filterCountry.map(country => country.id);
-
+    }
+    if (payload) {
+      if (payload.rows) {
+        params.rows = payload.rows;
+      }
+      if (payload.page) {
+        params.page = payload.page;
+      }
+      if (payload.filterCountry) {
+        params.country = payload.filterCountry.map(country => country.id);
+      }
+      if (payload.filterState) {
+        params.state = payload.filterState.map(state => state.id);
+      }
+      if (payload.filterDistrict) {
+        params.district = payload.filterDistrict.map(district => district.id);
+      }
+    }
     return onCityGetAjax({
       access_token: getState().auth.cookies.token_data.access_token,
       params
@@ -633,40 +687,40 @@ epics.push((action$, { getState }) =>
 
 export const onClearCityFilters = () => ({ type: CLEAR_CITY_ALL });
 
-export const onCityAutocomplete = payload => ({
-  type: FETCH_CITY_AUTOCOMPLETE_PENDING,
-  payload
-});
+// export const onCityAutocomplete = payload => ({
+//   type: FETCH_CITY_AUTOCOMPLETE_PENDING,
+//   payload
+// });
 
-epics.push((action$, { getState }) =>
-  action$.ofType(FETCH_CITY_AUTOCOMPLETE_PENDING).switchMap(({ payload }) => {
-    const {
-      filterDistrict,
-      filterState,
-      filterCountry
-    } = getState().AdminContainer.filterArea;
-    const params = {};
-    params.keyword = (payload && payload.keyword) || "";
+// epics.push((action$, { getState }) =>
+//   action$.ofType(FETCH_CITY_AUTOCOMPLETE_PENDING).switchMap(({ payload }) => {
+//     const {
+//       filterDistrict,
+//       filterState,
+//       filterCountry
+//     } = getState().AdminContainer.filterArea;
+//     const params = {};
+//     params.keyword = (payload && payload.keyword) || "";
 
-    if (filterDistrict.length)
-      params.district = filterDistrict.map(district => district.id);
-    if (filterState.length) params.state = filterState.map(state => state.id);
-    if (filterCountry.length)
-      params.country = filterCountry.map(country => country.id);
+//     if (filterDistrict.length)
+//       params.district = filterDistrict.map(district => district.id);
+//     if (filterState.length) params.state = filterState.map(state => state.id);
+//     if (filterCountry.length)
+//       params.country = filterCountry.map(country => country.id);
 
-    return onCityGetAjax({
-      access_token: getState().auth.cookies.token_data.access_token,
-      params
-    })
-      .map(({ response }) => ({
-        type: FETCH_CITY_AUTOCOMPLETE_FULFILLED,
-        payload: response
-      }))
-      .catch(ajaxError =>
-        Observable.of({ type: FETCH_CITY_AUTOCOMPLETE_REJECTED })
-      );
-  })
-);
+//     return onCityGetAjax({
+//       access_token: getState().auth.cookies.token_data.access_token,
+//       params
+//     })
+//       .map(({ response }) => ({
+//         type: FETCH_CITY_AUTOCOMPLETE_FULFILLED,
+//         payload: response
+//       }))
+//       .catch(ajaxError =>
+//         Observable.of({ type: FETCH_CITY_AUTOCOMPLETE_REJECTED })
+//       );
+//   })
+// );
 
 export const onCityEachList = payload => ({
   type: FETCH_CITY_EACH_PENDING,
@@ -739,20 +793,40 @@ epics.push((action$, { getState }) =>
     const params = {};
     params.rows = rows;
     params.page = page;
-    if (name) params.name = name;
+    if (name) {
+      params.name = name;
+    }
     params.sortby = sortby.map(data => `${data.id}${data.desc ? "-desc" : ""}`);
+
+    if (filterCity.length) {
+      params.city = filterCity.map(city => city.id);
+    }
+    if (filterDistrict.length) {
+      params.district = filterDistrict.map(district => district.id);
+    }
+    if (filterState.length) {
+      params.state = filterState.map(state => state.id);
+    }
+    if (filterCountry.length) {
+      params.country = filterCountry.map(country => country.id);
+    }
 
     if (payload) {
       if (payload.rows) params.rows = payload.rows;
       if (payload.page) params.page = payload.page;
+      if (payload.filterCountry) {
+        params.country = payload.filterCountry.map(country => country.id);
+      }
+      if (payload.filterState) {
+        params.state = payload.filterState.map(state => state.id);
+      }
+      if (payload.filterDistrict) {
+        params.district = payload.filterDistrict.map(district => district.id);
+      }
+      if (payload.filterCity) {
+        params.city = payload.filterCity.map(city => city.id);
+      }
     }
-
-    if (filterCity.length) params.city = filterCity.map(city => city.id);
-    if (filterDistrict.length)
-      params.district = filterDistrict.map(district => district.id);
-    if (filterState.length) params.state = filterState.map(state => state.id);
-    if (filterCountry.length)
-      params.country = filterCountry.map(country => country.id);
 
     return onAreaGetAjax({
       access_token: getState().auth.cookies.token_data.access_token,

@@ -28,9 +28,9 @@ import {
   FETCH_CITY_FULFILLED,
   FETCH_CITY_PENDING,
   FETCH_CITY_REJECTED,
-  FETCH_CITY_AUTOCOMPLETE_FULFILLED,
-  FETCH_CITY_AUTOCOMPLETE_PENDING,
-  FETCH_CITY_AUTOCOMPLETE_REJECTED,
+  // FETCH_CITY_AUTOCOMPLETE_FULFILLED,
+  // FETCH_CITY_AUTOCOMPLETE_PENDING,
+  // FETCH_CITY_AUTOCOMPLETE_REJECTED,
   FETCH_STATE_EACH_FULFILLED,
   FETCH_CITY_EACH_FULFILLED,
   UNMOUNT_CITY,
@@ -65,6 +65,8 @@ const INITIAL_STATE = {
   stateError: false,
   stateData: [],
   districts: [],
+  districtsPages: 1,
+  districtsRowCount: 0,
   districtsFetchLoading: false,
   districtLoading: false,
   districtError: false,
@@ -137,8 +139,8 @@ export default function(state = INITIAL_STATE, action) {
     case FETCH_STATE_FULFILLED:
       return {
         ...state,
-        states: action.payload.data.map((state, i) => ({
-          ...state,
+        states: action.payload.data.map((stateVar, i) => ({
+          ...stateVar,
           s_no: action.payload.rows * (action.payload.page - 1) + i + 1
         })),
         statesPages: action.payload.pages,
@@ -167,10 +169,12 @@ export default function(state = INITIAL_STATE, action) {
     case FETCH_DISTRICT_FULFILLED:
       return {
         ...state,
-        districts: action.payload.map((district, i) => ({
+        districts: action.payload.data.map((district, i) => ({
           ...district,
-          s_no: i + 1
+          s_no: action.payload.rows * (action.payload.page - 1) + i + 1
         })),
+        districtsPages: action.payload.pages,
+        districtsRowCount: action.payload.rowCount,
         districtsFetchLoading: false
       };
     case FETCH_DISTRICT_REJECTED:
@@ -206,20 +210,20 @@ export default function(state = INITIAL_STATE, action) {
     case FETCH_CITY_REJECTED:
       return { ...state, citiesFetchLoading: false };
 
-    case FETCH_CITY_AUTOCOMPLETE_FULFILLED:
-      return {
-        ...state,
-        citiesAutocomplete: action.payload,
-        citiesAutocompleteLoading: false
-      };
-    case FETCH_CITY_AUTOCOMPLETE_PENDING:
-      return {
-        ...state,
-        citiesAutocomplete: [],
-        citiesAutocompleteLoading: true
-      };
-    case FETCH_CITY_AUTOCOMPLETE_REJECTED:
-      return { ...state, citiesAutocompleteLoading: false };
+    // case FETCH_CITY_AUTOCOMPLETE_FULFILLED:
+    //   return {
+    //     ...state,
+    //     citiesAutocomplete: action.payload,
+    //     citiesAutocompleteLoading: false
+    //   };
+    // case FETCH_CITY_AUTOCOMPLETE_PENDING:
+    //   return {
+    //     ...state,
+    //     citiesAutocomplete: [],
+    //     citiesAutocompleteLoading: true
+    //   };
+    // case FETCH_CITY_AUTOCOMPLETE_REJECTED:
+    //   return { ...state, citiesAutocompleteLoading: false };
 
     case FETCH_CITY_EACH_FULFILLED:
       return { ...state, cityData: action.payload.areas };
