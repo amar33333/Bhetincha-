@@ -122,9 +122,15 @@ class BusinessList extends Component {
               color="primary"
               className="mr-2"
               onClick={() =>
-                this.props.history.push(
-                  `${this.props.match.path}/${props.value}/manage-branchs`
-                )
+                this.props.history.push({
+                  pathname: `${this.props.match.path}/${
+                    props.value
+                  }/manage-branchs`,
+                  state: {
+                    id: props.original.id,
+                    slug: props.original.slug
+                  }
+                })
               }
             >
               <i className="fa fa-pencil" /> Manage Branchs

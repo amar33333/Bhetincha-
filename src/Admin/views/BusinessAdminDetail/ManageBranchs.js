@@ -36,9 +36,14 @@ class ManageBranchs extends Component {
   };
 
   render() {
+    console.log("manage branchs props: ", this.props);
     return (
       <div className="animated fadeIn">
-        <Link to={`/admin/list-business/`}>
+        <Link
+          to={`/admin/list-business/${
+            this.props.match.params.businessSlug
+          }/manage-branchs/add-branch`}
+        >
           <Button variant="raised" color="primary">
             Add New Branch
           </Button>
