@@ -18,10 +18,6 @@ class Groups extends Component {
     this.state = {
       group: ""
     };
-
-    this.access_token = this.props.cookies
-      ? this.props.cookies.token_data.access_token
-      : null;
   }
 
   componentDidMount() {
@@ -36,7 +32,7 @@ class Groups extends Component {
 
     const { group } = this.state;
 
-    this.props.onGroupSubmit({ group, access_token: this.access_token });
+    this.props.onGroupSubmit({ group });
     this.clearState();
   };
 
@@ -78,8 +74,7 @@ export default connect(
   ({
     AdminContainer: {
       user_reducer: { groups }
-    },
-    auth
-  }) => ({ groups, ...auth }),
+    }
+  }) => ({ groups }),
   { onGroupSubmit, onGroupsList, onGroupDelete }
 )(Groups);

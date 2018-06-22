@@ -108,11 +108,11 @@ class AdminRoute extends Component {
           //permission="CAN_VIEW_DASHBOARD"
         />
 
-        <Route
+        <CustomRoute
           path="/admin/approve-app-business"
           name="List App Business"
           component={AppBusinessList}
-          //permission="CAN_VIEW_DASHBOARD"
+          permission="CAN_VIEW_APP_BUSINESS"
         />
 
         <CustomRoute
@@ -164,11 +164,12 @@ class AdminRoute extends Component {
           component={TeleCalling}
           permission="CAN_VIEW_USER"
         />
-        <Route
+        <CustomRoute
           exact
           path="/admin/ecommerce/categories"
           name="Ecommerce-categories"
           component={ManageCategories}
+          permission="CAN_VIEW_ECOMMERCE_CATEGORIES"
         />
         <CustomRoute
           exact

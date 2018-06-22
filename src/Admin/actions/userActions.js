@@ -103,23 +103,50 @@ epics.push((action$, { getState }) =>
   )
 );
 
-export const onGroupSubmit = ({ group, access_token }) => dispatch => {
-  onGroupPost({ group, access_token })
-    .then(response => {
-      if (response.data.msg === "success") {
-        toast.success("Group Created Successfully!");
-        dispatch({ type: CREATE_GROUP_FULFILLED, payload: response.data });
-      } else {
-        toast.error("Error !!!");
-      }
-    })
-    .catch(error => {
-      toast.error("Error !!!");
+export const onGroupSubmit = payload => ({
+  type: CREATE_GROUP_PENDING,
+  payload
+});
 
-      dispatch({ type: CREATE_GROUP_REJECTED, payload: error });
-    });
-  dispatch({ type: CREATE_GROUP_PENDING });
-};
+epics.push((action$, { getState }) =>
+  action$.ofType(CREATE_GROUP_PENDING).mergeMap(({ payload }) =>
+    onGroupPost({
+      ...payload,
+      access_token: getState().auth.cookies.token_data.access_token
+    })
+      .map(({ response }) => {
+        if (response.msg === "success") {
+          toast.success("Group Created Successfully!");
+          return { type: CREATE_GROUP_FULFILLED, payload: response };
+        } else {
+          throw new Error(response.msg);
+        }
+      })
+      .catch(ajaxError => {
+        toast.error("Error Adding group");
+        console.log(ajaxError);
+        return Observable.of({ type: CREATE_GROUP_REJECTED });
+      })
+  )
+);
+
+// export const onGroupSubmit = ({ group, access_token }) => dispatch => {
+//   onGroupPost({ group, access_token })
+//     .then(response => {
+//       if (response.data.msg === "success") {
+//         toast.success("Group Created Successfully!");
+//         dispatch({ type: CREATE_GROUP_FULFILLED, payload: response.data });
+//       } else {
+//         toast.error("Error !!!");
+//       }
+//     })
+//     .catch(error => {
+//       toast.error("Error !!!");
+
+//       dispatch({ type: CREATE_GROUP_REJECTED, payload: error });
+//     });
+//   dispatch({ type: CREATE_GROUP_PENDING });
+// };
 
 export const onGroupDelete = payload => ({
   type: DELETE_USER_GROUPS_PENDING,
@@ -158,43 +185,85 @@ epics.push((action$, { getState }) =>
 //   dispatch({ type: FETCH_GROUP_PENDING });
 // };
 
-export const onUserSubmit = ({
-  first_name,
-  last_name,
-  username,
-  email,
-  password,
-  groups,
-  access_token
-}) => dispatch => {
-  onUserPost({
-    first_name,
-    last_name,
-    username,
-    email,
-    password,
-    groups,
-    access_token
-  })
-    .then(response => {
-      if (response.data.msg === "success") {
-        toast.success("User Created Successfully!: ");
-        dispatch({ type: CREATE_USER_FULFILLED, payload: response.data });
-      } else {
-        throw new Error(
-          response.data.msg[Object.keys(response.data.msg)[0]][0]
-        );
-        // toast.error("Error !!!");
-      }
+export const onUserSubmit = payload => ({
+  type: CREATE_USER_PENDING,
+  payload
+});
+
+epics.push((action$, { getState }) =>
+  action$.ofType(CREATE_USER_PENDING).mergeMap(({ payload }) => {
+    const {
+      first_name,
+      last_name,
+      username,
+      email,
+      password,
+      groups
+    } = payload;
+
+    return onUserPost({
+      first_name,
+      last_name,
+      username,
+      email,
+      password,
+      groups,
+      access_token: getState().auth.cookies.token_data.access_token
     })
-    .catch(error => {
-      toast.error("Error : " + error.message);
+      .map(({ response }) => {
+        if (response.msg === "success") {
+          toast.success("User Created Successfully!");
+          return { type: CREATE_USER_FULFILLED, payload: response };
+        } else {
+          throw new Error(response.msg);
+        }
+      })
+      .catch(ajaxError => {
+        toast.error("Error Creating User");
+        console.log(ajaxError);
+        return Observable.of({ type: CREATE_USER_REJECTED });
+      });
+  })
+);
 
-      dispatch({ type: CREATE_USER_REJECTED, payload: error });
-    });
-  dispatch({ type: CREATE_USER_PENDING });
-};
+// export const onUserSubmit = ({
+//   first_name,
+//   last_name,
+//   username,
+//   email,
+//   password,
+//   groups,
+//   access_token
+// }) => dispatch => {
+//   onUserPost({
+//     first_name,
+//     last_name,
+//     username,
+//     email,
+//     password,
+//     groups,
+//     access_token
+//   })
+//     .then(response => {
+//       if (response.data.msg === "success") {
+//         toast.success("User Created Successfully!: ");
+//         dispatch({ type: CREATE_USER_FULFILLED, payload: response.data });
+//       } else {
+//         throw new Error(
+//           response.data.msg[Object.keys(response.data.msg)[0]][0]
+//         );
+//         // toast.error("Error !!!");
+//       }
+//     })
+//     .catch(error => {
+//       toast.error("Error : " + error.message);
 
+//       dispatch({ type: CREATE_USER_REJECTED, payload: error });
+//     });
+//   dispatch({ type: CREATE_USER_PENDING });
+// };
+
+// This `onUserList` has not been used so do as you like
 export const onUserList = ({ access_token }) => dispatch => {
   onUserGet({ access_token })
     .then(response => {

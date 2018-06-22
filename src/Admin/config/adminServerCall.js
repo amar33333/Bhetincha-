@@ -269,8 +269,9 @@ export const onIndustryGet = ({ access_token }) =>
     }
   });
 
-export const onIndustryEachGet = ({ id, access_token }) =>
-  axios({
+export const onIndustryEachGet = ({ id, access_token }) => {
+  // console.log("access : ", access_token);
+  return axios({
     method: "get",
     url: `${INDUSTRY_URL}${id}/`,
     headers: {
@@ -278,6 +279,7 @@ export const onIndustryEachGet = ({ id, access_token }) =>
       Authorization: "Bearer " + access_token
     }
   });
+};
 
 export const onIndustryPostAjax = ({ industry, access_token }) =>
   ajax({
@@ -938,14 +940,14 @@ export const onAreaEachDeleteAjax = ({ id, access_token }) =>
   });
 
 export const onGroupPost = ({ group, access_token }) =>
-  axios({
+  ajax({
     method: "post",
     url: USER_GROUPS_URL,
     headers: {
       "Content-Type": "application/json",
       Authorization: "Bearer " + access_token
     },
-    data: {
+    body: {
       name: group
     }
   });
@@ -979,14 +981,14 @@ export const onUserPost = ({
   groups,
   access_token
 }) =>
-  axios({
+  ajax({
     method: "post",
     url: USERS_URL,
     headers: {
       "Content-Type": "application/json",
       Authorization: "Bearer " + access_token
     },
-    data: {
+    body: {
       first_name,
       last_name,
       username,

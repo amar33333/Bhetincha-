@@ -338,6 +338,7 @@ class SubBusinessDetail extends Component {
                       value={valueIndustry}
                       onChange={this.handleSelectChange.bind(this, "industry")}
                       options={industries}
+                      tabSelectsValue={false}
                       valueKey="id"
                       labelKey="name"
                     />

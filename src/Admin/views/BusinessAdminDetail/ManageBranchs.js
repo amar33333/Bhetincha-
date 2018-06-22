@@ -3,36 +3,18 @@ import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { Button } from "reactstrap";
 
-import {
-  onBusinessAllGet,
-  onBusinessEachDelete,
-  onIndustryList,
-  onFilterCleared,
-  handleOnBusinessFilterChange,
-  handleSearchKeywordCleared,
-  onUnmountIndustry,
-  handleSortChangeBusiness
-} from "../../actions";
+import { onBusinessEachList } from "../../actions";
 
 class ManageBranchs extends Component {
+  access_token = this.props.cookies
+    ? this.props.cookies.token_data.access_token
+    : null;
+
   componentDidMount = () => {
-    this.props.onIndustryList();
-    this.props.onBusinessAllGet();
-  };
-
-  componentWillUnmount = () => {
-    this.props.onUnmountIndustry();
-  };
-
-  handleChange = (key, event) =>
-    this.props.handleOnBusinessFilterChange({ [key]: event.target.value });
-
-  handleIndustryChange = industry =>
-    this.props.handleOnBusinessFilterChange({ industry });
-
-  handleSearchKeywordSubmit = event => {
-    event.preventDefault();
-    this.props.onBusinessAllGet();
+    this.props.onBusinessEachList({
+      username: this.props.match.params.businessSlug,
+      access_token: this.access_token
+    });
   };
 
   render() {
@@ -60,27 +42,14 @@ class ManageBranchs extends Component {
 export default connect(
   ({
     AdminContainer: {
-      business_reducer: { businesses, fetchLoading, pages, rowCount },
-      filterBusiness,
-      industries
-    }
+      business_reducer: { businessData }
+    },
+    auth
   }) => ({
-    industries: industries.industries,
-    industryLoading: industries.loading,
-    businesses,
-    pages,
-    rowCount,
-    fetchLoading,
-    ...filterBusiness
+    ...auth,
+    businessData
   }),
   {
-    onBusinessAllGet,
-    onBusinessEachDelete,
-    onIndustryList,
-    onFilterCleared,
-    handleOnBusinessFilterChange,
-    handleSearchKeywordCleared,
-    handleSortChangeBusiness,
-    onUnmountIndustry
+    onBusinessEachList
   }
 )(ManageBranchs);
