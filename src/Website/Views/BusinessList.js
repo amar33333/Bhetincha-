@@ -24,22 +24,21 @@ import { onSearchResultsList } from "../actions";
 import CustomModal from "../../Common/components/CustomModal";
 import PhoneVerificationModal from "../../Common/components/CustomModal/ModalTemplates/PhoneVerificationModal";
 
-// const defaultLogo = {`${}/media/default_logo.png`};
-
-import { AutoSuggestion } from "../components";
-
 class BusinessList extends Component {
   state = {
     verifiedTooltipOpen: false
   };
   componentDidMount() {
-    const parsedUrlStringObject = querystring.parse(this.props.location.search);
+    const parsedUrlStringObject = querystring.parse(
+      this.props.location.search.slice(1)
+    );
 
     this.props.onSearchResultsList({
-      query: parsedUrlStringObject["?query"],
+      query: parsedUrlStringObject["query"],
       frm: parsedUrlStringObject["frm"],
       size: parsedUrlStringObject["size"]
     });
+    this.props.setInitialQuery(parsedUrlStringObject.query);
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -47,7 +46,7 @@ class BusinessList extends Component {
 
     if (this.props.location.search !== prevProps.location.search)
       this.props.onSearchResultsList({
-        query: parsedUrlStringObject["?query"],
+        query: parsedUrlStringObject["query"],
         frm: parsedUrlStringObject["frm"],
         size: parsedUrlStringObject["size"]
       });

@@ -27,7 +27,12 @@ class WebsiteRoute extends Component {
         <Route
           path="/businesses"
           name="Business List"
-          component={BusinessList}
+          render={props => (
+            <BusinessList
+              {...props}
+              setInitialQuery={this.props.setInitialQuery}
+            />
+          )}
         />
 
         <Route path="/ecommerce" name="Ecommerce" component={AsyncEcommerce} />

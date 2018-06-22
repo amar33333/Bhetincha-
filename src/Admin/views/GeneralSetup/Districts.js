@@ -60,6 +60,7 @@ class Districts extends Component {
       {
         Header: "SN",
         accessor: "s_no",
+        sortable: false,
         filterable: false,
         width: 70
       },
@@ -68,6 +69,7 @@ class Districts extends Component {
       {
         Header: "State",
         accessor: "state",
+        sortable: false,
         Filter: () => (
           <Select
             clearable
@@ -109,6 +111,7 @@ class Districts extends Component {
       {
         Header: "Country",
         accessor: "country",
+        sortable: false,
         Filter: () => (
           <Select
             clearable

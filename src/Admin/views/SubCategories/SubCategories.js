@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import TagsInput from "react-tagsinput";
 import { connect } from "react-redux";
-import orderBy from "lodash.orderby";
 import debounce from "lodash.debounce";
 import ReactTable from "react-table";
 
@@ -29,7 +28,6 @@ import {
   PopoverDelete,
   PaginationComponent
 } from "../../../Common/components";
-// import filterCaseInsensitive from "../../../Common/utils/filterCaseInsesitive";
 
 import CustomModal from "../../../Common/components/CustomModal";
 import SubCategoryEditModal from "../../../Common/components/CustomModal/ModalTemplates/SubCategoryEditModal";
@@ -40,6 +38,9 @@ import {
   onExtraSectionList,
   onSubCategorySubmit,
   onSubCategoryList,
+  handleSortChangeSubCategory,
+  handleOnSubCategoryFilterChange,
+  handleOnCategoryFilterChange,
   onSubCategoryEdit,
   toggleSubCategoryEditModal,
   onCategoryList,
@@ -50,8 +51,6 @@ import {
   onUnmountSubCategory
 } from "../../actions";
 
-const SUB_CATEGORIES_CHANGED = "SUB_CATEGORIES_CHANGED";
-
 class SubCategories extends Component {
   state = {
     subCategory: "",
@@ -60,16 +59,7 @@ class SubCategories extends Component {
     extraSections: [],
     tags: [],
     subCategorySubmit: false,
-    filterIndustry: [],
-    filterCategory: [],
-    filterExtrasection: [],
-    filterText: [],
-    sortedData: [],
-    pages: 1,
-    page: 0,
-    rows: 20,
-    rowCount: 0,
-    subCategories: []
+    categorySearchText: ""
   };
 
   tableProps = {
@@ -81,80 +71,90 @@ class SubCategories extends Component {
         sortable: false,
         width: 70
       },
-      { Header: "Sub-Category", accessor: "name" },
+      { Header: "Sub-Category", accessor: "name", id: "subcategory" },
+      // {
+      //   Header: "Extra Sections",
+      //   accessor: "extra_section",
+      //   Cell: ({ value }) => value.join(", "),
+      //   sortable: false,
+      //   filterable: false
+      //   // Filter: () => (
+      //   //   <Select
+      //   //     clearable
+      //   //     tabSelectsValue={false}
+      //   //     multi
+      //   //     value={this.state.filterExtrasection}
+      //   //     onChange={this.handleSelectChange.bind(this, "filterExtrasection")}
+      //   //     options={this.props.extra_sections.data}
+      //   //   />
+      //   // )
+      // },
+      // {
+      //   Header: "Tags",
+      //   accessor: "tags",
+      //   Cell: ({ value }) => value.join(", "),
+      //   sortable: false,
+      //   filterable: false
+      // },
       {
-        Header: "Extra Sections",
-        accessor: "extra_section",
-        Cell: ({ value }) => value.join(", "),
+        Header: "Category",
+        accessor: "category",
         sortable: false,
         Filter: () => (
           <Select
             clearable
             tabSelectsValue={false}
             multi
-            value={this.state.filterExtrasection}
-            onChange={this.handleSelectChange.bind(this, "filterExtrasection")}
-            options={this.props.extra_sections.data}
-          />
-        )
-      },
-      {
-        Header: "Tags",
-        accessor: "tags",
-        Cell: ({ value }) => value.join(", "),
-        sortable: false
-      },
-      {
-        Header: "Category",
-        accessor: "category",
-        id: "category",
-        Cell: ({ value }) => {
-          const category = this.props.categories.find(
-            category => category.id === value
-          );
-          return category ? category.name : "Not Found";
-        },
-        Filter: () => (
-          <Select
-            clearable
-            tabSelectsValue={false}
-            multi
-            value={this.state.filterCategory}
-            onChange={this.handleSelectChange.bind(this, "filterCategory")}
+            isLoading={this.props.categoriesFetchLoading}
+            onInputChange={categorySearchText => {
+              this.setState(
+                { categorySearchText },
+                () =>
+                  categorySearchText &&
+                  this.debouncedCategoryAutocomplete(categorySearchText)
+              );
+            }}
+            value={this.props.filterCategory}
+            onChange={filterCategory =>
+              this.props.handleOnSubCategoryFilterChange({ filterCategory })
+            }
             valueKey="id"
             labelKey="name"
-            options={this.props.categories.filter(category => {
-              const { filterIndustry } = this.state;
-              if (filterIndustry.length === 0) return true;
-              for (let i = 0; i < filterIndustry.length; i++)
-                if (category.industry === filterIndustry[i].id) return true;
-              return false;
-            })}
+            filterOptions={options => options}
+            options={
+              this.state.categorySearchText &&
+              !this.props.categoriesFetchLoading
+                ? this.props.categories.filter(
+                    category =>
+                      !this.props.filterCategory.length ||
+                      !this.props.filterCategory
+                        .map(x => x.id)
+                        .includes(category.id)
+                  )
+                : []
+            }
+            noResultsText={
+              this.state.categorySearchText &&
+              !this.props.categoriesFetchLoading
+                ? "No Results Found"
+                : "Start Typing..."
+            }
           />
         )
       },
       {
         Header: "Industry",
-        accessor: "category",
-        id: "industry",
-        Cell: ({ value }) => {
-          const category = this.props.categories.find(
-            category => category.id === value
-          );
-          if (category) {
-            const industry = this.props.industries.find(
-              industry => industry.id === category.industry
-            );
-            return industry ? industry.name : "Not Found";
-          } else return "Not Found";
-        },
+        accessor: "industry",
+        sortable: false,
         Filter: () => (
           <Select
             clearable
-            tabSelectsValue={false}
             multi
-            value={this.state.filterIndustry}
-            onChange={this.handleSelectChange.bind(this, "filterIndustry")}
+            tabSelectsValue={false}
+            value={this.props.filterIndustry}
+            onChange={filterIndustry =>
+              this.props.handleOnSubCategoryFilterChange({ filterIndustry })
+            }
             valueKey="id"
             labelKey="name"
             options={this.props.industries}
@@ -188,6 +188,9 @@ class SubCategories extends Component {
         )
       }
     ],
+    onFilteredChange: (column, value) => {
+      value.id === "subcategory" && this.debouncedSearch(column);
+    },
     manual: true,
     minRows: 5,
     className: "-striped -highlight",
@@ -197,19 +200,11 @@ class SubCategories extends Component {
 
   componentDidMount() {
     this.props.onSubCategoryList();
-    this.props.onCategoryList();
     this.props.onIndustryList();
     this.props.onExtraSectionList();
   }
 
-  getSnapshotBeforeUpdate(prevProps, prevState) {
-    if (prevProps.subCategories !== this.props.subCategories) {
-      return SUB_CATEGORIES_CHANGED;
-    }
-    return null;
-  }
-
-  componentDidUpdate = (prevProps, prevState, snapshot) => {
+  componentDidUpdate = (_, prevState) => {
     if (prevState.subCategorySubmit && !this.props.loading) {
       const updates = { subCategorySubmit: false };
       if (!this.props.error) {
@@ -220,11 +215,6 @@ class SubCategories extends Component {
       }
       this.setState(updates, () => this.focusableInput.focus());
     }
-
-    if (prevState.subCategorySubmit && prevProps.loading)
-      this.focusableInput.focus();
-
-    if (snapshot === SUB_CATEGORIES_CHANGED) this.updateTable();
   };
 
   componentWillUnmount() {
@@ -233,6 +223,23 @@ class SubCategories extends Component {
     this.props.onUnmountSubCategory();
     this.props.onUnmountExtraSection();
   }
+
+  debouncedSearch = debounce(
+    column =>
+      this.props.handleOnSubCategoryFilterChange({
+        name: column.length ? column[0].value : ""
+      }),
+    200
+  );
+
+  debouncedCategoryAutocomplete = debounce(
+    name =>
+      this.props.handleOnCategoryFilterChange({
+        name,
+        filterIndustry: this.props.filterIndustry
+      }),
+    200
+  );
 
   onChange = (key, event) =>
     this.setState({
@@ -255,154 +262,14 @@ class SubCategories extends Component {
   handleTagsChange = tags => this.setState({ tags });
 
   handleSelectChange = (key, value) => {
-    this.setState(
-      { [key]: value },
-      () =>
-        (key === "filterIndustry" ||
-          key === "filterCategory" ||
-          key === "filterExtrasection") &&
-        this.updateTable()
-    );
+    this.setState({ [key]: value });
     if (key === "industry") {
       this.setState({ category: "" });
       value && this.props.onIndustryEachList({ id: value.id });
     }
-    if (
-      key === "filterIndustry" &&
-      value.length > 0 &&
-      this.state.filterCategory.length > 0
-    ) {
-      let changed = false;
-      let filterCategory = this.state.filterCategory.filter(filter => {
-        let found = false;
-        for (let i = 0; i < value.length; i++) {
-          found = found || value[i].id === filter.industry;
-          if (found) break;
-        }
-        changed = !found;
-        return found;
-      });
-      changed && this.updateData({ filterCategory });
-    }
   };
-
-  updateTable = () => {
-    const {
-      page,
-      rows,
-      filterText,
-      filterCategory,
-      filterIndustry,
-      filterExtrasection,
-      sortedData
-    } = this.state;
-
-    let subCategories = this.props.subCategories;
-    // filter
-    if (filterText.length) {
-      filterText.forEach(filter => {
-        subCategories = subCategories.filter(subCategory => {
-          const text =
-            filter.id === "tags"
-              ? String(subCategory[filter.id].join(", ")).toLowerCase()
-              : String(subCategory[filter.id]).toLowerCase();
-          return text.indexOf(filter.value.toLowerCase()) !== -1;
-        });
-      });
-    }
-    if (filterExtrasection.length) {
-      filterExtrasection.forEach(filter => {
-        subCategories = subCategories.filter(
-          subCategory =>
-            String(subCategory.extra_section.join(", "))
-              .toLowerCase()
-              .indexOf(filter.value.toLowerCase()) !== -1
-        );
-      });
-    }
-    if (filterCategory.length) {
-      subCategories = subCategories.filter(subCategory => {
-        let found = false;
-        for (let i = 0; i < filterCategory.length; i++) {
-          found = found || filterCategory[i].id === subCategory.category;
-          if (found) break;
-        }
-        return found;
-      });
-    } else if (filterIndustry.length) {
-      subCategories = subCategories.filter(subCategory => {
-        let found = false;
-        for (let i = 0; i < filterIndustry.length; i++) {
-          const categories = this.props.categories
-            .filter(category => category.industry === filterIndustry[i].id)
-            .map(category => category.id);
-          found = found || categories.includes(subCategory.category);
-          if (found) break;
-        }
-        return found;
-      });
-    }
-    // sort
-    if (sortedData.length > 0) {
-      subCategories = subCategories.map(subCategory => {
-        const category = this.props.categories.find(
-          category => category.id === subCategory.category
-        );
-
-        const industry = this.props.industries.find(
-          industry => (category ? category.industry === industry.id : false)
-        );
-
-        return {
-          ...subCategory,
-          categoryName: category ? category.name : "Not Found",
-          industryName: industry ? industry.name : "Not Found"
-        };
-      });
-      subCategories = orderBy(
-        subCategories,
-        sortedData.map(sort => {
-          let id;
-          switch (sort.id) {
-            case "category":
-              id = "categoryName";
-              break;
-            case "industry":
-              id = "industryName";
-              break;
-            default:
-              id = sort.id;
-          }
-          return row => {
-            if (row[id] === null || row[id] === undefined) {
-              return -Infinity;
-            }
-            return typeof row[id] === "string"
-              ? row[id].toLowerCase()
-              : row[id];
-          };
-        }),
-        sortedData.map(d => (d.desc ? "desc" : "asc"))
-      );
-    }
-
-    // pagination
-    let newPage = subCategories.length <= rows * page ? 0 : page;
-
-    this.setState({
-      rowCount: subCategories.length,
-      subCategories: subCategories.slice(rows * newPage, rows * newPage + rows),
-      page: newPage,
-      pages: Math.ceil(subCategories.length / rows)
-    });
-  };
-
-  debouncedUpdate = debounce(this.updateTable, 100);
-
-  updateData = params => this.setState(params, () => this.updateTable());
 
   render() {
-    console.log("sub cat props: ", this.props);
     return (
       <div className="animated fadeIn">
         <Row className="hr-centered">
@@ -528,27 +395,23 @@ class SubCategories extends Component {
         <ReactTable
           {...this.tableProps}
           style={{ background: "white" }}
-          data={this.state.subCategories}
-          pages={this.state.pages}
-          pageSize={this.state.rows}
-          rowCount={this.state.rowCount}
-          onPageChange={pageIndex => {
-            this.updateData({ page: pageIndex });
-          }}
+          data={this.props.subCategories}
+          defaultPageSize={this.props.rows}
+          defaultSorted={this.props.sort_by}
+          loading={this.props.fetchLoading}
+          onPageChange={pageIndex =>
+            this.props.onSubCategoryList({ page: pageIndex + 1 })
+          }
           onPageSizeChange={(pageSize, pageIndex) =>
-            this.updateData({
-              page: pageIndex,
+            this.props.onSubCategoryList({
+              page: pageIndex + 1,
               rows: pageSize
             })
           }
-          onSortedChange={newSorted =>
-            this.updateData({ sortedData: newSorted })
-          }
-          onFilteredChange={(column, value) => {
-            (value.id === "tags" || value.id === "name") &&
-              this.setState({ filterText: column }, this.debouncedUpdate);
-          }}
-          loading={this.props.fetchLoading}
+          onSortedChange={this.props.handleSortChangeSubCategory}
+          page={this.props.page - 1}
+          pages={this.props.pages}
+          rowCount={this.props.rowCount}
         />
         <CustomModal
           title="Edit Sub Category Data"
@@ -572,16 +435,19 @@ export default connect(
   ({
     AdminContainer: {
       sub_categories,
-      categories: { categories },
+      categories: { categories, fetchLoading: categoriesFetchLoading },
       extra_sections,
-      industries: { industries, industriesData }
+      industries: { industries, industriesData },
+      filterSubCategory
     }
   }) => ({
     industries,
     partialCategories: industriesData,
     categories,
     extra_sections,
-    ...sub_categories
+    categoriesFetchLoading,
+    ...sub_categories,
+    ...filterSubCategory
   }),
   {
     onIndustryList,
@@ -589,6 +455,9 @@ export default connect(
     onExtraSectionList,
     onSubCategorySubmit,
     onSubCategoryList,
+    handleOnCategoryFilterChange,
+    handleOnSubCategoryFilterChange,
+    handleSortChangeSubCategory,
     onSubCategoryEdit,
     toggleSubCategoryEditModal,
     onCategoryList,

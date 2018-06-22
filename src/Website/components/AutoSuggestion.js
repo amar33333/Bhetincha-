@@ -5,16 +5,21 @@ class AutoSuggestion extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      value: "",
-      // value: (props.initialQuery && props.initialQuery.query) || "",
-      selected: false
+      value: props.initialQuery || ""
+      // selected: false
     };
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.initialQuery !== this.props.initialQuery) {
+      this.setState({ value: this.props.initialQuery });
+    }
   }
 
   onSuggestionsClearRequested = () => {};
 
   getSuggestionValue = suggestion => {
-    this.setState({ selected: true });
+    // this.setState({ selected: true });
     return suggestion[this.props.valueKey];
   };
 
@@ -39,18 +44,20 @@ class AutoSuggestion extends Component {
         getSuggestionValue={this.getSuggestionValue}
         renderSuggestion={this.renderSuggestion}
         onSuggestionSelected={(event, { suggestion }) => {
-          (event.type === "click" || this.state.selected) &&
-            this.props.onSearchItemSelected(suggestion);
+          event.type === "click" &&
+            //  || this.state.selected
+            this.props.onSearchComplete(suggestion[this.props.valueKey]);
+          // this.props.onSearchItemSelected(suggestion);
         }}
         renderInputComponent={inputProps => (
           <div>
             <form
               onSubmit={event => {
                 event.preventDefault();
-                this.state.selected
-                  ? this.setState({ selected: false })
-                  : this.props.onSearchComplete(this.state.value);
-                // this.props.onSearchComplete(this.state.value);
+                // this.state.selected
+                //   ? this.setState({ selected: false })
+                //   : this.props.onSearchComplete(this.state.value);
+                this.props.onSearchComplete(this.state.value);
               }}
             >
               <input

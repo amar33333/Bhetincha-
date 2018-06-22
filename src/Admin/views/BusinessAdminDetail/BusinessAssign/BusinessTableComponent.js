@@ -439,8 +439,8 @@ class BusinessTableComponent extends Component {
                 )}
               </CardBody>
             </Card>
-            {!this.props.area ? (
-              <p>Area filter must be selected</p>
+            {!this.props.area.length ? (
+              <p>Area filter must be selected to view business</p>
             ) : (
               <ReactTable
                 {...this.tableProps}

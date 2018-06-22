@@ -14,6 +14,8 @@ const INITIAL_STATE = {
   error: false,
   fetchLoading: false,
   subCategories: [],
+  pages: 1,
+  rowCount: 0,
   subCategoryEditModal: false
 };
 
@@ -37,10 +39,12 @@ export default function(state = INITIAL_STATE, action) {
     case FETCH_SUB_CATEGORY_FULFILLED:
       return {
         ...state,
-        subCategories: action.payload.map((subCategory, i) => ({
+        subCategories: action.payload.data.map((subCategory, i) => ({
           ...subCategory,
-          s_no: i + 1
+          s_no: action.payload.rows * (action.payload.page - 1) + i + 1
         })),
+        pages: action.payload.pages,
+        rowCount: action.payload.rowCount,
         fetchLoading: false
       };
 
