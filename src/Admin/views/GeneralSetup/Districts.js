@@ -199,7 +199,9 @@ class Districts extends Component {
   debouncedSearch = debounce(
     column =>
       this.props.handleOnDistrictFilterChange({
-        name: column.length ? column[0].value : ""
+        name: column.filter(x => x.id === "district").length
+          ? column.find(x => x.id === "district").value
+          : ""
       }),
     200
   );

@@ -76,8 +76,10 @@ epics.push((action$, { getState }) =>
       rows,
       page,
       name,
+      tags,
       filterIndustry,
       filterCategory,
+      filterExtraSection,
       sortby
     } = getState().AdminContainer.filterSubCategory;
 
@@ -87,12 +89,18 @@ epics.push((action$, { getState }) =>
     if (name) {
       params.name = name;
     }
+    if (tags) {
+      params.tags = tags;
+    }
     params.sortby = sortby.map(data => `${data.id}${data.desc ? "-desc" : ""}`);
     if (filterIndustry.length) {
       params.industry = filterIndustry.map(industry => industry.id);
     }
     if (filterCategory.length) {
       params.category = filterCategory.map(category => category.id);
+    }
+    if (filterExtraSection.length) {
+      params.extra_sections = filterExtraSection.map(x => x.label);
     }
     if (payload) {
       if (payload.rows) {
@@ -106,6 +114,11 @@ epics.push((action$, { getState }) =>
       }
       if (payload.filterCategory) {
         params.category = payload.filterCategory.map(category => category.id);
+      }
+      if (payload.filterExtraSection) {
+        params.extra_sections = payload.filterExtraSection.map(
+          category => category.id
+        );
       }
     }
 

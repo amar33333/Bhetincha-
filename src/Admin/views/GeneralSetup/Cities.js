@@ -228,7 +228,9 @@ class Cities extends Component {
   debouncedSearch = debounce(
     column =>
       this.props.handleOnCityFilterChange({
-        name: column.length ? column[0].value : ""
+        name: column.filter(x => x.id === "city").length
+          ? column.find(x => x.id === "city").value
+          : ""
       }),
     200
   );

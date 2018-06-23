@@ -418,7 +418,7 @@ export const onSubCategoryPost = ({
     url: SUB_CATEGORY_URL,
     data: {
       category,
-      extra_section: extraSection,
+      extra_sections: extraSection,
       tags: tags,
       name: subCategory
     },
@@ -457,7 +457,7 @@ export const onSubCategoryPostAjax = ({
     url: SUB_CATEGORY_URL,
     body: {
       category,
-      extra_section: extraSection,
+      extra_sections: extraSection,
       tags: tags,
       name: subCategory
     },

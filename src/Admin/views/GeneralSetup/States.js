@@ -132,7 +132,9 @@ class States extends Component {
   debouncedSearch = debounce(
     column =>
       this.props.handleOnStateFilterChange({
-        name: column.length ? column[0].value : ""
+        name: column.filter(x => x.id === "state").length
+          ? column.find(x => x.id === "state").value
+          : ""
       }),
     200
   );

@@ -269,17 +269,57 @@ export const onBusinessAllGet = payload => ({
 
 epics.push((action$, { getState }) =>
   action$.ofType(FETCH_BUSINESS_PENDING).switchMap(({ payload }) => {
-    const filterValue = getState().AdminContainer.filterBusiness;
+    const {
+      rows,
+      page,
+      q,
+      sort_by,
+      filterIndustry,
+      filterCategory,
+      filterSubCategory,
+      filterCountry,
+      filterState,
+      filterDistrict,
+      filterCity,
+      filterArea
+    } = getState().AdminContainer.filterBusiness;
     const params = {};
-    params.rows = filterValue.rows;
-    params.page = filterValue.page;
-    params.q = filterValue.q;
-    params.sort_by = filterValue.sort_by.map(
-      data => `${data.id}-${data.desc ? "desc" : "asc"}`
-    );
-    params.industry = filterValue.industry
-      ? filterValue.industry.map(industry => industry.id)
-      : [];
+    params.rows = rows;
+    params.page = page;
+    if (q) {
+      params.q = q;
+    }
+    if (sort_by.length) {
+      params.sort_by = sort_by.map(
+        data => `${data.id}-${data.desc ? "desc" : "asc"}`
+      );
+    }
+    if (filterIndustry.length) {
+      params.industry = filterIndustry.map(industry => industry.id);
+    }
+    if (filterCategory.length) {
+      params.category = filterCategory.map(category => category.id);
+    }
+    if (filterSubCategory.length) {
+      params.sub_category = filterSubCategory.map(
+        subcategory => subcategory.id
+      );
+    }
+    if (filterCountry.length) {
+      params.country = filterCountry.map(country => country.id);
+    }
+    if (filterState.length) {
+      params.state = filterState.map(state => state.id);
+    }
+    if (filterDistrict.length) {
+      params.district = filterDistrict.map(district => district.id);
+    }
+    if (filterCity.length) {
+      params.city = filterCity.map(city => city.id);
+    }
+    if (filterArea.length) {
+      params.area = filterArea.map(area => area.id);
+    }
 
     if (payload) {
       if (payload.rows) params.rows = payload.rows;
@@ -369,19 +409,56 @@ export const onAssignBusinessList = payload => ({
 
 epics.push((action$, { getState }) =>
   action$.ofType(FETCH_ASSIGN_BUSINESS_PENDING).switchMap(({ payload }) => {
-    const filterValue = getState().AdminContainer.filterAssignBusiness;
+    const {
+      rows,
+      page,
+      q,
+      sort_by,
+      filterIndustry,
+      filterCategory,
+      filterSubCategory,
+      filterCountry,
+      filterState,
+      filterDistrict,
+      filterCity,
+      filterArea
+    } = getState().AdminContainer.filterAssignBusiness;
     const params = {};
-    params.rows = filterValue.rows;
-    params.page = filterValue.page;
-    params.q = filterValue.q;
-    params.sort_by = filterValue.sort_by.map(
-      data => `${data.id}-${data.desc ? "desc" : "asc"}`
-    );
-    if (filterValue.industry.length) {
-      params.industry = filterValue.industry.map(industry => industry.id);
+    params.rows = rows;
+    params.page = page;
+    if (q) {
+      params.q = q;
     }
-    if (filterValue.area.length) {
-      params.area = filterValue.area.map(area => area.id);
+    if (sort_by.length) {
+      params.sort_by = sort_by.map(
+        data => `${data.id}-${data.desc ? "desc" : "asc"}`
+      );
+    }
+    if (filterIndustry.length) {
+      params.industry = filterIndustry.map(industry => industry.id);
+    }
+    if (filterCategory.length) {
+      params.category = filterCategory.map(category => category.id);
+    }
+    if (filterSubCategory.length) {
+      params.sub_category = filterSubCategory.map(
+        subcategory => subcategory.id
+      );
+    }
+    if (filterCountry.length) {
+      params.country = filterCountry.map(country => country.id);
+    }
+    if (filterState.length) {
+      params.state = filterState.map(state => state.id);
+    }
+    if (filterDistrict.length) {
+      params.district = filterDistrict.map(district => district.id);
+    }
+    if (filterCity.length) {
+      params.city = filterCity.map(city => city.id);
+    }
+    if (filterArea.length) {
+      params.area = filterArea.map(area => area.id);
     }
 
     if (payload) {

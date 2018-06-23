@@ -7,11 +7,13 @@ import {
 
 const INITIAL_STATE = {
   name: "",
+  tags: "",
   sortby: [],
   rows: 20,
   page: 1,
   filterIndustry: [],
-  filterCategory: []
+  filterCategory: [],
+  filterExtraSection: []
 };
 
 export default function(state = INITIAL_STATE, action) {

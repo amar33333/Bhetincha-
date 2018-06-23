@@ -137,7 +137,9 @@ class Categories extends Component {
   debouncedSearch = debounce(
     column =>
       this.props.handleOnCategoryFilterChange({
-        name: column.length ? column[0].value : ""
+        name: column.filter(x => x.id === "category").length
+          ? column.find(x => x.id === "category").value
+          : ""
       }),
     200
   );

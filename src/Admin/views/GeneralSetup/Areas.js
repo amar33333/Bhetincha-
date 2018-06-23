@@ -274,7 +274,9 @@ class Areas extends Component {
   debouncedSearch = debounce(
     column =>
       this.props.handleOnAreaFilterChange({
-        name: column.length ? column[0].value : ""
+        name: column.filter(x => x.id === "area").length
+          ? column.find(x => x.id === "area").value
+          : ""
       }),
     200
   );

@@ -72,30 +72,32 @@ class SubCategories extends Component {
         width: 70
       },
       { Header: "Sub-Category", accessor: "name", id: "subcategory" },
-      // {
-      //   Header: "Extra Sections",
-      //   accessor: "extra_section",
-      //   Cell: ({ value }) => value.join(", "),
-      //   sortable: false,
-      //   filterable: false
-      //   // Filter: () => (
-      //   //   <Select
-      //   //     clearable
-      //   //     tabSelectsValue={false}
-      //   //     multi
-      //   //     value={this.state.filterExtrasection}
-      //   //     onChange={this.handleSelectChange.bind(this, "filterExtrasection")}
-      //   //     options={this.props.extra_sections.data}
-      //   //   />
-      //   // )
-      // },
-      // {
-      //   Header: "Tags",
-      //   accessor: "tags",
-      //   Cell: ({ value }) => value.join(", "),
-      //   sortable: false,
-      //   filterable: false
-      // },
+      {
+        Header: "Extra Sections",
+        accessor: "extra_sections",
+        Cell: ({ value }) => value.join(", "),
+        sortable: false,
+        filterable: true,
+        Filter: () => (
+          <Select
+            clearable
+            tabSelectsValue={false}
+            multi
+            value={this.props.filterExtraSection}
+            onChange={filterExtraSection =>
+              this.props.handleOnSubCategoryFilterChange({ filterExtraSection })
+            }
+            options={this.props.extra_sections.data}
+          />
+        )
+      },
+      {
+        Header: "Tags",
+        accessor: "tags",
+        Cell: ({ value }) => value.join(", "),
+        sortable: false,
+        filterable: true
+      },
       {
         Header: "Category",
         accessor: "category",
@@ -189,7 +191,16 @@ class SubCategories extends Component {
       }
     ],
     onFilteredChange: (column, value) => {
-      value.id === "subcategory" && this.debouncedSearch(column);
+      switch (value.id) {
+        case "subcategory":
+          this.debouncedSearch(column);
+          break;
+        case "tags":
+          this.debouncedTagsSearch(column);
+          break;
+        default:
+          return;
+      }
     },
     manual: true,
     minRows: 5,
@@ -227,7 +238,19 @@ class SubCategories extends Component {
   debouncedSearch = debounce(
     column =>
       this.props.handleOnSubCategoryFilterChange({
-        name: column.length ? column[0].value : ""
+        name: column.filter(x => x.id === "subcategory").length
+          ? column.find(x => x.id === "subcategory").value
+          : ""
+      }),
+    200
+  );
+
+  debouncedTagsSearch = debounce(
+    column =>
+      this.props.handleOnSubCategoryFilterChange({
+        tags: column.filter(x => x.id === "tags").length
+          ? column.find(x => x.id === "tags").value
+          : ""
       }),
     200
   );
