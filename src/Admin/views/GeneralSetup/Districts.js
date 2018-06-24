@@ -51,8 +51,7 @@ class Districts extends Component {
     state: "",
     district: "",
     districtCode: "",
-    districtSubmit: false,
-    stateSearchText: ""
+    districtSubmit: false
   };
 
   tableProps = {
@@ -65,7 +64,7 @@ class Districts extends Component {
         width: 70
       },
       { Header: "District", accessor: "name", id: "district" },
-      { Header: "Code", accessor: "districtCode", filterable: false },
+      { Header: "Code", accessor: "districtCode", id: "code", sortable: false },
       {
         Header: "State",
         accessor: "state",
@@ -76,14 +75,7 @@ class Districts extends Component {
             tabSelectsValue={false}
             multi
             isLoading={this.props.statesFetchLoading}
-            onInputChange={stateSearchText => {
-              this.setState(
-                { stateSearchText },
-                () =>
-                  stateSearchText &&
-                  this.debouncedStateAutocomplete(stateSearchText)
-              );
-            }}
+            onInputChange={this.debouncedStateAutocomplete}
             value={this.props.filterState}
             onChange={filterState =>
               this.props.handleOnDistrictFilterChange({ filterState })
@@ -92,7 +84,7 @@ class Districts extends Component {
             labelKey="name"
             filterOptions={options => options}
             options={
-              this.state.stateSearchText && !this.props.statesFetchLoading
+              !this.props.statesFetchLoading
                 ? this.props.states.filter(
                     state =>
                       !this.props.filterState.length ||
@@ -101,9 +93,7 @@ class Districts extends Component {
                 : []
             }
             noResultsText={
-              this.state.stateSearchText && !this.props.statesFetchLoading
-                ? "No Results Found"
-                : "Start Typing..."
+              !this.props.statesFetchLoading ? "No Results Found" : "Loading..."
             }
           />
         )
@@ -164,6 +154,7 @@ class Districts extends Component {
     ],
     onFilteredChange: (column, value) => {
       value.id === "district" && this.debouncedSearch(column);
+      value.id === "code" && this.debouncedCodeSearch(column);
     },
     manual: true,
     sortable: true,
@@ -176,7 +167,7 @@ class Districts extends Component {
   componentDidMount() {
     this.props.onCountryList();
     this.props.onDistrictList();
-    this.props.onStateList();
+    this.props.onStateList({ rows: 50, page: 1 });
   }
 
   componentDidUpdate = (_, prevState) => {
@@ -201,6 +192,16 @@ class Districts extends Component {
       this.props.handleOnDistrictFilterChange({
         name: column.filter(x => x.id === "district").length
           ? column.find(x => x.id === "district").value
+          : ""
+      }),
+    200
+  );
+
+  debouncedCodeSearch = debounce(
+    column =>
+      this.props.handleOnDistrictFilterChange({
+        code: column.filter(x => x.id === "code").length
+          ? column.find(x => x.id === "code").value
           : ""
       }),
     200
@@ -348,8 +349,8 @@ class Districts extends Component {
           {...this.tableProps}
           style={{ background: "white" }}
           data={this.props.districts}
-          defaultPageSize={this.props.rows}
-          defaultSorted={this.props.sort_by}
+          pageSize={this.props.rows}
+          sorted={this.props.sort_by}
           loading={this.props.fetchLoading}
           onPageChange={pageIndex =>
             this.props.onDistrictList({ page: pageIndex + 1 })

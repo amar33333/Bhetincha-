@@ -225,8 +225,8 @@ class Categories extends Component {
           {...this.tableProps}
           style={{ background: "white" }}
           data={this.props.categories}
-          defaultPageSize={this.props.rows}
-          defaultSorted={this.props.sort_by}
+          pageSize={this.props.rows}
+          sorted={this.props.sort_by}
           loading={this.props.fetchLoading}
           onPageChange={pageIndex =>
             this.props.onCategoryList({ page: pageIndex + 1 })

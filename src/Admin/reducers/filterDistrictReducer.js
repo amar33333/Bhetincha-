@@ -2,11 +2,13 @@ import {
   DISTRICT_FILTER_ON_CHANGE,
   CLEAR_DISTRICT_ALL,
   FETCH_DISTRICT_FULFILLED,
-  DISTRICT_SET_SORT_BY
+  DISTRICT_SET_SORT_BY,
+  UNMOUNT_DISTRICT
 } from "../actions/types";
 
 const INITIAL_STATE = {
   name: "",
+  code: "",
   sortby: [],
   rows: 20,
   page: 1,
@@ -25,6 +27,7 @@ export default function(state = INITIAL_STATE, action) {
     case DISTRICT_SET_SORT_BY:
       return { ...state, sortby: action.payload };
 
+    case UNMOUNT_DISTRICT:
     case CLEAR_DISTRICT_ALL:
       return INITIAL_STATE;
 

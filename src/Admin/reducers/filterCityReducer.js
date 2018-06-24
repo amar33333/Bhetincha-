@@ -2,7 +2,8 @@ import {
   CITY_FILTER_ON_CHANGE,
   CLEAR_CITY_ALL,
   FETCH_CITY_FULFILLED,
-  CITY_SET_SORT_BY
+  CITY_SET_SORT_BY,
+  UNMOUNT_CITY
 } from "../actions/types";
 
 const INITIAL_STATE = {
@@ -27,6 +28,7 @@ export default function(state = INITIAL_STATE, action) {
       return { ...state, sortby: action.payload };
 
     case CLEAR_CITY_ALL:
+    case UNMOUNT_CITY:
       return INITIAL_STATE;
 
     default:
