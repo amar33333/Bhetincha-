@@ -110,30 +110,6 @@ class Contact extends Component {
               header={branch.area ? `${branch.area.name} Branch` : null}
             />
             <Card.Content>
-<<<<<<< HEAD
-              {(branch.addressLine1 || branch.addressLine2) && (
-                <p>
-                  {branch.addressLine1}
-                  {branch.addressLine1 && `,`} {branch.addressLine2}{" "}
-                </p>
-              )}
-              <p>{`${branch.area.name}, ${branch.city.name}, ${
-                branch.district.name
-              }`}</p>
-              <p>{branch.landmark && `(${branch.landmark})`}</p>
-              {branch.landlineNumber && (
-                <p>
-                  <i className="fa fa-phone" /> {branch.landlineNumber}{" "}
-                </p>
-              )}
-              {branch.email && (
-                <p>
-                  <i className="fa fa-envelope" /> {branch.email}{" "}
-                </p>
-              )}
-              {branch.contactPerson &&
-                branch.contactPerson.map(person => (
-=======
               <p>
                 {branch.area
                   ? `${branch.area.name}, ${branch.city.name}, ${
@@ -144,7 +120,6 @@ class Contact extends Component {
               <p>{branch.landmark}</p>
               {this.props.branchAddress.contactPerson &&
                 this.props.branchAddress.contactPerson.map(person => (
->>>>>>> master
                   <div>
                     <p className="mt-3">
                       <i className="fa fa-user" />{" "}
@@ -199,24 +174,11 @@ class Contact extends Component {
               </h2>
             </Col>
           </Row>
-<<<<<<< HEAD
-          <Row
-            className="mt-5 mb-5"
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "center"
-            }}
-          >
-            {this.renderPrimaryAddress()}
-            {this.renderBranchAddress()}
-=======
           <Row className="mt-5 mb-5">
             {this.props.address && this.renderPrimaryAddress()}
             {this.props.branchAddress &&
               this.props.branchAddress.length &&
               this.renderBranchAddress()}
->>>>>>> master
           </Row>
         </Container>
       </div>
