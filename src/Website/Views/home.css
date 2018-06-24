@@ -407,7 +407,7 @@ input.main-nav-search::placeholder {
   position: absolute;
   top: 51px;
   width: 280px;
-  border: 1px solid #aaa;
+  border: 1px solid rgb(224, 215, 215);
   background-color: #fff;
   font-family: Helvetica, sans-serif;
   font-weight: 300;

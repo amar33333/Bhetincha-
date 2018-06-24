@@ -76,16 +76,22 @@ class BusinessFooter extends Component {
                   <i className="fa fa-google-plus fa-stack-1x" />
                 </span>
               </Row>
-              <Row>
-                <div className="toll-free">
-                  <h4>Call us Now!</h4>
-                  <h2>
-                    <a href={`tel:${this.props.business_phone}`}>
-                      {this.props.business_phone}
-                    </a>
-                  </h2>
-                </div>
-              </Row>
+              {this.props.business_phone && (
+                <Row>
+                  <div className="toll-free">
+                    <h4 className="mb-0">Call us Now!</h4>
+                    <h1 className="mt-0">
+                      <a
+                        href={`tel:${this.props.address.tollFreeNumber ||
+                          this.props.business_phone}`}
+                      >
+                        {this.props.address.tollFreeNumber ||
+                          this.props.business_phone}
+                      </a>
+                    </h1>
+                  </div>
+                </Row>
+              )}
             </Col>
           </Row>
         </Container>
