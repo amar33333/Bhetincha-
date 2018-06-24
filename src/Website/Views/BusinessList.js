@@ -42,7 +42,9 @@ class BusinessList extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    const parsedUrlStringObject = querystring.parse(this.props.location.search);
+    const parsedUrlStringObject = querystring.parse(
+      this.props.location.search.slice(1)
+    );
 
     if (this.props.location.search !== prevProps.location.search)
       this.props.onSearchResultsList({

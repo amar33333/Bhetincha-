@@ -33,7 +33,7 @@ class Contact extends Component {
     return (
       this.props.address && (
         <Col sm="3">
-          <Card>
+          <Card className="mb-3">
             <Card.Content header="Head Office" />
             <Card.Content>
               <p>{`${this.props.address.area.name}, ${
@@ -77,12 +77,18 @@ class Contact extends Component {
       this.props.branchAddress &&
       this.props.branchAddress.map(branch => (
         <Col sm="3">
-          <Card>
-            <Card.Content header={`${branch.area.name} Branch`} />
+          <Card className="mb-3">
+            <Card.Content
+              header={branch.area ? `${branch.area.name} Branch` : null}
+            />
             <Card.Content>
-              <p>{`${branch.area.name}, ${branch.city.name}, ${
-                branch.district.name
-              }`}</p>
+              <p>
+                {branch.area
+                  ? `${branch.area.name}, ${branch.city.name}, ${
+                      branch.district.name
+                    }`
+                  : null}
+              </p>
               <p>{branch.landmark}</p>
               {this.props.branchAddress.contactPerson &&
                 this.props.branchAddress.contactPerson.map(person => (
@@ -137,8 +143,10 @@ class Contact extends Component {
             </Col>
           </Row>
           <Row className="mt-5 mb-5">
-            {this.renderPrimaryAddress()}
-            {this.renderBranchAddress()}
+            {this.props.address && this.renderPrimaryAddress()}
+            {this.props.branchAddress &&
+              this.props.branchAddress.length &&
+              this.renderBranchAddress()}
           </Row>
         </Container>
       </div>
