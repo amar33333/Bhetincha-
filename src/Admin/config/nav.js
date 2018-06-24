@@ -70,8 +70,8 @@ const items = {
     {
       name: "List App Business",
       url: "/admin/approve-app-business",
-      icon: "fa fa-industry"
-      //permission: "CAN_VIEW_BUSINESS"
+      icon: "fa fa-industry",
+      permission: "CAN_VIEW_APP_BUSINESS"
     },
     {
       name: "Industry",
@@ -138,6 +138,24 @@ const items = {
       url: "/admin/tele-calling",
       icon: "fa fa-headphones",
       permission: "CAN_VIEW_USER"
+    },
+    {
+      title: true,
+      name: "Ecommerce"
+    },
+    {
+      name: "Ecommerce",
+      url: "/admin/ecommerce",
+      icon: "fa fa-users",
+      permission: "CAN_VIEW_ECOMMERCE",
+      children: [
+        {
+          name: "Manage Categories",
+          url: "/admin/ecommerce/categories",
+          icon: "icon-user-follow",
+          permission: "CAN_VIEW_ECOMMERCE_CATEGORIES"
+        }
+      ]
     },
     {
       title: true,

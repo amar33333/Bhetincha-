@@ -4,12 +4,12 @@ import { connect } from "react-redux";
 import ReactTable from "react-table";
 import Select from "react-select";
 import moment from "moment";
+import debounce from "lodash.debounce";
 import {
   Button,
   Row,
   Col,
   Label,
-  Container,
   Card,
   CardHeader,
   CardBody,
@@ -29,14 +29,32 @@ import {
   onBusinessAllGet,
   onBusinessEachDelete,
   onIndustryList,
+  onCountryList,
   onFilterCleared,
+  handleOnStateFilterChange,
+  handleOnDistrictFilterChange,
+  handleOnCityFilterChange,
+  handleOnAreaFilterChange,
+  handleOnCategoryFilterChange,
+  handleOnSubCategoryFilterChange,
   handleOnBusinessFilterChange,
   handleSearchKeywordCleared,
   onUnmountIndustry,
-  handleSortChangeBusiness
+  handleSortChangeBusiness,
+  onBusinessVerify
 } from "../../actions";
 
 class BusinessList extends Component {
+  state = {
+    categorySearchText: "",
+    subCategorySearchText: "",
+    stateSearchText: "",
+    districtSearchText: "",
+    citySearchText: "",
+    areaSearchText: "",
+    q: ""
+  };
+
   tableProps = {
     columns: [
       {
@@ -116,6 +134,40 @@ class BusinessList extends Component {
                 this.props.onBusinessEachDelete({ id: props.original.id })
               }
             />
+
+            <Button
+              color="primary"
+              className="mr-2"
+              onClick={() =>
+                this.props.history.push({
+                  pathname: `${this.props.match.path}/${
+                    props.value
+                  }/manage-branchs`,
+                  state: {
+                    id: props.original.id,
+                    slug: props.original.slug
+                  }
+                })
+              }
+            >
+              <i className="fa fa-pencil" /> Manage Branchs
+            </Button>
+
+            <Button
+              color="success"
+              className="mr-2"
+              onClick={() => {
+                console.log("verify button clicked: ", props);
+                this.props.onBusinessVerify({
+                  id: props.original.id,
+                  body: {
+                    verified: true
+                  }
+                });
+              }}
+            >
+              <i className="fa fa-pencil" /> Verify
+            </Button>
           </div>
         ),
         sortable: false,
@@ -130,24 +182,92 @@ class BusinessList extends Component {
     PaginationComponent
   };
 
+  debouncedCategoryAutocomplete = debounce(
+    name =>
+      this.props.handleOnCategoryFilterChange({
+        name,
+        filterIndustry: this.props.filterIndustry
+      }),
+    200
+  );
+
+  debouncedSubCategoryAutocomplete = debounce(
+    name =>
+      this.props.handleOnSubCategoryFilterChange({
+        name,
+        filterIndustry: this.props.filterIndustry,
+        filterCategory: this.props.filterCategory
+      }),
+    200
+  );
+
+  debouncedStateAutocomplete = debounce(
+    name =>
+      this.props.handleOnStateFilterChange({
+        name,
+        filterCountry: this.props.filterCountry
+      }),
+    200
+  );
+
+  debouncedDistrictAutocomplete = debounce(
+    name =>
+      this.props.handleOnDistrictFilterChange({
+        name,
+        filterCountry: this.props.filterCountry,
+        filterState: this.props.filterState
+      }),
+    200
+  );
+
+  debouncedCityAutocomplete = debounce(
+    name =>
+      this.props.handleOnCityFilterChange({
+        name,
+        filterCountry: this.props.filterCountry,
+        filterState: this.props.filterState,
+        filterDistrict: this.props.filterDistrict
+      }),
+    200
+  );
+
+  debouncedAreaAutocomplete = debounce(
+    name =>
+      this.props.handleOnAreaFilterChange({
+        name,
+        filterCountry: this.props.filterCountry,
+        filterState: this.props.filterState,
+        filterDistrict: this.props.filterDistrict,
+        filterCity: this.props.filterCity
+      }),
+    200
+  );
+
   componentDidMount = () => {
     this.props.onIndustryList();
+    this.props.onCountryList();
     this.props.onBusinessAllGet();
   };
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.q !== this.props.q) {
+      this.setState({ q: this.props.q });
+    }
+  }
 
   componentWillUnmount = () => {
     this.props.onUnmountIndustry();
   };
 
-  handleChange = (key, event) =>
-    this.props.handleOnBusinessFilterChange({ [key]: event.target.value });
+  handleChange = (key, event) => this.setState({ [key]: event.target.value });
+  // this.props.handleOnBusinessFilterChange({ [key]: event.target.value });
 
   handleIndustryChange = industry =>
     this.props.handleOnBusinessFilterChange({ industry });
 
   handleSearchKeywordSubmit = event => {
     event.preventDefault();
-    this.props.onBusinessAllGet();
+    this.props.handleOnBusinessFilterChange({ q: this.state.q });
   };
 
   render() {
@@ -157,84 +277,391 @@ class BusinessList extends Component {
           <Col xs="12" md="12">
             <Card>
               <CardHeader>
-                <strong>Filter and Search</strong>
+                <strong>Filters</strong>
+                <Button
+                  className="pull-right"
+                  color="link"
+                  onClick={this.props.onFilterCleared}
+                >
+                  <i className="fa fa-close" /> Clear Filter
+                </Button>
               </CardHeader>
               <CardBody>
-                <Row>
-                  <Col xs="6" md="4">
-                    <FormGroup>
-                      <Select
-                        // autosize
-                        disabled={this.props.industryLoading}
-                        isLoading={this.props.industryLoading}
-                        labelKey="name"
-                        multi
-                        onChange={this.handleIndustryChange}
-                        options={this.props.industries}
-                        placeholder="Filter Industry"
-                        value={this.props.industry}
-                        valueKey="id"
-                      />
-                    </FormGroup>
-                  </Col>
-                  <Col xs="1" md="1">
-                    <Button
-                      color="primary"
-                      onClick={this.props.onBusinessAllGet}
-                    >
-                      <i className="fa fa-filter" /> Filter
-                    </Button>
-                  </Col>
-                  <Col xs="1" md="1">
-                    <FormGroup>
-                      <Button
-                        color="danger"
-                        onClick={this.props.onFilterCleared}
-                      >
-                        <i className="fa fa-close" /> Clear
-                      </Button>
-                    </FormGroup>
-                  </Col>
-                  <Col xs="6" md="4">
-                    <Form onSubmit={this.handleSearchKeywordSubmit}>
-                      <InputGroup>
-                        <Input
-                          placeholder="Search for Business Name"
-                          onChange={this.handleChange.bind(null, "q")}
-                          value={this.props.q}
-                        />
-                        <InputGroupAddon addonType="append">
-                          <Button color="warning">
-                            <i className="fa fa-search" /> Search{" "}
-                          </Button>
-                        </InputGroupAddon>
-                      </InputGroup>
-                      {/* <Input
-                        placeholder="Search for Business Name"
-                        onChange={this.handleChange.bind(null, "q")}
-                        value={this.props.q}
-                      />
-
+                <Form>
+                  <Row>
+                    <Col xs="12" md="4">
                       <FormGroup>
-                        <Button color="primary">
-                          <i className="fa fa-search" /> Search
-                        </Button>
-                      </FormGroup> */}
-                    </Form>
-                  </Col>
-                  <Col xs="2" md="1">
-                    <FormGroup>
-                      <Button
-                        color="danger"
-                        onClick={this.props.handleSearchKeywordCleared}
-                      >
-                        <i className="fa fa-close" /> Clear Search
-                      </Button>
-                    </FormGroup>
-                  </Col>
-                </Row>
+                        <Label for="filterIndustry">Industry</Label>
+
+                        <Select
+                          id="filterIndustry"
+                          clearable
+                          multi
+                          tabSelectsValue={false}
+                          isLoading={this.props.industriesFetchLoading}
+                          value={this.props.filterIndustry}
+                          onChange={filterIndustry =>
+                            this.props.handleOnBusinessFilterChange({
+                              filterIndustry
+                            })
+                          }
+                          valueKey="id"
+                          labelKey="name"
+                          options={this.props.industries}
+                        />
+                      </FormGroup>
+                    </Col>
+                    <Col xs="12" md="4">
+                      <FormGroup>
+                        <Label for="filterCategory">Category</Label>
+
+                        <Select
+                          clearable
+                          id="filterCategory"
+                          tabSelectsValue={false}
+                          multi
+                          isLoading={this.props.categoriesFetchLoading}
+                          onInputChange={categorySearchText => {
+                            this.setState(
+                              { categorySearchText },
+                              () =>
+                                categorySearchText &&
+                                this.debouncedCategoryAutocomplete(
+                                  categorySearchText
+                                )
+                            );
+                          }}
+                          value={this.props.filterCategory}
+                          onChange={filterCategory =>
+                            this.props.handleOnBusinessFilterChange({
+                              filterCategory
+                            })
+                          }
+                          valueKey="id"
+                          labelKey="name"
+                          filterOptions={options => options}
+                          options={
+                            this.state.categorySearchText &&
+                            !this.props.categoriesFetchLoading
+                              ? this.props.categories.filter(
+                                  category =>
+                                    !this.props.filterCategory.length ||
+                                    !this.props.filterCategory
+                                      .map(x => x.id)
+                                      .includes(category.id)
+                                )
+                              : []
+                          }
+                          noResultsText={
+                            this.state.categorySearchText &&
+                            !this.props.categoriesFetchLoading
+                              ? "No Results Found"
+                              : "Start Typing..."
+                          }
+                        />
+                      </FormGroup>
+                    </Col>
+                    <Col xs="12" md="4">
+                      <FormGroup>
+                        <Label for="filterSubCategory">Sub Category</Label>
+
+                        <Select
+                          clearable
+                          id="filterSubCategory"
+                          tabSelectsValue={false}
+                          multi
+                          isLoading={this.props.subCategoriesFetchLoading}
+                          onInputChange={subCategorySearchText => {
+                            this.setState(
+                              { subCategorySearchText },
+                              () =>
+                                subCategorySearchText &&
+                                this.debouncedSubCategoryAutocomplete(
+                                  subCategorySearchText
+                                )
+                            );
+                          }}
+                          value={this.props.filterSubCategory}
+                          onChange={filterSubCategory =>
+                            this.props.handleOnBusinessFilterChange({
+                              filterSubCategory
+                            })
+                          }
+                          valueKey="id"
+                          labelKey="name"
+                          filterOptions={options => options}
+                          options={
+                            this.state.subCategorySearchText &&
+                            !this.props.subCategoriesFetchLoading
+                              ? this.props.subCategories.filter(
+                                  subCategory =>
+                                    !this.props.filterSubCategory.length ||
+                                    !this.props.filterSubCategory
+                                      .map(x => x.id)
+                                      .includes(subCategory.id)
+                                )
+                              : []
+                          }
+                          noResultsText={
+                            this.state.subCategorySearchText &&
+                            !this.props.subCategoriesFetchLoading
+                              ? "No Results Found"
+                              : "Start Typing..."
+                          }
+                        />
+                      </FormGroup>
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col xs="12" md="4">
+                      <FormGroup>
+                        <Label for="filterCountry">Country</Label>
+
+                        <Select
+                          id="filterCountry"
+                          isLoading={this.props.countriesFetchLoading}
+                          clearable
+                          tabSelectsValue={false}
+                          multi
+                          value={this.props.filterCountry}
+                          onChange={filterCountry =>
+                            this.props.handleOnBusinessFilterChange({
+                              filterCountry
+                            })
+                          }
+                          valueKey="id"
+                          labelKey="name"
+                          options={this.props.countries}
+                        />
+                      </FormGroup>
+                    </Col>
+                    <Col xs="12" md="4">
+                      <FormGroup>
+                        <Label for="filterState">State</Label>
+
+                        <Select
+                          id="filterState"
+                          clearable
+                          tabSelectsValue={false}
+                          multi
+                          isLoading={this.props.statesFetchLoading}
+                          onInputChange={stateSearchText => {
+                            this.setState(
+                              { stateSearchText },
+                              () =>
+                                stateSearchText &&
+                                this.debouncedStateAutocomplete(stateSearchText)
+                            );
+                          }}
+                          value={this.props.filterState}
+                          onChange={filterState =>
+                            this.props.handleOnBusinessFilterChange({
+                              filterState
+                            })
+                          }
+                          valueKey="id"
+                          labelKey="name"
+                          filterOptions={options => options}
+                          options={
+                            this.state.stateSearchText &&
+                            !this.props.statesFetchLoading
+                              ? this.props.states.filter(
+                                  state =>
+                                    !this.props.filterState.length ||
+                                    !this.props.filterState
+                                      .map(x => x.id)
+                                      .includes(state.id)
+                                )
+                              : []
+                          }
+                          noResultsText={
+                            this.state.stateSearchText &&
+                            !this.props.statesFetchLoading
+                              ? "No Results Found"
+                              : "Start Typing..."
+                          }
+                        />
+                      </FormGroup>
+                    </Col>
+                    <Col xs="12" md="4">
+                      <FormGroup>
+                        <Label for="filterDistrict">District</Label>
+
+                        <Select
+                          id="filterDistrict"
+                          clearable
+                          tabSelectsValue={false}
+                          multi
+                          isLoading={this.props.districtsFetchLoading}
+                          onInputChange={districtSearchText => {
+                            this.setState(
+                              { districtSearchText },
+                              () =>
+                                districtSearchText &&
+                                this.debouncedDistrictAutocomplete(
+                                  districtSearchText
+                                )
+                            );
+                          }}
+                          value={this.props.filterDistrict}
+                          onChange={filterDistrict =>
+                            this.props.handleOnBusinessFilterChange({
+                              filterDistrict
+                            })
+                          }
+                          valueKey="id"
+                          labelKey="name"
+                          filterOptions={options => options}
+                          options={
+                            this.state.districtSearchText &&
+                            !this.props.districtsFetchLoading
+                              ? this.props.districts.filter(
+                                  district =>
+                                    !this.props.filterDistrict.length ||
+                                    !this.props.filterDistrict
+                                      .map(x => x.id)
+                                      .includes(district.id)
+                                )
+                              : []
+                          }
+                          noResultsText={
+                            this.state.districtSearchText &&
+                            !this.props.districtsFetchLoading
+                              ? "No Results Found"
+                              : "Start Typing..."
+                          }
+                        />
+                      </FormGroup>
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col xs="12" md="4">
+                      <FormGroup>
+                        <Label for="filterCity">City</Label>
+
+                        <Select
+                          id="filterCity"
+                          clearable
+                          tabSelectsValue={false}
+                          multi
+                          isLoading={this.props.citiesFetchLoading}
+                          onInputChange={citySearchText => {
+                            this.setState(
+                              { citySearchText },
+                              () =>
+                                citySearchText &&
+                                this.debouncedCityAutocomplete(citySearchText)
+                            );
+                          }}
+                          value={this.props.filterCity}
+                          onChange={filterCity =>
+                            this.props.handleOnBusinessFilterChange({
+                              filterCity
+                            })
+                          }
+                          valueKey="id"
+                          labelKey="name"
+                          filterOptions={options => options}
+                          options={
+                            this.state.citySearchText &&
+                            !this.props.citiesFetchLoading
+                              ? this.props.cities.filter(
+                                  city =>
+                                    !this.props.filterCity.length ||
+                                    !this.props.filterCity
+                                      .map(x => x.id)
+                                      .includes(city.id)
+                                )
+                              : []
+                          }
+                          noResultsText={
+                            this.state.citySearchText &&
+                            !this.props.citiesFetchLoading
+                              ? "No Results Found"
+                              : "Start Typing..."
+                          }
+                        />
+                      </FormGroup>
+                    </Col>
+                    <Col xs="12" md="4">
+                      <FormGroup>
+                        <Label for="filterArea">Area</Label>
+
+                        <Select
+                          id="filterArea"
+                          clearable
+                          tabSelectsValue={false}
+                          multi
+                          isLoading={this.props.areasFetchLoading}
+                          onInputChange={areaSearchText => {
+                            this.setState(
+                              { areaSearchText },
+                              () =>
+                                areaSearchText &&
+                                this.debouncedAreaAutocomplete(areaSearchText)
+                            );
+                          }}
+                          value={this.props.filterArea}
+                          onChange={filterArea =>
+                            this.props.handleOnBusinessFilterChange({
+                              filterArea
+                            })
+                          }
+                          valueKey="id"
+                          labelKey="name"
+                          filterOptions={options => options}
+                          options={
+                            this.state.areaSearchText &&
+                            !this.props.areasFetchLoading
+                              ? this.props.areas.filter(
+                                  area =>
+                                    !this.props.filterArea.length ||
+                                    !this.props.filterArea
+                                      .map(x => x.id)
+                                      .includes(area.id)
+                                )
+                              : []
+                          }
+                          noResultsText={
+                            this.state.areaSearchText &&
+                            !this.props.areasFetchLoading
+                              ? "No Results Found"
+                              : "Start Typing..."
+                          }
+                        />
+                      </FormGroup>
+                    </Col>
+                  </Row>
+                </Form>
               </CardBody>
             </Card>
+          </Col>
+        </Row>
+        <Row>
+          <Col xs="12">
+            <Button
+              className="float-right"
+              color="link"
+              onClick={this.props.handleSearchKeywordCleared}
+            >
+              <i className="fa fa-close" /> Clear Search
+            </Button>
+            <Form onSubmit={this.handleSearchKeywordSubmit}>
+              <FormGroup>
+                <InputGroup>
+                  <Input
+                    placeholder="Search for Business Name"
+                    onChange={this.handleChange.bind(null, "q")}
+                    value={this.state.q}
+                  />
+                  <InputGroupAddon addonType="append">
+                    <Button color="warning">
+                      <i className="fa fa-search" /> Search{" "}
+                    </Button>
+                  </InputGroupAddon>
+                </InputGroup>
+              </FormGroup>
+            </Form>
           </Col>
         </Row>
         <Row>
@@ -271,12 +698,43 @@ export default connect(
   ({
     AdminContainer: {
       business_reducer: { businesses, fetchLoading, pages, rowCount },
+      categories: { categories, fetchLoading: categoriesFetchLoading },
+      sub_categories: {
+        subCategories,
+        fetchLoading: subCategoriesFetchLoading
+      },
+      general_setup: {
+        countries,
+        countriesFetchLoading,
+        states,
+        statesFetchLoading,
+        districts,
+        districtsFetchLoading,
+        cities,
+        citiesFetchLoading,
+        areas,
+        areasFetchLoading
+      },
       filterBusiness,
-      industries
+      industries: { industries, fetchLoading: industriesFetchLoading }
     }
   }) => ({
-    industries: industries.industries,
-    industryLoading: industries.loading,
+    industries,
+    industriesFetchLoading,
+    categories,
+    categoriesFetchLoading,
+    subCategories,
+    subCategoriesFetchLoading,
+    countries,
+    countriesFetchLoading,
+    states,
+    statesFetchLoading,
+    districts,
+    districtsFetchLoading,
+    cities,
+    citiesFetchLoading,
+    areas,
+    areasFetchLoading,
     businesses,
     pages,
     rowCount,
@@ -287,10 +745,18 @@ export default connect(
     onBusinessAllGet,
     onBusinessEachDelete,
     onIndustryList,
+    onCountryList,
     onFilterCleared,
+    handleOnStateFilterChange,
+    handleOnDistrictFilterChange,
+    handleOnCityFilterChange,
+    handleOnAreaFilterChange,
+    handleOnCategoryFilterChange,
+    handleOnSubCategoryFilterChange,
     handleOnBusinessFilterChange,
     handleSearchKeywordCleared,
     handleSortChangeBusiness,
-    onUnmountIndustry
+    onUnmountIndustry,
+    onBusinessVerify
   }
 )(BusinessList);

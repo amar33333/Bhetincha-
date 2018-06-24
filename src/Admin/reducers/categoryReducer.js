@@ -18,6 +18,8 @@ const INITIAL_STATE = {
   loading: false,
   fetchLoading: false,
   error: false,
+  pages: 1,
+  rowCount: 0,
   categories: [],
   categoryData: [],
   categoryEditModal: false
@@ -43,10 +45,12 @@ export default function(state = INITIAL_STATE, action) {
     case FETCH_CATEGORY_FULFILLED:
       return {
         ...state,
-        categories: action.payload.map((category, i) => ({
+        categories: action.payload.data.map((category, i) => ({
           ...category,
-          s_no: i + 1
+          s_no: action.payload.rows * (action.payload.page - 1) + i + 1
         })),
+        pages: action.payload.pages,
+        rowCount: action.payload.rowCount,
         fetchLoading: false
       };
 

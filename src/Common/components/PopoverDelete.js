@@ -14,6 +14,7 @@ class PopoverItem extends React.Component {
           color="danger"
           id={"Popover-" + this.props.id}
           onClick={this.toggle}
+          disabled={this.props.disabled}
         >
           <i className="fa fa-close" /> {this.props.text || "Delete"}
         </Button>

@@ -26,25 +26,66 @@ class PhoneVerificationModal extends Component {
 
   renderFormField = () => {
     return !this.props.phone_verification_request ? (
-      <Input
-        autoFocus
-        required
-        //disabled={this.props.loading}
-        type="text"
-        placeholder="Mobile Number"
-        value={this.state.phone}
-        onChange={this.onChange.bind(this, "phone")}
-      />
+      <div>
+        <InputGroup className="mb-3">
+          <InputGroupAddon addonType="prepend">
+            <InputGroupText>
+              <i className="icon-user" />
+            </InputGroupText>
+          </InputGroupAddon>
+          <Input
+            autoFocus
+            required
+            //disabled={this.props.loading}
+            type="text"
+            placeholder="Mobile Number"
+            value={this.state.phone}
+            onChange={this.onChange.bind(this, "phone")}
+          />
+        </InputGroup>
+        <Row>
+          <Col xs="6">
+            <LaddaButton
+              //loading={this.props.loading}
+              data-size={S}
+              data-style={EXPAND_RIGHT}
+            >
+              CLAIM
+            </LaddaButton>
+          </Col>
+        </Row>
+      </div>
     ) : (
-      <Input
-        autoFocus
-        required
-        //disabled={this.props.loading}
-        type="text"
-        placeholder="Enter the verification code"
-        value={this.state.verificationToken}
-        onChange={this.onChange.bind(this, "verificationToken")}
-      />
+      <div>
+        <InputGroup className="mb-3">
+          <InputGroupAddon addonType="prepend">
+            <InputGroupText>
+              <i className="icon-user" />
+            </InputGroupText>
+          </InputGroupAddon>
+
+          <Input
+            autoFocus
+            required
+            //disabled={this.props.loading}
+            type="text"
+            placeholder="Enter the verification code"
+            value={this.state.verificationToken}
+            onChange={this.onChange.bind(this, "verificationToken")}
+          />
+        </InputGroup>
+        <Row>
+          <Col xs="6">
+            <LaddaButton
+              //loading={this.props.loading}
+              data-size={S}
+              data-style={EXPAND_RIGHT}
+            >
+              VERIFY
+            </LaddaButton>
+          </Col>
+        </Row>
+      </div>
     );
 
     // return (
@@ -79,29 +120,7 @@ class PhoneVerificationModal extends Component {
 
   render() {
     console.log("phonde model: ", this.props);
-    return (
-      <Form onSubmit={this.onFormSubmit}>
-        <InputGroup className="mb-3">
-          <InputGroupAddon addonType="prepend">
-            <InputGroupText>
-              <i className="icon-user" />
-            </InputGroupText>
-          </InputGroupAddon>
-          {this.renderFormField()}
-        </InputGroup>
-        <Row>
-          <Col xs="6">
-            <LaddaButton
-              //loading={this.props.loading}
-              data-size={S}
-              data-style={EXPAND_RIGHT}
-            >
-              Verify
-            </LaddaButton>
-          </Col>
-        </Row>
-      </Form>
-    );
+    return <Form onSubmit={this.onFormSubmit}>{this.renderFormField()}</Form>;
   }
 }
 

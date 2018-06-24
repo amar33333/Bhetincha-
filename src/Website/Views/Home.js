@@ -82,11 +82,12 @@ class Home extends Component {
               <AutoSuggestion
                 placeholder="Search anything..."
                 valueKey="business_name"
+                autoFocus
                 suggestions={this.props.search_result.data}
                 onSuggestionsFetchRequested={this.props.onSearchQuerySubmit}
-                onSearchItemSelected={business => {
-                  this.props.history.push(`/${business.slug}`);
-                }}
+                // onSearchItemSelected={business => {
+                //   this.props.history.push(`/${business.slug}`);
+                // }}
                 onSearchComplete={keyword => {
                   this.props.history.push({
                     pathname: "/businesses",

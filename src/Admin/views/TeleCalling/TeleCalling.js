@@ -12,6 +12,7 @@ import {
   FormGroup,
   Card,
   CardBody,
+  Badge,
   CardHeader
 } from "reactstrap";
 import debounce from "lodash.debounce";
@@ -158,6 +159,14 @@ class TeleCalling extends Component {
                     options={
                       this.state.locationSearchText ? this.props.locations : []
                     }
+                    optionRenderer={({ name, type }) => (
+                      <div>
+                        {name}
+                        <Badge color="light" pill>
+                          {type}
+                        </Badge>
+                      </div>
+                    )}
                     noResultsText={
                       this.state.locationSearchText &&
                       !this.props.locationsFetchLoading

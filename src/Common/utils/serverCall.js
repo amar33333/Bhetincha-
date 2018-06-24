@@ -6,7 +6,9 @@ import {
   INDIVIDUAL_REGISTER_URL,
   GET_USER_INFO_URL,
   PHONE_VERIFICATION_REQUEST_URL,
-  PHONE_VERIFICATION_TOKEN_SNED
+  PHONE_VERIFICATION_TOKEN_SEND_URL,
+  USER_REGISTER_URL,
+  RESEND_TOKEN_URL
 } from "./API";
 import querystring from "querystring";
 import { ajax } from "rxjs/observable/dom/ajax";
@@ -27,7 +29,7 @@ export const onPhoneVerificationTokenPost = ({ id, verificationToken }) => {
   console.log("verifiL: ", verificationToken);
   return ajax({
     method: "post",
-    url: `${PHONE_VERIFICATION_TOKEN_SNED}${id}/`,
+    url: `${PHONE_VERIFICATION_TOKEN_SEND_URL}${id}/`,
     body: {
       token: verificationToken
     },
@@ -63,24 +65,30 @@ export const onUserGet = ({ access_token }) =>
     }
   });
 
-export const onBusinessRegister = ({
-  username,
-  password,
-  email,
-  business_name
-}) =>
+export const onBusinessRegister = ({ body }) =>
   ajax({
     method: "post",
     url: BUSINESS_REGISTER_URL,
-    body: {
-      username,
-      password,
-      email,
-      business_name
-    },
+    body,
     headers: {
       "Content-Type": "application/json"
     }
+  });
+
+export const onUserRegister = ({ id, body }) =>
+  ajax({
+    method: "post",
+    url: `${USER_REGISTER_URL}${id}/`,
+    body,
+    headers: {
+      "Content-Type": "application/json"
+    }
+  });
+
+export const onResendTokenPost = ({ id }) =>
+  ajax({
+    method: "POST",
+    url: `${RESEND_TOKEN_URL}${id}/`
   });
 
 export const onIndividualRegister = ({

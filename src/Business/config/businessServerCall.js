@@ -12,6 +12,17 @@ import axios from "axios";
 import { ajax } from "rxjs/observable/dom/ajax";
 import querystring from "querystring";
 
+export const onBranchPost = ({ access_token, id, body }) =>
+  ajax({
+    method: "PUT",
+    url: `${BUSINESS_URL}${id}/`,
+    body,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
 export const onSalesUserGet = ({ access_token }) =>
   ajax({
     method: "GET",
@@ -168,7 +179,7 @@ export const onBusinessEachGet = ({ username, access_token }) =>
 export const onBusinessEachGetAjax = ({ slug }) =>
   ajax({
     method: "GET",
-    url: `${BUSINESS_URL}${slug}`,
+    url: `${BUSINESS_URL}${slug}/`,
     headers: {
       "Content-Type": "application/json"
     }
@@ -177,7 +188,7 @@ export const onBusinessEachGetAjax = ({ slug }) =>
 export const onBusinessEachDeleteAjax = ({ id, access_token }) =>
   ajax({
     method: "DELETE",
-    url: `${BUSINESS_URL}${id}`,
+    url: `${BUSINESS_URL}${id}/`,
     headers: {
       "Content-Type": "application/json",
       Authorization: "Bearer " + access_token
@@ -187,7 +198,7 @@ export const onBusinessEachDeleteAjax = ({ id, access_token }) =>
 export const onAppBusinessEachDelete = ({ id, access_token }) =>
   ajax({
     method: "DELETE",
-    url: `${APP_BUSINESS_APPROVAL_URL}${id}`,
+    url: `${APP_BUSINESS_APPROVAL_URL}${id}/`,
     headers: {
       "Content-Type": "application/json",
       Authorization: "Bearer " + access_token

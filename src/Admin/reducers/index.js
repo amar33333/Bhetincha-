@@ -7,12 +7,17 @@ import generalSetupReducer from "./generalSetupReducer";
 import userReducer from "./userReducer";
 import BusinessReducer from "./businessReducer";
 import filterBusiness from "./filterBusinessReducer";
+import filterState from "./filterStateReducer";
+import filterDistrict from "./filterDistrictReducer";
 import filterCity from "./filterCityReducer";
 import filterArea from "./filterAreaReducer";
+import filterCategory from "./filterCategoryReducer";
+import filterSubCategory from "./filterSubCategoryReducer";
 import filterAppBusiness from "./filterAppBusinessReducer";
 import filterAssignBusiness from "./filterAssignBusinessReducer";
 import tele_calling from "./teleCallingReducer";
 import location from "./locationReducer";
+import ecommerce from "./ecommerceReducer";
 
 const createReducer = combineReducers({
   industries: IndustryReducer,
@@ -23,12 +28,17 @@ const createReducer = combineReducers({
   user_reducer: userReducer,
   business_reducer: BusinessReducer,
   filterBusiness,
+  filterState,
+  filterDistrict,
   filterCity,
   filterArea,
+  filterCategory,
+  filterSubCategory,
   filterAppBusiness,
   filterAssignBusiness,
   tele_calling,
-  location
+  location,
+  ecommerce
 });
 
 export default createReducer;

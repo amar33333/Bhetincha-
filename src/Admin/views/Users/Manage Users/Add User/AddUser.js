@@ -27,10 +27,6 @@ class AddUser extends Component {
       password: "",
       group: ""
     };
-
-    this.access_token = this.props.cookies
-      ? this.props.cookies.token_data.access_token
-      : null;
   }
 
   componentWillMount() {
@@ -59,8 +55,7 @@ class AddUser extends Component {
       username,
       email,
       password,
-      groups: [group.id],
-      access_token: this.access_token
+      groups: [group.id]
     });
     this.clearState();
   };
@@ -129,6 +124,7 @@ class AddUser extends Component {
                         value={value}
                         onChange={this.handleSelectChange}
                         options={this.props.groups}
+                        tabSelectsValue={false}
                         valueKey="id"
                         labelKey="name"
                       />
@@ -225,9 +221,8 @@ class AddUser extends Component {
 }
 
 export default connect(
-  ({ AdminContainer: { user_reducer }, auth }) => ({
-    ...user_reducer,
-    ...auth
+  ({ AdminContainer: { user_reducer } }) => ({
+    ...user_reducer
   }),
   { onUserSubmit, onGroupsList }
 )(AddUser);

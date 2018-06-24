@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import orderBy from "lodash.orderby";
 import debounce from "lodash.debounce";
 
 import {
@@ -33,7 +32,10 @@ import {
   onCountryList,
   onCountryEachList,
   onStateList,
+  handleOnStateFilterChange,
   onDistrictList,
+  handleSortChangeDistrict,
+  handleOnDistrictFilterChange,
   onDistrictSubmit,
   onDistrictEdit,
   toggleDistrictEditModal,
@@ -43,8 +45,6 @@ import {
   onUnmountDistrict
 } from "../../actions";
 
-const DISTRICTS_CHANGED = " districts_changed";
-
 class Districts extends Component {
   state = {
     country: "",
@@ -52,15 +52,7 @@ class Districts extends Component {
     district: "",
     districtCode: "",
     districtSubmit: false,
-    filterCountry: [],
-    filterState: [],
-    filterText: [],
-    sortedData: [],
-    pages: 1,
-    page: 0,
-    rows: 20,
-    rowCount: 0,
-    districts: []
+    stateSearchText: ""
   };
 
   tableProps = {
@@ -68,56 +60,67 @@ class Districts extends Component {
       {
         Header: "SN",
         accessor: "s_no",
+        sortable: false,
         filterable: false,
         width: 70
       },
-      { Header: "District", accessor: "name" },
-      { Header: "Code", accessor: "districtCode" },
+      { Header: "District", accessor: "name", id: "district" },
+      { Header: "Code", accessor: "districtCode", filterable: false },
       {
         Header: "State",
         accessor: "state",
-        id: "state",
-        Cell: ({ value }) => {
-          const state = this.props.states.find(state => state.id === value);
-          return state ? state.name : "Not Found";
-        },
+        sortable: false,
         Filter: () => (
           <Select
             clearable
+            tabSelectsValue={false}
             multi
-            value={this.state.filterState}
-            onChange={this.handleSelectChange.bind(this, "filterState")}
+            isLoading={this.props.statesFetchLoading}
+            onInputChange={stateSearchText => {
+              this.setState(
+                { stateSearchText },
+                () =>
+                  stateSearchText &&
+                  this.debouncedStateAutocomplete(stateSearchText)
+              );
+            }}
+            value={this.props.filterState}
+            onChange={filterState =>
+              this.props.handleOnDistrictFilterChange({ filterState })
+            }
             valueKey="id"
             labelKey="name"
-            options={this.props.states.filter(state => {
-              const { filterCountry } = this.state;
-              if (filterCountry.length === 0) return true;
-              for (let i = 0; i < filterCountry.length; i++)
-                if (state.country === filterCountry[i].id) return true;
-              return false;
-            })}
+            filterOptions={options => options}
+            options={
+              this.state.stateSearchText && !this.props.statesFetchLoading
+                ? this.props.states.filter(
+                    state =>
+                      !this.props.filterState.length ||
+                      !this.props.filterState.map(x => x.id).includes(state.id)
+                  )
+                : []
+            }
+            noResultsText={
+              this.state.stateSearchText && !this.props.statesFetchLoading
+                ? "No Results Found"
+                : "Start Typing..."
+            }
           />
         )
       },
       {
         Header: "Country",
-        accessor: "state",
-        id: "country",
-        Cell: ({ value }) => {
-          const state = this.props.states.find(state => state.id === value);
-          if (state) {
-            const country = this.props.countries.find(
-              country => country.id === state.country
-            );
-            return country ? country.name : "Not Found";
-          } else return "Not Found";
-        },
+        accessor: "country",
+        sortable: false,
         Filter: () => (
           <Select
             clearable
             multi
-            value={this.state.filterCountry}
-            onChange={this.handleSelectChange.bind(this, "filterCountry")}
+            tabSelectsValue={false}
+            value={this.props.filterCountry}
+            onChange={filterCountry =>
+              this.props.handleOnDistrictFilterChange({ filterCountry })
+            }
             valueKey="id"
             labelKey="name"
             options={this.props.countries}
@@ -131,13 +134,22 @@ class Districts extends Component {
         filterable: false,
         sortable: false,
         width: 145,
-        Cell: ({ value, original: { id, country, state, name } }) => (
+        Cell: ({
+          value,
+          original: { id, country, state, name, districtCode }
+        }) => (
           <div>
             <Button
               color="secondary"
               className="mr-l"
               onClick={() =>
-                this.props.toggleDistrictEditModal({ id, country, state, name })
+                this.props.toggleDistrictEditModal({
+                  id,
+                  country,
+                  state,
+                  name,
+                  districtCode
+                })
               }
             >
               Edit
@@ -150,7 +162,11 @@ class Districts extends Component {
         )
       }
     ],
+    onFilteredChange: (column, value) => {
+      value.id === "district" && this.debouncedSearch(column);
+    },
     manual: true,
+    sortable: true,
     filterable: true,
     minRows: 5,
     className: "-striped -highlight",
@@ -163,14 +179,7 @@ class Districts extends Component {
     this.props.onStateList();
   }
 
-  getSnapshotBeforeUpdate(prevProps, prevState) {
-    if (prevProps.districts !== this.props.districts) {
-      return DISTRICTS_CHANGED;
-    }
-    return null;
-  }
-
-  componentDidUpdate = (prevProps, prevState, snapshot) => {
+  componentDidUpdate = (_, prevState) => {
     if (prevState.districtSubmit && !this.props.loading) {
       const updates = { districtSubmit: false };
       if (!this.props.error) {
@@ -179,8 +188,6 @@ class Districts extends Component {
       }
       this.setState(updates, () => this.focusableInput.focus());
     }
-
-    if (snapshot === DISTRICTS_CHANGED) this.updateTable();
   };
 
   componentWillUnmount() {
@@ -188,6 +195,25 @@ class Districts extends Component {
     this.props.onUnmountState();
     this.props.onUnmountDistrict();
   }
+
+  debouncedSearch = debounce(
+    column =>
+      this.props.handleOnDistrictFilterChange({
+        name: column.filter(x => x.id === "district").length
+          ? column.find(x => x.id === "district").value
+          : ""
+      }),
+    200
+  );
+
+  debouncedStateAutocomplete = debounce(
+    name =>
+      this.props.handleOnStateFilterChange({
+        name,
+        filterCountry: this.props.filterCountry
+      }),
+    200
+  );
 
   onFormSubmit = event => {
     event.preventDefault();
@@ -207,138 +233,15 @@ class Districts extends Component {
     });
 
   handleSelectChange = (key, value) => {
-    this.setState(
-      { [key]: value },
-      () =>
-        (key === "filterCountry" || key === "filterState") && this.updateTable()
-    );
+    this.setState({ [key]: value });
     if (key === "country") {
       this.setState({ state: "" });
       value && this.props.onCountryEachList({ id: value.id });
     }
-    if (
-      key === "filterCountry" &&
-      value.length > 0 &&
-      this.state.filterState.length > 0
-    ) {
-      let changed = false;
-      let filterState = this.state.filterState.filter(filter => {
-        let found = false;
-        for (let i = 0; i < value.length; i++) {
-          found = found || value[i].id === filter.country;
-          if (found) break;
-        }
-        changed = !found;
-        return found;
-      });
-      changed && this.updateData({ filterState });
-    }
   };
-
-  updateTable = () => {
-    const {
-      page,
-      rows,
-      filterText,
-      filterCountry,
-      filterState,
-      sortedData
-    } = this.state;
-
-    let districts = this.props.districts;
-    // filter
-    if (filterText.length) {
-      filterText.forEach(filter => {
-        districts = districts.filter(
-          district =>
-            String(district[filter.id].toLowerCase()).indexOf(
-              filter.value.toLowerCase()
-            ) !== -1
-        );
-      });
-    }
-    if (filterState.length) {
-      districts = districts.filter(district => {
-        let found = false;
-        for (let i = 0; i < filterState.length; i++) {
-          found = found || filterState[i].id === district.state;
-          if (found) break;
-        }
-        return found;
-      });
-    } else if (filterCountry.length) {
-      districts = districts.filter(district => {
-        let found = false;
-        for (let i = 0; i < filterCountry.length; i++) {
-          const states = this.props.states
-            .filter(state => state.country === filterCountry[i].id)
-            .map(state => state.id);
-          found = found || states.includes(district.state);
-          if (found) break;
-        }
-        return found;
-      });
-    }
-    // sort
-    if (sortedData.length > 0) {
-      districts = districts.map(district => {
-        const state = this.props.states.find(
-          state => state.id === district.state
-        );
-
-        const country = this.props.countries.find(
-          country => (state ? state.country === country.id : false)
-        );
-
-        return {
-          ...district,
-          stateName: state ? state.name : "Not Found",
-          countryName: country ? country.name : "Not Found"
-        };
-      });
-      districts = orderBy(
-        districts,
-        sortedData.map(sort => {
-          let id;
-          switch (sort.id) {
-            case "state":
-              id = "stateName";
-              break;
-            case "country":
-              id = "countryName";
-              break;
-            default:
-              id = sort.id;
-          }
-          return row => {
-            if (row[id] === null || row[id] === undefined) {
-              return -Infinity;
-            }
-            return typeof row[id] === "string"
-              ? row[id].toLowerCase()
-              : row[id];
-          };
-        }),
-        sortedData.map(d => (d.desc ? "desc" : "asc"))
-      );
-    }
-
-    // pagination
-    let newPage = districts.length <= rows * page ? 0 : page;
-
-    this.setState({
-      rowCount: districts.length,
-      districts: districts.slice(rows * newPage, rows * newPage + rows),
-      page: newPage,
-      pages: Math.ceil(districts.length / rows)
-    });
-  };
-
-  debouncedUpdate = debounce(this.updateTable, 100);
-
-  updateData = params => this.setState(params, () => this.updateTable());
 
   render() {
+    console.log("district props: ", this.props);
     return (
       <div className="animated fadeIn">
         <Row className="hr-centered">
@@ -444,27 +347,20 @@ class Districts extends Component {
         <ReactTable
           {...this.tableProps}
           style={{ background: "white" }}
-          data={this.state.districts}
-          pages={this.state.pages}
-          pageSize={this.state.rows}
-          rowCount={this.state.rowCount}
-          onPageChange={pageIndex => {
-            this.updateData({ page: pageIndex });
-          }}
-          onPageSizeChange={(pageSize, pageIndex) =>
-            this.updateData({
-              page: pageIndex,
-              rows: pageSize
-            })
-          }
-          onSortedChange={newSorted =>
-            this.updateData({ sortedData: newSorted })
-          }
-          onFilteredChange={(column, value) => {
-            (value.id === "districtCode" || value.id === "name") &&
-              this.setState({ filterText: column }, this.debouncedUpdate);
-          }}
+          data={this.props.districts}
+          defaultPageSize={this.props.rows}
+          defaultSorted={this.props.sort_by}
           loading={this.props.fetchLoading}
+          onPageChange={pageIndex =>
+            this.props.onDistrictList({ page: pageIndex + 1 })
+          }
+          onPageSizeChange={(pageSize, pageIndex) =>
+            this.props.onDistrictList({ page: pageIndex + 1, rows: pageSize })
+          }
+          onSortedChange={this.props.handleSortChangeDistrict}
+          page={this.props.page - 1}
+          pages={this.props.pages}
+          rowCount={this.props.rowCount}
         />
         <CustomModal
           title="Edit District Data"
@@ -485,24 +381,49 @@ class Districts extends Component {
 }
 
 export default connect(
-  ({ AdminContainer: { general_setup } }) => ({
-    countries: general_setup.countries,
-    partialStates: general_setup.countryData,
-    states: general_setup.states,
-    districts: general_setup.districts,
-    districtEditModal: general_setup.districtEditModal,
-    districtEditData: general_setup.districtEditData,
-    fetchLoading: general_setup.districtsFetchLoading,
-    loading: general_setup.districtLoading,
-    error: general_setup.districtError
+  ({
+    AdminContainer: {
+      general_setup: {
+        countries,
+        countryData,
+        states,
+        statesFetchLoading,
+        districts,
+        districtsPages,
+        districtsRowCount,
+        districtEditModal,
+        districtEditData,
+        districtsFetchLoading,
+        districtLoading,
+        districtError
+      },
+      filterDistrict
+    }
+  }) => ({
+    countries,
+    partialStates: countryData,
+    states,
+    statesFetchLoading,
+    districts,
+    pages: districtsPages,
+    rowCount: districtsRowCount,
+    districtEditModal,
+    districtEditData,
+    fetchLoading: districtsFetchLoading,
+    loading: districtLoading,
+    error: districtError,
+    ...filterDistrict
   }),
   {
     onStateList,
+    handleOnStateFilterChange,
     onDistrictSubmit,
     onDistrictEdit,
     toggleDistrictEditModal,
     onCountryList,
     onDistrictList,
+    handleOnDistrictFilterChange,
+    handleSortChangeDistrict,
     onCountryEachList,
     onDistrictDelete,
     onUnmountCountry,

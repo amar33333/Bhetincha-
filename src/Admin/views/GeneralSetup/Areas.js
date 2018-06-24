@@ -32,10 +32,12 @@ import {
   onAreaList,
   onDistrictList,
   onStateList,
+  handleOnStateFilterChange,
+  handleOnDistrictFilterChange,
+  handleOnCityFilterChange,
   handleOnAreaFilterChange,
   handleSortChangeArea,
   onAreaDelete,
-  onCityAutocomplete,
   onUnmountCountry,
   onUnmountState,
   onUnmountDistrict,
@@ -49,7 +51,10 @@ class Areas extends Component {
     district: "",
     city: "",
     area: "",
-    areaSubmit: false
+    areaSubmit: false,
+    citySearchText: "",
+    districtSearchText: "",
+    stateSearchText: ""
   };
 
   tableProps = {
@@ -65,93 +70,144 @@ class Areas extends Component {
       {
         Header: "City",
         accessor: "city",
+        sortable: false,
         Filter: () => (
           <Select
             clearable
+            tabSelectsValue={false}
             multi
-            isLoading={this.props.citiesAutocompleteLoading}
-            onInputChange={this.debouncedAutocomplete}
+            isLoading={this.props.citiesFetchLoading}
+            onInputChange={citySearchText => {
+              this.setState(
+                { citySearchText },
+                () =>
+                  citySearchText &&
+                  this.debouncedCityAutocomplete(citySearchText)
+              );
+            }}
             value={this.props.filterCity}
-            onChange={this.handleFilterSelectChange.bind(this, "filterCity")}
+            onChange={filterCity =>
+              this.props.handleOnAreaFilterChange({ filterCity })
+            }
             valueKey="id"
             labelKey="name"
             filterOptions={options => options}
-            options={this.props.citiesAutocomplete.filter(
-              city =>
-                !this.props.filterCity
-                  .map(filter => filter.id)
-                  .includes(city.id)
-            )}
+            options={
+              this.state.citySearchText && !this.props.citiesFetchLoading
+                ? this.props.cities.filter(
+                    city =>
+                      !this.props.filterCity.length ||
+                      !this.props.filterCity.map(x => x.id).includes(city.id)
+                  )
+                : []
+            }
+            noResultsText={
+              this.state.citySearchText && !this.props.citiesFetchLoading
+                ? "No Results Found"
+                : "Start Typing..."
+            }
           />
         )
       },
       {
         Header: "District",
         accessor: "district",
+        sortable: false,
         Filter: () => (
           <Select
             clearable
+            tabSelectsValue={false}
             multi
+            isLoading={this.props.districtsFetchLoading}
+            onInputChange={districtSearchText => {
+              this.setState(
+                { districtSearchText },
+                () =>
+                  districtSearchText &&
+                  this.debouncedDistrictAutocomplete(districtSearchText)
+              );
+            }}
             value={this.props.filterDistrict}
-            onChange={this.handleFilterSelectChange.bind(
-              this,
-              "filterDistrict"
-            )}
+            onChange={filterDistrict =>
+              this.props.handleOnAreaFilterChange({ filterDistrict })
+            }
             valueKey="id"
             labelKey="name"
-            options={this.props.districts.filter(district => {
-              const { filterCountry, filterState } = this.props;
-              if (!filterState.length) {
-                if (!filterCountry.length) return true;
-                else {
-                  let found = false;
-                  for (let i = 0; i < filterCountry.length; i++) {
-                    const states = this.props.states
-                      .filter(state => state.country === filterCountry[i].id)
-                      .map(state => state.id);
-                    found = found || states.includes(district.state);
-                  }
-                  return found;
-                }
-              } else {
-                for (let i = 0; i < filterState.length; i++)
-                  if (district.state === filterState[i].id) return true;
-              }
-              return false;
-            })}
+            filterOptions={options => options}
+            options={
+              this.state.districtSearchText && !this.props.districtsFetchLoading
+                ? this.props.districts.filter(
+                    district =>
+                      !this.props.filterDistrict.length ||
+                      !this.props.filterDistrict
+                        .map(x => x.id)
+                        .includes(district.id)
+                  )
+                : []
+            }
+            noResultsText={
+              this.state.districtSearchText && !this.props.districtsFetchLoading
+                ? "No Results Found"
+                : "Start Typing..."
+            }
           />
         )
       },
       {
         Header: "State",
         accessor: "state",
+        sortable: false,
         Filter: () => (
           <Select
             clearable
+            tabSelectsValue={false}
             multi
+            isLoading={this.props.statesFetchLoading}
+            onInputChange={stateSearchText => {
+              this.setState(
+                { stateSearchText },
+                () =>
+                  stateSearchText &&
+                  this.debouncedStateAutocomplete(stateSearchText)
+              );
+            }}
             value={this.props.filterState}
-            onChange={this.handleFilterSelectChange.bind(this, "filterState")}
+            onChange={filterState =>
+              this.props.handleOnAreaFilterChange({ filterState })
+            }
             valueKey="id"
             labelKey="name"
-            options={this.props.states.filter(state => {
-              const { filterCountry } = this.props;
-              if (!filterCountry.length) return true;
-              for (let i = 0; i < filterCountry.length; i++)
-                if (state.country === filterCountry[i].id) return true;
-              return false;
-            })}
+            filterOptions={options => options}
+            options={
+              this.state.stateSearchText && !this.props.statesFetchLoading
+                ? this.props.states.filter(
+                    state =>
+                      !this.props.filterState.length ||
+                      !this.props.filterState.map(x => x.id).includes(state.id)
+                  )
+                : []
+            }
+            noResultsText={
+              this.state.stateSearchText && !this.props.statesFetchLoading
+                ? "No Results Found"
+                : "Start Typing..."
+            }
           />
         )
       },
       {
         Header: "Country",
         accessor: "country",
+        sortable: false,
         Filter: () => (
           <Select
             clearable
+            tabSelectsValue={false}
             multi
             value={this.props.filterCountry}
-            onChange={this.handleFilterSelectChange.bind(this, "filterCountry")}
+            onChange={filterCountry =>
+              this.props.handleOnAreaFilterChange({ filterCountry })
+            }
             valueKey="id"
             labelKey="name"
             options={this.props.countries}
@@ -182,10 +238,12 @@ class Areas extends Component {
         )
       }
     ],
-    onFilteredChange: (column, value) =>
-      value.id === "area" && this.debouncedSearch(column),
+    onFilteredChange: (column, value) => {
+      value.id === "area" && this.debouncedSearch(column);
+    },
     manual: true,
     filterable: true,
+    sortable: true,
     minRows: 5,
     className: "-striped -highlight",
     PaginationComponent
@@ -194,12 +252,9 @@ class Areas extends Component {
   componentDidMount() {
     this.props.onCountryList();
     this.props.onAreaList();
-    this.props.onDistrictList();
-    this.props.onStateList();
-    this.props.onCityAutocomplete();
   }
 
-  componentDidUpdate = (prevProps, prevState, snapshot) => {
+  componentDidUpdate = (_, prevState) => {
     if (prevState.areaSubmit && !this.props.loading) {
       const updates = { areaSubmit: false };
       if (!this.props.error) {
@@ -216,27 +271,52 @@ class Areas extends Component {
     this.props.onUnmountArea();
   }
 
+  debouncedSearch = debounce(
+    column =>
+      this.props.handleOnAreaFilterChange({
+        name: column.filter(x => x.id === "area").length
+          ? column.find(x => x.id === "area").value
+          : ""
+      }),
+    200
+  );
+
+  debouncedStateAutocomplete = debounce(
+    name =>
+      this.props.handleOnStateFilterChange({
+        name,
+        filterCountry: this.props.filterCountry
+      }),
+    200
+  );
+
+  debouncedDistrictAutocomplete = debounce(name =>
+    this.props.handleOnDistrictFilterChange({
+      name,
+      filterCountry: this.props.filterCountry,
+      filterState: this.props.filterState
+    })
+  );
+
+  debouncedCityAutocomplete = debounce(name =>
+    this.props.handleOnCityFilterChange({
+      name,
+      filterCountry: this.props.filterCountry,
+      filterState: this.props.filterState,
+      filterDistrict: this.props.filterDistrict
+    })
+  );
+
   onChange = (key, event) =>
     this.setState({
       [key]: event.target.value.replace(/\b\w/g, l => l.toUpperCase())
     });
 
-  debouncedSearch = debounce(
-    column =>
-      this.props.handleOnAreaFilterChange({
-        name: column.length ? column[0].value : ""
-      }),
-    200
-  );
-
-  debouncedAutocomplete = debounce(
-    keyword => this.props.onCityAutocomplete({ keyword }),
-    200
-  );
-
   onFormSubmit = event => {
     event.preventDefault();
+
     const { area, city } = this.state;
+
     this.setState({ areaSubmit: true }, () =>
       this.props.onAreaSubmit({ area, city: city.id })
     );
@@ -254,110 +334,6 @@ class Areas extends Component {
       this.setState({ city: "" });
       value && this.props.onDistrictEachList({ id: value.id });
     }
-  };
-
-  handleFilterSelectChange = (key, value) => {
-    if (key === "filterCity")
-      this.props.handleOnAreaFilterChange({ filterCity: value });
-    else this.updateOtherFilters(key, value);
-  };
-
-  updateOtherFilters = (key, value) => {
-    const { filterCity } = this.props;
-    let changedCity = false;
-
-    let newFilterState = key === "filterState" ? value : this.props.filterState,
-      newFilterCity = [],
-      newFilterDistrict =
-        key === "filterDistrict" ? value : this.props.filterDistrict,
-      filterCountry =
-        key === "filterCountry" ? value : this.props.filterCountry;
-
-    if (newFilterState.length) {
-      if (filterCountry.length) {
-        newFilterState = newFilterState.filter(filter => {
-          let found = false;
-          for (let i = 0; i < filterCountry.length; i++) {
-            found = found || filter.country === filterCountry[i].id;
-            if (found) break;
-          }
-          return found;
-        });
-      }
-    }
-    if (newFilterDistrict.length) {
-      if (newFilterState.length) {
-        newFilterDistrict = newFilterDistrict.filter(filter => {
-          let found = false;
-          for (let i = 0; i < newFilterState.length; i++) {
-            found = found || filter.state === newFilterState[i].id;
-            if (found) break;
-          }
-          return found;
-        });
-      } else if (filterCountry.length) {
-        newFilterDistrict = newFilterDistrict.filter(filter => {
-          let found = false;
-          for (let i = 0; i < filterCountry.length; i++) {
-            const states = this.props.states
-              .filter(state => state.country === filterCountry[i].id)
-              .map(state => state.id);
-            found = found || states.includes(filter.state);
-            if (found) break;
-          }
-          return found;
-        });
-      }
-    }
-
-    if (filterCity.length) {
-      if (newFilterDistrict.length) {
-        newFilterCity = filterCity.filter(filter => {
-          let found = false;
-          for (let i = 0; i < newFilterDistrict.length; i++) {
-            found = found || filter.district === newFilterDistrict[i].id;
-            if (found) break;
-          }
-          changedCity = !found;
-          return found;
-        });
-      } else if (newFilterState.length) {
-        newFilterCity = filterCity.filter(filter => {
-          let found = false;
-          for (let i = 0; i < newFilterState.length; i++) {
-            const districts = this.props.districts
-              .filter(district => district.state === newFilterState[i].id)
-              .map(district => district.id);
-            found = found || districts.includes(filter.district);
-            if (found) break;
-          }
-          changedCity = !found;
-          return found;
-        });
-      } else if (filterCountry.length) {
-        newFilterCity = filterCity.filter(filter => {
-          let found = false;
-          for (let i = 0; i < filterCountry.length; i++) {
-            const states = this.props.states
-              .filter(state => state.country === filterCountry[i].id)
-              .map(state => state.id);
-            const districts = this.props.districts
-              .filter(district => states.includes(district.state))
-              .map(district => district.id);
-            found = found || districts.includes(filter.district);
-            if (found) break;
-          }
-          changedCity = !found;
-          return found;
-        });
-      }
-    }
-    const toUpdate = {};
-    toUpdate.filterDistrict = newFilterDistrict;
-    toUpdate.filterState = newFilterState;
-    toUpdate.filterCountry = filterCountry;
-    if (changedCity) toUpdate.filterCity = newFilterCity;
-    this.props.handleOnAreaFilterChange(toUpdate);
   };
 
   render() {
@@ -517,22 +493,45 @@ class Areas extends Component {
 }
 
 export default connect(
-  ({ AdminContainer: { general_setup, filterArea } }) => ({
-    countries: general_setup.countries,
-    partialStates: general_setup.countryData,
-    partialDistricts: general_setup.stateData,
-    partialCities: general_setup.districtData,
-    loading: general_setup.areaLoading,
-    error: general_setup.areaError,
-    citiesAutocompleteLoading: general_setup.citiesAutocompleteLoading,
-
-    areas: general_setup.areas,
-    citiesAutocomplete: general_setup.citiesAutocomplete,
-    districts: general_setup.districts,
-    states: general_setup.states,
-    fetchLoading: general_setup.areasFetchLoading,
-    pages: general_setup.areasPages,
-    rowCount: general_setup.areasRowCount,
+  ({
+    AdminContainer: {
+      general_setup: {
+        countries,
+        countryData,
+        stateData,
+        districtData,
+        areaLoading,
+        areaError,
+        areas,
+        cities,
+        citiesFetchLoading,
+        districts,
+        districtsFetchLoading,
+        states,
+        statesFetchLoading,
+        areasFetchLoading,
+        areasPages,
+        areasRowCount
+      },
+      filterArea
+    }
+  }) => ({
+    countries,
+    partialStates: countryData,
+    partialDistricts: stateData,
+    partialCities: districtData,
+    loading: areaLoading,
+    error: areaError,
+    cities,
+    citiesFetchLoading,
+    areas,
+    districts,
+    districtsFetchLoading,
+    states,
+    statesFetchLoading,
+    fetchLoading: areasFetchLoading,
+    pages: areasPages,
+    rowCount: areasRowCount,
     ...filterArea
   }),
   {
@@ -544,10 +543,12 @@ export default connect(
     onAreaList,
     onDistrictList,
     onStateList,
+    handleOnStateFilterChange,
+    handleOnDistrictFilterChange,
+    handleOnCityFilterChange,
     handleOnAreaFilterChange,
     handleSortChangeArea,
     onAreaDelete,
-    onCityAutocomplete,
     onUnmountCountry,
     onUnmountState,
     onUnmountDistrict,

@@ -14,6 +14,7 @@ import {
   CardHeader,
   CardBody
 } from "reactstrap";
+import debounce from "lodash.debounce";
 
 import { connect } from "react-redux";
 import ReactTable from "react-table";
@@ -22,7 +23,6 @@ import {
   Select,
   PaginationComponent
 } from "../../../Common/components";
-import filterCaseInsensitive from "../../../Common/utils/filterCaseInsesitive";
 import "react-table/react-table.css";
 
 import CustomModal from "../../../Common/components/CustomModal";
@@ -33,6 +33,8 @@ import {
   onCategoryEdit,
   onCategoryList,
   onIndustryList,
+  handleSortChangeCategory,
+  handleOnCategoryFilterChange,
   onUnmountIndustry,
   onUnmountCategory,
   onCategoryDelete,
@@ -55,31 +57,20 @@ class Categories extends Component {
         sortable: false,
         width: 70
       },
-      { Header: "Category", accessor: "name" },
+      { Header: "Category", accessor: "name", id: "category" },
       {
         Header: "Industry",
         accessor: "industry",
-        Cell: ({ value }) => {
-          const industry = this.props.industries.find(
-            industry => industry.id === value
-          );
-          return industry ? industry.name : "Not Found";
-        },
-        filterMethod: (filter, row) => {
-          if (filter && filter.value && filter.value.length > 0) {
-            let found = false;
-            for (let i = 0; i < filter.value.length; i++) {
-              found = found || filter.value[i].id === row.industry;
-            }
-            return found;
-          } else return true;
-        },
-        Filter: ({ filter, onChange }) => (
+        sortable: false,
+        Filter: () => (
           <Select
             clearable
+            tabSelectsValue={false}
             multi
-            value={filter ? filter.value : null}
-            onChange={onChange}
+            value={this.props.filterIndustry}
+            onChange={filterIndustry =>
+              this.props.handleOnCategoryFilterChange({ filterIndustry })
+            }
             valueKey="id"
             labelKey="name"
             options={this.props.industries}
@@ -112,8 +103,12 @@ class Categories extends Component {
         )
       }
     ],
+    onFilteredChange: (column, value) => {
+      value.id === "category" && this.debouncedSearch(column);
+    },
+    manual: true,
+    sortable: true,
     minRows: 5,
-    defaultPageSize: 20,
     className: "-striped -highlight",
     filterable: true,
     PaginationComponent
@@ -124,7 +119,7 @@ class Categories extends Component {
     this.props.onCategoryList();
   }
 
-  componentDidUpdate = (prevProps, prevState, snapshot) => {
+  componentDidUpdate = (_, prevState) => {
     if (prevState.categorySubmit && !this.props.loading) {
       const updates = { categorySubmit: false };
       if (!this.props.error) {
@@ -138,6 +133,16 @@ class Categories extends Component {
     this.props.onUnmountIndustry();
     this.props.onUnmountCategory();
   }
+
+  debouncedSearch = debounce(
+    column =>
+      this.props.handleOnCategoryFilterChange({
+        name: column.filter(x => x.id === "category").length
+          ? column.find(x => x.id === "category").value
+          : ""
+      }),
+    200
+  );
 
   onChange = (key, event) =>
     this.setState({
@@ -220,8 +225,19 @@ class Categories extends Component {
           {...this.tableProps}
           style={{ background: "white" }}
           data={this.props.categories}
+          defaultPageSize={this.props.rows}
+          defaultSorted={this.props.sort_by}
           loading={this.props.fetchLoading}
-          defaultFilterMethod={filterCaseInsensitive}
+          onPageChange={pageIndex =>
+            this.props.onCategoryList({ page: pageIndex + 1 })
+          }
+          onPageSizeChange={(pageSize, pageIndex) =>
+            this.props.onCategoryList({ page: pageIndex + 1, rows: pageSize })
+          }
+          onSortedChange={this.props.handleSortChangeCategory}
+          page={this.props.page - 1}
+          pages={this.props.pages}
+          rowCount={this.props.rowCount}
         />
         <CustomModal
           title="Edit Category Data"
@@ -244,17 +260,21 @@ export default connect(
   ({
     AdminContainer: {
       industries: { industries },
-      categories
+      categories,
+      filterCategory
     }
   }) => ({
     industries,
-    ...categories
+    ...categories,
+    ...filterCategory
   }),
   {
     onCategorySubmit,
     toggleCategoryEditModal,
     onCategoryEdit,
     onIndustryList,
+    handleOnCategoryFilterChange,
+    handleSortChangeCategory,
     onUnmountIndustry,
     onUnmountCategory,
     onCategoryList,

@@ -101,19 +101,53 @@ epics.push((action$, { getState }) =>
   })
 );
 
-export const onCategoryList = () => ({ type: FETCH_CATEGORY_PENDING });
+export const onCategoryList = payload => ({
+  type: FETCH_CATEGORY_PENDING,
+  payload
+});
 
 epics.push((action$, { getState }) =>
-  action$.ofType(FETCH_CATEGORY_PENDING).mergeMap(action =>
-    onCategoryGetAjax({
-      access_token: getState().auth.cookies.token_data.access_token
+  action$.ofType(FETCH_CATEGORY_PENDING).mergeMap(({ payload }) => {
+    const {
+      rows,
+      page,
+      name,
+      filterIndustry,
+      sortby
+    } = getState().AdminContainer.filterCategory;
+
+    const params = {};
+    params.rows = rows;
+    params.page = page;
+    if (name) {
+      params.name = name;
+    }
+    params.sortby = sortby.map(data => `${data.id}${data.desc ? "-desc" : ""}`);
+    if (filterIndustry.length) {
+      params.industry = filterIndustry.map(industry => industry.id);
+    }
+    if (payload) {
+      if (payload.rows) {
+        params.rows = payload.rows;
+      }
+      if (payload.page) {
+        params.page = payload.page;
+      }
+      if (payload.filterIndustry) {
+        params.industry = payload.filterIndustry.map(industry => industry.id);
+      }
+    }
+
+    return onCategoryGetAjax({
+      access_token: getState().auth.cookies.token_data.access_token,
+      params
     })
       .map(({ response }) => ({
         type: FETCH_CATEGORY_FULFILLED,
         payload: response
       }))
-      .catch(ajaxError => Observable.of({ type: FETCH_CATEGORY_REJECTED }))
-  )
+      .catch(ajaxError => Observable.of({ type: FETCH_CATEGORY_REJECTED }));
+  })
 );
 
 export const onCategoryDelete = payload => ({

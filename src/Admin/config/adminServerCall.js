@@ -17,12 +17,17 @@ import {
   ASSIGNED_LIST_URL,
   VERIFY_BUSINESS_URL,
   BUSINESS_TELE_CALLING_URL,
-  LOCATION_URL
+  LOCATION_URL,
+  ECOMMERCE_CATEGORY_URL,
+  ECOMMERCE_ATTRIBUTE_URL,
+  ECOMMERCE_PRODUCT_ATTRIBUTE_URL,
+  ECOMMERCE_PRODUCT_URL
 } from "./ADMIN_API";
 
 import {
   PAYMENT_METHOD_URL,
-  COMPANY_TYPE_URL
+  COMPANY_TYPE_URL,
+  BUSINESS_PUT_URL
 } from "../../Business/config/BUSINESS_API";
 
 import axios from "axios";
@@ -264,8 +269,9 @@ export const onIndustryGet = ({ access_token }) =>
     }
   });
 
-export const onIndustryEachGet = ({ id, access_token }) =>
-  axios({
+export const onIndustryEachGet = ({ id, access_token }) => {
+  // console.log("access : ", access_token);
+  return axios({
     method: "get",
     url: `${INDUSTRY_URL}${id}/`,
     headers: {
@@ -273,6 +279,7 @@ export const onIndustryEachGet = ({ id, access_token }) =>
       Authorization: "Bearer " + access_token
     }
   });
+};
 
 export const onIndustryPostAjax = ({ industry, access_token }) =>
   ajax({
@@ -379,10 +386,10 @@ export const onCategoryGet = ({ access_token }) =>
     }
   });
 
-export const onCategoryGetAjax = ({ access_token }) =>
+export const onCategoryGetAjax = ({ access_token, params }) =>
   ajax({
     method: "get",
-    url: CATEGORY_URL,
+    url: `${CATEGORY_URL}?${querystring.stringify(params)}`,
     headers: {
       "Content-Type": "application/json",
       Authorization: "Bearer " + access_token
@@ -411,7 +418,7 @@ export const onSubCategoryPost = ({
     url: SUB_CATEGORY_URL,
     data: {
       category,
-      extra_section: extraSection,
+      extra_sections: extraSection,
       tags: tags,
       name: subCategory
     },
@@ -450,7 +457,7 @@ export const onSubCategoryPostAjax = ({
     url: SUB_CATEGORY_URL,
     body: {
       category,
-      extra_section: extraSection,
+      extra_sections: extraSection,
       tags: tags,
       name: subCategory
     },
@@ -470,10 +477,10 @@ export const onSubCategoryEachGet = ({ id, access_token }) =>
     }
   });
 
-export const onSubCategoryGetAjax = ({ access_token }) =>
+export const onSubCategoryGetAjax = ({ access_token, params }) =>
   ajax({
     method: "get",
-    url: SUB_CATEGORY_URL,
+    url: `${SUB_CATEGORY_URL}?${querystring.stringify(params)}`,
     headers: {
       "Content-Type": "application/json",
       Authorization: "Bearer " + access_token
@@ -637,10 +644,10 @@ export const onStateGet = ({ access_token }) =>
     }
   });
 
-export const onStateGetAjax = ({ access_token }) =>
+export const onStateGetAjax = ({ access_token, params }) =>
   ajax({
     method: "get",
-    url: STATE_URL,
+    url: `${STATE_URL}?${querystring.stringify(params)}`,
     headers: {
       "Content-Type": "application/json",
       Authorization: "Bearer " + access_token
@@ -741,10 +748,10 @@ export const onDistrictGet = ({ access_token }) =>
     }
   });
 
-export const onDistrictGetAjax = ({ access_token }) =>
+export const onDistrictGetAjax = ({ access_token, params }) =>
   ajax({
     method: "get",
-    url: DISTRICT_URL,
+    url: `${DISTRICT_URL}?${querystring.stringify(params)}`,
     headers: {
       "Content-Type": "application/json",
       Authorization: "Bearer " + access_token
@@ -933,15 +940,25 @@ export const onAreaEachDeleteAjax = ({ id, access_token }) =>
   });
 
 export const onGroupPost = ({ group, access_token }) =>
-  axios({
+  ajax({
     method: "post",
     url: USER_GROUPS_URL,
     headers: {
       "Content-Type": "application/json",
       Authorization: "Bearer " + access_token
     },
-    data: {
+    body: {
       name: group
+    }
+  });
+
+export const onGroupsEachDelete = ({ id, access_token }) =>
+  ajax({
+    method: "delete",
+    url: `${USER_GROUPS_URL}${id}/`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
     }
   });
 
@@ -964,14 +981,14 @@ export const onUserPost = ({
   groups,
   access_token
 }) =>
-  axios({
+  ajax({
     method: "post",
     url: USERS_URL,
     headers: {
       "Content-Type": "application/json",
       Authorization: "Bearer " + access_token
     },
-    data: {
+    body: {
       first_name,
       last_name,
       username,
@@ -985,6 +1002,105 @@ export const onUserGet = ({ access_token }) =>
   axios({
     method: "get",
     url: USERS_URL,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
+// ecommerce
+// attribute
+export const onEcommerceAttributesGet = () =>
+  ajax({
+    method: "GET",
+    url: ECOMMERCE_ATTRIBUTE_URL,
+    headers: {
+      "Content-Type": "application/json"
+    }
+  });
+
+export const onEcommercePropertiesPost = ({ body }) =>
+  ajax({
+    method: "POST",
+    url: ECOMMERCE_ATTRIBUTE_URL,
+    body,
+    headers: {
+      "Content-Type": "application/json"
+    }
+  });
+
+export const onEcommercePropertiesDelete = ({ body }) =>
+  ajax({
+    method: "DELETE",
+    url: ECOMMERCE_ATTRIBUTE_URL,
+    body,
+    headers: {
+      "Content-Type": "application/json"
+    }
+  });
+
+// categories
+export const onEcommerceCategoriesGet = () =>
+  ajax({
+    method: "GET",
+    url: ECOMMERCE_CATEGORY_URL,
+    headers: {
+      "Content-Type": "application/json"
+    }
+  });
+
+export const onEcommerceCategoryPost = ({ name, parent }) =>
+  ajax({
+    method: "POST",
+    url: ECOMMERCE_CATEGORY_URL,
+    body: { name, parent },
+    headers: {
+      "Content-Type": "application/json"
+    }
+  });
+
+export const onEcommerceCategoryDetailGet = ({ uid }) =>
+  ajax({
+    method: "GET",
+    url: `${ECOMMERCE_CATEGORY_URL}${uid}/`,
+    headers: {
+      "Content-Type": "application/json"
+    }
+  });
+
+export const onEcommerceCategoryDetailPost = ({ uid, body }) =>
+  ajax({
+    method: "POST",
+    url: `${ECOMMERCE_CATEGORY_URL}${uid}/`,
+    body,
+    headers: {
+      "Content-Type": "application/json"
+    }
+  });
+
+export const onEcommerceCategoryDetailDelete = ({ uid }) =>
+  ajax({
+    method: "DELETE",
+    url: `${ECOMMERCE_CATEGORY_URL}${uid}/`,
+    headers: {
+      "Content-Type": "application/json"
+    }
+  });
+
+export const onEcommerceCategoryAttributesGet = ({ body }) =>
+  ajax({
+    method: "POST",
+    url: ECOMMERCE_PRODUCT_ATTRIBUTE_URL,
+    body,
+    headers: {
+      "Content-Type": "application/json"
+    }
+  });
+
+export const onEcommerceCategoryProductsGet = ({ access_token, params }) =>
+  ajax({
+    method: "GET",
+    url: `${ECOMMERCE_PRODUCT_URL}?${querystring.stringify(params)}`,
     headers: {
       "Content-Type": "application/json",
       Authorization: "Bearer " + access_token

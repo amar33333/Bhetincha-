@@ -33,13 +33,17 @@ import {
   onAppBusinessGet,
   onAppBusinessEachGet,
   onAppBusinessEachDelete,
-  onSalesUserGet
+  onSalesUserGet,
+  onBranchPost
 } from "../../Business/config/businessServerCall";
 
 import {
   CREATE_COMPANY_TYPE_FULFILLED,
   CREATE_COMPANY_TYPE_PENDING,
   CREATE_COMPANY_TYPE_REJECTED,
+  CREATE_BRANCH_FULFILLED,
+  CREATE_BRANCH_PENDING,
+  CREATE_BRANCH_REJECTED,
   DELETE_COMPANY_TYPE_FULFILLED,
   DELETE_COMPANY_TYPE_PENDING,
   DELETE_COMPANY_TYPE_REJECTED,
@@ -130,6 +134,32 @@ import {
 } from "./types";
 
 const epics = [];
+
+export const onBranchAdd = payload => ({
+  type: CREATE_BRANCH_PENDING,
+  payload
+});
+
+epics.push((action$, { getState }) =>
+  action$.ofType(CREATE_BRANCH_PENDING).mergeMap(action => {
+    const access_token = getState().auth.cookies.token_data.access_token;
+    const { id, body } = action.payload;
+
+    return onBranchPost({ id, body, access_token })
+      .map(({ response }) => {
+        if (response.msg === "success") {
+          toast.success("Branch Added Successfully!");
+          return { type: CREATE_BRANCH_FULFILLED };
+        } else {
+          throw new Error(response.msg[Object.keys(response.msg)[0]][0]);
+        }
+      })
+      .catch(ajaxError => {
+        toast.error(ajaxError.toString());
+        return Observable.of({ type: CREATE_BRANCH_REJECTED });
+      });
+  })
+);
 
 export const onBusinessVerify = payload => ({
   type: CREATE_VERIFIED_BUSINESS_PENDING,
@@ -239,17 +269,57 @@ export const onBusinessAllGet = payload => ({
 
 epics.push((action$, { getState }) =>
   action$.ofType(FETCH_BUSINESS_PENDING).switchMap(({ payload }) => {
-    const filterValue = getState().AdminContainer.filterBusiness;
+    const {
+      rows,
+      page,
+      q,
+      sort_by,
+      filterIndustry,
+      filterCategory,
+      filterSubCategory,
+      filterCountry,
+      filterState,
+      filterDistrict,
+      filterCity,
+      filterArea
+    } = getState().AdminContainer.filterBusiness;
     const params = {};
-    params.rows = filterValue.rows;
-    params.page = filterValue.page;
-    params.q = filterValue.q;
-    params.sort_by = filterValue.sort_by.map(
-      data => `${data.id}-${data.desc ? "desc" : "asc"}`
-    );
-    params.industry = filterValue.industry
-      ? filterValue.industry.map(industry => industry.id)
-      : [];
+    params.rows = rows;
+    params.page = page;
+    if (q) {
+      params.q = q;
+    }
+    if (sort_by.length) {
+      params.sort_by = sort_by.map(
+        data => `${data.id}-${data.desc ? "desc" : "asc"}`
+      );
+    }
+    if (filterIndustry.length) {
+      params.industry = filterIndustry.map(industry => industry.id);
+    }
+    if (filterCategory.length) {
+      params.category = filterCategory.map(category => category.id);
+    }
+    if (filterSubCategory.length) {
+      params.sub_category = filterSubCategory.map(
+        subcategory => subcategory.id
+      );
+    }
+    if (filterCountry.length) {
+      params.country = filterCountry.map(country => country.id);
+    }
+    if (filterState.length) {
+      params.state = filterState.map(state => state.id);
+    }
+    if (filterDistrict.length) {
+      params.district = filterDistrict.map(district => district.id);
+    }
+    if (filterCity.length) {
+      params.city = filterCity.map(city => city.id);
+    }
+    if (filterArea.length) {
+      params.area = filterArea.map(area => area.id);
+    }
 
     if (payload) {
       if (payload.rows) params.rows = payload.rows;
@@ -339,17 +409,57 @@ export const onAssignBusinessList = payload => ({
 
 epics.push((action$, { getState }) =>
   action$.ofType(FETCH_ASSIGN_BUSINESS_PENDING).switchMap(({ payload }) => {
-    const filterValue = getState().AdminContainer.filterAssignBusiness;
+    const {
+      rows,
+      page,
+      q,
+      sort_by,
+      filterIndustry,
+      filterCategory,
+      filterSubCategory,
+      filterCountry,
+      filterState,
+      filterDistrict,
+      filterCity,
+      filterArea
+    } = getState().AdminContainer.filterAssignBusiness;
     const params = {};
-    params.rows = filterValue.rows;
-    params.page = filterValue.page;
-    params.q = filterValue.q;
-    params.sort_by = filterValue.sort_by.map(
-      data => `${data.id}-${data.desc ? "desc" : "asc"}`
-    );
-    if (filterValue.industry.length)
-      params.industry = filterValue.industry.map(industry => industry.id);
-    if (filterValue.area) params.area = filterValue.area.id;
+    params.rows = rows;
+    params.page = page;
+    if (q) {
+      params.q = q;
+    }
+    if (sort_by.length) {
+      params.sort_by = sort_by.map(
+        data => `${data.id}-${data.desc ? "desc" : "asc"}`
+      );
+    }
+    if (filterIndustry.length) {
+      params.industry = filterIndustry.map(industry => industry.id);
+    }
+    if (filterCategory.length) {
+      params.category = filterCategory.map(category => category.id);
+    }
+    if (filterSubCategory.length) {
+      params.sub_category = filterSubCategory.map(
+        subcategory => subcategory.id
+      );
+    }
+    if (filterCountry.length) {
+      params.country = filterCountry.map(country => country.id);
+    }
+    if (filterState.length) {
+      params.state = filterState.map(state => state.id);
+    }
+    if (filterDistrict.length) {
+      params.district = filterDistrict.map(district => district.id);
+    }
+    if (filterCity.length) {
+      params.city = filterCity.map(city => city.id);
+    }
+    if (filterArea.length) {
+      params.area = filterArea.map(area => area.id);
+    }
 
     if (payload) {
       if (payload.rows) params.rows = payload.rows;
@@ -472,7 +582,13 @@ epics.push((action$, { getState }) =>
     const { id } = action.payload;
     const { access_token } = getState().auth.cookies.token_data;
     return onBusinessEachDeleteAjax({ id, access_token })
-      .mergeMap(({ response }) => console.log(response))
+      .concatMap(({ response }) => {
+        toast.success("Deleted Successfully!");
+        return [
+          { type: FETCH_BUSINESS_PENDING },
+          { type: DELETE_BUSINESS_FULFILLED }
+        ];
+      })
       .catch(ajaxError => {
         console.log(ajaxError);
         return Observable.of({ type: DELETE_BUSINESS_REJECTED });

@@ -9,7 +9,14 @@ import {
 const INITIAL_STATE = {
   q: "",
   sort_by: [],
-  industry: "",
+  filterIndustry: [],
+  filterCategory: [],
+  filterSubCategory: [],
+  filterCountry: [],
+  filterState: [],
+  filterDistrict: [],
+  filterCity: [],
+  filterArea: [],
   rows: 20,
   page: 1
 };

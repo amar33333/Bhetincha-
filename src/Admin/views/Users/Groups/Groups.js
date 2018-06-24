@@ -8,7 +8,8 @@ import {
   InputGroupText
 } from "reactstrap";
 
-import { onGroupSubmit } from "../../../actions";
+import GroupList from "./GroupList";
+import { onGroupSubmit, onGroupsList, onGroupDelete } from "../../../actions";
 
 class Groups extends Component {
   constructor(props) {
@@ -17,10 +18,10 @@ class Groups extends Component {
     this.state = {
       group: ""
     };
+  }
 
-    this.access_token = this.props.cookies
-      ? this.props.cookies.token_data.access_token
-      : null;
+  componentDidMount() {
+    this.props.onGroupsList();
   }
 
   onChange = (key, event) =>
@@ -31,7 +32,7 @@ class Groups extends Component {
 
     const { group } = this.state;
 
-    this.props.onGroupSubmit({ group, access_token: this.access_token });
+    this.props.onGroupSubmit({ group });
     this.clearState();
   };
 
@@ -59,12 +60,21 @@ class Groups extends Component {
             </InputGroupAddon>
           </InputGroup>
         </form>
+        <br />
+        <GroupList
+          groups={this.props.groups}
+          onGroupDelete={this.props.onGroupDelete}
+        />
       </div>
     );
   }
 }
 
 export default connect(
-  ({ AdminContainer: { user_reducer }, auth }) => ({ user_reducer, ...auth }),
-  { onGroupSubmit }
+  ({
+    AdminContainer: {
+      user_reducer: { groups }
+    }
+  }) => ({ groups }),
+  { onGroupSubmit, onGroupsList, onGroupDelete }
 )(Groups);

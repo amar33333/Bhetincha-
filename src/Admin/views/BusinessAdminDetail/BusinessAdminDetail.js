@@ -133,10 +133,19 @@ class BusinessAdminDetail extends Component {
     this.setState(updatedCollapseState);
   };
 
+  renderErrors = () => {
+    return (
+      <div>
+        <p> Business name not added </p>
+      </div>
+    );
+  };
+
   render() {
     // console.log("busines admin props: ", this.props);
     return (
       <div className="animated fadeIn" style={{ marginBottom: "20px" }}>
+        {/* {this.renderErrors()} */}
         <form onSubmit={this.onFormSubmit}>
           <SubBusinessDetails
             collapsed={this.state.businessAdminDetailCollapse}

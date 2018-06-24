@@ -14,6 +14,12 @@ const AsyncMinisite = props => (
   </DynamicImport>
 );
 
+const AsyncEcommerce = props => (
+  <DynamicImport load={() => import("../Views/Ecommerce")}>
+    {Component => (Component === null ? <Loading /> : <Component {...props} />)}
+  </DynamicImport>
+);
+
 class WebsiteRoute extends Component {
   render() {
     return (
@@ -21,8 +27,15 @@ class WebsiteRoute extends Component {
         <Route
           path="/businesses"
           name="Business List"
-          component={BusinessList}
+          render={props => (
+            <BusinessList
+              {...props}
+              setInitialQuery={this.props.setInitialQuery}
+            />
+          )}
         />
+
+        <Route path="/ecommerce" name="Ecommerce" component={AsyncEcommerce} />
 
         <Route
           path={`/:${ROUTE_PARAMS_BUSINESS_NAME}/:${ROUTE_PARAMS_MINISITE_BUSINESS_ROUTE}`}

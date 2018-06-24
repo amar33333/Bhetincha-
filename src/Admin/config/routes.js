@@ -24,8 +24,12 @@ import {
   AppBusinessList,
   AppBusinessReview,
   BusinessAssign,
-  TeleCalling
+  TeleCalling,
+  ManageBranchs,
+  AddBranch
 } from "../views";
+
+import { ManageCategories } from "../views/Ecommerce";
 
 import CustomRoute from "../../Common/utils/CustomRoute";
 
@@ -92,10 +96,23 @@ class AdminRoute extends Component {
           //permission="CAN_VIEW_DASHBOARD"
         />
         <Route
+          path="/admin/list-business/:businessSlug/manage-branchs/add-branch"
+          name="Add Branch Address"
+          component={AddBranch}
+          //permission="CAN_VIEW_DASHBOARD"
+        />
+        <Route
+          path="/admin/list-business/:businessSlug/manage-branchs"
+          name="Manage Branch Address"
+          component={ManageBranchs}
+          //permission="CAN_VIEW_DASHBOARD"
+        />
+
+        <CustomRoute
           path="/admin/approve-app-business"
           name="List App Business"
           component={AppBusinessList}
-          //permission="CAN_VIEW_DASHBOARD"
+          permission="CAN_VIEW_APP_BUSINESS"
         />
 
         <CustomRoute
@@ -146,6 +163,13 @@ class AdminRoute extends Component {
           name="Tele-Calling"
           component={TeleCalling}
           permission="CAN_VIEW_USER"
+        />
+        <CustomRoute
+          exact
+          path="/admin/ecommerce/categories"
+          name="Ecommerce-categories"
+          component={ManageCategories}
+          permission="CAN_VIEW_ECOMMERCE_CATEGORIES"
         />
         <CustomRoute
           exact

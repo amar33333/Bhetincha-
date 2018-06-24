@@ -9,6 +9,9 @@ import {
   FETCH_USER_PENDING,
   CREATE_BUSINESS_USER_FULFILLED,
   CREATE_BUSINESS_USER_REJECTED,
+  CREATE_USER_PENDING,
+  CREATE_USER_FULFILLED,
+  CREATE_USER_REJECTED,
   CREATE_BUSINESS_USER_PENDING,
   CREATE_INDIVIDUAL_USER_FULFILLED,
   CREATE_INDIVIDUAL_USER_REJECTED,
@@ -23,6 +26,10 @@ import {
   PERMISSIONS_LOAD_FULFILLED,
   PERMISSIONS_LOAD_REJECTED,
   COOKIES_LOAD_FULFILLED,
+  TOGGLE_PHONE_VERIFICATION_MODAL,
+  RESEND_TOKEN_FULFILLED,
+  RESEND_TOKEN_PENDING,
+  RESEND_TOKEN_REJECTED,
   LOGOUT_USER
 } from "./types";
 
@@ -43,8 +50,12 @@ import {
   onIndividualRegister,
   onUserGet,
   onPhoneVerificationRequestPost,
-  onPhoneVerificationTokenPost
+  onPhoneVerificationTokenPost,
+  onUserRegister,
+  onResendTokenPost
 } from "../Common/utils/serverCall";
+
+import querystring from "querystring";
 
 const epics = [];
 
@@ -188,12 +199,16 @@ export const onPhoneVerificationTokenSend = payload => ({
 });
 
 epics.push(action$ =>
-  action$.ofType(SEND_PHONE_VERIFICATION_TOKEN_PENDING).mergeMap(action =>
-    onPhoneVerificationTokenPost({ ...action.payload })
+  action$.ofType(SEND_PHONE_VERIFICATION_TOKEN_PENDING).mergeMap(action => {
+    const { history } = action.payload;
+    return onPhoneVerificationTokenPost({ ...action.payload })
       .map(({ response }) => {
-        if (response.msg === "success") {
+        if (response.id) {
           // toast.success("Request Sent Successfully");
-
+          history.push({
+            pathname: "/user-register",
+            search: `?${querystring.stringify({ id: response.id })}`
+          });
           return {
             type: SEND_PHONE_VERIFICATION_TOKEN_FULFILLED,
             payload: response
@@ -208,8 +223,70 @@ epics.push(action$ =>
           type: SEND_PHONE_VERIFICATION_TOKEN_REJECTED,
           payload: ajaxError
         });
+      });
+  })
+);
+
+export const onResendTokenRequest = payload => ({
+  type: RESEND_TOKEN_PENDING,
+  payload
+});
+
+epics.push(action$ =>
+  action$.ofType(RESEND_TOKEN_PENDING).mergeMap(action => {
+    return onResendTokenPost({ ...action.payload })
+      .map(({ response }) => {
+        if (response.id) {
+          toast.success("Verification code has been sent successfully");
+
+          return {
+            type: RESEND_TOKEN_FULFILLED,
+            payload: response
+          };
+        } else {
+          throw new Error(response.msg);
+        }
       })
-  )
+      .catch(ajaxError => {
+        toast.error(ajaxError.toString());
+        return Observable.of({
+          type: RESEND_TOKEN_REJECTED,
+          payload: ajaxError
+        });
+      });
+  })
+);
+
+export const onUserRegisterSubmit = payload => ({
+  type: CREATE_USER_PENDING,
+  payload
+});
+
+epics.push(action$ =>
+  action$.ofType(CREATE_USER_PENDING).mergeMap(action => {
+    const { history, slug } = action.payload;
+
+    return onUserRegister({ ...action.payload })
+      .concatMap(({ response }) => {
+        if (response.msg === "success") {
+          toast.success("Registered Successfully");
+          console.log("respons: ", response);
+          history.push({
+            pathname: `/${slug}`
+          });
+          return [{ type: CREATE_USER_FULFILLED, payload: response }];
+        } else {
+          throw new Error(response.msg[Object.keys(response.msg)[0]][0]);
+        }
+      })
+      .catch(ajaxError => {
+        toast.error(ajaxError.toString());
+        return Observable.of({
+          type: CREATE_USER_REJECTED,
+          payload: ajaxError
+        });
+      });
+  })
 );
 
 export const onBusinessRegisterSubmit = payload => ({
@@ -217,29 +294,36 @@ export const onBusinessRegisterSubmit = payload => ({
   payload
 });
 
-epics.push(action$ =>
-  action$
-    .ofType(CREATE_BUSINESS_USER_PENDING)
-    .mergeMap(action => onBusinessRegister({ ...action.payload }))
-    .concatMap(({ response }) => {
-      if (response.msg === "success") {
-        toast.success("Registered Successfully");
+export const togglePhoneVerificationModal = payload => ({
+  type: TOGGLE_PHONE_VERIFICATION_MODAL,
+  payload
+});
 
-        return [
-          { type: TOGGLE_REGISTER_MODAL },
-          { type: CREATE_BUSINESS_USER_FULFILLED, payload: response }
-        ];
-      } else {
-        throw new Error(response.msg[Object.keys(response.msg)[0]][0]);
-      }
-    })
-    .catch(ajaxError => {
-      toast.error(ajaxError.toString());
-      return Observable.of({
-        type: CREATE_BUSINESS_USER_REJECTED,
-        payload: ajaxError
+epics.push(action$ =>
+  action$.ofType(CREATE_BUSINESS_USER_PENDING).mergeMap(action => {
+    const { history } = action.payload;
+
+    return onBusinessRegister({ ...action.payload })
+      .map(({ response }) => {
+        if (response.id) {
+          toast.success("Registered Successfully");
+          history.push({
+            pathname: "/mobile-verification",
+            search: `?${querystring.stringify({ id: response.id })}`
+          });
+          return { type: CREATE_BUSINESS_USER_FULFILLED, payload: response };
+        } else {
+          throw new Error(response.msg[Object.keys(response.msg)[0]][0]);
+        }
+      })
+      .catch(ajaxError => {
+        toast.error(ajaxError.toString());
+        return Observable.of({
+          type: CREATE_BUSINESS_USER_REJECTED,
+          payload: ajaxError
+        });
       });
-    })
+  })
 );
 
 export const onIndividualRegisterSubmit = payload => ({

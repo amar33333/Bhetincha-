@@ -114,6 +114,9 @@ class SubBusinessDetail extends Component {
       if (value) {
         console.log("indsutry each Called: ", value);
 
+        this.props.onUnmountIndustryData();
+        this.props.onUnmountCategoryData();
+
         this.props.onIndustryEachList({
           id: value.id,
           access_token: this.access_token
@@ -335,6 +338,7 @@ class SubBusinessDetail extends Component {
                       value={valueIndustry}
                       onChange={this.handleSelectChange.bind(this, "industry")}
                       options={industries}
+                      tabSelectsValue={false}
                       valueKey="id"
                       labelKey="name"
                     />
@@ -354,7 +358,8 @@ class SubBusinessDetail extends Component {
                       )}
                       options={categories}
                       multi
-                      closeOnSelect={false}
+                      tabSelectsValue={false}
+                      //closeOnSelect={false}
                       valueKey="id"
                       labelKey="name"
                     />
@@ -370,8 +375,9 @@ class SubBusinessDetail extends Component {
                       placeholder="Select Sub Category (Multiple if any)"
                       noResultsText="No Data Found"
                       multi
+                      tabSelectsValue={false}
                       //removeSelected={false}
-                      closeOnSelect={false}
+                      //closeOnSelect={false}
                       value={this.state.sub_categories}
                       onChange={this.handleSelectChange.bind(
                         this,
@@ -389,7 +395,8 @@ class SubBusinessDetail extends Component {
                     <Select
                       name="Payment Method"
                       multi
-                      closeOnSelect={false}
+                      tabSelectsValue={false}
+                      //closeOnSelect={false}
                       placeholder="Select Payment Methods (Multiple if any)"
                       noResultsText="No Data Found"
                       value={valuePaymentMethod}

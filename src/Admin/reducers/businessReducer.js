@@ -83,7 +83,9 @@ const INITIAL_STATE = {
   salesUser: [],
 
   assignedPathLoading: false,
-  assignedPathError: false
+  assignedPathError: false,
+
+  businessData: null
 };
 
 export default function(state = INITIAL_STATE, action) {

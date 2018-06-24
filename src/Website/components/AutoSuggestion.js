@@ -2,12 +2,24 @@ import React, { Component } from "react";
 import Autosuggest from "react-autosuggest";
 
 class AutoSuggestion extends Component {
-  state = { value: "", selected: false };
+  constructor(props) {
+    super(props);
+    this.state = {
+      value: props.initialQuery || ""
+      // selected: false
+    };
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.initialQuery !== this.props.initialQuery) {
+      this.setState({ value: this.props.initialQuery });
+    }
+  }
 
   onSuggestionsClearRequested = () => {};
 
   getSuggestionValue = suggestion => {
-    this.setState({ selected: true });
+    // this.setState({ selected: true });
     return suggestion[this.props.valueKey];
   };
 
@@ -32,22 +44,25 @@ class AutoSuggestion extends Component {
         getSuggestionValue={this.getSuggestionValue}
         renderSuggestion={this.renderSuggestion}
         onSuggestionSelected={(event, { suggestion }) => {
-          (event.type === "click" || this.state.selected) &&
-            this.props.onSearchItemSelected(suggestion);
+          event.type === "click" &&
+            //  || this.state.selected
+            this.props.onSearchComplete(suggestion[this.props.valueKey]);
+          // this.props.onSearchItemSelected(suggestion);
         }}
         renderInputComponent={inputProps => (
           <div>
             <form
               onSubmit={event => {
                 event.preventDefault();
-                this.state.selected
-                  ? this.setState({ selected: false })
-                  : this.props.onSearchComplete(this.state.value);
+                // this.state.selected
+                //   ? this.setState({ selected: false })
+                //   : this.props.onSearchComplete(this.state.value);
+                this.props.onSearchComplete(this.state.value);
               }}
             >
               <input
                 {...inputProps}
-                autoFocus
+                autoFocus={this.props.autoFocus}
                 style={{
                   // border: "1px solid #aaa",
                   border: "none",

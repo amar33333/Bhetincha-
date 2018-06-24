@@ -41,7 +41,10 @@ class CategoryEditModal extends Component {
 
   onFormEdit = event => {
     event.preventDefault();
-    const { category, industry: { id } } = this.state;
+    const {
+      category,
+      industry: { id }
+    } = this.state;
     this.props.onCategoryEdit({ category, industry: id });
   };
 
@@ -96,7 +99,7 @@ class CategoryEditModal extends Component {
           </Col>
           <Col xs="12" md="2">
             <Button color="primary">
-              <span className="fa fa-plus" /> EDIT
+              <span className="fa fa-plus" /> SAVE
             </Button>
           </Col>
         </Row>

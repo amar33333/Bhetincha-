@@ -65,19 +65,73 @@ epics.push((action$, { getState }) =>
   })
 );
 
-export const onSubCategoryList = () => ({ type: FETCH_SUB_CATEGORY_PENDING });
+export const onSubCategoryList = payload => ({
+  type: FETCH_SUB_CATEGORY_PENDING,
+  payload
+});
 
 epics.push((action$, { getState }) =>
-  action$.ofType(FETCH_SUB_CATEGORY_PENDING).mergeMap(action =>
-    onSubCategoryGetAjax({
-      access_token: getState().auth.cookies.token_data.access_token
+  action$.ofType(FETCH_SUB_CATEGORY_PENDING).mergeMap(({ payload }) => {
+    const {
+      rows,
+      page,
+      name,
+      tags,
+      filterIndustry,
+      filterCategory,
+      filterExtraSection,
+      sortby
+    } = getState().AdminContainer.filterSubCategory;
+
+    const params = {};
+    params.rows = rows;
+    params.page = page;
+    if (name) {
+      params.name = name;
+    }
+    if (tags) {
+      params.tags = tags;
+    }
+    params.sortby = sortby.map(data => `${data.id}${data.desc ? "-desc" : ""}`);
+    if (filterIndustry.length) {
+      params.industry = filterIndustry.map(industry => industry.id);
+    }
+    if (filterCategory.length) {
+      params.category = filterCategory.map(category => category.id);
+    }
+    if (filterExtraSection.length) {
+      params.extra_sections = filterExtraSection.map(x => x.label);
+    }
+    if (payload) {
+      if (payload.rows) {
+        params.rows = payload.rows;
+      }
+      if (payload.page) {
+        params.page = payload.page;
+      }
+      if (payload.filterIndustry) {
+        params.industry = payload.filterIndustry.map(industry => industry.id);
+      }
+      if (payload.filterCategory) {
+        params.category = payload.filterCategory.map(category => category.id);
+      }
+      if (payload.filterExtraSection) {
+        params.extra_sections = payload.filterExtraSection.map(
+          category => category.id
+        );
+      }
+    }
+
+    return onSubCategoryGetAjax({
+      access_token: getState().auth.cookies.token_data.access_token,
+      params
     })
       .map(({ response }) => ({
         type: FETCH_SUB_CATEGORY_FULFILLED,
         payload: response
       }))
-      .catch(ajaxError => Observable.of({ type: FETCH_SUB_CATEGORY_REJECTED }))
-  )
+      .catch(ajaxError => Observable.of({ type: FETCH_SUB_CATEGORY_REJECTED }));
+  })
 );
 
 export const onSubCategoryEdit = payload => ({

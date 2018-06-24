@@ -58,7 +58,7 @@ class CompanyTypeEditModal extends Component {
           </InputGroup>
         </FormGroup>
         <Button color="primary">
-          <span className="fa fa-plus" /> EDIT
+          <span className="fa fa-plus" /> SAVE
         </Button>
       </Form>
     );

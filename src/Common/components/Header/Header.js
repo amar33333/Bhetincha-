@@ -1,5 +1,6 @@
 import React, { Component } from "react";
-import { NavbarToggler, NavbarBrand, Nav } from "reactstrap";
+import { NavbarToggler, Nav } from "reactstrap";
+import { Link } from "react-router-dom";
 import { Avatar } from "../../../Website/components";
 
 class Header extends Component {
@@ -29,7 +30,7 @@ class Header extends Component {
         <NavbarToggler className="d-lg-none" onClick={this.mobileSidebarToggle}>
           <span className="navbar-toggler-icon" />
         </NavbarToggler>
-        <NavbarBrand href="#" />
+        <Link className="navbar-brand" to="/" />
         <NavbarToggler
           className="d-md-down-none mr-auto"
           onClick={this.sidebarToggle}

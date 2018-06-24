@@ -18,7 +18,7 @@ import { connect } from "react-redux";
 
 import { onBusinessRegisterSubmit } from "../../../../actions";
 
-class BusinessRegisterModal extends Component {
+class BusinessRegisterModal_2 extends Component {
   state = {
     business_name: "",
     mobile_number: "",
@@ -140,4 +140,4 @@ const mapStateToProps = ({ auth }) => {
 export default connect(
   mapStateToProps,
   { onBusinessRegisterSubmit }
-)(BusinessRegisterModal);
+)(BusinessRegisterModal_2);

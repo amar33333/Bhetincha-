@@ -1,8 +1,4 @@
-import {
-  TOGGLE_LOGIN_MODAL,
-  TOGGLE_REGISTER_MODAL,
-  TOGGLE_PHONE_VERIFICATION_MODAL
-} from "../actions/types";
+import { TOGGLE_LOGIN_MODAL, TOGGLE_REGISTER_MODAL } from "../actions/types";
 
 const INITIAL_STATE = {
   loginModal: false,

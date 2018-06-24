@@ -256,16 +256,16 @@ class SubBusinessPrimaryAddress extends Component {
   };
 
   onContactSave = (index, data) => {
-    console.log("herau: ", index, data);
+    // console.log("herau: ", index, data);
     const newContactPerson = this.state.contactPerson.map(
       (contact, sub_index) => {
         return index !== sub_index ? contact : { ...contact, ...data };
       }
     );
 
-    this.setState({ contactPerson: newContactPerson }, () =>
-      toast.success(`Contact - ${index + 1} Saved Successfully`)
-    );
+    this.setState({ contactPerson: newContactPerson }, () => {
+      // toast.success(`Contact - ${index + 1} Saved Successfully`);
+    });
   };
 
   // DO NOT DELETE THIS COMMENTED CODE

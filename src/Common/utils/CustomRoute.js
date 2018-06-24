@@ -1,7 +1,10 @@
 import React, { Component } from "react";
 import { Route, Link, Redirect } from "react-router-dom";
 
+import { connect } from "react-redux";
+
 import PermissionProvider from "../utils/PermissionProvider";
+import { Loading } from "../pages";
 
 // const permissionProvider = new PermissionProvider();
 
@@ -15,17 +18,20 @@ class CustomRoute extends Component {
     // console.log('name: ', name, ' exact: ', exact, ' path: ', path, ' component: ', component);
 
     // let permissionProvider = new PermissionProvider();
-
-    if (PermissionProvider.hasPermission(this.props.permission)) {
-      console.log("permission granted");
-      return (
-        <Route exact={exact} path={path} name={name} component={component} />
-      );
+    if (!this.props.permissions_loading) {
+      if (PermissionProvider.hasPermission(this.props.permission)) {
+        console.log("permission granted");
+        return (
+          <Route exact={exact} path={path} name={name} component={component} />
+        );
+      } else {
+        console.log("no permission");
+        return <Redirect to="/404" />;
+      }
     } else {
-      console.log("no permission");
-      return <Redirect to="/Page404" />;
+      return <Loading />;
     }
   }
 }
 
-export default CustomRoute;
+export default connect(({ auth }) => ({ ...auth }))(CustomRoute);

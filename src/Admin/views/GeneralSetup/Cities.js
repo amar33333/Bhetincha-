@@ -31,6 +31,8 @@ import {
   onCityList,
   onDistrictList,
   onStateList,
+  handleOnStateFilterChange,
+  handleOnDistrictFilterChange,
   handleOnCityFilterChange,
   handleSortChangeCity,
   onCityDelete,
@@ -47,7 +49,9 @@ class Cities extends Component {
     state: "",
     district: "",
     city: "",
-    citySubmit: false
+    citySubmit: false,
+    stateSearchText: "",
+    districtSearchText: ""
   };
 
   tableProps = {
@@ -63,70 +67,102 @@ class Cities extends Component {
       {
         Header: "District",
         accessor: "district",
+        sortable: false,
         Filter: () => (
           <Select
             clearable
+            tabSelectsValue={false}
             multi
+            isLoading={this.props.districtsFetchLoading}
+            onInputChange={districtSearchText => {
+              this.setState(
+                { districtSearchText },
+                () =>
+                  districtSearchText &&
+                  this.debouncedDistrictAutocomplete(districtSearchText)
+              );
+            }}
             value={this.props.filterDistrict}
-            onChange={this.handleFilterSelectChange.bind(
-              this,
-              "filterDistrict"
-            )}
+            onChange={filterDistrict =>
+              this.props.handleOnCityFilterChange({ filterDistrict })
+            }
             valueKey="id"
             labelKey="name"
-            options={this.props.districts.filter(district => {
-              const { filterCountry, filterState } = this.props;
-              if (!filterState.length) {
-                if (!filterCountry.length) return true;
-                else {
-                  let found = false;
-                  for (let i = 0; i < filterCountry.length; i++) {
-                    const states = this.props.states
-                      .filter(state => state.country === filterCountry[i].id)
-                      .map(state => state.id);
-                    found = found || states.includes(district.state);
-                  }
-                  return found;
-                }
-              } else {
-                for (let i = 0; i < filterState.length; i++)
-                  if (district.state === filterState[i].id) return true;
-              }
-              return false;
-            })}
+            filterOptions={options => options}
+            options={
+              this.state.districtSearchText && !this.props.districtsFetchLoading
+                ? this.props.districts.filter(
+                    district =>
+                      !this.props.filterDistrict.length ||
+                      !this.props.filterDistrict
+                        .map(x => x.id)
+                        .includes(district.id)
+                  )
+                : []
+            }
+            noResultsText={
+              this.state.districtSearchText && !this.props.districtsFetchLoading
+                ? "No Results Found"
+                : "Start Typing..."
+            }
           />
         )
       },
       {
         Header: "State",
         accessor: "state",
+        sortable: false,
         Filter: () => (
           <Select
             clearable
+            tabSelectsValue={false}
             multi
+            isLoading={this.props.statesFetchLoading}
+            onInputChange={stateSearchText => {
+              this.setState(
+                { stateSearchText },
+                () =>
+                  stateSearchText &&
+                  this.debouncedStateAutocomplete(stateSearchText)
+              );
+            }}
             value={this.props.filterState}
-            onChange={this.handleFilterSelectChange.bind(this, "filterState")}
+            onChange={filterState =>
+              this.props.handleOnCityFilterChange({ filterState })
+            }
             valueKey="id"
             labelKey="name"
-            options={this.props.states.filter(state => {
-              const { filterCountry } = this.props;
-              if (!filterCountry.length) return true;
-              for (let i = 0; i < filterCountry.length; i++)
-                if (state.country === filterCountry[i].id) return true;
-              return false;
-            })}
+            filterOptions={options => options}
+            options={
+              this.state.stateSearchText && !this.props.statesFetchLoading
+                ? this.props.states.filter(
+                    state =>
+                      !this.props.filterState.length ||
+                      !this.props.filterState.map(x => x.id).includes(state.id)
+                  )
+                : []
+            }
+            noResultsText={
+              this.state.stateSearchText && !this.props.statesFetchLoading
+                ? "No Results Found"
+                : "Start Typing..."
+            }
           />
         )
       },
       {
         Header: "Country",
         accessor: "country",
+        sortable: false,
         Filter: () => (
           <Select
             clearable
+            tabSelectsValue={false}
             multi
             value={this.props.filterCountry}
-            onChange={this.handleFilterSelectChange.bind(this, "filterCountry")}
+            onChange={filterCountry =>
+              this.props.handleOnCityFilterChange({ filterCountry })
+            }
             valueKey="id"
             labelKey="name"
             options={this.props.countries}
@@ -169,11 +205,9 @@ class Cities extends Component {
   componentDidMount() {
     this.props.onCountryList();
     this.props.onCityList();
-    this.props.onDistrictList();
-    this.props.onStateList();
   }
 
-  componentDidUpdate = (prevProps, prevState, snapshot) => {
+  componentDidUpdate = (_, prevState) => {
     if (prevState.citySubmit && !this.props.loading) {
       const updates = { citySubmit: false };
       if (!this.props.error) {
@@ -194,9 +228,28 @@ class Cities extends Component {
   debouncedSearch = debounce(
     column =>
       this.props.handleOnCityFilterChange({
-        name: column.length ? column[0].value : ""
+        name: column.filter(x => x.id === "city").length
+          ? column.find(x => x.id === "city").value
+          : ""
       }),
     200
+  );
+
+  debouncedStateAutocomplete = debounce(
+    name =>
+      this.props.handleOnStateFilterChange({
+        name,
+        filterCountry: this.props.filterCountry
+      }),
+    200
+  );
+
+  debouncedDistrictAutocomplete = debounce(name =>
+    this.props.handleOnDistrictFilterChange({
+      name,
+      filterCountry: this.props.filterCountry,
+      filterState: this.props.filterState
+    })
   );
 
   onChange = (key, event) =>
@@ -226,67 +279,6 @@ class Cities extends Component {
       this.setState({ district: "" });
       value && this.props.onStateEachList({ id: value.id });
     }
-  };
-
-  handleFilterSelectChange = (key, value) => {
-    if (key === "filterDistrict")
-      this.props.handleOnCityFilterChange({ filterDistrict: value });
-    else this.updateOtherFilters(key, value);
-  };
-
-  updateOtherFilters = (key, value) => {
-    const { filterDistrict } = this.props;
-    let changedDistrict = false;
-
-    let newFilterState = key === "filterState" ? value : this.props.filterState,
-      newFilterDistrict = [],
-      filterCountry =
-        key === "filterCountry" ? value : this.props.filterCountry;
-
-    if (newFilterState.length) {
-      if (filterCountry.length) {
-        newFilterState = newFilterState.filter(filter => {
-          let found = false;
-          for (let i = 0; i < filterCountry.length; i++) {
-            found = found || filter.country === filterCountry[i].id;
-            if (found) break;
-          }
-          return found;
-        });
-      }
-    }
-    if (filterDistrict.length) {
-      if (newFilterState.length) {
-        newFilterDistrict = filterDistrict.filter(filter => {
-          let found = false;
-          for (let i = 0; i < newFilterState.length; i++) {
-            found = found || filter.state === newFilterState[i].id;
-            if (found) break;
-          }
-          changedDistrict = !found;
-          return found;
-        });
-      } else if (filterCountry.length) {
-        newFilterDistrict = filterDistrict.filter(filter => {
-          let found = false;
-          for (let i = 0; i < filterCountry.length; i++) {
-            const states = this.props.states
-              .filter(state => state.country === filterCountry[i].id)
-              .map(state => state.id);
-            found = found || states.includes(filter.state);
-            if (found) break;
-          }
-          changedDistrict = !found;
-          return found;
-        });
-      }
-    }
-
-    const toUpdate = {};
-    toUpdate.filterState = newFilterState;
-    toUpdate.filterCountry = filterCountry;
-    if (changedDistrict) toUpdate.filterDistrict = newFilterDistrict;
-    this.props.handleOnCityFilterChange(toUpdate);
   };
 
   render() {
@@ -424,19 +416,39 @@ class Cities extends Component {
 }
 
 export default connect(
-  ({ AdminContainer: { general_setup, filterCity } }) => ({
-    countries: general_setup.countries,
-    partialStates: general_setup.countryData,
-    partialDistricts: general_setup.stateData,
-    loading: general_setup.cityLoading,
-    error: general_setup.cityError,
-
-    districts: general_setup.districts,
-    states: general_setup.states,
-    cities: general_setup.cities,
-    fetchLoading: general_setup.citiesFetchLoading,
-    pages: general_setup.citiesPages,
-    rowCount: general_setup.citiesRowCount,
+  ({
+    AdminContainer: {
+      general_setup: {
+        countries,
+        countryData,
+        stateData,
+        cityLoading,
+        cityError,
+        districts,
+        districtsFetchLoading,
+        cities,
+        states,
+        statesFetchLoading,
+        citiesFetchLoading,
+        citiesPages,
+        citiesRowCount
+      },
+      filterCity
+    }
+  }) => ({
+    countries,
+    partialStates: countryData,
+    partialDistricts: stateData,
+    loading: cityLoading,
+    error: cityError,
+    districts,
+    districtsFetchLoading,
+    states,
+    statesFetchLoading,
+    cities,
+    fetchLoading: citiesFetchLoading,
+    pages: citiesPages,
+    rowCount: citiesRowCount,
     ...filterCity
   }),
   {
@@ -447,6 +459,8 @@ export default connect(
     onCityList,
     onDistrictList,
     onStateList,
+    handleOnStateFilterChange,
+    handleOnDistrictFilterChange,
     handleOnCityFilterChange,
     handleSortChangeCity,
     onCityDelete,

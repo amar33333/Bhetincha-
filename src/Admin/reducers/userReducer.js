@@ -86,7 +86,7 @@ export default function(state = INITIAL_STATE, action) {
     case FETCH_GROUPS_FULFILLED:
       return {
         ...state,
-        groups: action.payload,
+        groups: action.payload.map((group, i) => ({ ...group, s_no: i + 1 })),
         loading: false,
         statusClass: "fulfilled"
       };
