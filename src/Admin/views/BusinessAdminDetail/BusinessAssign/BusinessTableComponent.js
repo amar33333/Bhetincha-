@@ -57,6 +57,11 @@ class BusinessTableComponent extends Component {
     selectedBusiness: [],
     path: "",
     assignedPathSubmit: false,
+    categorySearchText: "",
+    subCategorySearchText: "",
+    stateSearchText: "",
+    districtSearchText: "",
+    citySearchText: "",
     areaSearchText: ""
   };
 
