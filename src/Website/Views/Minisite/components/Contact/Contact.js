@@ -118,9 +118,12 @@ class Contact extends Component {
                   : null}
               </p>
               <p>{branch.landmark}</p>
-              <a href={`tel: ${branch.landlineNumber}`}>
-                <i className="fa fa-phone" /> {branch.landlineNumber}
-              </a>
+              {branch.landlineNumber ? (
+                <a href={`tel: ${branch.landlineNumber}`}>
+                  <i className="fa fa-phone" /> {branch.landlineNumber}
+                </a>
+              ) : null}
+
               {branch.contactPerson &&
                 branch.contactPerson.map(person => (
                   <div>

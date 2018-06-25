@@ -1,7 +1,15 @@
 import React, { Component } from "react";
 import GalleryGrid from "react-grid-gallery";
 import FileInputComponent from "react-file-input-previews-base64";
-import { Container, Card, CardBody, CardHeader, Input } from "reactstrap";
+import {
+  Container,
+  Card,
+  CardBody,
+  CardHeader,
+  Input,
+  Button
+} from "reactstrap";
+// import { Button } from "semantic-ui-react";
 
 import FontAwesome from "react-fontawesome";
 
@@ -166,6 +174,16 @@ class GalleryComponent extends Component {
               <CardBody>
                 <div className="album-title">
                   <p className="album-title">{album.name}</p>
+                  <Button
+                    color="danger"
+                    style={{
+                      position: "absolute",
+                      top: "10px",
+                      right: "10px"
+                    }}
+                  >
+                    <i className="fa fa-remove" />
+                  </Button>
                   {this.renderDeleteButton(album)}
                   <small>
                     {album.photos.length === 0

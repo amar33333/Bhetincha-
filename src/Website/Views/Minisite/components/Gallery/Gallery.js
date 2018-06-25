@@ -47,6 +47,8 @@ class Gallery extends Component {
           galleryLoading={this.props.galleryLoading}
         />
         <Button
+          data-tooltip="Add New Album"
+          data-position="left center"
           circular
           icon="add"
           color="linkedin"
