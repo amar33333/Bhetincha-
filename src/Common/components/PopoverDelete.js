@@ -26,7 +26,9 @@ class PopoverItem extends React.Component {
         >
           <PopoverHeader>Are You Sure</PopoverHeader>
           <PopoverBody>
-            <div>Clicking yes will delete your data</div>
+            <div>
+              {this.props.subtitle || "Clicking yes will delete your data"}
+            </div>
             <Button
               color="danger"
               className="mr-2"

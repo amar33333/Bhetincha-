@@ -12,6 +12,7 @@ import {
 // import { Button } from "semantic-ui-react";
 
 import FontAwesome from "react-fontawesome";
+import { CustomModal, PopoverDelete } from "../../../../../Common/components";
 
 class GalleryComponent extends Component {
   constructor(props) {
@@ -148,6 +149,7 @@ class GalleryComponent extends Component {
                 }}
               >
                 <Input
+                  autoFocus
                   placeholder="Album Name"
                   value={this.state.newAlbumName}
                   onChange={event =>
@@ -166,7 +168,14 @@ class GalleryComponent extends Component {
   render() {
     return (
       <div>
-        {this.props.isEdit && this.renderAddNewGallery()}
+        <CustomModal
+          isOpen={this.props.createModalOpened}
+          toggle={this.props.toggleCreateModal}
+          className="modal-md"
+          title="Gallery | Create New"
+        >
+          {this.props.isEdit && this.renderAddNewGallery()}
+        </CustomModal>
         {this.state.albums.length === 0 && "Comming Soon!"}
         {this.state.albums.map(album => (
           <Container key={album.albumID}>
@@ -174,16 +183,17 @@ class GalleryComponent extends Component {
               <CardBody>
                 <div className="album-title">
                   <p className="album-title">{album.name}</p>
-                  <Button
-                    color="danger"
-                    style={{
-                      position: "absolute",
-                      top: "10px",
-                      right: "10px"
-                    }}
-                  >
-                    <i className="fa fa-remove" />
-                  </Button>
+                  {this.props.isEdit && (
+                    <PopoverDelete
+                      id={album.albumID}
+                      onClick={() =>
+                        this.props.handleAlbumDelete({
+                          album_id: album.albumID
+                        })
+                      }
+                      subtitle="This will delete all the photos inside album"
+                    />
+                  )}
                   {this.renderDeleteButton(album)}
                   <small>
                     {album.photos.length === 0
