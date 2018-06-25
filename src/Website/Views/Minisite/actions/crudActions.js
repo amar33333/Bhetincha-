@@ -7,6 +7,7 @@ import {
   onBusinessEachGetAjax,
   onBusinessEachPutAjax,
   onBusinessEachAlbumEachPhotosAjax,
+  onBusinessEachAlbumDeleteAjax,
   onBusinessEachAlbumEachPhotosDelete
 } from "../../../../Business/config/businessServerCall";
 
@@ -31,6 +32,9 @@ import {
   DELETE_GALLERY_PHOTO_FULFILLED,
   DELETE_GALLERY_PHOTO_PENDING,
   DELETE_GALLERY_PHOTO_REJECTED,
+  DELETE_GALLERY_ALBUM_FULFILLED,
+  DELETE_GALLERY_ALBUM_PENDING,
+  DELETE_GALLERY_ALBUM_REJECTED,
   CREATE_NEW_ALBUM_PENDING,
   CREATE_NEW_ALBUM_FULFILLED,
   CREATE_NEW_ALBUM_REJECTED,
@@ -160,6 +164,35 @@ epics.push((action$, { getState }) =>
               slug: getState().auth.cookies.user_data.slug
             }
           : { type: UPLOAD_GALLERY_PHOTO_REJECTED }
+    )
+  )
+);
+
+export const handleGalleryAlbumDelete = payload => ({
+  type: DELETE_GALLERY_ALBUM_PENDING,
+  payload
+});
+
+epics.push((action$, { getState }) =>
+  action$.ofType(DELETE_GALLERY_ALBUM_PENDING).mergeMap(({ payload }) =>
+    onBusinessEachAlbumDeleteAjax({
+      album_id: payload.album_id,
+      access_token: getState().auth.cookies.token_data.access_token,
+      business_id: getState().MinisiteContainer.crud.id
+    }).map(
+      ({ response }) =>
+        response.msg === "success"
+          ? {
+              type: FETCH_PART_BUSINESS,
+              updates: ["albums"],
+              onSuccess: payload => [
+                { type: DELETE_GALLERY_ALBUM_FULFILLED, payload }
+              ],
+              successToasts: ["Album Deleted Successfully"],
+              FAILED: DELETE_GALLERY_ALBUM_REJECTED,
+              slug: getState().auth.cookies.user_data.slug
+            }
+          : { type: DELETE_GALLERY_ALBUM_REJECTED }
     )
   )
 );

@@ -259,6 +259,20 @@ export const onBusinessEachAlbumEachPhotosAjax = ({
     }
   });
 
+export const onBusinessEachAlbumDeleteAjax = ({
+  business_id,
+  album_id,
+  access_token
+}) =>
+  ajax({
+    method: "DELETE",
+    url: `${ALBUM_URL}${business_id}/${album_id}/`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
 export const onBusinessEachAlbumEachPhotosDelete = ({
   business_id,
   album_id,
