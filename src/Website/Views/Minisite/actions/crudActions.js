@@ -234,6 +234,7 @@ epics.push(action$ =>
         payload.address = response.address;
         payload.branchAddress = response.branchAddress;
         payload.tollfreeNumber = response.tollfreeNumber;
+        payload.workingHour = response.workingHour;
 
         if (response.about) payload.about = response.about;
         if (response.nav_layout) payload.nav_layout = response.nav_layout;

@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 
+import { Button } from "semantic-ui-react";
+
 import {
   handleGalleryPhotoUpload,
   onBusinessUpdate,
@@ -43,6 +45,17 @@ class Gallery extends Component {
           handleCreateAlbum={this.handleCreateAlbum}
           // optional
           galleryLoading={this.props.galleryLoading}
+        />
+        <Button
+          circular
+          icon="add"
+          color="linkedin"
+          size="big"
+          style={{
+            position: "absolute",
+            right: "20px",
+            bottom: "50px"
+          }}
         />
       </div>
     );

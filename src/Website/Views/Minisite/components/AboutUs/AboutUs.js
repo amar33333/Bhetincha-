@@ -1,7 +1,9 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Container, Row, Col } from "reactstrap";
-import CircularProgressbar from "react-circular-progressbar";
+import { Card } from "semantic-ui-react";
+// import moment from "moment";
+// import CircularProgressbar from "react-circular-progressbar";
 
 import "react-quill/dist/quill.snow.css";
 import "react-circular-progressbar/dist/styles.css";
@@ -34,10 +36,11 @@ class AboutUs extends Component {
   };
 
   render() {
+    console.log("About props: ", this.props);
     const AsyncEditor = this.state.AsyncEditor;
     return (
       <div id="about-us">
-        <Container>
+        <Container fluid className="mb-3">
           <Row>
             <Col xs="12" md="12" className="minisite_heading__text_wrapper">
               <h2 className="minisite_heading__text">
@@ -47,7 +50,7 @@ class AboutUs extends Component {
             </Col>
           </Row>
           <Row>
-            <Col xs="12" md="12">
+            <Col xs="12" md="9">
               {this.props.mainEdit && this.props.aboutUsEdit ? (
                 AsyncEditor ? (
                   <AsyncEditor initialValue={this.props.data} />
@@ -68,23 +71,88 @@ class AboutUs extends Component {
                       __html: this.props.data.aboutUs
                     }}
                   />
-
-                  <div>Established Year {this.props.data.establishedYear}</div>
-                  {/* <div>Company Type {this.props.data.companyType}</div> */}
                 </div>
               )}
             </Col>
-          </Row>
-          {/* <Row>
-            <Col md="2">
-              <CircularProgressbar
-                initialAnimation
-                percentage={100}
-                className="progressbar-blue"
-                // textForPercentage={() => "90% is cool"}
-              />
+            <Col xs="12" md="3">
+              <Row className="mb-3">
+                <Col xs="12">
+                  <Card>
+                    <Card.Content header="Information" />
+                    <Card.Content>
+                      <strong>Established Year : </strong>
+                      {this.props.data.establishedYear === "" ||
+                      !this.props.data.establishedYear ? (
+                        <span> Not Provided</span>
+                      ) : (
+                        this.props.data.establishedYear
+                      )}
+                    </Card.Content>
+                    <Card.Content>
+                      <strong>Company Type : </strong>
+                      {!this.props.data.companyType ? (
+                        <span> Not Provided</span>
+                      ) : (
+                        this.props.data.companyType.name
+                      )}
+                    </Card.Content>
+                  </Card>
+                </Col>
+              </Row>
+              <Row>
+                <Col xs="12">
+                  <Card>
+                    <Card.Content header="Working Hour" />
+                    {this.props.workingHour.map((day, index) => {
+                      let start = new Date(day.start).toLocaleTimeString([], {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                        hour12: true
+                      });
+                      let end = new Date(day.end).toLocaleTimeString([], {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                        hour12: true
+                      });
+
+                      let today = new Date();
+                      return (
+                        <Card.Content>
+                          <strong>{day.day}: </strong>{" "}
+                          {!day.holiday ? `${start} - ${end}` : "Holiday"}{" "}
+                          {(() => {
+                            if (index === today.getDay()) {
+                              if (
+                                !day.holiday &&
+                                today.toLocaleTimeString([], {
+                                  hour: "2-digit",
+                                  minute: "2-digit",
+                                  hour12: true
+                                }) >= start &&
+                                today.toLocaleTimeString([], {
+                                  hour: "2-digit",
+                                  minute: "2-digit",
+                                  hour12: true
+                                }) <= end
+                              ) {
+                                return (
+                                  <span style={{ color: "blue" }}>Open</span>
+                                );
+                              } else {
+                                return (
+                                  <span style={{ color: "red" }}>Closed</span>
+                                );
+                              }
+                            }
+                          })()}
+                        </Card.Content>
+                      );
+                    })}
+                  </Card>
+                </Col>
+              </Row>
             </Col>
-          </Row> */}
+          </Row>
         </Container>
       </div>
     );
@@ -94,18 +162,19 @@ class AboutUs extends Component {
 export default connect(
   ({
     MinisiteContainer: {
-      crud: { about },
+      crud: { about, workingHour },
       edit
     }
   }) => ({
     data: {
       tagline: about.tagline || "",
       aboutUs: about.aboutUs || "",
-      establishedYear: about.establishedYear || ""
-      // companyType: about.companyType
+      establishedYear: about.establishedYear || "",
+      companyType: about.companyType
     },
     aboutUsEdit: edit.aboutUs,
-    mainEdit: edit.main
+    mainEdit: edit.main,
+    workingHour
   }),
   { onEditAboutUsClicked }
 )(AboutUs);

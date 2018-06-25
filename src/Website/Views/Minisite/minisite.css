@@ -114,7 +114,7 @@
 /* ============About us ================= */
 
 .gallery-wrapper {
-  /* position: relative; */
+  position: relative;
   min-height: 80vh !important;
   padding: 20px;
 }
