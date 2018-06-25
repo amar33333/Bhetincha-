@@ -36,6 +36,7 @@ class AddBranch extends Component {
     super(props);
 
     this.state = {
+      address_title: "",
       country: "",
       state: "",
       district: "",
@@ -218,6 +219,7 @@ class AddBranch extends Component {
 
   clearState = () => {
     this.setState({
+      address_title: "",
       country: "",
       state: "",
       district: "",
@@ -448,6 +450,18 @@ class AddBranch extends Component {
           {/* <Collapse isOpen={!this.props.collapsed}> */}
           <CardBody>
             <Row>
+              <Col xs="12" md="4">
+                <FormGroup>
+                  <Label for="Address-Title">Address Title</Label>
+                  <Input
+                    required
+                    type="Address_Title"
+                    value={this.state.address_title}
+                    onKeyDown={this._handleKeyPress}
+                    onChange={this.onChange.bind(this, "address_title")}
+                  />
+                </FormGroup>
+              </Col>
               <Col xs="12" md="4">
                 <FormGroup>
                   <Label for="group">Country</Label>
