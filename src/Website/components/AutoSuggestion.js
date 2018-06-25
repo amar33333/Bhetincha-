@@ -73,16 +73,25 @@ class AutoSuggestion extends Component {
                   boxShadow: "0px 2px 4px 1px rgba(196,174,196,0.79)"
                 }}
               />
-              <i
-                className="fa fa-search"
+              <button
+                type="submit"
                 style={{
-                  position: "absolute",
-                  right: "10px",
-                  top: "25%",
-                  fontSize: "20px",
-                  color: "grey"
+                  border: "none",
+                  outline: "none",
+                  background: "none"
                 }}
-              />
+              >
+                <i
+                  className="fa fa-search"
+                  style={{
+                    position: "absolute",
+                    right: "10px",
+                    top: "25%",
+                    fontSize: "20px",
+                    color: "grey"
+                  }}
+                />
+              </button>
             </form>
           </div>
         )}
