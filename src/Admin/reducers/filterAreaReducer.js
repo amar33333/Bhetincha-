@@ -2,7 +2,8 @@ import {
   AREA_FILTER_ON_CHANGE,
   CLEAR_AREA_ALL,
   FETCH_AREA_FULFILLED,
-  AREA_SET_SORT_BY
+  AREA_SET_SORT_BY,
+  UNMOUNT_AREA
 } from "../actions/types";
 
 const INITIAL_STATE = {
@@ -28,6 +29,7 @@ export default function(state = INITIAL_STATE, action) {
       return { ...state, sortby: action.payload };
 
     case CLEAR_AREA_ALL:
+    case UNMOUNT_AREA:
       return INITIAL_STATE;
 
     default:

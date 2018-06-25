@@ -58,8 +58,7 @@ class SubCategories extends Component {
     industry: "",
     extraSections: [],
     tags: [],
-    subCategorySubmit: false,
-    categorySearchText: ""
+    subCategorySubmit: false
   };
 
   tableProps = {
@@ -108,14 +107,7 @@ class SubCategories extends Component {
             tabSelectsValue={false}
             multi
             isLoading={this.props.categoriesFetchLoading}
-            onInputChange={categorySearchText => {
-              this.setState(
-                { categorySearchText },
-                () =>
-                  categorySearchText &&
-                  this.debouncedCategoryAutocomplete(categorySearchText)
-              );
-            }}
+            onInputChange={this.debouncedCategoryAutocomplete}
             value={this.props.filterCategory}
             onChange={filterCategory =>
               this.props.handleOnSubCategoryFilterChange({ filterCategory })
@@ -124,7 +116,6 @@ class SubCategories extends Component {
             labelKey="name"
             filterOptions={options => options}
             options={
-              this.state.categorySearchText &&
               !this.props.categoriesFetchLoading
                 ? this.props.categories.filter(
                     category =>
@@ -136,10 +127,9 @@ class SubCategories extends Component {
                 : []
             }
             noResultsText={
-              this.state.categorySearchText &&
               !this.props.categoriesFetchLoading
                 ? "No Results Found"
-                : "Start Typing..."
+                : "Loading..."
             }
           />
         )
@@ -212,6 +202,7 @@ class SubCategories extends Component {
   componentDidMount() {
     this.props.onSubCategoryList();
     this.props.onIndustryList();
+    this.props.onCategoryList({ rows: 50, page: 1 });
     this.props.onExtraSectionList();
   }
 

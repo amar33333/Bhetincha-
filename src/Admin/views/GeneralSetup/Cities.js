@@ -36,7 +36,6 @@ import {
   handleOnCityFilterChange,
   handleSortChangeCity,
   onCityDelete,
-  onClearCityFilters,
   onUnmountCountry,
   onUnmountState,
   onUnmountDistrict,
@@ -49,9 +48,7 @@ class Cities extends Component {
     state: "",
     district: "",
     city: "",
-    citySubmit: false,
-    stateSearchText: "",
-    districtSearchText: ""
+    citySubmit: false
   };
 
   tableProps = {
@@ -74,14 +71,7 @@ class Cities extends Component {
             tabSelectsValue={false}
             multi
             isLoading={this.props.districtsFetchLoading}
-            onInputChange={districtSearchText => {
-              this.setState(
-                { districtSearchText },
-                () =>
-                  districtSearchText &&
-                  this.debouncedDistrictAutocomplete(districtSearchText)
-              );
-            }}
+            onInputChange={this.debouncedDistrictAutocomplete}
             value={this.props.filterDistrict}
             onChange={filterDistrict =>
               this.props.handleOnCityFilterChange({ filterDistrict })
@@ -90,7 +80,7 @@ class Cities extends Component {
             labelKey="name"
             filterOptions={options => options}
             options={
-              this.state.districtSearchText && !this.props.districtsFetchLoading
+              !this.props.districtsFetchLoading
                 ? this.props.districts.filter(
                     district =>
                       !this.props.filterDistrict.length ||
@@ -101,9 +91,9 @@ class Cities extends Component {
                 : []
             }
             noResultsText={
-              this.state.districtSearchText && !this.props.districtsFetchLoading
+              !this.props.districtsFetchLoading
                 ? "No Results Found"
-                : "Start Typing..."
+                : "Loading..."
             }
           />
         )
@@ -118,14 +108,7 @@ class Cities extends Component {
             tabSelectsValue={false}
             multi
             isLoading={this.props.statesFetchLoading}
-            onInputChange={stateSearchText => {
-              this.setState(
-                { stateSearchText },
-                () =>
-                  stateSearchText &&
-                  this.debouncedStateAutocomplete(stateSearchText)
-              );
-            }}
+            onInputChange={this.debouncedStateAutocomplete}
             value={this.props.filterState}
             onChange={filterState =>
               this.props.handleOnCityFilterChange({ filterState })
@@ -134,7 +117,7 @@ class Cities extends Component {
             labelKey="name"
             filterOptions={options => options}
             options={
-              this.state.stateSearchText && !this.props.statesFetchLoading
+              !this.props.statesFetchLoading
                 ? this.props.states.filter(
                     state =>
                       !this.props.filterState.length ||
@@ -143,9 +126,7 @@ class Cities extends Component {
                 : []
             }
             noResultsText={
-              this.state.stateSearchText && !this.props.statesFetchLoading
-                ? "No Results Found"
-                : "Start Typing..."
+              !this.props.statesFetchLoading ? "No Results Found" : "Loading..."
             }
           />
         )
@@ -205,6 +186,8 @@ class Cities extends Component {
   componentDidMount() {
     this.props.onCountryList();
     this.props.onCityList();
+    this.props.onDistrictList({ rows: 50, page: 1 });
+    this.props.onStateList({ rows: 50, page: 1 });
   }
 
   componentDidUpdate = (_, prevState) => {
@@ -222,7 +205,6 @@ class Cities extends Component {
     this.props.onUnmountState();
     this.props.onUnmountDistrict();
     this.props.onUnmountCity();
-    this.props.onClearCityFilters();
   }
 
   debouncedSearch = debounce(
@@ -393,8 +375,8 @@ class Cities extends Component {
           {...this.tableProps}
           style={{ background: "white" }}
           data={this.props.cities}
-          defaultPageSize={this.props.rows}
-          defaultSorted={this.props.sortby}
+          pageSize={this.props.rows}
+          sorted={this.props.sortby}
           loading={this.props.fetchLoading}
           onPageChange={pageIndex => {
             this.props.onCityList({ page: pageIndex + 1 });
@@ -464,7 +446,6 @@ export default connect(
     handleOnCityFilterChange,
     handleSortChangeCity,
     onCityDelete,
-    onClearCityFilters,
     onUnmountCountry,
     onUnmountState,
     onUnmountDistrict,

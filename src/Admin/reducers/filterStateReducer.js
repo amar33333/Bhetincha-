@@ -2,7 +2,8 @@ import {
   STATE_FILTER_ON_CHANGE,
   CLEAR_STATE_ALL,
   FETCH_STATE_FULFILLED,
-  STATE_SET_SORT_BY
+  STATE_SET_SORT_BY,
+  UNMOUNT_STATE
 } from "../actions/types";
 
 const INITIAL_STATE = {
@@ -25,6 +26,7 @@ export default function(state = INITIAL_STATE, action) {
       return { ...state, sortby: action.payload };
 
     case CLEAR_STATE_ALL:
+    case UNMOUNT_STATE:
       return INITIAL_STATE;
 
     default:

@@ -287,7 +287,7 @@ epics.push((action$, { getState }) =>
     params.rows = rows;
     params.page = page;
     if (q) {
-      params.q = q;
+      params.q = q.trim();
     }
     if (sort_by.length) {
       params.sort_by = sort_by.map(
@@ -427,7 +427,7 @@ epics.push((action$, { getState }) =>
     params.rows = rows;
     params.page = page;
     if (q) {
-      params.q = q;
+      params.q = q.trim();
     }
     if (sort_by.length) {
       params.sort_by = sort_by.map(

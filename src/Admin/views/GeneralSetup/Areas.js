@@ -30,6 +30,7 @@ import {
   onDistrictEachList,
   onAreaSubmit,
   onAreaList,
+  onCityList,
   onDistrictList,
   onStateList,
   handleOnStateFilterChange,
@@ -41,6 +42,7 @@ import {
   onUnmountCountry,
   onUnmountState,
   onUnmountDistrict,
+  onUnmountCity,
   onUnmountArea
 } from "../../actions";
 
@@ -51,10 +53,7 @@ class Areas extends Component {
     district: "",
     city: "",
     area: "",
-    areaSubmit: false,
-    citySearchText: "",
-    districtSearchText: "",
-    stateSearchText: ""
+    areaSubmit: false
   };
 
   tableProps = {
@@ -77,14 +76,7 @@ class Areas extends Component {
             tabSelectsValue={false}
             multi
             isLoading={this.props.citiesFetchLoading}
-            onInputChange={citySearchText => {
-              this.setState(
-                { citySearchText },
-                () =>
-                  citySearchText &&
-                  this.debouncedCityAutocomplete(citySearchText)
-              );
-            }}
+            onInputChange={this.debouncedCityAutocomplete}
             value={this.props.filterCity}
             onChange={filterCity =>
               this.props.handleOnAreaFilterChange({ filterCity })
@@ -93,7 +85,7 @@ class Areas extends Component {
             labelKey="name"
             filterOptions={options => options}
             options={
-              this.state.citySearchText && !this.props.citiesFetchLoading
+              !this.props.citiesFetchLoading
                 ? this.props.cities.filter(
                     city =>
                       !this.props.filterCity.length ||
@@ -102,9 +94,7 @@ class Areas extends Component {
                 : []
             }
             noResultsText={
-              this.state.citySearchText && !this.props.citiesFetchLoading
-                ? "No Results Found"
-                : "Start Typing..."
+              !this.props.citiesFetchLoading ? "No Results Found" : "Loading..."
             }
           />
         )
@@ -119,14 +109,7 @@ class Areas extends Component {
             tabSelectsValue={false}
             multi
             isLoading={this.props.districtsFetchLoading}
-            onInputChange={districtSearchText => {
-              this.setState(
-                { districtSearchText },
-                () =>
-                  districtSearchText &&
-                  this.debouncedDistrictAutocomplete(districtSearchText)
-              );
-            }}
+            onInputChange={this.debouncedDistrictAutocomplete}
             value={this.props.filterDistrict}
             onChange={filterDistrict =>
               this.props.handleOnAreaFilterChange({ filterDistrict })
@@ -135,7 +118,7 @@ class Areas extends Component {
             labelKey="name"
             filterOptions={options => options}
             options={
-              this.state.districtSearchText && !this.props.districtsFetchLoading
+              !this.props.districtsFetchLoading
                 ? this.props.districts.filter(
                     district =>
                       !this.props.filterDistrict.length ||
@@ -146,9 +129,9 @@ class Areas extends Component {
                 : []
             }
             noResultsText={
-              this.state.districtSearchText && !this.props.districtsFetchLoading
+              !this.props.districtsFetchLoading
                 ? "No Results Found"
-                : "Start Typing..."
+                : "Loading..."
             }
           />
         )
@@ -163,14 +146,7 @@ class Areas extends Component {
             tabSelectsValue={false}
             multi
             isLoading={this.props.statesFetchLoading}
-            onInputChange={stateSearchText => {
-              this.setState(
-                { stateSearchText },
-                () =>
-                  stateSearchText &&
-                  this.debouncedStateAutocomplete(stateSearchText)
-              );
-            }}
+            onInputChange={this.debouncedStateAutocomplete}
             value={this.props.filterState}
             onChange={filterState =>
               this.props.handleOnAreaFilterChange({ filterState })
@@ -179,7 +155,7 @@ class Areas extends Component {
             labelKey="name"
             filterOptions={options => options}
             options={
-              this.state.stateSearchText && !this.props.statesFetchLoading
+              !this.props.statesFetchLoading
                 ? this.props.states.filter(
                     state =>
                       !this.props.filterState.length ||
@@ -188,9 +164,7 @@ class Areas extends Component {
                 : []
             }
             noResultsText={
-              this.state.stateSearchText && !this.props.statesFetchLoading
-                ? "No Results Found"
-                : "Start Typing..."
+              !this.props.statesFetchLoading ? "No Results Found" : "Loading..."
             }
           />
         )
@@ -252,6 +226,9 @@ class Areas extends Component {
   componentDidMount() {
     this.props.onCountryList();
     this.props.onAreaList();
+    this.props.onCityList({ rows: 50, page: 1 });
+    this.props.onDistrictList({ rows: 50, page: 1 });
+    this.props.onStateList({ rows: 50, page: 1 });
   }
 
   componentDidUpdate = (_, prevState) => {
@@ -268,6 +245,7 @@ class Areas extends Component {
     this.props.onUnmountCountry();
     this.props.onUnmountState();
     this.props.onUnmountDistrict();
+    this.props.onUnmountCity();
     this.props.onUnmountArea();
   }
 
@@ -470,8 +448,8 @@ class Areas extends Component {
           {...this.tableProps}
           style={{ background: "white" }}
           data={this.props.areas}
-          defaultPageSize={this.props.rows}
-          defaultSorted={this.props.sortby}
+          pageSize={this.props.rows}
+          sorted={this.props.sortby}
           loading={this.props.fetchLoading}
           onPageChange={pageIndex => {
             this.props.onAreaList({ page: pageIndex + 1 });
@@ -541,6 +519,7 @@ export default connect(
     onDistrictEachList,
     onAreaSubmit,
     onAreaList,
+    onCityList,
     onDistrictList,
     onStateList,
     handleOnStateFilterChange,
@@ -552,6 +531,7 @@ export default connect(
     onUnmountCountry,
     onUnmountState,
     onUnmountDistrict,
+    onUnmountCity,
     onUnmountArea
   }
 )(Areas);

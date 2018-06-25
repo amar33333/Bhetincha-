@@ -284,7 +284,7 @@ epics.push((action$, { getState }) =>
 export const onStateList = payload => ({ type: FETCH_STATE_PENDING, payload });
 
 epics.push((action$, { getState }) =>
-  action$.ofType(FETCH_STATE_PENDING).mergeMap(({ payload }) => {
+  action$.ofType(FETCH_STATE_PENDING).switchMap(({ payload }) => {
     const {
       rows,
       page,
@@ -296,7 +296,7 @@ epics.push((action$, { getState }) =>
     params.rows = rows;
     params.page = page;
     if (name) {
-      params.name = name;
+      params.name = name.trim();
     }
     params.sortby = sortby.map(data => `${data.id}${data.desc ? "-desc" : ""}`);
     if (filterCountry.length) {
@@ -444,11 +444,12 @@ export const onDistrictList = payload => ({
 });
 
 epics.push((action$, { getState }) =>
-  action$.ofType(FETCH_DISTRICT_PENDING).mergeMap(({ payload }) => {
+  action$.ofType(FETCH_DISTRICT_PENDING).switchMap(({ payload }) => {
     const {
       rows,
       page,
       name,
+      code,
       filterCountry,
       filterState,
       sortby
@@ -457,7 +458,10 @@ epics.push((action$, { getState }) =>
     params.rows = rows;
     params.page = page;
     if (name) {
-      params.name = name;
+      params.name = name.trim();
+    }
+    if (code) {
+      params.code = code.trim();
     }
     params.sortby = sortby.map(data => `${data.id}${data.desc ? "-desc" : ""}`);
     if (filterCountry.length) {
@@ -621,7 +625,7 @@ epics.push((action$, { getState }) =>
     const params = {};
     params.rows = rows;
     params.page = page;
-    if (name) params.name = name;
+    if (name) params.name = name.trim();
     params.sortby = sortby.map(data => `${data.id}${data.desc ? "-desc" : ""}`);
 
     if (filterDistrict.length) {
@@ -686,41 +690,6 @@ epics.push((action$, { getState }) =>
 );
 
 export const onClearCityFilters = () => ({ type: CLEAR_CITY_ALL });
-
-// export const onCityAutocomplete = payload => ({
-//   type: FETCH_CITY_AUTOCOMPLETE_PENDING,
-//   payload
-// });
-
-// epics.push((action$, { getState }) =>
-//   action$.ofType(FETCH_CITY_AUTOCOMPLETE_PENDING).switchMap(({ payload }) => {
-//     const {
-//       filterDistrict,
-//       filterState,
-//       filterCountry
-//     } = getState().AdminContainer.filterArea;
-//     const params = {};
-//     params.keyword = (payload && payload.keyword) || "";
-
-//     if (filterDistrict.length)
-//       params.district = filterDistrict.map(district => district.id);
-//     if (filterState.length) params.state = filterState.map(state => state.id);
-//     if (filterCountry.length)
-//       params.country = filterCountry.map(country => country.id);
-
-//     return onCityGetAjax({
-//       access_token: getState().auth.cookies.token_data.access_token,
-//       params
-//     })
-//       .map(({ response }) => ({
-//         type: FETCH_CITY_AUTOCOMPLETE_FULFILLED,
-//         payload: response
-//       }))
-//       .catch(ajaxError =>
-//         Observable.of({ type: FETCH_CITY_AUTOCOMPLETE_REJECTED })
-//       );
-//   })
-// );
 
 export const onCityEachList = payload => ({
   type: FETCH_CITY_EACH_PENDING,
@@ -794,7 +763,7 @@ epics.push((action$, { getState }) =>
     params.rows = rows;
     params.page = page;
     if (name) {
-      params.name = name;
+      params.name = name.trim();
     }
     params.sortby = sortby.map(data => `${data.id}${data.desc ? "-desc" : ""}`);
 

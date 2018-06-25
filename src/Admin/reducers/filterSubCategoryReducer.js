@@ -2,7 +2,8 @@ import {
   SUB_CATEGORY_FILTER_ON_CHANGE,
   CLEAR_SUB_CATEGORY_ALL,
   FETCH_SUB_CATEGORY_FULFILLED,
-  SUB_CATEGORY_SET_SORT_BY
+  SUB_CATEGORY_SET_SORT_BY,
+  UNMOUNT_SUB_CATEGORY
 } from "../actions/types";
 
 const INITIAL_STATE = {
@@ -28,6 +29,7 @@ export default function(state = INITIAL_STATE, action) {
       return { ...state, sortby: action.payload };
 
     case CLEAR_SUB_CATEGORY_ALL:
+    case UNMOUNT_SUB_CATEGORY:
       return INITIAL_STATE;
 
     default:

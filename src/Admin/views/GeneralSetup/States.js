@@ -223,8 +223,8 @@ class States extends Component {
           {...this.tableProps}
           style={{ background: "white" }}
           data={this.props.states}
-          defaultPageSize={this.props.rows}
-          defaultSorted={this.props.sort_by}
+          pageSize={this.props.rows}
+          sorted={this.props.sort_by}
           loading={this.props.fetchLoading}
           onPageChange={pageIndex =>
             this.props.onStateList({ page: pageIndex + 1 })

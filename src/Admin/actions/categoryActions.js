@@ -107,7 +107,7 @@ export const onCategoryList = payload => ({
 });
 
 epics.push((action$, { getState }) =>
-  action$.ofType(FETCH_CATEGORY_PENDING).mergeMap(({ payload }) => {
+  action$.ofType(FETCH_CATEGORY_PENDING).switchMap(({ payload }) => {
     const {
       rows,
       page,
@@ -120,7 +120,7 @@ epics.push((action$, { getState }) =>
     params.rows = rows;
     params.page = page;
     if (name) {
-      params.name = name;
+      params.name = name.trim();
     }
     params.sortby = sortby.map(data => `${data.id}${data.desc ? "-desc" : ""}`);
     if (filterIndustry.length) {

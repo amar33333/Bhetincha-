@@ -29,7 +29,13 @@ import {
   onBusinessAllGet,
   onBusinessEachDelete,
   onIndustryList,
+  onCategoryList,
+  onSubCategoryList,
   onCountryList,
+  onStateList,
+  onDistrictList,
+  onCityList,
+  onAreaList,
   onFilterCleared,
   handleOnStateFilterChange,
   handleOnDistrictFilterChange,
@@ -39,21 +45,20 @@ import {
   handleOnSubCategoryFilterChange,
   handleOnBusinessFilterChange,
   handleSearchKeywordCleared,
-  onUnmountIndustry,
   handleSortChangeBusiness,
-  onBusinessVerify
+  onBusinessVerify,
+  onUnmountIndustry,
+  onUnmountCategory,
+  onUnmountSubCategory,
+  onUnmountCountry,
+  onUnmountState,
+  onUnmountDistrict,
+  onUnmountCity,
+  onUnmountArea
 } from "../../actions";
 
 class BusinessList extends Component {
-  state = {
-    categorySearchText: "",
-    subCategorySearchText: "",
-    stateSearchText: "",
-    districtSearchText: "",
-    citySearchText: "",
-    areaSearchText: "",
-    q: ""
-  };
+  state = { q: "" };
 
   tableProps = {
     columns: [
@@ -245,7 +250,13 @@ class BusinessList extends Component {
 
   componentDidMount = () => {
     this.props.onIndustryList();
+    this.props.onCategoryList({ rows: 50, page: 1 });
+    this.props.onSubCategoryList({ rows: 50, page: 1 });
     this.props.onCountryList();
+    this.props.onStateList({ rows: 50, page: 1 });
+    this.props.onDistrictList({ rows: 50, page: 1 });
+    this.props.onCityList({ rows: 50, page: 1 });
+    this.props.onAreaList({ rows: 50, page: 1 });
     this.props.onBusinessAllGet();
   };
 
@@ -257,6 +268,13 @@ class BusinessList extends Component {
 
   componentWillUnmount = () => {
     this.props.onUnmountIndustry();
+    this.props.onUnmountCategory();
+    this.props.onUnmountSubCategory();
+    this.props.onUnmountCountry();
+    this.props.onUnmountState();
+    this.props.onUnmountDistrict();
+    this.props.onUnmountCity();
+    this.props.onUnmountArea();
   };
 
   handleChange = (key, event) => this.setState({ [key]: event.target.value });
@@ -316,21 +334,15 @@ class BusinessList extends Component {
                         <Label for="filterCategory">Category</Label>
 
                         <Select
-                          clearable
                           id="filterCategory"
+                          clearable
                           tabSelectsValue={false}
                           multi
                           isLoading={this.props.categoriesFetchLoading}
-                          onInputChange={categorySearchText => {
-                            this.setState(
-                              { categorySearchText },
-                              () =>
-                                categorySearchText &&
-                                this.debouncedCategoryAutocomplete(
-                                  categorySearchText
-                                )
-                            );
-                          }}
+                          onInputChange={this.debouncedCategoryAutocomplete}
+                          onFocus={() =>
+                            this.debouncedCategoryAutocomplete(" ")
+                          }
                           value={this.props.filterCategory}
                           onChange={filterCategory =>
                             this.props.handleOnBusinessFilterChange({
@@ -341,7 +353,6 @@ class BusinessList extends Component {
                           labelKey="name"
                           filterOptions={options => options}
                           options={
-                            this.state.categorySearchText &&
                             !this.props.categoriesFetchLoading
                               ? this.props.categories.filter(
                                   category =>
@@ -353,10 +364,9 @@ class BusinessList extends Component {
                               : []
                           }
                           noResultsText={
-                            this.state.categorySearchText &&
                             !this.props.categoriesFetchLoading
                               ? "No Results Found"
-                              : "Start Typing..."
+                              : "Loading..."
                           }
                         />
                       </FormGroup>
@@ -366,21 +376,15 @@ class BusinessList extends Component {
                         <Label for="filterSubCategory">Sub Category</Label>
 
                         <Select
-                          clearable
                           id="filterSubCategory"
+                          clearable
                           tabSelectsValue={false}
                           multi
                           isLoading={this.props.subCategoriesFetchLoading}
-                          onInputChange={subCategorySearchText => {
-                            this.setState(
-                              { subCategorySearchText },
-                              () =>
-                                subCategorySearchText &&
-                                this.debouncedSubCategoryAutocomplete(
-                                  subCategorySearchText
-                                )
-                            );
-                          }}
+                          onInputChange={this.debouncedSubCategoryAutocomplete}
+                          onFocus={() =>
+                            this.debouncedSubCategoryAutocomplete(" ")
+                          }
                           value={this.props.filterSubCategory}
                           onChange={filterSubCategory =>
                             this.props.handleOnBusinessFilterChange({
@@ -391,7 +395,6 @@ class BusinessList extends Component {
                           labelKey="name"
                           filterOptions={options => options}
                           options={
-                            this.state.subCategorySearchText &&
                             !this.props.subCategoriesFetchLoading
                               ? this.props.subCategories.filter(
                                   subCategory =>
@@ -403,10 +406,9 @@ class BusinessList extends Component {
                               : []
                           }
                           noResultsText={
-                            this.state.subCategorySearchText &&
                             !this.props.subCategoriesFetchLoading
                               ? "No Results Found"
-                              : "Start Typing..."
+                              : "Loading..."
                           }
                         />
                       </FormGroup>
@@ -445,14 +447,8 @@ class BusinessList extends Component {
                           tabSelectsValue={false}
                           multi
                           isLoading={this.props.statesFetchLoading}
-                          onInputChange={stateSearchText => {
-                            this.setState(
-                              { stateSearchText },
-                              () =>
-                                stateSearchText &&
-                                this.debouncedStateAutocomplete(stateSearchText)
-                            );
-                          }}
+                          onInputChange={this.debouncedStateAutocomplete}
+                          onFocus={() => this.debouncedStateAutocomplete(" ")}
                           value={this.props.filterState}
                           onChange={filterState =>
                             this.props.handleOnBusinessFilterChange({
@@ -463,7 +459,6 @@ class BusinessList extends Component {
                           labelKey="name"
                           filterOptions={options => options}
                           options={
-                            this.state.stateSearchText &&
                             !this.props.statesFetchLoading
                               ? this.props.states.filter(
                                   state =>
@@ -475,10 +470,9 @@ class BusinessList extends Component {
                               : []
                           }
                           noResultsText={
-                            this.state.stateSearchText &&
                             !this.props.statesFetchLoading
                               ? "No Results Found"
-                              : "Start Typing..."
+                              : "Loading..."
                           }
                         />
                       </FormGroup>
@@ -493,16 +487,10 @@ class BusinessList extends Component {
                           tabSelectsValue={false}
                           multi
                           isLoading={this.props.districtsFetchLoading}
-                          onInputChange={districtSearchText => {
-                            this.setState(
-                              { districtSearchText },
-                              () =>
-                                districtSearchText &&
-                                this.debouncedDistrictAutocomplete(
-                                  districtSearchText
-                                )
-                            );
-                          }}
+                          onInputChange={this.debouncedDistrictAutocomplete}
+                          onFocus={() =>
+                            this.debouncedDistrictAutocomplete(" ")
+                          }
                           value={this.props.filterDistrict}
                           onChange={filterDistrict =>
                             this.props.handleOnBusinessFilterChange({
@@ -513,7 +501,6 @@ class BusinessList extends Component {
                           labelKey="name"
                           filterOptions={options => options}
                           options={
-                            this.state.districtSearchText &&
                             !this.props.districtsFetchLoading
                               ? this.props.districts.filter(
                                   district =>
@@ -525,10 +512,9 @@ class BusinessList extends Component {
                               : []
                           }
                           noResultsText={
-                            this.state.districtSearchText &&
                             !this.props.districtsFetchLoading
                               ? "No Results Found"
-                              : "Start Typing..."
+                              : "Loading..."
                           }
                         />
                       </FormGroup>
@@ -545,14 +531,8 @@ class BusinessList extends Component {
                           tabSelectsValue={false}
                           multi
                           isLoading={this.props.citiesFetchLoading}
-                          onInputChange={citySearchText => {
-                            this.setState(
-                              { citySearchText },
-                              () =>
-                                citySearchText &&
-                                this.debouncedCityAutocomplete(citySearchText)
-                            );
-                          }}
+                          onInputChange={this.debouncedCityAutocomplete}
+                          onFocus={() => this.debouncedCityAutocomplete(" ")}
                           value={this.props.filterCity}
                           onChange={filterCity =>
                             this.props.handleOnBusinessFilterChange({
@@ -563,7 +543,6 @@ class BusinessList extends Component {
                           labelKey="name"
                           filterOptions={options => options}
                           options={
-                            this.state.citySearchText &&
                             !this.props.citiesFetchLoading
                               ? this.props.cities.filter(
                                   city =>
@@ -575,10 +554,9 @@ class BusinessList extends Component {
                               : []
                           }
                           noResultsText={
-                            this.state.citySearchText &&
                             !this.props.citiesFetchLoading
                               ? "No Results Found"
-                              : "Start Typing..."
+                              : "Loading..."
                           }
                         />
                       </FormGroup>
@@ -593,14 +571,8 @@ class BusinessList extends Component {
                           tabSelectsValue={false}
                           multi
                           isLoading={this.props.areasFetchLoading}
-                          onInputChange={areaSearchText => {
-                            this.setState(
-                              { areaSearchText },
-                              () =>
-                                areaSearchText &&
-                                this.debouncedAreaAutocomplete(areaSearchText)
-                            );
-                          }}
+                          onInputChange={this.debouncedAreaAutocomplete}
+                          onFocus={() => this.debouncedAreaAutocomplete(" ")}
                           value={this.props.filterArea}
                           onChange={filterArea =>
                             this.props.handleOnBusinessFilterChange({
@@ -611,7 +583,6 @@ class BusinessList extends Component {
                           labelKey="name"
                           filterOptions={options => options}
                           options={
-                            this.state.areaSearchText &&
                             !this.props.areasFetchLoading
                               ? this.props.areas.filter(
                                   area =>
@@ -623,10 +594,9 @@ class BusinessList extends Component {
                               : []
                           }
                           noResultsText={
-                            this.state.areaSearchText &&
                             !this.props.areasFetchLoading
                               ? "No Results Found"
-                              : "Start Typing..."
+                              : "Loading..."
                           }
                         />
                       </FormGroup>
@@ -670,8 +640,8 @@ class BusinessList extends Component {
               {...this.tableProps}
               style={{ background: "white" }}
               data={this.props.businesses}
-              defaultPageSize={this.props.rows}
-              defaultSorted={this.props.sort_by}
+              pageSize={this.props.rows}
+              sorted={this.props.sort_by}
               loading={this.props.fetchLoading}
               onPageChange={pageIndex => {
                 this.props.onBusinessAllGet({ page: pageIndex + 1 });
@@ -745,7 +715,13 @@ export default connect(
     onBusinessAllGet,
     onBusinessEachDelete,
     onIndustryList,
+    onCategoryList,
+    onSubCategoryList,
     onCountryList,
+    onStateList,
+    onDistrictList,
+    onCityList,
+    onAreaList,
     onFilterCleared,
     handleOnStateFilterChange,
     handleOnDistrictFilterChange,
@@ -757,6 +733,13 @@ export default connect(
     handleSearchKeywordCleared,
     handleSortChangeBusiness,
     onUnmountIndustry,
-    onBusinessVerify
+    onBusinessVerify,
+    onUnmountCategory,
+    onUnmountSubCategory,
+    onUnmountCountry,
+    onUnmountState,
+    onUnmountDistrict,
+    onUnmountCity,
+    onUnmountArea
   }
 )(BusinessList);
