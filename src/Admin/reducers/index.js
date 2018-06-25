@@ -15,6 +15,7 @@ import filterCategory from "./filterCategoryReducer";
 import filterSubCategory from "./filterSubCategoryReducer";
 import filterAppBusiness from "./filterAppBusinessReducer";
 import filterAssignBusiness from "./filterAssignBusinessReducer";
+import filterUsers from "./filterUsersReducer";
 import tele_calling from "./teleCallingReducer";
 import location from "./locationReducer";
 import ecommerce from "./ecommerceReducer";
@@ -36,6 +37,7 @@ const createReducer = combineReducers({
   filterSubCategory,
   filterAppBusiness,
   filterAssignBusiness,
+  filterUsers,
   tele_calling,
   location,
   ecommerce

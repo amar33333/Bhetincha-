@@ -5,7 +5,7 @@ import {
   onGroupPost,
   onGroupsEachDelete,
   onUserPost,
-  onUserGet,
+  onUsersGet,
   onGroupsGet,
   onPermissionsGet,
   onTogglePermissionPost
@@ -20,9 +20,9 @@ import {
   FETCH_GROUPS_FULFILLED,
   FETCH_GROUPS_REJECTED,
   FETCH_GROUPS_PENDING,
-  FETCH_USER_FULFILLED,
-  FETCH_USER_REJECTED,
-  FETCH_USER_PENDING,
+  FETCH_USERS_FULFILLED,
+  FETCH_USERS_REJECTED,
+  FETCH_USERS_PENDING,
   PERMISSIONS_LIST_PENDING,
   PERMISSIONS_LIST_REJECTED,
   PERMISSIONS_LIST_FULFILLED,
@@ -264,15 +264,68 @@ epics.push((action$, { getState }) =>
 // };
 
 // This `onUserList` has not been used so do as you like
-export const onUserList = ({ access_token }) => dispatch => {
-  onUserGet({ access_token })
-    .then(response => {
-      dispatch({ type: FETCH_USER_FULFILLED, payload: response.data });
+export const onUsersList = payload => ({ type: FETCH_USERS_PENDING, payload });
+
+epics.push((action$, { getState }) =>
+  action$.ofType(FETCH_USERS_PENDING).switchMap(({ payload }) => {
+    const {
+      rows,
+      page,
+      filterGroup,
+      sortby,
+      username,
+      first_name,
+      last_name
+    } = getState().AdminContainer.filterUsers;
+
+    const params = {};
+    params.rows = rows;
+    params.page = page;
+    if (username) {
+      params.username = username.trim();
+    }
+    if (first_name) {
+      params.first_name = first_name.trim();
+    }
+    if (last_name) {
+      params.last_name = last_name.trim();
+    }
+
+    params.sortby = sortby.map(data => `${data.id}${data.desc ? "-desc" : ""}`);
+
+    if (filterGroup.length) {
+      params.group = filterGroup.map(group => group.id);
+    }
+
+    if (payload) {
+      if (payload.rows) {
+        params.rows = payload.rows;
+      }
+      if (payload.page) {
+        params.page = payload.page;
+      }
+    }
+
+    return onUsersGet({
+      access_token: getState().auth.cookies.token_data.access_token,
+      params
     })
-    .catch(error => {
-      dispatch({ type: FETCH_USER_REJECTED, payload: error.data });
-    });
-  dispatch({ type: FETCH_USER_PENDING });
-};
+      .map(({ response }) => ({
+        type: FETCH_USERS_FULFILLED,
+        payload: response
+      }))
+      .catch(ajaxError => Observable.of({ type: FETCH_USERS_REJECTED }));
+  })
+);
+// export const onUserList = ({ access_token }) => dispatch => {
+//   onUsersGet({ access_token })
+//     .then(response => {
+//       dispatch({ type: FETCH_USERS_FULFILLED, payload: response.data });
+//     })
+//     .catch(error => {
+//       dispatch({ type: FETCH_USERS_REJECTED, payload: error.data });
+//     });
+//   dispatch({ type: FETCH_USERS_PENDING });
+// };
 
 export default epics;

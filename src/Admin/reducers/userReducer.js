@@ -8,9 +8,9 @@ import {
   FETCH_GROUPS_FULFILLED,
   FETCH_GROUPS_REJECTED,
   FETCH_GROUPS_PENDING,
-  FETCH_USER_FULFILLED,
-  FETCH_USER_REJECTED,
-  FETCH_USER_PENDING,
+  FETCH_USERS_FULFILLED,
+  FETCH_USERS_REJECTED,
+  FETCH_USERS_PENDING,
   PERMISSIONS_LIST_PENDING,
   PERMISSIONS_LIST_REJECTED,
   PERMISSIONS_LIST_FULFILLED,
@@ -23,7 +23,11 @@ const INITIAL_STATE = {
   loading: false,
   statusClass: "",
   permissions_list: [],
-  groups: []
+  groups: [],
+  users: [],
+  usersFetchLoading: false,
+  usersPages: 1,
+  usersRowCount: 0
 };
 
 export default function(state = INITIAL_STATE, action) {
@@ -94,19 +98,23 @@ export default function(state = INITIAL_STATE, action) {
     case FETCH_GROUPS_REJECTED:
       return { ...state, loading: false, statusClass: "rejected" };
 
-    case FETCH_USER_PENDING:
-      return { ...state, loading: true, statusClass: "pending" };
+    case FETCH_USERS_PENDING:
+      return { ...state, usersFetchLoading: true };
 
-    case FETCH_USER_FULFILLED:
+    case FETCH_USERS_FULFILLED:
       return {
         ...state,
-        users: action.payload,
-        loading: false,
-        statusClass: "fulfilled"
+        users: action.payload.data.map((user, i) => ({
+          ...user,
+          s_no: action.payload.rows * (action.payload.page - 1) + i + 1
+        })),
+        usersPages: action.payload.pages,
+        rowCount: action.payload.rowCount,
+        usersFetchLoading: false
       };
 
-    case FETCH_USER_REJECTED:
-      return { ...state, loading: false, statusClass: "rejected" };
+    case FETCH_USERS_REJECTED:
+      return { ...state, usersFetchLoading: false };
 
     default:
       return state;

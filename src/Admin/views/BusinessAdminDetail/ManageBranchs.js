@@ -22,7 +22,7 @@ class ManageBranchs extends Component {
         sortable: false,
         width: 70
       },
-      { Header: "Address Title", accessor: "address_title" },
+      { Header: "Address Title", accessor: "address_title", sortable: true },
       {
         Header: "Area",
         accessor: "area",
@@ -130,6 +130,7 @@ class ManageBranchs extends Component {
     defaultPageSize: 20,
     className: "-striped -highlight",
     filterable: true,
+    sortable: false,
     PaginationComponent
   };
 

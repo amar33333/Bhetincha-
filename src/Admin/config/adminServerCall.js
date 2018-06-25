@@ -998,10 +998,10 @@ export const onUserPost = ({
     }
   });
 
-export const onUserGet = ({ access_token }) =>
-  axios({
+export const onUsersGet = ({ access_token, params }) =>
+  ajax({
     method: "get",
-    url: USERS_URL,
+    url: `${USERS_URL}?${querystring.stringify(params)}`,
     headers: {
       "Content-Type": "application/json",
       Authorization: "Bearer " + access_token
