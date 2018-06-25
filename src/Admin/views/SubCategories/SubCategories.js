@@ -365,7 +365,7 @@ class SubCategories extends Component {
                       <TagsInput
                         onlyUnique
                         disabled={this.props.loading}
-                        addKeys={[9, 32, 188]}
+                        addKeys={[9, 188]}
                         value={this.state.tags}
                         onChange={this.handleTagsChange}
                       />
