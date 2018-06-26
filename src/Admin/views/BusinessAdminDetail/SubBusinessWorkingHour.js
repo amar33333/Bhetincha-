@@ -16,6 +16,10 @@ import {
   FormGroup
 } from "reactstrap";
 
+import { Card as SemanticCard } from "semantic-ui-react";
+
+import { Select } from "../../../Common/components";
+
 class subBusinessWorkingHour extends Component {
   constructor(props) {
     super(props);
@@ -144,6 +148,113 @@ class subBusinessWorkingHour extends Component {
       workingHour: newWorkingHour
     });
   };
+  renderNewWorkingHours = () => {
+    var dateArray = [];
+    var currentDate = moment("2018-05-01T00:00");
+    var stopDate = moment("2018-05-01T23:59");
+    while (currentDate <= stopDate) {
+      dateArray.push(moment(currentDate).format("YYYY-MM-DDTHH:mmZ"));
+      currentDate = moment(currentDate).add(15, "m");
+    }
+
+    const timeList = dateArray.map((date, index) => {
+      return { id: index, value: date };
+    });
+
+    // console.log("date array: ", dateArray);
+    return (
+      <FormGroup>
+        <SemanticCard fluid>
+          {this.state.workingHour.map(day => (
+            <SemanticCard.Content key={day.day}>
+              <Row>
+                <Col xs="6" md="2">
+                  <strong>{day.day}</strong>
+                </Col>
+                <Col xs="6" md="2">
+                  <Label check>
+                    <Input
+                      type="checkbox"
+                      checked={day.holiday}
+                      onChange={this.toggleHoliday.bind(this, day.day)}
+                    />
+                    Holiday
+                  </Label>
+                </Col>
+                <Col xs="6" md="4">
+                  {day.holiday ? null : (
+                    <span>
+                      <Label>Opens at: </Label>
+                      {/* <Select
+                        autosize
+                        name="Opnes at"
+                        // value={timeList}
+                        onChange={time => {
+                          this.handleStartHourChange(time, day.day);
+                        }}
+                        options={timeList}
+                        valuekey="value"
+                        labelKey="value"
+                        optionRenderer={({ value }) => (
+                          <div>{moment(value).format("hh:mm A")}</div>
+                        )}
+                      /> */}
+                      <Input
+                        type="select"
+                        onChange={time => {
+                          this.handleStartHourChange(time, day.day);
+                        }}
+                      >
+                        {dateArray.map(date => (
+                          <option
+                            key={date}
+                            value={moment.utc(date).format("YYYY-MM-DDTHH:mmZ")}
+                          >
+                            {moment(date).format("h:mm A")}
+                          </option>
+                        ))}
+                      </Input>
+                      {/* <Datetime
+                        dateFormat={false}
+                        value={moment(day.start).format("hh:mm a")}
+                        // defaultValue={moment("2018-05-01T10:00").format(
+                        //   "hh:mm a"
+                        // )}
+                        onChange={time => {
+                          this.handleStartHourChange(time, day.day);
+                        }}
+                        viewMode={"time"}
+                        // utc={true}
+                      /> */}
+                    </span>
+                  )}
+                </Col>
+                <Col xs="6" md="4">
+                  {day.holiday ? null : (
+                    <span>
+                      <Label>Closes at: </Label>
+                      <Datetime
+                        dateFormat={false}
+                        value={moment(day.end).format("hh:mm a")}
+                        // defaultValue={moment("2018-05-01T17:00").format(
+                        //   "hh:mm a"
+                        // )}
+                        onChange={time =>
+                          this.handleClosingHourChange(time, day.day)
+                        }
+                        viewMode={"time"}
+                        // utc={true}
+                      />
+                    </span>
+                  )}
+                </Col>
+              </Row>
+            </SemanticCard.Content>
+          ))}
+        </SemanticCard>
+      </FormGroup>
+    );
+  };
   renderWorkingHours = () => {
     return this.state.workingHour.map(day => (
       <FormGroup key={day.day}>
@@ -264,7 +375,8 @@ class subBusinessWorkingHour extends Component {
                       Always Open
                     </Label>
                   </Row>
-                  {!this.state.alwaysOpen && this.renderWorkingHours()}
+                  {/* {!this.state.alwaysOpen && this.renderWorkingHours()} */}
+                  {!this.state.alwaysOpen && this.renderNewWorkingHours()}
                 </Col>
               </Row>
             </CardBody>

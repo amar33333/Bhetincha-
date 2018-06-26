@@ -104,7 +104,7 @@ class ManageBranchs extends Component {
         accessor: "addressID",
         filterable: false,
         sortable: false,
-        width: 145,
+        width: 170,
         Cell: ({ value }) => (
           <div>
             <Button
@@ -116,7 +116,7 @@ class ManageBranchs extends Component {
                 );
               }}
             >
-              Edit
+              <i className="fa fa-pencil" /> Edit
             </Button>
             <PopoverDelete
               id={`delete-${value}`}
@@ -151,8 +151,8 @@ class ManageBranchs extends Component {
             }/manage-branchs/add-branch`
           }}
         >
-          <Button variant="raised" color="primary">
-            Add New Branch
+          <Button variant="raised" color="primary" className="mb-3">
+            <i className="fa fa-plus" /> Add New Branch
           </Button>
         </Link>
         <ReactTable
