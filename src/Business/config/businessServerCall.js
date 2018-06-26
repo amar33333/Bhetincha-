@@ -6,16 +6,59 @@ import {
   ALBUM_URL,
   BUSINESS_PUT_URL,
   PHOTO_URL,
-  SALES_USERS_LIST_URL
+  SALES_USERS_LIST_URL,
+  BRANCH_ADDRESS_URL,
+  BUSINESS_BRANCH_GET_URL
 } from "./BUSINESS_API";
 import axios from "axios";
 import { ajax } from "rxjs/observable/dom/ajax";
 import querystring from "querystring";
 
-export const onBranchPost = ({ access_token, id, body }) =>
+export const onBranchPut = ({ access_token, business_slug, branch_id, body }) =>
   ajax({
     method: "PUT",
-    url: `${BUSINESS_URL}${id}/`,
+    url: `${BRANCH_ADDRESS_URL}${business_slug}/${branch_id}/`,
+    body,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
+export const onBusinessBranchGet = ({ access_token, business_slug }) =>
+  ajax({
+    method: "get",
+    url: `${BUSINESS_BRANCH_GET_URL}${business_slug}/`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
+export const onBranchGet = ({ access_token, business_slug, branch_id }) =>
+  axios({
+    method: "get",
+    url: `${BRANCH_ADDRESS_URL}${business_slug}/${branch_id}/`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
+export const onBranchGetAjax = ({ access_token, business_slug, branch_id }) =>
+  ajax({
+    method: "get",
+    url: `${BRANCH_ADDRESS_URL}${business_slug}/${branch_id}/`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
+export const onBranchPost = ({ access_token, business_slug, body }) =>
+  ajax({
+    method: "PUT",
+    url: `${BUSINESS_URL}${business_slug}/`,
     body,
     headers: {
       "Content-Type": "application/json",

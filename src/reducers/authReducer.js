@@ -32,7 +32,8 @@ const INITIAL_STATE = {
   phone_verification_request: false,
   phone_verification_response: null,
   phoneVerificationModal: false,
-  data: null
+  data: null,
+  search_selected_business_id: null
 };
 
 export default function(state = INITIAL_STATE, action) {
@@ -111,7 +112,7 @@ export default function(state = INITIAL_STATE, action) {
       return {
         ...state,
         phoneVerificationModal: !state.phoneVerificationModal,
-        phone_verification_request: false
+        search_selected_business_id: action.payload
       };
 
     default:

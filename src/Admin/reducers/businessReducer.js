@@ -41,6 +41,13 @@ import {
   CREATE_ASSIGNED_PATH_FULFILLED,
   CREATE_ASSIGNED_PATH_PENDING,
   CREATE_ASSIGNED_PATH_REJECTED,
+  FETCH_BRANCH_EACH_FULFILLED,
+  FETCH_BRANCH_EACH_PENDING,
+  FETCH_BRANCH_EACH_REJECTED,
+  FETCH_BUSINESS_BRANCH_FULFILLED,
+  FETCH_BUSINESS_BRANCH_PENDING,
+  FETCH_BUSINESS_BRANCH_REJECTED,
+  UNMOUNT_BRANCH,
   UNMOUNT_PAYMENT_METHOD,
   UNMOUNT_COMPANY_TYPE
 } from "../actions/types";
@@ -85,11 +92,33 @@ const INITIAL_STATE = {
   assignedPathLoading: false,
   assignedPathError: false,
 
-  businessData: null
+  businessData: null,
+  branch: null,
+  businessBranchData: []
 };
 
 export default function(state = INITIAL_STATE, action) {
   switch (action.type) {
+    case FETCH_BUSINESS_BRANCH_PENDING:
+      return { ...state, fetchLoading: true };
+    case FETCH_BUSINESS_BRANCH_REJECTED:
+      return { ...state, fetchLoading: false };
+    case FETCH_BUSINESS_BRANCH_FULFILLED:
+      return {
+        ...state,
+        businessBranchData: action.payload
+      };
+
+    case FETCH_BRANCH_EACH_PENDING:
+      return { ...state, fetchLoading: true };
+    case FETCH_BRANCH_EACH_REJECTED:
+      return { ...state, fetchLoading: false };
+    case FETCH_BRANCH_EACH_FULFILLED:
+      return {
+        ...state,
+        branch: action.payload
+      };
+
     case FETCH_ASSIGNED_PATH_PENDING:
       return { ...state, fetchLoading: true };
     case FETCH_ASSIGNED_PATH_REJECTED:
@@ -256,6 +285,9 @@ export default function(state = INITIAL_STATE, action) {
 
     case UNMOUNT_COMPANY_TYPE:
       return { ...state, company_types: [] };
+
+    case UNMOUNT_BRANCH:
+      return { ...state, branch: null };
 
     case TOGGLE_EDIT:
       return { ...state, EDIT: action.payload, loading: false };

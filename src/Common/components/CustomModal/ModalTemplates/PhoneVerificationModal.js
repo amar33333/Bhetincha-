@@ -12,123 +12,69 @@ import {
 } from "reactstrap";
 
 import { connect } from "react-redux";
-import {
-  onPhoneVerificationRequest,
-  onPhoneVerificationTokenSend
-} from "../../../../actions";
+import { onPhoneVerificationRequest } from "../../../../actions";
 
 class PhoneVerificationModal extends Component {
-  state = { phone: "", verificationToken: "" };
+  state = { phone: "" };
 
   onChange = (key, event) => {
     this.setState({ [key]: event.target.value });
   };
 
-  renderFormField = () => {
-    return !this.props.phone_verification_request ? (
-      <div>
-        <InputGroup className="mb-3">
-          <InputGroupAddon addonType="prepend">
-            <InputGroupText>
-              <i className="icon-user" />
-            </InputGroupText>
-          </InputGroupAddon>
-          <Input
-            autoFocus
-            required
-            //disabled={this.props.loading}
-            type="text"
-            placeholder="Mobile Number"
-            value={this.state.phone}
-            onChange={this.onChange.bind(this, "phone")}
-          />
-        </InputGroup>
-        <Row>
-          <Col xs="6">
-            <LaddaButton
-              //loading={this.props.loading}
-              data-size={S}
-              data-style={EXPAND_RIGHT}
-            >
-              CLAIM
-            </LaddaButton>
-          </Col>
-        </Row>
-      </div>
-    ) : (
-      <div>
-        <InputGroup className="mb-3">
-          <InputGroupAddon addonType="prepend">
-            <InputGroupText>
-              <i className="icon-user" />
-            </InputGroupText>
-          </InputGroupAddon>
-
-          <Input
-            autoFocus
-            required
-            //disabled={this.props.loading}
-            type="text"
-            placeholder="Enter the verification code"
-            value={this.state.verificationToken}
-            onChange={this.onChange.bind(this, "verificationToken")}
-          />
-        </InputGroup>
-        <Row>
-          <Col xs="6">
-            <LaddaButton
-              //loading={this.props.loading}
-              data-size={S}
-              data-style={EXPAND_RIGHT}
-            >
-              VERIFY
-            </LaddaButton>
-          </Col>
-        </Row>
-      </div>
-    );
-
-    // return (
-    //   <Input
-    //     autoFocus
-    //     required
-    //     //disabled={this.props.loading}
-    //     type="text"
-    //     placeholder="Mobile Number"
-    //     value={this.state.phone}
-    //     onChange={this.onChange.bind(this, "phone")}
-    //   />
-    // );
-  };
-
   onFormSubmit = event => {
     event.preventDefault();
-    const { phone, verificationToken } = this.state;
-    console.log("props: ", this.props);
-    if (!this.props.phone_verification_request)
-      this.props.onPhoneVerificationRequest({
-        id: "5b1d12b6c1ddbb3e3d05bf88",
-        phone
-      });
-    else {
-      this.props.onPhoneVerificationTokenSend({
-        id: "5b1d12b6c1ddbb3e3d05bf88",
-        verificationToken
-      });
-    }
+    const { phone } = this.state;
+
+    this.props.onPhoneVerificationRequest({
+      id: this.props.search_selected_business_id.id,
+      phone,
+      history: this.props.history
+    });
   };
 
   render() {
     console.log("phonde model: ", this.props);
-    return <Form onSubmit={this.onFormSubmit}>{this.renderFormField()}</Form>;
+    return (
+      <Form onSubmit={this.onFormSubmit}>
+        <div>
+          <InputGroup className="mb-3">
+            <InputGroupAddon addonType="prepend">
+              <InputGroupText>
+                <i className="icon-user" />
+              </InputGroupText>
+            </InputGroupAddon>
+            <Input
+              autoFocus
+              required
+              //disabled={this.props.loading}
+              type="text"
+              placeholder="Mobile Number"
+              value={this.state.phone}
+              onChange={this.onChange.bind(this, "phone")}
+            />
+          </InputGroup>
+          <Row>
+            <Col xs="6">
+              <LaddaButton
+                //loading={this.props.loading}
+                data-size={S}
+                data-style={EXPAND_RIGHT}
+              >
+                CLAIM
+              </LaddaButton>
+            </Col>
+          </Row>
+        </div>
+      </Form>
+    );
   }
 }
 
-const mapStateToProps = ({ auth }) => {
-  return { ...auth };
+const mapStateToProps = ({ auth: { search_selected_business_id } }) => {
+  return { search_selected_business_id };
 };
 
 export default connect(
   mapStateToProps,
-  { onPhoneVerificationRequest, onPhoneVerificationTokenSend }
+  { onPhoneVerificationRequest }
 )(PhoneVerificationModal);

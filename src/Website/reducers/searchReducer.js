@@ -45,7 +45,8 @@ export default function(state = INITIAL_STATE, action) {
       return {
         ...state,
         search_results_page_data: action.payload.hits.map(hit => ({
-          ...hit._source
+          ...hit._source,
+          id: hit._id
         })),
         search_results_page_loading: false
       };

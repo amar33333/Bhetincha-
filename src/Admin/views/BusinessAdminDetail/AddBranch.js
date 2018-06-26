@@ -24,11 +24,11 @@ import SubBusinessContact from "./SubBusinessContact";
 import {
   onAddressTreeList,
   onCountryList,
-  onCountryEachList,
-  onStateEachList,
-  onDistrictEachList,
-  onCityEachList,
-  onBranchAdd
+  onBranchAdd,
+  onBranchEdit,
+  onBranchAddressList,
+  onUnmountBranch,
+  ToogleEDIT
 } from "../../actions";
 
 class AddBranch extends Component {
@@ -68,55 +68,77 @@ class AddBranch extends Component {
 
   componentDidMount() {
     this.props.onCountryList();
+    const {
+      id: branch_id,
+      businessSlug: business_slug
+    } = this.props.match.params;
+
+    if (branch_id) {
+      this.props.ToogleEDIT(true);
+
+      this.props.onBranchAddressList({
+        branch_id,
+        business_slug,
+        access_token: this.props.access_token
+      });
+    }
   }
 
-  // static getDerivedStateFromProps = (nextProps, prevState) => {
-  //   const { branch } = nextProps;
-  //   // console.log("branchprops: ", nextProps);
-  //   // console.log("branch onlytoogle props branch: ", nextProps);
-  //   if (branch && nextProps.EDIT) {
-  //     console.log("branch if run");
-  //     return {
-  //       contactPerson: branch.contactPerson ? branch.contactPerson : [],
-  //       landlineNumber: branch.landlineNumber ? branch.landlineNumber : "",
-  //       otherLandlineNumber: branch.otherLandlineNumber
-  //         ? branch.otherLandlineNumber
-  //         : "",
-  //       house_no: branch.house_no ? branch.house_no : "",
-  //       landmark: branch.landmark ? branch.landmark : "",
-  //       addressLine1: branch.addressLine1 ? branch.addressLine1 : "",
-  //       addressLine2: branch.addressLine2 ? branch.addressLine2 : "",
-  //       po_box: branch.po_box ? branch.po_box : "",
-  //       tollFreeNumber: branch.tollFreeNumber ? branch.tollFreeNumber : "",
-  //       email: branch.email ? branch.email : "",
-  //       latitude: branch.latitude ? branch.latitude : 27.7172453,
-  //       longitude: branch.longitude ? branch.longitude : 85.32391758465576,
-  //       country: {
-  //         id: branch.country ? branch.country.id : "",
-  //         name: branch.country ? branch.country.name : ""
-  //       },
-  //       state: {
-  //         id: branch.state ? branch.state.id : "",
-  //         name: branch.state ? branch.state.name : ""
-  //       },
-  //       district: {
-  //         id: branch.district ? branch.district.id : "",
-  //         name: branch.district ? branch.district.name : ""
-  //       },
-  //       city: {
-  //         id: branch.city ? branch.city.id : "",
-  //         name: branch.city ? branch.city.name : ""
-  //       },
-  //       area: {
-  //         id: branch.area ? branch.area.id : "",
-  //         name: branch.area ? branch.area.name : ""
-  //       }
-  //     };
-  //   } else {
-  //     console.log("branchs else run");
-  //     return null;
-  //   }
-  // };
+  componentWillUnmount() {
+    this.props.onUnmountBranch();
+  }
+
+  static getDerivedStateFromProps = (nextProps, prevState) => {
+    console.log("add banch props: ", nextProps);
+    const { branch } = nextProps;
+    // console.log("branchprops: ", nextProps);
+    // console.log("branch onlytoogle props branch: ", nextProps);
+    if (branch && nextProps.EDIT) {
+      nextProps.ToogleEDIT(!nextProps.EDIT);
+
+      console.log("branch if run");
+      return {
+        address_title: branch.address_title ? branch.address_title : "",
+        contactPerson: branch.contactPerson ? branch.contactPerson : [],
+        landlineNumber: branch.landlineNumber ? branch.landlineNumber : "",
+        otherLandlineNumber: branch.otherLandlineNumber
+          ? branch.otherLandlineNumber
+          : "",
+        house_no: branch.house_no ? branch.house_no : "",
+        landmark: branch.landmark ? branch.landmark : "",
+        addressLine1: branch.addressLine1 ? branch.addressLine1 : "",
+        addressLine2: branch.addressLine2 ? branch.addressLine2 : "",
+        po_box: branch.po_box ? branch.po_box : "",
+        tollFreeNumber: branch.tollFreeNumber ? branch.tollFreeNumber : "",
+        email: branch.email ? branch.email : "",
+        latitude: branch.latitude ? branch.latitude : 27.7172453,
+        longitude: branch.longitude ? branch.longitude : 85.32391758465576,
+        country: {
+          id: branch.country ? branch.country.id : "",
+          name: branch.country ? branch.country.name : ""
+        },
+        state: {
+          id: branch.state ? branch.state.id : "",
+          name: branch.state ? branch.state.name : ""
+        },
+        district: {
+          id: branch.district ? branch.district.id : "",
+          name: branch.district ? branch.district.name : ""
+        },
+        city: {
+          id: branch.city ? branch.city.id : "",
+          name: branch.city ? branch.city.name : ""
+        },
+        area: {
+          id: branch.area ? branch.area.id : "",
+          name: branch.area ? branch.area.name : ""
+        }
+      };
+    } else {
+      console.log("branchs else run");
+      return null;
+    }
+  };
 
   onChange = (key, event) => {
     if (key === "addressLine1" || key === "addressLine2") {
@@ -132,9 +154,6 @@ class AddBranch extends Component {
     // console.log("latLang: ", this.state.latitude, this.state.longitude);
     this.setState({ latitude: latLng.lat(), longitude: latLng.lng() });
   };
-
-  handleChange = (key, event) =>
-    this.props.handleOnBusinessFilterChange({ [key]: event.target.value });
 
   handleSelectChange = (key, value) => {
     this.setState({ [key]: value });
@@ -335,11 +354,22 @@ class AddBranch extends Component {
       body: {
         branchAddress: [this.getRefinedState()]
       },
-      id: this.props.location.state.id
+      business_slug: this.props.match.params.businessSlug
+    });
+  };
+
+  onBranchEdit = () => {
+    this.props.onBranchEdit({
+      body: {
+        ...this.getRefinedState()
+      },
+      branch_id: this.props.match.params.id,
+      business_slug: this.props.match.params.businessSlug
     });
   };
 
   render() {
+    console.log("add branch state: ", this.state);
     this.countries = this.props.countries;
 
     try {
@@ -729,8 +759,15 @@ class AddBranch extends Component {
             /> */}
             <Row style={{ marginBottom: 15 }}>
               <Col xs="6" md="6">
-                <Button color="success" onClick={() => this.onBranchSave()}>
-                  <i className="fa fa-save" /> SAVE BRANCH
+                <Button
+                  color="success"
+                  onClick={() => {
+                    if (!this.props.match.params.id) this.onBranchSave();
+                    else this.onBranchEdit();
+                  }}
+                >
+                  <i className="fa fa-save" />{" "}
+                  {!this.props.match.params.id ? "ADD BRANCH" : "SAVE BRANCH"}
                 </Button>
               </Col>
               <Col xs="6" md="6">
@@ -748,17 +785,29 @@ class AddBranch extends Component {
 }
 
 export default connect(
-  ({ AdminContainer: { business_reducer, general_setup } }) => ({
-    ...business_reducer,
-    ...general_setup
+  ({
+    auth: {
+      cookies: {
+        token_data: { access_token }
+      }
+    },
+    AdminContainer: {
+      business_reducer: { branch, EDIT },
+      general_setup: { countries }
+    }
+  }) => ({
+    access_token,
+    branch,
+    EDIT,
+    countries
   }),
   {
     onAddressTreeList,
     onCountryList,
-    onCountryEachList,
-    onStateEachList,
-    onDistrictEachList,
-    onCityEachList,
-    onBranchAdd
+    onBranchAdd,
+    onBranchEdit,
+    onBranchAddressList,
+    onUnmountBranch,
+    ToogleEDIT
   }
 )(AddBranch);

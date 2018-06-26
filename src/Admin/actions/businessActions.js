@@ -34,7 +34,10 @@ import {
   onAppBusinessEachGet,
   onAppBusinessEachDelete,
   onSalesUserGet,
-  onBranchPost
+  onBranchPost,
+  onBranchGet,
+  onBranchPut,
+  onBusinessBranchGet
 } from "../../Business/config/businessServerCall";
 
 import {
@@ -129,11 +132,131 @@ import {
   CREATE_VERIFIED_BUSINESS_FULFILLED,
   CREATE_VERIFIED_BUSINESS_PENDING,
   CREATE_VERIFIED_BUSINESS_REJECTED,
+  FETCH_BRANCH_EACH_FULFILLED,
+  FETCH_BRANCH_EACH_PENDING,
+  FETCH_BRANCH_EACH_REJECTED,
+  EDIT_BRANCH_EACH_FULFILLED,
+  EDIT_BRANCH_EACH_PENDING,
+  EDIT_BRANCH_EACH_REJECTED,
+  FETCH_BUSINESS_BRANCH_FULFILLED,
+  FETCH_BUSINESS_BRANCH_PENDING,
+  FETCH_BUSINESS_BRANCH_REJECTED,
+  UNMOUNT_BRANCH,
   UNMOUNT_COMPANY_TYPE,
   UNMOUNT_PAYMENT_METHOD
 } from "./types";
 
 const epics = [];
+
+export const onBusinessBranchList = payload => ({
+  type: FETCH_BUSINESS_BRANCH_PENDING,
+  payload
+});
+
+epics.push((action$, { getState }) =>
+  action$.ofType(FETCH_BUSINESS_BRANCH_PENDING).mergeMap(({ payload }) => {
+    const access_token = getState().auth.cookies.token_data.access_token;
+    const { business_slug } = payload;
+
+    return onBusinessBranchGet({ access_token, business_slug })
+      .map(({ response }) => {
+        return { type: FETCH_BUSINESS_BRANCH_FULFILLED, payload: response };
+      })
+      .catch(ajaxError => {
+        toast.error(ajaxError.toString());
+        return Observable.of({
+          type: FETCH_BUSINESS_BRANCH_REJECTED,
+          payload: ajaxError
+        });
+      });
+  })
+);
+
+export const onBranchAddressList = ({
+  business_slug,
+  branch_id,
+  access_token
+}) => dispatch => {
+  onBranchGet({ access_token, business_slug, branch_id })
+    .then(response => {
+      console.log("asdadsadADasd: ", response.data);
+
+      const countryId = response.data.country ? response.data.country.id : "";
+      const stateId = response.data.state ? response.data.state.id : "";
+      const districtId = response.data.district
+        ? response.data.district.id
+        : "";
+      const cityId = response.data.city ? response.data.city.id : "";
+
+      getAddressTree(
+        countryId,
+        stateId,
+        districtId,
+        cityId,
+        access_token,
+        dispatch
+      );
+
+      dispatch({ type: FETCH_ADDRESS_TREE_PENDING });
+      dispatch({ type: FETCH_BRANCH_EACH_FULFILLED, payload: response.data });
+    })
+    .catch(error =>
+      dispatch({ type: FETCH_BRANCH_EACH_REJECTED, payload: error })
+    );
+  dispatch({ type: FETCH_BRANCH_EACH_PENDING });
+};
+
+export const onBranchEdit = payload => ({
+  type: EDIT_BRANCH_EACH_PENDING,
+  payload
+});
+
+epics.push((action$, { getState }) =>
+  action$.ofType(EDIT_BRANCH_EACH_PENDING).mergeMap(({ payload }) => {
+    const access_token = getState().auth.cookies.token_data.access_token;
+    const { business_slug, branch_id, body } = payload;
+
+    return onBranchPut({ access_token, business_slug, branch_id, body })
+      .map(({ response }) => {
+        if (response.msg === "success") {
+          toast.success("Branch Updated Successfully!");
+
+          return { type: EDIT_BRANCH_EACH_FULFILLED, payload: response };
+        } else throw new Error(response.msg);
+      })
+      .catch(ajaxError => {
+        toast.error(ajaxError.toString());
+        return Observable.of({
+          type: EDIT_BRANCH_EACH_REJECTED,
+          payload: ajaxError
+        });
+      });
+  })
+);
+
+// export const onBranchAddressLists = payload => ({
+//   type: FETCH_BRANCH_EACH_PENDING,
+//   payload
+// });
+
+// epics.push((action$, { getState }) =>
+//   action$.ofType(FETCH_BRANCH_EACH_PENDING).mergeMap(({ payload }) => {
+//     const access_token = getState().auth.cookies.token_data.access_token;
+//     const { business_slug, branch_id } = payload;
+
+//     return onBranchGet({ access_token, business_slug, branch_id })
+//       .map(({ response }) => {
+//         return { type: FETCH_BRANCH_EACH_FULFILLED, payload: response };
+//       })
+//       .catch(ajaxError => {
+//         toast.error(ajaxError.toString());
+//         return Observable.of({
+//           type: FETCH_BRANCH_EACH_REJECTED,
+//           payload: ajaxError
+//         });
+//       });
+//   })
+// );
 
 export const onBranchAdd = payload => ({
   type: CREATE_BRANCH_PENDING,
@@ -143,9 +266,9 @@ export const onBranchAdd = payload => ({
 epics.push((action$, { getState }) =>
   action$.ofType(CREATE_BRANCH_PENDING).mergeMap(action => {
     const access_token = getState().auth.cookies.token_data.access_token;
-    const { id, body } = action.payload;
+    const { business_slug, body } = action.payload;
 
-    return onBranchPost({ id, body, access_token })
+    return onBranchPost({ business_slug, body, access_token })
       .map(({ response }) => {
         if (response.msg === "success") {
           toast.success("Branch Added Successfully!");
@@ -1380,6 +1503,7 @@ epics.push((action$, { getState }) =>
 );
 
 export const onUnmountCompanyType = () => ({ type: UNMOUNT_COMPANY_TYPE });
+export const onUnmountBranch = () => ({ type: UNMOUNT_BRANCH });
 
 export const onUnmountPaymentMethod = () => ({ type: UNMOUNT_PAYMENT_METHOD });
 
