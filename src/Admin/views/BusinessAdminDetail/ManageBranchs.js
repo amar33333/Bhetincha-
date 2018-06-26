@@ -108,15 +108,15 @@ class ManageBranchs extends Component {
         accessor: "addressID",
         filterable: false,
         sortable: false,
-        width: 145,
+        width: 170,
         Cell: ({ value }) => (
           <div>
             <Button
-              color="secondary"
-              className="mr-l"
+              color="primary"
+              className="mr-2"
               onClick={() => console.log("edit", value)}
             >
-              Edit
+              <i className="fa fa-pencil" /> Edit
             </Button>
             <PopoverDelete
               id={`delete-${value}`}
@@ -153,11 +153,10 @@ class ManageBranchs extends Component {
             state: this.props.location.state
           }}
         >
-          <Button variant="raised" color="primary">
-            Add New Branch
+          <Button variant="raised" color="primary" className="mb-3">
+            <i className="fa fa-plus" /> Add New Branch
           </Button>
         </Link>
-        <p>Show Branch List Table Here</p>
         <ReactTable
           {...this.tableProps}
           style={{ background: "white" }}
