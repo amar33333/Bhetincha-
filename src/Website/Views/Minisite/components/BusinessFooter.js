@@ -12,13 +12,13 @@ class BusinessFooter extends Component {
           <Row>
             <Col xs="12" md="4">
               <h4>Contact us</h4>
-              <p className="m-0">
+              <div className="m-0">
                 <strong>Head Office</strong>
                 <p className="m-0">
                   <strong>{this.props.business_name}</strong>
                 </p>
                 <p>{this.props.address && this.props.address.addressLine1}</p>
-              </p>
+              </div>
               <p>{""}</p>
               <span className="fa fa-envelope">
                 <a href={`mailto:${this.props.business_email}`}>

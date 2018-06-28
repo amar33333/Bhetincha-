@@ -68,9 +68,9 @@ class AutoSuggestion extends Component {
                   border: "none",
                   borderRadius: "0px",
                   backgroundColor: "white",
-                  webkitBoxShadow: "0px 1px 6px 1px rgba(196,174,196,0.79)",
-                  mozBoxShadow: "0px 1px 6px 1px rgba(196,174,196,0.79)",
-                  boxShadow: "0px 2px 4px 1px rgba(196,174,196,0.79)"
+                  WebkitBoxShadow: "0px 1px 6px 1px rgba(196,174,196,0.79)",
+                  MozBoxShadow: "0px 1px 6px 1px rgba(196,174,196,0.79)",
+                  BoxShadow: "0px 2px 4px 1px rgba(196,174,196,0.79)"
                 }}
               />
               <button

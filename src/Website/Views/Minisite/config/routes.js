@@ -8,6 +8,7 @@ import {
   ROUTE_PARAMS_MINISITE_BUSINESS_ROUTE
 } from "../../../../config/CONSTANTS";
 import ThemeLight from "../theme-light/ThemeLight";
+import GalleryView from "../components/Gallery/GalleryView";
 
 class MinisiteRoute extends Component {
   render() {
@@ -17,6 +18,12 @@ class MinisiteRoute extends Component {
     ];
     return (
       <Switch>
+        <Route
+          path={`/:${ROUTE_PARAMS_BUSINESS_NAME}/gallery/:id`}
+          name="Gallery-View"
+          render={props => <GalleryView {...props} />}
+          // component={GalleryView}
+        />
         <Route
           path={`/:${ROUTE_PARAMS_BUSINESS_NAME}/gallery`}
           name="Minisite-Gallery"

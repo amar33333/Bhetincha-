@@ -9,7 +9,7 @@ import {
   Input,
   Button
 } from "reactstrap";
-// import { Button } from "semantic-ui-react";
+import { Button as SButton } from "semantic-ui-react";
 
 import FontAwesome from "react-fontawesome";
 import { CustomModal, PopoverDelete } from "../../../../../Common/components";
@@ -72,16 +72,33 @@ class GalleryComponent extends Component {
 
     if (selectedPhotos.length > 0) {
       return (
-        <button
+        <PopoverDelete
+          // customStyle={{
+          //   position: "absolute",
+          //   top: "10px",
+          //   right: "10px"
+          // }}
+          text={`Delete ${selectedPhotos.length} Item(s)`}
+          id={album.albumID + "X"}
           onClick={() =>
             this.props.handlePhotoDelete({
               photos: selectedPhotos,
               album_id: album.albumID
             })
           }
-        >
-          {`Delete ${selectedPhotos.length} Items`}
-        </button>
+          subtitle="This will delete all the selected photos"
+        />
+        // <Button
+        //   color="danger"
+        // onClick={() =>
+        //   this.props.handlePhotoDelete({
+        //     photos: selectedPhotos,
+        //     album_id: album.albumID
+        //   })
+        // }
+        // >
+        //   {`Delete ${selectedPhotos.length} Item(s)`}
+        // </Button>
       );
     }
   };
@@ -108,7 +125,21 @@ class GalleryComponent extends Component {
           }
           accept="image/*"
           buttonComponent={
-            <button disabled={loading} className="gallery_upload">
+            <SButton
+              disabled={loading}
+              data-tooltip="Maximum upload size 25 MB."
+              data-position="bottom center"
+              circular
+              icon="camera"
+              color="linkedin"
+              size="big"
+              style={{
+                position: "absolute",
+                top: "50%",
+                marginLeft: "20px"
+              }}
+              onClick={this.toggleCreateModal}
+            >
               {loading ? (
                 <FontAwesome
                   className="super-crazy-colors"
@@ -117,14 +148,25 @@ class GalleryComponent extends Component {
                   spin
                   style={{ textShadow: "0 1px 0 rgba(0, 0, 0, 0.1)" }}
                 />
-              ) : (
-                <div>
-                  <span>Maximum upload size: 25MB</span>
-                  <br />
-                  <i className="fa fa-camera upload-camera" />
-                </div>
-              )}
-            </button>
+              ) : null}
+            </SButton>
+            // <button disabled={loading} className="gallery_upload">
+            //   {loading ? (
+            //     <FontAwesome
+            //       className="super-crazy-colors"
+            //       name="spinner"
+            //       size="2x"
+            //       spin
+            //       style={{ textShadow: "0 1px 0 rgba(0, 0, 0, 0.1)" }}
+            //     />
+            //   ) : (
+            //     <div>
+            //       <span>Maximum upload size: 25MB</span>
+            //       <br />
+            //       <i className="fa fa-camera upload-camera" />
+            //     </div>
+            //   )}
+            // </button>
           }
         />
       </div>
@@ -185,6 +227,11 @@ class GalleryComponent extends Component {
                   <p className="album-title">{album.name}</p>
                   {this.props.isEdit && (
                     <PopoverDelete
+                      customStyle={{
+                        position: "absolute",
+                        top: "10px",
+                        right: "10px"
+                      }}
                       id={album.albumID}
                       onClick={() =>
                         this.props.handleAlbumDelete({

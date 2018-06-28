@@ -55,7 +55,7 @@ class MainNavbar extends Component {
             />
           </NavItem>
           {/* {this.props.cookies && <Avatar />} */}
-          <NavItem right>{this.props.cookies && <Avatar />}</NavItem>
+          <NavItem right="true">{this.props.cookies && <Avatar />}</NavItem>
         </Navbar>
       </div>
     );

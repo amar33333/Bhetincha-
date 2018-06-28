@@ -19,6 +19,8 @@ import { Card } from "semantic-ui-react";
 // import avatar from "../../static/img/avatar.jpg";
 import querystring from "querystring";
 
+import { Link } from "react-router-dom";
+
 import { togglePhoneVerificationModal } from "../../actions";
 import { onSearchResultsList } from "../actions";
 import CustomModal from "../../Common/components/CustomModal";
@@ -93,16 +95,18 @@ class BusinessList extends Component {
                   </Media>
                   <Media body>
                     <Media heading className="result-header__text">
-                      {each_search_result.business_name}{" "}
-                      {each_search_result.verified && (
-                        <span data-tooltip="Verified">
-                          <i
-                            className="fa fa-check-circle"
-                            style={{ color: "green" }}
-                            // data-tooltip="Add users to your feed"
-                          />
-                        </span>
-                      )}
+                      <Link to={each_search_result.slug}>
+                        {each_search_result.business_name}{" "}
+                        {each_search_result.verified && (
+                          <span data-tooltip="Verified">
+                            <i
+                              className="fa fa-check-circle"
+                              style={{ color: "green" }}
+                              // data-tooltip="Add users to your feed"
+                            />
+                          </span>
+                        )}
+                      </Link>
                     </Media>
                     <div className="mb-1">
                       <Badge color="warning" pill className="mr-1">
