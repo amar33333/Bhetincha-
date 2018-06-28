@@ -295,9 +295,16 @@ class PropertyItemAddNew extends Component {
                         <Input
                           type="checkbox"
                           checked={this.state.filterable}
-                          onClick={event =>
-                            this.setState({ filterable: event.target.checked })
-                          }
+                          onClick={event => {
+                            const extra = {};
+                            if (event.target.checked) {
+                              extra.required = true;
+                            }
+                            this.setState({
+                              filterable: event.target.checked,
+                              ...extra
+                            });
+                          }}
                         />
                         Filterable
                       </Label>
