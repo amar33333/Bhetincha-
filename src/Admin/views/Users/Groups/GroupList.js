@@ -30,7 +30,7 @@ class GroupList extends Component {
             <Button
               color="secondary"
               className="mr-l"
-              onClick={() => console.log(id)}
+              onClick={() => this.props.toggleGroupEditModal({ id, name })}
             >
               Edit
             </Button>

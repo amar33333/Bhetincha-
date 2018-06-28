@@ -9,19 +9,19 @@ import {
   FormGroup
 } from "reactstrap";
 
-class CountryEditModal extends Component {
-  state = { country: "" };
+class GroupEditModal extends Component {
+  state = { group: "" };
 
   componentDidMount() {
     this.setState({
-      country: this.props.data ? this.props.data : ""
+      group: this.props.data ? this.props.data : ""
     });
   }
 
   onChange = (key, event) => {
     this.setState({
       [key]: {
-        ...this.state.country,
+        ...this.state.group,
         name: event.target.value.replace(/\b\w/g, l => l.toUpperCase())
       }
     });
@@ -29,8 +29,8 @@ class CountryEditModal extends Component {
 
   onFormEdit = event => {
     event.preventDefault();
-    const { country } = this.state;
-    this.props.onCountryEdit({ country });
+    const { group } = this.state;
+    this.props.onGroupEdit({ group });
   };
 
   render() {
@@ -40,7 +40,7 @@ class CountryEditModal extends Component {
           <InputGroup>
             <InputGroupAddon addonType="prepend">
               <InputGroupText>
-                <i className="fa fa-country" />
+                <i className="fa fa-group" />
               </InputGroupText>
             </InputGroupAddon>
             <Input
@@ -48,9 +48,9 @@ class CountryEditModal extends Component {
               required
               disabled={this.props.loading}
               type="text"
-              placeholder="Type country Name"
-              value={this.state.country ? this.state.country.name : ""}
-              onChange={this.onChange.bind(this, "country")}
+              placeholder="Type Group Name"
+              value={this.state.group ? this.state.group.name : ""}
+              onChange={this.onChange.bind(this, "group")}
             />
           </InputGroup>
         </FormGroup>
@@ -62,4 +62,4 @@ class CountryEditModal extends Component {
   }
 }
 
-export default CountryEditModal;
+export default GroupEditModal;

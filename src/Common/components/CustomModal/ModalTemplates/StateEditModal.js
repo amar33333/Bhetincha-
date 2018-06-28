@@ -20,9 +20,9 @@ class StateEditModal extends Component {
   componentDidMount() {
     this.setState({
       state: this.props.data ? this.props.data : "",
-      country: this.props.data
-        ? { id: this.props.data.country, name: this.props.data.country }
-        : ""
+      country: this.props.countries.find(
+        each => each.name === this.props.data.country
+      )
     });
   }
 
@@ -63,7 +63,7 @@ class StateEditModal extends Component {
                 required
                 name="Industries"
                 className="select-country"
-                value={this.state.country}
+                value={this.state.country && this.state.country.id}
                 onChange={this.handleSelectChange}
                 options={this.props.countries}
                 valueKey="id"

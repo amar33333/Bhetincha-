@@ -319,7 +319,7 @@ epics.push(action$ =>
           });
           return { type: CREATE_BUSINESS_USER_FULFILLED, payload: response };
         } else {
-          throw new Error(response.msg[Object.keys(response.msg)[0]][0]);
+          throw new Error(response.msg);
         }
       })
       .catch(ajaxError => {

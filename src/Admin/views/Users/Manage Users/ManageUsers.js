@@ -12,11 +12,16 @@ import {
 } from "../../../../Common/components";
 import PermissionProvider from "../../../../Common/utils/PermissionProvider";
 
+import CustomModal from "../../../../Common/components/CustomModal";
+import UserEditModal from "../../../../Common/components/CustomModal/ModalTemplates/UserEditModal";
+
 import {
   onUsersList,
   onGroupsList,
   handleSortChangeUsers,
-  handleOnUsersFilterChange
+  handleOnUsersFilterChange,
+  toggleUserEditModal,
+  onUserEdit
 } from "../../../actions";
 
 class ManageUsers extends Component {
@@ -58,12 +63,12 @@ class ManageUsers extends Component {
         filterable: false,
         sortable: false,
         width: 145,
-        Cell: ({ value }) => (
+        Cell: ({ value, original }) => (
           <div>
             <Button
               color="secondary"
               className="mr-l"
-              onClick={() => console.log("edit ", value)}
+              onClick={() => this.props.toggleUserEditModal({ ...original })}
             >
               Edit
             </Button>
@@ -131,6 +136,17 @@ class ManageUsers extends Component {
           pages={this.props.pages}
           rowCount={this.props.rowCount}
         />
+        <CustomModal
+          title="Edit User Data"
+          isOpen={this.props.userEditModal}
+          toggle={this.props.toggleUserEditModal}
+          className={"modal-xs" + this.props.className}
+        >
+          <UserEditModal
+            data={this.props.userEditData}
+            onUserEdit={this.props.onUserEdit}
+          />
+        </CustomModal>
       </div>
     );
   }
@@ -144,7 +160,9 @@ export default connect(
         users,
         usersFetchLoading: fetchLoading,
         usersPages: pages,
-        usersRowCount: rowCount
+        usersRowCount: rowCount,
+        userEditData,
+        userEditModal
       },
       filterUsers
     }
@@ -154,12 +172,16 @@ export default connect(
     fetchLoading,
     pages,
     rowCount,
-    ...filterUsers
+    ...filterUsers,
+    userEditData,
+    userEditModal
   }),
   {
     onUsersList,
+    onUserEdit,
     onGroupsList,
     handleOnUsersFilterChange,
-    handleSortChangeUsers
+    handleSortChangeUsers,
+    toggleUserEditModal
   }
 )(ManageUsers);

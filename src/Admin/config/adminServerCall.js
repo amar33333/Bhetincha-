@@ -952,6 +952,19 @@ export const onGroupPost = ({ group, access_token }) =>
     }
   });
 
+export const onGroupPut = ({ group, access_token }) =>
+  ajax({
+    method: "PUT",
+    url: `${USER_GROUPS_URL}${group.id}/`,
+    body: {
+      name: group.name
+    },
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
 export const onGroupsEachDelete = ({ id, access_token }) =>
   ajax({
     method: "delete",

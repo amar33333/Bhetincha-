@@ -8,7 +8,8 @@ import {
   onUsersGet,
   onGroupsGet,
   onPermissionsGet,
-  onTogglePermissionPost
+  onTogglePermissionPost,
+  onGroupPut
 } from "../config/adminServerCall";
 import {
   CREATE_GROUP_FULFILLED,
@@ -31,10 +32,109 @@ import {
   TOGGLE_PERMISSION_REJECTED,
   DELETE_USER_GROUPS_FULFILLED,
   DELETE_USER_GROUPS_PENDING,
-  DELETE_USER_GROUPS_REJECTED
+  DELETE_USER_GROUPS_REJECTED,
+  TOGGLE_GROUP_EDIT_MODAL,
+  TOGGLE_USER_EDIT_MODAL,
+  EDIT_USER_FULFILLED,
+  EDIT_USER_PENDING,
+  EDIT_USER_REJECTED,
+  EDIT_GROUP_FULFILLED,
+  EDIT_GROUP_PENDING,
+  EDIT_GROUP_REJECTED
 } from "./types";
 
 const epics = [];
+
+export const toggleGroupEditModal = payload => ({
+  type: TOGGLE_GROUP_EDIT_MODAL,
+  payload
+});
+
+export const toggleUserEditModal = payload => ({
+  type: TOGGLE_USER_EDIT_MODAL,
+  payload
+});
+
+export const onUserEdit = payload => ({
+  type: EDIT_USER_PENDING,
+  payload
+});
+
+epics.push((action$, { getState }) =>
+  action$.ofType(EDIT_USER_PENDING).mergeMap(({ payload }) => {
+    const {
+      groups,
+      first_name,
+      last_name,
+      username,
+      email,
+      password
+    } = payload;
+    const access_token = getState().auth.cookies.token_data.access_token;
+
+    return onGroupPut({
+      groups,
+      first_name,
+      last_name,
+      username,
+      email,
+      password,
+      access_token
+    })
+      .concatMap(({ response }) => {
+        if (response.msg === "success") {
+          toast.success("User Updated successfully!");
+          return [
+            { type: EDIT_USER_FULFILLED },
+            { type: FETCH_USERS_PENDING },
+            { type: TOGGLE_USER_EDIT_MODAL }
+          ];
+        } else {
+          throw new Error(response.msg[Object.keys(response.msg)[0]][0]);
+        }
+      })
+      .catch(ajaxError => {
+        toast.error(ajaxError.toString());
+        return Observable.of({
+          type: EDIT_USER_REJECTED,
+          payload: ajaxError
+        });
+      });
+  })
+);
+
+export const onGroupEdit = payload => ({
+  type: EDIT_GROUP_PENDING,
+  payload
+});
+
+epics.push((action$, { getState }) =>
+  action$.ofType(EDIT_GROUP_PENDING).mergeMap(({ payload }) => {
+    const { group } = payload;
+    const access_token = getState().auth.cookies.token_data.access_token;
+
+    return onGroupPut({ group, access_token })
+      .concatMap(({ response }) => {
+        if (response.msg === "success") {
+          toast.success("Group Updated successfully!");
+          return [
+            { type: EDIT_GROUP_FULFILLED },
+            { type: FETCH_GROUPS_PENDING },
+            { type: TOGGLE_GROUP_EDIT_MODAL }
+          ];
+        } else {
+          throw new Error(response.msg[Object.keys(response.msg)[0]][0]);
+        }
+      })
+      .catch(ajaxError => {
+        toast.error(ajaxError.toString());
+        return Observable.of({
+          type: EDIT_GROUP_REJECTED,
+          payload: ajaxError
+        });
+      });
+  })
+);
 
 export const onTogglePermission = payload => ({
   type: TOGGLE_PERMISSION_PENDING,
@@ -263,7 +363,6 @@ epics.push((action$, { getState }) =>
 //   dispatch({ type: CREATE_USER_PENDING });
 // };
 
-// This `onUserList` has not been used so do as you like
 export const onUsersList = payload => ({ type: FETCH_USERS_PENDING, payload });
 
 epics.push((action$, { getState }) =>
@@ -317,15 +416,5 @@ epics.push((action$, { getState }) =>
       .catch(ajaxError => Observable.of({ type: FETCH_USERS_REJECTED }));
   })
 );
-// export const onUserList = ({ access_token }) => dispatch => {
-//   onUsersGet({ access_token })
-//     .then(response => {
-//       dispatch({ type: FETCH_USERS_FULFILLED, payload: response.data });
-//     })
-//     .catch(error => {
-//       dispatch({ type: FETCH_USERS_REJECTED, payload: error.data });
-//     });
-//   dispatch({ type: FETCH_USERS_PENDING });
-// };
 
 export default epics;

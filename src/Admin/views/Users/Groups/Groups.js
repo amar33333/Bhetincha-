@@ -8,8 +8,17 @@ import {
   InputGroupText
 } from "reactstrap";
 
+import CustomModal from "../../../../Common/components/CustomModal";
+import GroupEditModal from "../../../../Common/components/CustomModal/ModalTemplates/GroupEditModal";
+
 import GroupList from "./GroupList";
-import { onGroupSubmit, onGroupsList, onGroupDelete } from "../../../actions";
+import {
+  onGroupSubmit,
+  onGroupsList,
+  onGroupDelete,
+  toggleGroupEditModal,
+  onGroupEdit
+} from "../../../actions";
 
 class Groups extends Component {
   constructor(props) {
@@ -64,7 +73,19 @@ class Groups extends Component {
         <GroupList
           groups={this.props.groups}
           onGroupDelete={this.props.onGroupDelete}
+          toggleGroupEditModal={this.props.toggleGroupEditModal}
         />
+        <CustomModal
+          title="Edit Group Data"
+          isOpen={this.props.groupEditModal}
+          toggle={this.props.toggleGroupEditModal}
+          className={"modal-xs" + this.props.className}
+        >
+          <GroupEditModal
+            data={this.props.groupEditData}
+            onGroupEdit={this.props.onGroupEdit}
+          />
+        </CustomModal>
       </div>
     );
   }
@@ -73,8 +94,14 @@ class Groups extends Component {
 export default connect(
   ({
     AdminContainer: {
-      user_reducer: { groups }
+      user_reducer: { groups, groupEditData, groupEditModal }
     }
-  }) => ({ groups }),
-  { onGroupSubmit, onGroupsList, onGroupDelete }
+  }) => ({ groups, groupEditData, groupEditModal }),
+  {
+    onGroupSubmit,
+    onGroupsList,
+    onGroupDelete,
+    toggleGroupEditModal,
+    onGroupEdit
+  }
 )(Groups);
