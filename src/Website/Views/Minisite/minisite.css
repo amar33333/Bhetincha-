@@ -97,6 +97,11 @@
   display: block;
 }
 
+img.minisite__album-thumbnail {
+  object-fit: cover;
+  height: 200px !important;
+}
+
 /* ==============About us=================== */
 .minisite_about__edit__icon {
   display: inline-block;

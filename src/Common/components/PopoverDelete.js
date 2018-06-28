@@ -10,6 +10,7 @@ class PopoverItem extends React.Component {
     return (
       <span>
         <Button
+          style={this.props.customStyle ? { ...this.props.customStyle } : {}}
           className="mr-1"
           color="danger"
           id={"Popover-" + this.props.id}
