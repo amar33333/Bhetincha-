@@ -226,10 +226,14 @@ export const onBusinessEachList = ({ username, access_token }) => dispatch => {
         ? response.data.industry.id
         : "";
       const countryId = response.data.address
-        ? response.data.address.country ? response.data.address.country.id : ""
+        ? response.data.address.country
+          ? response.data.address.country.id
+          : ""
         : "";
       const stateId = response.data.address
-        ? response.data.address.state ? response.data.address.state.id : ""
+        ? response.data.address.state
+          ? response.data.address.state.id
+          : ""
         : "";
       const districtId = response.data.address
         ? response.data.address.district
@@ -237,7 +241,9 @@ export const onBusinessEachList = ({ username, access_token }) => dispatch => {
           : ""
         : "";
       const cityId = response.data.address
-        ? response.data.address.city ? response.data.address.city.id : ""
+        ? response.data.address.city
+          ? response.data.address.city.id
+          : ""
         : "";
 
       if (industryId !== "")

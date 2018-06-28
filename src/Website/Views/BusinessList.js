@@ -57,8 +57,11 @@ class BusinessList extends Component {
   }
 
   onClaimed = id => () => {
-    console.log("claimed");
     this.props.togglePhoneVerificationModal({ id });
+  };
+
+  onImproveListingClicked = id => () => {
+    console.log("imporve listing: ", id);
   };
 
   toggleVerifiedTooltip = () => {
@@ -163,11 +166,17 @@ class BusinessList extends Component {
                   <Col
                     sm="2"
                     style={{ cursor: "pointer" }}
-                    onClick={this.onClaimed(each_search_result._id)}
+                    onClick={this.onClaimed(each_search_result.id)}
                   >
                     <i className="fa fa-unlock" /> Claim
                   </Col>
-                  {/* <Col sm="3">
+                  <Col
+                    sm="3"
+                    style={{ cursor: "pointer" }}
+                    onClick={this.onImproveListingClicked(
+                      each_search_result.id
+                    )}
+                  >
                     <i className="fa fa-list" /> Improve Listing
                   </Col>
                   <Col sm="2">
@@ -178,7 +187,7 @@ class BusinessList extends Component {
                   </Col>
                   <Col sm="2">
                     <i className="fa fa-star" /> 4.5
-                  </Col> */}
+                  </Col>
                 </Row>
               </Card.Content>
               {/* <div

@@ -6,13 +6,9 @@ import ReactTable from "react-table";
 import { PopoverDelete, PaginationComponent } from "../../../Common/components";
 import filterCaseInsensitive from "../../../Common/utils/filterCaseInsesitive";
 
-import { onBusinessEachList } from "../../actions";
+import { onBusinessBranchList } from "../../actions";
 
 class ManageBranchs extends Component {
-  access_token = this.props.cookies
-    ? this.props.cookies.token_data.access_token
-    : null;
-
   tableProps = {
     columns: [
       {
@@ -112,9 +108,13 @@ class ManageBranchs extends Component {
         Cell: ({ value }) => (
           <div>
             <Button
-              color="primary"
-              className="mr-2"
-              onClick={() => console.log("edit", value)}
+              color="secondary"
+              className="mr-l"
+              onClick={() => {
+                this.props.history.push(
+                  `${this.props.match.url}/${value}/edit-branch`
+                );
+              }}
             >
               <i className="fa fa-pencil" /> Edit
             </Button>
@@ -135,9 +135,8 @@ class ManageBranchs extends Component {
   };
 
   componentDidMount = () => {
-    this.props.onBusinessEachList({
-      username: this.props.match.params.businessSlug,
-      access_token: this.access_token
+    this.props.onBusinessBranchList({
+      business_slug: this.props.match.params.businessSlug
     });
   };
 
@@ -149,8 +148,7 @@ class ManageBranchs extends Component {
           to={{
             pathname: `/admin/list-business/${
               this.props.match.params.businessSlug
-            }/manage-branchs/add-branch`,
-            state: this.props.location.state
+            }/manage-branchs/add-branch`
           }}
         >
           <Button variant="raised" color="primary" className="mb-3">
@@ -161,10 +159,9 @@ class ManageBranchs extends Component {
           {...this.tableProps}
           style={{ background: "white" }}
           data={
-            this.props.businessData &&
-            this.props.businessData.branchAddress &&
-            this.props.businessData.branchAddress.length
-              ? this.props.businessData.branchAddress.map((x, i) => ({
+            this.props.businessBranchData &&
+            this.props.businessBranchData.length
+              ? this.props.businessBranchData.map((x, i) => ({
                   ...x,
                   s_no: i + 1
                 }))
@@ -181,14 +178,14 @@ class ManageBranchs extends Component {
 export default connect(
   ({
     AdminContainer: {
-      business_reducer: { businessData }
+      business_reducer: { businessBranchData }
     },
     auth
   }) => ({
     ...auth,
-    businessData
+    businessBranchData
   }),
   {
-    onBusinessEachList
+    onBusinessBranchList
   }
 )(ManageBranchs);

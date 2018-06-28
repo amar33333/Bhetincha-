@@ -102,6 +102,12 @@ class AdminRoute extends Component {
           //permission="CAN_VIEW_DASHBOARD"
         />
         <Route
+          path="/admin/list-business/:businessSlug/manage-branchs/:id/edit-branch"
+          name="Edit Branch Address"
+          component={AddBranch}
+          //permission="CAN_VIEW_DASHBOARD"
+        />
+        <Route
           path="/admin/list-business/:businessSlug/manage-branchs"
           name="Manage Branch Address"
           component={ManageBranchs}
