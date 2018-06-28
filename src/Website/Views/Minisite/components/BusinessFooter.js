@@ -82,10 +82,12 @@ class BusinessFooter extends Component {
                     <h4 className="mb-0">Call us Now!</h4>
                     <h1 className="mt-0">
                       <a
-                        href={`tel:${this.props.address.tollFreeNumber ||
+                        href={`tel:${(this.props.address &&
+                          this.props.address.tollFreeNumber) ||
                           this.props.business_phone}`}
                       >
-                        {this.props.address.tollFreeNumber ||
+                        {(this.props.address &&
+                          this.props.address.tollFreeNumber) ||
                           this.props.business_phone}
                       </a>
                     </h1>

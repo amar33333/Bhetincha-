@@ -18,13 +18,13 @@ import {
 
 import { Card as SemanticCard } from "semantic-ui-react";
 
-import { Select } from "../../../Common/components";
-
 class subBusinessWorkingHour extends Component {
   constructor(props) {
     super(props);
     this.state = {
       alwaysOpen: false,
+      selectedStart: moment("2018-05-01T10:00").format("YYYY-MM-DDTHH:mmZ"),
+      selectedClosing: moment("2018-05-01T17:00").format("YYYY-MM-DDTHH:mmZ"),
       workingHour: [
         {
           day: "Sunday",
@@ -157,10 +157,6 @@ class subBusinessWorkingHour extends Component {
       currentDate = moment(currentDate).add(15, "m");
     }
 
-    const timeList = dateArray.map((date, index) => {
-      return { id: index, value: date };
-    });
-
     // console.log("date array: ", dateArray);
     return (
       <FormGroup>
@@ -185,20 +181,6 @@ class subBusinessWorkingHour extends Component {
                   {day.holiday ? null : (
                     <span>
                       <Label>Opens at: </Label>
-                      {/* <Select
-                        autosize
-                        name="Opnes at"
-                        // value={timeList}
-                        onChange={time => {
-                          this.handleStartHourChange(time, day.day);
-                        }}
-                        options={timeList}
-                        valuekey="value"
-                        labelKey="value"
-                        optionRenderer={({ value }) => (
-                          <div>{moment(value).format("hh:mm A")}</div>
-                        )}
-                      /> */}
                       <Input
                         type="select"
                         onChange={time => {
@@ -207,8 +189,14 @@ class subBusinessWorkingHour extends Component {
                       >
                         {dateArray.map(date => (
                           <option
+                            selected={
+                              this.state.selectedStart ===
+                              moment(date).format("YYYY-MM-DDTHH:mmZ")
+                                ? true
+                                : false
+                            }
                             key={date}
-                            value={moment.utc(date).format("YYYY-MM-DDTHH:mmZ")}
+                            value={moment(date).format("YYYY-MM-DDTHH:mmZ")}
                           >
                             {moment(date).format("h:mm A")}
                           </option>
@@ -233,7 +221,28 @@ class subBusinessWorkingHour extends Component {
                   {day.holiday ? null : (
                     <span>
                       <Label>Closes at: </Label>
-                      <Datetime
+                      <Input
+                        type="select"
+                        onChange={time => {
+                          this.handleClosingHourChange(time, day.day);
+                        }}
+                      >
+                        {dateArray.map(date => (
+                          <option
+                            selected={
+                              this.state.selectedClosing ===
+                              moment(date).format("YYYY-MM-DDTHH:mmZ")
+                                ? true
+                                : false
+                            }
+                            key={date}
+                            value={moment(date).format("YYYY-MM-DDTHH:mmZ")}
+                          >
+                            {moment(date).format("h:mm A")}
+                          </option>
+                        ))}
+                      </Input>
+                      {/* <Datetime
                         dateFormat={false}
                         value={moment(day.end).format("hh:mm a")}
                         // defaultValue={moment("2018-05-01T17:00").format(
@@ -244,7 +253,7 @@ class subBusinessWorkingHour extends Component {
                         }
                         viewMode={"time"}
                         // utc={true}
-                      />
+                      /> */}
                     </span>
                   )}
                 </Col>
