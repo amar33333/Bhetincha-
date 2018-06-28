@@ -1,11 +1,16 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import {
+  Card,
+  CardHeader,
+  CardBody,
   Input,
   Button,
   InputGroup,
   InputGroupAddon,
-  InputGroupText
+  InputGroupText,
+  Row,
+  Col
 } from "reactstrap";
 
 import GroupList from "./GroupList";
@@ -41,25 +46,36 @@ class Groups extends Component {
   render() {
     return (
       <div className="animated fadeIn">
-        <form onSubmit={this.onFormSubmit}>
-          <InputGroup>
-            <InputGroupAddon addonType="prepend">
-              <InputGroupText>Group Name</InputGroupText>
-            </InputGroupAddon>
-            <Input
-              innerRef={ref => (this.addButton = ref)}
-              autoFocus
-              type="text"
-              value={this.state.group}
-              onChange={this.onChange.bind(this, "group")}
-            />
-            <InputGroupAddon addonType="append">
-              <Button type="submit" color="primary" value="Add Group">
-                <i className="fa fa-plus" /> Add Group
-              </Button>
-            </InputGroupAddon>
-          </InputGroup>
-        </form>
+        <Row>
+          <Col xs="12" md="6">
+            <Card>
+              <CardHeader>
+                <strong>Add New User Group</strong>
+              </CardHeader>
+              <CardBody>
+                <form onSubmit={this.onFormSubmit}>
+                  <InputGroup>
+                    <InputGroupAddon addonType="prepend">
+                      <InputGroupText>Group Name</InputGroupText>
+                    </InputGroupAddon>
+                    <Input
+                      innerRef={ref => (this.addButton = ref)}
+                      autoFocus
+                      type="text"
+                      value={this.state.group}
+                      onChange={this.onChange.bind(this, "group")}
+                    />
+                    <InputGroupAddon addonType="append">
+                      <Button type="submit" color="primary" value="Add Group">
+                        <i className="fa fa-plus" /> Add Group
+                      </Button>
+                    </InputGroupAddon>
+                  </InputGroup>
+                </form>
+              </CardBody>
+            </Card>
+          </Col>
+        </Row>
         <br />
         <GroupList
           groups={this.props.groups}

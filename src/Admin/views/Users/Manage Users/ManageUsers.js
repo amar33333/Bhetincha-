@@ -108,8 +108,8 @@ class ManageUsers extends Component {
       <div className="animated fadeIn">
         <PermissionProvider permission="CAN_ADD_USER">
           <Link to="/admin/users/add-user">
-            <Button variant="raised" color="primary">
-              Add New User
+            <Button variant="raised" color="primary" className="mb-4">
+              <i className="fa fa-plus" /> Add New User
             </Button>
           </Link>
         </PermissionProvider>
