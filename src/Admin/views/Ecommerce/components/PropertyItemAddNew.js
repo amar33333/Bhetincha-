@@ -36,7 +36,7 @@ class PropertyItemAddNew extends Component {
     };
   }
 
-  componentDidUpdate = (prevProps, prevState, snapshot) => {
+  componentDidUpdate = (_, prevState) => {
     if (prevState.propertySubmit && !this.props.loading) {
       const updates = { propertySubmit: false };
       if (!this.props.error) {
