@@ -26,7 +26,7 @@ const items = {
       children: [
         {
           name: "Manage Products",
-          url: `/${ROUTE_PARAMS_BUSINESS_NAME}/dashboard/ecommerce/products`,
+          url: `/${ROUTE_PARAMS_BUSINESS_NAME}/dashboard/ecommerce/manage-products`,
           icon: "icon-user-follow"
           // permission: "CAN_VIEW_USER"
         }

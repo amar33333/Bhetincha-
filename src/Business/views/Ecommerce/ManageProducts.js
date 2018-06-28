@@ -6,11 +6,12 @@ import {
   SideTreeView,
   BreadcrumbNav
 } from "../../../Admin/views/Ecommerce/components";
-import { ProductAddNew } from "./components";
+import { ProductAddNew, ProductsList } from "./components";
 import {
   onCategoriesListEcommerce,
   onChangeActiveCategoryEcommerce,
-  openAllOnSearchEcommerce
+  openAllOnSearchEcommerce,
+  onCreateEcommerceProduct
 } from "../../actions";
 
 class ManageProducts extends Component {
@@ -35,17 +36,31 @@ class ManageProducts extends Component {
               />
             </Col>
             <Col xs="12" md="9">
-              {this.props.attributes && (
-                <BreadcrumbNav
-                  breadCrumbs={this.props.attributes.breadCrumbs}
-                  onChangeActiveCategory={
-                    this.props.onChangeActiveCategoryEcommerce
-                  }
-                />
+              {this.props.selectedCategoryDetail && (
+                <div>
+                  <BreadcrumbNav
+                    breadCrumbs={this.props.selectedCategoryDetail.breadCrumbs}
+                    onChangeActiveCategory={
+                      this.props.onChangeActiveCategoryEcommerce
+                    }
+                  />
+                  <ProductsList
+                    products={this.props.selectedCategoryDetail.products}
+                    URL={`/${
+                      this.props.match.params.businessName
+                    }/dashboard/ecommerce/manage-products`}
+                  />
+                </div>
               )}
-              {this.props.attributes && (
-                <ProductAddNew attributes={this.props.attributes.attributes} />
-              )}
+              {this.props.selectedCategoryDetail &&
+                this.props.selectedCategoryDetail.hasProduct && (
+                  <ProductAddNew
+                    attributes={this.props.attributes.attributes}
+                    onSubmit={this.props.onCreateEcommerceProduct}
+                    loading={this.props.productLoading}
+                    error={this.props.productError}
+                  />
+                )}
             </Col>
           </Row>
         </Container>
@@ -57,12 +72,29 @@ class ManageProducts extends Component {
 export default connect(
   ({
     BusinessContainer: {
-      ecommerce: { categories, activeCategory, isOpenCategories, attributes }
+      ecommerce: {
+        categories,
+        activeCategory,
+        isOpenCategories,
+        attributes,
+        selectedCategoryDetail,
+        productLoading,
+        productError
+      }
     }
-  }) => ({ categories, activeCategory, isOpenCategories, attributes }),
+  }) => ({
+    categories,
+    activeCategory,
+    isOpenCategories,
+    attributes,
+    selectedCategoryDetail,
+    productLoading,
+    productError
+  }),
   {
     onCategoriesListEcommerce,
     onChangeActiveCategoryEcommerce,
-    openAllOnSearchEcommerce
+    openAllOnSearchEcommerce,
+    onCreateEcommerceProduct
   }
 )(ManageProducts);
