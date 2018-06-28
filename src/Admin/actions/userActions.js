@@ -9,7 +9,8 @@ import {
   onGroupsGet,
   onPermissionsGet,
   onTogglePermissionPost,
-  onGroupPut
+  onGroupPut,
+  onUserPut
 } from "../config/adminServerCall";
 import {
   CREATE_GROUP_FULFILLED,
@@ -62,23 +63,9 @@ export const onUserEdit = payload => ({
 
 epics.push((action$, { getState }) =>
   action$.ofType(EDIT_USER_PENDING).mergeMap(({ payload }) => {
-    const {
-      groups,
-      first_name,
-      last_name,
-      username,
-      email,
-      password
-    } = payload;
     const access_token = getState().auth.cookies.token_data.access_token;
-
-    return onGroupPut({
-      groups,
-      first_name,
-      last_name,
-      username,
-      email,
-      password,
+    return onUserPut({
+      ...payload,
       access_token
     })
       .concatMap(({ response }) => {

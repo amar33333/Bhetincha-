@@ -1011,6 +1011,17 @@ export const onUserPost = ({
     }
   });
 
+export const onUserPut = ({ body, id, access_token }) =>
+  ajax({
+    method: "PUT",
+    url: `${USERS_URL}${id}/`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    },
+    body
+  });
+
 export const onUsersGet = ({ access_token, params }) =>
   ajax({
     method: "get",

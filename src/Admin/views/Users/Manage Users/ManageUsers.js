@@ -143,7 +143,7 @@ class ManageUsers extends Component {
           className={"modal-xs" + this.props.className}
         >
           <UserEditModal
-            data={this.props.userEditData}
+            data={{ ...this.props.userEditData, groups: this.props.groups }}
             onUserEdit={this.props.onUserEdit}
           />
         </CustomModal>

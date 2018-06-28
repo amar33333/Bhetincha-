@@ -28,7 +28,7 @@ class UserEditModal extends Component {
     console.log("user edit data: ", this.props);
     const { first_name, last_name, username, email, group } = this.props.data;
     this.setState({
-      group,
+      group: this.props.data.groups.find(each => each.name === group),
       first_name,
       last_name,
       username,
@@ -45,11 +45,14 @@ class UserEditModal extends Component {
     const { first_name, last_name, username, group, email } = this.state;
 
     this.props.onUserEdit({
-      first_name,
-      last_name,
-      username,
-      email,
-      groups: [group.id]
+      body: {
+        first_name,
+        last_name,
+        username,
+        email,
+        groups: [group.id]
+      },
+      id: this.props.data.id
     });
   };
 
@@ -57,8 +60,10 @@ class UserEditModal extends Component {
     const { group } = this.state;
     const value = group && group.id;
 
+    console.log("user state: ", this.state);
+
     return (
-      <Form onSubmit={this.onFormSubmit}>
+      <Form onSubmit={this.onFormEdit}>
         <Row>
           <Col xs="12" md="12">
             <FormGroup>
@@ -66,13 +71,10 @@ class UserEditModal extends Component {
               <Select
                 autoFocus
                 required
-                ref={input => {
-                  this.selectInput = input;
-                }}
                 name="group"
                 value={value}
                 onChange={this.handleSelectChange}
-                options={this.props.groups}
+                options={this.props.data.groups}
                 tabSelectsValue={false}
                 valueKey="id"
                 labelKey="name"
