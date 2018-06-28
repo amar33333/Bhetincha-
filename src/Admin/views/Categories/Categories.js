@@ -195,9 +195,7 @@ class Categories extends Component {
                       <FormGroup>
                         <InputGroup>
                           <InputGroupAddon addonType="prepend">
-                            <InputGroupText>
-                              <i className="icon-user" />
-                            </InputGroupText>
+                            <InputGroupText>Name</InputGroupText>
                           </InputGroupAddon>
                           <Input
                             required

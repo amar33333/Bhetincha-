@@ -98,9 +98,7 @@ class DistrictEditModal extends Component {
           <Col xs="12" md="5">
             <InputGroup>
               <InputGroupAddon addonType="prepend">
-                <InputGroupText>
-                  <i className="fa fa-industry" />
-                </InputGroupText>
+                <InputGroupText>Name</InputGroupText>
               </InputGroupAddon>
               <Input
                 required
@@ -113,12 +111,10 @@ class DistrictEditModal extends Component {
               />
             </InputGroup>
           </Col>
-          <Col xs="12" md="5">
+          <Col xs="12" md="4">
             <InputGroup>
               <InputGroupAddon addonType="prepend">
-                <InputGroupText>
-                  <i className="fa fa-industry" />
-                </InputGroupText>
+                <InputGroupText>Code</InputGroupText>
               </InputGroupAddon>
               <Input
                 required
@@ -134,7 +130,7 @@ class DistrictEditModal extends Component {
           </Col>
           <Col xs="12" md="2">
             <Button color="primary">
-              <span className="fa fa-plus" /> SAVE
+              <span className="fa fa-check" /> SAVE
             </Button>
           </Col>
         </Row>

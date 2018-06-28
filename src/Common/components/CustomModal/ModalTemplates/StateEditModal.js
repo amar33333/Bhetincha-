@@ -73,13 +73,11 @@ class StateEditModal extends Component {
           </Col>
         </Row>
         <Row>
-          <Col xs="12" md="10">
+          <Col xs="12" md="9">
             <FormGroup>
               <InputGroup>
                 <InputGroupAddon addonType="prepend">
-                  <InputGroupText>
-                    <i className="icon-user" />
-                  </InputGroupText>
+                  <InputGroupText>Name</InputGroupText>
                 </InputGroupAddon>
                 <Input
                   //autoFocus
@@ -94,8 +92,8 @@ class StateEditModal extends Component {
             </FormGroup>
           </Col>
           <Col xs="12" md="2">
-            <Button color="primary">
-              <span className="fa fa-plus" /> SAVE
+            <Button fluid color="primary">
+              <span className="fa fa-check" /> SAVE
             </Button>
           </Col>
         </Row>

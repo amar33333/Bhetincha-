@@ -346,9 +346,7 @@ class SubCategories extends Component {
 
                   <InputGroup className="mb-3">
                     <InputGroupAddon addonType="prepend">
-                      <InputGroupText>
-                        <i className="icon-user" />
-                      </InputGroupText>
+                      <InputGroupText>Name</InputGroupText>
                     </InputGroupAddon>
                     <Input
                       required
@@ -397,7 +395,7 @@ class SubCategories extends Component {
                         disabled={this.props.loading}
                         className="px-4"
                       >
-                        Add
+                        <i className="fa fa-plus" /> Add
                       </Button>
                     </Col>
                   </Row>

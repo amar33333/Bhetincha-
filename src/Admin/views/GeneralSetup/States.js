@@ -193,9 +193,7 @@ class States extends Component {
                     <Col xs="10" md="10">
                       <InputGroup>
                         <InputGroupAddon addonType="prepend">
-                          <InputGroupText>
-                            <i className="fa fa-industry" />
-                          </InputGroupText>
+                          <InputGroupText>Name</InputGroupText>
                         </InputGroupAddon>
                         <Input
                           required
