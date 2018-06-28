@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Container, Row, Col } from "reactstrap";
 import { Card } from "semantic-ui-react";
-// import moment from "moment";
+import moment from "moment";
 // import CircularProgressbar from "react-circular-progressbar";
 
 import "react-quill/dist/quill.snow.css";
@@ -104,18 +104,30 @@ class AboutUs extends Component {
                   <Card>
                     <Card.Content header="Working Hour" />
                     {this.props.workingHour.map((day, index) => {
-                      let start = new Date(day.start).toLocaleTimeString([], {
-                        hour: "2-digit",
-                        minute: "2-digit",
-                        hour12: true
-                      });
-                      let end = new Date(day.end).toLocaleTimeString([], {
+                      let start = moment(day.start).format("hh:mm A");
+                      let end = moment(day.end).format("hh:mm A");
+
+                      var today = new Date();
+                      var now = today.toLocaleTimeString([], {
                         hour: "2-digit",
                         minute: "2-digit",
                         hour12: true
                       });
 
-                      let today = new Date();
+                      var momentNow = moment().format("hh:mm A");
+
+                      console.log(
+                        moment(momentNow, "hh:mm A").isBetween(
+                          moment(start, "hh:mm A"),
+                          moment(end, "hh:mm A")
+                        )
+                      );
+                      console.log(
+                        "Check for is after::",
+                        moment(momentNow, "hh:mm A").isBefore(
+                          moment(start, "hh:mm A")
+                        )
+                      );
                       return (
                         <Card.Content>
                           <strong>{day.day}: </strong>{" "}
@@ -124,16 +136,10 @@ class AboutUs extends Component {
                             if (index === today.getDay()) {
                               if (
                                 !day.holiday &&
-                                today.toLocaleTimeString([], {
-                                  hour: "2-digit",
-                                  minute: "2-digit",
-                                  hour12: true
-                                }) >= start &&
-                                today.toLocaleTimeString([], {
-                                  hour: "2-digit",
-                                  minute: "2-digit",
-                                  hour12: true
-                                }) <= end
+                                moment(momentNow, "hh:mm A").isBetween(
+                                  moment(start, "hh:mm A"),
+                                  moment(end, "hh:mm A")
+                                )
                               ) {
                                 return (
                                   <span style={{ color: "blue" }}>Open</span>
