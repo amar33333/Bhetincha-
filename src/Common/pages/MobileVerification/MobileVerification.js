@@ -34,7 +34,7 @@ class MobileVerification extends Component {
   onFormSubmit = event => {
     event.preventDefault();
     const { verificationToken } = this.state;
-    console.log("mobile verif - props: ", this.props);
+    // console.log("mobile verif - props: ", this.props);
 
     const { "?id": id } = querystring.parse(this.props.location.search);
 
@@ -52,7 +52,7 @@ class MobileVerification extends Component {
   };
 
   render() {
-    console.log("mobile props: ", this.props);
+    // console.log("mobile props: ", this.props);
     return (
       <div className="app flex-row align-items-center">
         <Container>

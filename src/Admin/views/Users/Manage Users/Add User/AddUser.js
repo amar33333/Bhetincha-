@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import { toast } from "react-toastify";
 import Select from "react-select";
 
 import {
@@ -25,6 +26,7 @@ class AddUser extends Component {
       username: "",
       email: "",
       password: "",
+      confirm_password: "",
       group: ""
     };
   }
@@ -45,19 +47,24 @@ class AddUser extends Component {
       last_name,
       username,
       password,
+      confirm_password,
       group,
       email
     } = this.state;
 
-    this.props.onUserSubmit({
-      first_name,
-      last_name,
-      username,
-      email,
-      password,
-      groups: [group.id]
-    });
-    this.clearState();
+    if (password === confirm_password) {
+      this.props.onUserSubmit({
+        first_name,
+        last_name,
+        username,
+        email,
+        password,
+        groups: [group.id]
+      });
+      this.clearState();
+    } else {
+      toast.error("Password Mismatch");
+    }
   };
 
   clearState = () =>
@@ -67,6 +74,7 @@ class AddUser extends Component {
       username: "",
       email: "",
       password: "",
+      confirm_password: "",
       group: ""
     });
 
@@ -139,7 +147,6 @@ class AddUser extends Component {
                         required
                         type="text"
                         value={this.state.email}
-                        onKeyDown={this._handleKeyPress}
                         onChange={this.onChange.bind(this, "email")}
                       />
                     </FormGroup>
@@ -157,7 +164,6 @@ class AddUser extends Component {
                         innerRef={input => {
                           this.nameInput = input;
                         }}
-                        onKeyDown={this._handleKeyPress}
                       />
                     </FormGroup>
                   </Col>
@@ -168,7 +174,6 @@ class AddUser extends Component {
                         required
                         type="text"
                         value={this.state.last_name}
-                        onKeyDown={this._handleKeyPress}
                         onChange={this.onChange.bind(this, "last_name")}
                       />
                     </FormGroup>
@@ -182,7 +187,6 @@ class AddUser extends Component {
                         required
                         type="text"
                         value={this.state.username}
-                        onKeyDown={this._handleKeyPress}
                         onChange={this.onChange.bind(this, "username")}
                       />
                     </FormGroup>
@@ -194,19 +198,25 @@ class AddUser extends Component {
                         required
                         type="password"
                         value={this.state.password}
-                        onKeyDown={this._handleKeyPress}
                         onChange={this.onChange.bind(this, "password")}
+                      />
+                    </FormGroup>
+                  </Col>
+                  <Col xs="12" md="6">
+                    <FormGroup>
+                      <Label for="pass">Confirm Password</Label>
+                      <Input
+                        required
+                        type="password"
+                        value={this.state.confirm_password}
+                        onChange={this.onChange.bind(this, "confirm_password")}
                       />
                     </FormGroup>
                   </Col>
                 </Row>
                 <Row>
                   <Col xs="12">
-                    <Button
-                      color="primary"
-                      onKeyDown={this._handleKeyPress}
-                      size="lg"
-                    >
+                    <Button color="primary" size="lg">
                       Submit
                     </Button>
                   </Col>

@@ -110,8 +110,11 @@ class TeleCalling extends Component {
           </CardHeader>
           <CardBody>
             <Form onSubmit={this.onFormSubmit} inline>
-              <FormGroup className="mb-2 mr-sm-2 mb-sm-0">
-                <InputGroup>
+              <FormGroup
+                className="mb-2 mr-sm-1 mb-sm-0"
+                style={{ width: "89%" }}
+              >
+                <InputGroup style={{ width: "60%" }}>
                   <InputGroupAddon addonType="prepend">
                     <InputGroupText>Query</InputGroupText>
                   </InputGroupAddon>
@@ -176,8 +179,8 @@ class TeleCalling extends Component {
                   />
                 </InputGroup>
               </FormGroup>
-              <Button color="primary">
-                <span className="fa fa-plus" /> Search
+              <Button color="warning">
+                <span className="fa fa-search" /> Search
               </Button>
             </Form>
           </CardBody>

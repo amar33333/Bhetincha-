@@ -12,13 +12,13 @@ class BusinessFooter extends Component {
           <Row>
             <Col xs="12" md="4">
               <h4>Contact us</h4>
-              <p className="m-0">
+              <div className="m-0">
                 <strong>Head Office</strong>
                 <p className="m-0">
                   <strong>{this.props.business_name}</strong>
                 </p>
                 <p>{this.props.address && this.props.address.addressLine1}</p>
-              </p>
+              </div>
               <p>{""}</p>
               <span className="fa fa-envelope">
                 <a href={`mailto:${this.props.business_email}`}>
@@ -82,10 +82,12 @@ class BusinessFooter extends Component {
                     <h4 className="mb-0">Call us Now!</h4>
                     <h1 className="mt-0">
                       <a
-                        href={`tel:${this.props.address.tollFreeNumber ||
+                        href={`tel:${(this.props.address &&
+                          this.props.address.tollFreeNumber) ||
                           this.props.business_phone}`}
                       >
-                        {this.props.address.tollFreeNumber ||
+                        {(this.props.address &&
+                          this.props.address.tollFreeNumber) ||
                           this.props.business_phone}
                       </a>
                     </h1>

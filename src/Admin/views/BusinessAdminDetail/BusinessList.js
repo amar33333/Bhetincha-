@@ -66,7 +66,7 @@ class BusinessList extends Component {
         Header: "Business Name",
         id: "name",
         accessor: "business_name",
-        minWidth: 150,
+        minWidth: 100,
         Cell: props => {
           const business = props.original;
           return (
@@ -118,7 +118,7 @@ class BusinessList extends Component {
       {
         Header: "Actions",
         accessor: "slug",
-        width: 170,
+        width: 400,
         Cell: props => (
           <div>
             <Button
@@ -155,7 +155,7 @@ class BusinessList extends Component {
                 })
               }
             >
-              <i className="fa fa-pencil" /> Manage Branchs
+              <i className="fa fa-code-fork" /> Manage Branchs
             </Button>
 
             <Button
@@ -171,7 +171,7 @@ class BusinessList extends Component {
                 });
               }}
             >
-              <i className="fa fa-pencil" /> Verify
+              <i className="fa fa-check" /> Verify
             </Button>
           </div>
         ),

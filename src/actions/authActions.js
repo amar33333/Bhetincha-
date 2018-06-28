@@ -169,12 +169,18 @@ export const onPhoneVerificationRequest = payload => ({
 });
 
 epics.push(action$ =>
-  action$.ofType(REQUEST_PHONE_VERIFICATION_PENDING).mergeMap(action =>
-    onPhoneVerificationRequestPost({ ...action.payload })
+  action$.ofType(REQUEST_PHONE_VERIFICATION_PENDING).mergeMap(action => {
+    const { history } = action.payload;
+
+    return onPhoneVerificationRequestPost({ ...action.payload })
       .map(({ response }) => {
-        if (response.msg === "success") {
+        if (response.id) {
           toast.success("Request Sent Successfully");
 
+          history.push({
+            pathname: "/mobile-verification",
+            search: `?${querystring.stringify({ id: response.id })}`
+          });
           return {
             type: REQUEST_PHONE_VERIFICATION_FULFILLED,
             payload: true
@@ -189,8 +195,8 @@ epics.push(action$ =>
           type: REQUEST_PHONE_VERIFICATION_REJECTED,
           payload: false
         });
-      })
-  )
+      });
+  })
 );
 
 export const onPhoneVerificationTokenSend = payload => ({
@@ -289,13 +295,13 @@ epics.push(action$ =>
   })
 );
 
-export const onBusinessRegisterSubmit = payload => ({
-  type: CREATE_BUSINESS_USER_PENDING,
+export const togglePhoneVerificationModal = payload => ({
+  type: TOGGLE_PHONE_VERIFICATION_MODAL,
   payload
 });
 
-export const togglePhoneVerificationModal = payload => ({
-  type: TOGGLE_PHONE_VERIFICATION_MODAL,
+export const onBusinessRegisterSubmit = payload => ({
+  type: CREATE_BUSINESS_USER_PENDING,
   payload
 });
 
@@ -313,7 +319,7 @@ epics.push(action$ =>
           });
           return { type: CREATE_BUSINESS_USER_FULFILLED, payload: response };
         } else {
-          throw new Error(response.msg[Object.keys(response.msg)[0]][0]);
+          throw new Error(response.msg);
         }
       })
       .catch(ajaxError => {

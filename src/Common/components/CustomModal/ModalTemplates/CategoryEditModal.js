@@ -20,9 +20,9 @@ class CategoryEditModal extends Component {
   componentDidMount() {
     this.setState({
       category: this.props.data ? this.props.data : "",
-      industry: this.props.data
-        ? { id: this.props.data.industry, name: this.props.data.industry }
-        : ""
+      industry: this.props.industries.find(
+        each => each.name === this.props.data.industry
+      )
     });
   }
 
@@ -50,6 +50,7 @@ class CategoryEditModal extends Component {
 
   render() {
     console.log("category edit state: ", this.state);
+    console.log("category edit props: ", this.props);
 
     const { industry } = this.state;
     const value = industry && industry.id;

@@ -54,7 +54,8 @@ class Home extends Component {
         </CustomModal>
 
         <Button
-          onClick={this.props.toggleRegisterModal}
+          //onClick={this.props.toggleRegisterModal}
+          onClick={() => this.props.history.push("/register")}
           variant="raised"
           color="warning"
         >
