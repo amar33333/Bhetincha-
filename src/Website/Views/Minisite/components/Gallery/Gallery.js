@@ -103,6 +103,7 @@ class Gallery extends Component {
         </CustomModal>
         <Container>
           <Row>
+            {this.props.albums.length === 0 ? `No Galleries found!` : null}
             {this.props.albums &&
               this.props.albums.map(album => {
                 var src =

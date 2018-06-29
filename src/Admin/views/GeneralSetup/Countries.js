@@ -115,9 +115,7 @@ class Countries extends Component {
                   <FormGroup className="mb-2 mr-sm-2 mb-sm-0">
                     <InputGroup>
                       <InputGroupAddon addonType="prepend">
-                        <InputGroupText>
-                          <i className="fa fa-industry" />
-                        </InputGroupText>
+                        <InputGroupText>Name</InputGroupText>
                       </InputGroupAddon>
                       <Input
                         autoFocus

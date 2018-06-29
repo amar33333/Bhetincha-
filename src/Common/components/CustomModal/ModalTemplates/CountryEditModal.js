@@ -6,6 +6,8 @@ import {
   InputGroupAddon,
   InputGroupText,
   Form,
+  Col,
+  Row,
   FormGroup
 } from "reactstrap";
 
@@ -36,27 +38,31 @@ class CountryEditModal extends Component {
   render() {
     return (
       <Form onSubmit={this.onFormEdit} inline>
-        <FormGroup className="mb-2 mr-sm-2 mb-sm-0">
-          <InputGroup>
-            <InputGroupAddon addonType="prepend">
-              <InputGroupText>
-                <i className="fa fa-country" />
-              </InputGroupText>
-            </InputGroupAddon>
-            <Input
-              autoFocus
-              required
-              disabled={this.props.loading}
-              type="text"
-              placeholder="Type country Name"
-              value={this.state.country ? this.state.country.name : ""}
-              onChange={this.onChange.bind(this, "country")}
-            />
-          </InputGroup>
-        </FormGroup>
-        <Button color="primary">
-          <span className="fa fa-plus" /> SAVE
-        </Button>
+        <Row>
+          <Col xs="12" md="9">
+            <FormGroup>
+              <InputGroup>
+                <InputGroupAddon addonType="prepend">
+                  <InputGroupText>Name</InputGroupText>
+                </InputGroupAddon>
+                <Input
+                  autoFocus
+                  required
+                  disabled={this.props.loading}
+                  type="text"
+                  placeholder="Type country Name"
+                  value={this.state.country ? this.state.country.name : ""}
+                  onChange={this.onChange.bind(this, "country")}
+                />
+              </InputGroup>
+            </FormGroup>
+          </Col>
+          <Col xs="12" md="3">
+            <Button color="primary">
+              <span className="fa fa-check" /> SAVE
+            </Button>
+          </Col>
+        </Row>
       </Form>
     );
   }

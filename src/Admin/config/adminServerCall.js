@@ -1130,3 +1130,36 @@ export const onEcommerceCategoryProductsGet = ({ access_token, params }) =>
       Authorization: "Bearer " + access_token
     }
   });
+
+export const onEcommerceProductPost = ({
+  // access_token,
+  body
+}) =>
+  ajax({
+    method: "POST",
+    url: ECOMMERCE_PRODUCT_URL,
+    body,
+    headers: {
+      "Content-Type": "application/json"
+      // Authorization: "Bearer " + access_token
+    }
+  });
+
+export const onEcommerceProductEachGet = ({ uid }) =>
+  ajax({
+    method: "GET",
+    url: `${ECOMMERCE_PRODUCT_URL}${uid}/`,
+    headers: {
+      "Content-Type": "application/json"
+    }
+  });
+
+export const onEcommerceProductEachPut = ({ uid, body }) =>
+  ajax({
+    method: "PUT",
+    url: `${ECOMMERCE_PRODUCT_URL}${uid}/`,
+    body,
+    headers: {
+      "Content-Type": "application/json"
+    }
+  });

@@ -55,17 +55,25 @@ class ManageCategories extends Component {
                       this.props.onChangeActiveCategoryEcommerce
                     }
                   />
-                  <PopoverDelete
-                    onClick={() =>
-                      this.props.onCategoryDeleteEcommerce({
-                        uid: this.props.selectedCategoryDetail.uid
-                      })
-                    }
-                  />
-                  <CategoryEditView
-                    onCategoryUpdate={this.props.onCategoryUpdateEcommerce}
-                    category={this.props.selectedCategoryDetail}
-                  />
+                  {this.props.activeCategory &&
+                    this.props.categories &&
+                    this.props.categories.uid !== this.props.activeCategory && (
+                      <div>
+                        <PopoverDelete
+                          onClick={() =>
+                            this.props.onCategoryDeleteEcommerce({
+                              uid: this.props.selectedCategoryDetail.uid
+                            })
+                          }
+                        />
+                        <CategoryEditView
+                          onCategoryUpdate={
+                            this.props.onCategoryUpdateEcommerce
+                          }
+                          category={this.props.selectedCategoryDetail}
+                        />
+                      </div>
+                    )}
                   {!this.props.selectedCategoryDetail.hasProduct && (
                     <CategoryDetailView
                       name={this.props.selectedCategoryDetail.name}

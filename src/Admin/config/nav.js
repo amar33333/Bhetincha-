@@ -212,7 +212,14 @@ items.items.forEach(item => {
     item.children.forEach(innerItem => {
       items.routes[innerItem.url] = innerItem.name;
     });
-  else if (item.url) items.routes[item.url] = item.name;
+  if (item.url) items.routes[item.url] = item.name;
 });
+
+// items.routes = {
+//   ...items.routes,
+//   ...{
+//     "/admin/kxa": ""
+//   }
+// };
 
 export default items;

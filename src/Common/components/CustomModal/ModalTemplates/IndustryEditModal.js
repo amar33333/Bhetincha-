@@ -6,7 +6,9 @@ import {
   InputGroupAddon,
   InputGroupText,
   Form,
-  FormGroup
+  FormGroup,
+  Row,
+  Col
 } from "reactstrap";
 
 class IndustryEditModal extends Component {
@@ -37,27 +39,31 @@ class IndustryEditModal extends Component {
     console.log("industry edit state: ", this.state);
     return (
       <Form onSubmit={this.onFormEdit} inline>
-        <FormGroup className="mb-2 mr-sm-2 mb-sm-0">
-          <InputGroup>
-            <InputGroupAddon addonType="prepend">
-              <InputGroupText>
-                <i className="fa fa-industry" />
-              </InputGroupText>
-            </InputGroupAddon>
-            <Input
-              autoFocus
-              required
-              disabled={this.props.loading}
-              type="text"
-              placeholder="Type Industry Name"
-              value={this.state.industry ? this.state.industry.name : ""}
-              onChange={this.onChange.bind(this, "industry")}
-            />
-          </InputGroup>
-        </FormGroup>
-        <Button color="primary">
-          <span className="fa fa-plus" /> SAVE
-        </Button>
+        <Row>
+          <Col xs="12" md="8">
+            <InputGroup>
+              <InputGroupAddon addonType="prepend">
+                <InputGroupText>
+                  <i className="fa fa-industry" />
+                </InputGroupText>
+              </InputGroupAddon>
+              <Input
+                autoFocus
+                required
+                disabled={this.props.loading}
+                type="text"
+                placeholder="Type Industry Name"
+                value={this.state.industry ? this.state.industry.name : ""}
+                onChange={this.onChange.bind(this, "industry")}
+              />
+            </InputGroup>
+          </Col>
+          <Col xs="12" md="3">
+            <Button color="primary">
+              <span className="fa fa-check" /> SAVE
+            </Button>
+          </Col>
+        </Row>
       </Form>
     );
   }

@@ -18,13 +18,13 @@ import {
 
 import { Card as SemanticCard } from "semantic-ui-react";
 
-import { Select } from "../../../Common/components";
-
 class subBusinessWorkingHour extends Component {
   constructor(props) {
     super(props);
     this.state = {
       alwaysOpen: false,
+      selectedStart: moment("2018-05-01T10:00").format("YYYY-MM-DDTHH:mmZ"),
+      selectedClosing: moment("2018-05-01T17:00").format("YYYY-MM-DDTHH:mmZ"),
       workingHour: [
         {
           day: "Sunday",
@@ -118,13 +118,22 @@ class subBusinessWorkingHour extends Component {
       alwaysOpen: !this.state.alwaysOpen
     });
   }
-  handleStartHourChange = (time, day) => {
-    console.log("startHourchange: ", moment(time).format("YYYY-MM-DDTHH:mmZ"));
+  handleStartHourChange = (e, day) => {
+    console.log(
+      "startHourchange: ",
+      moment(e.target.value).format("YYYY-MM-DDTHH:mmZ")
+    );
     const newWorkingHour = this.state.workingHour.map(each => {
-      if (each.day === day) {
+      if (day === "Sunday") {
+        console.log("HIT");
         return {
           ...each,
-          start: moment(time).format("YYYY-MM-DDTHH:mmZ")
+          start: moment(e.target.value).format("YYYY-MM-DDTHH:mmZ")
+        };
+      } else if (each.day === day) {
+        return {
+          ...each,
+          start: moment(e.target.value).format("YYYY-MM-DDTHH:mmZ")
         };
       } else {
         return each;
@@ -135,11 +144,20 @@ class subBusinessWorkingHour extends Component {
     });
   };
 
-  handleClosingHourChange = (time, day) => {
-    console.log("time:", time);
+  handleClosingHourChange = (e, day) => {
+    console.log("time:", e.target.value);
     const newWorkingHour = this.state.workingHour.map(each => {
-      if (each.day === day) {
-        return { ...each, end: moment.utc(time).format("YYYY-MM-DDTHH:mmZ") };
+      if (day === "Sunday") {
+        console.log("HIT");
+        return {
+          ...each,
+          end: moment(e.target.value).format("YYYY-MM-DDTHH:mmZ")
+        };
+      } else if (each.day === day) {
+        return {
+          ...each,
+          end: moment(e.target.value).format("YYYY-MM-DDTHH:mmZ")
+        };
       } else {
         return each;
       }
@@ -157,14 +175,26 @@ class subBusinessWorkingHour extends Component {
       currentDate = moment(currentDate).add(15, "m");
     }
 
-    const timeList = dateArray.map((date, index) => {
-      return { id: index, value: date };
-    });
-
     // console.log("date array: ", dateArray);
     return (
       <FormGroup>
         <SemanticCard fluid>
+          <SemanticCard.Content>
+            <Row>
+              <Col xs="6" md="2">
+                <strong>Day</strong>
+              </Col>
+              <Col xs="6" md="2">
+                <strong>Holiday?</strong>
+              </Col>
+              <Col xs="6" md="4">
+                <strong>Opens at</strong>
+              </Col>
+              <Col xs="6" md="4">
+                <strong>Closes at</strong>
+              </Col>
+            </Row>
+          </SemanticCard.Content>
           {this.state.workingHour.map(day => (
             <SemanticCard.Content key={day.day}>
               <Row>
@@ -172,79 +202,66 @@ class subBusinessWorkingHour extends Component {
                   <strong>{day.day}</strong>
                 </Col>
                 <Col xs="6" md="2">
-                  <Label check>
-                    <Input
-                      type="checkbox"
-                      checked={day.holiday}
-                      onChange={this.toggleHoliday.bind(this, day.day)}
-                    />
-                    Holiday
-                  </Label>
+                  <Input
+                    className="ml-3"
+                    type="checkbox"
+                    checked={day.holiday}
+                    onChange={this.toggleHoliday.bind(this, day.day)}
+                  />
                 </Col>
                 <Col xs="6" md="4">
                   {day.holiday ? null : (
                     <span>
-                      <Label>Opens at: </Label>
-                      {/* <Select
-                        autosize
-                        name="Opnes at"
-                        // value={timeList}
-                        onChange={time => {
-                          this.handleStartHourChange(time, day.day);
-                        }}
-                        options={timeList}
-                        valuekey="value"
-                        labelKey="value"
-                        optionRenderer={({ value }) => (
-                          <div>{moment(value).format("hh:mm A")}</div>
-                        )}
-                      /> */}
                       <Input
                         type="select"
-                        onChange={time => {
-                          this.handleStartHourChange(time, day.day);
+                        name="select"
+                        onChange={e => {
+                          this.handleStartHourChange(e, day.day);
                         }}
                       >
                         {dateArray.map(date => (
                           <option
+                            selected={
+                              moment(day.start).format("YYYY-MM-DDTHH:mmZ") ===
+                              moment(date).format("YYYY-MM-DDTHH:mmZ")
+                                ? true
+                                : false
+                            }
                             key={date}
-                            value={moment.utc(date).format("YYYY-MM-DDTHH:mmZ")}
+                            value={moment(date).format("YYYY-MM-DDTHH:mmZ")}
                           >
                             {moment(date).format("h:mm A")}
                           </option>
                         ))}
                       </Input>
-                      {/* <Datetime
-                        dateFormat={false}
-                        value={moment(day.start).format("hh:mm a")}
-                        // defaultValue={moment("2018-05-01T10:00").format(
-                        //   "hh:mm a"
-                        // )}
-                        onChange={time => {
-                          this.handleStartHourChange(time, day.day);
-                        }}
-                        viewMode={"time"}
-                        // utc={true}
-                      /> */}
                     </span>
                   )}
                 </Col>
                 <Col xs="6" md="4">
                   {day.holiday ? null : (
                     <span>
-                      <Label>Closes at: </Label>
-                      <Datetime
-                        dateFormat={false}
-                        value={moment(day.end).format("hh:mm a")}
-                        // defaultValue={moment("2018-05-01T17:00").format(
-                        //   "hh:mm a"
-                        // )}
-                        onChange={time =>
-                          this.handleClosingHourChange(time, day.day)
-                        }
-                        viewMode={"time"}
-                        // utc={true}
-                      />
+                      <Input
+                        type="select"
+                        name="select"
+                        onChange={e => {
+                          this.handleClosingHourChange(e, day.day);
+                        }}
+                      >
+                        {dateArray.map(date => (
+                          <option
+                            selected={
+                              moment(day.end).format("YYYY-MM-DDTHH:mmZ") ===
+                              moment(date).format("YYYY-MM-DDTHH:mmZ")
+                                ? true
+                                : false
+                            }
+                            key={date}
+                            value={moment(date).format("YYYY-MM-DDTHH:mmZ")}
+                          >
+                            {moment(date).format("h:mm A")}
+                          </option>
+                        ))}
+                      </Input>
                     </span>
                   )}
                 </Col>
