@@ -85,11 +85,16 @@ export const onUpdateEcommerceProduct = payload => ({
 
 epics.push((action$, { getState }) =>
   action$.ofType(UPDATE_ECOMMERCE_PRODUCT_PENDING).mergeMap(({ payload }) => {
-    const { body, categories, categoryId, uid } = payload;
+    const {
+      body,
+      // categories,
+      categoryId,
+      uid
+    } = payload;
     const businessId = getState().auth.cookies.user_data.business_id;
 
     return onEcommerceProductEachPut({
-      body: { ...body, categories, categoryId, businessId },
+      body,
       uid
     })
       .concatMap(({ response }) => {
