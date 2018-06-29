@@ -42,7 +42,9 @@ import {
   onDistrictDelete,
   onUnmountCountry,
   onUnmountState,
-  onUnmountDistrict
+  onUnmountDistrict,
+  onAddressTreeList,
+  onGetAddressTreeList
 } from "../../actions";
 
 class Districts extends Component {
@@ -374,6 +376,9 @@ class Districts extends Component {
             onDistrictEdit={this.props.onDistrictEdit}
             countries={this.props.countries}
             states={this.props.partialStates}
+            onAddressTreeList={this.props.onAddressTreeList}
+            onGetAddressTreeList={this.props.onGetAddressTreeList}
+            access_token={this.props.access_token}
           />
         </CustomModal>
       </div>
@@ -383,6 +388,11 @@ class Districts extends Component {
 
 export default connect(
   ({
+    auth: {
+      cookies: {
+        token_data: { access_token }
+      }
+    },
     AdminContainer: {
       general_setup: {
         countries,
@@ -413,6 +423,7 @@ export default connect(
     fetchLoading: districtsFetchLoading,
     loading: districtLoading,
     error: districtError,
+    access_token,
     ...filterDistrict
   }),
   {
@@ -429,6 +440,8 @@ export default connect(
     onDistrictDelete,
     onUnmountCountry,
     onUnmountState,
-    onUnmountDistrict
+    onUnmountDistrict,
+    onAddressTreeList,
+    onGetAddressTreeList
   }
 )(Districts);

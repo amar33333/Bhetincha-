@@ -1138,6 +1138,20 @@ export const onBusinessEachList = ({ username, access_token }) => dispatch => {
   dispatch({ type: FETCH_BUSINESS_EACH_PENDING });
 };
 
+export const onGetAddressTreeList = data => dispatch => {
+  const { countryId, access_token } = data;
+
+  getAddressTree(countryId, dispatch, access_token)
+    .then(response => {
+      console.log(response);
+      dispatch({ type: FETCH_ADDRESS_TREE_PENDING });
+    })
+    .catch(error => {
+      console.log(error);
+      dispatch({ type: FETCH_ADDRESS_TREE_REJECTED });
+    });
+};
+
 const getAddressTree = (
   countryId,
   stateId,
@@ -1335,7 +1349,7 @@ epics.push((action$, { getState }) =>
     return onCompanyTypePut({ company_type, access_token })
       .concatMap(({ response }) => {
         if (response.msg === "success") {
-          toast.success("company_type Updated successfully!");
+          toast.success("Company Type Updated successfully!");
           return [
             { type: EDIT_COMPANY_TYPE_FULFILLED },
             { type: FETCH_COMPANY_TYPE_PENDING },
@@ -1443,7 +1457,7 @@ epics.push((action$, { getState }) =>
     return onPaymentMethodPut({ payment_method, access_token })
       .concatMap(({ response }) => {
         if (response.msg === "success") {
-          toast.success("payment_method Updated successfully!");
+          toast.success("Payment Method Updated successfully!");
           return [
             { type: EDIT_PAYMENT_METHOD_FULFILLED },
             { type: FETCH_PAYMENT_METHODS_PENDING },

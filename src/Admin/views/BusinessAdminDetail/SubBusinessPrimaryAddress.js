@@ -52,9 +52,6 @@ class SubBusinessPrimaryAddress extends Component {
     this.areas = [];
 
     this.propsData = {};
-    this.access_token = this.props.cookies
-      ? this.props.cookies.token_data.access_token
-      : null;
   }
   onChangeLatLng = ({ latLng }) => {
     console.log("latLang: ", this.state.latitude, this.state.longitude);
@@ -172,7 +169,6 @@ class SubBusinessPrimaryAddress extends Component {
       if (value)
         this.props.onAddressTreeList({
           id: value.id,
-          access_token: this.access_token,
           ADDRESS_KEY: key
         });
       this.districts = [];
@@ -187,7 +183,6 @@ class SubBusinessPrimaryAddress extends Component {
       if (value)
         this.props.onAddressTreeList({
           id: value.id,
-          access_token: this.access_token,
           ADDRESS_KEY: key
         });
       this.cities = [];
@@ -200,7 +195,6 @@ class SubBusinessPrimaryAddress extends Component {
       if (value)
         this.props.onAddressTreeList({
           id: value.id,
-          access_token: this.access_token,
           ADDRESS_KEY: key
         });
       this.areas = [];
@@ -211,7 +205,6 @@ class SubBusinessPrimaryAddress extends Component {
       if (value)
         this.props.onAddressTreeList({
           id: value.id,
-          access_token: this.access_token,
           ADDRESS_KEY: key
         });
     }
