@@ -207,7 +207,7 @@ class ProductAddEdit extends Component {
       if (Object.keys(updates).length) {
         this.props.onSubmit({
           body: updates,
-          categories: defaultValue.categories,
+          // categories: defaultValue.categories,
           categoryId: defaultValue.categoryId,
           uid: defaultValue.uid
         });
