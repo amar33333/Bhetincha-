@@ -109,7 +109,7 @@ class ManageBranchs extends Component {
           <div>
             <Button
               color="secondary"
-              className="mr-l"
+              className="mr-2"
               onClick={() => {
                 this.props.history.push(
                   `${this.props.match.url}/${value}/edit-branch`

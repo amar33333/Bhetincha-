@@ -27,7 +27,7 @@ import SubBusinessAbout from "./SubBusinessAbout";
 import SubBusinessLogo from "./SubBusinessLogo";
 import SubBusinessCoverImage from "./SubBusinessCoverImage";
 import SubBusinessPrimaryAddress from "./SubBusinessPrimaryAddress";
-import SubBusinessBranchWrapper from "./SubBusinessBranchWrapper";
+// import SubBusinessBranchWrapper from "./SubBusinessBranchWrapper";
 import SubBusinessWorkingHour from "./SubBusinessWorkingHour";
 
 class BusinessEdit extends Component {
@@ -72,7 +72,7 @@ class BusinessEdit extends Component {
     this.propsData = {
       ...this.subBusinessAdminDetailRef.getState(),
       ...this.subBusinessAboutRef.getState(),
-      ...this.subBusinessBranchWrapperRef.getState(),
+      // ...this.subBusinessBranchWrapperRef.getState(),
       ...this.subBusinessCoverImageRef.getState(),
       ...this.subBusinessLogoRef.getState(),
       ...this.subBusinessPrimaryAddressRef.getState(),
@@ -192,7 +192,7 @@ class BusinessEdit extends Component {
                   onInitialPropsReceived={this.onInitialPropsReceived}
                   EDIT={this.props.EDIT}
                 />
-                <SubBusinessBranchWrapper
+                {/* <SubBusinessBranchWrapper
                   collapsed={this.state.businessBranchWrapperCollapse}
                   toggleCollapse={this.toggleCollapse.bind(
                     this,
@@ -206,7 +206,7 @@ class BusinessEdit extends Component {
                   businessGet={this.props.businessGet}
                   onInitialPropsReceived={this.onInitialPropsReceived}
                   EDIT={this.props.EDIT}
-                />
+                /> */}
                 <SubBusinessAbout
                   collapsed={this.state.businessAboutCollapse}
                   toggleCollapse={this.toggleCollapse.bind(
