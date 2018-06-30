@@ -18,6 +18,8 @@ import {
 import debounce from "lodash.debounce";
 import { Tab } from "semantic-ui-react";
 
+import moment from "moment";
+
 import { Select } from "../../../Common/components";
 import { onLocationsList, onBusinessTeleCallingList } from "../../actions";
 
@@ -40,7 +42,7 @@ class TeleCalling extends Component {
 
     this.state = {
       locationSearchText: "",
-      location: "",
+      location: null,
       query: "",
       activeIndex: 0
     };
@@ -73,16 +75,17 @@ class TeleCalling extends Component {
 
     const { location, query, activeIndex } = this.state;
     const now = new Date();
-    if (location && query) {
+    if (query) {
       const body = {
         query,
-        open: !Boolean(activeIndex),
+        // open: !Boolean(activeIndex),
+        open: Boolean(activeIndex),
         time: `2010-10-10T${now.getHours()}:${now.getMinutes()}Z`,
         day: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday"][
           now.getDay()
         ],
-        thisIs: location.type.toLowerCase(),
-        location: location.name
+        thisIs: location ? location.type.toLowerCase() : undefined,
+        location: location ? location.name : undefined
       };
 
       this.props.onBusinessTeleCallingList({
@@ -96,10 +99,7 @@ class TeleCalling extends Component {
     200
   );
 
-  debouncedQueryType = debounce(
-    () => this.state.location && this.onFormSubmit(),
-    200
-  );
+  debouncedQueryType = debounce(() => this.onFormSubmit(), 50);
 
   render() {
     return (
@@ -143,7 +143,6 @@ class TeleCalling extends Component {
                     style={{ minWidth: 200 }}
                     placeholder="Filter Location"
                     clearable
-                    required
                     isLoading={this.props.locationsFetchLoading}
                     onInputChange={name => {
                       this.setState({ locationSearchText: name });
