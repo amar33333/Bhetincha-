@@ -19,6 +19,9 @@ import {
   UPDATE_ECOMMERCE_PRODUCT_FULFILLED,
   UPDATE_ECOMMERCE_PRODUCT_PENDING,
   UPDATE_ECOMMERCE_PRODUCT_REJECTED,
+  DELETE_ECOMMERCE_PRODUCT_FULFILLED,
+  DELETE_ECOMMERCE_PRODUCT_PENDING,
+  DELETE_ECOMMERCE_PRODUCT_REJECTED,
   FETCH_ECOMMERCE_PRODUCT_EACH_FULFILLED,
   FETCH_ECOMMERCE_PRODUCT_EACH_PENDING,
   FETCH_ECOMMERCE_PRODUCT_EACH_REJECTED
@@ -29,7 +32,8 @@ import {
   onEcommerceCategoryProductsGet,
   onEcommerceProductPost,
   onEcommerceProductEachGet,
-  onEcommerceProductEachPut
+  onEcommerceProductEachPut,
+  onEcommerceProductEachDelete
 } from "../../Admin/config/adminServerCall";
 
 const epics = [];
@@ -119,6 +123,33 @@ epics.push((action$, { getState }) =>
       .catch(ajaxError => {
         toast.error(ajaxError.toString());
         return Observable.of({ type: UPDATE_ECOMMERCE_PRODUCT_REJECTED });
+      });
+  })
+);
+
+export const onRemoveEcommerceProduct = payload => ({
+  type: DELETE_ECOMMERCE_PRODUCT_PENDING,
+  payload
+});
+
+epics.push((action$, { getState }) =>
+  action$.ofType(DELETE_ECOMMERCE_PRODUCT_PENDING).mergeMap(action => {
+    // const payload = getState().AdminContainer.ecommerce.activeCategory;
+    const { uid, routeToManageProducts } = action.payload;
+
+    return onEcommerceProductEachDelete({ uid })
+      .map(({ response }) => {
+        if (response.msg === "success") {
+          toast.success("Product Deleted Successfully");
+          routeToManageProducts();
+          return { type: DELETE_ECOMMERCE_PRODUCT_FULFILLED };
+        } else {
+          throw new Error(response.msg);
+        }
+      })
+      .catch(ajaxError => {
+        toast.error(ajaxError.toString());
+        return Observable.of({ type: DELETE_ECOMMERCE_PRODUCT_REJECTED });
       });
   })
 );

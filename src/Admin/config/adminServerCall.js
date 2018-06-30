@@ -1163,3 +1163,12 @@ export const onEcommerceProductEachPut = ({ uid, body }) =>
       "Content-Type": "application/json"
     }
   });
+
+export const onEcommerceProductEachDelete = ({ uid }) =>
+  ajax({
+    method: "DELETE",
+    url: `${ECOMMERCE_PRODUCT_URL}${uid}/`,
+    headers: {
+      "Content-Type": "application/json"
+    }
+  });
