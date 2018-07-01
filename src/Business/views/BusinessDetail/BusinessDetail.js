@@ -191,7 +191,7 @@ class BusinessDetail extends Component {
                   onInitialPropsReceived={this.onInitialPropsReceived}
                   EDIT={this.props.EDIT}
                 />
-                <SubBusinessBranchWrapper
+                {/* <SubBusinessBranchWrapper
                   collapsed={this.state.businessBranchWrapperCollapse}
                   toggleCollapse={this.toggleCollapse.bind(
                     this,
@@ -205,7 +205,7 @@ class BusinessDetail extends Component {
                   businessGet={this.props.businessGet}
                   onInitialPropsReceived={this.onInitialPropsReceived}
                   EDIT={this.props.EDIT}
-                />
+                /> */}
                 <SubBusinessAbout
                   collapsed={this.state.businessAboutCollapse}
                   toggleCollapse={this.toggleCollapse.bind(

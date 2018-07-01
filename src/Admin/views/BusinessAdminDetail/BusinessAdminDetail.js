@@ -30,7 +30,7 @@ import SubBusinessPrimaryAddress from "./SubBusinessPrimaryAddress";
 import SubBusinessLogo from "./SubBusinessLogo";
 import SubBusinessCoverImage from "./SubBusinessCoverImage";
 import SubBusinessAbout from "./SubBusinessAbout";
-import SubBusinessBranchWrapper from "./SubBusinessBranchWrapper";
+// import SubBusinessBranchWrapper from "./SubBusinessBranchWrapper";
 import SubBusinessWorkingHour from "./SubBusinessWorkingHour";
 
 class BusinessAdminDetail extends Component {
@@ -165,7 +165,7 @@ class BusinessAdminDetail extends Component {
             ref={ref => (this.subBusinessPrimaryAddressRef = ref)}
             {...this.props}
           />
-          <SubBusinessBranchWrapper
+          {/* <SubBusinessBranchWrapper
             collapsed={this.state.businessBranchWrapperCollapse}
             toggleCollapse={this.toggleCollapse.bind(
               this,
@@ -173,7 +173,7 @@ class BusinessAdminDetail extends Component {
             )}
             ref={ref => (this.subBusinessBranchWrapperRef = ref)}
             {...this.props}
-          />
+          /> */}
           <SubBusinessLogo
             collapsed={this.state.businessLogoCollapse}
             toggleCollapse={this.toggleCollapse.bind(

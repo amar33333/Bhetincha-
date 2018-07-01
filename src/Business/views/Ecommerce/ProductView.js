@@ -1,8 +1,12 @@
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 
-import { onEcommerceProductEachList } from "../../actions";
+import { ProductDetail } from "./components";
+
+import {
+  onEcommerceProductEachList,
+  onRemoveEcommerceProduct
+} from "../../actions";
 
 class ProductView extends Component {
   componentDidMount() {
@@ -10,42 +14,34 @@ class ProductView extends Component {
       uid: this.props.match.params.productId
     });
   }
-  // {`${this.props.URL}/${product.uid}`}
+
+  routeToManageProducts = () => {
+    this.props.history.replace(
+      `/${
+        this.props.match.params.businessName
+      }/dashboard/ecommerce/manage-products`
+    );
+  };
+
   render() {
     const { productDetail } = this.props;
     return (
       <div>
-        <div>
-          <Link
-            to={`/${
-              this.props.match.params.businessName
-            }/dashboard/ecommerce/manage-products/${
-              this.props.match.params.productId
-            }/edit`}
-          >
-            Edit
-          </Link>
-        </div>
-        <h3>Product Information</h3>
-        {productDetail && (
-          <div>
-            <p>Name: {productDetail.name}</p>
-            <p>Price: {productDetail.price}</p>
-            <p>Discount: {productDetail.discount}</p>
-            {this.props.attributes &&
-              this.props.attributes.attributes.map(attribute => {
-                if (productDetail[attribute.name]) {
-                  return (
-                    <p key={attribute.uid}>
-                      {attribute.name}: {productDetail[attribute.name]}
-                    </p>
-                  );
-                } else {
-                  return null;
-                }
-              })}
-          </div>
-        )}
+        {productDetail &&
+          this.props.attributes &&
+          this.props.attributes.attributes && (
+            <ProductDetail
+              editURL={`/${
+                this.props.match.params.businessName
+              }/dashboard/ecommerce/manage-products/${
+                this.props.match.params.productId
+              }/edit`}
+              onRemoveEcommerceProduct={this.props.onRemoveEcommerceProduct}
+              productDetail={this.props.productDetail}
+              routeToManageProducts={this.routeToManageProducts}
+              attributes={this.props.attributes.attributes}
+            />
+          )}
       </div>
     );
   }
@@ -58,6 +54,7 @@ export default connect(
     }
   }) => ({ productDetail, attributes }),
   {
-    onEcommerceProductEachList
+    onEcommerceProductEachList,
+    onRemoveEcommerceProduct
   }
 )(ProductView);
