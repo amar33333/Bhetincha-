@@ -25,19 +25,29 @@ class DistrictEditModal extends Component {
       each => each.name === this.props.data.country
     );
 
-    this.setState({
-      district: this.props.data ? this.props.data : "",
-      country: tempCountry,
-      state: this.props.data
-        ? { id: this.props.data.state, name: this.props.data.state }
-        : ""
+    this.props.onGetAddressTreeList({
+      countryId: tempCountry.id,
+      access_token: this.props.access_token
     });
 
-    // this.props.onGetAddressTreeList({
-    //   countryId: tempCountry.id,
-    //   access_token: this.props.access_token
-    // });
+    this.setState({
+      district: this.props.data ? this.props.data : "",
+      country: tempCountry
+    });
   }
+
+  static getDerivedStateFromProps = nextProps => {
+    const tempCountry = nextProps.countries.find(
+      each => each.name === nextProps.data.country
+    );
+
+    return {
+      state:
+        tempCountry.states &&
+        tempCountry.states.length &&
+        tempCountry.states.find(each => each.name === nextProps.data.state)
+    };
+  };
 
   onChange = (key, event) => {
     this.setState({
@@ -64,17 +74,15 @@ class DistrictEditModal extends Component {
   };
   onFormEdit = event => {
     event.preventDefault();
-    const {
-      state,
-      country: { id }
-    } = this.state;
-    this.props.onStateEdit({ state, country: id });
+    const { state, district } = this.state;
+    this.props.onDistrictEdit({
+      state: state.id,
+      district
+    });
   };
 
   render() {
-    console.log("distrit edit props: ", this.props);
-    console.log("distrit edit state: ", this.state);
-
+    console.log("disreriec: ", this.state);
     try {
       this.states = this.props.countries.length
         ? this.props.countries.find(country => {

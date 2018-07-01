@@ -576,8 +576,9 @@ export const onCountryGetAjax = ({ access_token }) =>
     }
   });
 
-export const onCountryEachGet = ({ id, access_token }) =>
-  axios({
+export const onCountryEachGet = ({ id, access_token }) => {
+  console.log("countrdch eger");
+  return axios({
     method: "get",
     url: `${COUNTRY_URL}${id}/`,
     headers: {
@@ -585,6 +586,7 @@ export const onCountryEachGet = ({ id, access_token }) =>
       Authorization: "Bearer " + access_token
     }
   });
+};
 
 export const onCountryEachGetAjax = ({ id, access_token }) =>
   ajax({
@@ -758,13 +760,13 @@ export const onDistrictGetAjax = ({ access_token, params }) =>
     }
   });
 
-export const onDistrictPut = ({ district, state, country, access_token }) =>
+export const onDistrictPut = ({ district, state, access_token }) =>
   ajax({
     method: "PUT",
     url: `${DISTRICT_URL}${district.id}/`,
     body: {
       name: district.name,
-      country,
+      districtCode: district.districtCode,
       state
     },
     headers: {

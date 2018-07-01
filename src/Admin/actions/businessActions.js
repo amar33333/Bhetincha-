@@ -1139,17 +1139,19 @@ export const onBusinessEachList = ({ username, access_token }) => dispatch => {
 };
 
 export const onGetAddressTreeList = data => dispatch => {
-  const { countryId, access_token } = data;
+  const { countryId, stateId, districtId, cityId, access_token } = data;
 
-  getAddressTree(countryId, dispatch, access_token)
-    .then(response => {
-      console.log(response);
-      dispatch({ type: FETCH_ADDRESS_TREE_PENDING });
-    })
-    .catch(error => {
-      console.log(error);
-      dispatch({ type: FETCH_ADDRESS_TREE_REJECTED });
-    });
+  console.log("addresteslisdf: ", countryId);
+
+  getAddressTree(
+    countryId,
+    stateId,
+    districtId,
+    cityId,
+    access_token,
+    dispatch
+  );
+  dispatch({ type: FETCH_ADDRESS_TREE_PENDING });
 };
 
 const getAddressTree = (
@@ -1160,28 +1162,30 @@ const getAddressTree = (
   access_token,
   dispatch
 ) => {
-  if (countryId !== "")
+  console.log(countryId, stateId, districtId, cityId, access_token);
+  if (countryId !== "" && countryId !== undefined) {
+    console.log("inside coutnryID: ", countryId);
     onCountryEachGet({ id: countryId, access_token })
       .then(countryResponse => {
         dispatch({
           type: FETCH_ADDRESS_TREE_FULFILLED,
           payload: countryResponse.data
         });
-        if (stateId !== "")
+        if (stateId !== "" && stateId !== undefined)
           onStateEachGet({ id: stateId, access_token })
             .then(stateResponse => {
               dispatch({
                 type: FETCH_ADDRESS_TREE_FULFILLED,
                 payload: stateResponse.data
               });
-              if (districtId !== "")
+              if (districtId !== "" && districtId !== undefined)
                 onDistrictEachGet({ id: districtId, access_token })
                   .then(districtResponse => {
                     dispatch({
                       type: FETCH_ADDRESS_TREE_FULFILLED,
                       payload: districtResponse.data
                     });
-                    if (cityId !== "")
+                    if (cityId !== "" && cityId !== undefined)
                       onCityEachGet({ id: cityId, access_token })
                         .then(cityResponse =>
                           dispatch({
@@ -1210,6 +1214,7 @@ const getAddressTree = (
       .catch(countryErr =>
         dispatch({ type: FETCH_ADDRESS_TREE_REJECTED, payload: countryErr })
       );
+  }
 };
 
 export const onCompanyTypeSubmit = payload => ({
