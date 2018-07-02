@@ -67,6 +67,7 @@ class TeleCalling extends Component {
   ];
 
   onTabChange = (event, data) => {
+    console.log("data:", data);
     this.setState({ activeIndex: data.activeIndex }, this.onFormSubmit);
   };
 
@@ -79,7 +80,7 @@ class TeleCalling extends Component {
       const body = {
         query,
         // open: !Boolean(activeIndex),
-        open: Boolean(activeIndex),
+        open: !Boolean(activeIndex),
         time: `2010-10-10T${now.getHours()}:${now.getMinutes()}Z`,
         day: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday"][
           now.getDay()
