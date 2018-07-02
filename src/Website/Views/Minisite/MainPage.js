@@ -16,7 +16,11 @@ const aboutUsstyle = {
 class MainPage extends Component {
   render() {
     return (
-      <div>
+      <div
+        style={{
+          paddingTop: "60px"
+        }}
+      >
         <CoverPhoto />
         <div className="body-wrapper">
           <div className="minisite_about__wrapper">

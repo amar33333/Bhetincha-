@@ -147,7 +147,7 @@ img.minisite__album-thumbnail {
 .gallery-wrapper {
   position: relative;
   min-height: 80vh !important;
-  padding: 20px;
+  padding: 80px 20px;
 }
 
 .gallery-list {

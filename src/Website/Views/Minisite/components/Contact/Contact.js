@@ -164,15 +164,17 @@ class Contact extends Component {
   render() {
     console.log("Contact props:", this.props);
     return (
-      <div>
-        <div>
-          <MapComponent
-            ref={ref => (this.mapEl = ref)}
-            position={this.state.position}
-            // onClick={this.onChangeLatLng}
-            // onDragEnd={this.onChangeLatLng}
-          />
-        </div>
+      <div
+        style={{
+          paddingTop: "60px"
+        }}
+      >
+        <MapComponent
+          ref={ref => (this.mapEl = ref)}
+          position={this.state.position}
+          // onClick={this.onChangeLatLng}
+          // onDragEnd={this.onChangeLatLng}
+        />
         <Container>
           <Row className="mt-5 mb-4">
             <Col sm="12">

@@ -6,7 +6,11 @@ import "./minisite.css";
 class MainPage extends Component {
   render() {
     return (
-      <div>
+      <div
+        style={{
+          paddingTop: "60px"
+        }}
+      >
         <CoverPhoto />
         <div className="body-wrapper">
           <AboutUs />
