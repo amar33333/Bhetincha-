@@ -13,13 +13,17 @@ import {
   Col
 } from "reactstrap";
 
-import { onSocialLinkSubmit } from "../../actions";
+import { onSocialLinkSubmit, onSocialLinksList } from "../../actions";
 
 class Settings extends Component {
   state = {
     name: "",
     className: ""
   };
+
+  componentDidMount() {
+    this.props.onSocialLinksList();
+  }
 
   onChange = (key, event) => this.setState({ [key]: event.target.value });
 
@@ -35,6 +39,7 @@ class Settings extends Component {
   clearState = () => this.setState({ name: "", className: "" });
 
   render() {
+    console.log("tsettings props: ", this.props);
     return (
       <div className="animated fadeIn">
         <Row>
@@ -86,6 +91,6 @@ class Settings extends Component {
 }
 
 export default connect(
-  null,
-  { onSocialLinkSubmit }
+  ({ AdminContainer: { settings } }) => ({ ...settings }),
+  { onSocialLinkSubmit, onSocialLinksList }
 )(Settings);

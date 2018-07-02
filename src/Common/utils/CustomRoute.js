@@ -10,7 +10,7 @@ import { Loading } from "../pages";
 
 class CustomRoute extends Component {
   render() {
-    console.log("custom props: ", this.props);
+    // console.log("custom props: ", this.props);
 
     const { name, component, path, params } = this.props;
     const exact = this.props.exact === true ? true : false;

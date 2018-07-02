@@ -47,6 +47,16 @@ export const onSocialLinkPost = ({ body, access_token }) =>
     }
   });
 
+export const onSocialLinksGet = ({ access_token }) =>
+  ajax({
+    method: "GET",
+    url: SOCIAL_LINK_URL,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
 export const onBusinessTeleCallingGetAjax = ({ access_token, body }) =>
   ajax({
     method: "POST",
