@@ -21,7 +21,8 @@ import {
   ECOMMERCE_CATEGORY_URL,
   ECOMMERCE_ATTRIBUTE_URL,
   ECOMMERCE_PRODUCT_ATTRIBUTE_URL,
-  ECOMMERCE_PRODUCT_URL
+  ECOMMERCE_PRODUCT_URL,
+  SOCIAL_LINK_URL
 } from "./ADMIN_API";
 
 import {
@@ -34,6 +35,17 @@ import axios from "axios";
 
 import { ajax } from "rxjs/observable/dom/ajax";
 import querystring from "querystring";
+
+export const onSocialLinkPost = ({ body, access_token }) =>
+  ajax({
+    method: "POST",
+    url: SOCIAL_LINK_URL,
+    body,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
 
 export const onBusinessTeleCallingGetAjax = ({ access_token, body }) =>
   ajax({
