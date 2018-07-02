@@ -1035,6 +1035,16 @@ export const onUserPost = ({
     }
   });
 
+export const onUserDelete = ({ id, access_token }) =>
+  ajax({
+    method: "delete",
+    url: `${USERS_URL}${id}/`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
 export const onUserPut = ({ body, id, access_token }) =>
   ajax({
     method: "PUT",
