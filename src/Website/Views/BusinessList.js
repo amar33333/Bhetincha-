@@ -62,12 +62,15 @@ class BusinessList extends Component {
       this.props.location.search.slice(1)
     );
 
-    // if (this.props.location.search !== prevProps.location.search)
-    //   this.props.onSearchResultsList({
-    //     query: parsedUrlStringObject["query"],
-    //     frm: parsedUrlStringObject["frm"],
-    //     size: parsedUrlStringObject["size"]
-    //   });
+    if (this.props.location.search !== prevProps.location.search) {
+      this.props.onSearchResultsList({
+        query: parsedUrlStringObject["query"],
+        frm: 0,
+        size: 5
+      });
+
+      this.setState({ searchResults: [], frm: 0 });
+    }
 
     if (
       this.props.search_results_page_data !== prevProps.search_results_page_data
@@ -128,7 +131,10 @@ class BusinessList extends Component {
   renderSearchResults = () => {
     // console.log("search results: ", this.props);
     // if (!this.props.search_results_page_loading)
-    if (!this.state.searchResults.length)
+    if (
+      !this.props.search_results_page_loading &&
+      !this.state.searchResults.length
+    )
       return <div>No Results Found !!!</div>;
     else
       return this.state.searchResults.map(each_search_result => {
