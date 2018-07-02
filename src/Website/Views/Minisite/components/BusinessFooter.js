@@ -76,7 +76,9 @@ class BusinessFooter extends Component {
                   <i className="fa fa-google-plus fa-stack-1x" />
                 </span>
               </Row>
-              {this.props.business_phone && (
+              {((this.props.address && this.props.address.tollFreeNumber) ||
+                (this.props.address && this.props.address.landLineNumber) ||
+                this.props.business_phone) && (
                 <Row>
                   <div className="toll-free">
                     <h4 className="mb-0">Call us Now!</h4>
@@ -84,11 +86,21 @@ class BusinessFooter extends Component {
                       <a
                         href={`tel:${(this.props.address &&
                           this.props.address.tollFreeNumber) ||
-                          this.props.business_phone}`}
+                          (this.props.address && this.props.landLineNumber) ||
+                          (this.props.address &&
+                            this.props.address.contactPerson[0] &&
+                            this.props.address.contactPerson[0]
+                              .visibleToPublic &&
+                            this.props.address.contactPerson[0].mobileNumber)}`}
                       >
                         {(this.props.address &&
                           this.props.address.tollFreeNumber) ||
-                          this.props.business_phone}
+                          (this.props.address && this.props.landLineNumber) ||
+                          (this.props.address &&
+                            this.props.address.contactPerson[0] &&
+                            this.props.address.contactPerson[0]
+                              .visibleToPublic &&
+                            this.props.address.contactPerson[0].mobileNumber)}
                       </a>
                     </h1>
                   </div>
