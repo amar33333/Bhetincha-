@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import { toast } from "react-toastify";
 
 import { Row, Col, Card, CardHeader, CardBody, Button } from "reactstrap";
 
@@ -67,17 +68,26 @@ class BusinessAdminDetail extends Component {
     this.propsData = {
       ...this.subBusinessAdminDetailRef.getState(),
       ...this.subBusinessAboutRef.getState(),
-      ...this.subBusinessBranchWrapperRef.getState(),
+      // ...this.subBusinessBranchWrapperRef.getState(),
       ...this.subBusinessCoverImageRef.getState(),
       ...this.subBusinessLogoRef.getState(),
       ...this.subBusinessPrimaryAddressRef.getState(),
       ...this.subBusinessWorkingHourRef.getState()
     };
 
-    this.props.onBusinessCreate({
-      data: this.propsData,
-      access_token: this.access_token
-    });
+    if (
+      !this.props.requiredParams.contactPerson ||
+      (this.propsData.address.contactPerson &&
+        this.propsData.address.contactPerson.length)
+    )
+      this.props.onBusinessCreate({
+        data: this.propsData,
+        access_token: this.access_token
+      });
+    else {
+      toast.error("Please add at-least One Contact Person");
+    }
+
     // this.subBusinessAdminDetailRef.clearState();
     // this.subBusinessAboutRef.clearState();
     // this.subBusinessBranchWrapperRef.clearState();
@@ -142,7 +152,7 @@ class BusinessAdminDetail extends Component {
   };
 
   render() {
-    // console.log("busines admin props: ", this.props);
+    console.log("busines admin props: ", this.props);
     return (
       <div className="animated fadeIn" style={{ marginBottom: "20px" }}>
         {/* {this.renderErrors()} */}

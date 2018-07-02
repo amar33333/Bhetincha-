@@ -110,7 +110,7 @@ class SubBusinessContact extends Component {
     return (
       <div className="animated fadeIn">
         <Card>
-          <CardHeader onClick={this.toggleCollapse}>
+          <CardHeader>
             <div
               style={{
                 display: "flex",
@@ -120,97 +120,72 @@ class SubBusinessContact extends Component {
               }}
             >
               <strong>Contact Person Detail - {this.props.id + 1}</strong>
-
-              <Button
-                color="primary"
-                onClick={this.toggleCollapse}
-                style={{
-                  marginBottom: "0rem",
-                  backgroundColor: "rgb(230, 228, 241)",
-                  color: "black",
-                  fontSize: "1.3rem",
-                  border: "1px solid #2e219036",
-                  borderRadius: "50%",
-                  height: "30px",
-                  width: "30px",
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center"
-                }}
-              >
-                {!this.props.collapsed ? (
-                  <i className="fa fa-angle-up" />
-                ) : (
-                  <i className="fa fa-angle-down" />
-                )}
-              </Button>
             </div>
           </CardHeader>
-          <Collapse isOpen={!this.state.collapsed}>
-            <CardBody>
-              <Row>
-                <Col xs="12" md="6">
-                  <FormGroup>
-                    <Label for="Name">Full Name</Label>
-                    <Input
-                      required
-                      type="text"
-                      value={this.state.name}
-                      onKeyDown={this._handleKeyPress}
-                      onChange={this.onChange.bind(this, "name")}
-                    />
-                  </FormGroup>
-                </Col>
-                <Col xs="12" md="6">
-                  {" "}
-                  <FormGroup>
-                    <Label for="Deparment">Department</Label>
-                    <Input
-                      type="text"
-                      value={this.state.department}
-                      onKeyDown={this._handleKeyPress}
-                      onChange={this.onChange.bind(this, "department")}
-                    />
-                  </FormGroup>
-                </Col>
-              </Row>
-              <Row>
-                <Col xs="12" md="4">
-                  <FormGroup>
-                    <Label for="Email">Email</Label>
-                    <Input
-                      type="email"
-                      value={this.state.email}
-                      onKeyDown={this._handleKeyPress}
-                      onChange={this.onChange.bind(this, "email")}
-                    />
-                  </FormGroup>
-                </Col>
-                <Col xs="12" md="4">
-                  <FormGroup>
-                    <Label for="Desgination">Designation</Label>
-                    <Input
-                      type="text"
-                      value={this.state.designation}
-                      onKeyDown={this._handleKeyPress}
-                      onChange={this.onChange.bind(this, "designation")}
-                    />
-                  </FormGroup>
-                </Col>
-                <Col xs="12" md="4">
-                  <FormGroup>
-                    <Label for="Mobile Number">Mobile Number</Label>
-                    <Input
-                      type="text"
-                      value={this.state.mobileNumber}
-                      onKeyDown={this._handleKeyPress}
-                      onChange={this.onChange.bind(this, "mobileNumber")}
-                    />
-                  </FormGroup>
-                </Col>
-              </Row>
-              <Row style={{ marginBottom: 15 }}>
-                {/* <Col xs="6" md="6">
+          <CardBody>
+            <Row>
+              <Col xs="12" md="6">
+                <FormGroup>
+                  <Label for="Name">Full Name</Label>
+                  <Input
+                    required
+                    type="text"
+                    value={this.state.name}
+                    onKeyDown={this._handleKeyPress}
+                    onChange={this.onChange.bind(this, "name")}
+                  />
+                </FormGroup>
+              </Col>
+              <Col xs="12" md="6">
+                {" "}
+                <FormGroup>
+                  <Label for="Deparment">Department</Label>
+                  <Input
+                    type="text"
+                    value={this.state.department}
+                    onKeyDown={this._handleKeyPress}
+                    onChange={this.onChange.bind(this, "department")}
+                  />
+                </FormGroup>
+              </Col>
+            </Row>
+            <Row>
+              <Col xs="12" md="4">
+                <FormGroup>
+                  <Label for="Email">Email</Label>
+                  <Input
+                    type="email"
+                    value={this.state.email}
+                    onKeyDown={this._handleKeyPress}
+                    onChange={this.onChange.bind(this, "email")}
+                  />
+                </FormGroup>
+              </Col>
+              <Col xs="12" md="4">
+                <FormGroup>
+                  <Label for="Desgination">Designation</Label>
+                  <Input
+                    type="text"
+                    value={this.state.designation}
+                    onKeyDown={this._handleKeyPress}
+                    onChange={this.onChange.bind(this, "designation")}
+                  />
+                </FormGroup>
+              </Col>
+              <Col xs="12" md="4">
+                <FormGroup>
+                  <Label for="Mobile Number">Mobile Number</Label>
+                  <Input
+                    type="text"
+                    value={this.state.mobileNumber}
+                    onKeyDown={this._handleKeyPress}
+                    onChange={this.onChange.bind(this, "mobileNumber")}
+                  />
+                </FormGroup>
+              </Col>
+            </Row>
+            <Row style={{ marginBottom: 15 }}>
+              {/* <Col xs="6" md="6">
                   <Button
                     color="success"
                     onClick={() => this.props.onContactSave(this.state)}
@@ -218,14 +193,13 @@ class SubBusinessContact extends Component {
                     <i className="fa fa-save" /> SAVE CONTACT
                   </Button>
                 </Col> */}
-                <Col xs="6" md="6">
-                  <Button color="danger" onClick={this.onContactDelete}>
-                    <i className="fa fa-remove" /> DELETE
-                  </Button>
-                </Col>
-              </Row>
-            </CardBody>
-          </Collapse>
+              <Col xs="6" md="6">
+                <Button color="danger" onClick={this.onContactDelete}>
+                  <i className="fa fa-remove" /> DELETE
+                </Button>
+              </Col>
+            </Row>
+          </CardBody>
         </Card>
       </div>
     );

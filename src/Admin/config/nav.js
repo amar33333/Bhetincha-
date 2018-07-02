@@ -56,6 +56,12 @@ const items = {
       permission: "CAN_ADD_BUSINESS"
     },
     {
+      name: "Add Free Business",
+      url: "/admin/add-free-business",
+      icon: "fa fa-industry",
+      permission: "CAN_ADD_BUSINESS"
+    },
+    {
       name: "List Business",
       url: "/admin/list-business",
       icon: "fa fa-industry",
