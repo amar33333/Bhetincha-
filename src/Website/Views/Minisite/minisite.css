@@ -78,8 +78,8 @@
   position: absolute;
   padding: 0.7rem;
   /* background-color: cornflowerblue; */
-  left: 1%;
-  top: 10%;
+  right: 1%;
+  top: 12%;
   z-index: 99;
   color: cornsilk;
   display: block;
@@ -101,7 +101,7 @@
 .main_nav__brand-logo {
   left: 70px;
   position: absolute;
-  top: 30px;
+  top: -35px;
   width: 120px;
   z-index: 999;
   border: 1px solid lightgray;

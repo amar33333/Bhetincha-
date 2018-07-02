@@ -19,6 +19,7 @@ class MainNavbar extends Component {
           expand="md"
           className="main-nav"
           style={{ height: "85px" }}
+          fixed="top"
         >
           <Link to="/" className="navbar-brand">
             Bhetincha

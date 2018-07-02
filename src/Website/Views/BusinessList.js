@@ -31,6 +31,7 @@ class BusinessList extends Component {
     frm: 0,
     size: 5,
     searchResults: [],
+    search_results_count: 0,
     hasMoreItems: true,
     verifiedTooltipOpen: false
   };
@@ -186,17 +187,20 @@ class BusinessList extends Component {
                         </Badge>
                       ))}
                   </div>
-                  <span
-                    data-tooltip="Get Direction"
-                    data-position="right center"
-                  >
-                    <i className="fa fa-map-marker" />{" "}
-                    {each_search_result.address &&
-                      each_search_result.address.area.area},{" "}
-                    {each_search_result.address &&
-                      each_search_result.address.area.city}{" "}
-                    <br />
-                  </span>
+                  {each_search_result.address ? (
+                    <span
+                      data-tooltip="Get Direction"
+                      data-position="right center"
+                    >
+                      <i className="fa fa-map-marker" />{" "}
+                      {each_search_result.address &&
+                        `${each_search_result.address.area.area},`}{" "}
+                      {each_search_result.address &&
+                        each_search_result.address.area.city}{" "}
+                      <br />
+                    </span>
+                  ) : null}
+
                   {each_search_result.business_phone ? (
                     <div style={{ color: "rgb(35, 35, 34)" }}>
                       <i className="fa fa-phone" />{" "}
@@ -274,12 +278,20 @@ class BusinessList extends Component {
   render() {
     // console.log("business list: ", this.props);
     // console.log("business list state: ", this.state);
+    this.props.search_result && console.log(this.props.search_result);
     const loader = <div className="loader">Loading ...</div>;
 
     return (
-      <div className="body-wrapper mb-5">
+      <div className="mb-5">
         <Container fluid>
-          <Row style={{ marginTop: 20 }}>
+          <Row style={{ marginTop: "20px", paddingTop: "80px" }}>
+            <Col xs="12">
+              <small>
+                {`About ${this.props.search_results_count} results in 0.002s`}
+              </small>
+            </Col>
+          </Row>
+          <Row style={{ marginTop: "20px" }}>
             <Col xs="12" md="8">
               {this.renderSearchResults()}
               {this.props.search_results_page_loading &&
@@ -312,11 +324,17 @@ class BusinessList extends Component {
 }
 
 export default connect(
-  ({ auth: { cookies, phoneVerificationModal }, home, search_result }) => ({
+  ({
+    auth: { cookies, phoneVerificationModal },
+    home,
+    search_result,
+    search_results_count
+  }) => ({
     cookies,
     ...home,
     phoneVerificationModal,
-    ...search_result
+    ...search_result,
+    search_results_count
   }),
   {
     togglePhoneVerificationModal,
