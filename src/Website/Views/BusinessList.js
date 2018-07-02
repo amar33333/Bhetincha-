@@ -41,13 +41,14 @@ class BusinessList extends Component {
       this.props.location.search.slice(1)
     );
 
+    const { frm, size } = this.state;
+
     this.props.onSearchResultsList({
       query: parsedUrlStringObject["query"],
-      frm: 0,
-      size: 5
+      frm,
+      size
     });
 
-    const { frm, size } = this.state;
     this.setState({ frm: frm + size });
 
     this.props.setInitialQuery(parsedUrlStringObject.query);
@@ -63,13 +64,16 @@ class BusinessList extends Component {
     );
 
     if (this.props.location.search !== prevProps.location.search) {
-      this.props.onSearchResultsList({
-        query: parsedUrlStringObject["query"],
-        frm: 0,
-        size: 5
-      });
+      this.setState({ frm: 0 }, () => {
+        const { frm, size } = this.state;
 
-      this.setState({ searchResults: [], frm: 0 });
+        this.props.onSearchResultsList({
+          query: parsedUrlStringObject["query"],
+          frm,
+          size
+        });
+        this.setState({ searchResults: [], frm: frm + size });
+      });
     }
 
     if (
@@ -112,7 +116,11 @@ class BusinessList extends Component {
     );
 
     const windowBottom = windowHeight + window.pageYOffset;
-    if (windowBottom >= docHeight) {
+    if (
+      windowBottom >= docHeight &&
+      this.props.search_results_page_data.length &&
+      !this.props.search_results_page_loading
+    ) {
       const { frm, size } = this.state;
       console.log("onScroll frm: ", frm);
 
