@@ -17,6 +17,7 @@ import {
 } from "reactstrap";
 import debounce from "lodash.debounce";
 import { Tab } from "semantic-ui-react";
+import { Link } from "react-router-dom";
 
 import moment from "moment";
 
@@ -28,7 +29,11 @@ const TabPane = ({ business, show }) => (
     {show && (
       <ol>
         {business.map(data => (
-          <li key={data._id}>{data._source.business_name}</li>
+          <li key={data._id}>
+            <Link to={`/${data._source.slug}`}>
+              {data._source.business_name}
+            </Link>
+          </li>
         ))}
       </ol>
     )}
