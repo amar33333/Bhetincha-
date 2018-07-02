@@ -41,7 +41,7 @@ export default [
     className: "fa fa-bell",
     title: "Notifications",
     id: "notifications",
-    badge: true,
+    badge: false,
     link: "/"
   },
   {

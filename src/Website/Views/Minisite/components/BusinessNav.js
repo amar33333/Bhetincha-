@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
+
 import { NavHashLink } from "react-router-hash-link";
 import { MAIN_URL } from "../config/MINISITE_API";
 import "../minisite.css";
@@ -8,7 +9,16 @@ import "../minisite.css";
 import { ScrollInNav } from "../../../components";
 import PermissionProvider from "../../../../Common/utils/PermissionProvider";
 
-import GridLayout from "react-grid-layout";
+// import GridLayout from "react-grid-layout";
+import onClickOutside from "react-onclickoutside";
+
+import AutoSuggestion from "../../../../Website/components/AutoSuggestion";
+import Avatar from "../../../../Website/components/Avatar";
+import {
+  onSearchQuerySubmit,
+  onSearchResultsList
+} from "../../../../Website/actions";
+import querystring from "querystring";
 
 // import { Responsive, WidthProvider } from "react-grid-layout";
 import "react-grid-layout/css/styles.css";
@@ -34,6 +44,7 @@ class BusinessNav extends Component {
 
   state = {
     isOpen: false,
+    revealSearch: false,
     nav_layout: []
   };
 
@@ -45,6 +56,18 @@ class BusinessNav extends Component {
   //     height: null
   //   });
   // };
+
+  toggleSearch = () => {
+    this.setState({
+      revealSearch: !this.state.revealSearch
+    });
+  };
+
+  handleClickOutside = () => {
+    this.setState({
+      revealSearch: false
+    });
+  };
 
   onNavDragStop = items => {
     console.log("onstop items:", items);
@@ -83,17 +106,28 @@ class BusinessNav extends Component {
   render() {
     return (
       <div>
-        <Navbar color="faded" light expand="md" className="business-navbar">
-          <Link to={`/${this.props.businessName}`} className="navbar-brand">
+        <Navbar
+          fixed="top"
+          color="faded"
+          light
+          expand="md"
+          className="business-navbar"
+        >
+          {/* <Link to={`/${this.props.businessName}`} className="navbar-brand">
             <img
               src={`${MAIN_URL}${this.props.logo}`}
               alt="brand-logo"
               className="main_nav__brand-logo"
             />
-          </Link>
+          </Link> */}
           <NavbarToggler onClick={this.toggle} />
           <Collapse isOpen={this.state.isOpen} navbar>
-            <Nav className="ml-5" navbar>
+            <Nav
+              navbar
+              style={{
+                marginLeft: "300px"
+              }}
+            >
               {/* <ResponsiveGridLayout
                 className="layout"
                 layouts={this.state.nav_layout}
@@ -106,7 +140,10 @@ class BusinessNav extends Component {
                 onLayoutChange={this.onNavChanged}
                 onDragStop={this.onNavDragStop}
               > */}
-              <GridLayout
+              {/* <GridLayout
+                style={{
+                  marginLeft: "200px"
+                }}
                 className="layout"
                 // layout={this.state.nav_layout}
                 layout={this.state.nav_layout}
@@ -130,7 +167,7 @@ class BusinessNav extends Component {
                     Home
                   </Link>
                 </NavItem>
-                <NavItem key="about">
+                 <NavItem key="about">
                   <Link
                     onClick={this.onNavClicked}
                     draggable="false"
@@ -139,7 +176,7 @@ class BusinessNav extends Component {
                   >
                     About
                   </Link>
-                </NavItem>
+                </NavItem> 
                 <NavItem key="gallery">
                   <Link
                     onClick={this.onNavClicked}
@@ -161,10 +198,89 @@ class BusinessNav extends Component {
                     Contact
                   </Link>
                 </NavItem>
-                {/* </ResponsiveGridLayout> */}
-              </GridLayout>
+              </GridLayout> */}
+              <NavItem key="home">
+                <Link
+                  onClick={this.onNavClicked}
+                  draggable="false"
+                  to={`/${this.props.businessName}`}
+                  className="nav-link minisite_business__nav__item"
+                >
+                  Home
+                </Link>
+              </NavItem>
+              {/* <NavItem key="about">
+                  <Link
+                    onClick={this.onNavClicked}
+                    draggable="false"
+                    to={`/${this.props.businessName}/about`}
+                    className="nav-link minisite_business__nav__item"
+                  >
+                    About
+                  </Link>
+                </NavItem> */}
+              <NavItem key="gallery">
+                <Link
+                  onClick={this.onNavClicked}
+                  draggable="false"
+                  to={`/${this.props.businessName}/gallery`}
+                  className="nav-link minisite_business__nav__item"
+                >
+                  Gallery
+                </Link>
+              </NavItem>
+              <NavItem key="contact">
+                <Link
+                  onClick={this.onNavClicked}
+                  draggable="false"
+                  to={`/${this.props.businessName}/contact`}
+                  className="nav-link minisite_business__nav__item"
+                  // smooth
+                >
+                  Contact
+                </Link>
+              </NavItem>
+              <NavItem>
+                {this.state.revealSearch ? (
+                  <div className="business_nav_search_wrapper">
+                    <AutoSuggestion
+                      initialQuery={this.props.initialQuery}
+                      placeholder="Search anything..."
+                      valueKey="business_name"
+                      suggestions={this.props.search_result.data}
+                      onSuggestionsFetchRequested={
+                        this.props.onSearchQuerySubmit
+                      }
+                      onSearchItemSelected={business => {
+                        this.props.history.push(`/${business.slug}`);
+                      }}
+                      onSearchComplete={keyword => {
+                        this.props.history.push({
+                          pathname: "/businesses",
+                          //query: keyword
+                          //search: `?query=${keyword}&frm=0&size=5`
+                          search: `?${querystring.stringify({
+                            query: keyword,
+                            frm: 0,
+                            size: 5
+                          })}`
+                          // state: { detail: response.data }
+                        });
+                      }}
+                    />
+                  </div>
+                ) : (
+                  <Button color="link" tabIndex={0} onClick={this.toggleSearch}>
+                    <i className="fa fa-search" />
+                  </Button>
+                )}
+              </NavItem>
             </Nav>
           </Collapse>
+
+          <NavItem className="nav-link minisite_business__nav__item">
+            {this.props.cookies && <Avatar />}
+          </NavItem>
           {/* <PermissionProvider permission="CAN_EDIT_MINISITE"> */}
           <Button color="primary" onClick={this.props.onEditMainClicked}>
             {this.props.mainEdit ? "Preview" : "Edit Data"}
@@ -192,12 +308,19 @@ export default connect(
       edit,
       crud: { logo, nav_layout }
     },
-    auth: { cookies }
+    auth: { cookies },
+    search_result
   }) => ({
     cookies,
     mainEdit: edit.main,
     logo,
-    nav_layout
+    nav_layout,
+    search_result
   }),
-  { onEditMainClicked, onBusinessUpdate }
-)(BusinessNav);
+  {
+    onEditMainClicked,
+    onBusinessUpdate,
+    onSearchQuerySubmit,
+    onSearchResultsList
+  }
+)(onClickOutside(BusinessNav));

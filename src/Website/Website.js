@@ -13,7 +13,7 @@ class Website extends Component {
 
     return (
       <div className="main-wrapper">
-        {pathname !== "/" && (
+        {pathname === "/businesses" && (
           <MainNavbar
             history={this.props.history}
             initialQuery={this.state.initialQuery}

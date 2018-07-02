@@ -129,8 +129,11 @@ class BusinessList extends Component {
                       data-position="right center"
                     >
                       <i className="fa fa-map-marker" />{" "}
-                      {each_search_result.address.area.area},{" "}
-                      {each_search_result.address.area.city} <br />
+                      {each_search_result.address &&
+                        each_search_result.address.area.area},{" "}
+                      {each_search_result.address &&
+                        each_search_result.address.area.city}{" "}
+                      <br />
                     </span>
                     {each_search_result.business_phone ? (
                       <div style={{ color: "rgb(35, 35, 34)" }}>

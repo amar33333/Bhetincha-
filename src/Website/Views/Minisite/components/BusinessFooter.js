@@ -7,13 +7,15 @@ class BusinessFooter extends Component {
   render() {
     console.log(this.props);
     return (
-      <div id="contact-us" className={`footer footer-${this.props.theme} p-3`}>
+      <div
+        id="contact-us"
+        className={`footer footer-${this.props.theme} pt-3 `}
+      >
         <Container>
           <Row>
-            <Col xs="12" md="4">
-              <h4>Contact us</h4>
+            <Col xs="12" md="3">
               <div className="m-0">
-                <strong>Head Office</strong>
+                <p>Head Office</p>
                 <p className="m-0">
                   <strong>{this.props.business_name}</strong>
                 </p>
@@ -26,60 +28,20 @@ class BusinessFooter extends Component {
                   {this.props.business_email}{" "}
                 </a>
               </span>
-              {/* <br />
-              <span className="fa fa-globe">
-                {" "}
-                <a
-                  href="http://techkunja.com.np"
-                  rel="noopener noreferrer"
-                  target="_blank"
-                >
-                  {" "}
-                </a>
-              </span> */}
-            </Col>
-            <Col xs="12" md="2">
-              <h4>Find us</h4>
-            </Col>
-            <Col xs="12" md="3">
-              <div className="mb-3">
-                <h4>Explore</h4>
-              </div>
-              <ul>
-                <li>
-                  <Link to="#">Home</Link>
-                </li>
-                <li>
-                  <Link to="#">About</Link>
-                </li>
-                <li>
-                  <Link to="#">Gallery</Link>
-                </li>
-                <li>
-                  <Link to="#">Contact</Link>
-                </li>
-              </ul>
             </Col>
 
-            <Col xs="12" md="3">
-              <Row>
-                <span className="fa-stack fa-lg footer_social__icon">
-                  <i className="fa fa-circle-thin fa-stack-2x" />
-                  <i className="fa fa-facebook fa-stack-1x" />
-                </span>
-                <span className="fa-stack fa-lg footer_social__icon">
-                  <i className="fa fa-circle-thin fa-stack-2x" />
-                  <i className="fa fa-twitter fa-stack-1x" />
-                </span>
-                <span className="fa-stack fa-lg footer_social__icon">
-                  <i className="fa fa-circle-thin fa-stack-2x" />
-                  <i className="fa fa-google-plus fa-stack-1x" />
-                </span>
-              </Row>
+            <Col xs="12" md={{ size: 6 }}>
               {((this.props.address && this.props.address.tollFreeNumber) ||
                 (this.props.address && this.props.address.landLineNumber) ||
                 this.props.business_phone) && (
-                <Row>
+                <Row
+                  className="text-center"
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "center"
+                  }}
+                >
                   <div className="toll-free">
                     <h4 className="mb-0">Call us Now!</h4>
                     <h1 className="mt-0">
@@ -106,6 +68,26 @@ class BusinessFooter extends Component {
                   </div>
                 </Row>
               )}
+            </Col>
+
+            <Col xs="12" md={{ size: 3 }}>
+              <Row className="mb-1">
+                <h3>Follow us on:</h3>
+              </Row>
+              <Row>
+                <span className="fa-stack fa-lg footer_social__icon">
+                  <i className="fa fa-circle-thin fa-stack-2x" />
+                  <i className="fa fa-facebook fa-stack-1x" />
+                </span>
+                <span className="fa-stack fa-lg footer_social__icon">
+                  <i className="fa fa-circle-thin fa-stack-2x" />
+                  <i className="fa fa-twitter fa-stack-1x" />
+                </span>
+                <span className="fa-stack fa-lg footer_social__icon">
+                  <i className="fa fa-circle-thin fa-stack-2x" />
+                  <i className="fa fa-google-plus fa-stack-1x" />
+                </span>
+              </Row>
             </Col>
           </Row>
         </Container>

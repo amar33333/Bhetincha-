@@ -11,7 +11,7 @@
 .minisite_banner__img {
   display: block;
   object-fit: cover;
-  height: 80vh;
+  height: 70vh;
   width: 100%;
 }
 
@@ -51,6 +51,7 @@
 
 .minisite_business__nav__item {
   text-transform: uppercase;
+  margin-right: 20px;
 }
 .minisite_banner__wrapper {
   position: relative;
@@ -97,11 +98,36 @@
   display: block;
 }
 
+.main_nav__brand-logo {
+  left: 70px;
+  position: absolute;
+  top: 30px;
+  width: 120px;
+  z-index: 999;
+  border: 1px solid lightgray;
+}
+
+.navbar-brand {
+  padding: 0px !important;
+}
+
 img.minisite__album-thumbnail {
   object-fit: cover;
   height: 200px !important;
 }
 
+.business_nav_search_wrapper {
+  position: absolute;
+  top: 7px;
+  width: 30%;
+  -webkit-transition: width 2s; /* Safari */
+  transition: width 2s;
+  /* transition: all 5s ease; */
+}
+
+.business_nav_search_wrapper:focus {
+  width: 100%;
+}
 /* ==============About us=================== */
 .minisite_about__edit__icon {
   display: inline-block;
@@ -112,8 +138,8 @@ img.minisite__album-thumbnail {
 .minisite_about__wrapper {
   padding: 20px;
   padding-top: 5rem;
-  background-color: rgb(145, 68, 218);
-  color: whitesmoke;
+  /* background-color: rgb(145, 68, 218); */
+  color: black;
 }
 
 /* ============About us ================= */

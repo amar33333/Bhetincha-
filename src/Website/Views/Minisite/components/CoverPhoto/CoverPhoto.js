@@ -38,7 +38,12 @@ class CoverPhoto extends Component {
           src={`${MAIN_URL}${this.props.cover_photo}`}
           alt="banner"
         />
-        <div className="minisite_banner__img__text__overlay">
+        <img
+          src={`${MAIN_URL}${this.props.logo}`}
+          alt="brand-logo"
+          className=" navbar-brand main_nav__brand-logo"
+        />
+        {/* <div className="minisite_banner__img__text__overlay">
           <h1>We are best in Town,</h1>
           <h1>We get things Done!</h1>
           <p style={{ marginTop: 20 }}>
@@ -51,7 +56,7 @@ class CoverPhoto extends Component {
           <Button outline color="warning" size="lg">
             Contact now
           </Button>
-        </div>
+        </div> */}
         {this.props.mainEdit && (
           <div className="minisite_banner__img__change__overlay">
             <Button

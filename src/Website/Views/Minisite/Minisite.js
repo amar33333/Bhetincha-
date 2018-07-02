@@ -39,6 +39,7 @@ class Minisite extends Component {
     return (
       <div>
         <BusinessNav
+          history={this.props.history}
           businessName={this.props.match.params[ROUTE_PARAMS_BUSINESS_NAME]}
         />
         {this.props.mainLoading ? (
