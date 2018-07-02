@@ -456,7 +456,10 @@ class SubBusinessPrimaryAddress extends Component {
                 <FormGroup>
                   <Label for="Country">Country</Label>
                   <Select
-                    required={this.props.requiredParams.country}
+                    required={
+                      this.props.requiredParams &&
+                      this.props.requiredParams.country
+                    }
                     name="Country"
                     placeholder="Select a Country"
                     noResultsText="No Data Found"
@@ -472,7 +475,10 @@ class SubBusinessPrimaryAddress extends Component {
                 <FormGroup>
                   <Label for="State">State</Label>
                   <Select
-                    required={this.props.requiredParams.state}
+                    required={
+                      this.props.requiredParams &&
+                      this.props.requiredParams.state
+                    }
                     name="State"
                     placeholder="Select a State"
                     noResultsText="No Data Found"
@@ -488,7 +494,10 @@ class SubBusinessPrimaryAddress extends Component {
                 <FormGroup>
                   <Label for="District">District</Label>
                   <Select
-                    required={this.props.requiredParams.district}
+                    required={
+                      this.props.requiredParams &&
+                      this.props.requiredParams.district
+                    }
                     name="District"
                     placeholder="Select a District"
                     noResultsText="No Data Found"
@@ -506,7 +515,10 @@ class SubBusinessPrimaryAddress extends Component {
                 <FormGroup>
                   <Label for="City">City</Label>
                   <Select
-                    required={this.props.requiredParams.city}
+                    required={
+                      this.props.requiredParams &&
+                      this.props.requiredParams.city
+                    }
                     name="City"
                     placeholder="Select a City"
                     noResultsText="No Data Found"
@@ -522,7 +534,10 @@ class SubBusinessPrimaryAddress extends Component {
                 <FormGroup>
                   <Label for="Area">Area</Label>
                   <Select
-                    required={this.props.requiredParams.area}
+                    required={
+                      this.props.requiredParams &&
+                      this.props.requiredParams.area
+                    }
                     name="Area"
                     placeholder="Select an Area"
                     noResultsText="No Data Found"
