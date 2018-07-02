@@ -97,19 +97,22 @@ class BusinessList extends Component {
       this.props.location.search.slice(1)
     );
 
-    const innerPlusScrollY = window.innerHeight + window.scrollY;
-    const bodyOffsetHeight = document.body.offsetHeight;
-    console.log(
-      "inner: ",
-      innerPlusScrollY,
-      " bodyofffset: ",
-      bodyOffsetHeight
+    const windowHeight =
+      "innerHeight" in window
+        ? window.innerHeight
+        : document.documentElement.offsetHeight;
+    const body = document.body;
+    const html = document.documentElement;
+    const docHeight = Math.max(
+      body.scrollHeight,
+      body.offsetHeight,
+      html.clientHeight,
+      html.scrollHeight,
+      html.offsetHeight
     );
-    if (
-      innerPlusScrollY >= bodyOffsetHeight &&
-      this.props.search_results_page_data.length &&
-      !this.props.search_results_page_loading
-    ) {
+
+    const windowBottom = windowHeight + window.pageYOffset;
+    if (windowBottom >= docHeight) {
       const { frm, size } = this.state;
       console.log("onScroll frm: ", frm);
 
