@@ -63,18 +63,6 @@ class UserRegister extends Component {
                   <Form onSubmit={this.onFormSubmit}>
                     <InputGroup className="mb-3">
                       <InputGroupAddon addonType="prepend">
-                        <InputGroupText>@</InputGroupText>
-                      </InputGroupAddon>
-                      <Input
-                        required
-                        type="text"
-                        placeholder="Email"
-                        value={this.state.email}
-                        onChange={this.onChange.bind(this, "email")}
-                      />
-                    </InputGroup>
-                    <InputGroup className="mb-3">
-                      <InputGroupAddon addonType="prepend">
                         <InputGroupText>
                           <i className="icon-user" />
                         </InputGroupText>
@@ -86,6 +74,18 @@ class UserRegister extends Component {
                         placeholder="Username"
                         value={this.state.username}
                         onChange={this.onChange.bind(this, "username")}
+                      />
+                    </InputGroup>
+                    <InputGroup className="mb-3">
+                      <InputGroupAddon addonType="prepend">
+                        <InputGroupText>@</InputGroupText>
+                      </InputGroupAddon>
+                      <Input
+                        required
+                        type="text"
+                        placeholder="Email"
+                        value={this.state.email}
+                        onChange={this.onChange.bind(this, "email")}
                       />
                     </InputGroup>
 

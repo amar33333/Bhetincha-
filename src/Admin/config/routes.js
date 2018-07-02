@@ -64,7 +64,6 @@ class AdminRoute extends Component {
           component={Districts}
           permission="CAN_VIEW_DISTRICT"
         />
-
         <CustomRoute
           path="/admin/states"
           name="States"
@@ -74,7 +73,37 @@ class AdminRoute extends Component {
         <CustomRoute
           path="/admin/add-business"
           name="Add Business"
-          component={BusinessAdminDetail}
+          component={props => (
+            <BusinessAdminDetail
+              {...this.props}
+              requiredParams={{
+                country: true,
+                state: true,
+                district: true,
+                city: true,
+                area: true,
+                contactPerson: true
+              }}
+            />
+          )}
+          permission="CAN_ADD_BUSINESS"
+        />
+        <CustomRoute
+          path="/admin/add-free-business"
+          name="Add Free Business"
+          component={props => (
+            <BusinessAdminDetail
+              {...this.props}
+              requiredParams={{
+                country: false,
+                state: false,
+                district: false,
+                city: false,
+                area: false,
+                contactPerson: false
+              }}
+            />
+          )}
           permission="CAN_ADD_BUSINESS"
         />
         <CustomRoute
@@ -113,14 +142,12 @@ class AdminRoute extends Component {
           component={ManageBranchs}
           //permission="CAN_VIEW_DASHBOARD"
         />
-
         <CustomRoute
           path="/admin/approve-app-business"
           name="List App Business"
           component={AppBusinessList}
           permission="CAN_VIEW_APP_BUSINESS"
         />
-
         <CustomRoute
           path="/admin/list-business"
           name="List Business"
@@ -208,9 +235,7 @@ class AdminRoute extends Component {
           component={Permissions}
           permission="CAN_ACCESS_PERMISSION"
         />
-
         <Route path="/admin/settings" name="Settings" component={Settings} />
-
         <Redirect from="/admin" to="/admin/dashboard" />
         {/* <CustomRoute
           path={`${MATCH_URL}/component2`}

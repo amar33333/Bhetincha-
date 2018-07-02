@@ -18,6 +18,7 @@ import filterAssignBusinessEpics from "./filterAssignBusinessActions";
 import teleCallingEpics from "./teleCallingActions";
 import locationEpics from "./locationActions";
 import ecommerceEpics from "./ecommerceActions";
+import settingsEpics from "./settingsActions";
 
 export * from "./industryActions";
 export * from "./categoryActions";
@@ -40,6 +41,7 @@ export * from "./filterAssignBusinessActions";
 export * from "./teleCallingActions";
 export * from "./locationActions";
 export * from "./ecommerceActions";
+export * from "./settingsActions";
 
 export default [
   ...industryEpics,
@@ -61,5 +63,6 @@ export default [
   ...filterAssignBusinessEpics,
   ...teleCallingEpics,
   ...locationEpics,
-  ...ecommerceEpics
+  ...ecommerceEpics,
+  ...settingsEpics
 ];

@@ -17,17 +17,37 @@ import Select from "react-select";
 class DistrictEditModal extends Component {
   state = { state: "", country: "" };
 
+  countries = [];
+  states = [];
+
   componentDidMount() {
+    const tempCountry = this.props.countries.find(
+      each => each.name === this.props.data.country
+    );
+
+    this.props.onGetAddressTreeList({
+      countryId: tempCountry.id,
+      access_token: this.props.access_token
+    });
+
     this.setState({
       district: this.props.data ? this.props.data : "",
-      country: this.props.data
-        ? { id: this.props.data.country, name: this.props.data.country }
-        : "",
-      state: this.props.data
-        ? { id: this.props.data.state, name: this.props.data.state }
-        : ""
+      country: tempCountry
     });
   }
+
+  static getDerivedStateFromProps = nextProps => {
+    const tempCountry = nextProps.countries.find(
+      each => each.name === nextProps.data.country
+    );
+
+    return {
+      state:
+        tempCountry.states &&
+        tempCountry.states.length &&
+        tempCountry.states.find(each => each.name === nextProps.data.state)
+    };
+  };
 
   onChange = (key, event) => {
     this.setState({
@@ -38,20 +58,42 @@ class DistrictEditModal extends Component {
     });
   };
 
-  handleSelectChange = country => this.setState({ country });
-
+  handleSelectChange = (key, value) => {
+    this.setState({ [key]: value });
+    console.log("access token in this case: ", this.access_token);
+    if (key === "country") {
+      this.setState({
+        state: ""
+      });
+      if (value)
+        this.props.onAddressTreeList({
+          id: value.id,
+          ADDRESS_KEY: key
+        });
+    }
+  };
   onFormEdit = event => {
     event.preventDefault();
-    const {
-      state,
-      country: { id }
-    } = this.state;
-    this.props.onStateEdit({ state, country: id });
+    const { state, district } = this.state;
+    this.props.onDistrictEdit({
+      state: state.id,
+      district
+    });
   };
 
   render() {
-    console.log("distrit edit props: ", this.props);
-    console.log("distrit edit state: ", this.state);
+    console.log("disreriec: ", this.state);
+    try {
+      this.states = this.props.countries.length
+        ? this.props.countries.find(country => {
+            if (country.id === this.state.country.id) {
+              return true;
+            }
+          }).states
+        : [];
+    } catch (error) {
+      this.states = [];
+    }
 
     return (
       <Form onSubmit={this.onFormEdit}>
@@ -67,7 +109,7 @@ class DistrictEditModal extends Component {
                 required
                 name="country"
                 className="select-industry"
-                value={this.state.country}
+                value={this.state.country && this.state.country.id}
                 onChange={this.handleSelectChange.bind(this, "country")}
                 options={this.props.countries}
                 valueKey="id"
@@ -87,7 +129,7 @@ class DistrictEditModal extends Component {
                 className="select-industry"
                 value={this.state.state}
                 onChange={this.handleSelectChange.bind(this, "state")}
-                options={this.props.states}
+                options={this.states}
                 valueKey="id"
                 labelKey="name"
               />

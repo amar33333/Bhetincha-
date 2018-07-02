@@ -340,7 +340,7 @@ class subBusinessWorkingHour extends Component {
     return (
       <div className="animated fadeIn">
         <Card>
-          <CardHeader onClick={this.props.toggleCollapse}>
+          <CardHeader>
             <div
               style={{
                 display: "flex",
@@ -350,54 +350,29 @@ class subBusinessWorkingHour extends Component {
               }}
             >
               <strong>Working Hour</strong>
-              <Button
-                color="primary"
-                onClick={this.props.toggleCollapse}
-                style={{
-                  marginBottom: "0rem",
-                  backgroundColor: "rgb(230, 228, 241)",
-                  color: "black",
-                  fontSize: "1.3rem",
-                  border: "1px solid #2e219036",
-                  borderRadius: "50%",
-                  height: "30px",
-                  width: "30px",
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center"
-                }}
-              >
-                {!this.props.collapsed ? (
-                  <i className="fa fa-angle-up" />
-                ) : (
-                  <i className="fa fa-angle-down" />
-                )}
-              </Button>
             </div>
           </CardHeader>
-          <Collapse isOpen={!this.props.collapsed}>
-            <CardBody>
-              <Row>
-                <Col xs="12" md="12">
-                  <Row>
-                    <Label
-                      check
-                      style={{ marginLeft: "30px", marginBottom: "20px" }}
-                    >
-                      <Input
-                        type="checkbox"
-                        checked={this.state.alwaysOpen}
-                        onChange={this.toggleAlwaysOpen.bind(this)}
-                      />
-                      Always Open
-                    </Label>
-                  </Row>
-                  {/* {!this.state.alwaysOpen && this.renderWorkingHours()} */}
-                  {!this.state.alwaysOpen && this.renderNewWorkingHours()}
-                </Col>
-              </Row>
-            </CardBody>
-          </Collapse>
+          <CardBody>
+            <Row>
+              <Col xs="12" md="12">
+                <Row>
+                  <Label
+                    check
+                    style={{ marginLeft: "30px", marginBottom: "20px" }}
+                  >
+                    <Input
+                      type="checkbox"
+                      checked={this.state.alwaysOpen}
+                      onChange={this.toggleAlwaysOpen.bind(this)}
+                    />
+                    Always Open
+                  </Label>
+                </Row>
+                {/* {!this.state.alwaysOpen && this.renderWorkingHours()} */}
+                {!this.state.alwaysOpen && this.renderNewWorkingHours()}
+              </Col>
+            </Row>
+          </CardBody>
         </Card>
       </div>
     );

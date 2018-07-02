@@ -21,7 +21,8 @@ import {
   ECOMMERCE_CATEGORY_URL,
   ECOMMERCE_ATTRIBUTE_URL,
   ECOMMERCE_PRODUCT_ATTRIBUTE_URL,
-  ECOMMERCE_PRODUCT_URL
+  ECOMMERCE_PRODUCT_URL,
+  SOCIAL_LINK_URL
 } from "./ADMIN_API";
 
 import {
@@ -34,6 +35,27 @@ import axios from "axios";
 
 import { ajax } from "rxjs/observable/dom/ajax";
 import querystring from "querystring";
+
+export const onSocialLinkPost = ({ body, access_token }) =>
+  ajax({
+    method: "POST",
+    url: SOCIAL_LINK_URL,
+    body,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
+export const onSocialLinksGet = ({ access_token }) =>
+  ajax({
+    method: "GET",
+    url: SOCIAL_LINK_URL,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
 
 export const onBusinessTeleCallingGetAjax = ({ access_token, body }) =>
   ajax({
@@ -576,8 +598,9 @@ export const onCountryGetAjax = ({ access_token }) =>
     }
   });
 
-export const onCountryEachGet = ({ id, access_token }) =>
-  axios({
+export const onCountryEachGet = ({ id, access_token }) => {
+  console.log("countrdch eger");
+  return axios({
     method: "get",
     url: `${COUNTRY_URL}${id}/`,
     headers: {
@@ -585,6 +608,7 @@ export const onCountryEachGet = ({ id, access_token }) =>
       Authorization: "Bearer " + access_token
     }
   });
+};
 
 export const onCountryEachGetAjax = ({ id, access_token }) =>
   ajax({
@@ -758,13 +782,13 @@ export const onDistrictGetAjax = ({ access_token, params }) =>
     }
   });
 
-export const onDistrictPut = ({ district, state, country, access_token }) =>
+export const onDistrictPut = ({ district, state, access_token }) =>
   ajax({
     method: "PUT",
     url: `${DISTRICT_URL}${district.id}/`,
     body: {
       name: district.name,
-      country,
+      districtCode: district.districtCode,
       state
     },
     headers: {
@@ -1008,6 +1032,16 @@ export const onUserPost = ({
       password,
       email,
       groups
+    }
+  });
+
+export const onUserDelete = ({ id, access_token }) =>
+  ajax({
+    method: "delete",
+    url: `${USERS_URL}${id}/`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
     }
   });
 

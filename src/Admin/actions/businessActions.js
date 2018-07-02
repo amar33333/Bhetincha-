@@ -1138,6 +1138,22 @@ export const onBusinessEachList = ({ username, access_token }) => dispatch => {
   dispatch({ type: FETCH_BUSINESS_EACH_PENDING });
 };
 
+export const onGetAddressTreeList = data => dispatch => {
+  const { countryId, stateId, districtId, cityId, access_token } = data;
+
+  console.log("addresteslisdf: ", countryId);
+
+  getAddressTree(
+    countryId,
+    stateId,
+    districtId,
+    cityId,
+    access_token,
+    dispatch
+  );
+  dispatch({ type: FETCH_ADDRESS_TREE_PENDING });
+};
+
 const getAddressTree = (
   countryId,
   stateId,
@@ -1146,28 +1162,30 @@ const getAddressTree = (
   access_token,
   dispatch
 ) => {
-  if (countryId !== "")
+  console.log(countryId, stateId, districtId, cityId, access_token);
+  if (countryId !== "" && countryId !== undefined) {
+    console.log("inside coutnryID: ", countryId);
     onCountryEachGet({ id: countryId, access_token })
       .then(countryResponse => {
         dispatch({
           type: FETCH_ADDRESS_TREE_FULFILLED,
           payload: countryResponse.data
         });
-        if (stateId !== "")
+        if (stateId !== "" && stateId !== undefined)
           onStateEachGet({ id: stateId, access_token })
             .then(stateResponse => {
               dispatch({
                 type: FETCH_ADDRESS_TREE_FULFILLED,
                 payload: stateResponse.data
               });
-              if (districtId !== "")
+              if (districtId !== "" && districtId !== undefined)
                 onDistrictEachGet({ id: districtId, access_token })
                   .then(districtResponse => {
                     dispatch({
                       type: FETCH_ADDRESS_TREE_FULFILLED,
                       payload: districtResponse.data
                     });
-                    if (cityId !== "")
+                    if (cityId !== "" && cityId !== undefined)
                       onCityEachGet({ id: cityId, access_token })
                         .then(cityResponse =>
                           dispatch({
@@ -1196,6 +1214,7 @@ const getAddressTree = (
       .catch(countryErr =>
         dispatch({ type: FETCH_ADDRESS_TREE_REJECTED, payload: countryErr })
       );
+  }
 };
 
 export const onCompanyTypeSubmit = payload => ({
@@ -1335,7 +1354,7 @@ epics.push((action$, { getState }) =>
     return onCompanyTypePut({ company_type, access_token })
       .concatMap(({ response }) => {
         if (response.msg === "success") {
-          toast.success("company_type Updated successfully!");
+          toast.success("Company Type Updated successfully!");
           return [
             { type: EDIT_COMPANY_TYPE_FULFILLED },
             { type: FETCH_COMPANY_TYPE_PENDING },
@@ -1443,7 +1462,7 @@ epics.push((action$, { getState }) =>
     return onPaymentMethodPut({ payment_method, access_token })
       .concatMap(({ response }) => {
         if (response.msg === "success") {
-          toast.success("payment_method Updated successfully!");
+          toast.success("Payment Method Updated successfully!");
           return [
             { type: EDIT_PAYMENT_METHOD_FULFILLED },
             { type: FETCH_PAYMENT_METHODS_PENDING },

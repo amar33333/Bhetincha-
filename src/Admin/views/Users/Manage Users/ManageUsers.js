@@ -21,7 +21,8 @@ import {
   handleSortChangeUsers,
   handleOnUsersFilterChange,
   toggleUserEditModal,
-  onUserEdit
+  onUserEdit,
+  onUserRemove
 } from "../../../actions";
 
 class ManageUsers extends Component {
@@ -74,7 +75,7 @@ class ManageUsers extends Component {
             </Button>
             <PopoverDelete
               id={`delete-${value}`}
-              onClick={() => console.log("delete", value)}
+              onClick={() => this.props.onUserRemove({ id: value })}
             />
           </div>
         )
@@ -182,6 +183,7 @@ export default connect(
     onGroupsList,
     handleOnUsersFilterChange,
     handleSortChangeUsers,
-    toggleUserEditModal
+    toggleUserEditModal,
+    onUserRemove
   }
 )(ManageUsers);

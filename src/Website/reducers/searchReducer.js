@@ -11,7 +11,8 @@ const INITIAL_STATE = {
   loading: false,
   search_results_page_loading: false,
   data: [],
-  search_results_page_data: []
+  search_results_page_data: [],
+  search_results_count: 0
 };
 
 export default function(state = INITIAL_STATE, action) {
@@ -48,6 +49,7 @@ export default function(state = INITIAL_STATE, action) {
           ...hit._source,
           id: hit._id
         })),
+        search_results_count: action.payload.total,
         search_results_page_loading: false
       };
 

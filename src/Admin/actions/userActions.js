@@ -10,7 +10,8 @@ import {
   onPermissionsGet,
   onTogglePermissionPost,
   onGroupPut,
-  onUserPut
+  onUserPut,
+  onUserDelete
 } from "../config/adminServerCall";
 import {
   CREATE_GROUP_FULFILLED,
@@ -34,6 +35,9 @@ import {
   DELETE_USER_GROUPS_FULFILLED,
   DELETE_USER_GROUPS_PENDING,
   DELETE_USER_GROUPS_REJECTED,
+  DELETE_USER_FULFILLED,
+  DELETE_USER_PENDING,
+  DELETE_USER_REJECTED,
   TOGGLE_GROUP_EDIT_MODAL,
   TOGGLE_USER_EDIT_MODAL,
   EDIT_USER_FULFILLED,
@@ -257,6 +261,29 @@ epics.push((action$, { getState }) =>
         toast.error("Error Deleting group");
         console.log(ajaxError);
         return Observable.of({ type: DELETE_USER_GROUPS_REJECTED });
+      })
+  )
+);
+
+export const onUserRemove = payload => ({
+  type: DELETE_USER_PENDING,
+  payload
+});
+
+epics.push((action$, { getState }) =>
+  action$.ofType(DELETE_USER_PENDING).mergeMap(({ payload }) =>
+    onUserDelete({
+      id: payload.id,
+      access_token: getState().auth.cookies.token_data.access_token
+    })
+      .concatMap(() => {
+        toast.success("User Deleted Successfully!");
+        return [{ type: FETCH_USERS_PENDING }, { type: DELETE_USER_FULFILLED }];
+      })
+      .catch(ajaxError => {
+        toast.error("Error Deleting User");
+        console.log(ajaxError);
+        return Observable.of({ type: DELETE_USER_REJECTED });
       })
   )
 );

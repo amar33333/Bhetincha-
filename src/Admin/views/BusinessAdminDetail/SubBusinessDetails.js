@@ -251,7 +251,7 @@ class SubBusinessDetail extends Component {
     return (
       <div className="animated fadeIn">
         <Card>
-          <CardHeader onClick={this.props.toggleCollapse}>
+          <CardHeader>
             <div
               style={{
                 display: "flex",
@@ -261,158 +261,132 @@ class SubBusinessDetail extends Component {
               }}
             >
               <strong>Business Detail</strong>
-              <Button
-                color="primary"
-                onClick={this.toggleCollapse}
-                style={{
-                  marginBottom: "0rem",
-                  backgroundColor: "rgb(230, 228, 241)",
-                  color: "black",
-                  fontSize: "1.3rem",
-                  border: "1px solid #2e219036",
-                  borderRadius: "50%",
-                  height: "30px",
-                  width: "30px",
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center"
-                }}
-              >
-                {!this.props.collapsed ? (
-                  <i className="fa fa-angle-up" />
-                ) : (
-                  <i className="fa fa-angle-down" />
-                )}
-              </Button>
             </div>
           </CardHeader>
-          <Collapse isOpen={!this.props.collapsed}>
-            <CardBody>
-              <Row>
-                <Col xs="12" md="6">
-                  <FormGroup>
-                    <Label for="bname">Business Name</Label>
-                    <Input
-                      autoFocus
-                      required
-                      type="text"
-                      value={this.state.business_name}
-                      onChange={this.onChange.bind(this, "business_name")}
-                      onKeyDown={this._handleKeyPress}
-                    />
-                  </FormGroup>
-                </Col>
-                <Col xs="12" md="6">
-                  <FormGroup>
-                    <Label for="bphone">Business Phone</Label>
-                    <Input
-                      type="text"
-                      value={this.state.business_phone}
-                      onChange={this.onChange.bind(this, "business_phone")}
-                      onKeyDown={this._handleKeyPress}
-                    />
-                  </FormGroup>
-                </Col>
-                <Col xs="12" md="6">
-                  <FormGroup>
-                    <Label for="business_email">Business Email</Label>
-                    <Input
-                      //required
-                      type="email"
-                      value={this.state.business_email}
-                      onKeyDown={this._handleKeyPress}
-                      onChange={this.onChange.bind(this, "business_email")}
-                    />
-                  </FormGroup>
-                </Col>
-              </Row>
+          <CardBody>
+            <Row>
+              <Col xs="12" md="6">
+                <FormGroup>
+                  <Label for="bname">Business Name</Label>
+                  <Input
+                    autoFocus
+                    required
+                    type="text"
+                    value={this.state.business_name}
+                    onChange={this.onChange.bind(this, "business_name")}
+                    onKeyDown={this._handleKeyPress}
+                  />
+                </FormGroup>
+              </Col>
+              <Col xs="12" md="6">
+                <FormGroup>
+                  <Label for="bphone">Business Phone</Label>
+                  <Input
+                    type="text"
+                    value={this.state.business_phone}
+                    onChange={this.onChange.bind(this, "business_phone")}
+                    onKeyDown={this._handleKeyPress}
+                  />
+                </FormGroup>
+              </Col>
+              <Col xs="12" md="6">
+                <FormGroup>
+                  <Label for="business_email">Business Email</Label>
+                  <Input
+                    //required
+                    type="email"
+                    value={this.state.business_email}
+                    onKeyDown={this._handleKeyPress}
+                    onChange={this.onChange.bind(this, "business_email")}
+                  />
+                </FormGroup>
+              </Col>
+            </Row>
 
-              <Row>
-                <Col xs="12" md="6">
-                  <FormGroup>
-                    <Label for="group">Business Industry</Label>
-                    <Select
-                      name="Industry"
-                      placeholder="Select an Industry"
-                      noResultsText="No Data Found"
-                      value={valueIndustry}
-                      onChange={this.handleSelectChange.bind(this, "industry")}
-                      options={industries}
-                      tabSelectsValue={false}
-                      valueKey="id"
-                      labelKey="name"
-                    />
-                  </FormGroup>
-                </Col>
-                <Col xs="12" md="6">
-                  <FormGroup>
-                    <Label for="group">Business Category</Label>
-                    <Select
-                      name="Industry"
-                      placeholder="Select Category (Multiple if any)"
-                      noResultsText="No Data Found"
-                      value={this.state.categories}
-                      onChange={this.handleSelectChange.bind(
-                        this,
-                        "categories"
-                      )}
-                      options={categories}
-                      multi
-                      tabSelectsValue={false}
-                      //closeOnSelect={false}
-                      valueKey="id"
-                      labelKey="name"
-                    />
-                  </FormGroup>
-                </Col>
-              </Row>
-              <Row>
-                <Col xs="12" md="6">
-                  <FormGroup>
-                    <Label for="group">Business Sub Category</Label>
-                    <Select
-                      name="Industry"
-                      placeholder="Select Sub Category (Multiple if any)"
-                      noResultsText="No Data Found"
-                      multi
-                      tabSelectsValue={false}
-                      //removeSelected={false}
-                      //closeOnSelect={false}
-                      value={this.state.sub_categories}
-                      onChange={this.handleSelectChange.bind(
-                        this,
-                        "sub_categories"
-                      )}
-                      options={subCategories}
-                      valueKey="id"
-                      labelKey="name"
-                    />
-                  </FormGroup>
-                </Col>
-                <Col xs="12" md="6">
-                  <FormGroup>
-                    <Label for="group">Payment Methods</Label>
-                    <Select
-                      name="Payment Method"
-                      multi
-                      tabSelectsValue={false}
-                      //closeOnSelect={false}
-                      placeholder="Select Payment Methods (Multiple if any)"
-                      noResultsText="No Data Found"
-                      value={valuePaymentMethod}
-                      onChange={this.handleSelectChange.bind(
-                        this,
-                        "paymentMethod"
-                      )}
-                      options={paymentMethods}
-                      valueKey="id"
-                      labelKey="name"
-                    />
-                  </FormGroup>
-                </Col>
-              </Row>
-            </CardBody>
-          </Collapse>
+            <Row>
+              <Col xs="12" md="6">
+                <FormGroup>
+                  <Label for="group">Business Industry</Label>
+                  <Select
+                    required
+                    name="Industry"
+                    placeholder="Select an Industry"
+                    noResultsText="No Data Found"
+                    value={valueIndustry}
+                    onChange={this.handleSelectChange.bind(this, "industry")}
+                    options={industries}
+                    tabSelectsValue={false}
+                    valueKey="id"
+                    labelKey="name"
+                  />
+                </FormGroup>
+              </Col>
+              <Col xs="12" md="6">
+                <FormGroup>
+                  <Label for="group">Business Category</Label>
+                  <Select
+                    required
+                    name="Category"
+                    placeholder="Select Category (Multiple if any)"
+                    noResultsText="No Data Found"
+                    value={this.state.categories}
+                    onChange={this.handleSelectChange.bind(this, "categories")}
+                    options={categories}
+                    multi
+                    tabSelectsValue={false}
+                    //closeOnSelect={false}
+                    valueKey="id"
+                    labelKey="name"
+                  />
+                </FormGroup>
+              </Col>
+            </Row>
+            <Row>
+              <Col xs="12" md="6">
+                <FormGroup>
+                  <Label for="group">Business Sub Category</Label>
+                  <Select
+                    name="Industry"
+                    placeholder="Select Sub Category (Multiple if any)"
+                    noResultsText="No Data Found"
+                    multi
+                    tabSelectsValue={false}
+                    //removeSelected={false}
+                    //closeOnSelect={false}
+                    value={this.state.sub_categories}
+                    onChange={this.handleSelectChange.bind(
+                      this,
+                      "sub_categories"
+                    )}
+                    options={subCategories}
+                    valueKey="id"
+                    labelKey="name"
+                  />
+                </FormGroup>
+              </Col>
+              <Col xs="12" md="6">
+                <FormGroup>
+                  <Label for="group">Payment Methods</Label>
+                  <Select
+                    name="Payment Method"
+                    multi
+                    tabSelectsValue={false}
+                    //closeOnSelect={false}
+                    placeholder="Select Payment Methods (Multiple if any)"
+                    noResultsText="No Data Found"
+                    value={valuePaymentMethod}
+                    onChange={this.handleSelectChange.bind(
+                      this,
+                      "paymentMethod"
+                    )}
+                    options={paymentMethods}
+                    valueKey="id"
+                    labelKey="name"
+                  />
+                </FormGroup>
+              </Col>
+            </Row>
+          </CardBody>
         </Card>
       </div>
     );

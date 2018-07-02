@@ -52,9 +52,6 @@ class SubBusinessPrimaryAddress extends Component {
     this.areas = [];
 
     this.propsData = {};
-    this.access_token = this.props.cookies
-      ? this.props.cookies.token_data.access_token
-      : null;
   }
   onChangeLatLng = ({ latLng }) => {
     console.log("latLang: ", this.state.latitude, this.state.longitude);
@@ -172,7 +169,6 @@ class SubBusinessPrimaryAddress extends Component {
       if (value)
         this.props.onAddressTreeList({
           id: value.id,
-          access_token: this.access_token,
           ADDRESS_KEY: key
         });
       this.districts = [];
@@ -187,7 +183,6 @@ class SubBusinessPrimaryAddress extends Component {
       if (value)
         this.props.onAddressTreeList({
           id: value.id,
-          access_token: this.access_token,
           ADDRESS_KEY: key
         });
       this.cities = [];
@@ -200,7 +195,6 @@ class SubBusinessPrimaryAddress extends Component {
       if (value)
         this.props.onAddressTreeList({
           id: value.id,
-          access_token: this.access_token,
           ADDRESS_KEY: key
         });
       this.areas = [];
@@ -211,7 +205,6 @@ class SubBusinessPrimaryAddress extends Component {
       if (value)
         this.props.onAddressTreeList({
           id: value.id,
-          access_token: this.access_token,
           ADDRESS_KEY: key
         });
     }
@@ -445,7 +438,7 @@ class SubBusinessPrimaryAddress extends Component {
     return (
       <div className="animated fadeIn">
         <Card>
-          <CardHeader onClick={this.props.toggleCollapse}>
+          <CardHeader>
             <div
               style={{
                 display: "flex",
@@ -455,309 +448,261 @@ class SubBusinessPrimaryAddress extends Component {
               }}
             >
               <strong>Business Primary Address</strong>
-              <Button
-                color="primary"
-                onClick={this.props.toggleCollapse}
-                style={{
-                  marginBottom: "0rem",
-                  backgroundColor: "rgb(230, 228, 241)",
-                  color: "black",
-                  fontSize: "1.3rem",
-                  border: "1px solid #2e219036",
-                  borderRadius: "50%",
-                  height: "30px",
-                  width: "30px",
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center"
-                }}
-              >
-                {!this.props.collapsed ? (
-                  <i className="fa fa-angle-up" />
-                ) : (
-                  <i className="fa fa-angle-down" />
-                )}
-              </Button>
             </div>
           </CardHeader>
-          <Collapse isOpen={!this.props.collapsed}>
-            <CardBody>
-              <Row>
-                <Col xs="12" md="4">
-                  <FormGroup>
-                    <Label for="group">Country</Label>
-                    <Select
-                      name="Country"
-                      placeholder="Select a Country"
-                      noResultsText="No Data Found"
-                      value={valuePrimaryCountry}
-                      onChange={this.handleSelectChange.bind(this, "country")}
-                      options={this.countries}
-                      valueKey="id"
-                      labelKey="name"
-                    />
-                  </FormGroup>
-                </Col>
-                <Col xs="12" md="4">
-                  <FormGroup>
-                    <Label for="group">State</Label>
-                    <Select
-                      name="State"
-                      placeholder="Select a State"
-                      noResultsText="No Data Found"
-                      value={valuePrimaryState}
-                      onChange={this.handleSelectChange.bind(this, "state")}
-                      options={this.states}
-                      valueKey="id"
-                      labelKey="name"
-                    />
-                  </FormGroup>
-                </Col>
-                <Col xs="12" md="4">
-                  <FormGroup>
-                    <Label for="group">District</Label>
-                    <Select
-                      name="District"
-                      placeholder="Select a District"
-                      noResultsText="No Data Found"
-                      value={valuePrimaryDistrict}
-                      onChange={this.handleSelectChange.bind(this, "district")}
-                      options={this.districts}
-                      valueKey="id"
-                      labelKey="name"
-                    />
-                  </FormGroup>
-                </Col>
-              </Row>
-              <Row>
-                <Col xs="12" md="4">
-                  <FormGroup>
-                    <Label for="group">City</Label>
-                    <Select
-                      name="City"
-                      placeholder="Select a City"
-                      noResultsText="No Data Found"
-                      value={valuePrimaryCity}
-                      onChange={this.handleSelectChange.bind(this, "city")}
-                      options={this.cities}
-                      valueKey="id"
-                      labelKey="name"
-                    />
-                  </FormGroup>
-                </Col>
-                <Col xs="12" md="4">
-                  <FormGroup>
-                    <Label for="group">Area</Label>
-                    <Select
-                      name="Area"
-                      placeholder="Select an Area"
-                      noResultsText="No Data Found"
-                      value={valuePrimaryArea}
-                      onChange={this.handleAreaSelectChange.bind(this)}
-                      options={this.areas}
-                      valueKey="id"
-                      labelKey="name"
-                    />
-                  </FormGroup>
-                </Col>
-                <Col xs="12" md="4">
-                  <FormGroup>
-                    <Label for="bname">Landmark</Label>
-                    <Input
-                      type="text"
-                      value={this.state.landmark}
-                      onChange={this.onChange.bind(this, "landmark")}
-                      onKeyDown={this._handleKeyPress}
-                    />
-                  </FormGroup>
-                </Col>
-              </Row>
-              <Row>
-                <Col xs="12" md="12">
-                  <Card className="p-3">
-                    <strong className="mb-2">
-                      Select your Business Location from the map displayed below
-                    </strong>
-                    <MapComponent
-                      ref={ref => (this.mapComponentEl = ref)}
-                      position={{
-                        lat: this.state.latitude,
-                        lng: this.state.longitude
-                      }}
-                      onClick={this.onChangeLatLng}
-                      onDragEnd={this.onChangeLatLng}
-                    />
-                  </Card>
-                </Col>
-              </Row>
-              <Row>
-                <Col xs="12" md="4">
-                  <FormGroup>
-                    <Label for="Email">Email</Label>
-                    <Input
-                      type="email"
-                      value={this.state.email}
-                      onKeyDown={this._handleKeyPress}
-                      onChange={this.onChange.bind(this, "email")}
-                    />
-                  </FormGroup>
-                </Col>
-                <Col xs="12" md="4">
-                  <FormGroup>
-                    <Label for="bname">Landline Number</Label>
-                    <Input
-                      type="text"
-                      value={this.state.landlineNumber}
-                      onChange={this.onChange.bind(this, "landlineNumber")}
-                      onKeyDown={this._handleKeyPress}
-                    />
-                  </FormGroup>
-                </Col>
-                <Col xs="12" md="4">
-                  <FormGroup>
-                    <Label for="bname">Other LandLine Number</Label>
-                    <Input
-                      type="text"
-                      value={this.state.otherLandlineNumber}
-                      onChange={event => {
-                        this.setState({
-                          otherLandlineNumber: [event.target.value]
-                        });
-                      }}
-                      onKeyDown={this._handleKeyPress}
-                    />
-                  </FormGroup>
-                </Col>
-              </Row>
-              <Row>
-                <Col xs="12" md="6">
-                  <FormGroup>
-                    <Label for="bname">Address Line 1</Label>
-                    <Input
-                      type="text"
-                      value={this.state.addressLine1}
-                      onChange={this.onChange.bind(this, "addressLine1")}
-                      onKeyDown={this._handleKeyPress}
-                    />
-                  </FormGroup>
-                </Col>
-                <Col xs="12" md="6">
-                  <FormGroup>
-                    <Label for="bname">Address Line 2</Label>
-                    <Input
-                      type="text"
-                      value={this.state.addressLine2}
-                      onChange={this.onChange.bind(this, "addressLine2")}
-                      onKeyDown={this._handleKeyPress}
-                    />
-                  </FormGroup>
-                </Col>
-              </Row>
-              <Row>
-                <Col xs="12" md="4">
-                  <FormGroup>
-                    <Label for="bname">House No.</Label>
-                    <Input
-                      type="text"
-                      value={this.state.house_no}
-                      onChange={this.onChange.bind(this, "house_no")}
-                      onKeyDown={this._handleKeyPress}
-                    />
-                  </FormGroup>
-                </Col>
-                <Col xs="12" md="4">
-                  <FormGroup>
-                    <Label for="bname">Post Box No.</Label>
-                    <Input
-                      type="text"
-                      value={this.state.po_box}
-                      onChange={this.onChange.bind(this, "po_box")}
-                      onKeyDown={this._handleKeyPress}
-                    />
-                  </FormGroup>
-                </Col>
-                <Col xs="12" md="4">
-                  <FormGroup>
-                    <Label for="bname">Toll Free No.</Label>
-                    <Input
-                      type="text"
-                      value={this.state.tollFreeNumber}
-                      onChange={this.onChange.bind(this, "tollFreeNumber")}
-                      onKeyDown={this._handleKeyPress}
-                    />
-                  </FormGroup>
-                </Col>
-              </Row>
-              <div className="animated fadeIn">
-                <Card>
-                  <CardHeader onClick={this.toggleCollapse}>
-                    <div
-                      style={{
-                        display: "flex",
-                        flexDirection: "row",
-                        justifyContent: "space-between",
-                        alignItems: "center"
-                      }}
-                    >
-                      <strong>Contact Person Details</strong>
-                      <Button
-                        color="primary"
-                        onClick={this.toggleCollapse}
-                        style={{
-                          marginBottom: "0rem",
-                          backgroundColor: "rgb(230, 228, 241)",
-                          color: "black",
-                          fontSize: "1.3rem",
-                          border: "1px solid #2e219036",
-                          borderRadius: "50%",
-                          height: "30px",
-                          width: "30px",
-                          display: "flex",
-                          justifyContent: "center",
-                          alignItems: "center"
-                        }}
-                      >
-                        {!this.state.collapsed ? (
-                          <i className="fa fa-angle-up" />
-                        ) : (
-                          <i className="fa fa-angle-down" />
-                        )}
-                      </Button>
-                    </div>
-                  </CardHeader>
-                  <Collapse isOpen={!this.state.collapsed}>
-                    <CardBody>
-                      {this.state.contactPerson.map((contact, index) => (
-                        <SubBusinessContact
-                          contact={contact}
-                          key={index}
-                          id={index}
-                          onContactSave={this.onContactSave.bind(this, index)}
-                          onContactDelete={this.onContactDelete(index)}
-                        />
-                      ))}
-                      <Row style={{ marginTop: 15 }}>
-                        <Col xs="6" md="6">
-                          <Button
-                            color="primary"
-                            onClick={this.onContactPersonAdd}
-                          >
-                            <i className="fa fa-plus" /> Add New Contact
-                          </Button>
-                        </Col>
-                      </Row>
-                    </CardBody>
-                  </Collapse>
+          <CardBody>
+            <Row>
+              <Col xs="12" md="4">
+                <FormGroup>
+                  <Label for="Country">Country</Label>
+                  <Select
+                    required={this.props.requiredParams.country}
+                    name="Country"
+                    placeholder="Select a Country"
+                    noResultsText="No Data Found"
+                    value={valuePrimaryCountry}
+                    onChange={this.handleSelectChange.bind(this, "country")}
+                    options={this.countries}
+                    valueKey="id"
+                    labelKey="name"
+                  />
+                </FormGroup>
+              </Col>
+              <Col xs="12" md="4">
+                <FormGroup>
+                  <Label for="State">State</Label>
+                  <Select
+                    required={this.props.requiredParams.state}
+                    name="State"
+                    placeholder="Select a State"
+                    noResultsText="No Data Found"
+                    value={valuePrimaryState}
+                    onChange={this.handleSelectChange.bind(this, "state")}
+                    options={this.states}
+                    valueKey="id"
+                    labelKey="name"
+                  />
+                </FormGroup>
+              </Col>
+              <Col xs="12" md="4">
+                <FormGroup>
+                  <Label for="District">District</Label>
+                  <Select
+                    required={this.props.requiredParams.district}
+                    name="District"
+                    placeholder="Select a District"
+                    noResultsText="No Data Found"
+                    value={valuePrimaryDistrict}
+                    onChange={this.handleSelectChange.bind(this, "district")}
+                    options={this.districts}
+                    valueKey="id"
+                    labelKey="name"
+                  />
+                </FormGroup>
+              </Col>
+            </Row>
+            <Row>
+              <Col xs="12" md="4">
+                <FormGroup>
+                  <Label for="City">City</Label>
+                  <Select
+                    required={this.props.requiredParams.city}
+                    name="City"
+                    placeholder="Select a City"
+                    noResultsText="No Data Found"
+                    value={valuePrimaryCity}
+                    onChange={this.handleSelectChange.bind(this, "city")}
+                    options={this.cities}
+                    valueKey="id"
+                    labelKey="name"
+                  />
+                </FormGroup>
+              </Col>
+              <Col xs="12" md="4">
+                <FormGroup>
+                  <Label for="Area">Area</Label>
+                  <Select
+                    required={this.props.requiredParams.area}
+                    name="Area"
+                    placeholder="Select an Area"
+                    noResultsText="No Data Found"
+                    value={valuePrimaryArea}
+                    onChange={this.handleAreaSelectChange.bind(this)}
+                    options={this.areas}
+                    valueKey="id"
+                    labelKey="name"
+                  />
+                </FormGroup>
+              </Col>
+              <Col xs="12" md="4">
+                <FormGroup>
+                  <Label for="bname">Landmark</Label>
+                  <Input
+                    type="text"
+                    value={this.state.landmark}
+                    onChange={this.onChange.bind(this, "landmark")}
+                    onKeyDown={this._handleKeyPress}
+                  />
+                </FormGroup>
+              </Col>
+            </Row>
+            <Row>
+              <Col xs="12" md="12">
+                <Card className="p-3">
+                  <strong className="mb-2">
+                    Select your Business Location from the map displayed below
+                  </strong>
+                  <MapComponent
+                    ref={ref => (this.mapComponentEl = ref)}
+                    position={{
+                      lat: this.state.latitude,
+                      lng: this.state.longitude
+                    }}
+                    onClick={this.onChangeLatLng}
+                    onDragEnd={this.onChangeLatLng}
+                  />
                 </Card>
-              </div>
+              </Col>
+            </Row>
+            <Row>
+              <Col xs="12" md="4">
+                <FormGroup>
+                  <Label for="Email">Email</Label>
+                  <Input
+                    type="email"
+                    value={this.state.email}
+                    onKeyDown={this._handleKeyPress}
+                    onChange={this.onChange.bind(this, "email")}
+                  />
+                </FormGroup>
+              </Col>
+              <Col xs="12" md="4">
+                <FormGroup>
+                  <Label for="bname">Landline Number</Label>
+                  <Input
+                    type="text"
+                    value={this.state.landlineNumber}
+                    onChange={this.onChange.bind(this, "landlineNumber")}
+                    onKeyDown={this._handleKeyPress}
+                  />
+                </FormGroup>
+              </Col>
+              <Col xs="12" md="4">
+                <FormGroup>
+                  <Label for="bname">Other LandLine Number</Label>
+                  <Input
+                    type="text"
+                    value={this.state.otherLandlineNumber}
+                    onChange={event => {
+                      this.setState({
+                        otherLandlineNumber: [event.target.value]
+                      });
+                    }}
+                    onKeyDown={this._handleKeyPress}
+                  />
+                </FormGroup>
+              </Col>
+            </Row>
+            <Row>
+              <Col xs="12" md="6">
+                <FormGroup>
+                  <Label for="bname">Address Line 1</Label>
+                  <Input
+                    type="text"
+                    value={this.state.addressLine1}
+                    onChange={this.onChange.bind(this, "addressLine1")}
+                    onKeyDown={this._handleKeyPress}
+                  />
+                </FormGroup>
+              </Col>
+              <Col xs="12" md="6">
+                <FormGroup>
+                  <Label for="bname">Address Line 2</Label>
+                  <Input
+                    type="text"
+                    value={this.state.addressLine2}
+                    onChange={this.onChange.bind(this, "addressLine2")}
+                    onKeyDown={this._handleKeyPress}
+                  />
+                </FormGroup>
+              </Col>
+            </Row>
+            <Row>
+              <Col xs="12" md="4">
+                <FormGroup>
+                  <Label for="bname">House No.</Label>
+                  <Input
+                    type="text"
+                    value={this.state.house_no}
+                    onChange={this.onChange.bind(this, "house_no")}
+                    onKeyDown={this._handleKeyPress}
+                  />
+                </FormGroup>
+              </Col>
+              <Col xs="12" md="4">
+                <FormGroup>
+                  <Label for="bname">Post Box No.</Label>
+                  <Input
+                    type="text"
+                    value={this.state.po_box}
+                    onChange={this.onChange.bind(this, "po_box")}
+                    onKeyDown={this._handleKeyPress}
+                  />
+                </FormGroup>
+              </Col>
+              <Col xs="12" md="4">
+                <FormGroup>
+                  <Label for="bname">Toll Free No.</Label>
+                  <Input
+                    type="text"
+                    value={this.state.tollFreeNumber}
+                    onChange={this.onChange.bind(this, "tollFreeNumber")}
+                    onKeyDown={this._handleKeyPress}
+                  />
+                </FormGroup>
+              </Col>
+            </Row>
+            <div className="animated fadeIn">
+              <Card>
+                <CardHeader onClick={this.toggleCollapse}>
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "row",
+                      justifyContent: "space-between",
+                      alignItems: "center"
+                    }}
+                  >
+                    <strong>Contact Person Details</strong>
+                  </div>
+                </CardHeader>
+                <CardBody>
+                  {this.state.contactPerson.map((contact, index) => (
+                    <SubBusinessContact
+                      contact={contact}
+                      key={index}
+                      id={index}
+                      onContactSave={this.onContactSave.bind(this, index)}
+                      onContactDelete={this.onContactDelete(index)}
+                    />
+                  ))}
+                  <Row style={{ marginTop: 15 }}>
+                    <Col xs="6" md="6">
+                      <Button color="primary" onClick={this.onContactPersonAdd}>
+                        <i className="fa fa-plus" /> Add New Contact
+                      </Button>
+                    </Col>
+                  </Row>
+                </CardBody>
+              </Card>
+            </div>
 
-              {/* <SubBusinessContactWrapper
+            {/* <SubBusinessContactWrapper
                 ref={ref => (this.subBusinessContactWrapperRef = ref)}
                 contactPerson={this.getContacts()}
                 edit
               /> */}
-            </CardBody>
-          </Collapse>
+          </CardBody>
         </Card>
       </div>
     );

@@ -19,6 +19,7 @@ import filterUsers from "./filterUsersReducer";
 import tele_calling from "./teleCallingReducer";
 import location from "./locationReducer";
 import ecommerce from "./ecommerceReducer";
+import settings from "./settingsReducer";
 
 const createReducer = combineReducers({
   industries: IndustryReducer,
@@ -28,6 +29,7 @@ const createReducer = combineReducers({
   general_setup: generalSetupReducer,
   user_reducer: userReducer,
   business_reducer: BusinessReducer,
+  settings,
   filterBusiness,
   filterState,
   filterDistrict,

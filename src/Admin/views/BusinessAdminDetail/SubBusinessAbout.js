@@ -127,7 +127,7 @@ class SubBusinessAbout extends Component {
     return (
       <div className="animated fadeIn">
         <Card>
-          <CardHeader onClick={this.props.toggleCollapse}>
+          <CardHeader>
             <div
               style={{
                 display: "flex",
@@ -137,98 +137,70 @@ class SubBusinessAbout extends Component {
               }}
             >
               <strong>About Us</strong>
-              <Button
-                color="primary"
-                onClick={this.props.toggleCollapse}
-                style={{
-                  marginBottom: "0rem",
-                  backgroundColor: "rgb(230, 228, 241)",
-                  color: "black",
-                  fontSize: "1.3rem",
-                  border: "1px solid #2e219036",
-                  borderRadius: "50%",
-                  height: "30px",
-                  width: "30px",
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center"
-                }}
-              >
-                {!this.props.collapsed ? (
-                  <i className="fa fa-angle-up" />
-                ) : (
-                  <i className="fa fa-angle-down" />
-                )}
-              </Button>
             </div>
           </CardHeader>
-          <Collapse isOpen={!this.props.collapsed}>
-            <CardBody>
-              <Row>
-                <Col xs="12" md="12">
-                  <FormGroup>
-                    <Label for="About_Tagline">Tagline</Label>
-                    <Input
-                      type="text"
-                      value={this.state.tagline}
-                      onKeyDown={this._handleKeyPress}
-                      onChange={this.onChange.bind(this, "tagline")}
-                    />
-                  </FormGroup>
-                </Col>
-              </Row>
-              <Row>
-                <Col xs="12" md="12">
-                  <FormGroup>
-                    <Label for="aboutUs">About Us</Label>
-                    <AboutUsEditor
-                      readOnly={this.props.loading}
-                      value={this.state.aboutUs}
-                      onChange={this.handleAboutChange}
-                    />
-                  </FormGroup>
-                </Col>
-              </Row>
-              <Row>
-                <Col xs="6" md="6">
-                  <FormGroup>
-                    <Label for="year">Established Year</Label>
+          <CardBody>
+            <Row>
+              <Col xs="12" md="12">
+                <FormGroup>
+                  <Label for="About_Tagline">Tagline</Label>
+                  <Input
+                    type="text"
+                    value={this.state.tagline}
+                    onKeyDown={this._handleKeyPress}
+                    onChange={this.onChange.bind(this, "tagline")}
+                  />
+                </FormGroup>
+              </Col>
+            </Row>
+            <Row>
+              <Col xs="12" md="12">
+                <FormGroup>
+                  <Label for="aboutUs">About Us</Label>
+                  <AboutUsEditor
+                    readOnly={this.props.loading}
+                    value={this.state.aboutUs}
+                    onChange={this.handleAboutChange}
+                  />
+                </FormGroup>
+              </Col>
+            </Row>
+            <Row>
+              <Col xs="6" md="6">
+                <FormGroup>
+                  <Label for="year">Established Year</Label>
 
-                    <Datetime
-                      timeFormat={false}
-                      isValidDate={validEstablishedYear}
-                      dateFormat="YYYY"
-                      value={this.state.establishedYear}
-                      defaultValue={moment.utc().format("YYYY")}
-                      onChange={this.onChangeEstablishedYear}
-                      viewMode={"years"}
-                      utc={true}
-                    />
-                  </FormGroup>
-                </Col>
-                <Col xs="6" md="6">
-                  <FormGroup>
-                    <Label for="company_type">Company Type</Label>
-                    <Select
-                      name="Company Type"
-                      placeholder="Select Your Company Type"
-                      noResultsText="No Data Found"
-                      value={
-                        this.state.companyType ? this.state.companyType.id : ""
-                      }
-                      onChange={this.handleSelectChange.bind(
-                        this,
-                        "companyType"
-                      )}
-                      options={companyTypes}
-                      valueKey="id"
-                      labelKey="name"
-                    />
-                  </FormGroup>
-                </Col>
-              </Row>
-            </CardBody>
-          </Collapse>
+                  <Datetime
+                    timeFormat={false}
+                    isValidDate={validEstablishedYear}
+                    dateFormat="YYYY"
+                    value={this.state.establishedYear}
+                    defaultValue={moment.utc().format("YYYY")}
+                    onChange={this.onChangeEstablishedYear}
+                    viewMode={"years"}
+                    utc={true}
+                  />
+                </FormGroup>
+              </Col>
+              <Col xs="6" md="6">
+                <FormGroup>
+                  <Label for="company_type">Company Type</Label>
+                  <Select
+                    name="Company Type"
+                    placeholder="Select Your Company Type"
+                    noResultsText="No Data Found"
+                    value={
+                      this.state.companyType ? this.state.companyType.id : ""
+                    }
+                    onChange={this.handleSelectChange.bind(this, "companyType")}
+                    options={companyTypes}
+                    valueKey="id"
+                    labelKey="name"
+                  />
+                </FormGroup>
+              </Col>
+            </Row>
+          </CardBody>
         </Card>
       </div>
     );

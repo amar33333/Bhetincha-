@@ -33,7 +33,6 @@ export const onSearch = ({ query }) =>
 export const onSearchResultsGet = ({ query, frm, size }) => {
   const currentDateTime = new Date();
 
-  console.log("blah blah: ", query, frm, size);
   return ajax({
     method: "POST",
     url: `${SEARCH_URL}`,

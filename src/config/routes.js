@@ -78,13 +78,13 @@ class MainRoute extends Component {
             component={AsyncAdmin}
             permission="CAN_ACCESS_ADMIN_PANEL"
           />
-          <Route
+          <CustomRoute
             path={`/:${ROUTE_PARAMS_BUSINESS_NAME}/dashboard`}
             name="Business Dashboard"
             component={AsyncBusiness}
             permission="CAN_ACCESS_BUSINESS_PANEL"
           />
-          <Route
+          <CustomRoute
             path={`/:${ROUTE_PARAMS_BUSINESS_NAME}/dashboard/:${ROUTE_PARAMS_BUSINESS_ROUTE}`}
             name="Business Dashboard"
             component={AsyncBusiness}

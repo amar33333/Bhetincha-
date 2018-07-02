@@ -45,9 +45,9 @@ class MainNavbar extends Component {
                   //query: keyword
                   //search: `?query=${keyword}&frm=0&size=5`
                   search: `?${querystring.stringify({
-                    query: keyword,
-                    frm: 0,
-                    size: 5
+                    query: keyword
+                    //frm: 0,
+                    //size: 5
                   })}`
                   // state: { detail: response.data }
                 });
