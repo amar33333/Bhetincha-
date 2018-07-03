@@ -55,7 +55,7 @@ class States extends Component {
       { Header: "State", accessor: "name", id: "state" },
       {
         Header: "Country",
-        accessor: "country",
+        accessor: "country.name",
         sortable: false,
         Filter: () => (
           <Select

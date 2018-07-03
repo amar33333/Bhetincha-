@@ -68,7 +68,7 @@ class Areas extends Component {
       { Header: "Area", accessor: "name", id: "area" },
       {
         Header: "City",
-        accessor: "city",
+        accessor: "city.name",
         sortable: false,
         Filter: () => (
           <Select
@@ -101,7 +101,7 @@ class Areas extends Component {
       },
       {
         Header: "District",
-        accessor: "district",
+        accessor: "district.name",
         sortable: false,
         Filter: () => (
           <Select
@@ -138,7 +138,7 @@ class Areas extends Component {
       },
       {
         Header: "State",
-        accessor: "state",
+        accessor: "state.name",
         sortable: false,
         Filter: () => (
           <Select
@@ -171,7 +171,7 @@ class Areas extends Component {
       },
       {
         Header: "Country",
-        accessor: "country",
+        accessor: "country.name",
         sortable: false,
         Filter: () => (
           <Select

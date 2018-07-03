@@ -63,7 +63,7 @@ class Cities extends Component {
       { Header: "City", accessor: "name", id: "city" },
       {
         Header: "District",
-        accessor: "district",
+        accessor: "district.name",
         sortable: false,
         Filter: () => (
           <Select
@@ -100,7 +100,7 @@ class Cities extends Component {
       },
       {
         Header: "State",
-        accessor: "state",
+        accessor: "state.name",
         sortable: false,
         Filter: () => (
           <Select
@@ -133,7 +133,7 @@ class Cities extends Component {
       },
       {
         Header: "Country",
-        accessor: "country",
+        accessor: "country.name",
         sortable: false,
         Filter: () => (
           <Select

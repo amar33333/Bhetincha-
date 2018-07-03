@@ -69,7 +69,7 @@ class Districts extends Component {
       { Header: "Code", accessor: "districtCode", id: "code", sortable: false },
       {
         Header: "State",
-        accessor: "state",
+        accessor: "state.name",
         sortable: false,
         Filter: () => (
           <Select
@@ -102,7 +102,7 @@ class Districts extends Component {
       },
       {
         Header: "Country",
-        accessor: "country",
+        accessor: "country.name",
         sortable: false,
         Filter: () => (
           <Select
