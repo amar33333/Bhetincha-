@@ -22,7 +22,9 @@ import {
   onAreaEachDeleteAjax,
   onCountryPut,
   onStatePut,
-  onDistrictPut
+  onDistrictPut,
+  onCityPut,
+  onAreaPut
 } from "../config/adminServerCall";
 
 import {
@@ -87,6 +89,9 @@ import {
   // FETCH_CITY_AUTOCOMPLETE_FULFILLED,
   // FETCH_CITY_AUTOCOMPLETE_PENDING,
   // FETCH_CITY_AUTOCOMPLETE_REJECTED,
+  EDIT_CITY_FULFILLED,
+  EDIT_CITY_PENDING,
+  EDIT_CITY_REJECTED,
   FETCH_CITY_EACH_FULFILLED,
   FETCH_CITY_EACH_REJECTED,
   FETCH_CITY_EACH_PENDING,
@@ -99,6 +104,9 @@ import {
   CREATE_AREA_FULFILLED,
   CREATE_AREA_REJECTED,
   CREATE_AREA_PENDING,
+  EDIT_AREA_FULFILLED,
+  EDIT_AREA_PENDING,
+  EDIT_AREA_REJECTED,
   FETCH_AREA_FULFILLED,
   FETCH_AREA_PENDING,
   FETCH_AREA_REJECTED,
@@ -181,7 +189,7 @@ epics.push((action$, { getState }) =>
     return onCountryPut({ country, access_token })
       .concatMap(({ response }) => {
         if (response.msg === "success") {
-          toast.success("country Updated successfully!");
+          toast.success("Country Updated Successfully!");
           return [
             { type: EDIT_COUNTRY_FULFILLED },
             { type: FETCH_COUNTRY_PENDING },
@@ -503,13 +511,13 @@ export const onDistrictEdit = payload => ({
 
 epics.push((action$, { getState }) =>
   action$.ofType(EDIT_DISTRICT_PENDING).mergeMap(({ payload }) => {
-    const { country, state, district } = payload;
+    const { state, district } = payload;
     const access_token = getState().auth.cookies.token_data.access_token;
 
-    return onDistrictPut({ district, state, country, access_token })
+    return onDistrictPut({ district, state, access_token })
       .concatMap(({ response }) => {
         if (response.msg === "success") {
-          toast.success("State Updated successfully!");
+          toast.success("District Updated successfully!");
           return [
             { type: EDIT_DISTRICT_FULFILLED },
             { type: FETCH_DISTRICT_PENDING },
@@ -603,6 +611,39 @@ epics.push((action$, { getState }) =>
         toast.error(ajaxError.toString());
         return Observable.of({
           type: CREATE_CITY_REJECTED,
+          payload: ajaxError
+        });
+      });
+  })
+);
+
+export const onCityEdit = payload => ({
+  type: EDIT_CITY_PENDING,
+  payload
+});
+
+epics.push((action$, { getState }) =>
+  action$.ofType(EDIT_CITY_PENDING).mergeMap(({ payload }) => {
+    const { city, district } = payload;
+    const access_token = getState().auth.cookies.token_data.access_token;
+
+    return onCityPut({ district, city, access_token })
+      .concatMap(({ response }) => {
+        if (response.msg === "success") {
+          toast.success("City Updated successfully!");
+          return [
+            { type: EDIT_CITY_FULFILLED },
+            { type: FETCH_CITY_PENDING },
+            { type: TOGGLE_CITY_EDIT_MODAL }
+          ];
+        } else {
+          throw new Error(response.msg[Object.keys(response.msg)[0]][0]);
+        }
+      })
+      .catch(ajaxError => {
+        toast.error(ajaxError.toString());
+        return Observable.of({
+          type: EDIT_CITY_REJECTED,
           payload: ajaxError
         });
       });
@@ -739,6 +780,39 @@ epics.push((action$, { getState }) =>
         toast.error(ajaxError.toString());
         return Observable.of({
           type: CREATE_AREA_REJECTED,
+          payload: ajaxError
+        });
+      });
+  })
+);
+
+export const onAreaEdit = payload => ({
+  type: EDIT_AREA_PENDING,
+  payload
+});
+
+epics.push((action$, { getState }) =>
+  action$.ofType(EDIT_AREA_PENDING).mergeMap(({ payload }) => {
+    const { city, area } = payload;
+    const access_token = getState().auth.cookies.token_data.access_token;
+
+    return onAreaPut({ area, city, access_token })
+      .concatMap(({ response }) => {
+        if (response.msg === "success") {
+          toast.success("Area Updated successfully!");
+          return [
+            { type: EDIT_AREA_FULFILLED },
+            { type: FETCH_AREA_PENDING },
+            { type: TOGGLE_AREA_EDIT_MODAL }
+          ];
+        } else {
+          throw new Error(response.msg[Object.keys(response.msg)[0]][0]);
+        }
+      })
+      .catch(ajaxError => {
+        toast.error(ajaxError.toString());
+        return Observable.of({
+          type: EDIT_AREA_REJECTED,
           payload: ajaxError
         });
       });

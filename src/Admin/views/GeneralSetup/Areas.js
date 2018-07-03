@@ -43,8 +43,15 @@ import {
   onUnmountState,
   onUnmountDistrict,
   onUnmountCity,
-  onUnmountArea
+  onUnmountArea,
+  toggleAreaEditModal,
+  onAreaEdit,
+  onAddressTreeList,
+  onGetAddressTreeList
 } from "../../actions";
+
+import CustomModal from "../../../Common/components/CustomModal";
+import AreaEditModal from "../../../Common/components/CustomModal/ModalTemplates/AreaEditModal";
 
 class Areas extends Component {
   state = {
@@ -195,12 +202,16 @@ class Areas extends Component {
         filterable: false,
         sortable: false,
         width: 145,
-        Cell: ({ value }) => (
+        Cell: ({ value, original }) => (
           <div>
             <Button
               color="secondary"
               className="mr-l"
-              onClick={event => console.log("Edit clicked for id: ", value)}
+              onClick={() =>
+                this.props.toggleAreaEditModal({
+                  ...original
+                })
+              }
             >
               Edit
             </Button>
@@ -465,6 +476,21 @@ class Areas extends Component {
           pages={this.props.pages}
           rowCount={this.props.rowCount}
         />
+        <CustomModal
+          title="Edit Area Data"
+          isOpen={this.props.areaEditModal}
+          toggle={this.props.toggleAreaEditModal}
+          className={"modal-xs" + this.props.className}
+        >
+          <AreaEditModal
+            data={this.props.areaEditData}
+            onAreaEdit={this.props.onAreaEdit}
+            countries={this.props.countries}
+            onAddressTreeList={this.props.onAddressTreeList}
+            onGetAddressTreeList={this.props.onGetAddressTreeList}
+            access_token={this.props.access_token}
+          />
+        </CustomModal>
       </div>
     );
   }
@@ -472,6 +498,11 @@ class Areas extends Component {
 
 export default connect(
   ({
+    auth: {
+      cookies: {
+        token_data: { access_token }
+      }
+    },
     AdminContainer: {
       general_setup: {
         countries,
@@ -489,7 +520,9 @@ export default connect(
         statesFetchLoading,
         areasFetchLoading,
         areasPages,
-        areasRowCount
+        areasRowCount,
+        areaEditModal,
+        areaEditData
       },
       filterArea
     }
@@ -510,6 +543,9 @@ export default connect(
     fetchLoading: areasFetchLoading,
     pages: areasPages,
     rowCount: areasRowCount,
+    areaEditModal,
+    areaEditData,
+    access_token,
     ...filterArea
   }),
   {
@@ -532,6 +568,10 @@ export default connect(
     onUnmountState,
     onUnmountDistrict,
     onUnmountCity,
-    onUnmountArea
+    onUnmountArea,
+    onAreaEdit,
+    onAddressTreeList,
+    onGetAddressTreeList,
+    toggleAreaEditModal
   }
 )(Areas);

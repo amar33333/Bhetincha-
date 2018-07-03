@@ -855,6 +855,20 @@ export const onCityPostAjax = ({ district, city, access_token }) =>
     }
   });
 
+export const onCityPut = ({ district, city, access_token }) =>
+  ajax({
+    method: "PUT",
+    url: `${CITY_URL}${city.id}/`,
+    body: {
+      name: city.name,
+      district
+    },
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
 export const onCityGet = ({ access_token }) =>
   axios({
     method: "get",
@@ -933,6 +947,19 @@ export const onAreaPostAjax = ({ city, area, access_token }) =>
     }
   });
 
+export const onAreaPut = ({ area, city, access_token }) =>
+  ajax({
+    method: "PUT",
+    url: `${AREA_URL}${area.id}/`,
+    body: {
+      name: area.name,
+      city
+    },
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
 export const onAreaGet = ({ access_token }) =>
   axios({
     method: "get",
@@ -1034,7 +1061,7 @@ export const onUserPost = ({
       groups
     }
   });
-
+``;
 export const onUserDelete = ({ id, access_token }) =>
   ajax({
     method: "delete",

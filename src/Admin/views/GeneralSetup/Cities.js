@@ -39,8 +39,15 @@ import {
   onUnmountCountry,
   onUnmountState,
   onUnmountDistrict,
-  onUnmountCity
+  onUnmountCity,
+  toggleCityEditModal,
+  onCityEdit,
+  onAddressTreeList,
+  onGetAddressTreeList
 } from "../../actions";
+
+import CustomModal from "../../../Common/components/CustomModal";
+import CityEditModal from "../../../Common/components/CustomModal/ModalTemplates/CityEditModal";
 
 class Cities extends Component {
   state = {
@@ -157,12 +164,16 @@ class Cities extends Component {
         filterable: false,
         sortable: false,
         width: 145,
-        Cell: ({ value }) => (
+        Cell: ({ value, original }) => (
           <div>
             <Button
               color="secondary"
               className="mr-l"
-              onClick={event => console.log("Edit clicked for id: ", value)}
+              onClick={() =>
+                this.props.toggleCityEditModal({
+                  ...original
+                })
+              }
             >
               Edit
             </Button>
@@ -392,6 +403,21 @@ class Cities extends Component {
           pages={this.props.pages}
           rowCount={this.props.rowCount}
         />
+        <CustomModal
+          title="Edit City Data"
+          isOpen={this.props.cityEditModal}
+          toggle={this.props.toggleCityEditModal}
+          className={"modal-xs" + this.props.className}
+        >
+          <CityEditModal
+            data={this.props.cityEditData}
+            onCityEdit={this.props.onCityEdit}
+            countries={this.props.countries}
+            onAddressTreeList={this.props.onAddressTreeList}
+            onGetAddressTreeList={this.props.onGetAddressTreeList}
+            access_token={this.props.access_token}
+          />
+        </CustomModal>
       </div>
     );
   }
@@ -399,6 +425,11 @@ class Cities extends Component {
 
 export default connect(
   ({
+    auth: {
+      cookies: {
+        token_data: { access_token }
+      }
+    },
     AdminContainer: {
       general_setup: {
         countries,
@@ -413,7 +444,9 @@ export default connect(
         statesFetchLoading,
         citiesFetchLoading,
         citiesPages,
-        citiesRowCount
+        citiesRowCount,
+        cityEditModal,
+        cityEditData
       },
       filterCity
     }
@@ -431,10 +464,16 @@ export default connect(
     fetchLoading: citiesFetchLoading,
     pages: citiesPages,
     rowCount: citiesRowCount,
+    cityEditModal,
+    cityEditData,
+    access_token,
     ...filterCity
   }),
   {
     onCitySubmit,
+    onCityEdit,
+    onAddressTreeList,
+    onGetAddressTreeList,
     onCountryList,
     onCountryEachList,
     onStateEachList,
@@ -449,6 +488,7 @@ export default connect(
     onUnmountCountry,
     onUnmountState,
     onUnmountDistrict,
-    onUnmountCity
+    onUnmountCity,
+    toggleCityEditModal
   }
 )(Cities);

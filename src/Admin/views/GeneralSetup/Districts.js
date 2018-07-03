@@ -375,7 +375,6 @@ class Districts extends Component {
             data={this.props.districtEditData}
             onDistrictEdit={this.props.onDistrictEdit}
             countries={this.props.countries}
-            states={this.props.partialStates}
             onAddressTreeList={this.props.onAddressTreeList}
             onGetAddressTreeList={this.props.onGetAddressTreeList}
             access_token={this.props.access_token}

@@ -18,12 +18,11 @@ class StateEditModal extends Component {
   state = { state: "", country: "" };
 
   componentDidMount() {
-    this.setState({
-      state: this.props.data ? this.props.data : "",
-      country: this.props.countries.find(
-        each => each.name === this.props.data.country
-      )
-    });
+    this.props.data &&
+      this.setState({
+        state: this.props.data,
+        country: this.props.data.country
+      });
   }
 
   onChange = (key, event) => {

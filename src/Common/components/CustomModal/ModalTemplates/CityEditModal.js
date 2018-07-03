@@ -14,29 +14,32 @@ import {
 
 import Select from "react-select";
 
-class DistrictEditModal extends Component {
-  state = { state: "", country: "", district: "" };
+class CityEditModal extends Component {
+  state = { state: "", country: "", district: "", city: "" };
 
   countries = [];
   states = [];
+  districts = [];
 
   componentDidMount() {
     this.props.onGetAddressTreeList({
       countryId: this.props.data.country.id,
+      stateId: this.props.data.state.id,
       access_token: this.props.access_token
     });
 
     this.setState({
-      district: this.props.data,
       country: this.props.data.country,
-      state: this.props.data.state
+      state: this.props.data.state,
+      district: this.props.data.district,
+      city: this.props.data
     });
   }
 
   onChange = (key, event) => {
     this.setState({
-      district: {
-        ...this.state.district,
+      city: {
+        ...this.state.city,
         [key]: event.target.value.replace(/\b\w/g, l => l.toUpperCase())
       }
     });
@@ -46,7 +49,18 @@ class DistrictEditModal extends Component {
     this.setState({ [key]: value });
     if (key === "country") {
       this.setState({
-        state: ""
+        state: "",
+        district: ""
+      });
+      if (value)
+        this.props.onAddressTreeList({
+          id: value.id,
+          ADDRESS_KEY: key
+        });
+      this.districts = [];
+    } else if (key === "state") {
+      this.setState({
+        district: ""
       });
       if (value)
         this.props.onAddressTreeList({
@@ -58,16 +72,17 @@ class DistrictEditModal extends Component {
 
   onFormEdit = event => {
     event.preventDefault();
-    const { state, district } = this.state;
-    this.props.onDistrictEdit({
-      state: state.id,
-      district
+    const { city, district } = this.state;
+    this.props.onCityEdit({
+      district: district.id,
+      city
     });
   };
 
   render() {
-    console.log("disreriec prpops: ", this.props);
-    console.log("disreriec: ", this.state);
+    console.log("city edit props: ", this.props);
+    console.log("city edit state: ", this.state);
+
     try {
       this.states = this.props.countries.length
         ? this.props.countries.find(country => {
@@ -80,10 +95,26 @@ class DistrictEditModal extends Component {
       this.states = [];
     }
 
+    try {
+      if (this.props.countries) {
+        this.props.countries.map(country => {
+          if (country.states) {
+            country.states.map(state => {
+              if (state.districts && state.id === this.state.state.id) {
+                this.districts = state.districts;
+              }
+            });
+          }
+        });
+      }
+    } catch (error) {
+      this.districts = [];
+    }
+
     return (
       <Form onSubmit={this.onFormEdit}>
         <Row>
-          <Col xs="12" md="6">
+          <Col xs="12" md="4">
             <FormGroup>
               <Label for="country">Country</Label>
               <Select
@@ -102,7 +133,7 @@ class DistrictEditModal extends Component {
               />
             </FormGroup>
           </Col>
-          <Col xs="12" md="6">
+          <Col xs="12" md="4">
             <FormGroup>
               <Label for="State">State</Label>
               <Select
@@ -120,41 +151,44 @@ class DistrictEditModal extends Component {
               />
             </FormGroup>
           </Col>
+          <Col xs="12" md="4">
+            <FormGroup>
+              <Label for="District">District</Label>
+              <Select
+                autosize
+                clearable
+                required
+                disabled={this.props.loading}
+                name="District"
+                className="select-industry"
+                value={this.state.district}
+                onChange={this.handleSelectChange.bind(this, "district")}
+                options={this.districts}
+                valueKey="id"
+                labelKey="name"
+              />
+            </FormGroup>
+          </Col>
         </Row>
         <Row>
-          <Col xs="12" md="5">
+          <Col xs="10" md="10">
             <InputGroup>
               <InputGroupAddon addonType="prepend">
-                <InputGroupText>Name</InputGroupText>
+                <InputGroupText>
+                  <i className="fa fa-industry" />
+                </InputGroupText>
               </InputGroupAddon>
               <Input
                 required
-                disabled={this.props.loading}
                 type="text"
-                innerRef={ref => (this.focusableInput = ref)}
-                placeholder="Type District Name"
-                value={this.state.district ? this.state.district.name : ""}
+                disabled={this.props.loading}
+                placeholder="Type City Name"
+                value={this.state.city ? this.state.city.name : ""}
                 onChange={this.onChange.bind(this, "name")}
               />
             </InputGroup>
           </Col>
-          <Col xs="12" md="4">
-            <InputGroup>
-              <InputGroupAddon addonType="prepend">
-                <InputGroupText>Code</InputGroupText>
-              </InputGroupAddon>
-              <Input
-                required
-                type="text"
-                disabled={this.props.loading}
-                placeholder="Type District Code"
-                value={
-                  this.state.district ? this.state.district.districtCode : ""
-                }
-                onChange={this.onChange.bind(this, "districtCode")}
-              />
-            </InputGroup>
-          </Col>
+
           <Col xs="12" md="2">
             <Button color="primary">
               <span className="fa fa-check" /> SAVE
@@ -166,4 +200,4 @@ class DistrictEditModal extends Component {
   }
 }
 
-export default DistrictEditModal;
+export default CityEditModal;
