@@ -187,9 +187,16 @@ class PropertyItemAddNew extends Component {
                         <Input
                           type="checkbox"
                           checked={this.state.required}
-                          onClick={event =>
-                            this.setState({ required: event.target.checked })
-                          }
+                          onClick={event => {
+                            const extra = {};
+                            if (!event.target.checked) {
+                              extra.filterable = false;
+                            }
+                            this.setState({
+                              required: event.target.checked,
+                              ...extra
+                            });
+                          }}
                         />
                         Required
                       </Label>

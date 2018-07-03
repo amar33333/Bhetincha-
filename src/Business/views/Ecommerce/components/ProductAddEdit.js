@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import FileInputComponent from "react-file-input-previews-base64";
 import {
   Card,
   CardHeader,
@@ -39,6 +38,8 @@ class ProductAddEdit extends Component {
       price: "",
       profilePictureFile: "",
       profilePicture: "",
+      picturesFile: [],
+      pictures: [],
       discount: 0,
       photoInvalid: false,
       ...extra
@@ -211,7 +212,7 @@ class ProductAddEdit extends Component {
           categoryId: defaultValue.categoryId,
           uid: defaultValue.uid
         });
-        console.log("updates", updates);
+        // console.log("updates", updates);
       } else {
         console.log("no changes detected");
       }
@@ -402,39 +403,36 @@ class ProductAddEdit extends Component {
                     type="file"
                     accept="image/*"
                     onChange={event =>
-                      getBase64(event.target.files[0]).then(base64 =>
+                      getBase64(event.target.files[0]).then(({ base64 }) =>
                         this.setState({ profilePictureFile: { base64 } })
                       )
                     }
                   />
-                  {/* <FileInputComponent
-                    required
-                    imagePreview
-                    multiple={false}
-                    labelStyle={{ display: "none" }}
-                    callbackFunction={profilePictureFile =>
-                      this.setState({ profilePictureFile, photoInvalid: false })
-                    }
-                    accept="image/*"
-                    buttonComponent={
-                      <button>
-                        {this.props.add ? "Upload Photo" : "Upload New Photo"}
-                      </button>
-                    }
-                  />
-                  <span
-                    style={{
-                      display: this.state.photoInvalid ? "inherit" : "none"
-                    }}
-                  >
-                    Oh noes! you need to add photo
-                  </span> */}
                 </Col>
               </FormGroup>
 
               {this.props.attributes.map(attribute =>
                 this.renderField(attribute)
               )}
+
+              <FormGroup row>
+                <Label sm={3}>Images</Label>
+                <Col sm={9}>
+                  <Input
+                    id="image"
+                    required={this.props.add}
+                    multiple
+                    type="file"
+                    accept="image/*"
+                    onChange={event =>
+                      getBase64(event.target.files, true).then(stuff => {
+                        // this.setState({ profilePictureFile: { base64 } })
+                        console.log(stuff);
+                      })
+                    }
+                  />
+                </Col>
+              </FormGroup>
 
               {this.props.add ? (
                 <Button
