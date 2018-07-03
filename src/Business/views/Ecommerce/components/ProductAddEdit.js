@@ -6,6 +6,7 @@ import {
   Form,
   FormGroup,
   Label,
+  Row,
   Col,
   Input,
   Button
@@ -68,9 +69,14 @@ class ProductAddEdit extends Component {
     if (prevState.productSubmit && !this.props.loading) {
       let updates = { productSubmit: false };
       if (!this.props.error) {
+        const file = document.querySelector(".file-product-add");
+        file.value = "";
+
         updates.name = "";
         updates.price = "";
         updates.profilePictureFile = "";
+        updates.pictures = "";
+        updates.picturesFile = "";
         updates.discount = 0;
         updates = {
           ...updates,
@@ -134,6 +140,8 @@ class ProductAddEdit extends Component {
       price,
       profilePictureFile,
       profilePicture,
+      picturesFile,
+      pictures,
       discount,
       photoInvalid,
       productSubmit,
@@ -145,11 +153,21 @@ class ProductAddEdit extends Component {
         this.setState({ photoInvalid: true });
         // console.log("photo is required");
       } else {
+        const extra = {};
+
+        if (picturesFile.length) {
+          extra.pictures = picturesFile.map(picture => ({
+            name: picture.name,
+            value: picture.base64
+          }));
+        }
+
         const body = {
           name,
           price: parseFloat(price),
           discount: parseFloat(discount),
-          profilePicture: profilePictureFile.base64
+          profilePicture: profilePictureFile.base64,
+          ...extra
         };
 
         this.props.attributes.forEach(({ name, fieldType: attributeType }) => {
@@ -401,15 +419,28 @@ class ProductAddEdit extends Component {
                     id="image"
                     required={this.props.add}
                     type="file"
+                    className="file-product-add"
                     accept="image/*"
                     onChange={event =>
-                      getBase64(event.target.files[0]).then(({ base64 }) =>
-                        this.setState({ profilePictureFile: { base64 } })
+                      getBase64(event.target.files[0]).then(file =>
+                        this.setState({ profilePictureFile: file })
                       )
                     }
                   />
                 </Col>
               </FormGroup>
+
+              {this.state.profilePictureFile && (
+                <div>
+                  <h5>Selected Photo</h5>
+                  <img
+                    alt={this.state.profilePictureFile.name}
+                    src={this.state.profilePictureFile.base64}
+                    key={this.state.profilePictureFile.name}
+                    style={{ width: 50, height: 50 }}
+                  />
+                </div>
+              )}
 
               {this.props.attributes.map(attribute =>
                 this.renderField(attribute)
@@ -420,19 +451,35 @@ class ProductAddEdit extends Component {
                 <Col sm={9}>
                   <Input
                     id="image"
-                    required={this.props.add}
                     multiple
                     type="file"
+                    className="file-product-add"
                     accept="image/*"
                     onChange={event =>
-                      getBase64(event.target.files, true).then(stuff => {
-                        // this.setState({ profilePictureFile: { base64 } })
-                        console.log(stuff);
+                      getBase64(event.target.files, true).then(picturesFile => {
+                        this.setState({ picturesFile });
                       })
                     }
                   />
                 </Col>
               </FormGroup>
+
+              {this.state.picturesFile.length ? (
+                <div>
+                  <h5>Selected Images</h5>
+                  <Row>
+                    {this.state.picturesFile.map(file => (
+                      <Col key={file.name}>
+                        <img
+                          alt={file.name}
+                          src={file.base64}
+                          style={{ width: 50, height: 50 }}
+                        />
+                      </Col>
+                    ))}
+                  </Row>
+                </div>
+              ) : null}
 
               {this.props.add ? (
                 <Button
