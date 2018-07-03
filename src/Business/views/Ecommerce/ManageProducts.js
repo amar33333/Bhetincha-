@@ -52,7 +52,9 @@ class ManageProducts extends Component {
                   />
                 </div>
               )}
-              {this.props.selectedCategoryDetail &&
+              {this.props.attributes &&
+                this.props.attributes.attributes &&
+                this.props.selectedCategoryDetail &&
                 this.props.selectedCategoryDetail.hasProduct && (
                   <ProductAddNew
                     attributes={this.props.attributes.attributes}
