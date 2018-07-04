@@ -24,10 +24,13 @@ epics.push((action$, { getState }) =>
       ...payload,
       access_token: getState().auth.cookies.token_data.access_token
     })
-      .map(({ response }) => {
+      .concatMap(({ response }) => {
         if (response.msg === "success") {
           toast.success("Social Link Created Successfully!");
-          return { type: CREATE_SOCIAL_LINK_FULFILLED, payload: response };
+          return [
+            { type: CREATE_SOCIAL_LINK_FULFILLED, payload: response },
+            { type: FETCH_SOCIAL_LINK_PENDING }
+          ];
         } else {
           throw new Error(response.msg);
         }

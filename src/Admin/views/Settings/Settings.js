@@ -13,6 +13,7 @@ import {
   Col
 } from "reactstrap";
 
+import SocialLinkTable from "./SocialLinkTable";
 import { onSocialLinkSubmit, onSocialLinksList } from "../../actions";
 
 class Settings extends Component {
@@ -85,12 +86,20 @@ class Settings extends Component {
             </Card>
           </Col>
         </Row>
+        <SocialLinkTable
+          data={this.props.social_links}
+          onDelete={() => console.log("delete click gariis?")}
+        />
       </div>
     );
   }
 }
 
 export default connect(
-  ({ AdminContainer: { settings } }) => ({ ...settings }),
+  ({
+    AdminContainer: {
+      settings: { social_links }
+    }
+  }) => ({ social_links }),
   { onSocialLinkSubmit, onSocialLinksList }
 )(Settings);

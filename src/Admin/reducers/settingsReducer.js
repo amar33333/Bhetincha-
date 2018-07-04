@@ -16,7 +16,10 @@ export default function(state = INITIAL_STATE, action) {
     case FETCH_SOCIAL_LINK_FULFILLED:
       return {
         ...state,
-        social_links: action.payload
+        social_links: action.payload.map((link, i) => ({
+          ...link,
+          s_no: i + 1
+        }))
       };
 
     case FETCH_SOCIAL_LINK_REJECTED:
