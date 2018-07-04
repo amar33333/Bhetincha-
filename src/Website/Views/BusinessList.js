@@ -298,7 +298,8 @@ class BusinessList extends Component {
           <Row style={{ marginTop: "20px", paddingTop: "80px" }}>
             <Col xs="12">
               <small>
-                {`About ${this.props.search_results_count} results in 0.002s`}
+                {`About ${this.props.search_results_count} results in ${this
+                  .props.time_taken / 1000}s`}
               </small>
             </Col>
           </Row>
@@ -335,17 +336,11 @@ class BusinessList extends Component {
 }
 
 export default connect(
-  ({
-    auth: { cookies, phoneVerificationModal },
-    home,
-    search_result,
-    search_results_count
-  }) => ({
+  ({ auth: { cookies, phoneVerificationModal }, home, search_result }) => ({
     cookies,
     ...home,
     phoneVerificationModal,
-    ...search_result,
-    search_results_count
+    ...search_result
   }),
   {
     togglePhoneVerificationModal,

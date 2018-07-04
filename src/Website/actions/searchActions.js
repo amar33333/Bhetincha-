@@ -26,7 +26,7 @@ epics.push(action$ =>
       onSearch(action.payload)
         .map(({ response }) => ({
           type: SEARCH_QUERY_FULFILLED,
-          payload: response.hits
+          payload: response
         }))
         .catch(ajaxError => Observable.of({ type: SEARCH_QUERY_REJECTED }))
         .startWith({ type: SEARCH_QUERY_PENDING })
@@ -44,7 +44,7 @@ epics.push(action$ =>
     return onSearchResultsGet({ query, frm, size })
       .map(({ response }) => ({
         type: SEARCH_RESULTS_PAGE_FULFILLED,
-        payload: response.hits
+        payload: response
       }))
       .catch(ajaxError =>
         Observable.of({ type: SEARCH_RESULTS_PAGE_REJECTED })

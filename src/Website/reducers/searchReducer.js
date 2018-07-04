@@ -12,7 +12,8 @@ const INITIAL_STATE = {
   search_results_page_loading: false,
   data: [],
   search_results_page_data: [],
-  search_results_count: 0
+  search_results_count: 0,
+  time_taken: 0
 };
 
 export default function(state = INITIAL_STATE, action) {
@@ -26,7 +27,7 @@ export default function(state = INITIAL_STATE, action) {
     case SEARCH_QUERY_FULFILLED:
       return {
         ...state,
-        data: action.payload.hits.map(hit => ({ ...hit._source })),
+        data: action.payload.hits.hits.map(hit => ({ ...hit._source })),
         loading: false
       };
 
@@ -45,11 +46,12 @@ export default function(state = INITIAL_STATE, action) {
     case SEARCH_RESULTS_PAGE_FULFILLED:
       return {
         ...state,
-        search_results_page_data: action.payload.hits.map(hit => ({
+        search_results_page_data: action.payload.hits.hits.map(hit => ({
           ...hit._source,
           id: hit._id
         })),
-        search_results_count: action.payload.total,
+        search_results_count: action.payload.hits.total,
+        time_taken: action.payload.took,
         search_results_page_loading: false
       };
 
