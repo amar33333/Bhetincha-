@@ -20,10 +20,12 @@ class SocialLinkTable extends Component {
       {
         Header: "Logo",
         accessor: "className",
+        id: "logo",
         Cell: ({ value }) => <span className={value} />,
         filterable: false,
         sortable: false
       },
+      { Header: "Class Name", accessor: "className" },
       {
         Header: "Actions",
         id: "edit",
