@@ -27,6 +27,12 @@ body {
   left: 10%;
 }
 
+.navbar-brand {
+  padding: 0px !important;
+  font-size: 1.3rem;
+  font-weight: bold;
+}
+
 .business-navbar {
   border-bottom: 1px solid rgba(202, 206, 209, 0.3);
   z-index: 99;
@@ -67,7 +73,8 @@ input.main-nav-search::placeholder {
 }
 
 .main-nav {
-  border: 0.5px solid lightgray;
+  /* border: 0.5px solid lightgray; */
+  background-color: #ffe200 !important;
 }
 
 .user-dropdown i {
@@ -85,7 +92,7 @@ input.main-nav-search::placeholder {
 .home-page__header .login-btn {
   margin-right: 1rem;
 }
-.home-page__header button.login-btn {
+/* .home-page__header button.login-btn {
   background-color: transparent !important;
   color: #007bff;
 }
@@ -94,7 +101,7 @@ input.main-nav-search::placeholder {
   background-color: #007bff !important;
   color: #fff;
   border: #007bff !important;
-}
+} */
 
 .home_page__slogan {
   text-transform: uppercase;
@@ -213,6 +220,8 @@ input.main-nav-search::placeholder {
   width: 35px;
   height: 35px;
   border-radius: 50%;
+  padding: 5px;
+  background-color: antiquewhite;
   cursor: pointer;
 }
 
@@ -447,9 +456,11 @@ input.main-nav-search::placeholder {
 .result-header__text {
   color: rgb(36, 36, 206);
   margin-bottom: 5px;
+  font-size: 1.5rem;
+  font-weight: 300;
 }
 
 .result-page__thumbnail {
-  width: 70px;
+  width: 90px;
   object-fit: cover;
 }

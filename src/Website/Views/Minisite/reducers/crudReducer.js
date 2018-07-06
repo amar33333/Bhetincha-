@@ -17,14 +17,23 @@ const INITIAL_STATE = {
   about: {
     tagline: "",
     aboutUs: "",
-    establishedYear: ""
-    // companyType: ""
+    establishedYear: "",
+    companyType: ""
   },
   business_name: "",
   username: "",
   cover_photo: "/media/default_cover.png",
   logo: "/media/default_logo.png",
   albums: [],
+  workingHour: [],
+  address: {
+    area: {},
+    branchAddress: [],
+    landLineNumber: "",
+    latitude: "",
+    longitude: ""
+  },
+
   nav_layout: [
     {
       i: "home",

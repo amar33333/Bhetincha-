@@ -27,6 +27,7 @@ class Home extends Component {
     !this.props.cookies ? (
       <div className="home-page__header">
         <Button
+          outline
           className="login-btn"
           onClick={this.props.toggleLoginModal}
           variant="raised"
@@ -57,7 +58,7 @@ class Home extends Component {
           //onClick={this.props.toggleRegisterModal}
           onClick={() => this.props.history.push("/register")}
           variant="raised"
-          color="warning"
+          color="success"
         >
           Register
         </Button>

@@ -48,6 +48,7 @@
     "react-router-hash-link": "^1.2.0",
     "react-scripts": "1.1.4",
     "react-select": "^1.2.1",
+    "react-semantic-ui-range": "^0.6.1",
     "react-simple-timefield": "^2.0.0",
     "react-split-pane": "^2.0.2",
     "react-table": "^6.8.0",

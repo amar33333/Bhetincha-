@@ -44,13 +44,13 @@ export default [
     badge: false,
     link: "/"
   },
-  {
-    className: "fa fa-lock",
-    title: "Change Password",
-    id: "changePassword",
-    badge: false,
-    link: "/"
-  },
+  // {
+  //   className: "fa fa-lock",
+  //   title: "Change Password",
+  //   id: "changePassword",
+  //   badge: false,
+  //   link: "/"
+  // },
   {
     className: "fa fa-sign-out",
     title: "Sign out",

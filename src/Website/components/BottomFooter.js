@@ -24,6 +24,12 @@ class BottomFooter extends Component {
                 className="text-center"
               >
                 <li className="bottom-footer__nav__item">
+                  <Link to="#">Business</Link>
+                </li>
+                <li className="bottom-footer__nav__item">
+                  <Link to="#">Blog</Link>
+                </li>
+                <li className="bottom-footer__nav__item">
                   <Link to="#">Site Map</Link>
                 </li>
                 <li className="bottom-footer__nav__item">
