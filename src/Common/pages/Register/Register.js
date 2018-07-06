@@ -98,6 +98,16 @@ class Register extends Component {
                       </Button>
                     </Col>
                   </Row>
+                  <span>
+                    <a
+                      href="#"
+                      onClick={() =>
+                        this.props.history.push("/individual-register")
+                      }
+                    >
+                      Register as Individual{" "}
+                    </a>
+                  </span>
                 </CardFooter>
               </Card>
             </Col>

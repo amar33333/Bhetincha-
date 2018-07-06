@@ -8,7 +8,8 @@ import {
   Page500,
   Loading,
   MobileVerification,
-  UserRegister
+  UserRegister,
+  IndividualRegister
 } from "../Common/pages";
 import Website from "../Website";
 
@@ -54,7 +55,7 @@ class MainRoute extends Component {
 
           <Route
             exact
-            path="/register"
+            path="/business-register"
             name="Register Page"
             component={Register}
           />
@@ -69,6 +70,12 @@ class MainRoute extends Component {
             path="/user-register"
             name="User Register"
             component={UserRegister}
+          />
+          <Route
+            exact
+            path="/individual-register"
+            name="Individual Register"
+            component={IndividualRegister}
           />
           <Route exact path="/404" name="Page 404" component={Page404} />
           <Route exact path="/500" name="Page 500" component={Page500} />

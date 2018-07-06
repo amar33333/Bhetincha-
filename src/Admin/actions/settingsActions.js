@@ -1,14 +1,26 @@
 import { Observable } from "rxjs/Observable";
 import { toast } from "react-toastify";
 
-import { onSocialLinkPost, onSocialLinksGet } from "../config/adminServerCall";
+import {
+  onSocialLinkPost,
+  onSocialLinksGet,
+  onSocialLinkEachDelete,
+  onSocialLinkPut
+} from "../config/adminServerCall";
 import {
   CREATE_SOCIAL_LINK_FULFILLED,
   CREATE_SOCIAL_LINK_PENDING,
   CREATE_SOCIAL_LINK_REJECTED,
   FETCH_SOCIAL_LINK_FULFILLED,
   FETCH_SOCIAL_LINK_PENDING,
-  FETCH_SOCIAL_LINK_REJECTED
+  FETCH_SOCIAL_LINK_REJECTED,
+  DELETE_SOCIAL_LINK_FULFILLED,
+  DELETE_SOCIAL_LINK_PENDING,
+  DELETE_SOCIAL_LINK_REJECTED,
+  EDIT_SOCIAL_LINK_FULFILLED,
+  EDIT_SOCIAL_LINK_PENDING,
+  EDIT_SOCIAL_LINK_REJECTED,
+  TOGGLE_SOCIAL_LINK_EDIT_MODAL
 } from "./types";
 
 const epics = [];
@@ -43,6 +55,35 @@ epics.push((action$, { getState }) =>
   )
 );
 
+export const onSocialLinkEdit = payload => ({
+  type: EDIT_SOCIAL_LINK_PENDING,
+  payload
+});
+
+epics.push((action$, { getState }) =>
+  action$.ofType(EDIT_SOCIAL_LINK_PENDING).mergeMap(({ payload }) =>
+    onSocialLinkPut({
+      ...payload,
+      access_token: getState().auth.cookies.token_data.access_token
+    })
+      .concatMap(({ response }) => {
+        if (response.msg === "success") {
+          toast.success("Social Link Updated Successfully!");
+          return [
+            { type: EDIT_SOCIAL_LINK_FULFILLED, payload: response },
+            { type: FETCH_SOCIAL_LINK_PENDING }
+          ];
+        } else {
+          throw new Error(response.msg);
+        }
+      })
+      .catch(ajaxError => {
+        toast.error("Error Updating Social Link !!!");
+        return Observable.of({ type: EDIT_SOCIAL_LINK_REJECTED });
+      })
+  )
+);
+
 export const onSocialLinksList = () => ({
   type: FETCH_SOCIAL_LINK_PENDING
 });
@@ -62,4 +103,36 @@ epics.push((action$, { getState }) =>
       })
   )
 );
+
+export const onSocialLinkRemove = payload => ({
+  type: DELETE_SOCIAL_LINK_PENDING,
+  payload
+});
+
+epics.push((action$, { getState }) =>
+  action$.ofType(DELETE_SOCIAL_LINK_PENDING).mergeMap(({ payload }) =>
+    onSocialLinkEachDelete({
+      id: payload.id,
+      access_token: getState().auth.cookies.token_data.access_token
+    })
+      .concatMap(() => {
+        toast.success("Social Link Deleted Successfully!");
+        return [
+          { type: FETCH_SOCIAL_LINK_PENDING },
+          { type: DELETE_SOCIAL_LINK_FULFILLED }
+        ];
+      })
+      .catch(ajaxError => {
+        toast.error("Error Deleting Social Link");
+        console.log(ajaxError);
+        return Observable.of({ type: DELETE_SOCIAL_LINK_REJECTED });
+      })
+  )
+);
+
+export const toggleSocialLinkEditModal = payload => ({
+  type: TOGGLE_SOCIAL_LINK_EDIT_MODAL,
+  payload
+});
+
 export default epics;

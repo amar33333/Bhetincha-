@@ -11,65 +11,64 @@ import {
   FormGroup
 } from "reactstrap";
 
-class CountryEditModal extends Component {
-  state = { country: "" };
+class SocialLinkEditModal extends Component {
+  state = {
+    name: "",
+    className: ""
+  };
 
   componentDidMount() {
     this.setState({
-      country: this.props.data ? this.props.data : ""
+      name: this.props.data ? this.props.data.name : "",
+      className: this.props.data ? this.props.data.className : ""
     });
   }
 
   onChange = (key, event) => {
     this.setState({
-      country: {
-        ...this.state.country,
-        [key]: event.target.value
-      }
+      [key]: event.target.value
     });
   };
 
   onFormEdit = event => {
     event.preventDefault();
-    const { country } = this.state;
-    this.props.onCountryEdit({ country });
+
+    const { name, className } = this.state;
+    this.props.onSocialLinkEdit({
+      id: this.props.data.id,
+      body: { name, className }
+    });
   };
 
   render() {
     return (
-      <Form onSubmit={this.onFormEdit} inline>
+      <Form onSubmit={this.onFormEdit}>
         <Row>
           <Col xs="12" md="9">
             <FormGroup>
               <InputGroup>
                 <InputGroupAddon addonType="prepend">
-                  <InputGroupText>Code</InputGroupText>
+                  <InputGroupText>Social Link Name </InputGroupText>
                 </InputGroupAddon>
                 <Input
                   autoFocus
                   required
-                  disabled={this.props.loading}
-                  type="number"
-                  min="0"
-                  step="1"
-                  placeholder="Type Country Code"
-                  value={
-                    this.state.country ? this.state.country.countryCode : ""
-                  }
-                  onChange={this.onChange.bind(this, "countryCode")}
+                  type="text"
+                  placeholder="Eg. Facebook"
+                  value={this.state.name}
+                  onChange={this.onChange.bind(this, "name")}
                 />
               </InputGroup>
               <InputGroup>
                 <InputGroupAddon addonType="prepend">
-                  <InputGroupText>Name</InputGroupText>
+                  <InputGroupText>Social Link Class-Name</InputGroupText>
                 </InputGroupAddon>
                 <Input
-                  required
-                  disabled={this.props.loading}
                   type="text"
-                  placeholder="Type Country Name"
-                  value={this.state.country ? this.state.country.name : ""}
-                  onChange={this.onChange.bind(this, "name")}
+                  required
+                  placeholder="Eg. fa fa-facebook"
+                  value={this.state.className}
+                  onChange={this.onChange.bind(this, "className")}
                 />
               </InputGroup>
             </FormGroup>
@@ -85,4 +84,4 @@ class CountryEditModal extends Component {
   }
 }
 
-export default CountryEditModal;
+export default SocialLinkEditModal;

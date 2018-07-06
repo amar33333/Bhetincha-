@@ -18,6 +18,10 @@ import { connect } from "react-redux";
 
 import { onIndividualRegisterSubmit } from "../../../../actions";
 
+/*
+ * NOT USED RIGHT NOW
+*/
+
 class IndidividualRegisterModal extends Component {
   state = {
     username: "",
