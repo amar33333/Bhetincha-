@@ -173,7 +173,7 @@ epics.push(action$ =>
     const { history } = action.payload;
 
     return onPhoneVerificationRequestPost({ ...action.payload })
-      .map(({ response }) => {
+      .concatMap(({ response }) => {
         if (response.id) {
           toast.success("Request Sent Successfully");
 
@@ -181,10 +181,16 @@ epics.push(action$ =>
             pathname: "/mobile-verification",
             search: `?${querystring.stringify({ id: response.id })}`
           });
-          return {
-            type: REQUEST_PHONE_VERIFICATION_FULFILLED,
-            payload: true
-          };
+          return [
+            {
+              type: REQUEST_PHONE_VERIFICATION_FULFILLED,
+              payload: true
+            },
+            {
+              type: TOGGLE_PHONE_VERIFICATION_MODAL,
+              payload: null
+            }
+          ];
         } else {
           throw new Error(response.msg);
         }
@@ -338,29 +344,29 @@ export const onIndividualRegisterSubmit = payload => ({
 });
 
 epics.push(action$ =>
-  action$
-    .ofType(CREATE_INDIVIDUAL_USER_PENDING)
-    .mergeMap(action => onIndividualRegister({ ...action.payload }))
-    .concatMap(({ response }) => {
-      if (response.msg === "success") {
-        toast.success("Registered Successfully");
+  action$.ofType(CREATE_INDIVIDUAL_USER_PENDING).mergeMap(action =>
+    onIndividualRegister({ ...action.payload })
+      .concatMap(({ response }) => {
+        if (response.msg === "success") {
+          toast.success("Registered Successfully");
 
-        return [
-          { type: TOGGLE_REGISTER_MODAL },
-          { type: CREATE_INDIVIDUAL_USER_FULFILLED, payload: response }
-        ];
-      } else {
-        throw new Error(response.msg[Object.keys(response.msg)[0]][0]);
-      }
-    })
-    .catch(ajaxError => {
-      toast.error(ajaxError.toString());
+          return [
+            { type: TOGGLE_REGISTER_MODAL },
+            { type: CREATE_INDIVIDUAL_USER_FULFILLED, payload: response }
+          ];
+        } else {
+          throw new Error(response.msg[Object.keys(response.msg)[0]][0]);
+        }
+      })
+      .catch(ajaxError => {
+        toast.error(ajaxError.toString());
 
-      return Observable.of({
-        type: CREATE_INDIVIDUAL_USER_REJECTED,
-        payload: ajaxError
-      });
-    })
+        return Observable.of({
+          type: CREATE_INDIVIDUAL_USER_REJECTED,
+          payload: ajaxError
+        });
+      })
+  )
 );
 
 export const onLogout = () => ({

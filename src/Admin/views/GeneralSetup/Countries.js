@@ -31,7 +31,7 @@ import {
 } from "../../actions";
 
 class Countries extends Component {
-  state = { country: "", countrySubmit: false };
+  state = { country: "", countryCode: "", countrySubmit: false };
 
   tableProps = {
     columns: [
@@ -50,12 +50,14 @@ class Countries extends Component {
         filterable: false,
         sortable: false,
         width: 145,
-        Cell: ({ value, original: { id, name } }) => (
+        Cell: ({ value, original: { id, name, countryCode } }) => (
           <div>
             <Button
               color="secondary"
               className="mr-l"
-              onClick={() => this.props.toggleCountryEditModal({ id, name })}
+              onClick={() =>
+                this.props.toggleCountryEditModal({ id, name, countryCode })
+              }
             >
               Edit
             </Button>
@@ -90,9 +92,9 @@ class Countries extends Component {
 
   onFormSubmit = event => {
     event.preventDefault();
-    const { country } = this.state;
+    const { country, countryCode } = this.state;
     this.setState({ countrySubmit: true }, () =>
-      this.props.onCountrySubmit({ country })
+      this.props.onCountrySubmit({ body: { name: country, countryCode } })
     );
   };
 
@@ -115,12 +117,27 @@ class Countries extends Component {
                   <FormGroup className="mb-2 mr-sm-2 mb-sm-0">
                     <InputGroup>
                       <InputGroupAddon addonType="prepend">
-                        <InputGroupText>Name</InputGroupText>
+                        <InputGroupText>Code</InputGroupText>
                       </InputGroupAddon>
                       <Input
                         autoFocus
                         required
                         innerRef={ref => (this.focusableInput = ref)}
+                        disabled={this.props.loading}
+                        type="number"
+                        min="0"
+                        step="1"
+                        placeholder="Type Country Code"
+                        value={this.state.countryCode}
+                        onChange={this.onChange.bind(this, "countryCode")}
+                      />
+                    </InputGroup>
+                    <InputGroup>
+                      <InputGroupAddon addonType="prepend">
+                        <InputGroupText>Name</InputGroupText>
+                      </InputGroupAddon>
+                      <Input
+                        required
                         disabled={this.props.loading}
                         type="text"
                         placeholder="Type Country Name"

@@ -3,6 +3,7 @@ import ManageUsers from "./Users/Manage Users/";
 import Groups from "./Users/Groups/";
 import Permissions from "./Users/Permissions/";
 import Settings from "./Settings/";
+import SocialLinks from "./Settings/SocialLinks";
 import AddUser from "./Users/Manage Users/Add User";
 import Industry from "../views/Industry/Industry";
 import Categories from "../views/Categories/Categories";
@@ -34,6 +35,7 @@ export {
   Groups,
   Permissions,
   Settings,
+  SocialLinks,
   AddUser,
   Industry,
   Categories,

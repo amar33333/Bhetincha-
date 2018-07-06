@@ -56,7 +56,7 @@ class Home extends Component {
 
         <Button
           //onClick={this.props.toggleRegisterModal}
-          onClick={() => this.props.history.push("/register")}
+          onClick={() => this.props.history.push("/business-register")}
           variant="raised"
           color="success"
         >
