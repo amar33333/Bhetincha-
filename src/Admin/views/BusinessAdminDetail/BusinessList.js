@@ -57,6 +57,8 @@ import {
   onUnmountArea
 } from "../../actions";
 
+import PermissionProvider from "../../../Common/utils/PermissionProvider";
+
 class BusinessList extends Component {
   state = { q: "" };
 
@@ -291,6 +293,20 @@ class BusinessList extends Component {
   render() {
     return (
       <div className="animated fadeIn">
+        <PermissionProvider permission="CAN_ADD_BUSINESS">
+          <Link to="/admin/add-business">
+            <Button variant="raised" color="primary" className="mb-4">
+              <i className="fa fa-plus" /> Add Business
+            </Button>
+          </Link>
+        </PermissionProvider>
+        <PermissionProvider permission="CAN_ADD_BUSINESS">
+          <Link to="/admin/add-free-business">
+            <Button variant="raised" color="primary" className="mb-4">
+              <i className="fa fa-plus" /> Add Free Business
+            </Button>
+          </Link>
+        </PermissionProvider>
         <Row>
           <Col xs="12" md="12">
             <Card>

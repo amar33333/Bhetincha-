@@ -58,18 +58,18 @@ const items = {
       title: true,
       name: "Business"
     },
-    {
-      name: "Add Business",
-      url: "/admin/add-business",
-      icon: "fa fa-industry",
-      permission: "CAN_ADD_BUSINESS"
-    },
-    {
-      name: "Add Free Business",
-      url: "/admin/add-free-business",
-      icon: "fa fa-industry",
-      permission: "CAN_ADD_BUSINESS"
-    },
+    // {
+    //   name: "Add Business",
+    //   url: "/admin/add-business",
+    //   icon: "fa fa-industry",
+    //   permission: "CAN_ADD_BUSINESS"
+    // },
+    // {
+    //   name: "Add Free Business",
+    //   url: "/admin/add-free-business",
+    //   icon: "fa fa-industry",
+    //   permission: "CAN_ADD_BUSINESS"
+    // },
     {
       name: "List Business",
       url: "/admin/list-business",
