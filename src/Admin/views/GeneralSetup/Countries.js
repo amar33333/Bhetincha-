@@ -43,6 +43,7 @@ class Countries extends Component {
         width: 70
       },
       { Header: "Country", accessor: "name" },
+      { Header: "Country Code", accessor: "countryCode", width: 250 },
       {
         Header: "Actions",
         id: "edit",
@@ -83,6 +84,7 @@ class Countries extends Component {
       const updates = { countrySubmit: false };
       if (!this.props.error) {
         updates.country = "";
+        updates.countryCode = "";
       }
       this.setState(updates, () => this.focusableInput.focus());
     }

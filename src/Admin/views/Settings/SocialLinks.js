@@ -95,6 +95,7 @@ class SocialLinks extends Component {
           </Col>
         </Row>
         <SocialLinkTable
+          fetchLoading={this.props.social_linksFetchLoading}
           data={this.props.social_links}
           onDelete={({ id }) => this.props.onSocialLinkRemove({ id })}
           onEdit={({ original: { id, name, className } }) => {
@@ -124,12 +125,18 @@ class SocialLinks extends Component {
 export default connect(
   ({
     AdminContainer: {
-      settings: { social_links, socialLinkEditData, socialLinkEditModal }
+      settings: {
+        social_links,
+        socialLinkEditData,
+        socialLinkEditModal,
+        social_linksFetchLoading
+      }
     }
   }) => ({
     social_links,
     socialLinkEditData,
-    socialLinkEditModal
+    socialLinkEditModal,
+    social_linksFetchLoading
   }),
   {
     onSocialLinkSubmit,

@@ -7,6 +7,7 @@ import {
 
 const INITIAL_STATE = {
   social_links: [],
+  social_linksFetchLoading: false,
   socialLinkEditData: null,
   socialLinkEditModal: false
 };
@@ -14,7 +15,7 @@ const INITIAL_STATE = {
 export default function(state = INITIAL_STATE, action) {
   switch (action.type) {
     case FETCH_SOCIAL_LINK_PENDING:
-      return { ...state };
+      return { ...state, social_linksFetchLoading: true };
 
     case FETCH_SOCIAL_LINK_FULFILLED:
       return {
@@ -22,11 +23,12 @@ export default function(state = INITIAL_STATE, action) {
         social_links: action.payload.map((link, i) => ({
           ...link,
           s_no: i + 1
-        }))
+        })),
+        social_linksFetchLoading: false
       };
 
     case FETCH_SOCIAL_LINK_REJECTED:
-      return { ...state, loading: false, statusClass: "rejected" };
+      return { ...state, social_linksFetchLoading: false };
 
     case TOGGLE_SOCIAL_LINK_EDIT_MODAL:
       return {

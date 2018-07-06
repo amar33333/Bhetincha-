@@ -64,7 +64,7 @@ class SocialLinkTable extends Component {
           {...this.tableProps}
           style={{ background: "white" }}
           data={this.props.data}
-          // loading={this.props.fetchLoading}
+          loading={this.props.fetchLoading}
           defaultFilterMethod={filterCaseInsensitive}
         />
       </div>
