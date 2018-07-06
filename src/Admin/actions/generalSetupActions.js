@@ -136,10 +136,9 @@ export const onCountrySubmit = payload => ({
 
 epics.push((action$, { getState }) =>
   action$.ofType(CREATE_COUNTRY_PENDING).mergeMap(({ payload }) => {
-    const { country } = payload;
     const access_token = getState().auth.cookies.token_data.access_token;
 
-    return onCountryPostAjax({ country, access_token })
+    return onCountryPostAjax({ ...payload, access_token })
       .concatMap(({ response }) => {
         if (response.msg === "success") {
           toast.success("Country added successfully!");

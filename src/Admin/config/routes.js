@@ -7,6 +7,7 @@ import {
   Groups,
   Permissions,
   Settings,
+  SocialLinks,
   AddUser,
   Industry,
   Categories,
@@ -235,7 +236,18 @@ class AdminRoute extends Component {
           component={Permissions}
           permission="CAN_ACCESS_PERMISSION"
         />
-        <Route path="/admin/settings" name="Settings" component={Settings} />
+        <CustomRoute
+          path="/admin/settings"
+          name="Settings"
+          component={Settings}
+          permission="CAN_VIEW_GROUP"
+        />
+        <CustomRoute
+          path="/admin/manage-social-links"
+          name="Social Links"
+          component={SocialLinks}
+          permission="CAN_VIEW_GROUP"
+        />
         <Redirect from="/admin" to="/admin/dashboard" />
         {/* <CustomRoute
           path={`${MATCH_URL}/component2`}

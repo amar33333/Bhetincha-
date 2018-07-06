@@ -1,0 +1,6 @@
+{
+  "name": "IndividualRegister",
+  "version": "0.0.0",
+  "private": true,
+  "main": "./IndividualRegister.js"
+}

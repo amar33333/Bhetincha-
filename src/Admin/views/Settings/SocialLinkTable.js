@@ -33,12 +33,12 @@ class SocialLinkTable extends Component {
         filterable: false,
         sortable: false,
         width: 145,
-        Cell: ({ value, original: { id, name } }) => (
+        Cell: ({ value, original }) => (
           <div>
             <Button
               color="secondary"
               className="mr-l"
-              onClick={() => console.log("edit clicked", value)}
+              onClick={() => this.props.onEdit({ original })}
             >
               Edit
             </Button>

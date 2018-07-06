@@ -57,6 +57,27 @@ export const onSocialLinksGet = ({ access_token }) =>
     }
   });
 
+export const onSocialLinkPut = ({ id, body, access_token }) =>
+  ajax({
+    method: "PUT",
+    url: `${SOCIAL_LINK_URL}${id}/`,
+    body,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
+export const onSocialLinkEachDelete = ({ id, access_token }) =>
+  ajax({
+    method: "delete",
+    url: `${SOCIAL_LINK_URL}${id}/`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
 export const onBusinessTeleCallingGetAjax = ({ access_token, body }) =>
   ajax({
     method: "POST",
@@ -557,7 +578,8 @@ export const onCountryPut = ({ country, access_token }) =>
     method: "PUT",
     url: `${COUNTRY_URL}${country.id}/`,
     body: {
-      name: country.name
+      name: country.name,
+      countryCode: country.countryCode
     },
     headers: {
       "Content-Type": "application/json",
@@ -565,13 +587,11 @@ export const onCountryPut = ({ country, access_token }) =>
     }
   });
 
-export const onCountryPostAjax = ({ country, access_token }) =>
+export const onCountryPostAjax = ({ body, access_token }) =>
   ajax({
     method: "post",
     url: COUNTRY_URL,
-    body: {
-      name: country
-    },
+    body,
     headers: {
       "Content-Type": "application/json",
       Authorization: "Bearer " + access_token

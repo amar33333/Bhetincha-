@@ -14,35 +14,44 @@ const items = {
       title: true,
       name: "General Setup"
     },
+
     {
-      name: "Countries",
+      name: "General Setup",
       url: "/admin/countries",
-      icon: "fa fa-map-o",
-      permission: "CAN_VIEW_COUNTRY"
-    },
-    {
-      name: "States",
-      url: "/admin/states",
-      icon: "fa fa-map-o",
-      permission: "CAN_VIEW_STATE"
-    },
-    {
-      name: "Districts",
-      url: "/admin/districts",
-      icon: "fa fa-map-o",
-      permission: "CAN_VIEW_DISTRICT"
-    },
-    {
-      name: "Cities",
-      url: "/admin/cities",
-      icon: "fa fa-map-pin",
-      permission: "CAN_VIEW_CITY"
-    },
-    {
-      name: "Areas",
-      url: "/admin/areas",
-      icon: "fa fa-map",
-      permission: "CAN_VIEW_AREA"
+      icon: "fa fa-users",
+      permission: "CAN_VIEW_ECOMMERCE",
+      children: [
+        {
+          name: "Countries",
+          url: "/admin/countries",
+          icon: "fa fa-map-o",
+          permission: "CAN_VIEW_COUNTRY"
+        },
+        {
+          name: "States",
+          url: "/admin/states",
+          icon: "fa fa-map-o",
+          permission: "CAN_VIEW_STATE"
+        },
+        {
+          name: "Districts",
+          url: "/admin/districts",
+          icon: "fa fa-map-o",
+          permission: "CAN_VIEW_DISTRICT"
+        },
+        {
+          name: "Cities",
+          url: "/admin/cities",
+          icon: "fa fa-map-pin",
+          permission: "CAN_VIEW_CITY"
+        },
+        {
+          name: "Areas",
+          url: "/admin/areas",
+          icon: "fa fa-map",
+          permission: "CAN_VIEW_AREA"
+        }
+      ]
     },
 
     {
@@ -200,8 +209,16 @@ const items = {
     {
       name: "Settings",
       url: "/admin/settings",
-      icon: "icon-settings"
-      // permission: "CAN_VIEW_SETTINGS"
+      icon: "icon-settings",
+      permission: "CAN_VIEW_GROUP",
+      children: [
+        {
+          name: "Manage Social Links",
+          url: "/admin/manage-social-links",
+          icon: "icon-user-follow",
+          permission: "CAN_VIEW_GROUP"
+        }
+      ]
     },
     {
       name: "Logout",
