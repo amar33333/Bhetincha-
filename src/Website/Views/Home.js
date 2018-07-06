@@ -64,7 +64,12 @@ class Home extends Component {
         </Button>
       </div>
     ) : (
-      <div className="home-page__header">
+      <div
+        className="home-page__header"
+        style={{
+          marginRight: "80px"
+        }}
+      >
         <Avatar />
       </div>
     );

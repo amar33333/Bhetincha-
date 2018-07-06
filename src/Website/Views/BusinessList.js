@@ -292,53 +292,54 @@ class BusinessList extends Component {
                 right: "10px"
               }}
             >
-              {each_search_result.workingHour.map((day, index) => {
-                let start = moment(day.start)
-                  .add({ hours: 5, minutes: 45 })
-                  .format("hh:mm A");
-                let end = moment(day.end)
-                  .add({ hours: 5, minutes: 45 })
-                  .format("hh:mm A");
-                console.log(
-                  each_search_result.business_name,
-                  "Now:",
-                  momentNow,
-                  "start:",
-                  start,
-                  "end:",
-                  end
-                );
-                if (index === today) {
-                  console.log("today");
-                  if (
-                    moment(momentNow, "hh:mm A").isBetween(
-                      moment(start, "hh:mm A"),
-                      moment(end, "hh:mm A")
-                    )
-                  ) {
-                    return (
-                      <small
-                        data-tooltip={`${start} - ${end}`}
-                        data-position="bottom center"
-                      >
-                        <i className="fa fa-clock-o" /> Open Now
-                      </small>
-                    );
+              {each_search_result.workingHour &&
+                each_search_result.workingHour.map((day, index) => {
+                  let start = moment(day.start)
+                    .add({ hours: 5, minutes: 45 })
+                    .format("hh:mm A");
+                  let end = moment(day.end)
+                    .add({ hours: 5, minutes: 45 })
+                    .format("hh:mm A");
+                  console.log(
+                    each_search_result.business_name,
+                    "Now:",
+                    momentNow,
+                    "start:",
+                    start,
+                    "end:",
+                    end
+                  );
+                  if (index === today) {
+                    console.log("today");
+                    if (
+                      moment(momentNow, "hh:mm A").isBetween(
+                        moment(start, "hh:mm A"),
+                        moment(end, "hh:mm A")
+                      )
+                    ) {
+                      return (
+                        <small
+                          data-tooltip={`${start} - ${end}`}
+                          data-position="bottom center"
+                        >
+                          <i className="fa fa-clock-o" /> Open Now
+                        </small>
+                      );
+                    } else {
+                      return (
+                        <small
+                          data-tooltip={`${start} - ${end}`}
+                          data-position="bottom center"
+                          style={{ color: "red" }}
+                        >
+                          Closed
+                        </small>
+                      );
+                    }
                   } else {
-                    return (
-                      <small
-                        data-tooltip={`${start} - ${end}`}
-                        data-position="bottom center"
-                        style={{ color: "red" }}
-                      >
-                        Closed
-                      </small>
-                    );
+                    return null;
                   }
-                } else {
-                  return null;
-                }
-              })}
+                })}
             </div>
           </Card>
         );
