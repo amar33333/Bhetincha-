@@ -81,38 +81,14 @@ class CallerEdit extends Component {
                 </td>
               </tr>
               <tr>
-                <th>Area</th>
+                <th>Country</th>
                 <td>
                   <Select
-                    value={this.state.area}
+                    value={this.state.country}
                     options={areas}
                     labelKey="name"
                     valueKey="id"
-                    onChange={value => this.handleChange("area", value)}
-                  />
-                </td>
-              </tr>
-              <tr>
-                <th>City</th>
-                <td>
-                  <Select
-                    value={this.state.city}
-                    options={areas}
-                    labelKey="name"
-                    valueKey="id"
-                    onChange={value => this.handleChange("city", value)}
-                  />
-                </td>
-              </tr>
-              <tr>
-                <th>District</th>
-                <td>
-                  <Select
-                    value={this.state.district}
-                    options={areas}
-                    labelKey="name"
-                    valueKey="id"
-                    onChange={value => this.handleChange("district", value)}
+                    onChange={value => this.handleChange("country", value)}
                   />
                 </td>
               </tr>
@@ -129,14 +105,38 @@ class CallerEdit extends Component {
                 </td>
               </tr>
               <tr>
-                <th>Country</th>
+                <th>District</th>
                 <td>
                   <Select
-                    value={this.state.country}
+                    value={this.state.district}
                     options={areas}
                     labelKey="name"
                     valueKey="id"
-                    onChange={value => this.handleChange("country", value)}
+                    onChange={value => this.handleChange("district", value)}
+                  />
+                </td>
+              </tr>
+              <tr>
+                <th>City</th>
+                <td>
+                  <Select
+                    value={this.state.city}
+                    options={areas}
+                    labelKey="name"
+                    valueKey="id"
+                    onChange={value => this.handleChange("city", value)}
+                  />
+                </td>
+              </tr>
+              <tr>
+                <th>Area</th>
+                <td>
+                  <Select
+                    value={this.state.area}
+                    options={areas}
+                    labelKey="name"
+                    valueKey="id"
+                    onChange={value => this.handleChange("area", value)}
                   />
                 </td>
               </tr>
