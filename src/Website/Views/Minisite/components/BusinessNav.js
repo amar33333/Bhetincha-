@@ -35,6 +35,8 @@ import {
 
 import { onEditMainClicked, onBusinessUpdate } from "../actions";
 
+import { USER_GROUP_BUSINESS } from "../../../../config/CONSTANTS";
+
 // const ResponsiveGridLayout = WidthProvider(Responsive);
 
 class BusinessNav extends Component {
@@ -279,12 +281,17 @@ class BusinessNav extends Component {
           </Collapse>
 
           <NavItem className="nav-link minisite_business__nav__item">
-            {this.props.cookies && <Avatar />}
+            {this.props.cookies && (
+              <Avatar
+                show={
+                  this.props.businessName === this.props.cookies.user_data.slug
+                }
+                nonLink={USER_GROUP_BUSINESS}
+                titleIndex={this.props.mainEdit}
+                onClick={this.props.onEditMainClicked}
+              />
+            )}
           </NavItem>
-          {/* <PermissionProvider permission="CAN_EDIT_MINISITE"> */}
-          <Button color="primary" onClick={this.props.onEditMainClicked}>
-            {this.props.mainEdit ? "Preview" : "Edit Data"}
-          </Button>
 
           {this.props.mainEdit ? (
             <Button

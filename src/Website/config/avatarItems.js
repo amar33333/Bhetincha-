@@ -38,6 +38,14 @@ export default [
     group: USER_GROUP_BUSINESS
   },
   {
+    className: ["fa fa-pencil", "fa fa-eye"],
+    title: ["Edit Minisite", "Preview Minisite"],
+    id: "edit-minisite",
+    badge: false,
+    link: null,
+    group: USER_GROUP_BUSINESS
+  },
+  {
     className: "fa fa-bell",
     title: "Notifications",
     id: "notifications",
