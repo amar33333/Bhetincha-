@@ -62,10 +62,6 @@ class FindCaller extends Component {
             </Col>
           </FormGroup>
           <CallerList />
-          <Button color="link" size="sm">
-            Load More
-          </Button>
-
           <hr />
           <FormGroup>
             <Label for="callerNumber">Caller Number</Label>

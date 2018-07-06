@@ -3,12 +3,13 @@ import { Table, Button } from "reactstrap";
 import "./callerdetail.css";
 
 import CallerAddEdit from "./CallerAddEdit";
+import CallerLogs from "./CallerLogs";
 
 class CallerDetail extends Component {
   constructor(props) {
     super(props);
 
-    this.state = { edit: true, found: true };
+    this.state = { edit: false, found: true };
   }
   render() {
     if (!this.props.isValidNumber(this.props.number)) {
@@ -40,24 +41,24 @@ class CallerDetail extends Component {
                   <td>abc@xyz.com</td>
                 </tr>
                 <tr>
-                  <th>Area</th>
-                  <td>Area</td>
-                </tr>
-                <tr>
-                  <th>City</th>
-                  <td>City</td>
-                </tr>
-                <tr>
-                  <th>District</th>
-                  <td>Kathmandu</td>
+                  <th>Country</th>
+                  <td>Nepal</td>
                 </tr>
                 <tr>
                   <th>State</th>
                   <td>State-01</td>
                 </tr>
                 <tr>
-                  <th>Country</th>
-                  <td>Nepal</td>
+                  <th>District</th>
+                  <td>Kathmandu</td>
+                </tr>
+                <tr>
+                  <th>City</th>
+                  <td>City</td>
+                </tr>
+                <tr>
+                  <th>Area</th>
+                  <td>Area</td>
                 </tr>
               </tbody>
             </Table>
@@ -69,6 +70,7 @@ class CallerDetail extends Component {
             onCancel={() => this.setState({ edit: false })}
           />
         )}
+        <CallerLogs />
       </div>
     );
   }

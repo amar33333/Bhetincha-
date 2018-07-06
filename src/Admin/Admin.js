@@ -20,7 +20,6 @@ import adminEpics from "./config/epics";
 
 class Admin extends Component {
   componentDidMount() {
-    console.log("asdasdaddsd");
     document.body.classList.add(
       "app",
       "header-fixed",

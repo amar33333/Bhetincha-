@@ -9,10 +9,12 @@ import {
   InputGroupAddon,
   InputGroupText,
   Form,
+  Table,
   FormGroup,
   Card,
   CardBody,
   Badge,
+  Label,
   CardHeader
 } from "reactstrap";
 import debounce from "lodash.debounce";
@@ -21,20 +23,32 @@ import { Link } from "react-router-dom";
 
 import { Select } from "../../../Common/components";
 import FindCaller from "./FindCaller";
+import ComposeSMS from "./ComposeSMS";
 import { onLocationsList, onBusinessTeleCallingList } from "../../actions";
 
 const TabPane = ({ business, show }) => (
   <Tab.Pane>
     {show && (
-      <ol>
+      <div>
         {business.map(data => (
-          <li key={data._id}>
-            <Link to={`/${data._source.slug}`}>
+          <div key={data._id}>
+            <FormGroup check>
+              <Label check>
+                <Input type="checkbox" />
+                <div style={{ width: "100%" }}>
+                  <h3>{data._source.business_name}</h3>
+                  <h5>{data._source.industry}</h5>
+                  <h5>{data._source.categories}</h5>
+                  <h5>{data._source.sub_categories}</h5>
+                </div>
+              </Label>
+            </FormGroup>
+            {/* <Link to={`/${data._source.slug}`}>
               {data._source.business_name}
-            </Link>
-          </li>
+            </Link> */}
+          </div>
         ))}
-      </ol>
+      </div>
     )}
     {!business.length && <p>No business found</p>}
   </Tab.Pane>
@@ -199,6 +213,7 @@ class TeleCalling extends Component {
           </Col>
           <Col md="6" xs="12">
             <FindCaller />
+            <ComposeSMS />
           </Col>
         </Row>
       </div>
