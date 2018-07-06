@@ -15,7 +15,7 @@ class MainNavbar extends Component {
       <Navbar
         justified
         color="light"
-        light
+        // light
         expand="md"
         className="main-nav"
         style={{ height: "85px" }}

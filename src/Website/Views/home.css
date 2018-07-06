@@ -74,7 +74,16 @@ input.main-nav-search::placeholder {
 
 .main-nav {
   /* border: 0.5px solid lightgray; */
-  background-color: #ffe200 !important;
+  /* background-color: #ffe200 !important; */
+  background-color: #15c111 !important;
+  /* color: white; */
+}
+
+.main-nav .navbar-brand {
+  color: white;
+}
+.main-nav .navbar-brand:hover {
+  color: rgb(243, 239, 239);
 }
 
 .user-dropdown i {
