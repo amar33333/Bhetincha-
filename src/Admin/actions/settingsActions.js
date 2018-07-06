@@ -71,7 +71,11 @@ epics.push((action$, { getState }) =>
           toast.success("Social Link Updated Successfully!");
           return [
             { type: EDIT_SOCIAL_LINK_FULFILLED, payload: response },
-            { type: FETCH_SOCIAL_LINK_PENDING }
+            { type: FETCH_SOCIAL_LINK_PENDING },
+            {
+              type: TOGGLE_SOCIAL_LINK_EDIT_MODAL,
+              payload: null
+            }
           ];
         } else {
           throw new Error(response.msg);
