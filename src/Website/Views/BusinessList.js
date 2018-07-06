@@ -213,8 +213,10 @@ class BusinessList extends Component {
                     >
                       {/* <i className="fa fa-map-marker" />{" "} */}
                       {each_search_result.address &&
+                        each_search_result.address.area &&
                         `${each_search_result.address.area.area},`}{" "}
                       {each_search_result.address &&
+                        each_search_result.address.area &&
                         each_search_result.address.area.city}{" "}
                       <br />
                     </span>

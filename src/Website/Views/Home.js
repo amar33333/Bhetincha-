@@ -20,6 +20,13 @@ import {
 import { BottomFooter } from "../components";
 import querystring from "querystring";
 
+const placeholder = [
+  "Search Anything....",
+  "Thakali Restaurants in Baneshwor",
+  "Hotels in Thamel",
+  "Schools in Lalitpur"
+];
+
 class Home extends Component {
   state = { query: "", result: "" };
 
@@ -75,6 +82,7 @@ class Home extends Component {
     );
 
   render() {
+    placeholder.sort(() => Math.random() - 0.5);
     return (
       <div className="body-wrapper">
         {this.renderLoginRegister()}
@@ -87,7 +95,7 @@ class Home extends Component {
           <Row className="centered">
             <Col xs="12" md="8" className="home-page__searchbar ">
               <AutoSuggestion
-                placeholder="Search anything..."
+                placeholder={placeholder[0]}
                 valueKey="business_name"
                 autoFocus
                 suggestions={this.props.search_result.data}
@@ -101,7 +109,13 @@ class Home extends Component {
                     //query: keyword
                     //search: `?query=${keyword}&frm=0&size=5`
                     search: `?${querystring.stringify({
-                      query: keyword
+                      query:
+                        keyword ||
+                        `${
+                          placeholder[0] !== "Search Anything...."
+                            ? placeholder[0]
+                            : ""
+                        }`
                       //frm: 0,
                       //size: 5
                     })}`
