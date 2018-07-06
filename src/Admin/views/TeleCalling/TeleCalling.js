@@ -128,80 +128,87 @@ class TeleCalling extends Component {
                 <strong>Place your query here</strong>
               </CardHeader>
               <CardBody>
-                <Form onSubmit={this.onFormSubmit} inline>
-                  <FormGroup
-                    className="mb-2 mr-sm-1 mb-sm-0"
-                    style={{ width: "89%" }}
-                  >
-                    <InputGroup style={{ width: "60%" }}>
-                      <InputGroupAddon addonType="prepend">
-                        <InputGroupText>Query</InputGroupText>
-                      </InputGroupAddon>
-                      <Input
-                        required
-                        // disabled={this.props.loading}
-                        // innerRef={ref => (this.focusableInput = ref)}
-                        type="text"
-                        placeholder="Enter search query"
-                        value={this.state.query}
-                        onChange={event => {
-                          const query = event.target.value;
-                          this.setState({ query }, () => {
-                            this.state.query &&
-                              // this.state.location &&
-                              this.debouncedQueryType();
-                          });
-                        }}
-                      />
-                    </InputGroup>
-                    <InputGroup style={{ paddingLeft: "10px" }}>
-                      <InputGroupAddon addonType="prepend">
-                        <InputGroupText>Location</InputGroupText>
-                      </InputGroupAddon>
-                      <Select
-                        style={{ minWidth: 200 }}
-                        placeholder="Filter Location"
-                        clearable
-                        isLoading={this.props.locationsFetchLoading}
-                        onInputChange={name => {
-                          this.setState({ locationSearchText: name });
-                          name && this.debouncedLocationAutocomplete(name);
-                        }}
-                        value={this.state.location}
-                        onChange={location =>
-                          this.setState(
-                            { location },
-                            () => this.state.query && this.onFormSubmit()
-                          )
-                        }
-                        valueKey="id"
-                        labelKey="name"
-                        filterOptions={options => options}
-                        options={
-                          this.state.locationSearchText
-                            ? this.props.locations
-                            : []
-                        }
-                        optionRenderer={({ name, type }) => (
-                          <div>
-                            {name}
-                            <Badge color="light" pill>
-                              {type}
-                            </Badge>
-                          </div>
-                        )}
-                        noResultsText={
-                          this.state.locationSearchText &&
-                          !this.props.locationsFetchLoading
-                            ? "No Results Found"
-                            : "Start Typing..."
-                        }
-                      />
-                    </InputGroup>
-                  </FormGroup>
-                  <Button color="warning">
-                    <span className="fa fa-search" /> Search
-                  </Button>
+                <Form onSubmit={this.onFormSubmit}>
+                  <Row>
+                    <Col xs="12">
+                      <FormGroup>
+                        <InputGroup>
+                          <InputGroupAddon addonType="prepend">
+                            <InputGroupText>Query</InputGroupText>
+                          </InputGroupAddon>
+                          <Input
+                            required
+                            // disabled={this.props.loading}
+                            // innerRef={ref => (this.focusableInput = ref)}
+                            type="text"
+                            placeholder="Enter search query"
+                            value={this.state.query}
+                            onChange={event => {
+                              const query = event.target.value;
+                              this.setState({ query }, () => {
+                                this.state.query &&
+                                  // this.state.location &&
+                                  this.debouncedQueryType();
+                              });
+                            }}
+                          />
+                        </InputGroup>
+                      </FormGroup>
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col xs="12">
+                      <FormGroup>
+                        <InputGroup>
+                          <InputGroupAddon addonType="prepend">
+                            <InputGroupText>Location</InputGroupText>
+                          </InputGroupAddon>
+                          <Select
+                            style={{ minWidth: 250 }}
+                            placeholder="Filter Location"
+                            clearable
+                            isLoading={this.props.locationsFetchLoading}
+                            onInputChange={name => {
+                              this.setState({ locationSearchText: name });
+                              name && this.debouncedLocationAutocomplete(name);
+                            }}
+                            value={this.state.location}
+                            onChange={location =>
+                              this.setState(
+                                { location },
+                                () => this.state.query && this.onFormSubmit()
+                              )
+                            }
+                            valueKey="id"
+                            labelKey="name"
+                            filterOptions={options => options}
+                            options={
+                              this.state.locationSearchText
+                                ? this.props.locations
+                                : []
+                            }
+                            optionRenderer={({ name, type }) => (
+                              <div>
+                                {name}
+                                <Badge color="light" pill>
+                                  {type}
+                                </Badge>
+                              </div>
+                            )}
+                            noResultsText={
+                              this.state.locationSearchText &&
+                              !this.props.locationsFetchLoading
+                                ? "No Results Found"
+                                : "Start Typing..."
+                            }
+                          />
+                          <Button color="warning" className="ml-2">
+                            <span className="fa fa-search" /> Search
+                          </Button>
+                        </InputGroup>
+                      </FormGroup>
+                    </Col>
+                  </Row>
                 </Form>
               </CardBody>
             </Card>

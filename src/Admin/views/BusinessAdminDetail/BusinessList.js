@@ -17,7 +17,8 @@ import {
   Input,
   Form,
   InputGroup,
-  InputGroupAddon
+  InputGroupAddon,
+  Collapse
 } from "reactstrap";
 import {
   Tooltip,
@@ -60,7 +61,7 @@ import {
 import PermissionProvider from "../../../Common/utils/PermissionProvider";
 
 class BusinessList extends Component {
-  state = { q: "" };
+  state = { q: "", filterCollapsed: true };
 
   tableProps = {
     columns: [
@@ -250,6 +251,12 @@ class BusinessList extends Component {
     200
   );
 
+  toggleFilterCollapse = () => {
+    this.setState({
+      filterCollapsed: !this.state.filterCollapsed
+    });
+  };
+
   componentDidMount = () => {
     this.props.onIndustryList();
     this.props.onCategoryList({ rows: 50, page: 1 });
@@ -295,14 +302,14 @@ class BusinessList extends Component {
       <div className="animated fadeIn">
         <PermissionProvider permission="CAN_ADD_BUSINESS">
           <Link to="/admin/add-business">
-            <Button variant="raised" color="primary" className="mb-4">
+            <Button variant="raised" color="primary" className="mb-4 mr-2">
               <i className="fa fa-plus" /> Add Business
             </Button>
           </Link>
         </PermissionProvider>
         <PermissionProvider permission="CAN_ADD_BUSINESS">
           <Link to="/admin/add-free-business">
-            <Button variant="raised" color="primary" className="mb-4">
+            <Button variant="raised" color="success" className="mb-4">
               <i className="fa fa-plus" /> Add Free Business
             </Button>
           </Link>
@@ -310,315 +317,333 @@ class BusinessList extends Component {
         <Row>
           <Col xs="12" md="12">
             <Card>
-              <CardHeader>
+              <CardHeader onClick={this.toggleFilterCollapse} className="pb-0">
                 <strong>Filters</strong>
-                <Button
-                  className="pull-right"
-                  color="link"
-                  onClick={this.props.onFilterCleared}
+                <span
+                  className="fa-stack fa-lg pull-right"
+                  style={{ marginTop: "-10px" }}
                 >
-                  <i className="fa fa-close" /> Clear Filter
-                </Button>
+                  <i className="fa fa-circle-thin fa-stack-1x" />
+                  {this.state.filterCollapsed ? (
+                    <i className="fa fa-angle-down fa-stack-1x" />
+                  ) : (
+                    <i className="fa fa-angle-up fa-stack-1x" />
+                  )}
+                </span>
               </CardHeader>
-              <CardBody>
-                <Form>
-                  <Row>
-                    <Col xs="12" md="4">
-                      <FormGroup>
-                        <Label for="filterIndustry">Industry</Label>
+              <CardBody className="pb-0">
+                <Collapse isOpen={!this.state.filterCollapsed}>
+                  <Button
+                    style={{
+                      marginLeft: "-15px",
+                      marginTop: "-15px"
+                    }}
+                    color="link"
+                    onClick={this.props.onFilterCleared}
+                  >
+                    <i className="fa fa-close" /> Clear Filter
+                  </Button>
+                  <Form>
+                    <Row>
+                      <Col xs="12" md="4">
+                        <FormGroup>
+                          <Label for="filterIndustry">Industry</Label>
 
-                        <Select
-                          id="filterIndustry"
-                          clearable
-                          multi
-                          tabSelectsValue={false}
-                          isLoading={this.props.industriesFetchLoading}
-                          value={this.props.filterIndustry}
-                          onChange={filterIndustry =>
-                            this.props.handleOnBusinessFilterChange({
-                              filterIndustry
-                            })
-                          }
-                          valueKey="id"
-                          labelKey="name"
-                          options={this.props.industries}
-                        />
-                      </FormGroup>
-                    </Col>
-                    <Col xs="12" md="4">
-                      <FormGroup>
-                        <Label for="filterCategory">Category</Label>
+                          <Select
+                            id="filterIndustry"
+                            clearable
+                            multi
+                            tabSelectsValue={false}
+                            isLoading={this.props.industriesFetchLoading}
+                            value={this.props.filterIndustry}
+                            onChange={filterIndustry =>
+                              this.props.handleOnBusinessFilterChange({
+                                filterIndustry
+                              })
+                            }
+                            valueKey="id"
+                            labelKey="name"
+                            options={this.props.industries}
+                          />
+                        </FormGroup>
+                      </Col>
+                      <Col xs="12" md="4">
+                        <FormGroup>
+                          <Label for="filterCategory">Category</Label>
 
-                        <Select
-                          id="filterCategory"
-                          clearable
-                          tabSelectsValue={false}
-                          multi
-                          isLoading={this.props.categoriesFetchLoading}
-                          onInputChange={this.debouncedCategoryAutocomplete}
-                          onFocus={() =>
-                            this.debouncedCategoryAutocomplete(" ")
-                          }
-                          value={this.props.filterCategory}
-                          onChange={filterCategory =>
-                            this.props.handleOnBusinessFilterChange({
-                              filterCategory
-                            })
-                          }
-                          valueKey="id"
-                          labelKey="name"
-                          filterOptions={options => options}
-                          options={
-                            !this.props.categoriesFetchLoading
-                              ? this.props.categories.filter(
-                                  category =>
-                                    !this.props.filterCategory.length ||
-                                    !this.props.filterCategory
-                                      .map(x => x.id)
-                                      .includes(category.id)
-                                )
-                              : []
-                          }
-                          noResultsText={
-                            !this.props.categoriesFetchLoading
-                              ? "No Results Found"
-                              : "Loading..."
-                          }
-                        />
-                      </FormGroup>
-                    </Col>
-                    <Col xs="12" md="4">
-                      <FormGroup>
-                        <Label for="filterSubCategory">Sub Category</Label>
+                          <Select
+                            id="filterCategory"
+                            clearable
+                            tabSelectsValue={false}
+                            multi
+                            isLoading={this.props.categoriesFetchLoading}
+                            onInputChange={this.debouncedCategoryAutocomplete}
+                            onFocus={() =>
+                              this.debouncedCategoryAutocomplete(" ")
+                            }
+                            value={this.props.filterCategory}
+                            onChange={filterCategory =>
+                              this.props.handleOnBusinessFilterChange({
+                                filterCategory
+                              })
+                            }
+                            valueKey="id"
+                            labelKey="name"
+                            filterOptions={options => options}
+                            options={
+                              !this.props.categoriesFetchLoading
+                                ? this.props.categories.filter(
+                                    category =>
+                                      !this.props.filterCategory.length ||
+                                      !this.props.filterCategory
+                                        .map(x => x.id)
+                                        .includes(category.id)
+                                  )
+                                : []
+                            }
+                            noResultsText={
+                              !this.props.categoriesFetchLoading
+                                ? "No Results Found"
+                                : "Loading..."
+                            }
+                          />
+                        </FormGroup>
+                      </Col>
+                      <Col xs="12" md="4">
+                        <FormGroup>
+                          <Label for="filterSubCategory">Sub Category</Label>
 
-                        <Select
-                          id="filterSubCategory"
-                          clearable
-                          tabSelectsValue={false}
-                          multi
-                          isLoading={this.props.subCategoriesFetchLoading}
-                          onInputChange={this.debouncedSubCategoryAutocomplete}
-                          onFocus={() =>
-                            this.debouncedSubCategoryAutocomplete(" ")
-                          }
-                          value={this.props.filterSubCategory}
-                          onChange={filterSubCategory =>
-                            this.props.handleOnBusinessFilterChange({
-                              filterSubCategory
-                            })
-                          }
-                          valueKey="id"
-                          labelKey="name"
-                          filterOptions={options => options}
-                          options={
-                            !this.props.subCategoriesFetchLoading
-                              ? this.props.subCategories.filter(
-                                  subCategory =>
-                                    !this.props.filterSubCategory.length ||
-                                    !this.props.filterSubCategory
-                                      .map(x => x.id)
-                                      .includes(subCategory.id)
-                                )
-                              : []
-                          }
-                          noResultsText={
-                            !this.props.subCategoriesFetchLoading
-                              ? "No Results Found"
-                              : "Loading..."
-                          }
-                        />
-                      </FormGroup>
-                    </Col>
-                  </Row>
-                  <Row>
-                    <Col xs="12" md="4">
-                      <FormGroup>
-                        <Label for="filterCountry">Country</Label>
+                          <Select
+                            id="filterSubCategory"
+                            clearable
+                            tabSelectsValue={false}
+                            multi
+                            isLoading={this.props.subCategoriesFetchLoading}
+                            onInputChange={
+                              this.debouncedSubCategoryAutocomplete
+                            }
+                            onFocus={() =>
+                              this.debouncedSubCategoryAutocomplete(" ")
+                            }
+                            value={this.props.filterSubCategory}
+                            onChange={filterSubCategory =>
+                              this.props.handleOnBusinessFilterChange({
+                                filterSubCategory
+                              })
+                            }
+                            valueKey="id"
+                            labelKey="name"
+                            filterOptions={options => options}
+                            options={
+                              !this.props.subCategoriesFetchLoading
+                                ? this.props.subCategories.filter(
+                                    subCategory =>
+                                      !this.props.filterSubCategory.length ||
+                                      !this.props.filterSubCategory
+                                        .map(x => x.id)
+                                        .includes(subCategory.id)
+                                  )
+                                : []
+                            }
+                            noResultsText={
+                              !this.props.subCategoriesFetchLoading
+                                ? "No Results Found"
+                                : "Loading..."
+                            }
+                          />
+                        </FormGroup>
+                      </Col>
+                    </Row>
+                    <Row>
+                      <Col xs="12" md="4">
+                        <FormGroup>
+                          <Label for="filterCountry">Country</Label>
 
-                        <Select
-                          id="filterCountry"
-                          isLoading={this.props.countriesFetchLoading}
-                          clearable
-                          tabSelectsValue={false}
-                          multi
-                          value={this.props.filterCountry}
-                          onChange={filterCountry =>
-                            this.props.handleOnBusinessFilterChange({
-                              filterCountry
-                            })
-                          }
-                          valueKey="id"
-                          labelKey="name"
-                          options={this.props.countries}
-                        />
-                      </FormGroup>
-                    </Col>
-                    <Col xs="12" md="4">
-                      <FormGroup>
-                        <Label for="filterState">State</Label>
+                          <Select
+                            id="filterCountry"
+                            isLoading={this.props.countriesFetchLoading}
+                            clearable
+                            tabSelectsValue={false}
+                            multi
+                            value={this.props.filterCountry}
+                            onChange={filterCountry =>
+                              this.props.handleOnBusinessFilterChange({
+                                filterCountry
+                              })
+                            }
+                            valueKey="id"
+                            labelKey="name"
+                            options={this.props.countries}
+                          />
+                        </FormGroup>
+                      </Col>
+                      <Col xs="12" md="4">
+                        <FormGroup>
+                          <Label for="filterState">State</Label>
 
-                        <Select
-                          id="filterState"
-                          clearable
-                          tabSelectsValue={false}
-                          multi
-                          isLoading={this.props.statesFetchLoading}
-                          onInputChange={this.debouncedStateAutocomplete}
-                          onFocus={() => this.debouncedStateAutocomplete(" ")}
-                          value={this.props.filterState}
-                          onChange={filterState =>
-                            this.props.handleOnBusinessFilterChange({
-                              filterState
-                            })
-                          }
-                          valueKey="id"
-                          labelKey="name"
-                          filterOptions={options => options}
-                          options={
-                            !this.props.statesFetchLoading
-                              ? this.props.states.filter(
-                                  state =>
-                                    !this.props.filterState.length ||
-                                    !this.props.filterState
-                                      .map(x => x.id)
-                                      .includes(state.id)
-                                )
-                              : []
-                          }
-                          noResultsText={
-                            !this.props.statesFetchLoading
-                              ? "No Results Found"
-                              : "Loading..."
-                          }
-                        />
-                      </FormGroup>
-                    </Col>
-                    <Col xs="12" md="4">
-                      <FormGroup>
-                        <Label for="filterDistrict">District</Label>
+                          <Select
+                            id="filterState"
+                            clearable
+                            tabSelectsValue={false}
+                            multi
+                            isLoading={this.props.statesFetchLoading}
+                            onInputChange={this.debouncedStateAutocomplete}
+                            onFocus={() => this.debouncedStateAutocomplete(" ")}
+                            value={this.props.filterState}
+                            onChange={filterState =>
+                              this.props.handleOnBusinessFilterChange({
+                                filterState
+                              })
+                            }
+                            valueKey="id"
+                            labelKey="name"
+                            filterOptions={options => options}
+                            options={
+                              !this.props.statesFetchLoading
+                                ? this.props.states.filter(
+                                    state =>
+                                      !this.props.filterState.length ||
+                                      !this.props.filterState
+                                        .map(x => x.id)
+                                        .includes(state.id)
+                                  )
+                                : []
+                            }
+                            noResultsText={
+                              !this.props.statesFetchLoading
+                                ? "No Results Found"
+                                : "Loading..."
+                            }
+                          />
+                        </FormGroup>
+                      </Col>
+                      <Col xs="12" md="4">
+                        <FormGroup>
+                          <Label for="filterDistrict">District</Label>
 
-                        <Select
-                          id="filterDistrict"
-                          clearable
-                          tabSelectsValue={false}
-                          multi
-                          isLoading={this.props.districtsFetchLoading}
-                          onInputChange={this.debouncedDistrictAutocomplete}
-                          onFocus={() =>
-                            this.debouncedDistrictAutocomplete(" ")
-                          }
-                          value={this.props.filterDistrict}
-                          onChange={filterDistrict =>
-                            this.props.handleOnBusinessFilterChange({
-                              filterDistrict
-                            })
-                          }
-                          valueKey="id"
-                          labelKey="name"
-                          filterOptions={options => options}
-                          options={
-                            !this.props.districtsFetchLoading
-                              ? this.props.districts.filter(
-                                  district =>
-                                    !this.props.filterDistrict.length ||
-                                    !this.props.filterDistrict
-                                      .map(x => x.id)
-                                      .includes(district.id)
-                                )
-                              : []
-                          }
-                          noResultsText={
-                            !this.props.districtsFetchLoading
-                              ? "No Results Found"
-                              : "Loading..."
-                          }
-                        />
-                      </FormGroup>
-                    </Col>
-                  </Row>
-                  <Row>
-                    <Col xs="12" md="4">
-                      <FormGroup>
-                        <Label for="filterCity">City</Label>
+                          <Select
+                            id="filterDistrict"
+                            clearable
+                            tabSelectsValue={false}
+                            multi
+                            isLoading={this.props.districtsFetchLoading}
+                            onInputChange={this.debouncedDistrictAutocomplete}
+                            onFocus={() =>
+                              this.debouncedDistrictAutocomplete(" ")
+                            }
+                            value={this.props.filterDistrict}
+                            onChange={filterDistrict =>
+                              this.props.handleOnBusinessFilterChange({
+                                filterDistrict
+                              })
+                            }
+                            valueKey="id"
+                            labelKey="name"
+                            filterOptions={options => options}
+                            options={
+                              !this.props.districtsFetchLoading
+                                ? this.props.districts.filter(
+                                    district =>
+                                      !this.props.filterDistrict.length ||
+                                      !this.props.filterDistrict
+                                        .map(x => x.id)
+                                        .includes(district.id)
+                                  )
+                                : []
+                            }
+                            noResultsText={
+                              !this.props.districtsFetchLoading
+                                ? "No Results Found"
+                                : "Loading..."
+                            }
+                          />
+                        </FormGroup>
+                      </Col>
+                    </Row>
+                    <Row>
+                      <Col xs="12" md="4">
+                        <FormGroup>
+                          <Label for="filterCity">City</Label>
 
-                        <Select
-                          id="filterCity"
-                          clearable
-                          tabSelectsValue={false}
-                          multi
-                          isLoading={this.props.citiesFetchLoading}
-                          onInputChange={this.debouncedCityAutocomplete}
-                          onFocus={() => this.debouncedCityAutocomplete(" ")}
-                          value={this.props.filterCity}
-                          onChange={filterCity =>
-                            this.props.handleOnBusinessFilterChange({
-                              filterCity
-                            })
-                          }
-                          valueKey="id"
-                          labelKey="name"
-                          filterOptions={options => options}
-                          options={
-                            !this.props.citiesFetchLoading
-                              ? this.props.cities.filter(
-                                  city =>
-                                    !this.props.filterCity.length ||
-                                    !this.props.filterCity
-                                      .map(x => x.id)
-                                      .includes(city.id)
-                                )
-                              : []
-                          }
-                          noResultsText={
-                            !this.props.citiesFetchLoading
-                              ? "No Results Found"
-                              : "Loading..."
-                          }
-                        />
-                      </FormGroup>
-                    </Col>
-                    <Col xs="12" md="4">
-                      <FormGroup>
-                        <Label for="filterArea">Area</Label>
+                          <Select
+                            id="filterCity"
+                            clearable
+                            tabSelectsValue={false}
+                            multi
+                            isLoading={this.props.citiesFetchLoading}
+                            onInputChange={this.debouncedCityAutocomplete}
+                            onFocus={() => this.debouncedCityAutocomplete(" ")}
+                            value={this.props.filterCity}
+                            onChange={filterCity =>
+                              this.props.handleOnBusinessFilterChange({
+                                filterCity
+                              })
+                            }
+                            valueKey="id"
+                            labelKey="name"
+                            filterOptions={options => options}
+                            options={
+                              !this.props.citiesFetchLoading
+                                ? this.props.cities.filter(
+                                    city =>
+                                      !this.props.filterCity.length ||
+                                      !this.props.filterCity
+                                        .map(x => x.id)
+                                        .includes(city.id)
+                                  )
+                                : []
+                            }
+                            noResultsText={
+                              !this.props.citiesFetchLoading
+                                ? "No Results Found"
+                                : "Loading..."
+                            }
+                          />
+                        </FormGroup>
+                      </Col>
+                      <Col xs="12" md="4">
+                        <FormGroup>
+                          <Label for="filterArea">Area</Label>
 
-                        <Select
-                          id="filterArea"
-                          clearable
-                          tabSelectsValue={false}
-                          multi
-                          isLoading={this.props.areasFetchLoading}
-                          onInputChange={this.debouncedAreaAutocomplete}
-                          onFocus={() => this.debouncedAreaAutocomplete(" ")}
-                          value={this.props.filterArea}
-                          onChange={filterArea =>
-                            this.props.handleOnBusinessFilterChange({
-                              filterArea
-                            })
-                          }
-                          valueKey="id"
-                          labelKey="name"
-                          filterOptions={options => options}
-                          options={
-                            !this.props.areasFetchLoading
-                              ? this.props.areas.filter(
-                                  area =>
-                                    !this.props.filterArea.length ||
-                                    !this.props.filterArea
-                                      .map(x => x.id)
-                                      .includes(area.id)
-                                )
-                              : []
-                          }
-                          noResultsText={
-                            !this.props.areasFetchLoading
-                              ? "No Results Found"
-                              : "Loading..."
-                          }
-                        />
-                      </FormGroup>
-                    </Col>
-                  </Row>
-                </Form>
+                          <Select
+                            id="filterArea"
+                            clearable
+                            tabSelectsValue={false}
+                            multi
+                            isLoading={this.props.areasFetchLoading}
+                            onInputChange={this.debouncedAreaAutocomplete}
+                            onFocus={() => this.debouncedAreaAutocomplete(" ")}
+                            value={this.props.filterArea}
+                            onChange={filterArea =>
+                              this.props.handleOnBusinessFilterChange({
+                                filterArea
+                              })
+                            }
+                            valueKey="id"
+                            labelKey="name"
+                            filterOptions={options => options}
+                            options={
+                              !this.props.areasFetchLoading
+                                ? this.props.areas.filter(
+                                    area =>
+                                      !this.props.filterArea.length ||
+                                      !this.props.filterArea
+                                        .map(x => x.id)
+                                        .includes(area.id)
+                                  )
+                                : []
+                            }
+                            noResultsText={
+                              !this.props.areasFetchLoading
+                                ? "No Results Found"
+                                : "Loading..."
+                            }
+                          />
+                        </FormGroup>
+                      </Col>
+                    </Row>
+                  </Form>
+                </Collapse>
               </CardBody>
             </Card>
           </Col>
@@ -636,6 +661,7 @@ class BusinessList extends Component {
               <FormGroup>
                 <InputGroup>
                   <Input
+                    size="lg"
                     placeholder="Search for Business Name"
                     onChange={this.handleChange.bind(null, "q")}
                     value={this.state.q}
@@ -650,7 +676,7 @@ class BusinessList extends Component {
             </Form>
           </Col>
         </Row>
-        <Row>
+        <Row className="mt-3">
           <Col xs="12">
             <ReactTable
               {...this.tableProps}
