@@ -44,9 +44,18 @@ class Contact extends Component {
                   {this.props.address.addressLine2}
                 </p>
               )}
-              <p>{`${this.props.address.area.name}, ${
-                this.props.address.city.name
-              }, ${this.props.address.district.name}`}</p>
+              <p>
+                {this.props.address &&
+                  this.props.address.area &&
+                  `${this.props.address.area.name},`}
+                {this.props.address &&
+                  this.props.address.city &&
+                  `${this.props.address.city.name},`}
+
+                {this.props.address &&
+                  this.props.address.district &&
+                  `${this.props.address.district.name}`}
+              </p>
               <p>
                 {this.props.address.landmark &&
                   `(${this.props.address.landmark})`}

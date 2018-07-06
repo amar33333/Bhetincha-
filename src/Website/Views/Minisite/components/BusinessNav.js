@@ -293,7 +293,7 @@ class BusinessNav extends Component {
             )}
           </NavItem>
 
-          {this.props.mainEdit ? (
+          {/* {this.props.mainEdit ? (
             <Button
               color="success"
               onClick={this.onNavChanged}
@@ -301,7 +301,7 @@ class BusinessNav extends Component {
             >
               <i className="fa fa-save" /> Save Nav
             </Button>
-          ) : null}
+          ) : null} */}
           {/* </PermissionProvider> */}
         </Navbar>
       </div>

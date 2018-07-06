@@ -356,8 +356,8 @@ class BusinessList extends Component {
     const settings = {
       start: 0,
       min: 0,
-      max: 200,
-      step: 20
+      max: 10,
+      step: 1
     };
     return (
       <div
@@ -374,7 +374,7 @@ class BusinessList extends Component {
                   .props.time_taken / 1000}s`}
               </small>
             </Col>
-            <Col xs="3">
+            {/* <Col xs="3">
               <small>
                 Limit Search Distance:{" "}
                 {this.state.distanceValue === 0
@@ -397,7 +397,7 @@ class BusinessList extends Component {
                   }}
                 />
               </small>
-            </Col>
+            </Col> */}
           </Row>
           <Row style={{ marginTop: "20px" }}>
             <Col xs="12" md="8">

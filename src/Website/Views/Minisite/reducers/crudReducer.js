@@ -27,47 +27,49 @@ const INITIAL_STATE = {
   albums: [],
   workingHour: [],
   address: {
-    area: {},
+    area: {
+      name: ""
+    },
     branchAddress: [],
     landLineNumber: "",
     latitude: "",
     longitude: ""
-  },
+  }
 
-  nav_layout: [
-    {
-      i: "home",
-      x: 0,
-      y: 0,
-      w: 2,
-      h: 1,
-      isResizable: false
-    },
-    {
-      i: "about",
-      x: 2,
-      y: 0,
-      w: 2,
-      h: 1,
-      isResizable: false
-    },
-    {
-      i: "gallery",
-      x: 4,
-      y: 0,
-      w: 2,
-      h: 1,
-      isResizable: false
-    },
-    {
-      i: "contact",
-      x: 6,
-      y: 0,
-      w: 2,
-      h: 1,
-      isResizable: false
-    }
-  ]
+  // nav_layout: [
+  //   {
+  //     i: "home",
+  //     x: 0,
+  //     y: 0,
+  //     w: 2,
+  //     h: 1,
+  //     isResizable: false
+  //   },
+  //   {
+  //     i: "about",
+  //     x: 2,
+  //     y: 0,
+  //     w: 2,
+  //     h: 1,
+  //     isResizable: false
+  //   },
+  //   {
+  //     i: "gallery",
+  //     x: 4,
+  //     y: 0,
+  //     w: 2,
+  //     h: 1,
+  //     isResizable: false
+  //   },
+  //   {
+  //     i: "contact",
+  //     x: 6,
+  //     y: 0,
+  //     w: 2,
+  //     h: 1,
+  //     isResizable: false
+  //   }
+  // ]
 };
 
 export default function(state = INITIAL_STATE, action) {
