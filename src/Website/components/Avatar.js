@@ -41,37 +41,65 @@ class Avatar extends Component {
   profileDropdowntoggle = () => this.setState({ isOpen: !this.state.isOpen });
 
   renderDropdownItems = () =>
-    avatarItems.map(
-      (avatarItem, i) =>
+    avatarItems.map((avatarItem, i) => {
+      if (
         !avatarItem.group ||
         (avatarItem.group === "ADMIN" &&
           this.state.group !== USER_GROUP_BUSINESS &&
           this.state.group !== USER_GROUP_INDIVIDUAL) ||
-        avatarItem.group === this.state.group ? (
-          <div key={i}>
-            <DropdownItem divider />
-            <Link
-              to={avatarItem.link.replace(
-                ROUTE_PARAMS_BUSINESS_NAME,
-                this.state.slug
-              )}
-            >
+        avatarItem.group === this.state.group
+      ) {
+        if (avatarItem.link) {
+          return (
+            <div key={i}>
+              <DropdownItem divider />
+              <Link
+                to={avatarItem.link.replace(
+                  ROUTE_PARAMS_BUSINESS_NAME,
+                  this.state.slug
+                )}
+              >
+                <div
+                  onClick={this.profileDropdowntoggle}
+                  className="profile-dropdown__item"
+                >
+                  <i
+                    className={`${
+                      avatarItem.className
+                    } profile-dropdown__item__icon`}
+                  />
+                  {avatarItem.title}
+                  {avatarItem.badge && <Badge color="warning">4</Badge>}
+                </div>
+              </Link>
+            </div>
+          );
+        } else if (this.props.show && avatarItem.group === this.props.nonLink) {
+          return (
+            <div key={i}>
+              <DropdownItem divider />
               <div
-                onClick={this.profileDropdowntoggle}
+                onClick={() => {
+                  this.profileDropdowntoggle();
+                  this.props.onClick();
+                }}
                 className="profile-dropdown__item"
               >
                 <i
                   className={`${
-                    avatarItem.className
+                    avatarItem.className[Number(this.props.titleIndex)]
                   } profile-dropdown__item__icon`}
                 />
-                {avatarItem.title}
+                {avatarItem.title[Number(this.props.titleIndex)]}
                 {avatarItem.badge && <Badge color="warning">4</Badge>}
               </div>
-            </Link>
-          </div>
-        ) : null
-    );
+            </div>
+          );
+        }
+        return null;
+      }
+      return null;
+    });
 
   render() {
     greetings.sort(() => Math.random() - 0.5);
