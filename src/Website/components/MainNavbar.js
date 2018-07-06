@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
-import { Navbar, NavItem, Input } from "reactstrap";
+import { Navbar, NavbarBrand, NavItem, Input } from "reactstrap";
 
 import Avatar from "./Avatar";
 import AutoSuggestion from "./AutoSuggestion";
@@ -12,53 +12,59 @@ import querystring from "querystring";
 class MainNavbar extends Component {
   render() {
     return (
-      <div>
-        <Navbar
-          color="light"
-          light
-          expand="md"
-          className="main-nav"
-          style={{ height: "85px" }}
-          fixed="top"
-        >
+      <Navbar
+        justified
+        color="light"
+        light
+        expand="md"
+        className="main-nav"
+        style={{ height: "85px" }}
+        // fixed="top"
+      >
+        <NavbarBrand>
           <Link to="/" className="navbar-brand">
             Bhetincha
           </Link>
-          <NavItem style={{ width: "50%", marginRight: "30px" }}>
-            {/* <Input
+        </NavbarBrand>
+
+        <NavItem
+          style={{ width: "50%", marginRight: "30px", marginTop: "17px" }}
+        >
+          {/* <Input
               icon="search"
               placeholder="Search..."
               className="main-nav-search"
               size="lg"
             /> */}
-            <AutoSuggestion
-              initialQuery={this.props.initialQuery}
-              placeholder="Search anything..."
-              valueKey="business_name"
-              suggestions={this.props.search_result.data}
-              onSuggestionsFetchRequested={this.props.onSearchQuerySubmit}
-              onSearchItemSelected={business => {
-                this.props.history.push(`/${business.slug}`);
-              }}
-              onSearchComplete={keyword => {
-                this.props.history.push({
-                  pathname: "/businesses",
-                  //query: keyword
-                  //search: `?query=${keyword}&frm=0&size=5`
-                  search: `?${querystring.stringify({
-                    query: keyword
-                    //frm: 0,
-                    //size: 5
-                  })}`
-                  // state: { detail: response.data }
-                });
-              }}
-            />
-          </NavItem>
-          {/* {this.props.cookies && <Avatar />} */}
-          <NavItem right="true">{this.props.cookies && <Avatar />}</NavItem>
-        </Navbar>
-      </div>
+          <AutoSuggestion
+            initialQuery={this.props.initialQuery}
+            placeholder="Search anything..."
+            valueKey="business_name"
+            suggestions={this.props.search_result.data}
+            onSuggestionsFetchRequested={this.props.onSearchQuerySubmit}
+            onSearchItemSelected={business => {
+              this.props.history.push(`/${business.slug}`);
+            }}
+            onSearchComplete={keyword => {
+              this.props.history.push({
+                pathname: "/businesses",
+                //query: keyword
+                //search: `?query=${keyword}&frm=0&size=5`
+                search: `?${querystring.stringify({
+                  query: keyword
+                  //frm: 0,
+                  //size: 5
+                })}`
+                // state: { detail: response.data }
+              });
+            }}
+          />
+        </NavItem>
+        {/* {this.props.cookies && <Avatar />} */}
+        <NavItem className="float-right">
+          {this.props.cookies && <Avatar />}
+        </NavItem>
+      </Navbar>
     );
   }
 }

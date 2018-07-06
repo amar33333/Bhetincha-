@@ -10,11 +10,12 @@ import {
   // CardFooter,
   Badge
 } from "reactstrap";
+import { Slider } from "react-semantic-ui-range";
 
 import { MAIN_URL } from "../../Common/utils/API";
 
-import { Card } from "semantic-ui-react";
-
+import { Card, Divider, Button, Input } from "semantic-ui-react";
+import moment from "moment";
 // import avatar from "../../static/img/avatar.jpg";
 // import avatar from "../../static/img/avatar.jpg";
 import querystring from "querystring";
@@ -33,7 +34,8 @@ class BusinessList extends Component {
     searchResults: [],
     search_results_count: 0,
     hasMoreItems: true,
-    verifiedTooltipOpen: false
+    verifiedTooltipOpen: false,
+    distanceValue: 0
   };
 
   componentDidMount() {
@@ -150,6 +152,10 @@ class BusinessList extends Component {
       return <div>No Results Found !!!</div>;
     else
       return this.state.searchResults.map(each_search_result => {
+        var momentNow = moment().format("hh:mm A");
+        var today = moment().day();
+        console.log("today:", today);
+
         return (
           <Card fluid>
             <Card.Content>
@@ -167,15 +173,16 @@ class BusinessList extends Component {
                     alt="Generic placeholder image"
                   />
                 </Media>
-                <Media body>
-                  <Media heading className="result-header__text">
+                <Media body className="ml-3">
+                  <small>Business</small>
+                  <Media className="result-header__text">
                     <Link to={each_search_result.slug}>
                       {each_search_result.business_name}{" "}
                       {each_search_result.verified && (
                         <span data-tooltip="Verified">
                           <i
                             className="fa fa-check-circle"
-                            style={{ color: "green" }}
+                            style={{ color: "green", fontSize: "1.2rem" }}
                             // data-tooltip="Add users to your feed"
                           />
                         </span>
@@ -200,10 +207,11 @@ class BusinessList extends Component {
                   </div>
                   {each_search_result.address ? (
                     <span
-                      data-tooltip="Get Direction"
-                      data-position="right center"
+                      // data-tooltip="Get Direction"
+                      // data-position="right center"
+                      style={{ fontSize: "1.2rem" }}
                     >
-                      <i className="fa fa-map-marker" />{" "}
+                      {/* <i className="fa fa-map-marker" />{" "} */}
                       {each_search_result.address &&
                         `${each_search_result.address.area.area},`}{" "}
                       {each_search_result.address &&
@@ -220,7 +228,7 @@ class BusinessList extends Component {
                   ) : null}
                   {each_search_result.business_email ? (
                     <div style={{ color: "rgb(35, 35, 34)" }}>
-                      <i className="fa fa-envelope" />{" "}
+                      <i className="fa fa-envelope-o" />{" "}
                       {each_search_result.business_email}
                     </div>
                   ) : null}
@@ -234,8 +242,7 @@ class BusinessList extends Component {
                     </div> */}
                 </Media>
               </Media>
-            </Card.Content>
-            <Card.Content>
+              <Divider />
               <Row>
                 {/* <Col sm="2">
                     <i className="fa fa-thumbs-up" />
@@ -248,39 +255,91 @@ class BusinessList extends Component {
                   style={{ cursor: "pointer" }}
                   onClick={this.onClaimed(each_search_result.id)}
                 >
-                  <i className="fa fa-unlock" /> Claim
+                  <Button circular basic>
+                    <i className="fa fa-unlock" /> Claim
+                  </Button>
                 </Col>
                 <Col
                   sm="3"
                   style={{ cursor: "pointer" }}
                   onClick={this.onImproveListingClicked(each_search_result.id)}
                 >
-                  <i className="fa fa-list" /> Improve Listing
+                  <Button circular basic>
+                    <i className="fa fa-list" /> Improve Listing{" "}
+                  </Button>
+                </Col>
+                {/* <Col sm="2">
+                  <i className="fa fa-envelope-o" /> Email
                 </Col>
                 <Col sm="2">
-                  <i className="fa fa-eye" /> 222
-                </Col>
-                <Col sm="2">
-                  <i className="fa fa-search" /> 5555
-                </Col>
-                <Col sm="2">
-                  <i className="fa fa-star" /> 4.5
+                  <i className="fa fa-phone" /> Call
+                </Col> */}
+                <Col sm="3">
+                  <Button circular basic>
+                    <i className="fa fa-location-arrow" /> Get Direction{" "}
+                  </Button>
                 </Col>
               </Row>
             </Card.Content>
-            {/* <div
-                style={{
-                  position: "absolute",
-                  backgroundColor: "#0719ece0",
-                  // opacity: 0.5,
-                  padding: 10,
-                  color: "white",
-                  top: 0,
-                  right: 0
-                }}
-              >
-                Business
-              </div> */}
+            <div
+              style={{
+                position: "absolute",
+                // backgroundColor: "#0719ece0",
+                // opacity: 0.5,
+                padding: 10,
+                color: "inherit",
+                top: "10px",
+                right: "10px"
+              }}
+            >
+              {each_search_result.workingHour.map((day, index) => {
+                let start = moment(day.start)
+                  .add({ hours: 5, minutes: 45 })
+                  .format("hh:mm A");
+                let end = moment(day.end)
+                  .add({ hours: 5, minutes: 45 })
+                  .format("hh:mm A");
+                console.log(
+                  each_search_result.business_name,
+                  "Now:",
+                  momentNow,
+                  "start:",
+                  start,
+                  "end:",
+                  end
+                );
+                if (index === today) {
+                  console.log("today");
+                  if (
+                    moment(momentNow, "hh:mm A").isBetween(
+                      moment(start, "hh:mm A"),
+                      moment(end, "hh:mm A")
+                    )
+                  ) {
+                    return (
+                      <small
+                        data-tooltip={`${start} - ${end}`}
+                        data-position="bottom center"
+                      >
+                        <i className="fa fa-clock-o" /> Open Now
+                      </small>
+                    );
+                  } else {
+                    return (
+                      <small
+                        data-tooltip={`${start} - ${end}`}
+                        data-position="bottom center"
+                        style={{ color: "red" }}
+                      >
+                        Closed
+                      </small>
+                    );
+                  }
+                } else {
+                  return null;
+                }
+              })}
+            </div>
           </Card>
         );
       });
@@ -291,15 +350,49 @@ class BusinessList extends Component {
     // console.log("business list state: ", this.state);
     this.props.search_result && console.log(this.props.search_result);
     const loader = <div className="loader">Loading ...</div>;
-
+    const settings = {
+      start: 0,
+      min: 0,
+      max: 200,
+      step: 20
+    };
     return (
-      <div className="mb-5">
+      <div
+        className="mb-5"
+        style={{
+          backgroundColor: "#f3f3f3"
+        }}
+      >
         <Container fluid>
-          <Row style={{ marginTop: "20px", paddingTop: "80px" }}>
-            <Col xs="12">
+          <Row style={{ paddingTop: "20px" }}>
+            <Col xs="5">
               <small>
                 {`About ${this.props.search_results_count} results in ${this
                   .props.time_taken / 1000}s`}
+              </small>
+            </Col>
+            <Col xs="3">
+              <small>
+                Limit Search Distance:{" "}
+                {this.state.distanceValue === 0
+                  ? "No limit"
+                  : `${this.state.distanceValue} KM`}
+                <Slider
+                  discrete
+                  color="red"
+                  inverted={false}
+                  settings={{
+                    start: this.state.distanceValue,
+                    min: 0,
+                    max: 200,
+                    step: 20,
+                    onChange: value => {
+                      this.setState({
+                        distanceValue: value
+                      });
+                    }
+                  }}
+                />
               </small>
             </Col>
           </Row>

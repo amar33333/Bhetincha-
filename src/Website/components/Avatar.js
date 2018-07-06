@@ -19,6 +19,16 @@ import { Link } from "react-router-dom";
 import avatar from "../../static/img/avatar.jpg";
 import avatarItems from "../config/avatarItems";
 
+const greetings = [
+  "Hi",
+  "Hello",
+  "Howdy",
+  "Namaste",
+  "Hola",
+  "नमस्ते",
+  "Bonjour"
+];
+
 class Avatar extends Component {
   state = { isOpen: false };
 
@@ -64,12 +74,13 @@ class Avatar extends Component {
     );
 
   render() {
+    greetings.sort(() => Math.random() - 0.5);
     return (
       <div>
         <Dropdown
           isOpen={this.state.isOpen}
           toggle={this.profileDropdowntoggle}
-          direction="top"
+          direction="bottom"
         >
           <DropdownToggle
             tag="span"
@@ -78,15 +89,15 @@ class Avatar extends Component {
             aria-expanded={this.state.isOpen}
           >
             <img className="avatar" alt="Avatar" src={avatar} />
-            <i className="fa fa-chevron-down profile-dropdown__icon" />
+            {/* <i className="fa fa-chevron-down profile-dropdown__icon" /> */}
           </DropdownToggle>
-          <DropdownMenu right>
+          <DropdownMenu>
             <div className="profile-dropdown">
               <div
                 onClick={this.profileDropdowntoggle}
                 className="profile-dropdown__item__heading"
               >
-                <strong>{`Howdy, ${this.state.username}!`}</strong>
+                <strong>{`${greetings[0]}, ${this.state.username}!`}</strong>
               </div>
               {this.renderDropdownItems()}
             </div>
