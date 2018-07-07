@@ -472,21 +472,16 @@ export const onSubCategoryPost = ({
   });
 };
 
-export const onSubCategoryPut = ({ sub_category, industry, access_token }) => {
-  console.log("sub cate edit: ", sub_category);
-  return ajax({
+export const onSubCategoryPut = ({ id, body, access_token }) =>
+  ajax({
     method: "PUT",
-    url: `${SUB_CATEGORY_URL}${sub_category.id}/`,
-    body: {
-      name: sub_category.name,
-      industry
-    },
+    url: `${SUB_CATEGORY_URL}${id}/`,
+    body,
     headers: {
       "Content-Type": "application/json",
       Authorization: "Bearer " + access_token
     }
   });
-};
 
 export const onSubCategoryPostAjax = ({
   category,

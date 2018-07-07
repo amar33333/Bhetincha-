@@ -30,6 +30,9 @@ import {
   RESEND_TOKEN_FULFILLED,
   RESEND_TOKEN_PENDING,
   RESEND_TOKEN_REJECTED,
+  CHECK_REGISTRATION_FULFILLED,
+  CHECK_REGISTRATION_PENDING,
+  CHECK_REGISTRATION_REJECTED,
   LOGOUT_USER
 } from "./types";
 
@@ -52,7 +55,8 @@ import {
   onPhoneVerificationRequestPost,
   onPhoneVerificationTokenPost,
   onUserRegister,
-  onResendTokenPost
+  onResendTokenPost,
+  onCheckRegistrationGet
 } from "../Common/utils/serverCall";
 
 import querystring from "querystring";
@@ -96,6 +100,31 @@ epics.push(action$ =>
     //     CookiesProvider.getAllCookies()
     //   );
     // }
+  })
+);
+
+export const onCheckRegistrationList = payload => ({
+  type: CHECK_REGISTRATION_PENDING,
+  payload
+});
+
+epics.push(action$ =>
+  action$.ofType(CHECK_REGISTRATION_PENDING).mergeMap(action => {
+    const { id } = action.payload;
+    return onCheckRegistrationGet({ id })
+      .map(({ response }) => {
+        return {
+          type: CHECK_REGISTRATION_FULFILLED,
+          payload: response.msg
+        };
+      })
+      .catch(ajaxError => {
+        toast.error(ajaxError.toString());
+        return Observable.of({
+          type: CHECK_REGISTRATION_REJECTED,
+          payload: ajaxError
+        });
+      });
   })
 );
 
@@ -283,10 +312,22 @@ epics.push(action$ =>
         if (response.msg === "success") {
           toast.success("Registered Successfully");
           console.log("respons: ", response);
-          history.push({
-            pathname: `/${slug}`
-          });
-          return [{ type: CREATE_USER_FULFILLED, payload: response }];
+          // history.push({
+          //   pathname: `/${slug}`
+          // });
+          console.log("asdadasdasdasdsadadasd: ", action.payload);
+          return [
+            { type: CREATE_USER_FULFILLED, payload: response },
+            {
+              type: FETCH_USER_PENDING,
+              payload: {
+                username: action.payload.body.username,
+                password: action.payload.body.password,
+                history
+              }
+            },
+            { type: TOGGLE_LOGIN_MODAL }
+          ];
         } else {
           throw new Error(response.msg[Object.keys(response.msg)[0]][0]);
         }

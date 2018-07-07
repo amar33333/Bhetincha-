@@ -16,7 +16,8 @@ const INITIAL_STATE = {
   subCategories: [],
   pages: 1,
   rowCount: 0,
-  subCategoryEditModal: false
+  subCategoryEditModal: false,
+  subCategoryEditData: null
 };
 
 export default function(state = INITIAL_STATE, action) {
@@ -52,7 +53,6 @@ export default function(state = INITIAL_STATE, action) {
       return { ...state, fetchLoading: false };
 
     case TOGGLE_SUB_CATEGORY_EDIT_MODAL:
-      console.log("SUB cat edit reducer: ", action);
       return {
         ...state,
         subCategoryEditModal: !state.subCategoryEditModal,

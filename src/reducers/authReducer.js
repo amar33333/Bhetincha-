@@ -19,6 +19,9 @@ import {
   SEND_PHONE_VERIFICATION_TOKEN_FULFILLED,
   SEND_PHONE_VERIFICATION_TOKEN_PENDING,
   SEND_PHONE_VERIFICATION_TOKEN_REJECTED,
+  CHECK_REGISTRATION_FULFILLED,
+  CHECK_REGISTRATION_PENDING,
+  CHECK_REGISTRATION_REJECTED,
   LOGOUT_USER
 } from "../actions/types";
 
@@ -33,7 +36,8 @@ const INITIAL_STATE = {
   phone_verification_response: null,
   phoneVerificationModal: false,
   data: null,
-  search_selected_business_id: null
+  search_selected_business_id: null,
+  checkRegistrationData: null
 };
 
 export default function(state = INITIAL_STATE, action) {
@@ -106,6 +110,23 @@ export default function(state = INITIAL_STATE, action) {
 
     case SEND_PHONE_VERIFICATION_TOKEN_REJECTED:
       return { ...state, loading: false };
+
+    case CHECK_REGISTRATION_PENDING:
+      return { ...state, loading: true };
+
+    case CHECK_REGISTRATION_FULFILLED:
+      return {
+        ...state,
+        checkRegistrationData: action.payload,
+        loading: false
+      };
+
+    case CHECK_REGISTRATION_REJECTED:
+      return {
+        ...state,
+        loading: false,
+        checkRegistrationData: action.payload
+      };
 
     case TOGGLE_PHONE_VERIFICATION_MODAL:
       console.log("togl phon: ", action.payload);

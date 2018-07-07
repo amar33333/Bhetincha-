@@ -8,10 +8,20 @@ import {
   PHONE_VERIFICATION_REQUEST_URL,
   PHONE_VERIFICATION_TOKEN_SEND_URL,
   USER_REGISTER_URL,
-  RESEND_TOKEN_URL
+  RESEND_TOKEN_URL,
+  CHECK_REGISTRATION_URL
 } from "./API";
 import querystring from "querystring";
 import { ajax } from "rxjs/observable/dom/ajax";
+
+export const onCheckRegistrationGet = ({ id }) =>
+  ajax({
+    method: "GET",
+    url: `${CHECK_REGISTRATION_URL}${id}/`,
+    headers: {
+      "Content-Type": "application/json"
+    }
+  });
 
 export const onPhoneVerificationRequestPost = ({ id, phone }) =>
   ajax({

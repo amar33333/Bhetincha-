@@ -71,7 +71,7 @@ class BusinessDetail extends Component {
     this.propsData = {
       ...this.subBusinessAdminDetailRef.getState(),
       ...this.subBusinessAboutRef.getState(),
-      ...this.subBusinessBranchWrapperRef.getState(),
+      // ...this.subBusinessBranchWrapperRef.getState(),
       ...this.subBusinessCoverImageRef.getState(),
       ...this.subBusinessLogoRef.getState(),
       ...this.subBusinessPrimaryAddressRef.getState(),

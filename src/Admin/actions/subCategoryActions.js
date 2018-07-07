@@ -141,10 +141,10 @@ export const onSubCategoryEdit = payload => ({
 
 epics.push((action$, { getState }) =>
   action$.ofType(EDIT_SUB_CATEGORY_PENDING).mergeMap(({ payload }) => {
-    const { subCategory, industry } = payload;
+    const { id, body } = payload;
     const access_token = getState().auth.cookies.token_data.access_token;
 
-    return onSubCategoryPut({ subCategory, industry, access_token })
+    return onSubCategoryPut({ id, body, access_token })
       .concatMap(({ response }) => {
         if (response.msg === "success") {
           toast.success("Sub_Category Updated successfully!");

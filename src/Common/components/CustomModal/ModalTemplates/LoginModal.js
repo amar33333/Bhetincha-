@@ -141,4 +141,7 @@ const mapStateToProps = ({ auth }) => {
   return { ...auth };
 };
 
-export default connect(mapStateToProps, { onSubmit })(LoginModal);
+export default connect(
+  mapStateToProps,
+  { onSubmit }
+)(LoginModal);

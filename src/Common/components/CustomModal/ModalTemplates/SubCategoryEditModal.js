@@ -12,95 +12,172 @@ import {
   FormGroup
 } from "reactstrap";
 
+import TagsInput from "react-tagsinput";
+
+import "react-table/react-table.css";
+import "react-tagsinput/react-tagsinput.css";
+
 import Select from "react-select";
 
 class SubCategoryEditModal extends Component {
-  state = { category: "", industry: "" };
+  state = {
+    subCategory: "",
+    category: "",
+    industry: "",
+    extraSections: [],
+    tags: []
+  };
 
   componentDidMount() {
-    this.setState({
-      category: this.props.data ? this.props.data : "",
-      industry: this.props.data
-        ? { id: this.props.data.industry, name: this.props.data.industry }
-        : ""
-    });
+    this.setState(
+      {
+        category: {
+          id: this.props.data.category,
+          name: this.props.data.category
+        },
+        industry: {
+          id: this.props.data.industry,
+          name: this.props.data.industry
+        },
+        subCategory: this.props.data.name,
+        extraSections: this.props.data.extra_sections.map(extraSection => ({
+          label: extraSection,
+          value: extraSection
+        })),
+        tags: this.props.data.tags
+      },
+      () => this.props.onIndustryEachList({ id: this.state.industry.id })
+    );
   }
 
   onChange = (key, event) => {
     this.setState({
-      [key]: {
-        ...this.state.category,
-        name: event.target.value.replace(/\b\w/g, l => l.toUpperCase())
-      }
+      [key]: event.target.value
     });
   };
 
-  handleIndustryChange = industry => {
-    this.setState({ industry });
+  handleTagsChange = tags => this.setState({ tags });
+
+  handleSelectChange = (key, value) => {
+    this.setState({ [key]: value });
+    if (key === "industry") {
+      this.setState({ category: "" });
+      value && this.props.onIndustryEachList({ id: value.id });
+    }
   };
 
   onFormEdit = event => {
     event.preventDefault();
-    const {
-      category,
-      industry: { id }
-    } = this.state;
-    this.props.onCategoryEdit({ category, industry: id });
+    const { category, subCategory, extraSections, tags } = this.state;
+
+    this.props.onSubCategoryEdit({
+      id: this.props.data.id,
+      body: {
+        category: category.id,
+        extra_sections: extraSections.map(extraSection => extraSection.value),
+        name: subCategory,
+        tags
+      }
+    });
   };
 
   render() {
     console.log("sub category edit props: ", this.props);
     console.log("sub category edit state: ", this.state);
 
-    const { industry } = this.state;
-    const value = industry && industry.id;
-
     return (
       <Form onSubmit={this.onFormEdit}>
         <Row>
-          <Col xs="12" md="12">
+          <Col xs="12" md="6">
             <FormGroup>
-              <Label for="Industries">Industry</Label>
+              <Label> Industry </Label>
               <Select
-                autoFocus
                 autosize
+                autoFocus
                 clearable
                 required
-                name="Industries"
-                className="select-industry"
-                value={value}
-                onChange={this.handleIndustryChange}
+                disabled={this.props.loading}
+                name="Industry"
+                className="select-category"
+                value={this.state.industry}
+                onChange={this.handleSelectChange.bind(this, "industry")}
                 options={this.props.industries}
                 valueKey="id"
                 labelKey="name"
               />
             </FormGroup>
           </Col>
-        </Row>
-        <Row>
-          <Col xs="12" md="10">
+          <Col xs="12" md="6">
             <FormGroup>
-              <InputGroup>
-                <InputGroupAddon addonType="prepend">
-                  <InputGroupText>
-                    <i className="icon-user" />
-                  </InputGroupText>
-                </InputGroupAddon>
-                <Input
-                  autoFocus
-                  required
-                  disabled={this.props.loading}
-                  type="text"
-                  placeholder="Type Category Name"
-                  value={this.state.category ? this.state.category.name : ""}
-                  onChange={this.onChange.bind(this, "category")}
-                />
-              </InputGroup>
+              <Label> Category </Label>
+              <Select
+                autosize
+                clearable
+                disabled={this.props.loading}
+                required
+                name="Category"
+                className="select-category"
+                value={this.state.category}
+                onChange={this.handleSelectChange.bind(this, "category")}
+                options={
+                  this.state.industry ? this.props.partialCategories : []
+                }
+                valueKey="id"
+                labelKey="name"
+              />
             </FormGroup>
           </Col>
-          <Col xs="12" md="2">
-            <Button color="primary">
-              <span className="fa fa-plus" /> SAVE
+        </Row>
+
+        <InputGroup className="mb-3">
+          <InputGroupAddon addonType="prepend">
+            <InputGroupText>Name</InputGroupText>
+          </InputGroupAddon>
+          <Input
+            required
+            innerRef={ref => (this.focusableInput = ref)}
+            disabled={this.props.loading}
+            type="text"
+            placeholder="New Sub Category Name"
+            value={this.state.subCategory}
+            onChange={this.onChange.bind(this, "subCategory")}
+          />
+        </InputGroup>
+        <Row>
+          <Col xs="12" md="12">
+            <TagsInput
+              onlyUnique
+              disabled={this.props.loading}
+              addKeys={[9, 188]}
+              value={this.state.tags}
+              onChange={this.handleTagsChange}
+            />
+          </Col>
+        </Row>
+        <FormGroup>
+          <Label> Extra Section </Label>
+          <Select
+            autosize
+            clearable
+            disabled={this.props.loading}
+            //required
+            tabSelectsValue={false}
+            multi
+            name="Extra-Sections"
+            className="select-extra-sections"
+            value={this.state.extraSections}
+            onChange={this.handleSelectChange.bind(this, "extraSections")}
+            options={this.props.extra_sections.data}
+          />
+        </FormGroup>
+        <Row>
+          <Col xs="6">
+            <Button
+              color="primary"
+              disabled={this.props.loading}
+              className="px-4"
+            >
+              <i className="fa fa-plus" /> SAVE
             </Button>
           </Col>
         </Row>
