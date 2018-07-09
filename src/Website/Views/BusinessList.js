@@ -432,7 +432,7 @@ class BusinessList extends Component {
                 loader={loader}
                 threshold={0}
               >
-                <div className="tracks">{items}</div>
+                <div className="tracks">{items}</div> 
               </InfiniteScroll> */}
             </Col>
           </Row>
