@@ -18,10 +18,27 @@ import { toast } from "react-toastify";
 import querystring from "querystring";
 import { connect } from "react-redux";
 
-import { onUserRegisterSubmit } from "../../../actions";
+import {
+  onUserRegisterSubmit,
+  onCheckRegistrationList
+} from "../../../actions";
 
 class UserRegister extends Component {
   state = { username: "", password: "", confirm_password: "", email: "" };
+
+  componentDidMount() {
+    const { id } = querystring.parse(this.props.location.search.slice(1));
+
+    this.props.onCheckRegistrationList({ id });
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (
+      this.props.checkRegistrationData &&
+      this.props.checkRegistrationData.status === 404
+    )
+      this.props.history.push("/404");
+  }
 
   onChange = (key, event) => {
     this.setState({ [key]: event.target.value });
@@ -143,6 +160,7 @@ const mapStateToProps = ({ auth }) => {
 export default connect(
   mapStateToProps,
   {
-    onUserRegisterSubmit
+    onUserRegisterSubmit,
+    onCheckRegistrationList
   }
 )(UserRegister);

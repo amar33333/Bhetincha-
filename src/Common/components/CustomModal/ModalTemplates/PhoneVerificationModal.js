@@ -11,9 +11,6 @@ import {
   Form
 } from "reactstrap";
 
-import { connect } from "react-redux";
-import { onPhoneVerificationRequest } from "../../../../actions";
-
 class PhoneVerificationModal extends Component {
   state = { phone: "" };
 
@@ -70,11 +67,4 @@ class PhoneVerificationModal extends Component {
   }
 }
 
-const mapStateToProps = ({ auth: { search_selected_business_id } }) => {
-  return { search_selected_business_id };
-};
-
-export default connect(
-  mapStateToProps,
-  { onPhoneVerificationRequest }
-)(PhoneVerificationModal);
+export default PhoneVerificationModal;

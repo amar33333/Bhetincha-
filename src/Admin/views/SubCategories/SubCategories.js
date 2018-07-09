@@ -165,9 +165,8 @@ class SubCategories extends Component {
             <Button
               color="secondary"
               className="mr-l"
-              onClick={
-                () => console.log("sub cat table: ", original)
-                //this.props.toggleSubCategoryEditModal({ id, industry, name })
+              onClick={() =>
+                this.props.toggleSubCategoryEditModal({ ...original })
               }
             >
               Edit
@@ -284,6 +283,7 @@ class SubCategories extends Component {
   };
 
   render() {
+    console.log("state: ", this.state);
     return (
       <div className="animated fadeIn">
         <Row className="hr-centered">
@@ -427,15 +427,17 @@ class SubCategories extends Component {
         />
         <CustomModal
           title="Edit Sub Category Data"
-          isOpen={this.props.SubCategoryEditModal}
+          isOpen={this.props.subCategoryEditModal}
           toggle={this.props.toggleSubCategoryEditModal}
           className={"modal-xs" + this.props.className}
         >
           <SubCategoryEditModal
             data={this.props.subCategoryEditData}
-            onCategoryEdit={this.props.onSubCategoryEdit}
+            onSubCategoryEdit={this.props.onSubCategoryEdit}
             industries={this.props.industries}
-            categories={this.props.categories}
+            extra_sections={this.props.extra_sections}
+            onIndustryEachList={this.props.onIndustryEachList}
+            partialCategories={this.props.partialCategories}
           />
         </CustomModal>
       </div>

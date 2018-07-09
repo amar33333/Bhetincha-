@@ -22,10 +22,21 @@ import querystring from "querystring";
 
 import { Link } from "react-router-dom";
 
-import { togglePhoneVerificationModal } from "../../actions";
+import {
+  togglePhoneVerificationModal,
+  onPhoneVerificationRequest
+} from "../../actions";
+
+import {
+  toggleImproveListingModal,
+  onProblemTypesList,
+  onImproveListing
+} from "../actions";
+
 import { onSearchResultsList } from "../actions";
 import CustomModal from "../../Common/components/CustomModal";
 import PhoneVerificationModal from "../../Common/components/CustomModal/ModalTemplates/PhoneVerificationModal";
+import ImproveListingModal from "../../Common/components/CustomModal/ModalTemplates/ImproveListingModal";
 
 class BusinessList extends Component {
   state = {
@@ -120,8 +131,8 @@ class BusinessList extends Component {
     this.props.togglePhoneVerificationModal({ id });
   };
 
-  onImproveListingClicked = id => () => {
-    console.log("imporve listing: ", id);
+  onImproveListingClicked = data => () => {
+    this.props.toggleImproveListingModal({ ...data });
   };
 
   onScroll = () => {
@@ -289,7 +300,7 @@ class BusinessList extends Component {
                 <Col
                   sm="3"
                   style={{ cursor: "pointer" }}
-                  onClick={this.onImproveListingClicked(each_search_result.id)}
+                  onClick={this.onImproveListingClicked(each_search_result)}
                 >
                   <Button circular basic>
                     <i className="fa fa-list" /> Improve Listing{" "}
@@ -443,7 +454,24 @@ class BusinessList extends Component {
           toggle={this.props.togglePhoneVerificationModal}
           className={"modal-xs" + this.props.className}
         >
-          <PhoneVerificationModal {...this.props} />
+          <PhoneVerificationModal
+            search_selected_business_id={this.props.search_selected_business_id}
+            onPhoneVerificationRequest={this.props.onPhoneVerificationRequest}
+            history={this.props.history}
+          />
+        </CustomModal>
+        <CustomModal
+          title="Improve Listing"
+          isOpen={this.props.improveListingModal}
+          toggle={this.props.toggleImproveListingModal}
+          className={"modal-xs" + this.props.className}
+        >
+          <ImproveListingModal
+            data={this.props.improveListingData}
+            onImproveListing={this.props.onImproveListing}
+            onProblemTypesList={this.props.onProblemTypesList}
+            problem_types={this.props.problem_types}
+          />
         </CustomModal>
       </div>
     );
@@ -451,14 +479,23 @@ class BusinessList extends Component {
 }
 
 export default connect(
-  ({ auth: { cookies, phoneVerificationModal }, home, search_result }) => ({
+  ({
+    auth: { cookies, phoneVerificationModal, search_selected_business_id },
+    home,
+    search_result
+  }) => ({
     cookies,
     ...home,
     phoneVerificationModal,
-    ...search_result
+    ...search_result,
+    search_selected_business_id
   }),
   {
     togglePhoneVerificationModal,
-    onSearchResultsList
+    toggleImproveListingModal,
+    onSearchResultsList,
+    onPhoneVerificationRequest,
+    onProblemTypesList,
+    onImproveListing
   }
 )(BusinessList);

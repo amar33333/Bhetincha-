@@ -1,6 +1,10 @@
-import { AUTO_COMPLETE_SEARCH_URL, SEARCH_URL } from "./WEBSITE_API";
+import {
+  AUTO_COMPLETE_SEARCH_URL,
+  SEARCH_URL,
+  PROBLEM_TYPES_URL,
+  IMPROVE_LISTING_URL
+} from "./WEBSITE_API";
 import { ajax } from "rxjs/observable/dom/ajax";
-import querystring from "querystring";
 
 const weekday = [
   "Sunday",
@@ -30,6 +34,24 @@ export const onSearch = ({ query }) =>
     }
   });
 
+export const onProblemTypesGet = () =>
+  ajax({
+    method: "GET",
+    url: PROBLEM_TYPES_URL,
+    headers: {
+      "Content-Type": "application/json"
+    }
+  });
+
+export const onImproveListingPost = ({ body, id }) =>
+  ajax({
+    method: "POST",
+    url: `${IMPROVE_LISTING_URL}${id}/`,
+    body,
+    headers: {
+      "Content-Type": "application/json"
+    }
+  });
 export const onSearchResultsGet = ({ query, frm, size }) => {
   const currentDateTime = new Date();
 

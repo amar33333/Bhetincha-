@@ -19,13 +19,34 @@ import querystring from "querystring";
 import { connect } from "react-redux";
 import {
   onPhoneVerificationTokenSend,
-  onResendTokenRequest
+  onResendTokenRequest,
+  onCheckRegistrationList
 } from "../../../actions";
 
 class MobileVerification extends Component {
   state = { verificationToken: "" };
 
-  componentDidMount() {}
+  componentDidMount() {
+    const { id } = querystring.parse(this.props.location.search.slice(1));
+
+    this.props.onCheckRegistrationList({ id });
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    const { id } = querystring.parse(this.props.location.search.slice(1));
+
+    if (
+      this.props.checkRegistrationData &&
+      this.props.checkRegistrationData.status === 404
+    )
+      this.props.history.push("/404");
+    else if (this.props.checkRegistrationData === "token_verified") {
+      this.props.history.push({
+        pathname: "/user-register",
+        search: `?${querystring.stringify({ id })}`
+      });
+    }
+  }
 
   onChange = (key, event) => {
     this.setState({ [key]: event.target.value });
@@ -36,7 +57,7 @@ class MobileVerification extends Component {
     const { verificationToken } = this.state;
     // console.log("mobile verif - props: ", this.props);
 
-    const { "?id": id } = querystring.parse(this.props.location.search);
+    const { id } = querystring.parse(this.props.location.search.slice(1));
 
     this.props.onPhoneVerificationTokenSend({
       id,
@@ -46,13 +67,13 @@ class MobileVerification extends Component {
   };
 
   onResendToken = () => {
-    const { "?id": id } = querystring.parse(this.props.location.search);
+    const { id } = querystring.parse(this.props.location.search.slice(1));
 
     this.props.onResendTokenRequest({ id });
   };
 
   render() {
-    // console.log("mobile props: ", this.props);
+    console.log("mobile props: ", this.props);
     return (
       <div className="app flex-row align-items-center">
         <Container>
@@ -117,5 +138,9 @@ const mapStateToProps = ({ auth }) => {
 
 export default connect(
   mapStateToProps,
-  { onPhoneVerificationTokenSend, onResendTokenRequest }
+  {
+    onPhoneVerificationTokenSend,
+    onResendTokenRequest,
+    onCheckRegistrationList
+  }
 )(MobileVerification);
