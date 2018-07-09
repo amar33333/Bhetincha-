@@ -225,10 +225,10 @@ epics.push(action$ =>
         }
       })
       .catch(ajaxError => {
-        toast.error(ajaxError.toString());
+        // toast.error(ajaxError.toString());
         return Observable.of({
           type: REQUEST_PHONE_VERIFICATION_REJECTED,
-          payload: false
+          payload: ajaxError
         });
       });
   })

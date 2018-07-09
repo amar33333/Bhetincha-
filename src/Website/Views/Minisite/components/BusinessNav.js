@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
+import { geolocated } from "react-geolocated";
 
 import { NavHashLink } from "react-router-hash-link";
 import { MAIN_URL } from "../config/MINISITE_API";
@@ -263,8 +264,10 @@ class BusinessNav extends Component {
                           //search: `?query=${keyword}&frm=0&size=5`
                           search: `?${querystring.stringify({
                             query: keyword,
-                            frm: 0,
-                            size: 5
+                            lat:
+                              this.props.coords && this.props.coords.latitude,
+                            lon:
+                              this.props.coords && this.props.coords.longitude
                           })}`
                           // state: { detail: response.data }
                         });
@@ -330,4 +333,13 @@ export default connect(
     onSearchQuerySubmit,
     onSearchResultsList
   }
-)(onClickOutside(BusinessNav));
+)(
+  onClickOutside(
+    geolocated({
+      positionOptions: {
+        enableHighAccuracy: false
+      },
+      userDecisionTimeout: 5000
+    })(BusinessNav)
+  )
+);

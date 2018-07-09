@@ -10,11 +10,21 @@ import {
   // CardFooter,
   Badge
 } from "reactstrap";
-import { Slider } from "react-semantic-ui-range";
+// import { geolocated } from "react-geolocated";
+import InputRange from "react-input-range";
+
+import "react-input-range/lib/css/index.css";
 
 import { MAIN_URL } from "../../Common/utils/API";
 
-import { Card, Divider, Button, Input } from "semantic-ui-react";
+import {
+  Card,
+  Divider,
+  Button,
+  Input,
+  Dimmer,
+  Loader
+} from "semantic-ui-react";
 import moment from "moment";
 // import avatar from "../../static/img/avatar.jpg";
 // import avatar from "../../static/img/avatar.jpg";
@@ -46,35 +56,10 @@ class BusinessList extends Component {
     search_results_count: 0,
     hasMoreItems: true,
     verifiedTooltipOpen: false,
-    distanceValue: 0,
-    location: {}
+    distance: 0
   };
 
-  getLocationState = () => {
-    return this.state.location;
-  };
-
-  getLocation = () => {
-    if (navigator.geolocation) {
-      console.log("navigator::", navigator.geolocation);
-      navigator.geolocation.getCurrentPosition(this.setPosition);
-    }
-  };
-
-  setPosition = position => {
-    this.setState(
-      {
-        location: {
-          latitude: position.coords.latitude,
-          longitude: position.coords.longitude
-        }
-      },
-      console.log("my Position:", this.state.location)
-    );
-  };
-
-  componentDidMount() {
-    this.getLocation();
+  componentDidMount = () => {
     window.addEventListener("scroll", this.onScroll, false);
     const parsedUrlStringObject = querystring.parse(
       this.props.location.search.slice(1)
@@ -85,13 +70,16 @@ class BusinessList extends Component {
     this.props.onSearchResultsList({
       query: parsedUrlStringObject["query"],
       frm,
-      size
+      size,
+      lat: parsedUrlStringObject["lat"],
+      lon: parsedUrlStringObject["lon"],
+      distance: this.state.distance
     });
 
     this.setState({ frm: frm + size });
 
     this.props.setInitialQuery(parsedUrlStringObject.query);
-  }
+  };
 
   componentWillUnmount() {
     window.removeEventListener("scroll", this.onScroll, false);
@@ -102,6 +90,8 @@ class BusinessList extends Component {
       this.props.location.search.slice(1)
     );
 
+    // console.log("pasdara: ", parsedUrlStringObject);
+
     if (this.props.location.search !== prevProps.location.search) {
       this.setState({ frm: 0 }, () => {
         const { frm, size } = this.state;
@@ -109,7 +99,10 @@ class BusinessList extends Component {
         this.props.onSearchResultsList({
           query: parsedUrlStringObject["query"],
           frm,
-          size
+          size,
+          lat: parsedUrlStringObject["lat"],
+          lon: parsedUrlStringObject["lon"],
+          distance: this.state.distance
         });
         this.setState({ searchResults: [], frm: frm + size });
       });
@@ -166,7 +159,10 @@ class BusinessList extends Component {
       this.props.onSearchResultsList({
         query: parsedUrlStringObject["query"],
         frm,
-        size
+        size,
+        lat: parsedUrlStringObject["lat"],
+        lon: parsedUrlStringObject["lon"],
+        distance: this.state.distance
       });
       this.setState({ frm: frm + size });
     }
@@ -303,7 +299,7 @@ class BusinessList extends Component {
                   onClick={this.onImproveListingClicked(each_search_result)}
                 >
                   <Button circular basic>
-                    <i className="fa fa-list" /> Improve Listing{" "}
+                    <i className="fa fa-list" /> Improve Listing
                   </Button>
                 </Col>
                 {/* <Col sm="2">
@@ -317,6 +313,14 @@ class BusinessList extends Component {
                     <i className="fa fa-location-arrow" /> Get Direction{" "}
                   </Button>
                 </Col>
+                {each_search_result.industry === "Restaurants" ? (
+                  <Col sm="3">
+                    <Button circular basic>
+                      <i className="fa fa-cutlery" aria-hidden="true" /> View
+                      Menu
+                    </Button>
+                  </Col>
+                ) : null}
               </Row>
             </Card.Content>
             <div
@@ -326,7 +330,7 @@ class BusinessList extends Component {
                 // opacity: 0.5,
                 padding: 10,
                 color: "inherit",
-                top: "10px",
+                top: "0px",
                 right: "10px"
               }}
             >
@@ -387,8 +391,14 @@ class BusinessList extends Component {
   render() {
     // console.log("business list: ", this.props);
     // console.log("business list state: ", this.state);
-    this.props.search_result && console.log(this.props.search_result);
-    const loader = <div className="loader">Loading ...</div>;
+    // this.props.search_result && console.log(this.props.search_result);
+    const loader = (
+      <div className="loader">
+        <Loader active inline="centered">
+          Loading
+        </Loader>
+      </div>
+    );
     return (
       <div
         className="mb-5"
@@ -397,42 +407,71 @@ class BusinessList extends Component {
         }}
       >
         <Container fluid>
-          <Row style={{ paddingTop: "20px" }}>
+          <Row style={{ paddingTop: "20px" }} className="mb-5">
             <Col xs="5">
               <small>
                 {`About ${this.props.search_results_count} results in ${this
                   .props.time_taken / 1000}s`}
               </small>
+              {/* <p>
+                Your Position: {this.props.coords && this.props.coords.latitude},{" "}
+                {this.props.coords && this.props.coords.longitude}
+              </p> */}
             </Col>
             <Col xs="3">
-              <small>
-                Limit Search Distance:{" "}
-                {this.state.distanceValue === 0
-                  ? "No limit"
-                  : `${this.state.distanceValue} KM`}
-                <Slider
-                  discrete
-                  color="red"
-                  inverted={false}
-                  settings={{
-                    start: this.state.distanceValue,
-                    min: 0,
-                    max: 20,
-                    step: 1,
-                    onChange: value => {
+              <div className="mb-2">
+                <small>
+                  Limit Search Distance:{" "}
+                  {this.state.distance === 0
+                    ? "No limit"
+                    : `${this.state.distance} KM`}
+                </small>
+              </div>
+              <InputRange
+                maxValue={20}
+                minValue={0}
+                step={1}
+                value={this.state.distance}
+                onChange={value => {
+                  this.setState({
+                    distance: value
+                  });
+                }}
+                onChangeComplete={value => {
+                  this.setState(
+                    {
+                      frm: 0
+                    },
+                    () => {
+                      const parsedUrlStringObject = querystring.parse(
+                        this.props.location.search.slice(1)
+                      );
+
+                      const { frm, size } = this.state;
+
+                      this.props.onSearchResultsList({
+                        query: parsedUrlStringObject["query"],
+                        frm,
+                        size,
+                        lat: parsedUrlStringObject["lat"],
+                        lon: parsedUrlStringObject["lon"],
+                        distance: this.state.distance
+                      });
                       this.setState({
-                        distanceValue: value
+                        searchResults: [],
+                        frm: frm + size
                       });
                     }
-                  }}
-                />
-              </small>
+                  );
+                }}
+              />
             </Col>
           </Row>
           <Row style={{ marginTop: "20px" }}>
             <Col xs="12" md="8">
               {this.renderSearchResults()}
-              {this.props.search_results_page_loading &&
+              {this.props.search_results_count > this.state.size &&
+              this.props.search_results_page_loading &&
               this.props.search_results_page_data.length
                 ? loader
                 : null}
@@ -457,6 +496,9 @@ class BusinessList extends Component {
           <PhoneVerificationModal
             search_selected_business_id={this.props.search_selected_business_id}
             onPhoneVerificationRequest={this.props.onPhoneVerificationRequest}
+            phone_verification_request_error={
+              this.props.phone_verification_request_error
+            }
             history={this.props.history}
           />
         </CustomModal>
@@ -480,7 +522,12 @@ class BusinessList extends Component {
 
 export default connect(
   ({
-    auth: { cookies, phoneVerificationModal, search_selected_business_id },
+    auth: {
+      cookies,
+      phoneVerificationModal,
+      search_selected_business_id,
+      phone_verification_request_error
+    },
     home,
     search_result
   }) => ({
@@ -488,7 +535,8 @@ export default connect(
     ...home,
     phoneVerificationModal,
     ...search_result,
-    search_selected_business_id
+    search_selected_business_id,
+    phone_verification_request_error
   }),
   {
     togglePhoneVerificationModal,
