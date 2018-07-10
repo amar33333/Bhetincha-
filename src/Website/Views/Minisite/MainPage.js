@@ -4,7 +4,16 @@ import { connect } from "react-redux";
 
 import Rating from "react-rating";
 
-import { Row, Col, Container } from "reactstrap";
+import {
+  Row,
+  Col,
+  Container,
+  Button,
+  Dropdown,
+  DropdownToggle,
+  DropdownMenu,
+  DropdownItem
+} from "reactstrap";
 import { Card } from "semantic-ui-react";
 
 import moment from "moment";
@@ -15,7 +24,33 @@ const aboutUsstyle = {
   color: "black"
 };
 
+const MAX_CAT = 3;
+
 class MainPage extends Component {
+  constructor(props) {
+    super(props);
+
+    this.toggle = this.toggle.bind(this);
+    this.state = {
+      dropdownOpen: false
+    };
+  }
+
+  toggle() {
+    this.setState(prevState => ({
+      dropdownOpen: !prevState.dropdownOpen
+    }));
+  }
+  renderRemainingCategories = () => {
+    var remainingcat = this.props.categories.filter((cat, i) => {
+      if (i >= MAX_CAT) {
+        return cat;
+      }
+    });
+    remainingcat.map((cat, index) => {
+      return <DropdownItem>{cat.name}</DropdownItem>;
+    });
+  };
   render() {
     var lastCategory = this.props.categories.slice(-1)[0];
     return (
@@ -31,6 +66,7 @@ class MainPage extends Component {
             <Rating
               className="mb-2 business-rating-component"
               fractions={2}
+              initialRating={3.5}
               emptySymbol="fa fa-star-o fa-1x"
               fullSymbol="fa fa-star fa-1x"
             />{" "}
@@ -40,10 +76,47 @@ class MainPage extends Component {
                 <span className="mr-2">{this.props.industry.name}</span>
                 <i className="fa fa-angle-right mr-2" />
                 {this.props.categories.map((category, catIndex) => {
+                  if (catIndex > MAX_CAT) return null;
                   return (
                     <span key={category.id}>
-                      {category.name}
-                      {category.id !== lastCategory.id ? (
+                      {catIndex < MAX_CAT ? (
+                        category.name
+                      ) : (
+                        <Dropdown
+                          isOpen={this.state.dropdownOpen}
+                          toggle={this.toggle}
+                          tag="span"
+                          className="ml-2"
+                          style={{
+                            cursor: "pointer"
+                          }}
+                        >
+                          <DropdownToggle tag="small">
+                            +{this.props.categories.length - MAX_CAT} more{" "}
+                            {this.props.categories.length - MAX_CAT === 1
+                              ? `category`
+                              : `categories`}
+                          </DropdownToggle>
+                          <DropdownMenu>
+                            {this.renderRemainingCategories()}
+                          </DropdownMenu>
+                        </Dropdown>
+                        // <Button
+                        //   color="link"
+                        //   className="ml-2"
+                        //   style={{
+                        //     color: "inherit"
+                        //   }}
+                        // >
+                        //   +{this.props.categories.length - MAX_CAT} more{" "}
+                        //   {this.props.categories.length - MAX_CAT === 1
+                        //     ? `category`
+                        //     : `categories`}
+                        // </Button>
+                      )}
+                      {/* {category.name} */}
+                      {category.id !== lastCategory.id &&
+                      catIndex < MAX_CAT - 1 ? (
                         <span className="mx-2"> | </span>
                       ) : null}
                     </span>
