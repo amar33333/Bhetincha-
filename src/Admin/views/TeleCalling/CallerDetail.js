@@ -28,11 +28,17 @@ class CallerDetail extends Component {
               <tbody className="contact-display">
                 <tr>
                   <th>Name</th>
-                  <td>{`${user.first_name} ${user.last_name}`}</td>
+                  <td>
+                    {user.at === "c"
+                      ? user.name
+                      : `${user.first_name} ${user.last_name}`}
+                  </td>
                 </tr>
                 <tr>
                   <th>Number</th>
-                  <td>{user.mobileNumber}</td>
+                  <td>
+                    {user.at === "m" ? user.phone_number : user.mobileNumber}
+                  </td>
                 </tr>
                 <tr>
                   <th>Email</th>
@@ -65,6 +71,8 @@ class CallerDetail extends Component {
           <CallerAddEdit
             edit={true}
             user={this.props.user}
+            number={this.props.number}
+            onTeleUserUpdate={this.props.onTeleUserUpdate}
             onCountryEachList={this.props.onCountryEachList}
             onStateEachList={this.props.onStateEachList}
             onDistrictEachList={this.props.onDistrictEachList}

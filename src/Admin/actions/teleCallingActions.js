@@ -19,7 +19,8 @@ import {
 import {
   onBusinessTeleCallingGetAjax,
   onTeleUserPostAjax,
-  onTeleUserSearchMobile
+  onTeleUserSearchMobile,
+  onTeleUserEditAjax
 } from "../config/adminServerCall";
 
 const epics = [];
@@ -72,6 +73,53 @@ epics.push((action$, { getState }) =>
         return Observable.of({ type: CREATE_TELE_USER_REJECTED });
       })
   )
+);
+
+export const onTeleUserUpdate = payload => ({
+  type: EDIT_TELE_USER_PENDING,
+  payload
+});
+
+epics.push((action$, { getState }) =>
+  action$.ofType(EDIT_TELE_USER_PENDING).mergeMap(({ payload }) => {
+    const state = getState();
+    const access_token = state.auth.cookies.token_data.access_token;
+    const { teleUser } = state.AdminContainer.tele_calling;
+    const body = { ...payload.body };
+    if (payload.body.at === "c") {
+      body.business_id = teleUser.business_id;
+      body.contactID = teleUser.contactID;
+      body.f = teleUser.f;
+    } else if (payload.body.at === "m") {
+      body.id = teleUser.id;
+      body.userid = teleUser.userid;
+    } else if (payload.body.at === "t") {
+      body.id = teleUser.id;
+    }
+
+    return onTeleUserEditAjax({
+      access_token,
+      body
+    })
+      .concatMap(({ response }) => {
+        if (response.msg === "success") {
+          toast.success("User updated successfully!");
+          return [
+            { type: EDIT_TELE_USER_FULFILLED },
+            {
+              type: FETCH_TELE_USER_PENDING,
+              payload: { params: { phone: payload.phone } }
+            }
+          ];
+        } else {
+          throw new Error(response.msg[Object.keys(response.msg)[0]][0]);
+        }
+      })
+      .catch(ajaxError => {
+        toast.error(ajaxError.toString());
+        return Observable.of({ type: EDIT_TELE_USER_REJECTED });
+      });
+  })
 );
 
 export const onTeleUserList = payload => ({

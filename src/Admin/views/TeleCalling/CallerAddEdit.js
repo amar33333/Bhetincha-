@@ -11,19 +11,25 @@ class CallerEdit extends Component {
         first_name,
         last_name,
         email,
-        mobileNumber,
+        // mobileNumber,
         country,
         state,
         district,
         city,
         area,
-        type
+        // type,
+        name,
+        // phone_number,
+        at
       } = props.user;
+
       this.state = {
-        firstName: first_name,
-        lastName: last_name,
-        number: mobileNumber,
-        email,
+        at,
+        firstName: at === "c" ? undefined : first_name,
+        lastName: at === "c" ? undefined : last_name,
+        name: at === "c" ? name : undefined,
+        // number: at === "m" ? phone_number : mobileNumber,
+        email: email || "",
         area: area || "",
         city: city || "",
         district: district || "",
@@ -32,9 +38,11 @@ class CallerEdit extends Component {
       };
     } else {
       this.state = {
+        at: "t",
         firstName: "",
         lastName: "",
-        number: "",
+        name: "",
+        // number: "",
         email: "",
         area: "",
         city: "",
@@ -43,10 +51,6 @@ class CallerEdit extends Component {
         country: ""
       };
     }
-  }
-
-  componentDidMount() {
-    console.log("mounted");
   }
 
   handleChange = (key, value) => {
@@ -75,10 +79,11 @@ class CallerEdit extends Component {
   onFormSubmit = e => {
     e.preventDefault();
 
-    const body = {};
     const {
+      at,
       firstName,
       lastName,
+      name,
       email,
       area,
       city,
@@ -86,6 +91,7 @@ class CallerEdit extends Component {
       state,
       country
     } = this.state;
+    const body = {};
 
     if (!this.props.edit) {
       body.mobileNumber = this.props.number;
@@ -113,6 +119,72 @@ class CallerEdit extends Component {
       }
 
       this.props.onSubmit({ body });
+    } else {
+      const { user } = this.props;
+      if (at === "c") {
+        if (user.name !== name) {
+          body.name = name;
+        }
+      } else {
+        if (user.first_name !== firstName) {
+          body.first_name = firstName;
+        }
+        if (user.last_name !== lastName) {
+          body.last_name = lastName;
+        }
+      }
+
+      if (user.email !== email) {
+        body.email = email;
+      }
+      if (
+        (user.country && country && user.country.id !== country.id) ||
+        (!user.country && country)
+      ) {
+        body.country = country.id;
+        body.state = null;
+        body.district = null;
+        body.city = null;
+        body.area = null;
+      }
+      if (
+        (user.state && state && user.state.id !== state.id) ||
+        (!user.state && state)
+      ) {
+        body.state = state.id;
+        body.district = null;
+        body.city = null;
+        body.area = null;
+      }
+      if (
+        (user.district && district && user.district.id !== district.id) ||
+        (!user.district && district)
+      ) {
+        body.district = district.id;
+        body.city = null;
+        body.area = null;
+      }
+      if (
+        (user.city && city && user.city.id !== city.id) ||
+        (!user.city && city)
+      ) {
+        body.city = city.id;
+        body.area = null;
+      }
+      if (
+        (user.area && area && user.area.id !== area.id) ||
+        (!user.area && area)
+      ) {
+        body.area = area.id;
+      }
+
+      if (Object.keys(body).length) {
+        this.props.onTeleUserUpdate({
+          body: { at, ...body },
+          phone: this.props.number
+        });
+      }
+      // console.log(body);
     }
   };
 
@@ -123,29 +195,44 @@ class CallerEdit extends Component {
         <Form onSubmit={this.onFormSubmit}>
           <Table size="sm" striped>
             <tbody className="contact-display">
-              <tr>
-                <th>First Name</th>
-                <td>
-                  <Input
-                    required
-                    value={this.state.firstName}
-                    onChange={e =>
-                      this.handleChange("firstName", e.target.value)
-                    }
-                  />
-                </td>
-              </tr>
-              <tr>
-                <th>Last Name</th>
-                <td>
-                  <Input
-                    value={this.state.lastName}
-                    onChange={e =>
-                      this.handleChange("lastName", e.target.value)
-                    }
-                  />
-                </td>
-              </tr>
+              {this.state.at !== "c" && (
+                <tr>
+                  <th>First Name</th>
+                  <td>
+                    <Input
+                      required
+                      value={this.state.firstName}
+                      onChange={e =>
+                        this.handleChange("firstName", e.target.value)
+                      }
+                    />
+                  </td>
+                </tr>
+              )}
+              {this.state.at !== "c" && (
+                <tr>
+                  <th>Last Name</th>
+                  <td>
+                    <Input
+                      value={this.state.lastName}
+                      onChange={e =>
+                        this.handleChange("lastName", e.target.value)
+                      }
+                    />
+                  </td>
+                </tr>
+              )}
+              {this.state.at === "c" && (
+                <tr>
+                  <th>Name</th>
+                  <td>
+                    <Input
+                      value={this.state.name}
+                      onChange={e => this.handleChange("name", e.target.value)}
+                    />
+                  </td>
+                </tr>
+              )}
               {/* <tr>
                 <th>Number</th>
                 <td>

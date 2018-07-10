@@ -72,6 +72,8 @@ class FindCaller extends Component {
       return (
         <CallerDetail
           user={this.props.teleUser}
+          number={this.state.callerNumber}
+          onTeleUserUpdate={this.props.onTeleUserUpdate}
           onCountryEachList={this.props.onCountryEachList}
           onStateEachList={this.props.onStateEachList}
           onDistrictEachList={this.props.onDistrictEachList}

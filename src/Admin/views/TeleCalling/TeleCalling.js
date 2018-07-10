@@ -33,7 +33,8 @@ import {
   onStateEachList,
   onDistrictEachList,
   onCityEachList,
-  onTeleUserList
+  onTeleUserList,
+  onTeleUserUpdate
 } from "../../actions";
 
 const TabPane = ({ business, show }) => (
@@ -239,6 +240,7 @@ class TeleCalling extends Component {
           <Col md="6" xs="12">
             <FindCaller
               onTeleUserList={this.props.onTeleUserList}
+              onTeleUserUpdate={this.props.onTeleUserUpdate}
               userLoading={this.props.userLoading}
               countries={this.props.countries}
               partialStates={this.props.partialStates}
@@ -292,6 +294,7 @@ export default connect(
     onStateEachList,
     onDistrictEachList,
     onCityEachList,
-    onTeleUserList
+    onTeleUserList,
+    onTeleUserUpdate
   }
 )(TeleCalling);
