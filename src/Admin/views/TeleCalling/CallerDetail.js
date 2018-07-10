@@ -12,9 +12,7 @@ class CallerDetail extends Component {
     this.state = { edit: false, found: true };
   }
   render() {
-    if (!this.props.isValidNumber(this.props.number)) {
-      return <p>Enter a Valid Number</p>;
-    }
+    const { user } = this.props;
     return (
       <div>
         {!this.state.edit ? (
@@ -30,35 +28,35 @@ class CallerDetail extends Component {
               <tbody className="contact-display">
                 <tr>
                   <th>Name</th>
-                  <td>Ram Prasad</td>
+                  <td>{`${user.first_name} ${user.last_name}`}</td>
                 </tr>
                 <tr>
                   <th>Number</th>
-                  <td>9898989898</td>
+                  <td>{user.mobileNumber}</td>
                 </tr>
                 <tr>
                   <th>Email</th>
-                  <td>abc@xyz.com</td>
+                  <td>{user.email}</td>
                 </tr>
                 <tr>
                   <th>Country</th>
-                  <td>Nepal</td>
+                  <td>{user.country && user.country.name}</td>
                 </tr>
                 <tr>
                   <th>State</th>
-                  <td>State-01</td>
+                  <td>{user.state && user.state.name}</td>
                 </tr>
                 <tr>
                   <th>District</th>
-                  <td>Kathmandu</td>
+                  <td>{user.district && user.district.name}</td>
                 </tr>
                 <tr>
                   <th>City</th>
-                  <td>City</td>
+                  <td>{user.city && user.city.name}</td>
                 </tr>
                 <tr>
                   <th>Area</th>
-                  <td>Area</td>
+                  <td>{user.area && user.area.name}</td>
                 </tr>
               </tbody>
             </Table>
@@ -66,7 +64,17 @@ class CallerDetail extends Component {
         ) : (
           <CallerAddEdit
             edit={true}
-            onSubmit={() => console.log("submitted")}
+            user={this.props.user}
+            onCountryEachList={this.props.onCountryEachList}
+            onStateEachList={this.props.onStateEachList}
+            onDistrictEachList={this.props.onDistrictEachList}
+            onCityEachList={this.props.onCityEachList}
+            countries={this.props.countries}
+            partialStates={this.props.partialStates}
+            partialDistricts={this.props.partialDistricts}
+            partialCities={this.props.partialCities}
+            partialAreas={this.props.partialAreas}
+            onSubmit={this.props.onSubmit}
             onCancel={() => this.setState({ edit: false })}
           />
         )}

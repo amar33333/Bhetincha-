@@ -2,26 +2,38 @@ import React, { Component } from "react";
 import { Button, Table, Input, Form } from "reactstrap";
 import { Select } from "../../../Common/components";
 
-const areas = [{ id: 1, name: "oralo" }, { id: 2, name: "ukalo" }];
-
 class CallerEdit extends Component {
   constructor(props) {
     super(props);
 
     if (this.props.edit) {
+      const {
+        first_name,
+        last_name,
+        email,
+        mobileNumber,
+        country,
+        state,
+        district,
+        city,
+        area,
+        type
+      } = props.user;
       this.state = {
-        name: "Ram",
-        number: "9898989898",
-        email: "abc@xyz.com",
-        area: { id: 1, name: "oralo" },
-        city: { id: 1, name: "oralo" },
-        district: { id: 1, name: "oralo" },
-        state: { id: 1, name: "oralo" },
-        country: { id: 1, name: "oralo" }
+        firstName: first_name,
+        lastName: last_name,
+        number: mobileNumber,
+        email,
+        area: area || "",
+        city: city || "",
+        district: district || "",
+        state: state || "",
+        country: country || ""
       };
     } else {
       this.state = {
-        name: "",
+        firstName: "",
+        lastName: "",
         number: "",
         email: "",
         area: "",
@@ -37,31 +49,104 @@ class CallerEdit extends Component {
     console.log("mounted");
   }
 
-  handleChange = (key, value) => this.setState({ [key]: value });
+  handleChange = (key, value) => {
+    this.setState({
+      [key]:
+        key === "firstName" || key === "lastName"
+          ? value.replace(/\b\w/g, l => l.toUpperCase())
+          : value
+    });
+
+    if (key === "country") {
+      this.setState({ state: "", district: "", city: "", area: "" });
+      value && this.props.onCountryEachList({ id: value.id });
+    } else if (key === "state") {
+      this.setState({ district: "", city: "", area: "" });
+      value && this.props.onStateEachList({ id: value.id });
+    } else if (key === "district") {
+      this.setState({ city: "", area: "" });
+      value && this.props.onDistrictEachList({ id: value.id });
+    } else if (key === "city") {
+      this.setState({ area: "" });
+      value && this.props.onCityEachList({ id: value.id });
+    }
+  };
 
   onFormSubmit = e => {
     e.preventDefault();
 
-    this.props.onSubmit();
+    const body = {};
+    const {
+      firstName,
+      lastName,
+      email,
+      area,
+      city,
+      district,
+      state,
+      country
+    } = this.state;
+
+    if (!this.props.edit) {
+      body.mobileNumber = this.props.number;
+      body.first_name = firstName;
+      if (lastName) {
+        body.last_name = lastName;
+      }
+      if (email) {
+        body.email = email;
+      }
+      if (area && area.id) {
+        body.area = area.id;
+      }
+      if (city && city.id) {
+        body.city = city.id;
+      }
+      if (district && district.id) {
+        body.district = district.id;
+      }
+      if (state && state.id) {
+        body.state = state.id;
+      }
+      if (country && country.id) {
+        body.country = country.id;
+      }
+
+      this.props.onSubmit({ body });
+    }
   };
 
   render() {
     return (
       <div>
+        {!this.props.edit && <p>No Associated User. Add New User</p>}
         <Form onSubmit={this.onFormSubmit}>
           <Table size="sm" striped>
             <tbody className="contact-display">
               <tr>
-                <th>Name</th>
+                <th>First Name</th>
                 <td>
                   <Input
                     required
-                    value={this.state.name}
-                    onChange={e => this.handleChange("name", e.target.value)}
+                    value={this.state.firstName}
+                    onChange={e =>
+                      this.handleChange("firstName", e.target.value)
+                    }
                   />
                 </td>
               </tr>
               <tr>
+                <th>Last Name</th>
+                <td>
+                  <Input
+                    value={this.state.lastName}
+                    onChange={e =>
+                      this.handleChange("lastName", e.target.value)
+                    }
+                  />
+                </td>
+              </tr>
+              {/* <tr>
                 <th>Number</th>
                 <td>
                   <Input
@@ -70,7 +155,7 @@ class CallerEdit extends Component {
                     onChange={e => this.handleChange("number", e.target.value)}
                   />
                 </td>
-              </tr>
+              </tr> */}
               <tr>
                 <th>Email</th>
                 <td>
@@ -85,7 +170,7 @@ class CallerEdit extends Component {
                 <td>
                   <Select
                     value={this.state.country}
-                    options={areas}
+                    options={this.props.countries}
                     labelKey="name"
                     valueKey="id"
                     onChange={value => this.handleChange("country", value)}
@@ -97,7 +182,7 @@ class CallerEdit extends Component {
                 <td>
                   <Select
                     value={this.state.state}
-                    options={areas}
+                    options={this.props.partialStates}
                     labelKey="name"
                     valueKey="id"
                     onChange={value => this.handleChange("state", value)}
@@ -109,7 +194,7 @@ class CallerEdit extends Component {
                 <td>
                   <Select
                     value={this.state.district}
-                    options={areas}
+                    options={this.props.partialDistricts}
                     labelKey="name"
                     valueKey="id"
                     onChange={value => this.handleChange("district", value)}
@@ -121,7 +206,7 @@ class CallerEdit extends Component {
                 <td>
                   <Select
                     value={this.state.city}
-                    options={areas}
+                    options={this.props.partialCities}
                     labelKey="name"
                     valueKey="id"
                     onChange={value => this.handleChange("city", value)}
@@ -133,7 +218,7 @@ class CallerEdit extends Component {
                 <td>
                   <Select
                     value={this.state.area}
-                    options={areas}
+                    options={this.props.partialAreas}
                     labelKey="name"
                     valueKey="id"
                     onChange={value => this.handleChange("area", value)}
@@ -145,9 +230,11 @@ class CallerEdit extends Component {
           <Button type="submit" color="primary">
             Submit
           </Button>{" "}
-          <Button color="secondary" onClick={this.props.onCancel}>
-            Cancel
-          </Button>
+          {this.props.edit && (
+            <Button color="secondary" onClick={this.props.onCancel}>
+              Cancel
+            </Button>
+          )}
         </Form>
       </div>
     );
