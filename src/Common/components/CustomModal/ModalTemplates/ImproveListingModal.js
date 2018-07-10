@@ -103,7 +103,7 @@ class ImproveListingModal extends Component {
                 autoFocus
                 autosize
                 clearable
-                required
+                //required
                 name="ProblemTypes"
                 placeholder="Select Your Problem Type"
                 className="select-problem-type"

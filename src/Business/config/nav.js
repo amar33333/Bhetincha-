@@ -12,9 +12,51 @@ const items = {
       title: true,
       name: `${ROUTE_PARAMS_BUSINESS_NAME}`
     },
+    // {
+    //   name: "Business Detail",
+    //   url: `/${ROUTE_PARAMS_BUSINESS_NAME}/dashboard/business-detail`,
+    //   icon: "fa fa-map-o"
+    //   // permission: "CAN_VIEW_USERS"
+    // },
     {
-      name: "Business Detail",
-      url: `/${ROUTE_PARAMS_BUSINESS_NAME}/dashboard/business-detail`,
+      name: "Business Details",
+      url: `/${ROUTE_PARAMS_BUSINESS_NAME}/dashboard/business-details`,
+      icon: "fa fa-map-o"
+      // permission: "CAN_VIEW_USERS"
+    },
+    {
+      name: "PrimaryAddress",
+      url: `/${ROUTE_PARAMS_BUSINESS_NAME}/dashboard/business-primary-address`,
+      icon: "fa fa-map-o"
+      // permission: "CAN_VIEW_USERS"
+    },
+    {
+      name: "BranchAddress",
+      url: `/${ROUTE_PARAMS_BUSINESS_NAME}/dashboard/business-branch-address`,
+      icon: "fa fa-map-o"
+      // permission: "CAN_VIEW_USERS"
+    },
+    {
+      name: "Logo",
+      url: `/${ROUTE_PARAMS_BUSINESS_NAME}/dashboard/business-logo`,
+      icon: "fa fa-map-o"
+      // permission: "CAN_VIEW_USERS"
+    },
+    {
+      name: "CoverImage",
+      url: `/${ROUTE_PARAMS_BUSINESS_NAME}/dashboard/business-cover-image`,
+      icon: "fa fa-map-o"
+      // permission: "CAN_VIEW_USERS"
+    },
+    {
+      name: "About",
+      url: `/${ROUTE_PARAMS_BUSINESS_NAME}/dashboard/business-about`,
+      icon: "fa fa-map-o"
+      // permission: "CAN_VIEW_USERS"
+    },
+    {
+      name: "WorkingHour",
+      url: `/${ROUTE_PARAMS_BUSINESS_NAME}/dashboard/business-working-hour`,
       icon: "fa fa-map-o"
       // permission: "CAN_VIEW_USERS"
     },
