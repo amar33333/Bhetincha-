@@ -24,7 +24,18 @@ import { Link } from "react-router-dom";
 import { Select } from "../../../Common/components";
 import FindCaller from "./FindCaller";
 import ComposeSMS from "./ComposeSMS";
-import { onLocationsList, onBusinessTeleCallingList } from "../../actions";
+import {
+  onLocationsList,
+  onBusinessTeleCallingList,
+  onTeleUserSubmit,
+  onCountryList,
+  onCountryEachList,
+  onStateEachList,
+  onDistrictEachList,
+  onCityEachList,
+  onTeleUserList,
+  onTeleUserUpdate
+} from "../../actions";
 
 const TabPane = ({ business, show }) => (
   <Tab.Pane>
@@ -83,6 +94,14 @@ class TeleCalling extends Component {
       )
     }
   ];
+
+  componentDidMount() {
+    this.props.onCountryList();
+  }
+
+  // componentDidUpdate() {
+  //
+  // }
 
   onTabChange = (_, data) => {
     this.setState({ activeIndex: data.activeIndex }, this.onFormSubmit);
@@ -219,7 +238,23 @@ class TeleCalling extends Component {
             />
           </Col>
           <Col md="6" xs="12">
-            <FindCaller />
+            <FindCaller
+              onTeleUserList={this.props.onTeleUserList}
+              onTeleUserUpdate={this.props.onTeleUserUpdate}
+              userLoading={this.props.userLoading}
+              countries={this.props.countries}
+              partialStates={this.props.partialStates}
+              partialDistricts={this.props.partialDistricts}
+              partialCities={this.props.partialCities}
+              partialAreas={this.props.partialAreas}
+              onTeleUserSubmit={this.props.onTeleUserSubmit}
+              onCountryEachList={this.props.onCountryEachList}
+              onStateEachList={this.props.onStateEachList}
+              onDistrictEachList={this.props.onDistrictEachList}
+              onCityEachList={this.props.onCityEachList}
+              fetchTeleUserLoading={this.props.fetchTeleUserLoading}
+              teleUser={this.props.teleUser}
+            />
             <ComposeSMS />
           </Col>
         </Row>
@@ -229,9 +264,37 @@ class TeleCalling extends Component {
 }
 
 export default connect(
-  ({ AdminContainer: { location, tele_calling } }) => ({
+  ({
+    AdminContainer: {
+      location,
+      tele_calling,
+      general_setup: {
+        countries,
+        countryData,
+        stateData,
+        districtData,
+        cityData
+      }
+    }
+  }) => ({
     ...location,
-    ...tele_calling
+    ...tele_calling,
+    countries,
+    partialStates: countryData,
+    partialDistricts: stateData,
+    partialCities: districtData,
+    partialAreas: cityData
   }),
-  { onBusinessTeleCallingList, onLocationsList }
+  {
+    onBusinessTeleCallingList,
+    onLocationsList,
+    onTeleUserSubmit,
+    onCountryList,
+    onCountryEachList,
+    onStateEachList,
+    onDistrictEachList,
+    onCityEachList,
+    onTeleUserList,
+    onTeleUserUpdate
+  }
 )(TeleCalling);
