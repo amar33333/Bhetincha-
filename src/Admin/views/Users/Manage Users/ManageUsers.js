@@ -65,15 +65,18 @@ class ManageUsers extends Component {
         sortable: false,
         width: 145,
         Cell: ({ value, original }) => (
-          <div>
+          <div style={{ overflow: "visible" }}>
             <Button
+              data-tooltip="Edit"
+              data-position="bottom center"
               color="secondary"
-              className="mr-l"
+              className="mr-2"
               onClick={() => this.props.toggleUserEditModal({ ...original })}
             >
-              Edit
+              <i className="fa fa-pencil" />
             </Button>
             <PopoverDelete
+              text={false}
               id={`delete-${value}`}
               onClick={() => this.props.onUserRemove({ id: value })}
             />

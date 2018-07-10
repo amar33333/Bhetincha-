@@ -108,6 +108,8 @@ class ManageBranchs extends Component {
         Cell: ({ value }) => (
           <div>
             <Button
+              data-tooltip="Edit"
+              data-position="bottom center"
               color="secondary"
               className="mr-2"
               onClick={() => {
@@ -116,7 +118,7 @@ class ManageBranchs extends Component {
                 );
               }}
             >
-              <i className="fa fa-pencil" /> Edit
+              <i className="fa fa-pencil" />
             </Button>
             <PopoverDelete
               id={`delete-${value}`}

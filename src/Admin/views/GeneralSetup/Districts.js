@@ -132,8 +132,10 @@ class Districts extends Component {
         }) => (
           <div>
             <Button
+              data-tooltip="Edit"
+              data-position="bottom center"
               color="secondary"
-              className="mr-l"
+              className="mr-2"
               onClick={() =>
                 this.props.toggleDistrictEditModal({
                   id,
@@ -144,7 +146,7 @@ class Districts extends Component {
                 })
               }
             >
-              Edit
+              <i className="fa fa-pencil" />
             </Button>
             <PopoverDelete
               id={`delete-${value}`}

@@ -53,13 +53,15 @@ class PaymentMethod extends Component {
         Cell: ({ value, original: { id, name } }) => (
           <div>
             <Button
+              data-tooltip="Edit"
+              data-position="bottom center"
               color="secondary"
-              className="mr-l"
+              className="mr-2"
               onClick={() =>
                 this.props.togglePaymentMethodEditModal({ id, name })
               }
             >
-              Edit
+              <i className="fa fa-pencil" />
             </Button>
             <PopoverDelete
               id={`delete-${value}`}

@@ -99,7 +99,8 @@ class SubCategories extends Component {
       },
       {
         Header: "Category",
-        accessor: "category",
+        accessor: "category.name",
+        id: "category",
         sortable: false,
         Filter: () => (
           <Select
@@ -136,7 +137,8 @@ class SubCategories extends Component {
       },
       {
         Header: "Industry",
-        accessor: "industry",
+        accessor: "industry.name",
+        id: "industry",
         sortable: false,
         Filter: () => (
           <Select
@@ -163,13 +165,15 @@ class SubCategories extends Component {
         Cell: ({ value, original }) => (
           <div>
             <Button
+              data-tooltip="Edit"
+              data-position="bottom center"
               color="secondary"
-              className="mr-l"
+              className="mr-2"
               onClick={() =>
                 this.props.toggleSubCategoryEditModal({ ...original })
               }
             >
-              Edit
+              <i className="fa fa-pencil" />
             </Button>
             <PopoverDelete
               id={`delete-${value}`}
@@ -369,7 +373,7 @@ class SubCategories extends Component {
                       />
                     </Col>
                   </Row>
-                  <FormGroup>
+                  <FormGroup className="mt-2">
                     <Label> Extra Section </Label>
                     <Select
                       autosize

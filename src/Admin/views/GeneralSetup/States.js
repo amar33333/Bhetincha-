@@ -82,15 +82,18 @@ class States extends Component {
         Cell: ({ value, original: { id, country, name } }) => (
           <div>
             <Button
+              data-tooltip="Edit"
+              data-position="bottom center"
               color="secondary"
-              className="mr-l"
+              className="mr-2"
               onClick={() =>
                 this.props.toggleStateEditModal({ id, country, name })
               }
             >
-              Edit
+              <i className="fa fa-pencil" />
             </Button>
             <PopoverDelete
+              text={false}
               id={`delete-${value}`}
               onClick={() => this.props.onStateDelete({ id: value })}
             />

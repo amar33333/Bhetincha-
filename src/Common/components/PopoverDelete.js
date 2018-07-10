@@ -10,6 +10,8 @@ class PopoverItem extends React.Component {
     return (
       <span>
         <Button
+          data-tooltip="Delete"
+          data-position="bottom center"
           style={this.props.customStyle ? { ...this.props.customStyle } : {}}
           className="mr-1"
           color="danger"
@@ -17,7 +19,8 @@ class PopoverItem extends React.Component {
           onClick={this.toggle}
           disabled={this.props.disabled}
         >
-          <i className="fa fa-close" /> {this.props.text || "Delete"}
+          <i className="fa fa-close" />{" "}
+          {this.props.text ? this.props.text || "Delete" : null}
         </Button>
         <Popover
           placement={this.props.placement || "bottom"}

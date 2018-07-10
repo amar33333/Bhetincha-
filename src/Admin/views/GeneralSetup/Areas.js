@@ -205,15 +205,17 @@ class Areas extends Component {
         Cell: ({ value, original }) => (
           <div>
             <Button
+              data-tooltip="Edit"
+              data-position="bottom center"
               color="secondary"
-              className="mr-l"
+              className="mr-2"
               onClick={() =>
                 this.props.toggleAreaEditModal({
                   ...original
                 })
               }
             >
-              Edit
+              <i className="fa fa-pencil" />
             </Button>
             <PopoverDelete
               id={`delete-${value}`}

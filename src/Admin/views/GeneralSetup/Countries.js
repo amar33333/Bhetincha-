@@ -54,15 +54,18 @@ class Countries extends Component {
         Cell: ({ value, original: { id, name, countryCode } }) => (
           <div>
             <Button
+              data-tooltip="Edit"
+              data-position="bottom center"
               color="secondary"
-              className="mr-l"
+              className="mr-2"
               onClick={() =>
                 this.props.toggleCountryEditModal({ id, name, countryCode })
               }
             >
-              Edit
+              <i className="fa fa-pencil" />
             </Button>
             <PopoverDelete
+              text={false}
               id={`delete-${value}`}
               onClick={() => this.props.onCountryDelete({ id: value })}
             />
@@ -109,15 +112,15 @@ class Countries extends Component {
     return (
       <div className="animated fadeIn">
         <Row className="hr-centered">
-          <Col xs="12" md="6">
+          <Col xs="12" md="8">
             <Card>
               <CardHeader>
                 <strong>Add Country</strong>
               </CardHeader>
               <CardBody>
                 <Form onSubmit={this.onFormSubmit} inline>
-                  <FormGroup className="mb-2 mr-sm-2 mb-sm-0">
-                    <InputGroup>
+                  <FormGroup>
+                    <InputGroup className="mr-3">
                       <InputGroupAddon addonType="prepend">
                         <InputGroupText>Code</InputGroupText>
                       </InputGroupAddon>
@@ -134,7 +137,7 @@ class Countries extends Component {
                         onChange={this.onChange.bind(this, "countryCode")}
                       />
                     </InputGroup>
-                    <InputGroup>
+                    <InputGroup className="mr-3">
                       <InputGroupAddon addonType="prepend">
                         <InputGroupText>Name</InputGroupText>
                       </InputGroupAddon>
