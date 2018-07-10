@@ -38,7 +38,7 @@ class IndustryEditModal extends Component {
   render() {
     console.log("industry edit state: ", this.state);
     return (
-      <Form onSubmit={this.onFormEdit} inline>
+      <Form onSubmit={this.onFormEdit}>
         <Row>
           <Col xs="12" md="8">
             <InputGroup>
@@ -58,9 +58,9 @@ class IndustryEditModal extends Component {
               />
             </InputGroup>
           </Col>
-          <Col xs="12" md="3">
+          <Col xs="12" md="2">
             <Button color="primary">
-              <span className="fa fa-check" /> SAVE
+              <span className="fa fa-check" /> Save
             </Button>
           </Col>
         </Row>

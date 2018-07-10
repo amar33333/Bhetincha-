@@ -171,11 +171,11 @@ class CityEditModal extends Component {
           </Col>
         </Row>
         <Row>
-          <Col xs="10" md="10">
+          <Col xs="10" md="8">
             <InputGroup>
               <InputGroupAddon addonType="prepend">
                 <InputGroupText>
-                  <i className="fa fa-industry" />
+                  <i className="fa fa-map-pin" />
                 </InputGroupText>
               </InputGroupAddon>
               <Input
@@ -191,7 +191,7 @@ class CityEditModal extends Component {
 
           <Col xs="12" md="2">
             <Button color="primary">
-              <span className="fa fa-check" /> SAVE
+              <span className="fa fa-check" /> Save
             </Button>
           </Col>
         </Row>

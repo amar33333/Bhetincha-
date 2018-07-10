@@ -46,7 +46,7 @@ class SocialLinkEditModal extends Component {
         <Row>
           <Col xs="12" md="9">
             <FormGroup>
-              <InputGroup>
+              <InputGroup className="mb-2">
                 <InputGroupAddon addonType="prepend">
                   <InputGroupText>Social Link Name </InputGroupText>
                 </InputGroupAddon>
@@ -59,7 +59,7 @@ class SocialLinkEditModal extends Component {
                   onChange={this.onChange.bind(this, "name")}
                 />
               </InputGroup>
-              <InputGroup>
+              <InputGroup className="mb-2">
                 <InputGroupAddon addonType="prepend">
                   <InputGroupText>Social Link Class-Name</InputGroupText>
                 </InputGroupAddon>
@@ -72,10 +72,8 @@ class SocialLinkEditModal extends Component {
                 />
               </InputGroup>
             </FormGroup>
-          </Col>
-          <Col xs="12" md="3">
             <Button color="primary">
-              <span className="fa fa-check" /> SAVE
+              <span className="fa fa-check" /> Save
             </Button>
           </Col>
         </Row>

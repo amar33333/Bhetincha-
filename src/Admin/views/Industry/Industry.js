@@ -160,7 +160,6 @@ class Industry extends Component {
             onIndustryEdit={this.props.onIndustryEdit}
           />
         </CustomModal>
-        );
       </div>
     );
   }

@@ -59,7 +59,7 @@ class SocialLinks extends Component {
               </CardHeader>
               <CardBody>
                 <form onSubmit={this.onFormSubmit}>
-                  <InputGroup>
+                  <InputGroup className="mb-2">
                     <InputGroupAddon addonType="prepend">
                       <InputGroupText>Social Link Name </InputGroupText>
                     </InputGroupAddon>
@@ -71,24 +71,22 @@ class SocialLinks extends Component {
                       value={this.state.name}
                       onChange={this.onChange.bind(this, "name")}
                     />
-                    <InputGroup>
-                      <InputGroupAddon addonType="prepend">
-                        <InputGroupText>Social Link Class-Name</InputGroupText>
-                      </InputGroupAddon>
-                      <Input
-                        type="text"
-                        required
-                        placeholder="Eg. fa fa-facebook"
-                        value={this.state.className}
-                        onChange={this.onChange.bind(this, "className")}
-                      />
-                    </InputGroup>
-                    <InputGroupAddon addonType="append">
-                      <Button type="submit" color="primary" value="Add Group">
-                        <i className="fa fa-plus" /> Add Social Link
-                      </Button>
-                    </InputGroupAddon>
                   </InputGroup>
+                  <InputGroup className="mb-2">
+                    <InputGroupAddon addonType="prepend">
+                      <InputGroupText>Social Link Class-Name</InputGroupText>
+                    </InputGroupAddon>
+                    <Input
+                      type="text"
+                      required
+                      placeholder="Eg. fa fa-facebook"
+                      value={this.state.className}
+                      onChange={this.onChange.bind(this, "className")}
+                    />
+                  </InputGroup>
+                  <Button type="submit" color="primary" value="Add Group">
+                    <i className="fa fa-plus" /> Add Social Link
+                  </Button>
                 </form>
               </CardBody>
             </Card>
