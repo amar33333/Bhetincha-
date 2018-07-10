@@ -157,7 +157,7 @@ class DistrictEditModal extends Component {
           </Col>
           <Col xs="12" md="2">
             <Button color="primary">
-              <span className="fa fa-check" /> SAVE
+              <span className="fa fa-check" /> Save
             </Button>
           </Col>
         </Row>

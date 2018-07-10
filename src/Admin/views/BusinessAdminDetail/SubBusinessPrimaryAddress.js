@@ -54,7 +54,7 @@ class SubBusinessPrimaryAddress extends Component {
     this.propsData = {};
   }
   onChangeLatLng = ({ latLng }) => {
-    console.log("latLang: ", this.state.latitude, this.state.longitude);
+    // console.log("latLang: ", this.state.latitude, this.state.longitude);
     this.setState({ latitude: latLng.lat(), longitude: latLng.lng() });
   };
 
@@ -68,6 +68,7 @@ class SubBusinessPrimaryAddress extends Component {
       // console.log("initial state loaded: ", prevState);
       // console.log("primary toogle  success called: ", nextProps.EDIT);
       // nextProps.ToogleEDIT(!nextProps.EDIT);
+      // console.log("asddd: ", address);
       nextProps.onInitialPropsReceived();
 
       return {
@@ -134,7 +135,7 @@ class SubBusinessPrimaryAddress extends Component {
   };
 
   handleAreaSelectChange = value => {
-    console.log("Value: ", value.name);
+    // console.log("Value: ", value.name);
     let geocoder = new window.google.maps.Geocoder();
     geocoder.geocode({ address: value.name }, (results, status) => {
       if (status === "OK") {
@@ -149,16 +150,16 @@ class SubBusinessPrimaryAddress extends Component {
           latitude: location.lat(),
           longitude: location.lng()
         });
-        console.log("latLang: ", this.state.latitude, this.state.longitude);
+        // console.log("latLang: ", this.state.latitude, this.state.longitude);
       } else {
-        console.log("Location not found in map. Select Manually");
+        // console.log("Location not found in map. Select Manually");
       }
     });
   };
 
   handleSelectChange = (key, value) => {
     this.setState({ [key]: value });
-    console.log("access token in this case: ", this.access_token);
+    // console.log("access token in this case: ", this.access_token);
     if (key === "country") {
       this.setState({
         state: "",
@@ -288,51 +289,62 @@ class SubBusinessPrimaryAddress extends Component {
   };
 
   getState = () => {
-    console.log("eachItem PRIMARY: ", this.state);
-    let contactPerson = this.state.contactPerson.map(eachItem => {
-      let contactReformed = {};
-      for (var property in eachItem) {
-        contactReformed =
-          eachItem[property] !== "" &&
-          eachItem[property] !== null &&
-          eachItem[property] !== undefined &&
-          eachItem[property].length > 0
-            ? { ...contactReformed, [property]: eachItem[property] }
-            : contactReformed;
-      }
-      return contactReformed;
-    });
-    console.log("contact contactReformed: ", contactPerson);
-    contactPerson = contactPerson.length > 0 ? contactPerson : undefined;
+    // console.log("eachItem PRIMARY: ", this.state);
+    // let contactPerson = this.state.contactPerson.map(eachItem => {
+    //   let contactReformed = {};
+    //   for (var property in eachItem) {
+    //     contactReformed =
+    //       eachItem[property] !== "" &&
+    //       eachItem[property] !== null &&
+    //       eachItem[property] !== undefined &&
+    //       eachItem[property].length > 0
+    //         ? { ...contactReformed, [property]: eachItem[property] }
+    //         : contactReformed;
+    //   }
+    //   return contactReformed;
+    // });
+    // console.log("contact contactReformed: ", contactPerson);
+    // contactPerson = contactPerson.length > 0 ? contactPerson : undefined;
 
-    const temp = {
-      ...this.state,
-      country: this.state.country ? this.state.country.id : "",
-      state: this.state.state ? this.state.state.id : "",
-      district: this.state.district ? this.state.district.id : "",
-      city: this.state.city ? this.state.city.id : "",
-      area: this.state.area ? this.state.area.id : ""
-    };
+    // const temp = {
+    //   ...this.state,
+    //   country: this.state.country ? this.state.country.id : "",
+    //   state: this.state.state ? this.state.state.id : "",
+    //   district: this.state.district ? this.state.district.id : "",
+    //   city: this.state.city ? this.state.city.id : "",
+    //   area: this.state.area ? this.state.area.id : ""
+    // };
 
-    console.log("temp: ", temp);
-    let reformed = {};
+    // console.log("temp: ", temp);
+    // let reformed = {};
 
-    for (var property in temp) {
-      console.log("property: ", property);
-      reformed =
-        temp[property] !== "" &&
-        temp[property] !== null &&
-        temp[property] !== undefined
-          ? { ...reformed, [property]: temp[property] }
-          : reformed;
-    }
+    // for (var property in temp) {
+    //   console.log("property: ", property);
+    //   reformed =
+    //     temp[property] !== "" &&
+    //     temp[property] !== null &&
+    //     temp[property] !== undefined
+    //       ? { ...reformed, [property]: temp[property] }
+    //       : reformed;
+    // }
 
-    console.log("primary address reformed: ", reformed);
+    // console.log("primary address reformed: ", reformed);
+    // return {
+    //   address: {
+    //     ...reformed,
+    //     contactPerson
+    //     // ...this.subBusinessContactWrapperRef.getState()
+    //   }
+    // };
+
     return {
       address: {
-        ...reformed,
-        contactPerson
-        // ...this.subBusinessContactWrapperRef.getState()
+        ...this.state,
+        country: this.state.country ? this.state.country.id : "",
+        state: this.state.state ? this.state.state.id : "",
+        district: this.state.district ? this.state.district.id : "",
+        city: this.state.city ? this.state.city.id : "",
+        area: this.state.area ? this.state.area.id : ""
       }
     };
   };
@@ -700,7 +712,7 @@ class SubBusinessPrimaryAddress extends Component {
                       onContactSave={this.onContactSave.bind(this, index)}
                       onContactDelete={this.onContactDelete(index)}
                     />
-                  ))}
+                  ))}w
                   <Row style={{ marginTop: 15 }}>
                     <Col xs="6" md="6">
                       <Button color="primary" onClick={this.onContactPersonAdd}>

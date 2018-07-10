@@ -178,7 +178,7 @@ export default function(state = INITIAL_STATE, action) {
       const countries = state.countries;
       const payload = action.payload;
 
-      // console.log("payload: ", payload);
+      console.log("payload: ", countries);
       return {
         ...state,
         countries: countries.map(country => {
@@ -244,6 +244,7 @@ export default function(state = INITIAL_STATE, action) {
       };
 
     case FETCH_ADDRESS_TREE_REJECTED:
+      return { ...state, loading: false };
 
     case UNMOUNT_DISTRICT:
       return {

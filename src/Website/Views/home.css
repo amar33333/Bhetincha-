@@ -280,6 +280,10 @@ input.main-nav-search::placeholder {
   width: 100%;
 }
 
+.rt-td {
+  overflow: visible !important;
+}
+
 /* =======Footer========= */
 .footer {
   position: relative;

@@ -6,7 +6,13 @@ import {
   onPaymentMethodsGet,
   onCompanyTypeGet,
   onBusinessPut,
-  onBusinessEachGet
+  onBusinessEachGet,
+  onPrimaryAddressGet,
+  onPrimaryAddressPut,
+  onAboutGet,
+  onAboutPut,
+  onWorkingHourGet,
+  onWorkingHourPut
 } from "../config/businessServerCall";
 
 import {
@@ -33,16 +39,287 @@ import {
   EDIT_BUSINESS_FULFILLED,
   EDIT_BUSINESS_PENDING,
   EDIT_BUSINESS_REJECTED,
+  EDIT_PRIMARY_ADDRESS_FULFILLED,
+  EDIT_PRIMARY_ADDRESS_PENDING,
+  EDIT_PRIMARY_ADDRESS_REJECTED,
   FETCH_BUSINESS_EACH_FULFILLED,
   FETCH_BUSINESS_EACH_REJECTED,
   FETCH_BUSINESS_EACH_PENDING,
   FETCH_INDUSTRY_EACH_PENDING,
   FETCH_INDUSTRY_EACH_FULFILLED,
   FETCH_INDUSTRY_EACH_REJECTED,
+  FETCH_PRIMARY_ADDRESS_FULFILLED,
+  FETCH_PRIMARY_ADDRESS_PENDING,
+  FETCH_PRIMARY_ADDRESS_REJECTED,
+  FETCH_ABOUT_FULFILLED,
+  FETCH_ABOUT_PENDING,
+  FETCH_ABOUT_REJECTED,
+  EDIT_ABOUT_FULFILLED,
+  EDIT_ABOUT_PENDING,
+  EDIT_ABOUT_REJECTED,
+  FETCH_WORKING_HOUR_FULFILLED,
+  FETCH_WORKING_HOUR_PENDING,
+  FETCH_WORKING_HOUR_REJECTED,
+  EDIT_WORKING_HOUR_FULFILLED,
+  EDIT_WORKING_HOUR_PENDING,
+  EDIT_WORKING_HOUR_REJECTED,
   TOGGLE_EDIT
 } from "./types";
 
 const epics = [];
+
+export const onWorkingHourList = payload => ({
+  type: FETCH_WORKING_HOUR_PENDING,
+  payload
+});
+
+epics.push((action$, { getState }) =>
+  action$.ofType(FETCH_WORKING_HOUR_PENDING).mergeMap(({ payload }) => {
+    const access_token = getState().auth.cookies.token_data.access_token;
+    const { id } = payload;
+
+    return onWorkingHourGet({ id, access_token })
+      .map(({ response }) => {
+        return {
+          type: FETCH_WORKING_HOUR_FULFILLED,
+          payload: response
+        };
+      })
+      .catch(ajaxError => {
+        toast.error(ajaxError.toString());
+        return Observable.of({
+          type: FETCH_WORKING_HOUR_REJECTED,
+          payload: ajaxError
+        });
+      });
+  })
+);
+
+export const onWorkingHourEdit = payload => ({
+  type: EDIT_WORKING_HOUR_PENDING,
+  payload
+});
+
+epics.push((action$, { getState }) =>
+  action$.ofType(EDIT_WORKING_HOUR_PENDING).mergeMap(({ payload }) => {
+    const access_token = getState().auth.cookies.token_data.access_token;
+    const { id, body } = payload;
+
+    return onWorkingHourPut({ id, body, access_token })
+      .concatMap(({ response }) => {
+        if (response.msg === "success") {
+          toast.success("Working Hour Section Updated Successfully!");
+          return [
+            {
+              type: EDIT_WORKING_HOUR_FULFILLED,
+              payload: response
+            },
+            {
+              type: FETCH_WORKING_HOUR_PENDING,
+              payload: { id }
+            }
+          ];
+        } else throw new Error(response.msg);
+      })
+      .catch(ajaxError => {
+        toast.error(ajaxError.toString());
+        return Observable.of({
+          type: EDIT_WORKING_HOUR_REJECTED,
+          payload: ajaxError
+        });
+      });
+  })
+);
+
+export const onAboutList = payload => ({
+  type: FETCH_ABOUT_PENDING,
+  payload
+});
+
+epics.push((action$, { getState }) =>
+  action$.ofType(FETCH_ABOUT_PENDING).mergeMap(({ payload }) => {
+    const access_token = getState().auth.cookies.token_data.access_token;
+    const { id } = payload;
+
+    return onAboutGet({ id, access_token })
+      .map(({ response }) => {
+        return {
+          type: FETCH_ABOUT_FULFILLED,
+          payload: response
+        };
+      })
+      .catch(ajaxError => {
+        toast.error(ajaxError.toString());
+        return Observable.of({
+          type: FETCH_ABOUT_REJECTED,
+          payload: ajaxError
+        });
+      });
+  })
+);
+
+export const onAboutEdit = payload => ({
+  type: EDIT_ABOUT_PENDING,
+  payload
+});
+
+epics.push((action$, { getState }) =>
+  action$.ofType(EDIT_ABOUT_PENDING).mergeMap(({ payload }) => {
+    const access_token = getState().auth.cookies.token_data.access_token;
+    const { id, body } = payload;
+
+    return onAboutPut({ id, body, access_token })
+      .concatMap(({ response }) => {
+        if (response.msg === "success") {
+          toast.success("About Section Updated Successfully!");
+          return [
+            {
+              type: EDIT_ABOUT_FULFILLED,
+              payload: response
+            },
+            {
+              type: FETCH_ABOUT_PENDING,
+              payload: { id }
+            }
+          ];
+        } else throw new Error(response.msg);
+      })
+      .catch(ajaxError => {
+        toast.error(ajaxError.toString());
+        return Observable.of({
+          type: EDIT_ABOUT_REJECTED,
+          payload: ajaxError
+        });
+      });
+  })
+);
+
+// export const onPrimaryAddressLists = payload => ({
+//   type: FETCH_PRIMARY_ADDRESS_PENDING,
+//   payload
+// });
+
+// epics.push((action$, { getState }) =>
+//   action$.ofType(FETCH_PRIMARY_ADDRESS_PENDING).mergeMap(({ payload }) => {
+//     const access_token = getState().auth.cookies.token_data.access_token;
+//     const { id } = payload;
+
+//     return onPrimaryAddressGet({ id, access_token })
+//       .map(({ response }) => {
+//         return {
+//           type: FETCH_PRIMARY_ADDRESS_FULFILLED,
+//           payload: response
+//         };
+//       })
+//       .catch(ajaxError => {
+//         toast.error(ajaxError.toString());
+//         return Observable.of({
+//           type: FETCH_PRIMARY_ADDRESS_REJECTED,
+//           payload: ajaxError
+//         });
+//       });
+//   })
+// );
+
+export const onPrimaryAddressEdit = ({
+  id,
+  data,
+  access_token,
+  EDIT
+}) => dispatch => {
+  onPrimaryAddressPut({ id, data, access_token })
+    .then(response => {
+      dispatch({
+        type: TOGGLE_EDIT,
+        payload: !EDIT
+      });
+
+      onPrimaryAddressGet({ id, access_token })
+        .then(response => {
+          // ToogleEDIT(!EDIT);
+
+          const countryId = response.data.address.country
+            ? response.data.address.country.id
+            : "";
+          const stateId = response.data.address.state
+            ? response.data.address.state.id
+            : "";
+          const districtId = response.data.address.district
+            ? response.data.address.district.id
+            : "";
+          const cityId = response.data.address.city
+            ? response.data.address.city.id
+            : "";
+
+          getAddressTree(
+            countryId,
+            stateId,
+            districtId,
+            cityId,
+            access_token,
+            dispatch
+          );
+
+          // dispatch({ type: FETCH_INDUSTRY_EACH_PENDING });
+          dispatch({ type: FETCH_ADDRESS_TREE_PENDING });
+          dispatch({
+            type: FETCH_PRIMARY_ADDRESS_FULFILLED,
+            payload: response.data
+          });
+        })
+        .catch(error =>
+          dispatch({ type: EDIT_PRIMARY_ADDRESS_REJECTED, payload: error })
+        );
+      dispatch({ type: FETCH_PRIMARY_ADDRESS_PENDING });
+
+      if (response.data.msg === "success") {
+        toast.success("Primary Address Updated Successfully!");
+        // console.log("bussiness acction toogle called: ", EDIT);
+        dispatch({
+          type: EDIT_PRIMARY_ADDRESS_FULFILLED,
+          payload: response.data
+        });
+      } else {
+        toast.error("Error in Updating!!!");
+        dispatch({ type: EDIT_BUSINESS_REJECTED, payload: response.data.msg });
+      }
+    })
+    .catch(error => {
+      toast.error("Error in Updating!!!");
+      dispatch({ type: EDIT_PRIMARY_ADDRESS_REJECTED, payload: error });
+    });
+  dispatch({ type: EDIT_PRIMARY_ADDRESS_PENDING });
+};
+
+export const onPrimaryAddressList = ({ id, access_token }) => dispatch => {
+  onPrimaryAddressGet({ id, access_token })
+    .then(response => {
+      const countryId = response.data.country ? response.data.country.id : "";
+      const stateId = response.data.state ? response.data.state.id : "";
+      const districtId = response.data.district
+        ? response.data.district.id
+        : "";
+      const cityId = response.data.city ? response.data.city.id : "";
+
+      getAddressTree(
+        countryId,
+        stateId,
+        districtId,
+        cityId,
+        access_token,
+        dispatch
+      );
+
+      dispatch({
+        type: FETCH_PRIMARY_ADDRESS_FULFILLED,
+        payload: response.data
+      });
+    })
+    .catch(error =>
+      dispatch({ type: FETCH_PRIMARY_ADDRESS_REJECTED, payload: error })
+    );
+  dispatch({ type: FETCH_PRIMARY_ADDRESS_PENDING });
+};
 
 export const onBusinessList = () => dispatch => {
   onBusinessAllGet()
@@ -311,7 +588,7 @@ epics.push((action$, { getState }) =>
 
     return onCompanyTypeGet({ access_token })
       .map(({ response }) => {
-        toast.success("Company Types Fetched Successfully!");
+        // toast.success("Company Types Fetched Successfully!");
         return { type: FETCH_COMPANY_TYPE_FULFILLED, payload: response };
       })
       .catch(ajaxError => {
@@ -386,3 +663,5 @@ export const ToogleEDIT = value => ({
 //   type: UNMOUNT_BUSINESS,onBusinessEachGet
 //   payload: null
 // });
+
+export default epics;

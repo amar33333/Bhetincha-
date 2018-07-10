@@ -119,8 +119,12 @@ class Home extends Component {
                               ? placeholder[0]
                               : ""
                           }`,
-                        lat: this.props.coords && this.props.coords.latitude,
-                        lon: this.props.coords && this.props.coords.longitude
+                        lat:
+                          (this.props.coords && this.props.coords.latitude) ||
+                          undefined,
+                        lon:
+                          (this.props.coords && this.props.coords.longitude) ||
+                          undefined
                         // distance: 0
                         //frm: 0,
                         //size:

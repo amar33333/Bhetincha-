@@ -36,11 +36,13 @@ class SocialLinkTable extends Component {
         Cell: ({ value, original }) => (
           <div>
             <Button
+              data-tooltip="Edit"
+              data-position="bottom center"
               color="secondary"
-              className="mr-l"
+              className="mr-2"
               onClick={() => this.props.onEdit({ original })}
             >
-              Edit
+              <i className="fa fa-pencil" />
             </Button>
             <PopoverDelete
               id={`delete-${value}`}
