@@ -60,7 +60,8 @@ class Categories extends Component {
       { Header: "Category", accessor: "name", id: "category" },
       {
         Header: "Industry",
-        accessor: "industry",
+        accessor: "industry.name",
+        id: "industry",
         sortable: false,
         Filter: () => (
           <Select
@@ -87,13 +88,15 @@ class Categories extends Component {
         Cell: ({ value, original: { id, industry, name } }) => (
           <div>
             <Button
+              data-tooltip="Edit"
+              data-position="bottom center"
               color="secondary"
-              className="mr-l"
+              className="mr-2"
               onClick={() =>
                 this.props.toggleCategoryEditModal({ id, industry, name })
               }
             >
-              Edit
+              <i className="fa fa-pencil" />
             </Button>
             <PopoverDelete
               id={`delete-${value}`}
