@@ -44,6 +44,7 @@
     "react-onclickoutside": "^6.7.1",
     "react-photo-gallery": "^6.0.25",
     "react-quill": "^1.2.7",
+    "react-rating": "^1.3.0",
     "react-redux": "^5.0.7",
     "react-router-config": "^1.0.0-beta.4",
     "react-router-dom": "^4.2.2",

@@ -11,7 +11,7 @@
 .minisite_banner__img {
   display: block;
   object-fit: cover;
-  height: 70vh;
+  height: 45vh;
   width: 100%;
 }
 
@@ -131,11 +131,22 @@ img.minisite__album-thumbnail {
   margin-left: 1.2rem;
 }
 
-.minisite_about__wrapper {
+.minisite_meta__wrapper {
+  color: white;
+  position: relative;
+  top: -15px;
+  background-color: #0a6ac4;
+  /* padding: 20px; */
+}
+
+.business-rating-component {
+  color: rgb(162, 221, 45);
+}
+.minisite_content__wrapper {
   padding: 20px;
   padding-top: 5rem;
   /* background-color: rgb(145, 68, 218); */
-  color: black;
+  color: inherit;
 }
 
 /* ============About us ================= */

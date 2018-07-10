@@ -154,7 +154,6 @@ class BusinessList extends Component {
       !this.props.search_results_page_loading
     ) {
       const { frm, size } = this.state;
-      console.log("onScroll frm: ", frm);
 
       this.props.onSearchResultsList({
         query: parsedUrlStringObject["query"],
@@ -183,13 +182,12 @@ class BusinessList extends Component {
     )
       return <div>No Results Found !!!</div>;
     else
-      return this.state.searchResults.map(each_search_result => {
+      return this.state.searchResults.map((each_search_result, Searchindex) => {
         var momentNow = moment().format("hh:mm A");
         var today = moment().day();
-        console.log("today:", today);
 
         return (
-          <Card fluid>
+          <Card fluid key={Searchindex}>
             <Card.Content>
               <Media>
                 <Media left href="#">
@@ -226,8 +224,9 @@ class BusinessList extends Component {
                       {each_search_result.industry}
                     </Badge>
                     {each_search_result.categories &&
-                      each_search_result.categories.map(category => (
+                      each_search_result.categories.map((category, index) => (
                         <Badge
+                          key={index}
                           color="info"
                           pill
                           className="mr-1"
@@ -342,17 +341,7 @@ class BusinessList extends Component {
                   let end = moment(day.end)
                     .add({ hours: 5, minutes: 45 })
                     .format("hh:mm A");
-                  console.log(
-                    each_search_result.business_name,
-                    "Now:",
-                    momentNow,
-                    "start:",
-                    start,
-                    "end:",
-                    end
-                  );
                   if (index === today) {
-                    console.log("today");
                     if (
                       moment(momentNow, "hh:mm A").isBetween(
                         moment(start, "hh:mm A"),
@@ -361,6 +350,7 @@ class BusinessList extends Component {
                     ) {
                       return (
                         <small
+                          key={index}
                           data-tooltip={`${start} - ${end}`}
                           data-position="bottom center"
                         >
@@ -370,6 +360,7 @@ class BusinessList extends Component {
                     } else {
                       return (
                         <small
+                          key={index}
                           data-tooltip={`${start} - ${end}`}
                           data-position="bottom center"
                           style={{ color: "red" }}
