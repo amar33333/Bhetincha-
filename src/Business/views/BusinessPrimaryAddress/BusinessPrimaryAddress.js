@@ -32,10 +32,6 @@ class BusinessPrimaryAddress extends Component {
   onFormEdit = event => {
     event.preventDefault();
 
-    console.log("businessprimar addres sumbit: ", {
-      ...this.subBusinessPrimaryAddressRef.getState()
-    });
-
     this.props.onPrimaryAddressEdit({
       data: {
         ...this.subBusinessPrimaryAddressRef.getState()
@@ -47,8 +43,6 @@ class BusinessPrimaryAddress extends Component {
   };
 
   render() {
-    console.log("asdaddadadad: ", this.props);
-
     return (
       <div className="animated fadeIn">
         <form onSubmit={this.onFormEdit}>
