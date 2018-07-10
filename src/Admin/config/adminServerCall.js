@@ -26,7 +26,8 @@ import {
   CREATE_TELE_USER_URL,
   TELE_USER_SEARCH_MOBILE_URL,
   TELE_USER_EDIT_URL,
-  TELE_USER_SEND_SMS_URL
+  TELE_USER_SEND_SMS_URL,
+  TELE_USER_SEARCH_NAME_URL
 } from "./ADMIN_API";
 
 import {
@@ -108,6 +109,16 @@ export const onTeleUserSearchMobile = ({ access_token, params }) =>
   ajax({
     method: "GET",
     url: `${TELE_USER_SEARCH_MOBILE_URL}?${querystring.stringify(params)}`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
+export const onTeleUserSearchName = ({ access_token, params }) =>
+  ajax({
+    method: "GET",
+    url: `${TELE_USER_SEARCH_NAME_URL}?${querystring.stringify(params)}`,
     headers: {
       "Content-Type": "application/json",
       Authorization: "Bearer " + access_token

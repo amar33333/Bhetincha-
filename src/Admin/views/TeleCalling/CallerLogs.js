@@ -43,13 +43,15 @@ class CallerLogs extends Component {
             </tbody>
           </Table>
         )}
-        <Button
-          color="link"
-          size="sm"
-          onClick={() => this.setState({ limit: !this.state.limit })}
-        >
-          {this.state.limit ? "Load All Remaining Logs" : "Minimize Logs"}
-        </Button>
+        {this.state.logs.length && (
+          <Button
+            color="link"
+            size="sm"
+            onClick={() => this.setState({ limit: !this.state.limit })}
+          >
+            {this.state.limit ? "Load All Remaining Logs" : "Minimize Logs"}
+          </Button>
+        )}
       </div>
     );
   }

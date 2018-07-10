@@ -34,7 +34,8 @@ import {
   onCityEachList,
   onTeleUserList,
   onTeleUserUpdate,
-  onTeleUserSMSSubmit
+  onTeleUserSMSSubmit,
+  onTeleUserNameList
 } from "../../actions";
 
 const TabPane = ({ business, show }) => (
@@ -236,6 +237,7 @@ class TeleCalling extends Component {
           <Col md="6" xs="12">
             <FindCaller
               onTeleUserList={this.props.onTeleUserList}
+              onTeleUserNameList={this.props.onTeleUserNameList}
               onTeleUserSMSSubmit={this.props.onTeleUserSMSSubmit}
               onTeleUserUpdate={this.props.onTeleUserUpdate}
               userLoading={this.props.userLoading}
@@ -251,6 +253,7 @@ class TeleCalling extends Component {
               onCityEachList={this.props.onCityEachList}
               fetchTeleUserLoading={this.props.fetchTeleUserLoading}
               teleUser={this.props.teleUser}
+              teleUsers={this.props.teleUsers}
             />
           </Col>
         </Row>
@@ -292,6 +295,7 @@ export default connect(
     onCityEachList,
     onTeleUserList,
     onTeleUserUpdate,
-    onTeleUserSMSSubmit
+    onTeleUserSMSSubmit,
+    onTeleUserNameList
   }
 )(TeleCalling);

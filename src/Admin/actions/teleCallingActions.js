@@ -16,7 +16,10 @@ import {
   EDIT_TELE_USER_REJECTED,
   SEND_SMS_TELE_USER_FULFILLED,
   SEND_SMS_TELE_USER_PENDING,
-  SEND_SMS_TELE_USER_REJECTED
+  SEND_SMS_TELE_USER_REJECTED,
+  FETCH_TELE_USER_NAME_PENDING,
+  FETCH_TELE_USER_NAME_FULFILLED,
+  FETCH_TELE_USER_NAME_REJECTED
 } from "./types";
 
 import {
@@ -24,7 +27,8 @@ import {
   onTeleUserPostAjax,
   onTeleUserSearchMobile,
   onTeleUserEditAjax,
-  onTeleUserSendSMS
+  onTeleUserSendSMS,
+  onTeleUserSearchName
 } from "../config/adminServerCall";
 
 const epics = [];
@@ -143,6 +147,30 @@ epics.push((action$, { getState }) =>
       }))
       .catch(ajaxError => Observable.of({ type: FETCH_TELE_USER_REJECTED }))
   )
+);
+
+export const onTeleUserNameList = payload => ({
+  type: FETCH_TELE_USER_NAME_PENDING,
+  payload
+});
+
+epics.push((action$, { getState }) =>
+  action$
+    .ofType(FETCH_TELE_USER_NAME_PENDING)
+    .debounceTime(200)
+    .switchMap(action =>
+      onTeleUserSearchName({
+        access_token: getState().auth.cookies.token_data.access_token,
+        params: action.payload.params
+      })
+        .map(({ response }) => ({
+          type: FETCH_TELE_USER_NAME_FULFILLED,
+          payload: response
+        }))
+        .catch(ajaxError =>
+          Observable.of({ type: FETCH_TELE_USER_NAME_REJECTED })
+        )
+    )
 );
 
 export const onTeleUserSMSSubmit = payload => ({

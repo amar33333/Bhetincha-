@@ -24,14 +24,17 @@ class FindCaller extends Component {
   constructor(props) {
     super(props);
 
-    this.state = { callerName: "", callerNumber: "985106620" };
+    this.state = { callerName: "", callerNumber: "985106620", total: 2 };
   }
 
   handleChange = (key, value) => {
     this.setState({ [key]: value });
 
     if (key === "callerName") {
-      console.log("name");
+      value &&
+        this.props.onTeleUserNameList({
+          params: { name: value, total: this.state.total }
+        });
     } else if (key === "callerNumber") {
       if (this.isValidNumber(value)) {
         this.props.onTeleUserList({ params: { phone: value } });
@@ -113,7 +116,22 @@ class FindCaller extends Component {
                 />
               </Col>
             </FormGroup>
-            <CallerList />
+            <CallerList
+              teleUsers={this.state.callerName ? this.props.teleUsers : []}
+              total={this.state.total}
+              onTeleUserList={this.props.onTeleUserList}
+              changeNumber={callerNumber => this.setState({ callerNumber })}
+              onLoadMoreName={() => {
+                this.setState({ total: this.state.total + 10 }, () => {
+                  this.props.onTeleUserNameList({
+                    params: {
+                      name: this.state.callerName,
+                      total: this.state.total
+                    }
+                  });
+                });
+              }}
+            />
             <hr />
             <FormGroup>
               <Label for="callerNumber">Caller Number</Label>
