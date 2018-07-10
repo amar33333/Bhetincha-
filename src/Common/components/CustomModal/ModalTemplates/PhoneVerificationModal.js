@@ -34,6 +34,10 @@ class PhoneVerificationModal extends Component {
     return (
       <Form onSubmit={this.onFormSubmit}>
         <div>
+          <p>
+            Please enter your valid mobile number. You will soon recieve a
+            verfification code.
+          </p>
           <InputGroup className="mb-3">
             <InputGroupAddon addonType="prepend">
               <InputGroupText>
@@ -50,6 +54,10 @@ class PhoneVerificationModal extends Component {
               onChange={this.onChange.bind(this, "phone")}
             />
           </InputGroup>
+          <p className="text-danger text-center">
+            {this.props.phone_verification_request_error &&
+              this.props.phone_verification_request_error.message}
+          </p>
           <Row>
             <Col xs="6">
               <LaddaButton
@@ -57,7 +65,7 @@ class PhoneVerificationModal extends Component {
                 data-size={S}
                 data-style={EXPAND_RIGHT}
               >
-                CLAIM
+                Claim
               </LaddaButton>
             </Col>
           </Row>

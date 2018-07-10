@@ -40,8 +40,8 @@ export const onSearchResultsList = payload => ({
 
 epics.push(action$ =>
   action$.ofType(SEARCH_RESULTS_PAGE_PENDING).mergeMap(action => {
-    const { query, frm, size } = action.payload;
-    return onSearchResultsGet({ query, frm, size })
+    const { query, frm, size, lat, lon, distance } = action.payload;
+    return onSearchResultsGet({ query, frm, size, lat, lon, distance })
       .map(({ response }) => ({
         type: SEARCH_RESULTS_PAGE_FULFILLED,
         payload: response

@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import { Navbar, NavbarBrand, NavItem, Input } from "reactstrap";
+import { geolocated } from "react-geolocated";
 
 import Avatar from "./Avatar";
 import AutoSuggestion from "./AutoSuggestion";
@@ -51,7 +52,10 @@ class MainNavbar extends Component {
                 //query: keyword
                 //search: `?query=${keyword}&frm=0&size=5`
                 search: `?${querystring.stringify({
-                  query: keyword
+                  query: keyword,
+                  lat: this.props.coords && this.props.coords.latitude,
+                  lon: this.props.coords && this.props.coords.longitude
+
                   //frm: 0,
                   //size: 5
                 })}`
@@ -78,4 +82,11 @@ export default connect(
     onSearchQuerySubmit,
     onSearchResultsList
   }
-)(MainNavbar);
+)(
+  geolocated({
+    positionOptions: {
+      enableHighAccuracy: false
+    },
+    userDecisionTimeout: 5000
+  })(MainNavbar)
+);

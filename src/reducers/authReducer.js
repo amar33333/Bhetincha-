@@ -37,7 +37,8 @@ const INITIAL_STATE = {
   phoneVerificationModal: false,
   data: null,
   search_selected_business_id: null,
-  checkRegistrationData: null
+  checkRegistrationData: null,
+  phone_verification_request_error: null
 };
 
 export default function(state = INITIAL_STATE, action) {
@@ -96,7 +97,11 @@ export default function(state = INITIAL_STATE, action) {
       };
 
     case REQUEST_PHONE_VERIFICATION_REJECTED:
-      return { ...state, loading: false };
+      return {
+        ...state,
+        loading: false,
+        phone_verification_request_error: action.payload
+      };
 
     case SEND_PHONE_VERIFICATION_TOKEN_PENDING:
       return { ...state, loading: true };

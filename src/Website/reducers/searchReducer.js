@@ -13,7 +13,9 @@ const INITIAL_STATE = {
   data: [],
   search_results_page_data: [],
   search_results_count: 0,
-  time_taken: 0
+  time_taken: 0,
+  distance: 0,
+  geoPosition: {}
 };
 
 export default function(state = INITIAL_STATE, action) {

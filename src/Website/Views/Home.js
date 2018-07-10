@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Container, Button, Col, Row, Input } from "reactstrap";
 import { connect } from "react-redux";
+import { geolocated } from "react-geolocated";
 
 import logo from "../../static/img/logo.png";
 import "./home.css";
@@ -82,6 +83,7 @@ class Home extends Component {
     );
 
   render() {
+    console.log(this.props.coords);
     placeholder.sort(() => Math.random() - 0.5);
     return (
       <div className="body-wrapper">
@@ -104,23 +106,27 @@ class Home extends Component {
                 //   this.props.history.push(`/${business.slug}`);
                 // }}
                 onSearchComplete={keyword => {
-                  this.props.history.push({
-                    pathname: "/businesses",
-                    //query: keyword
-                    //search: `?query=${keyword}&frm=0&size=5`
-                    search: `?${querystring.stringify({
-                      query:
-                        keyword ||
-                        `${
-                          placeholder[0] !== "Search Anything...."
-                            ? placeholder[0]
-                            : ""
-                        }`
-                      //frm: 0,
-                      //size: 5
-                    })}`
-                    // state: { detail: response.data }
-                  });
+                  this.props.coords &&
+                    this.props.history.push({
+                      pathname: "/businesses",
+                      //query: keyword
+                      //search: `?query=${keyword}&frm=0&size=5`
+                      search: `?${querystring.stringify({
+                        query:
+                          keyword ||
+                          `${
+                            placeholder[0] !== "Search Anything...."
+                              ? placeholder[0]
+                              : ""
+                          }`,
+                        lat: this.props.coords && this.props.coords.latitude,
+                        lon: this.props.coords && this.props.coords.longitude
+                        // distance: 0
+                        //frm: 0,
+                        //size:
+                      })}`
+                      // state: { detail: response.data }
+                    });
                 }}
               />
             </Col>
@@ -143,4 +149,11 @@ export default connect(
     toggleRegisterModal,
     onSearchQuerySubmit
   }
-)(Home);
+)(
+  geolocated({
+    positionOptions: {
+      enableHighAccuracy: false
+    },
+    userDecisionTimeout: 5000
+  })(Home)
+);

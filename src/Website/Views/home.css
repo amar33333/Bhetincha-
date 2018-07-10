@@ -473,3 +473,12 @@ input.main-nav-search::placeholder {
   width: 90px;
   object-fit: cover;
 }
+
+.input-range__track,
+.input-range__slider-container {
+  transition: none !important;
+}
+
+.input-range__label.input-range__label--value {
+  display: none !important;
+}
