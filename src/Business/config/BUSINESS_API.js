@@ -14,6 +14,7 @@ const BUSINESS_BRANCH_GET = "business/business-each-section/branchAddress/";
 const PRIMARY_ADDRESS = "business/business-each-section/address/";
 const ABOUT = "business/business-each-section/about/";
 const WORKING_HOUR = "business/business-each-section/workingHour/";
+const BUSINESS_DETAILS = "business/business-each-section/basics/";
 
 export const BUSINESS_URL = `${MAIN_URL}/${BUSINESS}`;
 export const ALBUM_URL = `${MAIN_URL}/${ALBUM}`;
@@ -29,3 +30,4 @@ export const BUSINESS_BRANCH_GET_URL = `${MAIN_URL}/${BUSINESS_BRANCH_GET}`;
 export const PRIMARY_ADDRESS_URL_GET_URL = `${MAIN_URL}/${PRIMARY_ADDRESS}`;
 export const ABOUT_GET_URL = `${MAIN_URL}/${ABOUT}`;
 export const WORKING_HOUR_GET_URL = `${MAIN_URL}/${WORKING_HOUR}`;
+export const BUSINESS_DETAILS_GET_URL = `${MAIN_URL}/${BUSINESS_DETAILS}`;

@@ -8,6 +8,7 @@ import {
   // onCountryPost,
   // onStatePost,
   onCountryGet,
+  onCountryGetAjax,
   onStateGet,
   onAreaGet,
   onDistrictGet,
@@ -73,15 +74,30 @@ import {
 
 const epics = [];
 
-export const onCountryList = ({ access_token }) => dispatch => {
-  onCountryGet({ access_token })
-    .then(response =>
-      dispatch({ type: FETCH_COUNTRY_FULFILLED, payload: response.data })
-    )
-    .catch(error => dispatch({ type: FETCH_COUNTRY_REJECTED, payload: error }));
+export const onCountryList = () => ({ type: FETCH_COUNTRY_PENDING });
 
-  dispatch({ type: FETCH_COUNTRY_PENDING });
-};
+epics.push((action$, { getState }) =>
+  action$.ofType(FETCH_COUNTRY_PENDING).mergeMap(action =>
+    onCountryGetAjax({
+      access_token: getState().auth.cookies.token_data.access_token
+    })
+      .map(({ response }) => ({
+        type: FETCH_COUNTRY_FULFILLED,
+        payload: response
+      }))
+      .catch(ajaxError => Observable.of({ type: FETCH_COUNTRY_REJECTED }))
+  )
+);
+
+// export const onCountryList = ({ access_token }) => dispatch => {
+//   onCountryGet({ access_token })
+//     .then(response =>
+//       dispatch({ type: FETCH_COUNTRY_FULFILLED, payload: response.data })
+//     )
+//     .catch(error => dispatch({ type: FETCH_COUNTRY_REJECTED, payload: error }));
+
+//   dispatch({ type: FETCH_COUNTRY_PENDING });
+// };
 
 export const onCountryEachList = ({ id, access_token }) => dispatch => {
   onCountryEachGet({ id, access_token })

@@ -302,8 +302,9 @@ export const onIndustryPut = ({ industry, access_token }) =>
     }
   });
 
-export const onIndustryGet = ({ access_token }) =>
-  axios({
+export const onIndustryGet = ({ access_token }) => {
+  console.log("sdasd", INDUSTRY_URL);
+  return axios({
     method: "get",
     url: INDUSTRY_URL,
     headers: {
@@ -311,6 +312,7 @@ export const onIndustryGet = ({ access_token }) =>
       Authorization: "Bearer " + access_token
     }
   });
+};
 
 export const onIndustryEachGet = ({ id, access_token }) => {
   // console.log("access : ", access_token);
