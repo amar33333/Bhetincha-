@@ -83,7 +83,6 @@ class Home extends Component {
     );
 
   render() {
-    console.log(this.props.coords);
     placeholder.sort(() => Math.random() - 0.5);
     return (
       <div className="body-wrapper">

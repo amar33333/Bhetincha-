@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import { AboutUs, CoverPhoto } from "./components";
 import { connect } from "react-redux";
 
+import Rating from "react-rating";
+
 import { Row, Col, Container } from "reactstrap";
 import { Card } from "semantic-ui-react";
 
@@ -15,6 +17,7 @@ const aboutUsstyle = {
 
 class MainPage extends Component {
   render() {
+    var lastCategory = this.props.categories.slice(-1)[0];
     return (
       <div
         style={{
@@ -23,7 +26,33 @@ class MainPage extends Component {
       >
         <CoverPhoto />
         <div className="body-wrapper">
-          <div className="minisite_about__wrapper">
+          <div className="minisite_meta__wrapper mr-5 ml-5 p-3">
+            <h2 className="mb-1">{this.props.business_name}</h2>
+            <Rating
+              className="mb-2 business-rating-component"
+              fractions={2}
+              emptySymbol="fa fa-star-o fa-1x"
+              fullSymbol="fa fa-star fa-1x"
+            />{" "}
+            (10 Ratings)
+            <div>
+              <strong>
+                <span className="mr-2">{this.props.industry.name}</span>
+                <i className="fa fa-angle-right mr-2" />
+                {this.props.categories.map((category, catIndex) => {
+                  return (
+                    <span key={category.id}>
+                      {category.name}
+                      {category.id !== lastCategory.id ? (
+                        <span className="mx-2"> | </span>
+                      ) : null}
+                    </span>
+                  );
+                })}
+              </strong>
+            </div>
+          </div>
+          <div className="minisite_content__wrapper">
             <Container>
               <Row>
                 <Col xs="12" md="6">
@@ -51,7 +80,7 @@ class MainPage extends Component {
 
                           var momentNow = moment().format("hh:mm A");
                           return (
-                            <Card.Content>
+                            <Card.Content key={index}>
                               <strong>{day.day}: </strong>{" "}
                               {!day.holiday ? `${start} - ${end}` : "Holiday"}{" "}
                               {(() => {
@@ -123,7 +152,7 @@ class MainPage extends Component {
 export default connect(
   ({
     MinisiteContainer: {
-      crud: { about, workingHour }
+      crud: { business_name, about, workingHour, industry, categories }
     }
   }) => ({
     data: {
@@ -132,6 +161,9 @@ export default connect(
       establishedYear: about.establishedYear || "",
       companyType: about.companyType
     },
-    workingHour
+    business_name,
+    workingHour,
+    industry,
+    categories
   })
 )(MainPage);
