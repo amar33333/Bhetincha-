@@ -121,10 +121,12 @@ class BusinessList extends Component {
       {
         Header: "Actions",
         accessor: "slug",
-        width: 400,
+        width: 250,
         Cell: props => (
           <div>
             <Button
+              data-tooltip="Edit"
+              data-position="bottom center"
               color="primary"
               className="mr-2"
               onClick={() =>
@@ -133,17 +135,12 @@ class BusinessList extends Component {
                 )
               }
             >
-              <i className="fa fa-pencil" /> Edit
+              <i className="fa fa-pencil" />
             </Button>
 
-            <PopoverDelete
-              id={`delete-${props.original.id}`}
-              onClick={() =>
-                this.props.onBusinessEachDelete({ id: props.original.id })
-              }
-            />
-
             <Button
+              data-tooltip="Manage Branches"
+              data-position="bottom center"
               color="primary"
               className="mr-2"
               onClick={() =>
@@ -158,10 +155,12 @@ class BusinessList extends Component {
                 })
               }
             >
-              <i className="fa fa-code-fork" /> Manage Branchs
+              <i className="fa fa-code-fork" />
             </Button>
 
             <Button
+              data-tooltip="Verify"
+              data-position="bottom center"
               color="success"
               className="mr-2"
               onClick={() => {
@@ -174,8 +173,15 @@ class BusinessList extends Component {
                 });
               }}
             >
-              <i className="fa fa-check" /> Verify
+              <i className="fa fa-check" />
             </Button>
+            <PopoverDelete
+              text={false}
+              id={`delete-${props.original.id}`}
+              onClick={() =>
+                this.props.onBusinessEachDelete({ id: props.original.id })
+              }
+            />
           </div>
         ),
         sortable: false,
@@ -317,32 +323,27 @@ class BusinessList extends Component {
         <Row>
           <Col xs="12" md="12">
             <Card>
-              <CardHeader onClick={this.toggleFilterCollapse} className="pb-0">
+              <CardHeader onClick={this.toggleFilterCollapse}>
                 <strong>Filters</strong>
-                <span
-                  className="fa-stack fa-lg pull-right"
-                  style={{ marginTop: "-10px" }}
-                >
-                  <i className="fa fa-circle-thin fa-stack-1x" />
+                <span className="pull-left" style={{ marginRight: "10px" }}>
                   {this.state.filterCollapsed ? (
-                    <i className="fa fa-angle-down fa-stack-1x" />
+                    <i className="fa fa-angle-right" />
                   ) : (
-                    <i className="fa fa-angle-up fa-stack-1x" />
+                    <i className="fa fa-angle-down" />
                   )}
                 </span>
-              </CardHeader>
-              <CardBody className="pb-0">
-                <Collapse isOpen={!this.state.filterCollapsed}>
+                {!this.state.filterCollapsed ? (
                   <Button
-                    style={{
-                      marginLeft: "-15px",
-                      marginTop: "-15px"
-                    }}
+                    className="pull-right"
                     color="link"
                     onClick={this.props.onFilterCleared}
                   >
                     <i className="fa fa-close" /> Clear Filter
                   </Button>
+                ) : null}
+              </CardHeader>
+              <CardBody className="pb-0">
+                <Collapse isOpen={!this.state.filterCollapsed}>
                   <Form>
                     <Row>
                       <Col xs="12" md="4">
