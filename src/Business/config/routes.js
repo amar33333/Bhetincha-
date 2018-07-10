@@ -12,7 +12,8 @@ import {
   BusinessWorkingHour,
   ManageProducts,
   ProductEdit,
-  ProductView
+  ProductView,
+  AddBranch
 } from "../views";
 
 import {
@@ -44,6 +45,18 @@ class BusinessRoute extends Component {
           name="BusinessWorkingHour"
           component={BusinessWorkingHour}
         />{" "}
+        <Route
+          path={`/:${ROUTE_PARAMS_BUSINESS_NAME}/dashboard/business-branch-address/add-branch`}
+          name="Add Branch Address"
+          component={AddBranch}
+          //permission="CAN_VIEW_DASHBOARD"
+        />
+        <Route
+          path={`/:${ROUTE_PARAMS_BUSINESS_NAME}/dashboard/business-branch-address/:id/edit-branch`}
+          name="Edit Branch Address"
+          component={AddBranch}
+          //permission="CAN_VIEW_DASHBOARD"
+        />
         <Route
           path={`/:${ROUTE_PARAMS_BUSINESS_NAME}/dashboard/business-about`}
           name="BusinessAbout"

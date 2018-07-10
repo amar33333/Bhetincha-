@@ -64,6 +64,10 @@ class CallerDetail extends Component {
                   <th>Area</th>
                   <td>{user.area && user.area.name}</td>
                 </tr>
+                <tr>
+                  <th>Type</th>
+                  <td>{user.at === "c" ? "Business Holder" : "Individual"}</td>
+                </tr>
               </tbody>
             </Table>
           </div>
@@ -86,7 +90,7 @@ class CallerDetail extends Component {
             onCancel={() => this.setState({ edit: false })}
           />
         )}
-        <CallerLogs />
+        <CallerLogs logs={this.props.user.logs} />
       </div>
     );
   }

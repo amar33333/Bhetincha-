@@ -25,7 +25,9 @@ import {
   SOCIAL_LINK_URL,
   CREATE_TELE_USER_URL,
   TELE_USER_SEARCH_MOBILE_URL,
-  TELE_USER_EDIT_URL
+  TELE_USER_EDIT_URL,
+  TELE_USER_SEND_SMS_URL,
+  TELE_USER_SEARCH_NAME_URL
 } from "./ADMIN_API";
 
 import {
@@ -113,10 +115,31 @@ export const onTeleUserSearchMobile = ({ access_token, params }) =>
     }
   });
 
+export const onTeleUserSearchName = ({ access_token, params }) =>
+  ajax({
+    method: "GET",
+    url: `${TELE_USER_SEARCH_NAME_URL}?${querystring.stringify(params)}`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
 export const onTeleUserEditAjax = ({ access_token, body }) =>
   ajax({
     method: "POST",
     url: TELE_USER_EDIT_URL,
+    body,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${access_token}`
+    }
+  });
+
+export const onTeleUserSendSMS = ({ access_token, body }) =>
+  ajax({
+    method: "POST",
+    url: TELE_USER_SEND_SMS_URL,
     body,
     headers: {
       "Content-Type": "application/json",
@@ -337,8 +360,9 @@ export const onIndustryPut = ({ industry, access_token }) =>
     }
   });
 
-export const onIndustryGet = ({ access_token }) =>
-  axios({
+export const onIndustryGet = ({ access_token }) => {
+  console.log("sdasd", INDUSTRY_URL);
+  return axios({
     method: "get",
     url: INDUSTRY_URL,
     headers: {
@@ -346,6 +370,7 @@ export const onIndustryGet = ({ access_token }) =>
       Authorization: "Bearer " + access_token
     }
   });
+};
 
 export const onIndustryEachGet = ({ id, access_token }) => {
   // console.log("access : ", access_token);

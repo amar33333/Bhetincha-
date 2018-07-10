@@ -18,19 +18,23 @@ import {
 import CallerList from "./CallerList";
 import CallerDetail from "./CallerDetail";
 import CallerAddEdit from "./CallerAddEdit";
+import ComposeSMS from "./ComposeSMS";
 
 class FindCaller extends Component {
   constructor(props) {
     super(props);
 
-    this.state = { callerName: "", callerNumber: "985106620" };
+    this.state = { callerName: "", callerNumber: "985106620", total: 2 };
   }
 
   handleChange = (key, value) => {
     this.setState({ [key]: value });
 
     if (key === "callerName") {
-      console.log("name");
+      value &&
+        this.props.onTeleUserNameList({
+          params: { name: value, total: this.state.total }
+        });
     } else if (key === "callerNumber") {
       if (this.isValidNumber(value)) {
         this.props.onTeleUserList({ params: { phone: value } });
@@ -91,48 +95,73 @@ class FindCaller extends Component {
 
   render() {
     return (
-      <Card>
-        <CardHeader>
-          <strong>Find Caller</strong>
-        </CardHeader>
-        <CardBody>
-          <FormGroup>
-            <Label for="callerName">Caller Name</Label>
-            <Col>
-              <Input
-                type="text"
-                name="callerName"
-                id="callerName"
-                placeholder="Enter a Name"
-                value={this.state.callerName}
-                onChange={e => this.handleChange("callerName", e.target.value)}
-              />
-            </Col>
-          </FormGroup>
-          <CallerList />
-          <hr />
-          <FormGroup>
-            <Label for="callerNumber">Caller Number</Label>
-            <Col>
-              <Input
-                type="number"
-                name="callerNumber"
-                id="callerNumber"
-                placeholder="Enter Number"
-                value={this.state.callerNumber}
-                onChange={e =>
-                  this.handleChange("callerNumber", e.target.value)
-                }
-              />
-            </Col>
-          </FormGroup>
-          {this.state.callerNumber === "" ? (
-            <p>Caller Number Empty</p>
-          ) : (
-            this.renderCaller()
-          )}
-        </CardBody>
-      </Card>
+      <div>
+        <Card>
+          <CardHeader>
+            <strong>Find Caller</strong>
+          </CardHeader>
+          <CardBody>
+            <FormGroup>
+              <Label for="callerName">Caller Name</Label>
+              <Col>
+                <Input
+                  type="text"
+                  name="callerName"
+                  id="callerName"
+                  placeholder="Enter a Name"
+                  value={this.state.callerName}
+                  onChange={e =>
+                    this.handleChange("callerName", e.target.value)
+                  }
+                />
+              </Col>
+            </FormGroup>
+            <CallerList
+              teleUsers={this.state.callerName ? this.props.teleUsers : []}
+              total={this.state.total}
+              onTeleUserList={this.props.onTeleUserList}
+              changeNumber={callerNumber => this.setState({ callerNumber })}
+              onLoadMoreName={() => {
+                this.setState({ total: this.state.total + 10 }, () => {
+                  this.props.onTeleUserNameList({
+                    params: {
+                      name: this.state.callerName,
+                      total: this.state.total
+                    }
+                  });
+                });
+              }}
+            />
+            <hr />
+            <FormGroup>
+              <Label for="callerNumber">Caller Number</Label>
+              <Col>
+                <Input
+                  type="number"
+                  name="callerNumber"
+                  id="callerNumber"
+                  placeholder="Enter Number"
+                  value={this.state.callerNumber}
+                  onChange={e =>
+                    this.handleChange("callerNumber", e.target.value)
+                  }
+                />
+              </Col>
+            </FormGroup>
+            {this.state.callerNumber === "" ? (
+              <p>Caller Number Empty</p>
+            ) : (
+              this.renderCaller()
+            )}
+          </CardBody>
+        </Card>
+        <ComposeSMS
+          valid={this.isValidNumber(this.state.callerNumber)}
+          registered={this.props.teleUser && this.props.teleUser.at}
+          teleUser={this.props.teleUser}
+          onTeleUserSMSSubmit={this.props.onTeleUserSMSSubmit}
+        />
+      </div>
     );
   }
 }

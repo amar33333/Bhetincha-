@@ -9,6 +9,7 @@ import BusinessLogo from "./BusinessLogo/BusinessLogo";
 import BusinessCoverImage from "./BusinessCoverImage/BusinessCoverImage";
 import BusinessPrimaryAddress from "./BusinessPrimaryAddress/BusinessPrimaryAddress";
 import BusinessBranchAddress from "./BusinessBranchAddress/BusinessBranchAddress";
+import AddBranch from "./BusinessBranchAddress/AddBranch";
 import BusinessWorkingHour from "./BusinessWorkingHour/BusinessWorkingHour";
 import BusinessAbout from "./BusinessAbout/BusinessAbout";
 
@@ -24,5 +25,6 @@ export {
   BusinessPrimaryAddress,
   BusinessLogo,
   BusinessCoverImage,
-  BusinessWorkingHour
+  BusinessWorkingHour,
+  AddBranch
 };

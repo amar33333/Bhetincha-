@@ -1,6 +1,7 @@
 import {
   FETCH_BUSINESS_TELE_CALLING_FULFILLED,
   FETCH_BUSINESS_TELE_CALLING_PENDING,
+  FETCH_TELE_USER_NAME_FULFILLED,
   FETCH_BUSINESS_TELE_CALLING_REJECTED,
   CREATE_TELE_USER_PENDING,
   CREATE_TELE_USER_FULFILLED,
@@ -16,7 +17,8 @@ const INITIAL_STATE = {
   userLoading: false,
   userError: false,
   fetchTeleUserLoading: false,
-  teleUser: {}
+  teleUser: {},
+  teleUsers: []
 };
 
 export default function(state = INITIAL_STATE, action) {
@@ -39,6 +41,9 @@ export default function(state = INITIAL_STATE, action) {
 
     case FETCH_TELE_USER_REJECTED:
       return { ...state, fetchTeleUserLoading: false };
+
+    case FETCH_TELE_USER_NAME_FULFILLED:
+      return { ...state, teleUsers: action.payload };
 
     case CREATE_TELE_USER_PENDING:
       return { ...state, userLoading: true, userError: false };

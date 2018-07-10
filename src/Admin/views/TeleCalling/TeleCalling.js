@@ -23,7 +23,6 @@ import { Link } from "react-router-dom";
 
 import { Select } from "../../../Common/components";
 import FindCaller from "./FindCaller";
-import ComposeSMS from "./ComposeSMS";
 import {
   onLocationsList,
   onBusinessTeleCallingList,
@@ -34,7 +33,9 @@ import {
   onDistrictEachList,
   onCityEachList,
   onTeleUserList,
-  onTeleUserUpdate
+  onTeleUserUpdate,
+  onTeleUserSMSSubmit,
+  onTeleUserNameList
 } from "../../actions";
 
 const TabPane = ({ business, show }) => (
@@ -98,10 +99,6 @@ class TeleCalling extends Component {
   componentDidMount() {
     this.props.onCountryList();
   }
-
-  // componentDidUpdate() {
-  //
-  // }
 
   onTabChange = (_, data) => {
     this.setState({ activeIndex: data.activeIndex }, this.onFormSubmit);
@@ -240,6 +237,8 @@ class TeleCalling extends Component {
           <Col md="6" xs="12">
             <FindCaller
               onTeleUserList={this.props.onTeleUserList}
+              onTeleUserNameList={this.props.onTeleUserNameList}
+              onTeleUserSMSSubmit={this.props.onTeleUserSMSSubmit}
               onTeleUserUpdate={this.props.onTeleUserUpdate}
               userLoading={this.props.userLoading}
               countries={this.props.countries}
@@ -254,8 +253,8 @@ class TeleCalling extends Component {
               onCityEachList={this.props.onCityEachList}
               fetchTeleUserLoading={this.props.fetchTeleUserLoading}
               teleUser={this.props.teleUser}
+              teleUsers={this.props.teleUsers}
             />
-            <ComposeSMS />
           </Col>
         </Row>
       </div>
@@ -295,6 +294,8 @@ export default connect(
     onDistrictEachList,
     onCityEachList,
     onTeleUserList,
-    onTeleUserUpdate
+    onTeleUserUpdate,
+    onTeleUserSMSSubmit,
+    onTeleUserNameList
   }
 )(TeleCalling);
