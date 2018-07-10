@@ -8,12 +8,33 @@ import {
   PHOTO_URL,
   SALES_USERS_LIST_URL,
   BRANCH_ADDRESS_URL,
-  BUSINESS_BRANCH_GET_URL
+  BUSINESS_BRANCH_GET_URL,
+  PRIMARY_ADDRESS_URL_GET_URL
 } from "./BUSINESS_API";
 import axios from "axios";
 import { ajax } from "rxjs/observable/dom/ajax";
 import querystring from "querystring";
 
+export const onPrimaryAddressGet = ({ access_token, id }) =>
+  axios({
+    method: "get",
+    url: `${PRIMARY_ADDRESS_URL_GET_URL}${id}/`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
+export const onPrimaryAddressPut = ({ access_token, id, data }) =>
+  axios({
+    method: "PUT",
+    url: `${BUSINESS_URL}${id}/`,
+    data,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
 export const onBranchPut = ({ access_token, business_slug, branch_id, body }) =>
   ajax({
     method: "PUT",

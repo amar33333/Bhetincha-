@@ -11,6 +11,7 @@ const COMPANY_TYPE = "business/companytype/";
 const SALES_USERS_LIST = "businessCollection/sales/";
 const BRANCH_ADDRESS = "business/business-branchaddress/";
 const BUSINESS_BRANCH_GET = "business/business-each-section/branchAddress/";
+const PRIMARY_ADDRESS = "business/business-each-section/address/";
 
 export const BUSINESS_URL = `${MAIN_URL}/${BUSINESS}`;
 export const ALBUM_URL = `${MAIN_URL}/${ALBUM}`;
@@ -23,3 +24,4 @@ export const APP_BUSINESS_APPROVAL_URL = `${MAIN_URL}/${APP_BUSINESS_APPROVAL}`;
 export const SALES_USERS_LIST_URL = `${MAIN_URL}/${SALES_USERS_LIST}`;
 export const BRANCH_ADDRESS_URL = `${MAIN_URL}/${BRANCH_ADDRESS}`;
 export const BUSINESS_BRANCH_GET_URL = `${MAIN_URL}/${BUSINESS_BRANCH_GET}`;
+export const PRIMARY_ADDRESS_URL_GET_URL = `${MAIN_URL}/${PRIMARY_ADDRESS}`;

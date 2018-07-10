@@ -1,3 +1,6 @@
+import { toast } from "react-toastify";
+import { Observable } from "rxjs/Observable";
+
 import {
   // onAreaPost,
   // onDistrictPost,
@@ -12,12 +15,16 @@ import {
   onCountryEachGet,
   onStateEachGet,
   onDistrictEachGet,
-  onCityEachGet
+  onCityEachGet,
+  onCountryEachGetAjax,
+  onStateEachGetAjax,
+  onDistrictEachGetAjax,
+  onCityEachGetAjax
 } from "../../Admin/config/adminServerCall";
 import {
   FETCH_ADDRESS_TREE_FULFILLED,
   FETCH_ADDRESS_TREE_REJECTED,
-  FETCH_ADDRESS_TREE_PENDING,
+  FETCH_ADDRESS_TREE_LIST_PENDING,
 
   // AREA
   FETCH_AREA_FULFILLED,
@@ -63,6 +70,8 @@ import {
   UNMOUNT_CITY,
   UNMOUNT_AREA
 } from "./types";
+
+const epics = [];
 
 export const onCountryList = ({ access_token }) => dispatch => {
   onCountryGet({ access_token })
@@ -164,60 +173,113 @@ export const onAreaList = ({ access_token }) => dispatch => {
   dispatch({ type: FETCH_AREA_PENDING });
 };
 
-export const onAddressTreeList = ({
-  id,
-  access_token,
-  ADDRESS_KEY
-}) => dispatch => {
-  console.log("address key: ", ADDRESS_KEY);
-  if (ADDRESS_KEY === "country") {
-    console.log("addreskey: ", ADDRESS_KEY);
-    onCountryEachGet({ id, access_token })
-      .then(response =>
-        dispatch({
-          type: FETCH_ADDRESS_TREE_FULFILLED,
-          payload: response.data
-        })
-      )
-      .catch(error =>
-        dispatch({ type: FETCH_ADDRESS_TREE_REJECTED, payload: error })
-      );
-  } else if (ADDRESS_KEY === "state")
-    onStateEachGet({ id, access_token })
-      .then(response =>
-        dispatch({
-          type: FETCH_ADDRESS_TREE_FULFILLED,
-          payload: response.data
-        })
-      )
-      .catch(error =>
-        dispatch({ type: FETCH_ADDRESS_TREE_REJECTED, payload: error })
-      );
-  else if (ADDRESS_KEY === "district")
-    onDistrictEachGet({ id, access_token })
-      .then(response =>
-        dispatch({
-          type: FETCH_ADDRESS_TREE_FULFILLED,
-          payload: response.data
-        })
-      )
-      .catch(error =>
-        dispatch({ type: FETCH_ADDRESS_TREE_REJECTED, payload: error })
-      );
-  else if (ADDRESS_KEY === "city")
-    onCityEachGet({ id, access_token })
-      .then(response =>
-        dispatch({
-          type: FETCH_ADDRESS_TREE_FULFILLED,
-          payload: response.data
-        })
-      )
-      .catch(error =>
-        dispatch({ type: FETCH_ADDRESS_TREE_REJECTED, payload: error })
-      );
+export const onAddressTreeList = payload => ({
+  type: FETCH_ADDRESS_TREE_LIST_PENDING,
+  payload
+});
 
-  dispatch({ type: FETCH_ADDRESS_TREE_PENDING });
-};
+epics.push((action$, { getState }) =>
+  action$
+    .ofType(FETCH_ADDRESS_TREE_LIST_PENDING)
+    .mergeMap(({ payload }) => {
+      const { id, ADDRESS_KEY } = payload;
+      const access_token = getState().auth.cookies.token_data.access_token;
+
+      if (ADDRESS_KEY === "country") {
+        return onCountryEachGetAjax({ id, access_token }).map(
+          ({ response }) => {
+            console.log("address tree response: ", response);
+            return {
+              type: FETCH_ADDRESS_TREE_FULFILLED,
+              payload: response
+            };
+          }
+        );
+      } else if (ADDRESS_KEY === "state") {
+        return onStateEachGetAjax({ id, access_token }).map(({ response }) => {
+          return {
+            type: FETCH_ADDRESS_TREE_FULFILLED,
+            payload: response
+          };
+        });
+      } else if (ADDRESS_KEY === "district") {
+        return onDistrictEachGetAjax({ id, access_token }).map(
+          ({ response }) => {
+            return {
+              type: FETCH_ADDRESS_TREE_FULFILLED,
+              payload: response
+            };
+          }
+        );
+      } else if (ADDRESS_KEY === "city") {
+        return onCityEachGetAjax({ id, access_token }).map(({ response }) => {
+          return {
+            type: FETCH_ADDRESS_TREE_FULFILLED,
+            payload: response
+          };
+        });
+      }
+    })
+    .catch(ajaxError => {
+      console.log("address tree error: ", ajaxError);
+      return Observable.of({ type: FETCH_ADDRESS_TREE_REJECTED });
+    })
+);
+
+// export const onAddressTreeList = ({
+//   id,
+//   access_token,
+//   ADDRESS_KEY
+// }) => dispatch => {
+//   console.log("address key: ", ADDRESS_KEY);
+//   if (ADDRESS_KEY === "country") {
+//     console.log("addreskey: ", ADDRESS_KEY);
+//     onCountryEachGet({ id, access_token })
+//       .then(response =>
+//         dispatch({
+//           type: FETCH_ADDRESS_TREE_FULFILLED,
+//           payload: response.data
+//         })
+//       )
+//       .catch(error =>
+//         dispatch({ type: FETCH_ADDRESS_TREE_REJECTED, payload: error })
+//       );
+//   } else if (ADDRESS_KEY === "state")
+//     onStateEachGet({ id, access_token })
+//       .then(response =>
+//         dispatch({
+//           type: FETCH_ADDRESS_TREE_FULFILLED,
+//           payload: response.data
+//         })
+//       )
+//       .catch(error =>
+//         dispatch({ type: FETCH_ADDRESS_TREE_REJECTED, payload: error })
+//       );
+//   else if (ADDRESS_KEY === "district")
+//     onDistrictEachGet({ id, access_token })
+//       .then(response =>
+//         dispatch({
+//           type: FETCH_ADDRESS_TREE_FULFILLED,
+//           payload: response.data
+//         })
+//       )
+//       .catch(error =>
+//         dispatch({ type: FETCH_ADDRESS_TREE_REJECTED, payload: error })
+//       );
+//   else if (ADDRESS_KEY === "city")
+//     onCityEachGet({ id, access_token })
+//       .then(response =>
+//         dispatch({
+//           type: FETCH_ADDRESS_TREE_FULFILLED,
+//           payload: response.data
+//         })
+//       )
+//       .catch(error =>
+//         dispatch({ type: FETCH_ADDRESS_TREE_REJECTED, payload: error })
+//       );
+
+//   dispatch({ type: FETCH_ADDRESS_TREE_PENDING });
+// };
 
 export const onUnmountDistrict = () => {
   return {
@@ -303,3 +365,5 @@ export const onUnmountArea = () => {
 //   type: UNMOUNT_AREA,
 //   payload: null
 // });
+
+export default epics;

@@ -89,6 +89,7 @@ class SubBusinessContact extends Component {
     });
   };
 
+  // This code is not used ...
   getState = () => {
     let reformed = {};
     for (var property in this.state) {
