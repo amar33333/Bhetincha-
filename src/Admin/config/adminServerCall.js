@@ -25,7 +25,8 @@ import {
   SOCIAL_LINK_URL,
   CREATE_TELE_USER_URL,
   TELE_USER_SEARCH_MOBILE_URL,
-  TELE_USER_EDIT_URL
+  TELE_USER_EDIT_URL,
+  TELE_USER_SEND_SMS_URL
 } from "./ADMIN_API";
 
 import {
@@ -117,6 +118,17 @@ export const onTeleUserEditAjax = ({ access_token, body }) =>
   ajax({
     method: "POST",
     url: TELE_USER_EDIT_URL,
+    body,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${access_token}`
+    }
+  });
+
+export const onTeleUserSendSMS = ({ access_token, body }) =>
+  ajax({
+    method: "POST",
+    url: TELE_USER_SEND_SMS_URL,
     body,
     headers: {
       "Content-Type": "application/json",
