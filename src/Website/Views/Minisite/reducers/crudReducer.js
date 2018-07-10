@@ -26,6 +26,16 @@ const INITIAL_STATE = {
   logo: "/media/default_logo.png",
   albums: [],
   workingHour: [],
+  industry: {
+    id: "",
+    name: ""
+  },
+  categories: [
+    {
+      id: "",
+      name: ""
+    }
+  ],
   address: {
     area: {
       name: ""

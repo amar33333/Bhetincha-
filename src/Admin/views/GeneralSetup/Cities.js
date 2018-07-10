@@ -359,7 +359,7 @@ class Cities extends Component {
                       <InputGroup>
                         <InputGroupAddon addonType="prepend">
                           <InputGroupText>
-                            <i className="fa fa-industry" />
+                            <i className="fa fa-map-pin" />
                           </InputGroupText>
                         </InputGroupAddon>
                         <Input

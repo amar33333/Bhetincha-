@@ -37,11 +37,11 @@ class CountryEditModal extends Component {
 
   render() {
     return (
-      <Form onSubmit={this.onFormEdit} inline>
+      <Form onSubmit={this.onFormEdit}>
         <Row>
           <Col xs="12" md="9">
             <FormGroup>
-              <InputGroup>
+              <InputGroup className="mb-2">
                 <InputGroupAddon addonType="prepend">
                   <InputGroupText>Code</InputGroupText>
                 </InputGroupAddon>
@@ -59,7 +59,7 @@ class CountryEditModal extends Component {
                   onChange={this.onChange.bind(this, "countryCode")}
                 />
               </InputGroup>
-              <InputGroup>
+              <InputGroup className="mb-2">
                 <InputGroupAddon addonType="prepend">
                   <InputGroupText>Name</InputGroupText>
                 </InputGroupAddon>
@@ -73,10 +73,8 @@ class CountryEditModal extends Component {
                 />
               </InputGroup>
             </FormGroup>
-          </Col>
-          <Col xs="12" md="3">
             <Button color="primary">
-              <span className="fa fa-check" /> SAVE
+              <span className="fa fa-check" /> Save
             </Button>
           </Col>
         </Row>

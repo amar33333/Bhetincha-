@@ -24,6 +24,11 @@ const EXTRA_SECTION_GET = "category/getsectionlist/";
 const EDIT_PERMISSION = "editpermission";
 const ASSIGNED_PATH = "businessCollection/sales-table/";
 const ASSIGNED_PATH_POST = "businessCollection/path-create/";
+const TELE_USER_CREATE = "business/teleusercreate/";
+const TELE_USER_SEARCH_MOBILE = "business/searchperson/";
+const TELE_USER_EDIT = "business/editperson/";
+const TELE_USER_SEND_SMS = "business/createlog/";
+const TELE_USER_SEARCH_NAME = "business/searchpersonbyname/";
 const ASSIGNED_LIST = "business/assign-list/";
 const VERIFY_BUSINESS = "business/business/";
 const BUSINESS_TELE_CALLING = "search/business-tc/";
@@ -56,7 +61,14 @@ export const ASSIGNED_PATH_URL = `${MAIN_URL}/${ASSIGNED_PATH}`;
 export const ASSIGNED_PATH_POST_URL = `${MAIN_URL}/${ASSIGNED_PATH_POST}`;
 export const VERIFY_BUSINESS_URL = `${MAIN_URL}/${VERIFY_BUSINESS}`;
 
+// tele calling
 export const BUSINESS_TELE_CALLING_URL = `${MAIN_URL}/${BUSINESS_TELE_CALLING}`;
+export const CREATE_TELE_USER_URL = `${MAIN_URL}/${TELE_USER_CREATE}`;
+export const TELE_USER_SEARCH_MOBILE_URL = `${MAIN_URL}/${TELE_USER_SEARCH_MOBILE}`;
+export const TELE_USER_SEARCH_NAME_URL = `${MAIN_URL}/${TELE_USER_SEARCH_NAME}`;
+export const TELE_USER_EDIT_URL = `${MAIN_URL}/${TELE_USER_EDIT}`;
+export const TELE_USER_SEND_SMS_URL = `${MAIN_URL}/${TELE_USER_SEND_SMS}`;
+
 export const LOCATION_URL = `${MAIN_URL}/${LOCATION}`;
 export const SOCIAL_LINK_URL = `${MAIN_URL}/${SOCIAL_LINK}`;
 

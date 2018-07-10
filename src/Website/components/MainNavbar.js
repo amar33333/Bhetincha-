@@ -14,7 +14,6 @@ class MainNavbar extends Component {
   render() {
     return (
       <Navbar
-        justified
         color="light"
         // light
         expand="md"
@@ -22,11 +21,7 @@ class MainNavbar extends Component {
         style={{ height: "85px" }}
         // fixed="top"
       >
-        <NavbarBrand>
-          <Link to="/" className="navbar-brand">
-            Bhetincha
-          </Link>
-        </NavbarBrand>
+        <NavbarBrand href="/">Bhetincha</NavbarBrand>
 
         <NavItem
           style={{ width: "50%", marginRight: "30px", marginTop: "17px" }}
@@ -64,8 +59,8 @@ class MainNavbar extends Component {
             }}
           />
         </NavItem>
-        {/* {this.props.cookies && <Avatar />} */}
-        <NavItem className="float-right">
+        {/* <div className="pull-right">{this.props.cookies && <Avatar />}</div> */}
+        <NavItem className="ml-auto">
           {this.props.cookies && <Avatar />}
         </NavItem>
       </Navbar>

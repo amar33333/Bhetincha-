@@ -104,34 +104,32 @@ class Avatar extends Component {
   render() {
     greetings.sort(() => Math.random() - 0.5);
     return (
-      <div>
-        <Dropdown
-          isOpen={this.state.isOpen}
-          toggle={this.profileDropdowntoggle}
-          direction="bottom"
+      <Dropdown
+        isOpen={this.state.isOpen}
+        toggle={this.profileDropdowntoggle}
+        // direction="left"
+      >
+        <DropdownToggle
+          tag="span"
+          onClick={this.profileDropdowntoggle}
+          data-toggle="dropdown"
+          aria-expanded={this.state.isOpen}
         >
-          <DropdownToggle
-            tag="span"
-            onClick={this.profileDropdowntoggle}
-            data-toggle="dropdown"
-            aria-expanded={this.state.isOpen}
-          >
-            <img className="avatar" alt="Avatar" src={avatar} />
-            {/* <i className="fa fa-chevron-down profile-dropdown__icon" /> */}
-          </DropdownToggle>
-          <DropdownMenu>
-            <div className="profile-dropdown">
-              <div
-                onClick={this.profileDropdowntoggle}
-                className="profile-dropdown__item__heading"
-              >
-                <strong>{`${greetings[0]}, ${this.state.username}!`}</strong>
-              </div>
-              {this.renderDropdownItems()}
+          <img className="avatar" alt="Avatar" src={avatar} />
+          {/* <i className="fa fa-chevron-down profile-dropdown__icon" /> */}
+        </DropdownToggle>
+        <DropdownMenu right>
+          <div className="profile-dropdown">
+            <div
+              onClick={this.profileDropdowntoggle}
+              className="profile-dropdown__item__heading"
+            >
+              <strong>{`${greetings[0]}, ${this.state.username}!`}</strong>
             </div>
-          </DropdownMenu>
-        </Dropdown>
-      </div>
+            {this.renderDropdownItems()}
+          </div>
+        </DropdownMenu>
+      </Dropdown>
     );
   }
 }

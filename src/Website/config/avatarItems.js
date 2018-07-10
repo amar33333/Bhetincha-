@@ -30,7 +30,7 @@ export default [
     group: USER_GROUP_INDIVIDUAL
   },
   {
-    className: "fa fa-dashboard",
+    className: "fa fa-globe",
     title: "Minisite",
     id: "minisite",
     badge: false,

@@ -22,7 +22,12 @@ import {
   ECOMMERCE_ATTRIBUTE_URL,
   ECOMMERCE_PRODUCT_ATTRIBUTE_URL,
   ECOMMERCE_PRODUCT_URL,
-  SOCIAL_LINK_URL
+  SOCIAL_LINK_URL,
+  CREATE_TELE_USER_URL,
+  TELE_USER_SEARCH_MOBILE_URL,
+  TELE_USER_EDIT_URL,
+  TELE_USER_SEND_SMS_URL,
+  TELE_USER_SEARCH_NAME_URL
 } from "./ADMIN_API";
 
 import {
@@ -86,6 +91,59 @@ export const onBusinessTeleCallingGetAjax = ({ access_token, body }) =>
     headers: {
       "Content-Type": "application/json",
       Authorization: "Bearer " + access_token
+    }
+  });
+
+export const onTeleUserPostAjax = ({ access_token, body }) =>
+  ajax({
+    method: "POST",
+    url: CREATE_TELE_USER_URL,
+    body,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${access_token}`
+    }
+  });
+
+export const onTeleUserSearchMobile = ({ access_token, params }) =>
+  ajax({
+    method: "GET",
+    url: `${TELE_USER_SEARCH_MOBILE_URL}?${querystring.stringify(params)}`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
+export const onTeleUserSearchName = ({ access_token, params }) =>
+  ajax({
+    method: "GET",
+    url: `${TELE_USER_SEARCH_NAME_URL}?${querystring.stringify(params)}`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
+export const onTeleUserEditAjax = ({ access_token, body }) =>
+  ajax({
+    method: "POST",
+    url: TELE_USER_EDIT_URL,
+    body,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${access_token}`
+    }
+  });
+
+export const onTeleUserSendSMS = ({ access_token, body }) =>
+  ajax({
+    method: "POST",
+    url: TELE_USER_SEND_SMS_URL,
+    body,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${access_token}`
     }
   });
 

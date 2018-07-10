@@ -55,7 +55,7 @@ class GroupEditModal extends Component {
           </InputGroup>
         </FormGroup>
         <Button color="primary">
-          <span className="fa fa-plus" /> SAVE
+          <span className="fa fa-check" /> Save
         </Button>
       </Form>
     );

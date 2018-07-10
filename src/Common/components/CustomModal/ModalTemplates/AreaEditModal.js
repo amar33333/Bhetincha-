@@ -153,7 +153,7 @@ class AreaEditModal extends Component {
     return (
       <Form onSubmit={this.onFormEdit}>
         <Row>
-          <Col xs="12" md="3">
+          <Col xs="12" md="6">
             <FormGroup>
               <Label for="Countries">Country</Label>
               <Select
@@ -172,7 +172,7 @@ class AreaEditModal extends Component {
               />
             </FormGroup>
           </Col>
-          <Col xs="12" md="3">
+          <Col xs="12" md="6">
             <FormGroup>
               <Label for="States">State</Label>
               <Select
@@ -190,7 +190,9 @@ class AreaEditModal extends Component {
               />
             </FormGroup>
           </Col>
-          <Col xs="12" md="3">
+        </Row>
+        <Row>
+          <Col xs="12" md="6">
             <FormGroup>
               <Label for="Districts">District</Label>
               <Select
@@ -208,7 +210,7 @@ class AreaEditModal extends Component {
               />
             </FormGroup>
           </Col>
-          <Col xs="12" md="3">
+          <Col xs="12" md="6">
             <FormGroup>
               <Label for="Cities">City</Label>
               <Select
@@ -228,7 +230,7 @@ class AreaEditModal extends Component {
           </Col>
         </Row>{" "}
         <Row>
-          <Col xs="10" md="10">
+          <Col xs="10" md="8">
             <InputGroup>
               <InputGroupAddon addonType="prepend">
                 <InputGroupText>
@@ -248,7 +250,7 @@ class AreaEditModal extends Component {
 
           <Col xs="12" md="2">
             <Button color="primary">
-              <span className="fa fa-check" /> SAVE
+              <span className="fa fa-check" /> Save
             </Button>
           </Col>
         </Row>
