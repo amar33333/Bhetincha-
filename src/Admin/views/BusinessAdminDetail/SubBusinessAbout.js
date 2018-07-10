@@ -91,30 +91,37 @@ class SubBusinessAbout extends Component {
   };
 
   getState = () => {
-    const temp = {
-      ...this.state,
-      companyType: this.state.companyType ? this.state.companyType.id : ""
-    };
+    // const temp = {
+    //   ...this.state,
+    //   companyType: this.state.companyType ? this.state.companyType.id : ""
+    // };
 
-    let reformed = {};
-    for (var property in temp) {
-      reformed =
-        temp[property] !== null &&
-        temp[property] !== undefined &&
-        temp[property] !== ""
-          ? { ...reformed, [property]: temp[property] }
-          : reformed;
-    }
+    // let reformed = {};
+    // for (var property in temp) {
+    //   reformed =
+    //     temp[property] !== null &&
+    //     temp[property] !== undefined &&
+    //     temp[property] !== ""
+    //       ? { ...reformed, [property]: temp[property] }
+    //       : reformed;
+    // }
 
-    console.log("about reformed: ", reformed);
+    // console.log("about reformed: ", reformed);
+    // return {
+    //   about: {
+    //     ...reformed
+    //   }
+    // };
+
     return {
       about: {
-        ...reformed
+        ...this.state,
+        companyType: this.state.companyType ? this.state.companyType.id : ""
       }
     };
   };
   render() {
-    if (this.props.about) console.log("about props: ", this.props.about);
+    // if (this.props.about) console.log("about props: ", this.props.about);
     // console.log("about state: ", this.state);
     const companyTypes = this.props.company_types;
 

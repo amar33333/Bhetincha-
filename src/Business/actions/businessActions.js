@@ -8,7 +8,11 @@ import {
   onBusinessPut,
   onBusinessEachGet,
   onPrimaryAddressGet,
-  onPrimaryAddressPut
+  onPrimaryAddressPut,
+  onAboutGet,
+  onAboutPut,
+  onWorkingHourGet,
+  onWorkingHourPut
 } from "../config/businessServerCall";
 
 import {
@@ -47,10 +51,148 @@ import {
   FETCH_PRIMARY_ADDRESS_FULFILLED,
   FETCH_PRIMARY_ADDRESS_PENDING,
   FETCH_PRIMARY_ADDRESS_REJECTED,
+  FETCH_ABOUT_FULFILLED,
+  FETCH_ABOUT_PENDING,
+  FETCH_ABOUT_REJECTED,
+  EDIT_ABOUT_FULFILLED,
+  EDIT_ABOUT_PENDING,
+  EDIT_ABOUT_REJECTED,
+  FETCH_WORKING_HOUR_FULFILLED,
+  FETCH_WORKING_HOUR_PENDING,
+  FETCH_WORKING_HOUR_REJECTED,
+  EDIT_WORKING_HOUR_FULFILLED,
+  EDIT_WORKING_HOUR_PENDING,
+  EDIT_WORKING_HOUR_REJECTED,
   TOGGLE_EDIT
 } from "./types";
 
 const epics = [];
+
+export const onWorkingHourList = payload => ({
+  type: FETCH_WORKING_HOUR_PENDING,
+  payload
+});
+
+epics.push((action$, { getState }) =>
+  action$.ofType(FETCH_WORKING_HOUR_PENDING).mergeMap(({ payload }) => {
+    const access_token = getState().auth.cookies.token_data.access_token;
+    const { id } = payload;
+
+    return onWorkingHourGet({ id, access_token })
+      .map(({ response }) => {
+        return {
+          type: FETCH_WORKING_HOUR_FULFILLED,
+          payload: response
+        };
+      })
+      .catch(ajaxError => {
+        toast.error(ajaxError.toString());
+        return Observable.of({
+          type: FETCH_WORKING_HOUR_REJECTED,
+          payload: ajaxError
+        });
+      });
+  })
+);
+
+export const onWorkingHourEdit = payload => ({
+  type: EDIT_WORKING_HOUR_PENDING,
+  payload
+});
+
+epics.push((action$, { getState }) =>
+  action$.ofType(EDIT_WORKING_HOUR_PENDING).mergeMap(({ payload }) => {
+    const access_token = getState().auth.cookies.token_data.access_token;
+    const { id, body } = payload;
+
+    return onWorkingHourPut({ id, body, access_token })
+      .concatMap(({ response }) => {
+        if (response.msg === "success") {
+          toast.success("Working Hour Section Updated Successfully!");
+          return [
+            {
+              type: EDIT_WORKING_HOUR_FULFILLED,
+              payload: response
+            },
+            {
+              type: FETCH_WORKING_HOUR_PENDING,
+              payload: { id }
+            }
+          ];
+        } else throw new Error(response.msg);
+      })
+      .catch(ajaxError => {
+        toast.error(ajaxError.toString());
+        return Observable.of({
+          type: EDIT_WORKING_HOUR_REJECTED,
+          payload: ajaxError
+        });
+      });
+  })
+);
+
+export const onAboutList = payload => ({
+  type: FETCH_ABOUT_PENDING,
+  payload
+});
+
+epics.push((action$, { getState }) =>
+  action$.ofType(FETCH_ABOUT_PENDING).mergeMap(({ payload }) => {
+    const access_token = getState().auth.cookies.token_data.access_token;
+    const { id } = payload;
+
+    return onAboutGet({ id, access_token })
+      .map(({ response }) => {
+        return {
+          type: FETCH_ABOUT_FULFILLED,
+          payload: response
+        };
+      })
+      .catch(ajaxError => {
+        toast.error(ajaxError.toString());
+        return Observable.of({
+          type: FETCH_ABOUT_REJECTED,
+          payload: ajaxError
+        });
+      });
+  })
+);
+
+export const onAboutEdit = payload => ({
+  type: EDIT_ABOUT_PENDING,
+  payload
+});
+
+epics.push((action$, { getState }) =>
+  action$.ofType(EDIT_ABOUT_PENDING).mergeMap(({ payload }) => {
+    const access_token = getState().auth.cookies.token_data.access_token;
+    const { id, body } = payload;
+
+    return onAboutPut({ id, body, access_token })
+      .concatMap(({ response }) => {
+        if (response.msg === "success") {
+          toast.success("About Section Updated Successfully!");
+          return [
+            {
+              type: EDIT_ABOUT_FULFILLED,
+              payload: response
+            },
+            {
+              type: FETCH_ABOUT_PENDING,
+              payload: { id }
+            }
+          ];
+        } else throw new Error(response.msg);
+      })
+      .catch(ajaxError => {
+        toast.error(ajaxError.toString());
+        return Observable.of({
+          type: EDIT_ABOUT_REJECTED,
+          payload: ajaxError
+        });
+      });
+  })
+);
 
 // export const onPrimaryAddressLists = payload => ({
 //   type: FETCH_PRIMARY_ADDRESS_PENDING,
@@ -446,7 +588,7 @@ epics.push((action$, { getState }) =>
 
     return onCompanyTypeGet({ access_token })
       .map(({ response }) => {
-        toast.success("Company Types Fetched Successfully!");
+        // toast.success("Company Types Fetched Successfully!");
         return { type: FETCH_COMPANY_TYPE_FULFILLED, payload: response };
       })
       .catch(ajaxError => {
