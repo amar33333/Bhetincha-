@@ -1066,6 +1066,7 @@ export const onBusinessEachList = ({ username, access_token }) => dispatch => {
         onIndustryEachGet({ id: industryId, access_token })
           .then(newResponse => {
             console.log("industry each: ", newResponse);
+
             dispatch({
               type: FETCH_INDUSTRY_EACH_FULFILLED,
               payload: newResponse.data

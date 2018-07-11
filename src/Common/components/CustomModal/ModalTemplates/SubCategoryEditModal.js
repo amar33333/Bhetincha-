@@ -32,12 +32,12 @@ class SubCategoryEditModal extends Component {
     this.setState(
       {
         category: {
-          id: this.props.data.category,
-          name: this.props.data.category
+          id: this.props.data.category.id,
+          name: this.props.data.category.name
         },
         industry: {
-          id: this.props.data.industry,
-          name: this.props.data.industry
+          id: this.props.data.industry.id,
+          name: this.props.data.industry.name
         },
         subCategory: this.props.data.name,
         extraSections: this.props.data.extra_sections.map(extraSection => ({

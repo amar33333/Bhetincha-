@@ -111,12 +111,12 @@ epics.push((action$, { getState }) =>
         if (id !== "") {
           return [
             {
-              type: FETCH_INDUSTRY_EACH_PENDING,
-              payload: { id }
-            },
-            {
               type: FETCH_BUSINESS_DETAILS_FULFILLED,
               payload: response
+            },
+            {
+              type: FETCH_INDUSTRY_EACH_PENDING,
+              payload: { id }
             }
           ];
         } else throw new Error("Industry Get Error");
@@ -833,7 +833,7 @@ epics.push((action$, { getState }) =>
 
     return onPaymentMethodsGet({ access_token })
       .map(({ response }) => {
-        toast.success("Payment Methods Fetched Successfully!");
+        // toast.success("Payment Methods Fetched Successfully!");
         return {
           type: FETCH_PAYMENT_METHODS_FULFILLED,
           payload: response

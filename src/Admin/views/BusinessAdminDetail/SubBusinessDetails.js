@@ -41,7 +41,7 @@ class SubBusinessDetail extends Component {
     if (!nextProps.businessGet && businessData && nextProps.EDIT) {
       // console.log("sbbusines detail: ", nextProps);
       nextProps.onInitialPropsReceived();
-      // console.log("sbbusines detail: ", nextProps);
+      console.log("sbbusines detail: ", businessData);
 
       return {
         business_name: businessData.business_name
@@ -217,6 +217,7 @@ class SubBusinessDetail extends Component {
 
     return {
       ...this.state,
+      industry: this.state.industry ? this.state.industry.id : "",
       categories: category_list,
       sub_categories: sub_category_list,
       paymentMethod: payment_methods_list
@@ -224,7 +225,7 @@ class SubBusinessDetail extends Component {
   };
 
   render() {
-    // console.log("props subbusiness: ", this.props);
+    console.log("props subbusiness: ", this.props);
     // console.log("state subbusiness: ", this.state);
 
     const industries = this.props.industries;
@@ -317,7 +318,7 @@ class SubBusinessDetail extends Component {
                   <Label for="website">Business Website</Label>
                   <Input
                     //required
-                    type="email"
+                    type="text"
                     value={this.state.website}
                     onKeyDown={this._handleKeyPress}
                     onChange={this.onChange.bind(this, "website")}

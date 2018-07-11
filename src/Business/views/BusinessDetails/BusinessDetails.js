@@ -51,7 +51,6 @@ class BusinessDetails extends Component {
   };
 
   render() {
-    const businessData = null;
     console.log("props:ub usines sddetai: ", this.props);
     return (
       <div className="animated fadeIn">
