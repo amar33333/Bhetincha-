@@ -34,7 +34,7 @@ class CategoryDetailView extends Component {
             <strong>Add New Category inside {this.props.name}</strong>
           </CardHeader>
           <CardBody>
-            <Form onSubmit={this.onFormSubmit} inline>
+            <Form onSubmit={this.onFormSubmit}>
               <FormGroup className="mb-2 mr-sm-2 mb-sm-0">
                 <InputGroup>
                   <InputGroupAddon addonType="prepend">

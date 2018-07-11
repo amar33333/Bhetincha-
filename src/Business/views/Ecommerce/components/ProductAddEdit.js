@@ -32,7 +32,6 @@ class ProductAddEdit extends Component {
       };
     }
 
-    // console.log(props.attributes, props.defaultValue, extra);
     this.state = {
       productSubmit: false,
       name: "",
@@ -87,19 +86,22 @@ class ProductAddEdit extends Component {
     }
   }
 
+  // prepopulate states
   getAttributesToState = attributes => {
     const extra = {};
     attributes.forEach(attribute => {
-      extra[attribute.name] = attribute.defaultValue
-        ? attribute.fieldType === "DateTime"
-          ? new Date(attribute.defaultValue)
-          : attribute.defaultValue
-        : "";
+      extra[attribute.name] = "";
+      // attribute.defaultValue
+      //   ? attribute.fieldType === "DateTime"
+      //     ? new Date(attribute.defaultValue)
+      //     : attribute.defaultValue
+      //   : "";
     });
 
     return extra;
   };
 
+  // for edit: set entered value
   getDefaultToState = (attributes, defaultValue) => {
     const extra = {};
     attributes.forEach(attribute => {
@@ -171,15 +173,26 @@ class ProductAddEdit extends Component {
         };
 
         this.props.attributes.forEach(({ name, fieldType: attributeType }) => {
+          let value = "";
+          if (attributeType === "DateTime") {
+            if (rest[name]) {
+              value = rest[name].toISOString();
+            } else {
+              value = rest[name];
+            }
+          } else if (attributeType === "MultipleChoices") {
+            if (rest[name] && rest[name].length) {
+              value = rest[name].map(({ value }) => value);
+            } else {
+              value = rest[name];
+            }
+          } else {
+            value = rest[name];
+          }
           if (rest[name]) {
             body[name] = {
               attributeType,
-              value:
-                attributeType === "DateTime"
-                  ? rest[name]
-                    ? rest[name].toISOString()
-                    : rest[name]
-                  : rest[name]
+              value
             };
           }
         });
@@ -210,6 +223,12 @@ class ProductAddEdit extends Component {
         if (
           (defaultValue[key] !== undefined || value !== "") &&
           this.props.attributes.find(x => x.name === key) &&
+          (this.props.attributes.find(x => x.name === key).fieldType !==
+            "MultipleChoices" ||
+            value
+              .map(({ value }) => value)
+              .sort()
+              .join(",") !== defaultValue[key].sort().join(",")) &&
           (value instanceof Date
             ? defaultValue[key] !== value.toISOString()
             : defaultValue[key] != value)
@@ -218,7 +237,12 @@ class ProductAddEdit extends Component {
             .fieldType;
           updates[key] = {
             attributeType,
-            value: attributeType === "DateTime" ? value.toISOString() : value
+            value:
+              attributeType === "DateTime"
+                ? value.toISOString()
+                : attributeType === "MultipleChoices"
+                  ? value.map(({ value }) => value)
+                  : value
           };
         }
       });
@@ -226,11 +250,9 @@ class ProductAddEdit extends Component {
       if (Object.keys(updates).length) {
         this.props.onSubmit({
           body: updates,
-          // categories: defaultValue.categories,
           categoryId: defaultValue.categoryId,
           uid: defaultValue.uid
         });
-        // console.log("updates", updates);
       } else {
         console.log("no changes detected");
       }
@@ -330,6 +352,25 @@ class ProductAddEdit extends Component {
                 onChange={value =>
                   this.onChange(attribute.name, value ? value.value : "")
                 }
+                value={this.state[attribute.name]}
+              />
+            </Col>
+          </FormGroup>
+        );
+
+      case "MultipleChoices":
+        return (
+          <FormGroup row key={attribute.uid}>
+            <Label sm={3}>{`${attribute.name} ${
+              attribute.required ? "*" : ""
+            }`}</Label>
+            <Col sm={9}>
+              <Select
+                multi
+                tabSelectsValue={false}
+                options={attribute.options.map(x => ({ value: x, label: x }))}
+                required={attribute.required}
+                onChange={value => this.onChange(attribute.name, value)}
                 value={this.state[attribute.name]}
               />
             </Col>
