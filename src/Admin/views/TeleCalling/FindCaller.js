@@ -24,7 +24,7 @@ class FindCaller extends Component {
   constructor(props) {
     super(props);
 
-    this.state = { callerName: "", callerNumber: "985106620", total: 2 };
+    this.state = { callerName: "", callerNumber: "985106620", total: 5 };
   }
 
   handleChange = (key, value) => {
@@ -33,7 +33,7 @@ class FindCaller extends Component {
     if (key === "callerName") {
       value &&
         this.props.onTeleUserNameList({
-          params: { name: value, total: this.state.total }
+          params: { name: value, total: 5 }
         });
     } else if (key === "callerNumber") {
       if (this.isValidNumber(value)) {

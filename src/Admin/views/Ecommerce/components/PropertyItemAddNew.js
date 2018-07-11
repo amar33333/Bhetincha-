@@ -26,9 +26,11 @@ class PropertyItemAddNew extends Component {
       defaultValueString: "",
       defaultValueDateTime: new Date(),
       defaultValueChoices: null,
+      defaultValueMultipleChoices: null,
       defaultValueInteger: 0,
       defaultValueFloat: 0,
       options: [],
+      optionsMultiple: [],
       filterable: false,
       loading: false,
       error: false,
@@ -46,6 +48,7 @@ class PropertyItemAddNew extends Component {
         updates.defaultValueString = "";
         updates.defaultValueDateTime = new Date();
         updates.defaultValueChoices = null;
+        updates.defaultValueMultipleChoices = null;
         updates.defaultValueInteger = 0;
         updates.defaultValueFloat = 0;
         updates.options = [];
@@ -74,8 +77,10 @@ class PropertyItemAddNew extends Component {
       defaultValueFloat,
       defaultValueInteger,
       defaultValueChoices,
+      defaultValueMultipleChoices,
       defaultValueString,
       options,
+      optionsMultiple,
       filterable
     } = this.state;
 
@@ -89,6 +94,10 @@ class PropertyItemAddNew extends Component {
 
     if (fieldType.name === "Choices") {
       body.options = options.map(({ value }) => value);
+    }
+
+    if (fieldType.name === "MultipleChoices") {
+      body.options = optionsMultiple.map(({ value }) => value);
     }
 
     if (required) {
@@ -107,6 +116,9 @@ class PropertyItemAddNew extends Component {
           break;
         case "DateTime":
           body.defaultValue = defaultValueDateTime;
+          break;
+        case "MultipleChoices":
+          body.defaultValue = defaultValueMultipleChoices.value;
           break;
         default:
           break;
@@ -182,6 +194,24 @@ class PropertyItemAddNew extends Component {
                         </Col>
                       </FormGroup>
                     )}
+                    {this.state.fieldType.name === "MultipleChoices" && (
+                      <FormGroup row>
+                        <Label for="optionsMultiple" sm={3}>
+                          Options
+                        </Label>
+                        <Col sm={9}>
+                          <Select.Creatable
+                            multi
+                            onChange={optionsMultiple =>
+                              this.onChange("optionsMultiple", optionsMultiple)
+                            }
+                            value={this.state.optionsMultiple}
+                            noResultsText="Type option and press tab or enter"
+                            placeholder="Create options"
+                          />
+                        </Col>
+                      </FormGroup>
+                    )}
                     <FormGroup check>
                       <Label check>
                         <Input
@@ -217,6 +247,24 @@ class PropertyItemAddNew extends Component {
                                   )
                                 }
                                 value={this.state.defaultValueChoices}
+                              />
+                            </Col>
+                          </FormGroup>
+                        )}
+                        {this.state.fieldType.name === "MultipleChoices" && (
+                          <FormGroup row>
+                            <Label sm={3}>Default Value</Label>
+                            <Col sm={9}>
+                              <Select
+                                options={this.state.optionsMultiple}
+                                required
+                                onChange={defaultValueMultipleChoices =>
+                                  this.onChange(
+                                    "defaultValueMultipleChoices",
+                                    defaultValueMultipleChoices
+                                  )
+                                }
+                                value={this.state.defaultValueMultipleChoices}
                               />
                             </Col>
                           </FormGroup>
