@@ -19,7 +19,9 @@ export default function(files, multiple) {
 
     for (let i = 0; i < files.length; i++) {
       const reader = new FileReader();
-      reader.readAsDataURL(files[i]);
+      if (files[i]) {
+        reader.readAsDataURL(files[i]);
+      }
       reader.onload = () => onLoadFunc(reader, files[i]);
       reader.onerror = error => reject(error);
     }

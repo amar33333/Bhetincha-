@@ -48,13 +48,13 @@ epics.push((action$, { getState }) =>
   action$.ofType(CREATE_ECOMMERCE_PRODUCT_PENDING).mergeMap(({ payload }) => {
     const globalState = getState();
     const {
-      attributes: { categories },
+      // attributes: { categories },
       activeCategory: categoryId
     } = globalState.BusinessContainer.ecommerce;
     const businessId = globalState.auth.cookies.user_data.business_id;
 
     return onEcommerceProductPost({
-      body: { ...payload.body, categories, categoryId, businessId }
+      body: { ...payload.body, categoryId, businessId }
     })
       .concatMap(({ response }) => {
         if (response.msg === "success") {
@@ -165,7 +165,6 @@ epics.push((action$, { getState }) =>
 
     return onEcommerceProductEachGet({ uid })
       .concatMap(({ response }) => {
-        console.log(response);
         return [
           { type: FETCH_ECOMMERCE_PRODUCT_EACH_FULFILLED, payload: response },
           {
