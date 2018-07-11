@@ -20,8 +20,8 @@ class SubBusinessDetail extends Component {
 
     this.state = {
       business_name: "",
-      business_email: "",
-      business_phone: "",
+      business_email: null,
+      business_phone: null,
       website: "",
       industry: "",
       categories: [],
@@ -49,10 +49,10 @@ class SubBusinessDetail extends Component {
           : "",
         business_phone: businessData.business_phone
           ? businessData.business_phone
-          : "",
+          : null,
         business_email: businessData.business_email
           ? businessData.business_email
-          : "",
+          : null,
         website: businessData.website ? businessData.website : "",
         industry: businessData.industry
           ? { id: businessData.industry.id, name: businessData.industry.name }
@@ -178,8 +178,8 @@ class SubBusinessDetail extends Component {
   clearState = () => {
     this.setState({
       business_name: "",
-      business_phone: "",
-      business_email: "",
+      business_phone: null,
+      business_email: null,
       website: "",
       industry: "",
       categories: [],

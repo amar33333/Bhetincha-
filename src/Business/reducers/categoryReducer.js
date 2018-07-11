@@ -4,7 +4,10 @@ import {
   FETCH_CATEGORY_EACH_PENDING,
   REMOVE_CATEGORY_DATA_FULFILLED,
   UNMOUNT_CATEGORY_DATA,
-  UNMOUNT_SUB_CATEGORY
+  UNMOUNT_SUB_CATEGORY,
+  FETCH_CATEGORY_ARRAY_PENDING,
+  FETCH_CATEGORY_ARRAY_FULFILLED,
+  FETCH_CATEGORY_ARRAY_REJECTED
 } from "../actions/types";
 
 const INITIAL_STATE = {
@@ -15,6 +18,20 @@ const INITIAL_STATE = {
 
 export default function(state = INITIAL_STATE, action) {
   switch (action.type) {
+    case FETCH_CATEGORY_ARRAY_PENDING:
+      return { ...state, fetchLoading: true };
+
+    case FETCH_CATEGORY_ARRAY_FULFILLED:
+      return {
+        ...state,
+        categoryData: action.payload
+      };
+
+    case FETCH_CATEGORY_ARRAY_REJECTED:
+      console.log("industry each error : ", action.payload);
+
+      return { ...state, fetchLoading: false };
+
     case FETCH_CATEGORY_EACH_PENDING:
       return { ...state, loading: true };
 

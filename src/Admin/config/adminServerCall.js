@@ -489,6 +489,16 @@ export const onCategoryGet = ({ access_token }) =>
     }
   });
 
+export const onCategoryArrayGet = ({ access_token, params }) =>
+  ajax({
+    method: "get",
+    url: `${CATEGORY_URL}?${querystring.stringify(params)}`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
 export const onCategoryGetAjax = ({ access_token, params }) =>
   ajax({
     method: "get",
@@ -575,8 +585,9 @@ export const onSubCategoryEachGet = ({ id, access_token }) =>
     }
   });
 
-export const onSubCategoryGetAjax = ({ access_token, params }) =>
-  ajax({
+export const onSubCategoryGet = ({ access_token, params }) => {
+  console.log("industry each server: ", params, access_token);
+  return axios({
     method: "get",
     url: `${SUB_CATEGORY_URL}?${querystring.stringify(params)}`,
     headers: {
@@ -584,6 +595,20 @@ export const onSubCategoryGetAjax = ({ access_token, params }) =>
       Authorization: "Bearer " + access_token
     }
   });
+};
+
+export const onSubCategoryGetAjax = ({ access_token, params }) => {
+  console.log("industry each server ajax: ", params, access_token);
+
+  return ajax({
+    method: "get",
+    url: `${SUB_CATEGORY_URL}?${querystring.stringify(params)}`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+};
 
 export const onSubCategoryEachDeleteAjax = ({ id, access_token }) =>
   ajax({

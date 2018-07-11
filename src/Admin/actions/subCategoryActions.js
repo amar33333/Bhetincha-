@@ -65,33 +65,6 @@ epics.push((action$, { getState }) =>
   })
 );
 
-export const onSubCategoryArrayList = payload => ({
-  type: FETCH_SUB_CATEGORY_PENDING,
-  payload
-});
-
-epics.push((action$, { getState }) =>
-  action$.ofType(FETCH_SUB_CATEGORY_PENDING).mergeMap(({ payload }) => {
-    const { ids } = payload;
-    const access_token = getState().auth.cookies.token_data.access_token;
-
-    return onSubCategoryPostAjax({
-      ids,
-      access_token
-    })
-      .map(({ response }) => {
-        return { type: FETCH_SUB_CATEGORY_FULFILLED };
-      })
-      .catch(ajaxError => {
-        toast.error(ajaxError.toString());
-        return Observable.of({
-          type: FETCH_SUB_CATEGORY_REJECTED,
-          payload: ajaxError
-        });
-      });
-  })
-);
-
 export const onSubCategoryList = payload => ({
   type: FETCH_SUB_CATEGORY_PENDING,
   payload

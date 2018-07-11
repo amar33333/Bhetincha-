@@ -6,7 +6,8 @@ import {
   onCategoryEachDeleteAjax,
   onCategoryGetAjax,
   onCategoryEachGet,
-  onCategoryPut
+  onCategoryPut,
+  onCategoryArrayGet
 } from "../config/adminServerCall";
 
 import {
@@ -22,6 +23,9 @@ import {
   REMOVE_CATEGORY_DATA_PENDING,
   REMOVE_CATEGORY_DATA_FULFILLED,
   REMOVE_CATEGORY_DATA_REJECTED,
+  FETCH_CATEGORY_ARRAY_PENDING,
+  FETCH_CATEGORY_ARRAY_FULFILLED,
+  FETCH_CATEGORY_ARRAY_REJECTED,
   DELETE_CATEGORY_PENDING,
   DELETE_CATEGORY_FULFILLED,
   DELETE_CATEGORY_REJECTED,
@@ -35,6 +39,34 @@ import {
 } from "./types";
 
 const epics = [];
+
+export const onCategoryArrayList = payload => ({
+  type: FETCH_CATEGORY_ARRAY_PENDING,
+  payload
+});
+
+epics.push((action$, { getState }) =>
+  action$.ofType(FETCH_CATEGORY_ARRAY_PENDING).mergeMap(({ payload }) => {
+    const { ids } = payload;
+    const access_token = getState().auth.cookies.token_data.access_token;
+
+    console.log("industry each actions: ", payload);
+    return onCategoryArrayGet({
+      params: { ids },
+      access_token
+    })
+      .map(({ response }) => {
+        return { type: FETCH_CATEGORY_ARRAY_FULFILLED, payload: response };
+      })
+      .catch(ajaxError => {
+        toast.error(ajaxError.toString());
+        return Observable.of({
+          type: FETCH_CATEGORY_ARRAY_REJECTED,
+          payload: ajaxError
+        });
+      });
+  })
+);
 
 export const onCategorySubmit = payload => ({
   type: CREATE_CATEGORY_PENDING,

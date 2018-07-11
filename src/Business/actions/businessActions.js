@@ -87,6 +87,9 @@ import {
   EDIT_BUSINESS_DETAILS_FULFILLED,
   EDIT_BUSINESS_DETAILS_PENDING,
   EDIT_BUSINESS_DETAILS_REJECTED,
+  FETCH_CATEGORY_ARRAY_PENDING,
+  FETCH_CATEGORY_ARRAY_FULFILLED,
+  FETCH_CATEGORY_ARRAY_REJECTED,
   UNMOUNT_BRANCH,
   TOGGLE_EDIT
 } from "./types";
@@ -108,6 +111,9 @@ epics.push((action$, { getState }) =>
     return onBusinessDetailsGet({ id, access_token })
       .concatMap(({ response }) => {
         const id = response.industry ? response.industry.id : "";
+        const ids = response.categories.map(category => category.id);
+
+        console.log("ids: ", ids);
         if (id !== "") {
           return [
             {
@@ -117,6 +123,10 @@ epics.push((action$, { getState }) =>
             {
               type: FETCH_INDUSTRY_EACH_PENDING,
               payload: { id }
+            },
+            {
+              type: FETCH_CATEGORY_ARRAY_PENDING,
+              payload: { ids }
             }
           ];
         } else throw new Error("Industry Get Error");
@@ -140,11 +150,11 @@ export const onBusinessDetailsEdit = payload => ({
 epics.push((action$, { getState }) =>
   action$.ofType(EDIT_BUSINESS_DETAILS_PENDING).mergeMap(({ payload }) => {
     const access_token = getState().auth.cookies.token_data.access_token;
-    const { business_slug, body } = payload;
+    const { id, body } = payload;
 
     return onBusinessDetailsPut({
       access_token,
-      business_slug,
+      id,
       body
     })
       .map(({ response }) => {
