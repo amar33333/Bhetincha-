@@ -334,12 +334,10 @@ export default connect(
     onSearchResultsList
   }
 )(
-  onClickOutside(
-    geolocated({
-      positionOptions: {
-        enableHighAccuracy: false
-      },
-      userDecisionTimeout: 5000
-    })(BusinessNav)
-  )
+  geolocated({
+    positionOptions: {
+      enableHighAccuracy: false
+    },
+    userDecisionTimeout: 5000
+  })(onClickOutside(BusinessNav))
 );

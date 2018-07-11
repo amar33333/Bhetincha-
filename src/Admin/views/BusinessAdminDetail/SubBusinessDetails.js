@@ -22,6 +22,7 @@ class SubBusinessDetail extends Component {
       business_name: "",
       business_email: "",
       business_phone: "",
+      website: "",
       industry: "",
       categories: [],
       sub_categories: [],
@@ -52,6 +53,7 @@ class SubBusinessDetail extends Component {
         business_email: businessData.business_email
           ? businessData.business_email
           : "",
+        website: businessData.website ? businessData.website : "",
         industry: businessData.industry
           ? { id: businessData.industry.id, name: businessData.industry.name }
           : "",
@@ -178,6 +180,7 @@ class SubBusinessDetail extends Component {
       business_name: "",
       business_phone: "",
       business_email: "",
+      website: "",
       industry: "",
       categories: [],
       sub_categories: [],
@@ -197,18 +200,26 @@ class SubBusinessDetail extends Component {
       payment_method => payment_method.id
     );
 
+    // return {
+    //   ...this.state,
+    //   categories: category_list,
+    //   sub_categories: sub_category_list,
+    //   paymentMethod: payment_methods_list,
+    //   industry: this.state.industry ? this.state.industry.id : undefined,
+    //   business_email: this.state.business_email
+    //     ? this.state.business_email
+    //     : undefined,
+    //   website: this.state.website ? this.state.website : undefined,
+    //   business_phone: this.state.business_phone
+    //     ? this.state.business_phone
+    //     : undefined
+    // };
+
     return {
       ...this.state,
       categories: category_list,
       sub_categories: sub_category_list,
-      paymentMethod: payment_methods_list,
-      industry: this.state.industry ? this.state.industry.id : undefined,
-      business_email: this.state.business_email
-        ? this.state.business_email
-        : undefined,
-      business_phone: this.state.business_phone
-        ? this.state.business_phone
-        : undefined
+      paymentMethod: payment_methods_list
     };
   };
 
@@ -298,6 +309,18 @@ class SubBusinessDetail extends Component {
                     value={this.state.business_email}
                     onKeyDown={this._handleKeyPress}
                     onChange={this.onChange.bind(this, "business_email")}
+                  />
+                </FormGroup>
+              </Col>
+              <Col xs="12" md="6">
+                <FormGroup>
+                  <Label for="website">Business Website</Label>
+                  <Input
+                    //required
+                    type="email"
+                    value={this.state.website}
+                    onKeyDown={this._handleKeyPress}
+                    onChange={this.onChange.bind(this, "website")}
                   />
                 </FormGroup>
               </Col>

@@ -32,6 +32,19 @@ import {
   EDIT_WORKING_HOUR_FULFILLED,
   EDIT_WORKING_HOUR_PENDING,
   EDIT_WORKING_HOUR_REJECTED,
+  FETCH_BUSINESS_BRANCH_FULFILLED,
+  FETCH_BUSINESS_BRANCH_PENDING,
+  FETCH_BUSINESS_BRANCH_REJECTED,
+  FETCH_BRANCH_EACH_FULFILLED,
+  FETCH_BRANCH_EACH_PENDING,
+  FETCH_BRANCH_EACH_REJECTED,
+  FETCH_BUSINESS_DETAILS_FULFILLED,
+  FETCH_BUSINESS_DETAILS_PENDING,
+  FETCH_BUSINESS_DETAILS_REJECTED,
+  EDIT_BUSINESS_DETAILS_FULFILLED,
+  EDIT_BUSINESS_DETAILS_PENDING,
+  EDIT_BUSINESS_DETAILS_REJECTED,
+  UNMOUNT_BRANCH,
   TOGGLE_EDIT
 } from "../actions/types";
 
@@ -46,11 +59,45 @@ const INITIAL_STATE = {
   businessGet: false,
   primary_address_details: null,
   about: null,
-  workingHour: []
+  workingHour: [],
+  businessBranchData: [],
+  branch: null,
+  businessDetails: null
 };
 
 export default function(state = INITIAL_STATE, action) {
   switch (action.type) {
+    case FETCH_BUSINESS_DETAILS_PENDING:
+      return { ...state, fetchLoading: true };
+    case FETCH_BUSINESS_DETAILS_REJECTED:
+      return { ...state, fetchLoading: false };
+    case FETCH_BUSINESS_DETAILS_FULFILLED:
+      console.log("details: ", action.payload);
+      return {
+        ...state,
+        businessDetails: action.payload
+      };
+
+    case FETCH_BUSINESS_BRANCH_PENDING:
+      return { ...state, fetchLoading: true };
+    case FETCH_BUSINESS_BRANCH_REJECTED:
+      return { ...state, fetchLoading: false };
+    case FETCH_BUSINESS_BRANCH_FULFILLED:
+      return {
+        ...state,
+        businessBranchData: action.payload
+      };
+
+    case FETCH_BRANCH_EACH_PENDING:
+      return { ...state, fetchLoading: true };
+    case FETCH_BRANCH_EACH_REJECTED:
+      return { ...state, fetchLoading: false };
+    case FETCH_BRANCH_EACH_FULFILLED:
+      return {
+        ...state,
+        branch: action.payload
+      };
+
     case FETCH_BUSINESS_PENDING:
       return { ...state, loading: true };
 
@@ -204,6 +251,9 @@ export default function(state = INITIAL_STATE, action) {
 
     case FETCH_COMPANY_TYPE_REJECTED:
       return { ...state, loading: false };
+
+    case UNMOUNT_BRANCH:
+      return { ...state, branch: null };
 
     default:
       return state;

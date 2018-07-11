@@ -11,11 +11,33 @@ import {
   BUSINESS_BRANCH_GET_URL,
   PRIMARY_ADDRESS_URL_GET_URL,
   WORKING_HOUR_GET_URL,
+  BUSINESS_DETAILS_GET_URL,
   ABOUT_GET_URL
 } from "./BUSINESS_API";
 import axios from "axios";
 import { ajax } from "rxjs/observable/dom/ajax";
 import querystring from "querystring";
+
+export const onBusinessDetailsGet = ({ access_token, id }) =>
+  ajax({
+    method: "GET",
+    url: `${BUSINESS_DETAILS_GET_URL}${id}/`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
+export const onBusinessDetailsPut = ({ access_token, id, body }) =>
+  ajax({
+    method: "PUT",
+    url: `${BUSINESS_URL}${id}/`,
+    body,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
 
 export const onWorkingHourGet = ({ access_token, id }) =>
   ajax({
