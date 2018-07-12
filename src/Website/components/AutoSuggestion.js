@@ -35,6 +35,7 @@ class AutoSuggestion extends Component {
   render() {
     return (
       <Autosuggest
+        className={this.props.extraClassName}
         suggestions={this.props.suggestions}
         onSuggestionsFetchRequested={({ value }) => {
           value.length > 0 &&

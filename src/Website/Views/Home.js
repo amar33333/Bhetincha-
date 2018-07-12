@@ -20,6 +20,7 @@ import {
 
 import { BottomFooter } from "../components";
 import querystring from "querystring";
+import theme from "../components/theme-big.css";
 
 const placeholder = [
   "Search Anything....",
@@ -96,6 +97,7 @@ class Home extends Component {
           <Row className="centered">
             <Col xs="12" md="8" className="home-page__searchbar ">
               <AutoSuggestion
+                theme={theme}
                 placeholder={placeholder[0]}
                 valueKey="business_name"
                 autoFocus
@@ -105,31 +107,30 @@ class Home extends Component {
                 //   this.props.history.push(`/${business.slug}`);
                 // }}
                 onSearchComplete={keyword => {
-                  this.props.coords &&
-                    this.props.history.push({
-                      pathname: "/businesses",
-                      //query: keyword
-                      //search: `?query=${keyword}&frm=0&size=5`
-                      search: `?${querystring.stringify({
-                        query:
-                          keyword ||
-                          `${
-                            placeholder[0] !== "Search Anything...."
-                              ? placeholder[0]
-                              : ""
-                          }`,
-                        lat:
-                          (this.props.coords && this.props.coords.latitude) ||
-                          undefined,
-                        lon:
-                          (this.props.coords && this.props.coords.longitude) ||
-                          undefined
-                        // distance: 0
-                        //frm: 0,
-                        //size:
-                      })}`
-                      // state: { detail: response.data }
-                    });
+                  this.props.history.push({
+                    pathname: "/businesses",
+                    //query: keyword
+                    //search: `?query=${keyword}&frm=0&size=5`
+                    search: `?${querystring.stringify({
+                      query:
+                        keyword ||
+                        `${
+                          placeholder[0] !== "Search Anything...."
+                            ? placeholder[0]
+                            : ""
+                        }`,
+                      lat:
+                        (this.props.coords && this.props.coords.latitude) ||
+                        undefined,
+                      lon:
+                        (this.props.coords && this.props.coords.longitude) ||
+                        undefined
+                      // distance: 0
+                      //frm: 0,
+                      //size:
+                    })}`
+                    // state: { detail: response.data }
+                  });
                 }}
               />
             </Col>
