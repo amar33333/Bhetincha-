@@ -24,7 +24,7 @@ import {
 const INITIAL_STATE = {
   loading: false,
   statusClass: "",
-  permissions_list: [],
+  permissions_list: null,
   groups: [],
   users: [],
   usersFetchLoading: false,
@@ -33,7 +33,8 @@ const INITIAL_STATE = {
   groupEditData: null,
   groupEditModal: false,
   userEditData: null,
-  userEditModal: false
+  userEditModal: false,
+  permissionsLoading: false
 };
 
 export default function(state = INITIAL_STATE, action) {
@@ -51,16 +52,23 @@ export default function(state = INITIAL_STATE, action) {
       return { ...state, loading: false };
 
     case PERMISSIONS_LIST_PENDING:
-      return { ...state, loading: true };
+      return { ...state, loading: true, permissionsLoading: true };
 
     case PERMISSIONS_LIST_FULFILLED:
       return {
         ...state,
+        loading: false,
+        permissionsLoading: false,
         permissions_list: action.payload
       };
 
     case PERMISSIONS_LIST_REJECTED:
-      return { ...state, loading: false, statusClass: "rejected" };
+      return {
+        ...state,
+        loading: false,
+        permissionsLoading: false,
+        statusClass: "rejected"
+      };
 
     case CREATE_GROUP_PENDING:
       return { ...state, loading: true, statusClass: "pending" };

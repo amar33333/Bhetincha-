@@ -3,6 +3,8 @@ import { connect } from "react-redux";
 
 import { Row, Col, Card, CardHeader, CardBody, Button } from "reactstrap";
 
+import { Loading } from "../../../Common/pages";
+
 import {
   onCompanyTypeList,
   onPaymentMethodsList,
@@ -144,7 +146,7 @@ class BusinessEdit extends Component {
       workingHour = data.workingHour;
     }
 
-    return (
+    return !this.props.loading ? (
       <div className="animated fadeIn">
         <Col>
           <Card>
@@ -289,6 +291,8 @@ class BusinessEdit extends Component {
           </Card>
         </Col>
       </div>
+    ) : (
+      <Loading />
     );
   }
 }
