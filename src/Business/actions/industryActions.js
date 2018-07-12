@@ -2,7 +2,8 @@ import { Observable } from "rxjs/Observable";
 
 import {
   onIndustryGet,
-  onIndustryEachGet
+  onIndustryEachGet,
+  onIndustryEachGetAjax
 } from "../../Admin/config/adminServerCall";
 
 import {
@@ -40,7 +41,7 @@ epics.push((action$, { getState }) =>
     const access_token = getState().auth.cookies.token_data.access_token;
     const { id } = payload;
 
-    return onIndustryEachGet({
+    return onIndustryEachGetAjax({
       access_token,
       id
     })

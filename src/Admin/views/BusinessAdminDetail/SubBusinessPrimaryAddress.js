@@ -712,7 +712,7 @@ class SubBusinessPrimaryAddress extends Component {
                       onContactSave={this.onContactSave.bind(this, index)}
                       onContactDelete={this.onContactDelete(index)}
                     />
-                  ))}w
+                  ))}
                   <Row style={{ marginTop: 15 }}>
                     <Col xs="6" md="6">
                       <Button color="primary" onClick={this.onContactPersonAdd}>

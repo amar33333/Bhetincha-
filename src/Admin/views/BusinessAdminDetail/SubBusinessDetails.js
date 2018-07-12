@@ -20,8 +20,8 @@ class SubBusinessDetail extends Component {
 
     this.state = {
       business_name: "",
-      business_email: "",
-      business_phone: "",
+      business_email: null,
+      business_phone: null,
       website: "",
       industry: "",
       categories: [],
@@ -41,7 +41,7 @@ class SubBusinessDetail extends Component {
     if (!nextProps.businessGet && businessData && nextProps.EDIT) {
       // console.log("sbbusines detail: ", nextProps);
       nextProps.onInitialPropsReceived();
-      // console.log("sbbusines detail: ", nextProps);
+      console.log("sbbusines detail: ", businessData);
 
       return {
         business_name: businessData.business_name
@@ -49,10 +49,10 @@ class SubBusinessDetail extends Component {
           : "",
         business_phone: businessData.business_phone
           ? businessData.business_phone
-          : "",
+          : null,
         business_email: businessData.business_email
           ? businessData.business_email
-          : "",
+          : null,
         website: businessData.website ? businessData.website : "",
         industry: businessData.industry
           ? { id: businessData.industry.id, name: businessData.industry.name }
@@ -178,8 +178,8 @@ class SubBusinessDetail extends Component {
   clearState = () => {
     this.setState({
       business_name: "",
-      business_phone: "",
-      business_email: "",
+      business_phone: null,
+      business_email: null,
       website: "",
       industry: "",
       categories: [],
@@ -217,6 +217,7 @@ class SubBusinessDetail extends Component {
 
     return {
       ...this.state,
+      industry: this.state.industry ? this.state.industry.id : "",
       categories: category_list,
       sub_categories: sub_category_list,
       paymentMethod: payment_methods_list
@@ -224,7 +225,7 @@ class SubBusinessDetail extends Component {
   };
 
   render() {
-    // console.log("props subbusiness: ", this.props);
+    console.log("props subbusiness: ", this.props);
     // console.log("state subbusiness: ", this.state);
 
     const industries = this.props.industries;
@@ -317,7 +318,7 @@ class SubBusinessDetail extends Component {
                   <Label for="website">Business Website</Label>
                   <Input
                     //required
-                    type="email"
+                    type="text"
                     value={this.state.website}
                     onKeyDown={this._handleKeyPress}
                     onChange={this.onChange.bind(this, "website")}

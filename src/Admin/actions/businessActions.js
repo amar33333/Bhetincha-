@@ -17,7 +17,8 @@ import {
   onAssignedPathPost,
   onAssignedPathEachGet,
   onAssignedBusinessAllGetAjax,
-  onBusinessVerifyPost
+  onBusinessVerifyPost,
+  onSubCategoryGet
 } from "../config/adminServerCall";
 
 import {
@@ -41,6 +42,9 @@ import {
 } from "../../Business/config/businessServerCall";
 
 import {
+  FETCH_CATEGORY_ARRAY_PENDING,
+  FETCH_CATEGORY_ARRAY_FULFILLED,
+  FETCH_CATEGORY_ARRAY_REJECTED,
   CREATE_COMPANY_TYPE_FULFILLED,
   CREATE_COMPANY_TYPE_PENDING,
   CREATE_COMPANY_TYPE_REJECTED,
@@ -1065,7 +1069,32 @@ export const onBusinessEachList = ({ username, access_token }) => dispatch => {
       if (industryId !== "")
         onIndustryEachGet({ id: industryId, access_token })
           .then(newResponse => {
-            console.log("industry each: ", newResponse);
+            // const ids = newResponse.data.categories.map(
+            //   category => category.id
+            // );
+            // console.log("industry each: ", ids);
+
+            // onSubCategoryGet({ params: { ids }, access_token })
+            //   .then(subResponse => {
+            //     console.log("industry each response: ", subResponse);
+            //     dispatch({
+            //       type: FETCH_SUB_CATEGORY_ARRAY_FULFILLED,
+            //       payload: subResponse.data
+            //     });
+            //   })
+            //   .catch(err => {
+            //     console.log("industry each error", err);
+            //     dispatch({
+            //       type: FETCH_SUB_CATEGORY_ARRAY_REJECTED,
+            //       payload: err
+            //     });
+            //   });
+
+            // dispatch({
+            //   type: FETCH_CATEGORY_ARRAY_PENDING,
+            //   payload: { ids }
+            // });
+
             dispatch({
               type: FETCH_INDUSTRY_EACH_FULFILLED,
               payload: newResponse.data
@@ -1075,6 +1104,13 @@ export const onBusinessEachList = ({ username, access_token }) => dispatch => {
           .catch(err =>
             dispatch({ type: FETCH_INDUSTRY_EACH_REJECTED, payload: err })
           );
+      const ids = response.data.categories.map(category => category.id);
+
+      if (ids.length)
+        dispatch({
+          type: FETCH_CATEGORY_ARRAY_PENDING,
+          payload: { ids }
+        });
 
       // This below `dispatch` causes error of payload = undefined in industryEachList Action epics
       // dispatch({ type: FETCH_INDUSTRY_EACH_PENDING });

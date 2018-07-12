@@ -1,8 +1,10 @@
 import { Observable } from "rxjs/Observable";
+import { toast } from "react-toastify";
 
 import {
   onCategoryEachGet,
-  onCategoryGetAjax
+  onCategoryGetAjax,
+  onCategoryArrayGet
 } from "../../Admin/config/adminServerCall";
 
 import {
@@ -15,10 +17,41 @@ import {
   REMOVE_CATEGORY_DATA_FULFILLED,
   UNMOUNT_SUB_CATEGORY,
   UNMOUNT_CATEGORY_DATA,
+  FETCH_CATEGORY_ARRAY_PENDING,
+  FETCH_CATEGORY_ARRAY_FULFILLED,
+  FETCH_CATEGORY_ARRAY_REJECTED,
   UNMOUNT_CATEGORY
 } from "./types";
 
 const epics = [];
+
+export const onCategoryArrayList = payload => ({
+  type: FETCH_CATEGORY_ARRAY_PENDING,
+  payload
+});
+
+epics.push((action$, { getState }) =>
+  action$.ofType(FETCH_CATEGORY_ARRAY_PENDING).mergeMap(({ payload }) => {
+    const { ids } = payload;
+    const access_token = getState().auth.cookies.token_data.access_token;
+
+    console.log("industry each actions: ", payload);
+    return onCategoryArrayGet({
+      params: { ids },
+      access_token
+    })
+      .map(({ response }) => {
+        return { type: FETCH_CATEGORY_ARRAY_FULFILLED, payload: response };
+      })
+      .catch(ajaxError => {
+        toast.error(ajaxError.toString());
+        return Observable.of({
+          type: FETCH_CATEGORY_ARRAY_REJECTED,
+          payload: ajaxError
+        });
+      });
+  })
+);
 
 export const onCategoryEachList = ({ id, access_token }) => dispatch => {
   onCategoryEachGet({ id, access_token })
@@ -77,3 +110,5 @@ export const onUnmountSubCategories = () => {
     payload: []
   };
 };
+
+export default epics;

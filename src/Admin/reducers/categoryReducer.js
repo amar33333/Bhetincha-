@@ -11,6 +11,9 @@ import {
   CREATE_CATEGORY_FULFILLED,
   CREATE_CATEGORY_PENDING,
   CREATE_CATEGORY_REJECTED,
+  FETCH_CATEGORY_ARRAY_PENDING,
+  FETCH_CATEGORY_ARRAY_FULFILLED,
+  FETCH_CATEGORY_ARRAY_REJECTED,
   UNMOUNT_CATEGORY
 } from "../actions/types";
 
@@ -27,6 +30,20 @@ const INITIAL_STATE = {
 
 export default function(state = INITIAL_STATE, action) {
   switch (action.type) {
+    case FETCH_CATEGORY_ARRAY_PENDING:
+      return { ...state, fetchLoading: true };
+
+    case FETCH_CATEGORY_ARRAY_FULFILLED:
+      return {
+        ...state,
+        categoryData: action.payload
+      };
+
+    case FETCH_CATEGORY_ARRAY_REJECTED:
+      console.log("industry each error : ", action.payload);
+
+      return { ...state, fetchLoading: false };
+
     case UNMOUNT_CATEGORY:
       return { ...state, categories: [] };
 

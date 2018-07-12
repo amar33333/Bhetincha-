@@ -264,6 +264,7 @@ class BusinessList extends Component {
   };
 
   componentDidMount = () => {
+    this.setState({ q: this.props.q });
     this.props.onIndustryList();
     this.props.onCategoryList({ rows: 50, page: 1 });
     this.props.onSubCategoryList({ rows: 50, page: 1 });
