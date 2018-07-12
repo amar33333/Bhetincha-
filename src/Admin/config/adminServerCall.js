@@ -1234,11 +1234,11 @@ export const onEcommerceCategoriesGet = () =>
     }
   });
 
-export const onEcommerceCategoryPost = ({ name, parent }) =>
+export const onEcommerceCategoryPost = ({ body }) =>
   ajax({
     method: "POST",
     url: ECOMMERCE_CATEGORY_URL,
-    body: { name, parent },
+    body,
     headers: {
       "Content-Type": "application/json"
     }

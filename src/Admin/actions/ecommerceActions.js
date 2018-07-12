@@ -162,9 +162,9 @@ export const onCategorySubmitEcommerce = payload => ({
 epics.push((action$, { getState }) =>
   action$.ofType(CREATE_ECOMMERCE_CATEGORIES_PENDING).mergeMap(action => {
     const parent = getState().AdminContainer.ecommerce.activeCategory;
-    const { name } = action.payload;
+    const { name, tags } = action.payload;
 
-    return onEcommerceCategoryPost({ name, parent })
+    return onEcommerceCategoryPost({ body: { name, parent, tags } })
       .concatMap(({ response }) => {
         if (response.msg === "success") {
           toast.success("Category created successfully");
