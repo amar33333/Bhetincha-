@@ -11,6 +11,7 @@ import reducers from "./reducers";
 import { ROUTE_PARAMS_BUSINESS_NAME } from "../../../config/CONSTANTS";
 
 import minisiteEpics, { onBusinessGet, clearBusiness } from "./actions";
+import { MainNavbar } from "../../components";
 
 class Minisite extends Component {
   getBusiness = () => {
@@ -38,6 +39,7 @@ class Minisite extends Component {
     console.log("props in minisite:", this.props);
     return (
       <div>
+        <MainNavbar extraClassName="small" />
         <BusinessNav
           history={this.props.history}
           businessName={this.props.match.params[ROUTE_PARAMS_BUSINESS_NAME]}

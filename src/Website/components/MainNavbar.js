@@ -3,12 +3,12 @@ import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import { Navbar, NavbarBrand, NavItem, Input } from "reactstrap";
 import { geolocated } from "react-geolocated";
-
 import Avatar from "./Avatar";
 import AutoSuggestion from "./AutoSuggestion";
 
 import { onSearchQuerySubmit, onSearchResultsList } from "../actions";
 import querystring from "querystring";
+import theme from "./theme-small.css";
 
 class MainNavbar extends Component {
   render() {
@@ -17,8 +17,8 @@ class MainNavbar extends Component {
         color="light"
         // light
         expand="md"
-        className="main-nav"
-        style={{ height: "85px" }}
+        className={`main-nav ${this.props.extraClassName}`}
+        // style={{ height: "85px" }}
         // fixed="top"
       >
         <NavbarBrand href="/">Bhetincha</NavbarBrand>
@@ -33,9 +33,11 @@ class MainNavbar extends Component {
               size="lg"
             /> */}
           <AutoSuggestion
+            theme={theme}
             initialQuery={this.props.initialQuery}
             placeholder="Search anything..."
             valueKey="business_name"
+            extraClassName="small"
             suggestions={this.props.search_result.data}
             onSuggestionsFetchRequested={this.props.onSearchQuerySubmit}
             onSearchItemSelected={business => {

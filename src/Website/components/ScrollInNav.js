@@ -23,6 +23,7 @@ export default class ScrollInNav extends Component {
   };
 
   hiddenStyle = {
+    top: "120px",
     WebkitTransform: "translateY(-100%)",
     MsTransform: "translateY(-100%)",
     transform: "translateY(-100%)"

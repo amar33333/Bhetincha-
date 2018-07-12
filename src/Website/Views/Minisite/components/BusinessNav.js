@@ -109,57 +109,100 @@ class BusinessNav extends Component {
   render() {
     return (
       <div>
-        <Navbar
-          fixed="top"
-          color="faded"
-          light
-          expand="md"
-          className="business-navbar"
-        >
-          {/* <Link to={`/${this.props.businessName}`} className="navbar-brand">
-            <img
-              src={`${MAIN_URL}${this.props.logo}`}
-              alt="brand-logo"
-              className="main_nav__brand-logo"
-            />
-          </Link> */}
-          <NavbarToggler onClick={this.toggle} />
-          <Collapse isOpen={this.state.isOpen} navbar>
-            <Nav
-              navbar
-              style={{
-                marginLeft: "300px"
-              }}
-            >
-              {/* <ResponsiveGridLayout
-                className="layout"
-                layouts={this.state.nav_layout}
-                breakpoints={{ lg: 1200 }}
-                cols={{ lg: 12, md: 12, sm: 2, xs: 2, xxs: 2 }}
-                rowHeight={30}
-                width={1200}
-                // preventCollision={false}
-                // compactType="horizontal"
-                onLayoutChange={this.onNavChanged}
-                onDragStop={this.onNavDragStop}
-              > */}
-              {/* <GridLayout
+        <ScrollInNav scrollInHeight={1}>
+          <Navbar
+            // fixed="top"
+            color="faded"
+            light
+            expand="md"
+            className="business-navbar"
+          >
+            {/* <Link to={`/${this.props.businessName}`} className="navbar-brand">
+              <img
+                src={`${MAIN_URL}${this.props.logo}`}
+                alt="brand-logo"
+                className="main_nav__brand-logo"
+              />
+            </Link> */}
+            <NavbarToggler onClick={this.toggle} />
+            <Collapse isOpen={this.state.isOpen} navbar>
+              <Nav
+                navbar
                 style={{
-                  marginLeft: "200px"
+                  marginLeft: "300px"
                 }}
-                className="layout"
-                // layout={this.state.nav_layout}
-                layout={this.state.nav_layout}
-                cols={24}
-                rowHeight={30}
-                width={1200}
-                isDraggable={this.props.mainEdit ? true : false}
-                onLayoutChange={this.onNavChanged}
-                preventCollision={false}
-                compactType="horizontal"
-                // onDragStart={this.onNavDragStart}
-                // onDragStop={this.onNavDragStop}
               >
+                {/* <ResponsiveGridLayout
+                  className="layout"
+                  layouts={this.state.nav_layout}
+                  breakpoints={{ lg: 1200 }}
+                  cols={{ lg: 12, md: 12, sm: 2, xs: 2, xxs: 2 }}
+                  rowHeight={30}
+                  width={1200}
+                  // preventCollision={false}
+                  // compactType="horizontal"
+                  onLayoutChange={this.onNavChanged}
+                  onDragStop={this.onNavDragStop}
+                > */}
+                {/* <GridLayout
+                  style={{
+                    marginLeft: "200px"
+                  }}
+                  className="layout"
+                  // layout={this.state.nav_layout}
+                  layout={this.state.nav_layout}
+                  cols={24}
+                  rowHeight={30}
+                  width={1200}
+                  isDraggable={this.props.mainEdit ? true : false}
+                  onLayoutChange={this.onNavChanged}
+                  preventCollision={false}
+                  compactType="horizontal"
+                  // onDragStart={this.onNavDragStart}
+                  // onDragStop={this.onNavDragStop}
+                >
+                  <NavItem key="home">
+                    <Link
+                      onClick={this.onNavClicked}
+                      draggable="false"
+                      to={`/${this.props.businessName}`}
+                      className="nav-link minisite_business__nav__item"
+                    >
+                      Home
+                    </Link>
+                  </NavItem>
+                   <NavItem key="about">
+                    <Link
+                      onClick={this.onNavClicked}
+                      draggable="false"
+                      to={`/${this.props.businessName}/about`}
+                      className="nav-link minisite_business__nav__item"
+                    >
+                      About
+                    </Link>
+                  </NavItem> 
+                  <NavItem key="gallery">
+                    <Link
+                      onClick={this.onNavClicked}
+                      draggable="false"
+                      to={`/${this.props.businessName}/gallery`}
+                      className="nav-link minisite_business__nav__item"
+                    >
+                      Gallery
+                    </Link>
+                  </NavItem>
+                  <NavItem key="contact">
+                    <Link
+                      onClick={this.onNavClicked}
+                      draggable="false"
+                      to={`/${this.props.businessName}/contact`}
+                      className="nav-link minisite_business__nav__item"
+                      // smooth
+                    >
+                      Contact
+                    </Link>
+                  </NavItem>
+                </GridLayout> */}
                 <NavItem key="home">
                   <Link
                     onClick={this.onNavClicked}
@@ -170,16 +213,16 @@ class BusinessNav extends Component {
                     Home
                   </Link>
                 </NavItem>
-                 <NavItem key="about">
-                  <Link
-                    onClick={this.onNavClicked}
-                    draggable="false"
-                    to={`/${this.props.businessName}/about`}
-                    className="nav-link minisite_business__nav__item"
-                  >
-                    About
-                  </Link>
-                </NavItem> 
+                {/* <NavItem key="about">
+                    <Link
+                      onClick={this.onNavClicked}
+                      draggable="false"
+                      to={`/${this.props.businessName}/about`}
+                      className="nav-link minisite_business__nav__item"
+                    >
+                      About
+                    </Link>
+                  </NavItem> */}
                 <NavItem key="gallery">
                   <Link
                     onClick={this.onNavClicked}
@@ -201,90 +244,74 @@ class BusinessNav extends Component {
                     Contact
                   </Link>
                 </NavItem>
-              </GridLayout> */}
-              <NavItem key="home">
-                <Link
-                  onClick={this.onNavClicked}
-                  draggable="false"
-                  to={`/${this.props.businessName}`}
-                  className="nav-link minisite_business__nav__item"
-                >
-                  Home
-                </Link>
-              </NavItem>
-              {/* <NavItem key="about">
-                  <Link
-                    onClick={this.onNavClicked}
-                    draggable="false"
-                    to={`/${this.props.businessName}/about`}
-                    className="nav-link minisite_business__nav__item"
-                  >
-                    About
-                  </Link>
+                {/* <NavItem>
+                  {this.state.revealSearch ? (
+                    <div className="business_nav_search_wrapper">
+                      <AutoSuggestion
+                        initialQuery={this.props.initialQuery}
+                        placeholder="Search anything..."
+                        valueKey="business_name"
+                        suggestions={this.props.search_result.data}
+                        onSuggestionsFetchRequested={
+                          this.props.onSearchQuerySubmit
+                        }
+                        onSearchItemSelected={business => {
+                          this.props.history.push(`/${business.slug}`);
+                        }}
+                        onSearchComplete={keyword => {
+                          this.props.history.push({
+                            pathname: "/businesses",
+                            //query: keyword
+                            //search: `?query=${keyword}&frm=0&size=5`
+                            search: `?${querystring.stringify({
+                              query: keyword,
+                              lat:
+                                this.props.coords && this.props.coords.latitude,
+                              lon:
+                                this.props.coords && this.props.coords.longitude
+                            })}`
+                            // state: { detail: response.data }
+                          });
+                        }}
+                      />
+                    </div>
+                  ) : (
+                    <Button
+                      color="link"
+                      tabIndex={0}
+                      onClick={this.toggleSearch}
+                    >
+                      <i className="fa fa-search" />
+                    </Button>
+                  )}
                 </NavItem> */}
-              <NavItem key="gallery">
-                <Link
-                  onClick={this.onNavClicked}
-                  draggable="false"
-                  to={`/${this.props.businessName}/gallery`}
-                  className="nav-link minisite_business__nav__item"
-                >
-                  Gallery
-                </Link>
-              </NavItem>
-              <NavItem key="contact">
-                <Link
-                  onClick={this.onNavClicked}
-                  draggable="false"
-                  to={`/${this.props.businessName}/contact`}
-                  className="nav-link minisite_business__nav__item"
-                  // smooth
-                >
-                  Contact
-                </Link>
-              </NavItem>
-              <NavItem>
-                {this.state.revealSearch ? (
-                  <div className="business_nav_search_wrapper">
-                    <AutoSuggestion
-                      initialQuery={this.props.initialQuery}
-                      placeholder="Search anything..."
-                      valueKey="business_name"
-                      suggestions={this.props.search_result.data}
-                      onSuggestionsFetchRequested={
-                        this.props.onSearchQuerySubmit
-                      }
-                      onSearchItemSelected={business => {
-                        this.props.history.push(`/${business.slug}`);
-                      }}
-                      onSearchComplete={keyword => {
-                        this.props.history.push({
-                          pathname: "/businesses",
-                          //query: keyword
-                          //search: `?query=${keyword}&frm=0&size=5`
-                          search: `?${querystring.stringify({
-                            query: keyword,
-                            lat:
-                              this.props.coords && this.props.coords.latitude,
-                            lon:
-                              this.props.coords && this.props.coords.longitude
-                          })}`
-                          // state: { detail: response.data }
-                        });
-                      }}
-                    />
-                  </div>
-                ) : (
-                  <Button color="link" tabIndex={0} onClick={this.toggleSearch}>
-                    <i className="fa fa-search" />
-                  </Button>
-                )}
-              </NavItem>
-            </Nav>
-          </Collapse>
+              </Nav>
+            </Collapse>
 
-          <NavItem className="nav-link minisite_business__nav__item">
-            {this.props.cookies && (
+            {/* <NavItem className="nav-link minisite_business__nav__item">
+              {this.props.cookies && (
+                <Avatar
+                  show={
+                    this.props.businessName === this.props.cookies.user_data.slug
+                  }
+                  nonLink={USER_GROUP_BUSINESS}
+                  titleIndex={this.props.mainEdit}
+                  onClick={this.props.onEditMainClicked}
+                />
+              )}
+            </NavItem> */}
+
+            {/* {this.props.mainEdit ? (
+              <Button
+                color="success"
+                onClick={this.onNavChanged}
+                style={{ marginLeft: 20 }}
+              >
+                <i className="fa fa-save" /> Save Nav
+              </Button>
+            ) : null} */}
+            {/* </PermissionProvider> */}
+            {/* {this.props.cookies && (
               <Avatar
                 show={
                   this.props.businessName === this.props.cookies.user_data.slug
@@ -293,20 +320,9 @@ class BusinessNav extends Component {
                 titleIndex={this.props.mainEdit}
                 onClick={this.props.onEditMainClicked}
               />
-            )}
-          </NavItem>
-
-          {/* {this.props.mainEdit ? (
-            <Button
-              color="success"
-              onClick={this.onNavChanged}
-              style={{ marginLeft: 20 }}
-            >
-              <i className="fa fa-save" /> Save Nav
-            </Button>
-          ) : null} */}
-          {/* </PermissionProvider> */}
-        </Navbar>
+            )} */}
+          </Navbar>
+        </ScrollInNav>
       </div>
     );
   }
