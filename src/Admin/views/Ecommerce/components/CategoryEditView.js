@@ -10,7 +10,8 @@ import {
   InputGroupText,
   Input,
   Button,
-  Label
+  Label,
+  Col
 } from "reactstrap";
 
 import { Select } from "../../../../Common/components";
@@ -92,41 +93,38 @@ class CategoryEditView extends Component {
           <strong>Update Category</strong>
         </CardHeader>
         <CardBody>
-          <Form onSubmit={this.onFormSubmit} inline>
-            <FormGroup className="mb-2 mr-sm-2 mb-sm-0">
-              <InputGroup>
-                <InputGroupAddon addonType="prepend">
-                  <InputGroupText>
-                    <i className="fa fa-industry" />
-                  </InputGroupText>
-                </InputGroupAddon>
+          <Form onSubmit={this.onFormSubmit}>
+            <FormGroup row>
+              <Label sm={2}>Name</Label>
+              <Col sm={10}>
                 <Input
                   innerRef={ref => (this.focusableInput = ref)}
                   type="text"
                   value={this.state.name}
                   onChange={this.onChangeName}
                 />
-              </InputGroup>
+              </Col>
             </FormGroup>
-            <FormGroup check>
-              <Label check>
-                <Input
-                  type="checkbox"
-                  checked={this.state.hasProduct}
-                  onClick={event =>
-                    this.setState({ hasProduct: event.target.checked })
-                  }
-                />
-                Has Products
-              </Label>
+            <FormGroup row>
+              <Label sm={2} />
+              <Col sm={10}>
+                <FormGroup check>
+                  <Label check>
+                    <Input
+                      type="checkbox"
+                      checked={this.state.hasProduct}
+                      onClick={event =>
+                        this.setState({ hasProduct: event.target.checked })
+                      }
+                    />
+                    Has Products
+                  </Label>
+                </FormGroup>
+              </Col>
             </FormGroup>
-            <FormGroup className="mb-2 mr-sm-2 mb-sm-0">
-              <InputGroup>
-                <InputGroupAddon addonType="prepend">
-                  <InputGroupText>
-                    <i className="fa fa-tag" />
-                  </InputGroupText>
-                </InputGroupAddon>
+            <FormGroup row>
+              <Label sm={2}>Tags</Label>
+              <Col sm={10}>
                 <Select.Creatable
                   multi
                   onChange={tags => this.setState({ tags })}
@@ -134,10 +132,10 @@ class CategoryEditView extends Component {
                   noResultsText="Type option and press tab or enter"
                   placeholder="Create tags"
                 />
-              </InputGroup>
+              </Col>
             </FormGroup>
             <Button color="primary">
-              <span className="fa fa-plus" /> Update
+              <span className="fa fa-check" /> Update
             </Button>
           </Form>
         </CardBody>

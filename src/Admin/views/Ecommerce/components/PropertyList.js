@@ -52,12 +52,43 @@ class PropertyList extends Component {
 
   tableProps = {
     columns: [
+      // {
+      //   Header: "SN",
+      //   accessor: "s_no",
+      //   filterable: false,
+      //   // sortable: false,
+      //   width: 70
+      // },
       {
-        Header: "SN",
+        Header: "Ordering",
         accessor: "s_no",
-        filterable: false,
-        // sortable: false,
-        width: 70
+        Cell: cellInfo => (
+          <div
+            style={{ backgroundColor: "#fafafa" }}
+            contentEditable
+            suppressContentEditableWarning
+            onBlur={e => {
+              const value = parseInt(e.target.innerHTML, 10);
+              if (!isNaN(value)) {
+                console.log("parsed");
+                const properties = [...this.state.properties];
+                e.target.innerHTML = value;
+                if (value !== properties[cellInfo.index][cellInfo.column.id]) {
+                  properties[cellInfo.index][cellInfo.column.id] = value;
+                  this.setState({ properties });
+                }
+              } else {
+                console.log("unparsed");
+                e.target.innerHTML = this.state.properties[cellInfo.index][
+                  cellInfo.column.id
+                ];
+              }
+            }}
+            dangerouslySetInnerHTML={{
+              __html: this.state.properties[cellInfo.index][cellInfo.column.id]
+            }}
+          />
+        )
       },
       { Header: "Name", accessor: "name" },
       { Header: "Category", accessor: "category" },
