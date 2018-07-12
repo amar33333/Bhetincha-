@@ -72,7 +72,7 @@ class AdminRoute extends Component {
           permission="CAN_VIEW_STATE"
         />
         <CustomRoute
-          path="/admin/add-business"
+          path="/admin/list-business/add-business"
           name="Add Business"
           component={props => (
             <BusinessAdminDetail
@@ -90,7 +90,7 @@ class AdminRoute extends Component {
           permission="CAN_ADD_BUSINESS"
         />
         <CustomRoute
-          path="/admin/add-free-business"
+          path="/admin/list-business/add-free-business"
           name="Add Free Business"
           component={props => (
             <BusinessAdminDetail

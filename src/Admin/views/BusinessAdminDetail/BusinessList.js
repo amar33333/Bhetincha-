@@ -308,14 +308,14 @@ class BusinessList extends Component {
     return (
       <div className="animated fadeIn">
         <PermissionProvider permission="CAN_ADD_BUSINESS">
-          <Link to="/admin/add-business">
+          <Link to="/admin/list-business/add-business">
             <Button variant="raised" color="primary" className="mb-4 mr-2">
               <i className="fa fa-plus" /> Add Business
             </Button>
           </Link>
         </PermissionProvider>
         <PermissionProvider permission="CAN_ADD_BUSINESS">
-          <Link to="/admin/add-free-business">
+          <Link to="/admin/list-business/add-free-business">
             <Button variant="raised" color="success" className="mb-4">
               <i className="fa fa-plus" /> Add Free Business
             </Button>

@@ -238,11 +238,12 @@ items.items.forEach(item => {
   if (item.url) items.routes[item.url] = item.name;
 });
 
-// items.routes = {
-//   ...items.routes,
-//   ...{
-//     "/admin/kxa": ""
-//   }
-// };
+items.routes = {
+  ...items.routes,
+  ...{
+    "/admin/list-business/add-business": "Add Business",
+    "/admin/list-business/add-free-business": "Add Free Business"
+  }
+};
 
 export default items;
