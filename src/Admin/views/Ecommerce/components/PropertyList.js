@@ -22,6 +22,7 @@ class PropertyList extends Component {
 
   componentDidUpdate(prevProps) {
     if (this.props.category !== prevProps.category) {
+      console.log("category updatesd");
       this.setState({
         properties: this.props.category.breadCrumbs
           ? this.mapProperties(this.props.category)
@@ -52,36 +53,43 @@ class PropertyList extends Component {
 
   tableProps = {
     columns: [
-      // {
-      //   Header: "SN",
-      //   accessor: "s_no",
-      //   filterable: false,
-      //   // sortable: false,
-      //   width: 70
-      // },
+      {
+        Header: "SN",
+        accessor: "s_no",
+        filterable: false,
+        width: 70
+      },
       {
         Header: "Ordering",
-        accessor: "s_no",
+        accessor: "order",
         Cell: cellInfo => (
           <div
+            key={cellInfo.original.uid}
             style={{ backgroundColor: "#fafafa" }}
             contentEditable
             suppressContentEditableWarning
             onBlur={e => {
               const value = parseInt(e.target.innerHTML, 10);
               if (!isNaN(value)) {
-                console.log("parsed");
                 const properties = [...this.state.properties];
-                e.target.innerHTML = value;
                 if (value !== properties[cellInfo.index][cellInfo.column.id]) {
-                  properties[cellInfo.index][cellInfo.column.id] = value;
-                  this.setState({ properties });
+                  this.props.onPropertyUpdate({
+                    body: {
+                      order: value,
+                      categoryId: this.props.activeCategory,
+                      relationshipId: cellInfo.original.uid
+                    }
+                  });
                 }
               } else {
-                console.log("unparsed");
                 e.target.innerHTML = this.state.properties[cellInfo.index][
                   cellInfo.column.id
                 ];
+              }
+            }}
+            onKeyDown={event => {
+              if (event.keyCode === 13) {
+                event.target.blur();
               }
             }}
             dangerouslySetInnerHTML={{
@@ -137,7 +145,13 @@ class PropertyList extends Component {
   };
 
   render() {
-    return <ReactTable {...this.tableProps} data={this.state.properties} />;
+    return (
+      <ReactTable
+        {...this.tableProps}
+        data={this.state.properties}
+        defaultSorted={[{ id: "order", desc: false }]}
+      />
+    );
   }
 }
 

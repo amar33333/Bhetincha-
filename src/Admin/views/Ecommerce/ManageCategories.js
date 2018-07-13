@@ -21,6 +21,7 @@ import {
   onCategoryDeleteEcommerce,
   onAttributesListEcommerce,
   onPropertySubmitEcommerce,
+  onPropertyUpdateEcommerce,
   onPropertyRemoveEcommerce
 } from "../../actions";
 
@@ -90,6 +91,8 @@ class ManageCategories extends Component {
                   <PropertyList
                     category={this.props.selectedCategoryDetail}
                     onPropertyRemove={this.props.onPropertyRemoveEcommerce}
+                    activeCategory={this.props.activeCategory}
+                    onPropertyUpdate={this.props.onPropertyUpdateEcommerce}
                   />
                 </div>
               )}
@@ -132,6 +135,7 @@ export default connect(
     onCategoryDeleteEcommerce,
     onAttributesListEcommerce,
     onPropertySubmitEcommerce,
+    onPropertyUpdateEcommerce,
     onPropertyRemoveEcommerce
   }
 )(ManageCategories);
