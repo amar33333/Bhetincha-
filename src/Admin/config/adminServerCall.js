@@ -1224,6 +1224,16 @@ export const onEcommercePropertiesPost = ({ body }) =>
     }
   });
 
+export const onEcommercePropertiesPut = ({ body }) =>
+  ajax({
+    method: "PUT",
+    url: ECOMMERCE_ATTRIBUTE_URL,
+    body,
+    headers: {
+      "Content-Type": "application/json"
+    }
+  });
+
 export const onEcommercePropertiesDelete = ({ body }) =>
   ajax({
     method: "DELETE",

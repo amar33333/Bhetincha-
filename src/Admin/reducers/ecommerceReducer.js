@@ -4,9 +4,9 @@ import {
   FETCH_ECOMMERCE_CATEGORY_FULFILLED,
   FETCH_ECOMMERCE_ATTRIBUTES_FULFILLED,
   OPEN_ALL_ON_SEARCH,
-  CREATE_PROPERTY_CATEGORY_FULFILLED,
-  CREATE_PROPERTY_CATEGORY_PENDING,
-  CREATE_PROPERTY_CATEGORY_REJECTED
+  CREATE_ECOMMERCE_PROPERTY_CATEGORY_FULFILLED,
+  CREATE_ECOMMERCE_PROPERTY_CATEGORY_PENDING,
+  CREATE_ECOMMERCE_PROPERTY_CATEGORY_REJECTED
 } from "../actions/types";
 
 const INITIAL_STATE = {
@@ -23,13 +23,13 @@ export default function(state = INITIAL_STATE, action) {
   let isOpenCategories;
 
   switch (action.type) {
-    case CREATE_PROPERTY_CATEGORY_FULFILLED:
+    case CREATE_ECOMMERCE_PROPERTY_CATEGORY_FULFILLED:
       return { ...state, propertyLoading: false, propertyError: false };
 
-    case CREATE_PROPERTY_CATEGORY_PENDING:
+    case CREATE_ECOMMERCE_PROPERTY_CATEGORY_PENDING:
       return { ...state, propertyLoading: true, propertyError: false };
 
-    case CREATE_PROPERTY_CATEGORY_REJECTED:
+    case CREATE_ECOMMERCE_PROPERTY_CATEGORY_REJECTED:
       return { ...state, propertyLoading: false, propertyError: true };
 
     case FETCH_ECOMMERCE_ATTRIBUTES_FULFILLED:
