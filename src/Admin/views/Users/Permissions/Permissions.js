@@ -48,12 +48,10 @@ class Permissions extends Component {
         ? nextProps.groups.find(item => item.id === prevState.group.id)
         : nextProps.groups.find(item => item.name === "ADMIN"),
 
-      permissions_list: nextProps.permissions_list
-      // excluded_permissions_list: nextProps.permissions_list
-      //   ? nextProps.permissions_list.filter(
-      //       value => exclude_list.indexOf(value.name) === -1
-      //     )
-      //   : null
+      permissions_list: nextProps.permissions_list,
+      excluded_permissions_list:
+        nextProps.permissions_list &&
+        exclude_list.map(eachKey => !(eachKey in nextProps.permissions_list))
     };
   };
 
@@ -74,10 +72,10 @@ class Permissions extends Component {
     ));
   }
 
-  isChecked(id) {
+  isChecked(id, key) {
     if (
       this.state.group &&
-      this.state.group.permissions.find(each => each.id === id)
+      this.state.group.permissions[key].find(each => each.id === id)
     )
       return true;
 
@@ -104,10 +102,13 @@ class Permissions extends Component {
     //   this.state.permissions_list[key]
     // );
 
+    // const checkedPermissionsLength =
+    //   this.state.group &&
+    //   this.state.group.permissions.filter(each => each.name.includes(key))
+    //     .length;
+
     const checkedPermissionsLength =
-      this.state.group &&
-      this.state.group.permissions.filter(each => each.name.includes(key))
-        .length;
+      this.state.group && this.state.group.permissions[key].length;
 
     const actualPermissionsLength = this.state.permissions_list[key].length;
 
@@ -118,11 +119,11 @@ class Permissions extends Component {
     let checked = event.target.checked;
     const { id: group_id } = this.state.group;
 
-    console.log(
-      "collective: ",
-      this.state.permissions_list[key],
-      this.state.group
-    );
+    // console.log(
+    //   "collective: ",
+    //   this.state.permissions_list[key],
+    //   this.state.group
+    // );
 
     this.state.permissions_list[key].map(each => {
       this.props.onTogglePermission({
@@ -144,7 +145,7 @@ class Permissions extends Component {
     return (
       checkbox_perm_list &&
       Object.keys(checkbox_perm_list).map((key, i) => {
-        console.log("key: ", key);
+        // console.log("key: ", key);
 
         return (
           <ListGroupItem
@@ -178,18 +179,18 @@ class Permissions extends Component {
             ) : null}
             {checkbox_perm_list[key].map((item, j) => {
               return (
-                <Label>
+                <Label key={item.id}>
                   {this.state.group && this.state.group.name === "ADMIN" ? (
                     <Input
                       type="checkbox"
-                      checked={this.isChecked(item.id)}
+                      checked={this.isChecked(item.id, key)}
                       disabled
                     />
                   ) : (
                     <Input
                       disabled={this.props.loading}
                       type="checkbox"
-                      checked={this.isChecked(item.id)}
+                      checked={this.isChecked(item.id, key)}
                       onChange={event => this.onCheckboxChanged(event, item.id)}
                     />
                   )}

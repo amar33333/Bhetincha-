@@ -13,6 +13,7 @@ import BusinessAssign from "./BusinessAdminDetail/BusinessAssign/BusinessAssign"
 import TeleCalling from "./TeleCalling/TeleCalling";
 import ManageBranchs from "./BusinessAdminDetail/ManageBranchs";
 import AddBranch from "./BusinessAdminDetail/AddBranch";
+import ResetPassword from "./Users/ResetPassword";
 
 import {
   Areas,
@@ -55,5 +56,6 @@ export {
   BusinessAssign,
   TeleCalling,
   ManageBranchs,
-  AddBranch
+  AddBranch,
+  ResetPassword
 };

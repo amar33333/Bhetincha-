@@ -17,29 +17,6 @@
   -->
   <script src="https://cdn.ravenjs.com/3.24.1/raven.min.js" crossorigin="anonymous"></script>
   <!-- End -->
-
-  <script>
-    window.fbAsyncInit = function () {
-      FB.init({
-        appId: '{your-app-id}',
-        cookie: true,
-        xfbml: true,
-        version: '{api-version}'
-      });
-
-      FB.AppEvents.logPageView();
-
-    };
-
-    (function (d, s, id) {
-      var js, fjs = d.getElementsByTagName(s)[0];
-      if (d.getElementById(id)) { return; }
-      js = d.createElement(s); js.id = id;
-      js.src = "https://connect.facebook.net/en_US/sdk.js";
-      fjs.parentNode.insertBefore(js, fjs);
-    }(document, 'script', 'facebook-jssdk'));
-  </script>
-
   <link rel="stylesheet" href="https://unpkg.com/react-select@1.2.1/dist/react-select.css">
   <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/Ladda/1.0.0/ladda.min.css">
   <!-- <link href="https://fonts.googleapis.com/css?family=Palanquin:100,200,300,400,500,600,700&amp;subset=devanagari" rel="stylesheet"> -->

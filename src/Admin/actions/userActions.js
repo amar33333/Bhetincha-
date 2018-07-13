@@ -11,7 +11,8 @@ import {
   onTogglePermissionPost,
   onGroupPut,
   onUserPut,
-  onUserDelete
+  onUserDelete,
+  onUsersNotPaginatedGet
 } from "../config/adminServerCall";
 import {
   CREATE_GROUP_FULFILLED,
@@ -26,6 +27,9 @@ import {
   FETCH_USERS_FULFILLED,
   FETCH_USERS_REJECTED,
   FETCH_USERS_PENDING,
+  FETCH_USERS_NOT_PAGINATED_FULFILLED,
+  FETCH_USERS_NOT_PAGINATED_REJECTED,
+  FETCH_USERS_NOT_PAGINATED_PENDING,
   PERMISSIONS_LIST_PENDING,
   PERMISSIONS_LIST_REJECTED,
   PERMISSIONS_LIST_FULFILLED,
@@ -376,6 +380,26 @@ epics.push((action$, { getState }) =>
 //     });
 //   dispatch({ type: CREATE_USER_PENDING });
 // };
+
+export const onUsersNotPaginatedList = payload => ({
+  type: FETCH_USERS_NOT_PAGINATED_PENDING,
+  payload
+});
+
+epics.push((action$, { getState }) =>
+  action$.ofType(FETCH_USERS_NOT_PAGINATED_PENDING).switchMap(({ payload }) => {
+    return onUsersNotPaginatedGet({
+      access_token: getState().auth.cookies.token_data.access_token
+    })
+      .map(({ response }) => ({
+        type: FETCH_USERS_NOT_PAGINATED_FULFILLED,
+        payload: response
+      }))
+      .catch(ajaxError =>
+        Observable.of({ type: FETCH_USERS_NOT_PAGINATED_REJECTED })
+      );
+  })
+);
 
 export const onUsersList = payload => ({ type: FETCH_USERS_PENDING, payload });
 

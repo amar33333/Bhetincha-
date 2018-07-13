@@ -21,6 +21,7 @@ const PHONE_VERIFICATION_TOKEN_SEND = "business/claim-at-register/";
 const USER_REGISTER = "business/user-at-register/";
 const RESEND_TOKEN = "business/resend-code/";
 const CHECK_REGISTRATION = "business/checkurl/";
+const SOCIAL = "/api/accounts/social";
 
 const O_TOKEN = "o/token/";
 export const CLIENT_ID = "z5LMYuXtl4eFF7iyMIKA0LzZSu4awMBGg8hUsXH4";
@@ -37,6 +38,8 @@ export const PHONE_VERIFICATION_TOKEN_SEND_URL = `${MAIN_URL}/${PHONE_VERIFICATI
 export const USER_REGISTER_URL = `${MAIN_URL}/${USER_REGISTER}`;
 export const RESEND_TOKEN_URL = `${MAIN_URL}/${RESEND_TOKEN}`;
 export const CHECK_REGISTRATION_URL = `${MAIN_URL}/${CHECK_REGISTRATION}`;
+export const FACEBOOK_LOGIN_URL = `${MAIN_URL}/${SOCIAL}/facebook/`;
+export const GOOGLE_LOGIN_URL = `${MAIN_URL}/${SOCIAL}/google/`;
 // export const REGISTER_URL = `${MAIN_URL}/${API}/${ACCOUNTS}/${USER}`;
 
 export const O_TOKEN_URL = `${MAIN_URL}/${O_TOKEN}`;

@@ -22,6 +22,12 @@ import {
   CHECK_REGISTRATION_FULFILLED,
   CHECK_REGISTRATION_PENDING,
   CHECK_REGISTRATION_REJECTED,
+  FACEBOOK_LOGIN_FULFILLED,
+  FACEBOOK_LOGIN_PENDING,
+  FACEBOOK_LOGIN_REJECTED,
+  GOOGLE_LOGIN_FULFILLED,
+  GOOGLE_LOGIN_PENDING,
+  GOOGLE_LOGIN_REJECTED,
   LOGOUT_USER
 } from "../actions/types";
 
@@ -38,7 +44,9 @@ const INITIAL_STATE = {
   data: null,
   search_selected_business_id: null,
   checkRegistrationData: null,
-  phone_verification_request_error: null
+  phone_verification_request_error: null,
+  facebookLogin: null,
+  googleLogin: null
 };
 
 export default function(state = INITIAL_STATE, action) {
@@ -57,6 +65,15 @@ export default function(state = INITIAL_STATE, action) {
 
     case PERMISSIONS_LOAD_FULFILLED:
       return { ...state, ...action.payload, permissions_loading: false };
+
+    case FACEBOOK_LOGIN_PENDING:
+      return { ...state, ...action.payload };
+
+    case FACEBOOK_LOGIN_REJECTED:
+      return { ...state, ...action.payload };
+
+    case FACEBOOK_LOGIN_FULFILLED:
+      return { ...state, ...action.payload, facebookLogin: action.response };
 
     case FETCH_USER_PENDING:
       return { ...state, loading: true };

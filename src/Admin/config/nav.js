@@ -199,6 +199,12 @@ const items = {
           url: "/admin/users/permissions",
           icon: "icon-tag",
           permission: "CAN_ACCESS_PERMISSION"
+        },
+        {
+          name: "Reset Password",
+          url: "/admin/users/reset-password",
+          icon: "icon-tag",
+          permission: "CAN_ACCESS_PERMISSION"
         }
       ]
     },
