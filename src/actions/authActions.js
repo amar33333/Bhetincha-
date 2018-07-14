@@ -33,6 +33,12 @@ import {
   CHECK_REGISTRATION_FULFILLED,
   CHECK_REGISTRATION_PENDING,
   CHECK_REGISTRATION_REJECTED,
+  FACEBOOK_LOGIN_FULFILLED,
+  FACEBOOK_LOGIN_PENDING,
+  FACEBOOK_LOGIN_REJECTED,
+  GOOGLE_LOGIN_FULFILLED,
+  GOOGLE_LOGIN_PENDING,
+  GOOGLE_LOGIN_REJECTED,
   LOGOUT_USER
 } from "./types";
 
@@ -56,7 +62,9 @@ import {
   onPhoneVerificationTokenPost,
   onUserRegister,
   onResendTokenPost,
-  onCheckRegistrationGet
+  onCheckRegistrationGet,
+  onFacebookLogin,
+  onGoogleLogin
 } from "../Common/utils/serverCall";
 
 import querystring from "querystring";
@@ -100,6 +108,54 @@ epics.push(action$ =>
     //     CookiesProvider.getAllCookies()
     //   );
     // }
+  })
+);
+
+export const onFacebookLoginSubmit = payload => ({
+  type: FACEBOOK_LOGIN_PENDING,
+  payload
+});
+
+epics.push(action$ =>
+  action$.ofType(FACEBOOK_LOGIN_PENDING).mergeMap(action => {
+    return onFacebookLogin({ ...action.payload })
+      .map(({ response }) => {
+        return {
+          type: FACEBOOK_LOGIN_FULFILLED,
+          payload: response
+        };
+      })
+      .catch(ajaxError => {
+        toast.error(ajaxError.toString());
+        return Observable.of({
+          type: FACEBOOK_LOGIN_REJECTED,
+          payload: ajaxError
+        });
+      });
+  })
+);
+
+export const onGoogleLoginSubmit = payload => ({
+  type: GOOGLE_LOGIN_PENDING,
+  payload
+});
+
+epics.push(action$ =>
+  action$.ofType(GOOGLE_LOGIN_PENDING).mergeMap(action => {
+    return onGoogleLogin({ ...action.payload })
+      .map(({ response }) => {
+        return {
+          type: GOOGLE_LOGIN_FULFILLED,
+          payload: response
+        };
+      })
+      .catch(ajaxError => {
+        toast.error(ajaxError.toString());
+        return Observable.of({
+          type: GOOGLE_LOGIN_REJECTED,
+          payload: ajaxError
+        });
+      });
   })
 );
 

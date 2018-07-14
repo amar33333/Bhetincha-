@@ -18,7 +18,10 @@ import {
   TOGGLE_PERMISSION_FULFILLED,
   TOGGLE_PERMISSION_REJECTED,
   TOGGLE_GROUP_EDIT_MODAL,
-  TOGGLE_USER_EDIT_MODAL
+  TOGGLE_USER_EDIT_MODAL,
+  FETCH_USERS_NOT_PAGINATED_FULFILLED,
+  FETCH_USERS_NOT_PAGINATED_REJECTED,
+  FETCH_USERS_NOT_PAGINATED_PENDING
 } from "../actions/types";
 
 const INITIAL_STATE = {
@@ -34,7 +37,8 @@ const INITIAL_STATE = {
   groupEditModal: false,
   userEditData: null,
   userEditModal: false,
-  permissionsLoading: false
+  permissionsLoading: false,
+  usersNotPaginatedList: []
 };
 
 export default function(state = INITIAL_STATE, action) {
@@ -128,6 +132,19 @@ export default function(state = INITIAL_STATE, action) {
       };
 
     case FETCH_USERS_REJECTED:
+      return { ...state, usersFetchLoading: false };
+
+    case FETCH_USERS_NOT_PAGINATED_PENDING:
+      return { ...state, usersFetchLoading: true };
+
+    case FETCH_USERS_NOT_PAGINATED_FULFILLED:
+      return {
+        ...state,
+        usersNotPaginatedList: action.payload,
+        usersFetchLoading: false
+      };
+
+    case FETCH_USERS_NOT_PAGINATED_REJECTED:
       return { ...state, usersFetchLoading: false };
 
     case TOGGLE_GROUP_EDIT_MODAL:

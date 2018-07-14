@@ -106,6 +106,18 @@ class PermissionProvider extends Component {
           .getState()
           .auth.cookies.user_data.permissions.map(each => each.name)
       : [];
+
+    // const temp = store.getState().auth.cookies
+    //   ? store.getState().auth.cookies.user_data.permissions
+    //   : null;
+
+    // const permissions_set = [];
+
+    // Object.keys(temp).forEach(each => {
+    //   permissions_set.push(...temp[each].map(d => d.name));
+    // });
+
+    // Object.keys(a).forEach(e => { c.push(...a[e].map(d => d.name)) })
     if (permissions_set.includes(permission)) return true;
 
     return false;

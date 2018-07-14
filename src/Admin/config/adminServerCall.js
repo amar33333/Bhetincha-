@@ -1193,6 +1193,16 @@ export const onUsersGet = ({ access_token, params }) =>
     }
   });
 
+export const onUsersNotPaginatedGet = ({ access_token }) =>
+  ajax({
+    method: "get",
+    url: USERS_URL,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
 // ecommerce
 // attribute
 export const onEcommerceAttributesGet = () =>

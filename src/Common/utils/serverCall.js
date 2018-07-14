@@ -9,10 +9,38 @@ import {
   PHONE_VERIFICATION_TOKEN_SEND_URL,
   USER_REGISTER_URL,
   RESEND_TOKEN_URL,
-  CHECK_REGISTRATION_URL
+  CHECK_REGISTRATION_URL,
+  FACEBOOK_LOGIN_URL,
+  GOOGLE_LOGIN_URL
 } from "./API";
 import querystring from "querystring";
 import { ajax } from "rxjs/observable/dom/ajax";
+
+export const onFacebookLogin = ({ access_token }) => {
+  console.log("paylaod: ", access_token);
+  return ajax({
+    method: "post",
+    url: `${FACEBOOK_LOGIN_URL}`,
+    body: {
+      access_token
+    },
+    headers: {
+      "Content-Type": "application/json"
+    }
+  });
+};
+
+export const onGoogleLogin = ({ access_token }) =>
+  ajax({
+    method: "post",
+    url: `${GOOGLE_LOGIN_URL}${access_token}/`,
+    body: {
+      access_token
+    },
+    headers: {
+      "Content-Type": "application/json"
+    }
+  });
 
 export const onCheckRegistrationGet = ({ id }) =>
   ajax({

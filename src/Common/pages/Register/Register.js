@@ -14,15 +14,34 @@ import {
   Form
 } from "reactstrap";
 
+import FacebookLogin from "react-facebook-login";
+import GoogleLogin from "react-google-login";
+
 import { connect } from "react-redux";
 
-import { onBusinessRegisterSubmit } from "../../../actions";
+import {
+  onBusinessRegisterSubmit,
+  onFacebookLoginSubmit
+} from "../../../actions";
 
 class Register extends Component {
   state = { business_name: "", mobile_number: "" };
 
   onChange = (key, event) => {
     this.setState({ [key]: event.target.value });
+  };
+
+  responseFacebook = response => {
+    console.log("facebook response: ", response);
+    this.props.onFacebookLoginSubmit({ access_token: response.accessToken });
+  };
+
+  responseGoogle = response => {
+    console.log("google response: ", response);
+  };
+
+  componentClicked = () => {
+    console.log("facebook componenet cliked");
   };
 
   onFormSubmit = event => {
@@ -108,6 +127,22 @@ class Register extends Component {
                       Register as Individual{" "}
                     </a>
                   </span>
+                  <div>
+                    <FacebookLogin
+                      size="small"
+                      appId="2110205529228108"
+                      autoLoad={true}
+                      fields="name,email,picture"
+                      onClick={this.componentClicked}
+                      callback={this.responseFacebook}
+                    />
+                    <GoogleLogin
+                      clientId="317261253014-8bvqg3ehh145unueb8p67bomeapc9t3n.apps.googleusercontent.com"
+                      buttonText="Login With Google"
+                      onSuccess={this.responseGoogle}
+                      onFailure={this.responseGoogle}
+                    />
+                  </div>
                 </CardFooter>
               </Card>
             </Col>
@@ -127,6 +162,7 @@ const mapStateToProps = ({ auth }) => {
 export default connect(
   mapStateToProps,
   {
-    onBusinessRegisterSubmit
+    onBusinessRegisterSubmit,
+    onFacebookLoginSubmit
   }
 )(Register);

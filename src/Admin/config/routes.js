@@ -27,7 +27,8 @@ import {
   BusinessAssign,
   TeleCalling,
   ManageBranchs,
-  AddBranch
+  AddBranch,
+  ResetPassword
 } from "../views";
 
 import { ManageCategories } from "../views/Ecommerce";
@@ -235,6 +236,12 @@ class AdminRoute extends Component {
           name="Permissions"
           component={Permissions}
           permission="CAN_ACCESS_PERMISSION"
+        />
+        <CustomRoute
+          path="/admin/users/reset-password"
+          name="Reset Password"
+          component={ResetPassword}
+          permission="CAN_VIEW_USER"
         />
         <CustomRoute
           path="/admin/settings"
