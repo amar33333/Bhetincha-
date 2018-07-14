@@ -160,6 +160,7 @@ class FindCaller extends Component {
           registered={this.props.teleUser && this.props.teleUser.at}
           teleUser={this.props.teleUser}
           onTeleUserSMSSubmit={this.props.onTeleUserSMSSubmit}
+          composeSMSText={this.props.composeSMSText}
         />
       </div>
     );

@@ -22,7 +22,6 @@ class PropertyList extends Component {
 
   componentDidUpdate(prevProps) {
     if (this.props.category !== prevProps.category) {
-      console.log("category updatesd");
       this.setState({
         properties: this.props.category.breadCrumbs
           ? this.mapProperties(this.props.category)
@@ -80,6 +79,8 @@ class PropertyList extends Component {
                       relationshipId: cellInfo.original.uid
                     }
                   });
+                } else {
+                  e.target.innerHTML = value;
                 }
               } else {
                 e.target.innerHTML = this.state.properties[cellInfo.index][

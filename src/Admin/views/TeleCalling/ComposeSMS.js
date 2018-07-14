@@ -69,14 +69,17 @@ class ComposeSMS extends Component {
             <FormGroup>
               <Label for="message">Message</Label>
               <Input
+                style={{ height: 200 }}
                 type="textarea"
                 name="text"
                 id="message"
                 readOnly
                 required
-                value="Tech Kunja"
+                value={this.props.composeSMSText}
               />
-              <FormText>Character Count: 300</FormText>
+              <FormText>
+                Character Count: {this.props.composeSMSText.length}
+              </FormText>
             </FormGroup>
             <FormGroup check>
               <Label check>

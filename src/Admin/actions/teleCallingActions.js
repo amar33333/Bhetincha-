@@ -63,14 +63,17 @@ epics.push((action$, { getState }) =>
   action$.ofType(CREATE_TELE_USER_PENDING).mergeMap(action =>
     onTeleUserPostAjax({
       access_token: getState().auth.cookies.token_data.access_token,
-      ...action.payload
+      body: action.payload.body
     })
       .concatMap(({ response }) => {
         if (response.msg === "success") {
           toast.success("User added successfully!");
           return [
-            { type: CREATE_TELE_USER_FULFILLED }
-            // { type: FETCH_INDUSTRY_PENDING }
+            { type: CREATE_TELE_USER_FULFILLED },
+            {
+              type: FETCH_TELE_USER_PENDING,
+              payload: { params: { phone: action.payload.phone } }
+            }
           ];
         } else {
           throw new Error(response.msg[Object.keys(response.msg)[0]][0]);
