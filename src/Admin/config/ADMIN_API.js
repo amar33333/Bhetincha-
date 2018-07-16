@@ -37,6 +37,8 @@ const SOCIAL_LINK = "business/social-link/";
 
 const ECOMMERCE = "ecommerce";
 
+const EXSECTION = "sections";
+
 export { MAIN_URL };
 
 export const COUNTRY_URL = `${MAIN_URL}/${ADDRESS}/${COUNTRY}`;
@@ -77,3 +79,7 @@ export const ECOMMERCE_CATEGORY_URL = `${MAIN_URL}/${ECOMMERCE}/category/`;
 export const ECOMMERCE_ATTRIBUTE_URL = `${MAIN_URL}/${ECOMMERCE}/attribute/`;
 export const ECOMMERCE_PRODUCT_URL = `${MAIN_URL}/${ECOMMERCE}/product/`;
 export const ECOMMERCE_PRODUCT_ATTRIBUTE_URL = `${ECOMMERCE_PRODUCT_URL}attributes/`;
+
+// section
+export const EXSECTION_SECTION_URL = `${MAIN_URL}/${EXSECTION}/sections/`;
+export const EXSECTION_ATTRIBUTE_URL = `${MAIN_URL}/${EXSECTION}/attribute/`;

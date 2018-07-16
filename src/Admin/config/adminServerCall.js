@@ -27,7 +27,9 @@ import {
   TELE_USER_SEARCH_MOBILE_URL,
   TELE_USER_EDIT_URL,
   TELE_USER_SEND_SMS_URL,
-  TELE_USER_SEARCH_NAME_URL
+  TELE_USER_SEARCH_NAME_URL,
+  EXSECTION_SECTION_URL,
+  EXSECTION_ATTRIBUTE_URL
 } from "./ADMIN_API";
 
 import {
@@ -1349,6 +1351,45 @@ export const onEcommerceProductEachDelete = ({ uid }) =>
   ajax({
     method: "DELETE",
     url: `${ECOMMERCE_PRODUCT_URL}${uid}/`,
+    headers: {
+      "Content-Type": "application/json"
+    }
+  });
+
+// section
+// attribute
+export const onExsectionAttributesGet = () =>
+  ajax({
+    method: "GET",
+    url: EXSECTION_ATTRIBUTE_URL,
+    headers: {
+      "Content-Type": "application/json"
+    }
+  });
+
+export const onExsectionSectionsGet = () =>
+  ajax({
+    method: "GET",
+    url: EXSECTION_SECTION_URL,
+    headers: {
+      "Content-Type": "application/json"
+    }
+  });
+
+export const onExSectionSectionDetailGet = ({ uid }) =>
+  ajax({
+    method: "GET",
+    url: `${EXSECTION_SECTION_URL}${uid}/`,
+    headers: {
+      "Content-Type": "application/json"
+    }
+  });
+
+export const onExsectionSectionPost = ({ name, parent }) =>
+  ajax({
+    method: "POST",
+    url: EXSECTION_SECTION_URL,
+    body: { name, parent },
     headers: {
       "Content-Type": "application/json"
     }

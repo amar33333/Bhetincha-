@@ -19,6 +19,7 @@ import filterUsers from "./filterUsersReducer";
 import tele_calling from "./teleCallingReducer";
 import location from "./locationReducer";
 import ecommerce from "./ecommerceReducer";
+import exsection from "./exsectionReducer";
 import settings from "./settingsReducer";
 
 const createReducer = combineReducers({
@@ -42,7 +43,8 @@ const createReducer = combineReducers({
   filterUsers,
   tele_calling,
   location,
-  ecommerce
+  ecommerce,
+  exsection
 });
 
 export default createReducer;

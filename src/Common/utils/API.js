@@ -1,6 +1,7 @@
-const HOST = "https://bhetincha.app";
-const MONGO_PORT = "8025";
-// const MONGO_PORT = "8000";
+//const HOST = "http://202.51.75.111";
+const HOST = "http://127.0.0.1";
+//const MONGO_PORT = "8025";
+const MONGO_PORT = "8000";
 const ELASTIC_PORT = "9200";
 export const MAIN_URL = `${HOST}:${MONGO_PORT}`;
 export const ELASTIC_URL = `${HOST}:${MONGO_PORT}`;
@@ -24,9 +25,11 @@ const CHECK_REGISTRATION = "business/checkurl/";
 const SOCIAL = "/api/accounts/social";
 
 const O_TOKEN = "o/token/";
-export const CLIENT_ID = "z5LMYuXtl4eFF7iyMIKA0LzZSu4awMBGg8hUsXH4";
-export const CLIENT_SECRET =
-  "RHIlaZJMAFOeFFCnSTT7v5oLNJxH04dti5VUEe5i7CUAbnJk3EAWILaIE7kjYWnx18DoONY5xq3J1fKNx0zBKjWxVDzgQYcuxAO8U6eiHmOJ35Z21tadgW1oIUAtE8Jj";
+//export const CLIENT_ID = "z5LMYuXtl4eFF7iyMIKA0LzZSu4awMBGg8hUsXH4";
+export const CLIENT_ID = "abcd";
+//export const CLIENT_SECRET =
+// "RHIlaZJMAFOeFFCnSTT7v5oLNJxH04dti5VUEe5i7CUAbnJk3EAWILaIE7kjYWnx18DoONY5xq3J1fKNx0zBKjWxVDzgQYcuxAO8U6eiHmOJ35Z21tadgW1oIUAtE8Jj";
+export const CLIENT_SECRET = "abcd";
 
 export const GET_USER_INFO_URL = `${MAIN_URL}/${GET_USER_INFO}`;
 export const BUSINESS_INFO_URL = `${MAIN_URL}/${BUSINESS_INFO}`;
