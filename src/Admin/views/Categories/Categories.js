@@ -41,6 +41,8 @@ import {
   toggleCategoryEditModal
 } from "../../actions";
 
+import PermissionProvider from "../../../Common/utils/PermissionProvider";
+
 class Categories extends Component {
   state = {
     category: "",
@@ -167,59 +169,61 @@ class Categories extends Component {
       <div className="animated fadeIn">
         <Row className="hr-centered">
           <Col xs="12" md="6">
-            <Card>
-              <CardHeader>
-                <strong>Add Categories</strong>
-              </CardHeader>
-              <CardBody>
-                <Form onSubmit={this.onFormSubmit}>
-                  <Row>
-                    <Col xs="12" md="12">
-                      <FormGroup>
-                        <Label for="Industries">Industry</Label>
-                        <Select
-                          autoFocus
-                          autosize
-                          clearable
-                          required
-                          name="Industries"
-                          className="select-industry"
-                          value={this.state.industry}
-                          onChange={this.handleIndustryChange}
-                          options={this.props.industries}
-                          valueKey="id"
-                          labelKey="name"
-                        />
-                      </FormGroup>
-                    </Col>
-                  </Row>
-                  <Row>
-                    <Col xs="12" md="10">
-                      <FormGroup>
-                        <InputGroup>
-                          <InputGroupAddon addonType="prepend">
-                            <InputGroupText>Name</InputGroupText>
-                          </InputGroupAddon>
-                          <Input
+            <PermissionProvider permission="CAN_ADD_CATEGORY">
+              <Card>
+                <CardHeader>
+                  <strong>Add Categories</strong>
+                </CardHeader>
+                <CardBody>
+                  <Form onSubmit={this.onFormSubmit}>
+                    <Row>
+                      <Col xs="12" md="12">
+                        <FormGroup>
+                          <Label for="Industries">Industry</Label>
+                          <Select
+                            autoFocus
+                            autosize
+                            clearable
                             required
-                            innerRef={ref => (this.focusableInput = ref)}
-                            type="text"
-                            placeholder="Type Category Name"
-                            value={this.state.category}
-                            onChange={this.onChange.bind(this, "category")}
+                            name="Industries"
+                            className="select-industry"
+                            value={this.state.industry}
+                            onChange={this.handleIndustryChange}
+                            options={this.props.industries}
+                            valueKey="id"
+                            labelKey="name"
                           />
-                        </InputGroup>
-                      </FormGroup>
-                    </Col>
-                    <Col xs="12" md="2">
-                      <Button color="primary">
-                        <span className="fa fa-plus" /> Add
-                      </Button>
-                    </Col>
-                  </Row>
-                </Form>
-              </CardBody>
-            </Card>
+                        </FormGroup>
+                      </Col>
+                    </Row>
+                    <Row>
+                      <Col xs="12" md="10">
+                        <FormGroup>
+                          <InputGroup>
+                            <InputGroupAddon addonType="prepend">
+                              <InputGroupText>Name</InputGroupText>
+                            </InputGroupAddon>
+                            <Input
+                              required
+                              innerRef={ref => (this.focusableInput = ref)}
+                              type="text"
+                              placeholder="Type Category Name"
+                              value={this.state.category}
+                              onChange={this.onChange.bind(this, "category")}
+                            />
+                          </InputGroup>
+                        </FormGroup>
+                      </Col>
+                      <Col xs="12" md="2">
+                        <Button color="primary">
+                          <span className="fa fa-plus" /> Add
+                        </Button>
+                      </Col>
+                    </Row>
+                  </Form>
+                </CardBody>
+              </Card>
+            </PermissionProvider>
           </Col>
         </Row>
         <ReactTable

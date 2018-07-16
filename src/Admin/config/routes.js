@@ -106,49 +106,49 @@ class AdminRoute extends Component {
               }}
             />
           )}
-          permission="CAN_ADD_BUSINESS"
+          permission="CAN_ADD_BUSINESS_FREE"
         />
         <CustomRoute
           path="/admin/business-assign"
           name="Assign Business"
           component={BusinessAssign}
-          permission="CAN_ADD_BUSINESS"
+          permission="CAN_VIEW_BUSINESS_ASSIGN"
         />
-        <Route
+        <CustomRoute
           path="/admin/approve-app-business/:businessSlug/review"
           name="Review App Business"
           component={AppBusinessReview}
-          //permission="CAN_VIEW_DASHBOARD"
+          permission="CAN_EDIT_BUSINESS_APP"
         />
-        <Route
+        <CustomRoute
           path="/admin/list-business/:businessSlug/edit"
-          name="List Business"
+          name="Edit Business"
           component={BusinessEdit}
-          //permission="CAN_VIEW_DASHBOARD"
+          permission="CAN_EDIT_BUSINESS"
         />
-        <Route
+        <CustomRoute
           path="/admin/list-business/:businessSlug/manage-branchs/add-branch"
           name="Add Branch Address"
           component={AddBranch}
-          //permission="CAN_VIEW_DASHBOARD"
+          permission="CAN_ADD_BRANCH"
         />
         <Route
           path="/admin/list-business/:businessSlug/manage-branchs/:id/edit-branch"
           name="Edit Branch Address"
           component={AddBranch}
-          //permission="CAN_VIEW_DASHBOARD"
+          permission="CAN_EDIT_BRANCH"
         />
-        <Route
+        <CustomRoute
           path="/admin/list-business/:businessSlug/manage-branchs"
           name="Manage Branch Address"
           component={ManageBranchs}
-          //permission="CAN_VIEW_DASHBOARD"
+          permission="CAN_VIEW_BRANCH"
         />
         <CustomRoute
           path="/admin/approve-app-business"
           name="List App Business"
           component={AppBusinessList}
-          permission="CAN_VIEW_APP_BUSINESS"
+          permission="CAN_VIEW_BUSINESS_APP"
         />
         <CustomRoute
           path="/admin/list-business"
@@ -197,7 +197,7 @@ class AdminRoute extends Component {
           path="/admin/tele-calling"
           name="Tele-Calling"
           component={TeleCalling}
-          permission="CAN_VIEW_USER"
+          permission="CAN_VIEW_TELE_CALLING"
         />
         <CustomRoute
           exact
@@ -241,19 +241,19 @@ class AdminRoute extends Component {
           path="/admin/users/reset-password"
           name="Reset Password"
           component={ResetPassword}
-          permission="CAN_VIEW_USER"
+          permission="CAN_ACCESS_RESET_PASSWORD"
         />
         <CustomRoute
           path="/admin/settings"
           name="Settings"
           component={Settings}
-          permission="CAN_VIEW_GROUP"
+          permission="CAN_ACCESS_SETTINGS"
         />
         <CustomRoute
           path="/admin/manage-social-links"
           name="Social Links"
           component={SocialLinks}
-          permission="CAN_VIEW_GROUP"
+          permission="CAN_VIEW_SOCIAL_LINKS"
         />
         <Redirect from="/admin" to="/admin/dashboard" />
         {/* <CustomRoute

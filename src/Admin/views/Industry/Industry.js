@@ -31,6 +31,8 @@ import {
   onIndustryEdit
 } from "../../actions";
 
+import PermissionProvider from "../../../Common/utils/PermissionProvider";
+
 class Industry extends Component {
   state = { industry: "", industrySubmit: false };
 
@@ -109,37 +111,39 @@ class Industry extends Component {
       <div>
         <Row className="hr-centered">
           <Col xs="12" md="6">
-            <Card>
-              <CardHeader>
-                <strong>Add Industry</strong>
-              </CardHeader>
-              <CardBody>
-                <Form onSubmit={this.onFormSubmit} inline>
-                  <FormGroup className="mb-2 mr-sm-2 mb-sm-0">
-                    <InputGroup>
-                      <InputGroupAddon addonType="prepend">
-                        <InputGroupText>
-                          <i className="fa fa-industry" />
-                        </InputGroupText>
-                      </InputGroupAddon>
-                      <Input
-                        autoFocus
-                        required
-                        disabled={this.props.loading}
-                        innerRef={ref => (this.focusableInput = ref)}
-                        type="text"
-                        placeholder="Type Industry Name"
-                        value={this.state.industry}
-                        onChange={this.onChange.bind(this, "industry")}
-                      />
-                    </InputGroup>
-                  </FormGroup>
-                  <Button color="primary">
-                    <span className="fa fa-plus" /> Add
-                  </Button>
-                </Form>
-              </CardBody>
-            </Card>
+            <PermissionProvider permission="CAN_ADD_INDUSTRY">
+              <Card>
+                <CardHeader>
+                  <strong>Add Industry</strong>
+                </CardHeader>
+                <CardBody>
+                  <Form onSubmit={this.onFormSubmit} inline>
+                    <FormGroup className="mb-2 mr-sm-2 mb-sm-0">
+                      <InputGroup>
+                        <InputGroupAddon addonType="prepend">
+                          <InputGroupText>
+                            <i className="fa fa-industry" />
+                          </InputGroupText>
+                        </InputGroupAddon>
+                        <Input
+                          autoFocus
+                          required
+                          disabled={this.props.loading}
+                          innerRef={ref => (this.focusableInput = ref)}
+                          type="text"
+                          placeholder="Type Industry Name"
+                          value={this.state.industry}
+                          onChange={this.onChange.bind(this, "industry")}
+                        />
+                      </InputGroup>
+                    </FormGroup>
+                    <Button color="primary">
+                      <span className="fa fa-plus" /> Add
+                    </Button>
+                  </Form>
+                </CardBody>
+              </Card>
+            </PermissionProvider>
           </Col>
         </Row>
         <ReactTable

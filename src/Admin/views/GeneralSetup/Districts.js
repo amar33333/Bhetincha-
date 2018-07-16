@@ -28,6 +28,8 @@ import {
 import CustomModal from "../../../Common/components/CustomModal";
 import DistrictEditModal from "../../../Common/components/CustomModal/ModalTemplates/DistrictEditModal";
 
+import PermissionProvider from "../../../Common/utils/PermissionProvider";
+
 import {
   onCountryList,
   onCountryEachList,
@@ -131,27 +133,31 @@ class Districts extends Component {
           original: { id, country, state, name, districtCode }
         }) => (
           <div>
-            <Button
-              data-tooltip="Edit"
-              data-position="bottom center"
-              color="secondary"
-              className="mr-2"
-              onClick={() =>
-                this.props.toggleDistrictEditModal({
-                  id,
-                  country,
-                  state,
-                  name,
-                  districtCode
-                })
-              }
-            >
-              <i className="fa fa-pencil" />
-            </Button>
-            <PopoverDelete
-              id={`delete-${value}`}
-              onClick={() => this.props.onDistrictDelete({ id: value })}
-            />
+            <PermissionProvider permission="CAN_EDIT_DISTRICT">
+              <Button
+                data-tooltip="Edit"
+                data-position="bottom center"
+                color="secondary"
+                className="mr-2"
+                onClick={() =>
+                  this.props.toggleDistrictEditModal({
+                    id,
+                    country,
+                    state,
+                    name,
+                    districtCode
+                  })
+                }
+              >
+                <i className="fa fa-pencil" />
+              </Button>
+            </PermissionProvider>
+            <PermissionProvider permission="CAN_DELETE_DISTRICT">
+              <PopoverDelete
+                id={`delete-${value}`}
+                onClick={() => this.props.onDistrictDelete({ id: value })}
+              />
+            </PermissionProvider>
           </div>
         )
       }
@@ -251,101 +257,106 @@ class Districts extends Component {
       <div className="animated fadeIn">
         <Row className="hr-centered">
           <Col xs="12" md="8">
-            <Card>
-              <CardHeader>
-                <strong>Add District</strong>
-              </CardHeader>
-              <CardBody>
-                <Form onSubmit={this.onFormSubmit}>
-                  <Row>
-                    <Col xs="12" md="6">
-                      <FormGroup>
-                        <Label for="country">Country</Label>
-                        <Select
-                          autoFocus
-                          autosize
-                          clearable
-                          disabled={this.props.loading}
-                          required
-                          name="country"
-                          className="select-industry"
-                          value={this.state.country}
-                          onChange={this.handleSelectChange.bind(
-                            this,
-                            "country"
-                          )}
-                          options={this.props.countries}
-                          valueKey="id"
-                          labelKey="name"
-                        />
-                      </FormGroup>
-                    </Col>
-                    <Col xs="12" md="6">
-                      <FormGroup>
-                        <Label for="State">State</Label>
-                        <Select
-                          autosize
-                          clearable
-                          disabled={this.props.loading}
-                          required
-                          name="State"
-                          className="select-industry"
-                          value={this.state.state}
-                          onChange={this.handleSelectChange.bind(this, "state")}
-                          options={
-                            this.state.country ? this.props.partialStates : []
-                          }
-                          valueKey="id"
-                          labelKey="name"
-                        />
-                      </FormGroup>
-                    </Col>
-                  </Row>
-                  <Row>
-                    <Col xs="12" md="5">
-                      <InputGroup>
-                        <InputGroupAddon addonType="prepend">
-                          <InputGroupText>
-                            <i className="fa fa-industry" />
-                          </InputGroupText>
-                        </InputGroupAddon>
-                        <Input
-                          required
-                          disabled={this.props.loading}
-                          type="text"
-                          innerRef={ref => (this.focusableInput = ref)}
-                          placeholder="Type District Name"
-                          value={this.state.district}
-                          onChange={this.onChange.bind(this, "district")}
-                        />
-                      </InputGroup>
-                    </Col>
-                    <Col xs="12" md="5">
-                      <InputGroup>
-                        <InputGroupAddon addonType="prepend">
-                          <InputGroupText>
-                            <i className="fa fa-industry" />
-                          </InputGroupText>
-                        </InputGroupAddon>
-                        <Input
-                          required
-                          type="text"
-                          disabled={this.props.loading}
-                          placeholder="Type District Code"
-                          value={this.state.districtCode}
-                          onChange={this.onChange.bind(this, "districtCode")}
-                        />
-                      </InputGroup>
-                    </Col>
-                    <Col xs="12" md="2">
-                      <Button color="primary">
-                        <span className="fa fa-plus" /> Add
-                      </Button>
-                    </Col>
-                  </Row>
-                </Form>
-              </CardBody>
-            </Card>
+            <PermissionProvider permission="CAN_ADD_DISTRICT">
+              <Card>
+                <CardHeader>
+                  <strong>Add District</strong>
+                </CardHeader>
+                <CardBody>
+                  <Form onSubmit={this.onFormSubmit}>
+                    <Row>
+                      <Col xs="12" md="6">
+                        <FormGroup>
+                          <Label for="country">Country</Label>
+                          <Select
+                            autoFocus
+                            autosize
+                            clearable
+                            disabled={this.props.loading}
+                            required
+                            name="country"
+                            className="select-industry"
+                            value={this.state.country}
+                            onChange={this.handleSelectChange.bind(
+                              this,
+                              "country"
+                            )}
+                            options={this.props.countries}
+                            valueKey="id"
+                            labelKey="name"
+                          />
+                        </FormGroup>
+                      </Col>
+                      <Col xs="12" md="6">
+                        <FormGroup>
+                          <Label for="State">State</Label>
+                          <Select
+                            autosize
+                            clearable
+                            disabled={this.props.loading}
+                            required
+                            name="State"
+                            className="select-industry"
+                            value={this.state.state}
+                            onChange={this.handleSelectChange.bind(
+                              this,
+                              "state"
+                            )}
+                            options={
+                              this.state.country ? this.props.partialStates : []
+                            }
+                            valueKey="id"
+                            labelKey="name"
+                          />
+                        </FormGroup>
+                      </Col>
+                    </Row>
+                    <Row>
+                      <Col xs="12" md="5">
+                        <InputGroup>
+                          <InputGroupAddon addonType="prepend">
+                            <InputGroupText>
+                              <i className="fa fa-industry" />
+                            </InputGroupText>
+                          </InputGroupAddon>
+                          <Input
+                            required
+                            disabled={this.props.loading}
+                            type="text"
+                            innerRef={ref => (this.focusableInput = ref)}
+                            placeholder="Type District Name"
+                            value={this.state.district}
+                            onChange={this.onChange.bind(this, "district")}
+                          />
+                        </InputGroup>
+                      </Col>
+                      <Col xs="12" md="5">
+                        <InputGroup>
+                          <InputGroupAddon addonType="prepend">
+                            <InputGroupText>
+                              <i className="fa fa-industry" />
+                            </InputGroupText>
+                          </InputGroupAddon>
+                          <Input
+                            required
+                            type="text"
+                            disabled={this.props.loading}
+                            placeholder="Type District Code"
+                            value={this.state.districtCode}
+                            onChange={this.onChange.bind(this, "districtCode")}
+                          />
+                        </InputGroup>
+                      </Col>
+                      <Col xs="12" md="2">
+                        <Button color="primary">
+                          <span className="fa fa-plus" /> Add
+                        </Button>
+                      </Col>
+                    </Row>
+                  </Form>
+                </CardBody>
+              </Card>
+            </PermissionProvider>
           </Col>
         </Row>
 

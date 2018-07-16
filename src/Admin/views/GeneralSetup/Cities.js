@@ -49,6 +49,8 @@ import {
 import CustomModal from "../../../Common/components/CustomModal";
 import CityEditModal from "../../../Common/components/CustomModal/ModalTemplates/CityEditModal";
 
+import PermissionProvider from "../../../Common/utils/PermissionProvider";
+
 class Cities extends Component {
   state = {
     country: "",
@@ -166,23 +168,27 @@ class Cities extends Component {
         width: 145,
         Cell: ({ value, original }) => (
           <div>
-            <Button
-              data-tooltip="Edit"
-              data-position="bottom center"
-              color="secondary"
-              className="mr-2"
-              onClick={() =>
-                this.props.toggleCityEditModal({
-                  ...original
-                })
-              }
-            >
-              <i className="fa fa-pencil" />
-            </Button>
-            <PopoverDelete
-              id={`delete-${value}`}
-              onClick={() => this.props.onCityDelete({ id: value })}
-            />
+            <PermissionProvider permission="CAN_EDIT_CITY">
+              <Button
+                data-tooltip="Edit"
+                data-position="bottom center"
+                color="secondary"
+                className="mr-2"
+                onClick={() =>
+                  this.props.toggleCityEditModal({
+                    ...original
+                  })
+                }
+              >
+                <i className="fa fa-pencil" />
+              </Button>
+            </PermissionProvider>
+            <PermissionProvider permission="CAN_DELETE_CITY">
+              <PopoverDelete
+                id={`delete-${value}`}
+                onClick={() => this.props.onCityDelete({ id: value })}
+              />
+            </PermissionProvider>
           </div>
         )
       }
@@ -281,107 +287,114 @@ class Cities extends Component {
       <div className="animated fadeIn">
         <Row className="hr-centered">
           <Col xs="12" md="6">
-            <Card>
-              <CardHeader>
-                <strong>Add City</strong>
-              </CardHeader>
-              <CardBody>
-                <Form onSubmit={this.onFormSubmit}>
-                  <Row>
-                    <Col xs="12" md="4">
-                      <FormGroup>
-                        <Label for="Industies">Country</Label>
-                        <Select
-                          autoFocus
-                          autosize
-                          clearable
-                          required
-                          disabled={this.props.loading}
-                          name="countries"
-                          className="select-industry"
-                          value={this.state.country}
-                          onChange={this.handleSelectChange.bind(
-                            this,
-                            "country"
-                          )}
-                          options={this.props.countries}
-                          valueKey="id"
-                          labelKey="name"
-                        />
-                      </FormGroup>
-                    </Col>
-                    <Col xs="12" md="4">
-                      <FormGroup>
-                        <Label for="states">State</Label>
-                        <Select
-                          autosize
-                          clearable
-                          required
-                          disabled={this.props.loading}
-                          name="states"
-                          className="select-industry"
-                          value={this.state.state}
-                          onChange={this.handleSelectChange.bind(this, "state")}
-                          options={
-                            this.state.country ? this.props.partialStates : []
-                          }
-                          valueKey="id"
-                          labelKey="name"
-                        />
-                      </FormGroup>
-                    </Col>
-                    <Col xs="12" md="4">
-                      <FormGroup>
-                        <Label for="District">District</Label>
-                        <Select
-                          autosize
-                          clearable
-                          required
-                          disabled={this.props.loading}
-                          name="District"
-                          className="select-industry"
-                          value={this.state.district}
-                          onChange={this.handleSelectChange.bind(
-                            this,
-                            "district"
-                          )}
-                          options={
-                            this.state.state ? this.props.partialDistricts : []
-                          }
-                          valueKey="id"
-                          labelKey="name"
-                        />
-                      </FormGroup>
-                    </Col>
-                  </Row>
-                  <Row>
-                    <Col xs="10" md="10">
-                      <InputGroup>
-                        <InputGroupAddon addonType="prepend">
-                          <InputGroupText>
-                            <i className="fa fa-map-pin" />
-                          </InputGroupText>
-                        </InputGroupAddon>
-                        <Input
-                          required
-                          type="text"
-                          disabled={this.props.loading}
-                          innerRef={ref => (this.focusableInput = ref)}
-                          placeholder="Type City Name"
-                          value={this.state.city}
-                          onChange={this.onChange.bind(this, "city")}
-                        />
-                      </InputGroup>
-                    </Col>
-                    <Col xs="2" md="2">
-                      <Button color="primary">
-                        <span className="fa fa-plus" /> Add
-                      </Button>
-                    </Col>
-                  </Row>
-                </Form>
-              </CardBody>
-            </Card>
+            <PermissionProvider permission="CAN_ADD_CITY">
+              <Card>
+                <CardHeader>
+                  <strong>Add City</strong>
+                </CardHeader>
+                <CardBody>
+                  <Form onSubmit={this.onFormSubmit}>
+                    <Row>
+                      <Col xs="12" md="4">
+                        <FormGroup>
+                          <Label for="Industies">Country</Label>
+                          <Select
+                            autoFocus
+                            autosize
+                            clearable
+                            required
+                            disabled={this.props.loading}
+                            name="countries"
+                            className="select-industry"
+                            value={this.state.country}
+                            onChange={this.handleSelectChange.bind(
+                              this,
+                              "country"
+                            )}
+                            options={this.props.countries}
+                            valueKey="id"
+                            labelKey="name"
+                          />
+                        </FormGroup>
+                      </Col>
+                      <Col xs="12" md="4">
+                        <FormGroup>
+                          <Label for="states">State</Label>
+                          <Select
+                            autosize
+                            clearable
+                            required
+                            disabled={this.props.loading}
+                            name="states"
+                            className="select-industry"
+                            value={this.state.state}
+                            onChange={this.handleSelectChange.bind(
+                              this,
+                              "state"
+                            )}
+                            options={
+                              this.state.country ? this.props.partialStates : []
+                            }
+                            valueKey="id"
+                            labelKey="name"
+                          />
+                        </FormGroup>
+                      </Col>
+                      <Col xs="12" md="4">
+                        <FormGroup>
+                          <Label for="District">District</Label>
+                          <Select
+                            autosize
+                            clearable
+                            required
+                            disabled={this.props.loading}
+                            name="District"
+                            className="select-industry"
+                            value={this.state.district}
+                            onChange={this.handleSelectChange.bind(
+                              this,
+                              "district"
+                            )}
+                            options={
+                              this.state.state
+                                ? this.props.partialDistricts
+                                : []
+                            }
+                            valueKey="id"
+                            labelKey="name"
+                          />
+                        </FormGroup>
+                      </Col>
+                    </Row>
+                    <Row>
+                      <Col xs="10" md="10">
+                        <InputGroup>
+                          <InputGroupAddon addonType="prepend">
+                            <InputGroupText>
+                              <i className="fa fa-map-pin" />
+                            </InputGroupText>
+                          </InputGroupAddon>
+                          <Input
+                            required
+                            type="text"
+                            disabled={this.props.loading}
+                            innerRef={ref => (this.focusableInput = ref)}
+                            placeholder="Type City Name"
+                            value={this.state.city}
+                            onChange={this.onChange.bind(this, "city")}
+                          />
+                        </InputGroup>
+                      </Col>
+                      <Col xs="2" md="2">
+                        <Button color="primary">
+                          <span className="fa fa-plus" /> Add
+                        </Button>
+                      </Col>
+                    </Row>
+                  </Form>
+                </CardBody>
+              </Card>
+            </PermissionProvider>
           </Col>
         </Row>
         <ReactTable

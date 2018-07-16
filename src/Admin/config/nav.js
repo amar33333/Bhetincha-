@@ -19,7 +19,7 @@ const items = {
       name: "General Setup",
       url: "/admin/countries",
       icon: "fa fa-users",
-      permission: "CAN_VIEW_ECOMMERCE",
+      // permission: "CAN_VIEW_ECOMMERCE",
       children: [
         {
           name: "Countries",
@@ -80,7 +80,7 @@ const items = {
       name: "Assign Business",
       url: "/admin/business-assign",
       icon: "fa fa-industry",
-      permission: "CAN_ADD_BUSINESS"
+      permission: "CAN_VIEW_BUSINESS_ASSIGN"
     },
     {
       name: "List App Business",
@@ -152,7 +152,7 @@ const items = {
       name: "Tele-Calling",
       url: "/admin/tele-calling",
       icon: "fa fa-headphones",
-      permission: "CAN_VIEW_USER"
+      permission: "CAN_VIEW_TELE_CALLING"
     },
     {
       title: true,
@@ -204,7 +204,7 @@ const items = {
           name: "Reset Password",
           url: "/admin/users/reset-password",
           icon: "icon-tag",
-          permission: "CAN_ACCESS_PERMISSION"
+          permission: "CAN_ACCESS_RESET_PASSWORD"
         }
       ]
     },
@@ -216,13 +216,13 @@ const items = {
       name: "Settings",
       url: "/admin/settings",
       icon: "icon-settings",
-      permission: "CAN_VIEW_GROUP",
+      permission: "CAN_ACCESS_SETTINGS",
       children: [
         {
           name: "Manage Social Links",
           url: "/admin/manage-social-links",
           icon: "icon-user-follow",
-          permission: "CAN_VIEW_GROUP"
+          permission: "CAN_VIEW_SOCIAL_LINKS"
         }
       ]
     },

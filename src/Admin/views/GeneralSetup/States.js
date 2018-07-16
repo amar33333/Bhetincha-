@@ -27,6 +27,8 @@ import {
 import CustomModal from "../../../Common/components/CustomModal";
 import StateEditModal from "../../../Common/components/CustomModal/ModalTemplates/StateEditModal";
 
+import PermissionProvider from "../../../Common/utils/PermissionProvider";
+
 import {
   onStateSubmit,
   onCountryList,
@@ -81,22 +83,26 @@ class States extends Component {
         width: 145,
         Cell: ({ value, original: { id, country, name } }) => (
           <div>
-            <Button
-              data-tooltip="Edit"
-              data-position="bottom center"
-              color="secondary"
-              className="mr-2"
-              onClick={() =>
-                this.props.toggleStateEditModal({ id, country, name })
-              }
-            >
-              <i className="fa fa-pencil" />
-            </Button>
-            <PopoverDelete
-              text={false}
-              id={`delete-${value}`}
-              onClick={() => this.props.onStateDelete({ id: value })}
-            />
+            <PermissionProvider permission="CAN_ADD_STATE">
+              <Button
+                data-tooltip="Edit"
+                data-position="bottom center"
+                color="secondary"
+                className="mr-2"
+                onClick={() =>
+                  this.props.toggleStateEditModal({ id, country, name })
+                }
+              >
+                <i className="fa fa-pencil" />
+              </Button>
+            </PermissionProvider>
+            <PermissionProvider permission="CAN_ADD_STATE">
+              <PopoverDelete
+                text={false}
+                id={`delete-${value}`}
+                onClick={() => this.props.onStateDelete({ id: value })}
+              />
+            </PermissionProvider>
           </div>
         )
       }
@@ -165,59 +171,61 @@ class States extends Component {
       <div className="animated fadeIn">
         <Row className="hr-centered">
           <Col xs="12" md="6">
-            <Card>
-              <CardHeader>
-                <strong>Add State</strong>
-              </CardHeader>
-              <CardBody>
-                <Form onSubmit={this.onFormSubmit}>
-                  <Row>
-                    <Col xs="12">
-                      <FormGroup>
-                        <Label for="Country">Country</Label>
-                        <Select
-                          autoFocus
-                          autosize
-                          clearable
-                          required
-                          disabled={this.props.loading}
-                          name="Industies"
-                          className="select-industry mb-2"
-                          value={this.state.country}
-                          onChange={this.handleSelectChange}
-                          options={this.props.countries}
-                          valueKey="id"
-                          labelKey="name"
-                        />
-                      </FormGroup>
-                    </Col>
-                  </Row>
-                  <Row>
-                    <Col xs="10" md="10">
-                      <InputGroup>
-                        <InputGroupAddon addonType="prepend">
-                          <InputGroupText>Name</InputGroupText>
-                        </InputGroupAddon>
-                        <Input
-                          required
-                          disabled={this.props.loading}
-                          innerRef={ref => (this.focusableInput = ref)}
-                          type="text"
-                          placeholder="Type State Name"
-                          value={this.state.state}
-                          onChange={this.onChange.bind(this, "state")}
-                        />
-                      </InputGroup>
-                    </Col>
-                    <Col xs="2" md="2">
-                      <Button color="primary">
-                        <span className="fa fa-plus" /> Add
-                      </Button>
-                    </Col>
-                  </Row>
-                </Form>
-              </CardBody>
-            </Card>
+            <PermissionProvider permission="CAN_ADD_STATE">
+              <Card>
+                <CardHeader>
+                  <strong>Add State</strong>
+                </CardHeader>
+                <CardBody>
+                  <Form onSubmit={this.onFormSubmit}>
+                    <Row>
+                      <Col xs="12">
+                        <FormGroup>
+                          <Label for="Country">Country</Label>
+                          <Select
+                            autoFocus
+                            autosize
+                            clearable
+                            required
+                            disabled={this.props.loading}
+                            name="Industies"
+                            className="select-industry mb-2"
+                            value={this.state.country}
+                            onChange={this.handleSelectChange}
+                            options={this.props.countries}
+                            valueKey="id"
+                            labelKey="name"
+                          />
+                        </FormGroup>
+                      </Col>
+                    </Row>
+                    <Row>
+                      <Col xs="10" md="10">
+                        <InputGroup>
+                          <InputGroupAddon addonType="prepend">
+                            <InputGroupText>Name</InputGroupText>
+                          </InputGroupAddon>
+                          <Input
+                            required
+                            disabled={this.props.loading}
+                            innerRef={ref => (this.focusableInput = ref)}
+                            type="text"
+                            placeholder="Type State Name"
+                            value={this.state.state}
+                            onChange={this.onChange.bind(this, "state")}
+                          />
+                        </InputGroup>
+                      </Col>
+                      <Col xs="2" md="2">
+                        <Button color="primary">
+                          <span className="fa fa-plus" /> Add
+                        </Button>
+                      </Col>
+                    </Row>
+                  </Form>
+                </CardBody>
+              </Card>
+            </PermissionProvider>
           </Col>
         </Row>
         <ReactTable

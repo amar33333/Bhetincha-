@@ -83,7 +83,7 @@ class MainRoute extends Component {
             path="/admin"
             name="Admin"
             component={AsyncAdmin}
-            permission="CAN_ACCESS_ADMIN_PANEL"
+            permission="CAN_ACCESS_PANEL_ADMIN"
           />
           <CustomRoute
             path={`/:${ROUTE_PARAMS_BUSINESS_NAME}/dashboard`}

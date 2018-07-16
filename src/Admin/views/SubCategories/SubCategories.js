@@ -32,6 +32,8 @@ import {
 import CustomModal from "../../../Common/components/CustomModal";
 import SubCategoryEditModal from "../../../Common/components/CustomModal/ModalTemplates/SubCategoryEditModal";
 
+import PermissionProvider from "../../../Common/utils/PermissionProvider";
+
 import {
   onIndustryList,
   onIndustryEachList,
@@ -292,120 +294,122 @@ class SubCategories extends Component {
       <div className="animated fadeIn">
         <Row className="hr-centered">
           <Col xs="12" md="8">
-            <Card>
-              <CardHeader>
-                <strong>Add Sub-Categories</strong>
-              </CardHeader>
-              <CardBody>
-                <Form onSubmit={this.onFormSubmit}>
-                  <Row>
-                    <Col xs="12" md="6">
-                      <FormGroup>
-                        <Label> Industry </Label>
-                        <Select
-                          autosize
-                          autoFocus
-                          clearable
-                          required
-                          disabled={this.props.loading}
-                          name="Industry"
-                          className="select-category"
-                          value={this.state.industry}
-                          onChange={this.handleSelectChange.bind(
-                            this,
-                            "industry"
-                          )}
-                          options={this.props.industries}
-                          valueKey="id"
-                          labelKey="name"
-                        />
-                      </FormGroup>
-                    </Col>
-                    <Col xs="12" md="6">
-                      <FormGroup>
-                        <Label> Category </Label>
-                        <Select
-                          autosize
-                          clearable
-                          disabled={this.props.loading}
-                          required
-                          name="Category"
-                          className="select-category"
-                          value={this.state.category}
-                          onChange={this.handleSelectChange.bind(
-                            this,
-                            "category"
-                          )}
-                          options={
-                            this.state.industry
-                              ? this.props.partialCategories
-                              : []
-                          }
-                          valueKey="id"
-                          labelKey="name"
-                        />
-                      </FormGroup>
-                    </Col>
-                  </Row>
+            <PermissionProvider permission="CAN_ADD_SUB_CATEGORY">
+              <Card>
+                <CardHeader>
+                  <strong>Add Sub-Categories</strong>
+                </CardHeader>
+                <CardBody>
+                  <Form onSubmit={this.onFormSubmit}>
+                    <Row>
+                      <Col xs="12" md="6">
+                        <FormGroup>
+                          <Label> Industry </Label>
+                          <Select
+                            autosize
+                            autoFocus
+                            clearable
+                            required
+                            disabled={this.props.loading}
+                            name="Industry"
+                            className="select-category"
+                            value={this.state.industry}
+                            onChange={this.handleSelectChange.bind(
+                              this,
+                              "industry"
+                            )}
+                            options={this.props.industries}
+                            valueKey="id"
+                            labelKey="name"
+                          />
+                        </FormGroup>
+                      </Col>
+                      <Col xs="12" md="6">
+                        <FormGroup>
+                          <Label> Category </Label>
+                          <Select
+                            autosize
+                            clearable
+                            disabled={this.props.loading}
+                            required
+                            name="Category"
+                            className="select-category"
+                            value={this.state.category}
+                            onChange={this.handleSelectChange.bind(
+                              this,
+                              "category"
+                            )}
+                            options={
+                              this.state.industry
+                                ? this.props.partialCategories
+                                : []
+                            }
+                            valueKey="id"
+                            labelKey="name"
+                          />
+                        </FormGroup>
+                      </Col>
+                    </Row>
 
-                  <InputGroup className="mb-3">
-                    <InputGroupAddon addonType="prepend">
-                      <InputGroupText>Name</InputGroupText>
-                    </InputGroupAddon>
-                    <Input
-                      required
-                      innerRef={ref => (this.focusableInput = ref)}
-                      disabled={this.props.loading}
-                      type="text"
-                      placeholder="New Sub Category Name"
-                      value={this.state.subCategory}
-                      onChange={this.onChange.bind(this, "subCategory")}
-                    />
-                  </InputGroup>
-                  <Row>
-                    <Col xs="12" md="12">
-                      <TagsInput
-                        onlyUnique
+                    <InputGroup className="mb-3">
+                      <InputGroupAddon addonType="prepend">
+                        <InputGroupText>Name</InputGroupText>
+                      </InputGroupAddon>
+                      <Input
+                        required
+                        innerRef={ref => (this.focusableInput = ref)}
                         disabled={this.props.loading}
-                        addKeys={[9, 188]}
-                        value={this.state.tags}
-                        onChange={this.handleTagsChange}
+                        type="text"
+                        placeholder="New Sub Category Name"
+                        value={this.state.subCategory}
+                        onChange={this.onChange.bind(this, "subCategory")}
                       />
-                    </Col>
-                  </Row>
-                  <FormGroup className="mt-2">
-                    <Label> Extra Section </Label>
-                    <Select
-                      autosize
-                      clearable
-                      disabled={this.props.loading}
-                      required
-                      tabSelectsValue={false}
-                      multi
-                      name="Extra-Sections"
-                      className="select-extra-sections"
-                      value={this.state.extraSections}
-                      onChange={this.handleSelectChange.bind(
-                        this,
-                        "extraSections"
-                      )}
-                      options={this.props.extra_sections.data}
-                    />
-                  </FormGroup>
-                  <Row>
-                    <Col xs="6">
-                      <Button
-                        color="primary"
+                    </InputGroup>
+                    <Row>
+                      <Col xs="12" md="12">
+                        <TagsInput
+                          onlyUnique
+                          disabled={this.props.loading}
+                          addKeys={[9, 188]}
+                          value={this.state.tags}
+                          onChange={this.handleTagsChange}
+                        />
+                      </Col>
+                    </Row>
+                    <FormGroup className="mt-2">
+                      <Label> Extra Section </Label>
+                      <Select
+                        autosize
+                        clearable
                         disabled={this.props.loading}
-                        className="px-4"
-                      >
-                        <i className="fa fa-plus" /> Add
-                      </Button>
-                    </Col>
-                  </Row>
-                </Form>
-              </CardBody>
-            </Card>
+                        required
+                        tabSelectsValue={false}
+                        multi
+                        name="Extra-Sections"
+                        className="select-extra-sections"
+                        value={this.state.extraSections}
+                        onChange={this.handleSelectChange.bind(
+                          this,
+                          "extraSections"
+                        )}
+                        options={this.props.extra_sections.data}
+                      />
+                    </FormGroup>
+                    <Row>
+                      <Col xs="6">
+                        <Button
+                          color="primary"
+                          disabled={this.props.loading}
+                          className="px-4"
+                        >
+                          <i className="fa fa-plus" /> Add
+                        </Button>
+                      </Col>
+                    </Row>
+                  </Form>
+                </CardBody>
+              </Card>
+            </PermissionProvider>
           </Col>
         </Row>
         <ReactTable

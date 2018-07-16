@@ -16,6 +16,8 @@ import {
 import CustomModal from "../../../../Common/components/CustomModal";
 import GroupEditModal from "../../../../Common/components/CustomModal/ModalTemplates/GroupEditModal";
 
+import PermissionProvider from "../../../../Common/utils/PermissionProvider";
+
 import GroupList from "./GroupList";
 import {
   onGroupSubmit,
@@ -57,32 +59,34 @@ class Groups extends Component {
       <div className="animated fadeIn">
         <Row>
           <Col xs="12" md="6">
-            <Card>
-              <CardHeader>
-                <strong>Add New User Group</strong>
-              </CardHeader>
-              <CardBody>
-                <form onSubmit={this.onFormSubmit}>
-                  <InputGroup>
-                    <InputGroupAddon addonType="prepend">
-                      <InputGroupText>Group Name</InputGroupText>
-                    </InputGroupAddon>
-                    <Input
-                      innerRef={ref => (this.addButton = ref)}
-                      autoFocus
-                      type="text"
-                      value={this.state.group}
-                      onChange={this.onChange.bind(this, "group")}
-                    />
-                    <InputGroupAddon addonType="append">
-                      <Button type="submit" color="primary" value="Add Group">
-                        <i className="fa fa-plus" /> Add Group
-                      </Button>
-                    </InputGroupAddon>
-                  </InputGroup>
-                </form>
-              </CardBody>
-            </Card>
+            <PermissionProvider permission="CAN_ADD_GROUP">
+              <Card>
+                <CardHeader>
+                  <strong>Add New User Group</strong>
+                </CardHeader>
+                <CardBody>
+                  <form onSubmit={this.onFormSubmit}>
+                    <InputGroup>
+                      <InputGroupAddon addonType="prepend">
+                        <InputGroupText>Group Name</InputGroupText>
+                      </InputGroupAddon>
+                      <Input
+                        innerRef={ref => (this.addButton = ref)}
+                        autoFocus
+                        type="text"
+                        value={this.state.group}
+                        onChange={this.onChange.bind(this, "group")}
+                      />
+                      <InputGroupAddon addonType="append">
+                        <Button type="submit" color="primary" value="Add Group">
+                          <i className="fa fa-plus" /> Add Group
+                        </Button>
+                      </InputGroupAddon>
+                    </InputGroup>
+                  </form>
+                </CardBody>
+              </Card>
+            </PermissionProvider>
           </Col>
         </Row>
         <br />

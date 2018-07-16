@@ -30,6 +30,8 @@ import {
   onUnmountCompanyType
 } from "../../actions";
 
+import PermissionProvider from "../../../Common/utils/PermissionProvider";
+
 class CompanyType extends Component {
   state = { company_type: "", companyTypeSubmit: false };
 
@@ -110,37 +112,39 @@ class CompanyType extends Component {
       <div>
         <Row className="hr-centered">
           <Col xs="12" md="6">
-            <Card>
-              <CardHeader>
-                <strong>Add Company Type</strong>
-              </CardHeader>
-              <CardBody>
-                <Form onSubmit={this.onFormSubmit} inline>
-                  <FormGroup className="mb-2 mr-sm-2 mb-sm-0">
-                    <InputGroup>
-                      <InputGroupAddon addonType="prepend">
-                        <InputGroupText>
-                          <i className="fa fa-industry" />
-                        </InputGroupText>
-                      </InputGroupAddon>
-                      <Input
-                        autoFocus
-                        innerRef={ref => (this.focusableInput = ref)}
-                        disabled={this.props.loading}
-                        required
-                        type="text"
-                        placeholder="Enter Company Type"
-                        value={this.state.company_type}
-                        onChange={this.onChange.bind(this, "company_type")}
-                      />
-                    </InputGroup>
-                  </FormGroup>
-                  <Button color="primary">
-                    <span className="fa fa-plus" /> Add
-                  </Button>
-                </Form>
-              </CardBody>
-            </Card>
+            <PermissionProvider permission="CAN_ADD_COMPANY_TYPE">
+              <Card>
+                <CardHeader>
+                  <strong>Add Company Type</strong>
+                </CardHeader>
+                <CardBody>
+                  <Form onSubmit={this.onFormSubmit} inline>
+                    <FormGroup className="mb-2 mr-sm-2 mb-sm-0">
+                      <InputGroup>
+                        <InputGroupAddon addonType="prepend">
+                          <InputGroupText>
+                            <i className="fa fa-industry" />
+                          </InputGroupText>
+                        </InputGroupAddon>
+                        <Input
+                          autoFocus
+                          innerRef={ref => (this.focusableInput = ref)}
+                          disabled={this.props.loading}
+                          required
+                          type="text"
+                          placeholder="Enter Company Type"
+                          value={this.state.company_type}
+                          onChange={this.onChange.bind(this, "company_type")}
+                        />
+                      </InputGroup>
+                    </FormGroup>
+                    <Button color="primary">
+                      <span className="fa fa-plus" /> Add
+                    </Button>
+                  </Form>
+                </CardBody>
+              </Card>
+            </PermissionProvider>
           </Col>
         </Row>
         <ReactTable

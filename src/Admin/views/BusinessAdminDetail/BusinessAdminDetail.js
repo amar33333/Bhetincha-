@@ -34,6 +34,8 @@ import SubBusinessAbout from "./SubBusinessAbout";
 // import SubBusinessBranchWrapper from "./SubBusinessBranchWrapper";
 import SubBusinessWorkingHour from "./SubBusinessWorkingHour";
 
+import PermissionProvider from "../../../Common/utils/PermissionProvider";
+
 class BusinessAdminDetail extends Component {
   constructor(props) {
     super(props);
@@ -219,9 +221,11 @@ class BusinessAdminDetail extends Component {
           />
           <Row>
             <Col xs="12">
+              {/* <PermissionProvider permission="CAN_ADD_BUSINESS"> */}
               <Button color="primary" size="lg">
                 SUBMIT
               </Button>
+              {/* </PermissionProvider> */}
             </Col>
           </Row>
         </form>

@@ -314,7 +314,7 @@ class BusinessList extends Component {
             </Button>
           </Link>
         </PermissionProvider>
-        <PermissionProvider permission="CAN_ADD_BUSINESS">
+        <PermissionProvider permission="CAN_ADD_BUSINESS_FREE">
           <Link to="/admin/list-business/add-free-business">
             <Button variant="raised" color="success" className="mb-4">
               <i className="fa fa-plus" /> Add Free Business

@@ -30,6 +30,8 @@ import {
   onUnmountCountry
 } from "../../actions";
 
+import PermissionProvider from "../../../Common/utils/PermissionProvider";
+
 class Countries extends Component {
   state = { country: "", countryCode: "", countrySubmit: false };
 
@@ -53,22 +55,26 @@ class Countries extends Component {
         width: 145,
         Cell: ({ value, original: { id, name, countryCode } }) => (
           <div>
-            <Button
-              data-tooltip="Edit"
-              data-position="bottom center"
-              color="secondary"
-              className="mr-2"
-              onClick={() =>
-                this.props.toggleCountryEditModal({ id, name, countryCode })
-              }
-            >
-              <i className="fa fa-pencil" />
-            </Button>
-            <PopoverDelete
-              text={false}
-              id={`delete-${value}`}
-              onClick={() => this.props.onCountryDelete({ id: value })}
-            />
+            <PermissionProvider permission="CAN_EDIT_COUNTRY">
+              <Button
+                data-tooltip="Edit"
+                data-position="bottom center"
+                color="secondary"
+                className="mr-2"
+                onClick={() =>
+                  this.props.toggleCountryEditModal({ id, name, countryCode })
+                }
+              >
+                <i className="fa fa-pencil" />
+              </Button>
+            </PermissionProvider>
+            <PermissionProvider permission="CAN_DELETE_COUNTRY">
+              <PopoverDelete
+                text={false}
+                id={`delete-${value}`}
+                onClick={() => this.props.onCountryDelete({ id: value })}
+              />
+            </PermissionProvider>
           </div>
         )
       }
@@ -113,50 +119,52 @@ class Countries extends Component {
       <div className="animated fadeIn">
         <Row className="hr-centered">
           <Col xs="12" md="8">
-            <Card>
-              <CardHeader>
-                <strong>Add Country</strong>
-              </CardHeader>
-              <CardBody>
-                <Form onSubmit={this.onFormSubmit} inline>
-                  <FormGroup>
-                    <InputGroup className="mr-3">
-                      <InputGroupAddon addonType="prepend">
-                        <InputGroupText>Code</InputGroupText>
-                      </InputGroupAddon>
-                      <Input
-                        autoFocus
-                        required
-                        innerRef={ref => (this.focusableInput = ref)}
-                        disabled={this.props.loading}
-                        type="number"
-                        min="0"
-                        step="1"
-                        placeholder="Type Country Code"
-                        value={this.state.countryCode}
-                        onChange={this.onChange.bind(this, "countryCode")}
-                      />
-                    </InputGroup>
-                    <InputGroup className="mr-3">
-                      <InputGroupAddon addonType="prepend">
-                        <InputGroupText>Name</InputGroupText>
-                      </InputGroupAddon>
-                      <Input
-                        required
-                        disabled={this.props.loading}
-                        type="text"
-                        placeholder="Type Country Name"
-                        value={this.state.country}
-                        onChange={this.onChange.bind(this, "country")}
-                      />
-                    </InputGroup>
-                  </FormGroup>
-                  <Button color="primary">
-                    <span className="fa fa-plus" /> Add
-                  </Button>
-                </Form>
-              </CardBody>
-            </Card>
+            <PermissionProvider permission="CAN_ADD_COUNTRY">
+              <Card>
+                <CardHeader>
+                  <strong>Add Country</strong>
+                </CardHeader>
+                <CardBody>
+                  <Form onSubmit={this.onFormSubmit} inline>
+                    <FormGroup>
+                      <InputGroup className="mr-3">
+                        <InputGroupAddon addonType="prepend">
+                          <InputGroupText>Code</InputGroupText>
+                        </InputGroupAddon>
+                        <Input
+                          autoFocus
+                          required
+                          innerRef={ref => (this.focusableInput = ref)}
+                          disabled={this.props.loading}
+                          type="number"
+                          min="0"
+                          step="1"
+                          placeholder="Type Country Code"
+                          value={this.state.countryCode}
+                          onChange={this.onChange.bind(this, "countryCode")}
+                        />
+                      </InputGroup>
+                      <InputGroup className="mr-3">
+                        <InputGroupAddon addonType="prepend">
+                          <InputGroupText>Name</InputGroupText>
+                        </InputGroupAddon>
+                        <Input
+                          required
+                          disabled={this.props.loading}
+                          type="text"
+                          placeholder="Type Country Name"
+                          value={this.state.country}
+                          onChange={this.onChange.bind(this, "country")}
+                        />
+                      </InputGroup>
+                    </FormGroup>
+                    <Button color="primary">
+                      <span className="fa fa-plus" /> Add
+                    </Button>
+                  </Form>
+                </CardBody>
+              </Card>
+            </PermissionProvider>
           </Col>
         </Row>
 

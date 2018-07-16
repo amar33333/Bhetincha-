@@ -25,6 +25,8 @@ import {
 import CustomModal from "../../../Common/components/CustomModal";
 import SocialLinkEditModal from "../../../Common/components/CustomModal/ModalTemplates/SocialLinkEditModal";
 
+import PermissionProvider from "../../../Common/utils/PermissionProvider";
+
 class SocialLinks extends Component {
   state = {
     name: "",
@@ -53,43 +55,45 @@ class SocialLinks extends Component {
       <div className="animated fadeIn">
         <Row>
           <Col xs="12" md="6">
-            <Card>
-              <CardHeader>
-                <strong>Add New Social Link</strong>
-              </CardHeader>
-              <CardBody>
-                <form onSubmit={this.onFormSubmit}>
-                  <InputGroup className="mb-2">
-                    <InputGroupAddon addonType="prepend">
-                      <InputGroupText>Social Link Name </InputGroupText>
-                    </InputGroupAddon>
-                    <Input
-                      autoFocus
-                      required
-                      type="text"
-                      placeholder="Eg. Facebook"
-                      value={this.state.name}
-                      onChange={this.onChange.bind(this, "name")}
-                    />
-                  </InputGroup>
-                  <InputGroup className="mb-2">
-                    <InputGroupAddon addonType="prepend">
-                      <InputGroupText>Social Link Class-Name</InputGroupText>
-                    </InputGroupAddon>
-                    <Input
-                      type="text"
-                      required
-                      placeholder="Eg. fa fa-facebook"
-                      value={this.state.className}
-                      onChange={this.onChange.bind(this, "className")}
-                    />
-                  </InputGroup>
-                  <Button type="submit" color="primary" value="Add Group">
-                    <i className="fa fa-plus" /> Add Social Link
-                  </Button>
-                </form>
-              </CardBody>
-            </Card>
+            <PermissionProvider permission="CAN_ADD_SOCIAL_LINKS">
+              <Card>
+                <CardHeader>
+                  <strong>Add New Social Link</strong>
+                </CardHeader>
+                <CardBody>
+                  <form onSubmit={this.onFormSubmit}>
+                    <InputGroup className="mb-2">
+                      <InputGroupAddon addonType="prepend">
+                        <InputGroupText>Social Link Name </InputGroupText>
+                      </InputGroupAddon>
+                      <Input
+                        autoFocus
+                        required
+                        type="text"
+                        placeholder="Eg. Facebook"
+                        value={this.state.name}
+                        onChange={this.onChange.bind(this, "name")}
+                      />
+                    </InputGroup>
+                    <InputGroup className="mb-2">
+                      <InputGroupAddon addonType="prepend">
+                        <InputGroupText>Social Link Class-Name</InputGroupText>
+                      </InputGroupAddon>
+                      <Input
+                        type="text"
+                        required
+                        placeholder="Eg. fa fa-facebook"
+                        value={this.state.className}
+                        onChange={this.onChange.bind(this, "className")}
+                      />
+                    </InputGroup>
+                    <Button type="submit" color="primary" value="Add Group">
+                      <i className="fa fa-plus" /> Add Social Link
+                    </Button>
+                  </form>
+                </CardBody>
+              </Card>
+            </PermissionProvider>
           </Col>
         </Row>
         <SocialLinkTable

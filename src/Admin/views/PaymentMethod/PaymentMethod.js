@@ -30,6 +30,8 @@ import {
   onUnmountPaymentMethod
 } from "../../actions";
 
+import PermissionProvider from "../../../Common/utils/PermissionProvider";
+
 class PaymentMethod extends Component {
   state = { payment_method: "", paymentMethodSubmit: false };
 
@@ -110,37 +112,39 @@ class PaymentMethod extends Component {
       <div>
         <Row className="hr-centered">
           <Col xs="12" md="6">
-            <Card>
-              <CardHeader>
-                <strong>Add Payment Method</strong>
-              </CardHeader>
-              <CardBody>
-                <Form onSubmit={this.onFormSubmit} inline>
-                  <FormGroup className="mb-2 mr-sm-2 mb-sm-0">
-                    <InputGroup>
-                      <InputGroupAddon addonType="prepend">
-                        <InputGroupText>
-                          <i className="fa fa-industry" />
-                        </InputGroupText>
-                      </InputGroupAddon>
-                      <Input
-                        autoFocus
-                        innerRef={ref => (this.focusableInput = ref)}
-                        disabled={this.props.loading}
-                        required
-                        type="text"
-                        placeholder="Type Payment Method"
-                        value={this.state.payment_method}
-                        onChange={this.onChange.bind(this, "payment_method")}
-                      />
-                    </InputGroup>
-                  </FormGroup>
-                  <Button color="primary">
-                    <span className="fa fa-plus" /> Add
-                  </Button>
-                </Form>
-              </CardBody>
-            </Card>
+            <PermissionProvider permission="CAN_ADD_PAYMENT_METHOD">
+              <Card>
+                <CardHeader>
+                  <strong>Add Payment Method</strong>
+                </CardHeader>
+                <CardBody>
+                  <Form onSubmit={this.onFormSubmit} inline>
+                    <FormGroup className="mb-2 mr-sm-2 mb-sm-0">
+                      <InputGroup>
+                        <InputGroupAddon addonType="prepend">
+                          <InputGroupText>
+                            <i className="fa fa-industry" />
+                          </InputGroupText>
+                        </InputGroupAddon>
+                        <Input
+                          autoFocus
+                          innerRef={ref => (this.focusableInput = ref)}
+                          disabled={this.props.loading}
+                          required
+                          type="text"
+                          placeholder="Type Payment Method"
+                          value={this.state.payment_method}
+                          onChange={this.onChange.bind(this, "payment_method")}
+                        />
+                      </InputGroup>
+                    </FormGroup>
+                    <Button color="primary">
+                      <span className="fa fa-plus" /> Add
+                    </Button>
+                  </Form>
+                </CardBody>
+              </Card>
+            </PermissionProvider>
           </Col>
         </Row>
         <ReactTable
