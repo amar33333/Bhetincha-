@@ -118,7 +118,10 @@ class CallerEdit extends Component {
         body.country = country.id;
       }
 
-      this.props.onSubmit({ body });
+      this.props.onSubmit({
+        body,
+        phone: this.props.number
+      });
     } else {
       const { user } = this.props;
       if (at === "c") {

@@ -24,7 +24,7 @@ class FindCaller extends Component {
   constructor(props) {
     super(props);
 
-    this.state = { callerName: "", callerNumber: "985106620", total: 5 };
+    this.state = { callerName: "", callerNumber: "", total: 5 };
   }
 
   handleChange = (key, value) => {
@@ -160,6 +160,7 @@ class FindCaller extends Component {
           registered={this.props.teleUser && this.props.teleUser.at}
           teleUser={this.props.teleUser}
           onTeleUserSMSSubmit={this.props.onTeleUserSMSSubmit}
+          composeSMSText={this.props.composeSMSText}
         />
       </div>
     );
