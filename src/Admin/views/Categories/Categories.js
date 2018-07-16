@@ -89,21 +89,25 @@ class Categories extends Component {
         width: 145,
         Cell: ({ value, original: { id, industry, name } }) => (
           <div>
-            <Button
-              data-tooltip="Edit"
-              data-position="bottom center"
-              color="secondary"
-              className="mr-2"
-              onClick={() =>
-                this.props.toggleCategoryEditModal({ id, industry, name })
-              }
-            >
-              <i className="fa fa-pencil" />
-            </Button>
-            <PopoverDelete
-              id={`delete-${value}`}
-              onClick={() => this.props.onCategoryDelete({ id: value })}
-            />
+            <PermissionProvider permission="CAN_EDIT_CATEGORY">
+              <Button
+                data-tooltip="Edit"
+                data-position="bottom center"
+                color="secondary"
+                className="mr-2"
+                onClick={() =>
+                  this.props.toggleCategoryEditModal({ id, industry, name })
+                }
+              >
+                <i className="fa fa-pencil" />
+              </Button>
+            </PermissionProvider>
+            <PermissionProvider permission="CAN_DELETE_CATEGORY">
+              <PopoverDelete
+                id={`delete-${value}`}
+                onClick={() => this.props.onCategoryDelete({ id: value })}
+              />
+            </PermissionProvider>
           </div>
         )
       }

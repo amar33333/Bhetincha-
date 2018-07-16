@@ -54,21 +54,25 @@ class CompanyType extends Component {
         width: 145,
         Cell: ({ value, original: { id, name } }) => (
           <div>
-            <Button
-              data-tooltip="Edit"
-              data-position="bottom center"
-              color="secondary"
-              className="mr-2"
-              onClick={() =>
-                this.props.toggleCompanyTypeEditModal({ id, name })
-              }
-            >
-              <i className="fa fa-pencil" />
-            </Button>
-            <PopoverDelete
-              id={`delete-${value}`}
-              onClick={() => this.props.onCompanyTypeDelete({ id: value })}
-            />
+            <PermissionProvider permission="CAN_EDIT_COMPANY_TYPE">
+              <Button
+                data-tooltip="Edit"
+                data-position="bottom center"
+                color="secondary"
+                className="mr-2"
+                onClick={() =>
+                  this.props.toggleCompanyTypeEditModal({ id, name })
+                }
+              >
+                <i className="fa fa-pencil" />
+              </Button>
+            </PermissionProvider>
+            <PermissionProvider permission="CAN_DELETE_COMPANY_TYPE">
+              <PopoverDelete
+                id={`delete-${value}`}
+                onClick={() => this.props.onCompanyTypeDelete({ id: value })}
+              />
+            </PermissionProvider>
           </div>
         )
       }

@@ -166,21 +166,25 @@ class SubCategories extends Component {
         width: 145,
         Cell: ({ value, original }) => (
           <div>
-            <Button
-              data-tooltip="Edit"
-              data-position="bottom center"
-              color="secondary"
-              className="mr-2"
-              onClick={() =>
-                this.props.toggleSubCategoryEditModal({ ...original })
-              }
-            >
-              <i className="fa fa-pencil" />
-            </Button>
-            <PopoverDelete
-              id={`delete-${value}`}
-              onClick={() => this.props.onSubCategoryDelete({ id: value })}
-            />
+            <PermissionProvider permission="CAN_EDIT_SUB_CATEGORY">
+              <Button
+                data-tooltip="Edit"
+                data-position="bottom center"
+                color="secondary"
+                className="mr-2"
+                onClick={() =>
+                  this.props.toggleSubCategoryEditModal({ ...original })
+                }
+              >
+                <i className="fa fa-pencil" />
+              </Button>
+            </PermissionProvider>
+            <PermissionProvider permission="CAN_DELETE_SUB_CATEGORY">
+              <PopoverDelete
+                id={`delete-${value}`}
+                onClick={() => this.props.onSubCategoryDelete({ id: value })}
+              />
+            </PermissionProvider>
           </div>
         )
       }

@@ -124,64 +124,72 @@ class BusinessList extends Component {
         width: 250,
         Cell: props => (
           <div>
-            <Button
-              data-tooltip="Edit"
-              data-position="bottom center"
-              color="primary"
-              className="mr-2"
-              onClick={() =>
-                this.props.history.push(
-                  `${this.props.match.path}/${props.value}/edit`
-                )
-              }
-            >
-              <i className="fa fa-pencil" />
-            </Button>
+            <PermissionProvider permission="CAN_EDIT_BUSINESS">
+              <Button
+                data-tooltip="Edit"
+                data-position="bottom center"
+                color="primary"
+                className="mr-2"
+                onClick={() =>
+                  this.props.history.push(
+                    `${this.props.match.path}/${props.value}/edit`
+                  )
+                }
+              >
+                <i className="fa fa-pencil" />
+              </Button>
+            </PermissionProvider>
 
-            <Button
-              data-tooltip="Manage Branches"
-              data-position="bottom center"
-              color="primary"
-              className="mr-2"
-              onClick={() =>
-                this.props.history.push({
-                  pathname: `${this.props.match.path}/${
-                    props.value
-                  }/manage-branchs`,
-                  state: {
+            <PermissionProvider permission="CAN_VIEW_BRANCH">
+              <Button
+                data-tooltip="Manage Branches"
+                data-position="bottom center"
+                color="primary"
+                className="mr-2"
+                onClick={() =>
+                  this.props.history.push({
+                    pathname: `${this.props.match.path}/${
+                      props.value
+                    }/manage-branchs`,
+                    state: {
+                      id: props.original.id,
+                      slug: props.original.slug
+                    }
+                  })
+                }
+              >
+                <i className="fa fa-code-fork" />
+              </Button>
+            </PermissionProvider>
+
+            <PermissionProvider permission="CAN_BUSINESS_VERIFY">
+              <Button
+                data-tooltip="Verify"
+                data-position="bottom center"
+                color="success"
+                className="mr-2"
+                onClick={() => {
+                  console.log("verify button clicked: ", props);
+                  this.props.onBusinessVerify({
                     id: props.original.id,
-                    slug: props.original.slug
-                  }
-                })
-              }
-            >
-              <i className="fa fa-code-fork" />
-            </Button>
-
-            <Button
-              data-tooltip="Verify"
-              data-position="bottom center"
-              color="success"
-              className="mr-2"
-              onClick={() => {
-                console.log("verify button clicked: ", props);
-                this.props.onBusinessVerify({
-                  id: props.original.id,
-                  body: {
-                    verified: true
-                  }
-                });
-              }}
-            >
-              <i className="fa fa-check" />
-            </Button>
-            <PopoverDelete
-              text={false}
-              id={`delete-${props.original.id}`}
-              onClick={() =>
-                this.props.onBusinessEachDelete({ id: props.original.id })
-              }
-            />
+                    body: {
+                      verified: true
+                    }
+                  });
+                }}
+              >
+                <i className="fa fa-check" />
+              </Button>
+            </PermissionProvider>
+            <PermissionProvider permission="CAN_DELETE_BUSINESS">
+              <PopoverDelete
+                text={false}
+                id={`delete-${props.original.id}`}
+                onClick={() =>
+                  this.props.onBusinessEachDelete({ id: props.original.id })
+                }
+              />
+            </PermissionProvider>
           </div>
         ),
         sortable: false,

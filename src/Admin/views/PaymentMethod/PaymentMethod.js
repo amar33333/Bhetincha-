@@ -54,21 +54,25 @@ class PaymentMethod extends Component {
         width: 145,
         Cell: ({ value, original: { id, name } }) => (
           <div>
-            <Button
-              data-tooltip="Edit"
-              data-position="bottom center"
-              color="secondary"
-              className="mr-2"
-              onClick={() =>
-                this.props.togglePaymentMethodEditModal({ id, name })
-              }
-            >
-              <i className="fa fa-pencil" />
-            </Button>
-            <PopoverDelete
-              id={`delete-${value}`}
-              onClick={() => this.props.onPaymentMethodDelete({ id: value })}
-            />
+            <PermissionProvider permission="CAN_EDIT_PAYMENT_METHOD">
+              <Button
+                data-tooltip="Edit"
+                data-position="bottom center"
+                color="secondary"
+                className="mr-2"
+                onClick={() =>
+                  this.props.togglePaymentMethodEditModal({ id, name })
+                }
+              >
+                <i className="fa fa-pencil" />
+              </Button>
+            </PermissionProvider>
+            <PermissionProvider permission="CAN_EDIT_COMPANY_TYPE">
+              <PopoverDelete
+                id={`delete-${value}`}
+                onClick={() => this.props.onPaymentMethodDelete({ id: value })}
+              />
+            </PermissionProvider>
           </div>
         )
       }

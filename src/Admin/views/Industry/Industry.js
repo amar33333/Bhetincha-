@@ -55,19 +55,23 @@ class Industry extends Component {
         width: 145,
         Cell: ({ value, original: { id, name } }) => (
           <div>
-            <Button
-              data-tooltip="Edit"
-              data-position="bottom center"
-              color="secondary"
-              className="mr-2"
-              onClick={() => this.props.toggleIndustryEditModal({ id, name })}
-            >
-              <i className="fa fa-pencil" />
-            </Button>
-            <PopoverDelete
-              id={`delete-${value}`}
-              onClick={() => this.props.onIndustryDelete({ id: value })}
-            />
+            <PermissionProvider permission="CAN_EDIT_INDUSTRY">
+              <Button
+                data-tooltip="Edit"
+                data-position="bottom center"
+                color="secondary"
+                className="mr-2"
+                onClick={() => this.props.toggleIndustryEditModal({ id, name })}
+              >
+                <i className="fa fa-pencil" />
+              </Button>
+            </PermissionProvider>
+            <PermissionProvider permission="CAN_DELETE_INDUSTRY">
+              <PopoverDelete
+                id={`delete-${value}`}
+                onClick={() => this.props.onIndustryDelete({ id: value })}
+              />
+            </PermissionProvider>
           </div>
         )
       }
