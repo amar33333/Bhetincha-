@@ -8,6 +8,8 @@ import filterCaseInsensitive from "../../../Common/utils/filterCaseInsesitive";
 
 import { onBusinessBranchList } from "../../actions";
 
+import PermissionProvider from "../../../Common/utils/PermissionProvider";
+
 class ManageBranchs extends Component {
   tableProps = {
     columns: [
@@ -107,23 +109,27 @@ class ManageBranchs extends Component {
         width: 170,
         Cell: ({ value }) => (
           <div>
-            <Button
-              data-tooltip="Edit"
-              data-position="bottom center"
-              color="secondary"
-              className="mr-2"
-              onClick={() => {
-                this.props.history.push(
-                  `${this.props.match.url}/${value}/edit-branch`
-                );
-              }}
-            >
-              <i className="fa fa-pencil" />
-            </Button>
-            <PopoverDelete
-              id={`delete-${value}`}
-              onClick={() => console.log("delete", value)}
-            />
+            <PermissionProvider permission="CAN_EDIT_BRANCH">
+              <Button
+                data-tooltip="Edit"
+                data-position="bottom center"
+                color="secondary"
+                className="mr-2"
+                onClick={() => {
+                  this.props.history.push(
+                    `${this.props.match.url}/${value}/edit-branch`
+                  );
+                }}
+              >
+                <i className="fa fa-pencil" />
+              </Button>
+            </PermissionProvider>
+            <PermissionProvider permission="CAN_DELETE_BRANCH">
+              <PopoverDelete
+                id={`delete-${value}`}
+                onClick={() => console.log("delete", value)}
+              />
+            </PermissionProvider>
           </div>
         )
       }
@@ -146,17 +152,19 @@ class ManageBranchs extends Component {
     console.log("manage branchs props: ", this.props);
     return (
       <div className="animated fadeIn">
-        <Link
-          to={{
-            pathname: `/admin/list-business/${
-              this.props.match.params.businessSlug
-            }/manage-branchs/add-branch`
-          }}
-        >
-          <Button variant="raised" color="primary" className="mb-3">
-            <i className="fa fa-plus" /> Add New Branch
-          </Button>
-        </Link>
+        <PermissionProvider permission="CAN_ADD_BRANCH">
+          <Link
+            to={{
+              pathname: `/admin/list-business/${
+                this.props.match.params.businessSlug
+              }/manage-branchs/add-branch`
+            }}
+          >
+            <Button variant="raised" color="primary" className="mb-3">
+              <i className="fa fa-plus" /> Add New Branch
+            </Button>
+          </Link>
+        </PermissionProvider>
         <ReactTable
           {...this.tableProps}
           style={{ background: "white" }}

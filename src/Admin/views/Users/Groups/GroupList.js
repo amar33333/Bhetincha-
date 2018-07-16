@@ -7,6 +7,8 @@ import {
 } from "../../../../Common/components";
 import filterCaseInsensitive from "../../../../Common/utils/filterCaseInsesitive";
 
+import PermissionProvider from "../../../../Common/utils/PermissionProvider";
+
 class GroupList extends Component {
   tableProps = {
     columns: [
@@ -27,19 +29,23 @@ class GroupList extends Component {
         width: 145,
         Cell: ({ value, original: { id, name } }) => (
           <div>
-            <Button
-              data-tooltip="Edit"
-              data-position="bottom center"
-              color="secondary"
-              className="mr-2"
-              onClick={() => this.props.toggleGroupEditModal({ id, name })}
-            >
-              <i className="fa fa-pencil" />
-            </Button>
-            <PopoverDelete
-              id={`delete-${value}`}
-              onClick={() => this.props.onGroupDelete({ id: value })}
-            />
+            <PermissionProvider permission="CAN_EDIT_GROUP">
+              <Button
+                data-tooltip="Edit"
+                data-position="bottom center"
+                color="secondary"
+                className="mr-2"
+                onClick={() => this.props.toggleGroupEditModal({ id, name })}
+              >
+                <i className="fa fa-pencil" />
+              </Button>
+            </PermissionProvider>
+            <PermissionProvider permission="CAN_DELETE_GROUP">
+              <PopoverDelete
+                id={`delete-${value}`}
+                onClick={() => this.props.onGroupDelete({ id: value })}
+              />
+            </PermissionProvider>
           </div>
         )
       }

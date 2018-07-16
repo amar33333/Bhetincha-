@@ -66,20 +66,25 @@ class ManageUsers extends Component {
         width: 145,
         Cell: ({ value, original }) => (
           <div style={{ overflow: "visible" }}>
-            <Button
-              data-tooltip="Edit"
-              data-position="bottom center"
-              color="secondary"
-              className="mr-2"
-              onClick={() => this.props.toggleUserEditModal({ ...original })}
-            >
-              <i className="fa fa-pencil" />
-            </Button>
-            <PopoverDelete
-              text={false}
-              id={`delete-${value}`}
-              onClick={() => this.props.onUserRemove({ id: value })}
-            />
+            <PermissionProvider permission="CAN_EDIT_USER">
+              <Button
+                data-tooltip="Edit"
+                data-position="bottom center"
+                color="secondary"
+                className="mr-2"
+                onClick={() => this.props.toggleUserEditModal({ ...original })}
+              >
+                <i className="fa fa-pencil" />
+              </Button>
+            </PermissionProvider>
+
+            <PermissionProvider permission="CAN_DELETE_USER">
+              <PopoverDelete
+                text={false}
+                id={`delete-${value}`}
+                onClick={() => this.props.onUserRemove({ id: value })}
+              />
+            </PermissionProvider>
           </div>
         )
       }

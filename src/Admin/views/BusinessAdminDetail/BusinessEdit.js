@@ -32,6 +32,8 @@ import SubBusinessPrimaryAddress from "./SubBusinessPrimaryAddress";
 // import SubBusinessBranchWrapper from "./SubBusinessBranchWrapper";
 import SubBusinessWorkingHour from "./SubBusinessWorkingHour";
 
+import PermissionProvider from "../../../Common/utils/PermissionProvider";
+
 class BusinessEdit extends Component {
   static countryRepeat = true;
   static stateRepeat = true;
@@ -261,29 +263,33 @@ class BusinessEdit extends Component {
                 />
                 <Row>
                   <Col xs="12">
-                    <Button
-                      color="primary"
-                      size="lg"
-                      style={{ marginRight: 20 }}
-                    >
-                      SAVE
-                    </Button>
+                    <PermissionProvider permission="CAN_EDIT_BUSINESS">
+                      <Button
+                        color="primary"
+                        size="lg"
+                        style={{ marginRight: 20 }}
+                      >
+                        SAVE
+                      </Button>
+                    </PermissionProvider>
 
-                    <Button
-                      color="success"
-                      size="lg"
-                      onClick={() => {
-                        console.log("verify button clicked: ", this.props);
-                        this.props.onBusinessVerify({
-                          id: this.props.businessData.id,
-                          body: {
-                            verified: true
-                          }
-                        });
-                      }}
-                    >
-                      VERIFY
-                    </Button>
+                    <PermissionProvider permission="CAN_BUSINESS_VERIFY">
+                      <Button
+                        color="success"
+                        size="lg"
+                        onClick={() => {
+                          console.log("verify button clicked: ", this.props);
+                          this.props.onBusinessVerify({
+                            id: this.props.businessData.id,
+                            body: {
+                              verified: true
+                            }
+                          });
+                        }}
+                      >
+                        VERIFY
+                      </Button>
+                    </PermissionProvider>
                   </Col>
                 </Row>
               </form>
