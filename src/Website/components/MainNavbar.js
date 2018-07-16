@@ -8,7 +8,58 @@ import AutoSuggestion from "./AutoSuggestion";
 
 import { onSearchQuerySubmit, onSearchResultsList } from "../actions";
 import querystring from "querystring";
-import theme from "./theme-small.css";
+// import theme from "./theme-small.css";
+
+const theme = {
+  container: {
+    position: "relative"
+  },
+  input: {
+    width: "100% !important",
+    height: "50px !important",
+    padding: "10px 20px",
+    fontWeight: 300,
+    fontSize: "16px",
+    border: "1px solid #aaa",
+    borderRadius: "4px"
+  },
+  inputFocused: {
+    outline: "none"
+  },
+  inputOpen: {
+    borderBottomLeftRadius: 0,
+    borderBottomRightRadius: 0
+  },
+  suggestionsContainer: {
+    display: "none"
+  },
+  suggestionsContainerOpen: {
+    display: "block",
+    position: "absolute",
+    top: 51,
+    width: 280,
+    border: "1px solid #aaa",
+    backgroundColor: "#fff",
+    fontFamily: "Helvetica, sans-serif",
+    fontWeight: 300,
+    fontSize: 16,
+    borderBottomLeftRadius: 4,
+    borderBottomRightRadius: 4,
+    zIndex: 2
+  },
+  suggestionsList: {
+    margin: 0,
+    padding: 0,
+    listStyleType: "none"
+  },
+  suggestion: {
+    cursor: "pointer",
+    padding: "10px 20px"
+  },
+  suggestionHighlighted: {
+    backgroundColor: "#ddd"
+  }
+};
 
 class MainNavbar extends Component {
   render() {
@@ -33,11 +84,9 @@ class MainNavbar extends Component {
               size="lg"
             /> */}
           <AutoSuggestion
-            theme={theme}
             initialQuery={this.props.initialQuery}
             placeholder="Search anything..."
             valueKey="business_name"
-            extraClassName="small"
             suggestions={this.props.search_result.data}
             onSuggestionsFetchRequested={this.props.onSearchQuerySubmit}
             onSearchItemSelected={business => {
@@ -59,6 +108,7 @@ class MainNavbar extends Component {
                 // state: { detail: response.data }
               });
             }}
+            theme={theme}
           />
         </NavItem>
         {/* <div className="pull-right">{this.props.cookies && <Avatar />}</div> */}

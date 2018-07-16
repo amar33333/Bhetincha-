@@ -464,131 +464,155 @@ class SubBusinessPrimaryAddress extends Component {
           </CardHeader>
           <CardBody>
             <Row>
-              <Col xs="12" md="4">
-                <FormGroup>
-                  <Label for="Country">Country</Label>
-                  <Select
-                    required={
-                      this.props.requiredParams &&
-                      this.props.requiredParams.country
-                    }
-                    name="Country"
-                    placeholder="Select a Country"
-                    noResultsText="No Data Found"
-                    value={valuePrimaryCountry}
-                    onChange={this.handleSelectChange.bind(this, "country")}
-                    options={this.countries}
-                    valueKey="id"
-                    labelKey="name"
-                  />
-                </FormGroup>
-              </Col>
-              <Col xs="12" md="4">
-                <FormGroup>
-                  <Label for="State">State</Label>
-                  <Select
-                    required={
-                      this.props.requiredParams &&
-                      this.props.requiredParams.state
-                    }
-                    name="State"
-                    placeholder="Select a State"
-                    noResultsText="No Data Found"
-                    value={valuePrimaryState}
-                    onChange={this.handleSelectChange.bind(this, "state")}
-                    options={this.states}
-                    valueKey="id"
-                    labelKey="name"
-                  />
-                </FormGroup>
-              </Col>
-              <Col xs="12" md="4">
-                <FormGroup>
-                  <Label for="District">District</Label>
-                  <Select
-                    required={
-                      this.props.requiredParams &&
-                      this.props.requiredParams.district
-                    }
-                    name="District"
-                    placeholder="Select a District"
-                    noResultsText="No Data Found"
-                    value={valuePrimaryDistrict}
-                    onChange={this.handleSelectChange.bind(this, "district")}
-                    options={this.districts}
-                    valueKey="id"
-                    labelKey="name"
-                  />
-                </FormGroup>
-              </Col>
-            </Row>
-            <Row>
-              <Col xs="12" md="4">
-                <FormGroup>
-                  <Label for="City">City</Label>
-                  <Select
-                    required={
-                      this.props.requiredParams &&
-                      this.props.requiredParams.city
-                    }
-                    name="City"
-                    placeholder="Select a City"
-                    noResultsText="No Data Found"
-                    value={valuePrimaryCity}
-                    onChange={this.handleSelectChange.bind(this, "city")}
-                    options={this.cities}
-                    valueKey="id"
-                    labelKey="name"
-                  />
-                </FormGroup>
-              </Col>
-              <Col xs="12" md="4">
-                <FormGroup>
-                  <Label for="Area">Area</Label>
-                  <Select
-                    required={
-                      this.props.requiredParams &&
-                      this.props.requiredParams.area
-                    }
-                    name="Area"
-                    placeholder="Select an Area"
-                    noResultsText="No Data Found"
-                    value={valuePrimaryArea}
-                    onChange={this.handleAreaSelectChange.bind(this)}
-                    options={this.areas}
-                    valueKey="id"
-                    labelKey="name"
-                  />
-                </FormGroup>
-              </Col>
-              <Col xs="12" md="4">
-                <FormGroup>
-                  <Label for="bname">Landmark</Label>
-                  <Input
-                    type="text"
-                    value={this.state.landmark}
-                    onChange={this.onChange.bind(this, "landmark")}
-                    onKeyDown={this._handleKeyPress}
-                  />
-                </FormGroup>
-              </Col>
-            </Row>
-            <Row>
               <Col xs="12" md="12">
-                <Card className="p-3">
-                  <strong className="mb-2">
-                    Select your Business Location from the map displayed below
-                  </strong>
-                  <MapComponent
-                    ref={ref => (this.mapComponentEl = ref)}
-                    position={{
-                      lat: this.state.latitude,
-                      lng: this.state.longitude
-                    }}
-                    onClick={this.onChangeLatLng}
-                    onDragEnd={this.onChangeLatLng}
-                  />
-                </Card>
+                <Row>
+                  <Col xs="12" md="4">
+                    <Row>
+                      <Col xs="12" md="12">
+                        <FormGroup>
+                          <Label for="Country">Country</Label>
+                          <Select
+                            required={
+                              this.props.requiredParams &&
+                              this.props.requiredParams.country
+                            }
+                            name="Country"
+                            placeholder="Select a Country"
+                            noResultsText="No Data Found"
+                            value={valuePrimaryCountry}
+                            onChange={this.handleSelectChange.bind(
+                              this,
+                              "country"
+                            )}
+                            options={this.countries}
+                            valueKey="id"
+                            labelKey="name"
+                          />
+                        </FormGroup>
+                      </Col>
+                    </Row>
+                    <Row>
+                      <Col xs="12">
+                        <FormGroup>
+                          <Label for="State">State</Label>
+                          <Select
+                            required={
+                              this.props.requiredParams &&
+                              this.props.requiredParams.state
+                            }
+                            name="State"
+                            placeholder="Select a State"
+                            noResultsText="No Data Found"
+                            value={valuePrimaryState}
+                            onChange={this.handleSelectChange.bind(
+                              this,
+                              "state"
+                            )}
+                            options={this.states}
+                            valueKey="id"
+                            labelKey="name"
+                          />
+                        </FormGroup>
+                      </Col>
+                    </Row>
+                    <Row>
+                      <Col xs="12">
+                        <FormGroup>
+                          <Label for="District">District</Label>
+                          <Select
+                            required={
+                              this.props.requiredParams &&
+                              this.props.requiredParams.district
+                            }
+                            name="District"
+                            placeholder="Select a District"
+                            noResultsText="No Data Found"
+                            value={valuePrimaryDistrict}
+                            onChange={this.handleSelectChange.bind(
+                              this,
+                              "district"
+                            )}
+                            options={this.districts}
+                            valueKey="id"
+                            labelKey="name"
+                          />
+                        </FormGroup>
+                      </Col>
+                    </Row>
+                    <Row>
+                      <Col xs="12">
+                        <FormGroup>
+                          <Label for="City">City</Label>
+                          <Select
+                            required={
+                              this.props.requiredParams &&
+                              this.props.requiredParams.city
+                            }
+                            name="City"
+                            placeholder="Select a City"
+                            noResultsText="No Data Found"
+                            value={valuePrimaryCity}
+                            onChange={this.handleSelectChange.bind(
+                              this,
+                              "city"
+                            )}
+                            options={this.cities}
+                            valueKey="id"
+                            labelKey="name"
+                          />
+                        </FormGroup>
+                      </Col>
+                    </Row>
+                    <Row>
+                      <Col>
+                        <FormGroup>
+                          <Label for="Area">Area</Label>
+                          <Select
+                            required={
+                              this.props.requiredParams &&
+                              this.props.requiredParams.area
+                            }
+                            name="Area"
+                            placeholder="Select an Area"
+                            noResultsText="No Data Found"
+                            value={valuePrimaryArea}
+                            onChange={this.handleAreaSelectChange.bind(this)}
+                            options={this.areas}
+                            valueKey="id"
+                            labelKey="name"
+                          />
+                        </FormGroup>
+                      </Col>
+                    </Row>
+                    <Row>
+                      <Col>
+                        <FormGroup>
+                          <Label for="bname">Landmark</Label>
+                          <Input
+                            type="text"
+                            value={this.state.landmark}
+                            onChange={this.onChange.bind(this, "landmark")}
+                            onKeyDown={this._handleKeyPress}
+                          />
+                        </FormGroup>
+                      </Col>
+                    </Row>
+                  </Col>
+                  <Col xs="12" md="8">
+                    <strong className="mb-2">
+                      Select your Business Location from the map displayed below
+                    </strong>
+                    <MapComponent
+                      ref={ref => (this.mapComponentEl = ref)}
+                      position={{
+                        lat: this.state.latitude,
+                        lng: this.state.longitude
+                      }}
+                      onClick={this.onChangeLatLng}
+                      onDragEnd={this.onChangeLatLng}
+                    />
+                  </Col>
+                </Row>
               </Col>
             </Row>
             <Row>
@@ -691,7 +715,7 @@ class SubBusinessPrimaryAddress extends Component {
             </Row>
             <div className="animated fadeIn">
               <Card>
-                <CardHeader onClick={this.toggleCollapse}>
+                <CardHeader>
                   <div
                     style={{
                       display: "flex",

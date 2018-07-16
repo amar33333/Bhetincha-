@@ -14,8 +14,8 @@ class Contact extends Component {
   }
 
   componentDidMount = () => {
-    const lat = parseFloat(this.props.address.latitude);
-    const lng = parseFloat(this.props.address.longitude);
+    const lat = this.props.address && parseFloat(this.props.address.latitude);
+    const lng = this.props.address && parseFloat(this.props.address.longitude);
     setTimeout(() => {
       var latLng = new window.google.maps.LatLng(lat, lng);
       this.mapEl.googleMapEl.panTo(latLng);
@@ -194,9 +194,7 @@ class Contact extends Component {
           </Row>
           <Row className="mt-5 mb-5">
             {this.props.address && this.renderPrimaryAddress()}
-            {this.props.branchAddress &&
-              // this.props.branchAddress.length &&
-              this.renderBranchAddress()}
+            {this.props.branchAddress && this.renderBranchAddress()}
           </Row>
         </Container>
       </div>

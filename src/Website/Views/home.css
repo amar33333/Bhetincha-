@@ -7,7 +7,7 @@ body {
 .body-wrapper {
   position: relative;
   /* min-height: 70vh; */
-  background-color: rgb(255, 255, 255) !important;
+  background-color: rgba(255, 255, 255, 0.5) !important;
   margin-top: 0px !important;
   /* padding: 15px; */
   /* padding-top: 60px; */
@@ -141,7 +141,15 @@ input.main-nav-search::placeholder {
   align-items: center;
   margin-top: 30px;
 }
-
+.react-autosuggest__input {
+  width: 100% !important;
+  height: 50px !important;
+  padding: 10px 20px;
+  font-weight: 300;
+  font-size: 16px;
+  border: 1px solid #aaa;
+  border-radius: 4px;
+}
 /* .react-autosuggest__input.small {
   height: 30px;
 } */

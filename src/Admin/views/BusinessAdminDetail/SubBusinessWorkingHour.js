@@ -184,13 +184,13 @@ class subBusinessWorkingHour extends Component {
               <Col xs="6" md="2">
                 <strong>Day</strong>
               </Col>
-              <Col xs="6" md="2">
+              <Col xs="6" md="3">
                 <strong>Holiday?</strong>
               </Col>
-              <Col xs="6" md="4">
+              <Col xs="6" md="3">
                 <strong>Opens at</strong>
               </Col>
-              <Col xs="6" md="4">
+              <Col xs="6" md="3">
                 <strong>Closes at</strong>
               </Col>
             </Row>
@@ -199,7 +199,7 @@ class subBusinessWorkingHour extends Component {
             <SemanticCard.Content key={day.day}>
               <Row>
                 <Col xs="6" md="2">
-                  <strong>{day.day}</strong>
+                  <strong>{day.day.substring(0, 3)}</strong>
                 </Col>
                 <Col xs="6" md="2">
                   <Input
@@ -219,6 +219,18 @@ class subBusinessWorkingHour extends Component {
                           this.handleStartHourChange(e, day.day);
                         }}
                       >
+                        {/* <option
+                          value="Select your time"
+                          disabled
+                          selected={
+                            moment(day.start).format("YYYY-MM-DDTHH:mmZ") ===
+                            moment(date).format("YYYY-MM-DDTHH:mmZ")
+                              ? false
+                              : true
+                          }
+                        >
+                          Select Your Time
+                        </option> */}
                         {dateArray.map(date => (
                           <option
                             selected={

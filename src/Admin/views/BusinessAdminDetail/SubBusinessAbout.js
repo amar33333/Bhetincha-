@@ -186,6 +186,7 @@ class SubBusinessAbout extends Component {
                     onChange={this.onChangeEstablishedYear}
                     viewMode={"years"}
                     utc={true}
+                    closeOnSelect
                   />
                 </FormGroup>
               </Col>

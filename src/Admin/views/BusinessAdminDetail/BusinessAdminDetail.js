@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { toast } from "react-toastify";
 
-import { Row, Col, Card, CardHeader, CardBody, Button } from "reactstrap";
+import { Row, Col, Button } from "reactstrap";
 
 import {
   onBusinessCreate,
@@ -186,39 +186,52 @@ class BusinessAdminDetail extends Component {
             ref={ref => (this.subBusinessBranchWrapperRef = ref)}
             {...this.props}
           /> */}
-          <SubBusinessLogo
-            collapsed={this.state.businessLogoCollapse}
-            toggleCollapse={this.toggleCollapse.bind(
-              this,
-              "businessLogoCollapse"
-            )}
-            ref={ref => (this.subBusinessLogoRef = ref)}
-          />
-          <SubBusinessCoverImage
-            collapsed={this.state.businessCoverImageCollapse}
-            toggleCollapse={this.toggleCollapse.bind(
-              this,
-              "businessCoverImageCollapse"
-            )}
-            ref={ref => (this.subBusinessCoverImageRef = ref)}
-          />
-          <SubBusinessAbout
-            collapsed={this.state.businessAboutCollapse}
-            toggleCollapse={this.toggleCollapse.bind(
-              this,
-              "businessAboutCollapse"
-            )}
-            ref={ref => (this.subBusinessAboutRef = ref)}
-            company_types={this.props.company_types}
-          />
-          <SubBusinessWorkingHour
-            collapsed={this.state.businessWorkingHourCollapse}
-            ref={ref => (this.subBusinessWorkingHourRef = ref)}
-            toggleCollapse={this.toggleCollapse.bind(
-              this,
-              "businessWorkingHourCollapse"
-            )}
-          />
+
+          <Row>
+            <Col>
+              <SubBusinessLogo
+                collapsed={this.state.businessLogoCollapse}
+                toggleCollapse={this.toggleCollapse.bind(
+                  this,
+                  "businessLogoCollapse"
+                )}
+                ref={ref => (this.subBusinessLogoRef = ref)}
+              />
+            </Col>
+            <Col>
+              <SubBusinessCoverImage
+                collapsed={this.state.businessCoverImageCollapse}
+                toggleCollapse={this.toggleCollapse.bind(
+                  this,
+                  "businessCoverImageCollapse"
+                )}
+                ref={ref => (this.subBusinessCoverImageRef = ref)}
+              />
+            </Col>
+          </Row>
+          <Row>
+            <Col>
+              <SubBusinessAbout
+                collapsed={this.state.businessAboutCollapse}
+                toggleCollapse={this.toggleCollapse.bind(
+                  this,
+                  "businessAboutCollapse"
+                )}
+                ref={ref => (this.subBusinessAboutRef = ref)}
+                company_types={this.props.company_types}
+              />
+            </Col>
+            <Col>
+              <SubBusinessWorkingHour
+                collapsed={this.state.businessWorkingHourCollapse}
+                ref={ref => (this.subBusinessWorkingHourRef = ref)}
+                toggleCollapse={this.toggleCollapse.bind(
+                  this,
+                  "businessWorkingHourCollapse"
+                )}
+              />
+            </Col>
+          </Row>
           <Row>
             <Col xs="12">
               {/* <PermissionProvider permission="CAN_ADD_BUSINESS"> */}

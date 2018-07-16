@@ -35,7 +35,6 @@ class AutoSuggestion extends Component {
   render() {
     return (
       <Autosuggest
-        className={this.props.extraClassName}
         suggestions={this.props.suggestions}
         onSuggestionsFetchRequested={({ value }) => {
           value.length > 0 &&
@@ -65,7 +64,6 @@ class AutoSuggestion extends Component {
                 {...inputProps}
                 autoFocus={this.props.autoFocus}
                 style={{
-                  // border: "1px solid #aaa",
                   border: "none",
                   borderRadius: "0px",
                   backgroundColor: "white",
@@ -101,6 +99,7 @@ class AutoSuggestion extends Component {
           value: this.state.value,
           onChange: (event, { newValue }) => this.setState({ value: newValue })
         }}
+        // theme={this.props.theme}
       />
     );
   }
