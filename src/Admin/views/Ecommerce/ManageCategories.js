@@ -36,7 +36,7 @@ class ManageCategories extends Component {
       <div className="animated fadeIn">
         <Container fluid>
           <Row>
-            <Col xs="12" md="3">
+            <Col xs="12" md="4">
               <SideTreeView
                 categories={this.props.categories}
                 activeCategory={this.props.activeCategory}
@@ -47,7 +47,7 @@ class ManageCategories extends Component {
                 openAllOnSearch={this.props.openAllOnSearchEcommerce}
               />
             </Col>
-            <Col xs="12" md="9">
+            <Col xs="12" md="8">
               {this.props.selectedCategoryDetail && (
                 <div>
                   <BreadcrumbNav
