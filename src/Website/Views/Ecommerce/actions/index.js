@@ -1,5 +1,5 @@
-import adminEpics from "./adminActions";
+import homeEpics from "./homeActions";
 
-export * from "./adminActions";
+export * from "./homeActions";
 
-export default [...adminEpics];
+export default [...homeEpics];

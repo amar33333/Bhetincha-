@@ -1,6 +1,6 @@
 import { combineReducers } from "redux";
-import admin from "./adminReducer";
+import home from "./homeReducer";
 
 export default combineReducers({
-  admin
+  home
 });
