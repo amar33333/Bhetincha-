@@ -6,7 +6,7 @@ import ReactTable from "react-table";
 import { PopoverDelete, PaginationComponent } from "../../../Common/components";
 import filterCaseInsensitive from "../../../Common/utils/filterCaseInsesitive";
 
-import { onBusinessBranchList } from "../../actions";
+import { onBusinessBranchList, onBranchRemove } from "../../actions";
 
 import PermissionProvider from "../../../Common/utils/PermissionProvider";
 
@@ -127,7 +127,12 @@ class ManageBranchs extends Component {
             <PermissionProvider permission="CAN_DELETE_BRANCH">
               <PopoverDelete
                 id={`delete-${value}`}
-                onClick={() => console.log("delete", value)}
+                onClick={() => {
+                  this.props.onBranchRemove({
+                    business_slug: this.props.match.params.businessSlug,
+                    branch_id: value
+                  });
+                }}
               />
             </PermissionProvider>
           </div>
@@ -196,6 +201,7 @@ export default connect(
     businessBranchData
   }),
   {
-    onBusinessBranchList
+    onBusinessBranchList,
+    onBranchRemove
   }
 )(ManageBranchs);

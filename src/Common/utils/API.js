@@ -21,7 +21,7 @@ const PHONE_VERIFICATION_TOKEN_SEND = "business/claim-at-register/";
 const USER_REGISTER = "business/user-at-register/";
 const RESEND_TOKEN = "business/resend-code/";
 const CHECK_REGISTRATION = "business/checkurl/";
-const SOCIAL = "/api/accounts/social";
+const SOCIAL = "api/accounts/social";
 
 const O_TOKEN = "o/token/";
 export const CLIENT_ID = "z5LMYuXtl4eFF7iyMIKA0LzZSu4awMBGg8hUsXH4";

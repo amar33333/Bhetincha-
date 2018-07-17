@@ -33,7 +33,7 @@ export const onFacebookLogin = ({ access_token }) => {
 export const onGoogleLogin = ({ access_token }) =>
   ajax({
     method: "post",
-    url: `${GOOGLE_LOGIN_URL}${access_token}/`,
+    url: `${GOOGLE_LOGIN_URL}`,
     body: {
       access_token
     },
