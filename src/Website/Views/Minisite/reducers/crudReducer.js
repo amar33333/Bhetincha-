@@ -26,6 +26,7 @@ const INITIAL_STATE = {
   logo: "/media/default_logo.png",
   albums: [],
   workingHour: [],
+  alwaysOpen: false,
   industry: {
     id: "",
     name: ""

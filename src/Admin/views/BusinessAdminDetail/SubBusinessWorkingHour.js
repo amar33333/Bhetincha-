@@ -28,44 +28,44 @@ class subBusinessWorkingHour extends Component {
       workingHour: [
         {
           day: "Sunday",
-          start: moment("2018-05-01T10:00").format("YYYY-MM-DDTHH:mmZ"),
-          end: moment("2018-05-01T17:00").format("YYYY-MM-DDTHH:mmZ"),
+          start: "",
+          end: "",
           holiday: false
         },
         {
           day: "Monday",
-          start: moment("2018-05-01T10:00").format("YYYY-MM-DDTHH:mmZ"),
-          end: moment("2018-05-01T17:00").format("YYYY-MM-DDTHH:mmZ"),
+          start: "",
+          end: "",
           holiday: false
         },
         {
           day: "Tuesday",
-          start: moment("2018-05-01T10:00").format("YYYY-MM-DDTHH:mmZ"),
-          end: moment("2018-05-01T17:00").format("YYYY-MM-DDTHH:mmZ"),
+          start: "",
+          end: "",
           holiday: false
         },
         {
           day: "Wednesday",
-          start: moment("2018-05-01T10:00").format("YYYY-MM-DDTHH:mmZ"),
-          end: moment("2018-05-01T17:00").format("YYYY-MM-DDTHH:mmZ"),
+          start: "",
+          end: "",
           holiday: false
         },
         {
           day: "Thursday",
-          start: moment("2018-05-01T10:00").format("YYYY-MM-DDTHH:mmZ"),
-          end: moment("2018-05-01T17:00").format("YYYY-MM-DDTHH:mmZ"),
+          start: "",
+          end: "",
           holiday: false
         },
         {
           day: "Friday",
-          start: moment("2018-05-01T10:00").format("YYYY-MM-DDTHH:mmZ"),
-          end: moment("2018-05-01T17:00").format("YYYY-MM-DDTHH:mmZ"),
+          start: "",
+          end: "",
           holiday: false
         },
         {
           day: "Saturday",
-          start: moment("2018-05-01T10:00").format("YYYY-MM-DDTHH:mmZ"),
-          end: moment("2018-05-01T17:00").format("YYYY-MM-DDTHH:mmZ"),
+          start: "",
+          end: "",
           holiday: true
         }
       ]
@@ -219,18 +219,9 @@ class subBusinessWorkingHour extends Component {
                           this.handleStartHourChange(e, day.day);
                         }}
                       >
-                        {/* <option
-                          value="Select your time"
-                          disabled
-                          selected={
-                            moment(day.start).format("YYYY-MM-DDTHH:mmZ") ===
-                            moment(date).format("YYYY-MM-DDTHH:mmZ")
-                              ? false
-                              : true
-                          }
-                        >
+                        <option value="Select your time" disabled selected>
                           Select Your Time
-                        </option> */}
+                        </option>
                         {dateArray.map(date => (
                           <option
                             selected={
@@ -259,6 +250,9 @@ class subBusinessWorkingHour extends Component {
                           this.handleClosingHourChange(e, day.day);
                         }}
                       >
+                        <option value="Select your time" disabled selected>
+                          Select Your Time
+                        </option>
                         {dateArray.map(date => (
                           <option
                             selected={

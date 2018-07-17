@@ -268,6 +268,7 @@ epics.push(action$ =>
         payload.branchAddress = response.branchAddress;
         payload.tollfreeNumber = response.tollfreeNumber;
         payload.workingHour = response.workingHour;
+        payload.alwaysOpen = response.alwaysOpen;
         payload.industry = response.industry;
         payload.categories = response.categories;
 
