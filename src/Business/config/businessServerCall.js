@@ -101,11 +101,23 @@ export const onPrimaryAddressPut = ({ access_token, id, data }) =>
       Authorization: "Bearer " + access_token
     }
   });
+
 export const onBranchPut = ({ access_token, business_slug, branch_id, body }) =>
   ajax({
     method: "PUT",
     url: `${BRANCH_ADDRESS_URL}${business_slug}/${branch_id}/`,
     body,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
+export const onBranchDelete = ({ access_token, business_slug, branch_id }) =>
+  ajax({
+    method: "DELETE",
+    url: `${BRANCH_ADDRESS_URL}${business_slug}/${branch_id}/`,
+
     headers: {
       "Content-Type": "application/json",
       Authorization: "Bearer " + access_token

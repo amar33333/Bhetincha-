@@ -14,6 +14,8 @@ import {
   Collapse
 } from "reactstrap";
 
+import { validatePhone } from "../../../Common/utils/Extras";
+
 class SubBusinessDetail extends Component {
   constructor(props) {
     super(props);
@@ -26,7 +28,8 @@ class SubBusinessDetail extends Component {
       industry: "",
       categories: [],
       sub_categories: [],
-      paymentMethod: []
+      paymentMethod: [],
+      phone_validation_error: false
     };
 
     this.access_token = this.props.cookies
@@ -69,8 +72,8 @@ class SubBusinessDetail extends Component {
               name: each.name
             }))
           : [],
-        paymentMethod: businessData.payment_method
-          ? businessData.payment_method.map(each => ({
+        paymentMethod: businessData.paymentMethod
+          ? businessData.paymentMethod.map(each => ({
               id: each.id,
               name: each.name
             }))
@@ -93,16 +96,34 @@ class SubBusinessDetail extends Component {
   };
 
   onChange = (key, event) => {
+    const val = event.target.value;
+
     if (key === "business_name") {
-      let newBusinessName = event.target.value.replace(/\b\w/g, l =>
-        l.toUpperCase()
-      );
+      let newBusinessName = val.replace(/\b\w/g, l => l.toUpperCase());
       this.setState({
         [key]: newBusinessName
       });
-    } else {
-      this.setState({ [key]: event.target.value });
+    } else if (key === "business_email") {
+      this.setState({
+        [key]: val === "" ? null : val
+      });
+    } else if (key === "business_phone") {
+      this.setState({ [key]: val === "" ? null : val }, () => {
+        if (
+          this.state.business_phone &&
+          !validatePhone(this.state.business_phone)
+        ) {
+          this.setState({ phone_validation_error: true });
+        } else this.setState({ phone_validation_error: false });
+      });
     }
+  };
+
+  displayPhoneValidationInfo = () => {
+    if (this.state.business_phone)
+      if (this.state.phone_validation_error)
+        return <p style={{ color: "red" }}>Invalid Phone Number</p>;
+      else return <p style={{ color: "green" }}>Phone Number Valid</p>;
   };
 
   handleSelectChange = (key, value) => {
@@ -184,7 +205,8 @@ class SubBusinessDetail extends Component {
       industry: "",
       categories: [],
       sub_categories: [],
-      paymentMethod: []
+      paymentMethod: [],
+      phone_validation_error: false
     });
   };
 
@@ -295,11 +317,13 @@ class SubBusinessDetail extends Component {
                   <Label for="bphone">Business Phone</Label>
                   <Input
                     type="text"
+                    placeholder="Mobile Number Eg. 9843041699, (984)-3041699"
                     value={this.state.business_phone}
                     onChange={this.onChange.bind(this, "business_phone")}
                     onKeyDown={this._handleKeyPress}
                   />
                 </FormGroup>
+                {this.displayPhoneValidationInfo()}
               </Col>
               <Col xs="12" md="6">
                 <FormGroup>

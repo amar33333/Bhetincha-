@@ -27,7 +27,9 @@ import {
   TELE_USER_SEARCH_MOBILE_URL,
   TELE_USER_EDIT_URL,
   TELE_USER_SEND_SMS_URL,
-  TELE_USER_SEARCH_NAME_URL
+  TELE_USER_SEARCH_NAME_URL,
+  ECOMMERCE_CATEGORY_CONFIG_URL,
+  ECOMMERCE_PRODUCT_SEARCH_URL
 } from "./ADMIN_API";
 
 import {
@@ -1349,6 +1351,25 @@ export const onEcommerceProductEachDelete = ({ uid }) =>
   ajax({
     method: "DELETE",
     url: `${ECOMMERCE_PRODUCT_URL}${uid}/`,
+    headers: {
+      "Content-Type": "application/json"
+    }
+  });
+
+export const onEcommerceCategoryConfigGet = ({ categoryId }) =>
+  ajax({
+    method: "GET",
+    url: `${ECOMMERCE_CATEGORY_CONFIG_URL}${categoryId}/`,
+    headers: {
+      "Content-Type": "application/json"
+    }
+  });
+
+export const onEcommerceProductsGet = ({ body }) =>
+  ajax({
+    method: "POST",
+    url: ECOMMERCE_PRODUCT_SEARCH_URL,
+    body,
     headers: {
       "Content-Type": "application/json"
     }

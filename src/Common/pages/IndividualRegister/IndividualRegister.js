@@ -20,7 +20,15 @@ import { connect } from "react-redux";
 
 import { toast } from "react-toastify";
 
-import { onIndividualRegisterSubmit } from "../../../actions";
+import FacebookLogin from "react-facebook-login";
+import GoogleLogin from "react-google-login";
+
+import { validatePhone } from "../../utils/Extras";
+
+import {
+  onIndividualRegisterSubmit,
+  onFacebookLoginSubmit
+} from "../../../actions";
 
 class IndividualRegister extends Component {
   state = {
@@ -31,11 +39,36 @@ class IndividualRegister extends Component {
     first_name: "",
     last_name: "",
     phone_number: "",
-    checked: false
+    checked: false,
+    phone_validation_error: false
   };
 
   onChange = (key, event) => {
-    this.setState({ [key]: event.target.value });
+    this.setState({ [key]: event.target.value }, () => {
+      if (this.state.phone_number && !validatePhone(this.state.phone_number)) {
+        this.setState({ phone_validation_error: true });
+      } else this.setState({ phone_validation_error: false });
+    });
+  };
+
+  responseFacebook = response => {
+    console.log("facebook response: ", response);
+    this.props.onFacebookLoginSubmit({ access_token: response.accessToken });
+  };
+
+  responseGoogle = response => {
+    console.log("google response: ", response);
+  };
+
+  componentClicked = () => {
+    console.log("facebook componenet cliked");
+  };
+
+  displayPhoneValidationInfo = () => {
+    if (this.state.phone_number)
+      if (this.state.phone_validation_error)
+        return <p style={{ color: "red" }}>Invalid Phone Number</p>;
+      else return <p style={{ color: "green" }}>Phone Number Valid</p>;
   };
 
   onFormSubmit = event => {
@@ -48,23 +81,25 @@ class IndividualRegister extends Component {
       first_name,
       last_name,
       phone_number,
+      phone_validation_error,
       checked
     } = this.state;
 
-    if (password === confirm_password) {
-      if (checked) {
-        this.props.onIndividualRegisterSubmit({
-          username,
-          password,
-          email,
-          first_name,
-          last_name,
-          phone_number
-        });
-      } else toast.error("You have to agree to our User Agreement Policy");
-    } else {
-      toast.error("Password Mismatch");
-    }
+    if (!phone_validation_error)
+      if (password === confirm_password) {
+        if (checked) {
+          this.props.onIndividualRegisterSubmit({
+            username,
+            password,
+            email,
+            first_name,
+            last_name,
+            phone_number
+          });
+        } else toast.error("You have to agree to our User Agreement Policy");
+      } else {
+        toast.error("Password Mismatch");
+      }
   };
 
   render() {
@@ -116,11 +151,13 @@ class IndividualRegister extends Component {
                       <Input
                         required
                         type="text"
-                        placeholder="Phone Number"
+                        placeholder="Mobile Number Eg. 9843041699, (984)-3041699"
                         value={this.state.phone_number}
                         onChange={this.onChange.bind(this, "phone_number")}
                       />
                     </InputGroup>
+                    {this.displayPhoneValidationInfo()}
+
                     <InputGroup className="mb-3">
                       <InputGroupAddon addonType="prepend">
                         <InputGroupText>
@@ -227,7 +264,7 @@ class IndividualRegister extends Component {
                   </a>
                 </span>
                 <CardFooter className="p-4">
-                  <Row>
+                  {/* <Row>
                     <Col xs="12" sm="6">
                       <Button className="btn-facebook" block>
                         <span>facebook</span>
@@ -238,7 +275,24 @@ class IndividualRegister extends Component {
                         <span>twitter</span>
                       </Button>
                     </Col>
-                  </Row>
+                  </Row> */}
+                  <div>
+                    <FacebookLogin
+                      size="small"
+                      appId="2110205529228108"
+                      autoLoad={false}
+                      fields="name,email,picture"
+                      onClick={this.componentClicked}
+                      callback={this.responseFacebook}
+                    />
+                    <GoogleLogin
+                      autoLoad={false}
+                      clientId="317261253014-8bvqg3ehh145unueb8p67bomeapc9t3n.apps.googleusercontent.com"
+                      buttonText="Login With Google"
+                      onSuccess={this.responseGoogle}
+                      onFailure={this.responseGoogle}
+                    />
+                  </div>
                 </CardFooter>
               </Card>
             </Col>
@@ -258,6 +312,7 @@ const mapStateToProps = ({ auth }) => {
 export default connect(
   mapStateToProps,
   {
-    onIndividualRegisterSubmit
+    onIndividualRegisterSubmit,
+    onFacebookLoginSubmit
   }
 )(IndividualRegister);

@@ -133,7 +133,7 @@ class BusinessEdit extends Component {
         business_name: data.business_name,
         business_email: data.business_email,
         business_phone: data.business_phone,
-        payment_method: data.paymentMethod,
+        paymentMethod: data.paymentMethod,
         industry: data.industry,
         categories: data.categories,
         sub_categories: data.sub_categories

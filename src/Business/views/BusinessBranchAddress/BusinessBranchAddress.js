@@ -6,7 +6,7 @@ import ReactTable from "react-table";
 import { PopoverDelete, PaginationComponent } from "../../../Common/components";
 import filterCaseInsensitive from "../../../Common/utils/filterCaseInsesitive";
 
-import { onBusinessBranchList } from "../../actions";
+import { onBusinessBranchList, onBranchRemove } from "../../actions";
 
 class BusinessBranchAddress extends Component {
   tableProps = {
@@ -122,7 +122,12 @@ class BusinessBranchAddress extends Component {
             </Button>
             <PopoverDelete
               id={`delete-${value}`}
-              onClick={() => console.log("delete", value)}
+              onClick={() => {
+                this.props.onBranchRemove({
+                  business_slug: this.props.cookies.user_data.slug,
+                  branch_id: value
+                });
+              }}
             />
           </div>
         )
@@ -188,6 +193,7 @@ export default connect(
     businessBranchData
   }),
   {
-    onBusinessBranchList
+    onBusinessBranchList,
+    onBranchRemove
   }
 )(BusinessBranchAddress);

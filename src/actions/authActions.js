@@ -236,7 +236,7 @@ epics.push((action$, { getState }) =>
 
       switch (groups[0].name) {
         case USER_GROUP_BUSINESS:
-          history.push(`/${slug}`);
+          history.push(`/${slug}/dashboard`);
           break;
         case USER_GROUP_INDIVIDUAL:
           // history.push("/");
