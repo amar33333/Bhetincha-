@@ -19,7 +19,8 @@ import {
   onBranchPut,
   onBranchDelete,
   onBusinessDetailsGet,
-  onBusinessDetailsPut
+  onBusinessDetailsPut,
+  onBusinessLogoCoverImageGet
 } from "../config/businessServerCall";
 
 import {
@@ -91,6 +92,9 @@ import {
   EDIT_BUSINESS_DETAILS_FULFILLED,
   EDIT_BUSINESS_DETAILS_PENDING,
   EDIT_BUSINESS_DETAILS_REJECTED,
+  FETCH_LOGO_COVER_IMAGE_FULFILLED,
+  FETCH_LOGO_COVER_IMAGE_PENDING,
+  FETCH_LOGO_COVER_IMAGE_REJECTED,
   FETCH_CATEGORY_ARRAY_PENDING,
   FETCH_CATEGORY_ARRAY_FULFILLED,
   FETCH_CATEGORY_ARRAY_REJECTED,
@@ -101,6 +105,34 @@ import {
 const epics = [];
 
 export const onUnmountBranch = () => ({ type: UNMOUNT_BRANCH });
+
+export const onBusinessLogoCoverImageList = payload => ({
+  type: FETCH_LOGO_COVER_IMAGE_PENDING,
+  payload
+});
+
+epics.push((action$, { getState }) =>
+  action$.ofType(FETCH_LOGO_COVER_IMAGE_PENDING).mergeMap(({ payload }) => {
+    const access_token = getState().auth.cookies.token_data.access_token;
+    const { business_slug } = payload;
+
+    return onBusinessLogoCoverImageGet({ business_slug, access_token })
+      .map(({ response }) => {
+        return {
+          type: FETCH_LOGO_COVER_IMAGE_FULFILLED,
+          payload: response
+        };
+      })
+      .catch(ajaxError => {
+        // toast.error(ajaxError.toString());
+        console.log("business detais errror: ", ajaxError);
+        return Observable.of({
+          type: FETCH_LOGO_COVER_IMAGE_REJECTED,
+          payload: ajaxError
+        });
+      });
+  })
+);
 
 export const onBusinessDetailsList = payload => ({
   type: FETCH_BUSINESS_DETAILS_PENDING,

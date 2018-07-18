@@ -7,8 +7,7 @@ import {
   BusinessAbout,
   BusinessBranchAddress,
   BusinessPrimaryAddress,
-  BusinessCoverImage,
-  BusinessLogo,
+  BusinessLogoCoverImage,
   BusinessWorkingHour,
   ManageProducts,
   ProductEdit,
@@ -73,15 +72,10 @@ class BusinessRoute extends Component {
           component={BusinessBranchAddress}
         />{" "}
         <Route
-          path={`/:${ROUTE_PARAMS_BUSINESS_NAME}/dashboard/business-logo`}
-          name="BusinessLogo"
-          component={BusinessLogo}
+          path={`/:${ROUTE_PARAMS_BUSINESS_NAME}/dashboard/business-logo-cover-image`}
+          name="BusinessLogoCoverImage"
+          component={BusinessLogoCoverImage}
         />{" "}
-        <Route
-          path={`/:${ROUTE_PARAMS_BUSINESS_NAME}/dashboard/business-cover-image`}
-          name="BusinessCoverImage"
-          component={BusinessCoverImage}
-        />
         <Route
           path={`/:${ROUTE_PARAMS_BUSINESS_NAME}/dashboard/ecommerce/manage-products/:productId/edit`}
           name="edit-ecommerce-product"

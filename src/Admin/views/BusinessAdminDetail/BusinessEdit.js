@@ -85,12 +85,13 @@ class BusinessEdit extends Component {
 
     console.log("this.propsdttaa: ", this.propsData);
 
-    this.props.onBusinessEdit({
-      id: this.props.businessData.id,
-      data: this.propsData,
-      access_token: this.access_token,
-      EDIT: this.props.EDIT
-    });
+    if (!this.subBusinessAdminDetailRef.getState().phone_validation_error)
+      this.props.onBusinessEdit({
+        id: this.props.businessData.id,
+        data: this.propsData,
+        access_token: this.access_token,
+        EDIT: this.props.EDIT
+      });
   };
 
   toggleCollapse = key => {

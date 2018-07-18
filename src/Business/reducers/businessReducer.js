@@ -41,6 +41,9 @@ import {
   FETCH_BUSINESS_DETAILS_FULFILLED,
   FETCH_BUSINESS_DETAILS_PENDING,
   FETCH_BUSINESS_DETAILS_REJECTED,
+  FETCH_LOGO_COVER_IMAGE_FULFILLED,
+  FETCH_LOGO_COVER_IMAGE_PENDING,
+  FETCH_LOGO_COVER_IMAGE_REJECTED,
   EDIT_BUSINESS_DETAILS_FULFILLED,
   EDIT_BUSINESS_DETAILS_PENDING,
   EDIT_BUSINESS_DETAILS_REJECTED,
@@ -62,11 +65,25 @@ const INITIAL_STATE = {
   workingHour: [],
   businessBranchData: [],
   branch: null,
-  businessDetails: null
+  businessDetails: null,
+  logo: null,
+  cover_image: null
 };
 
 export default function(state = INITIAL_STATE, action) {
   switch (action.type) {
+    case FETCH_LOGO_COVER_IMAGE_PENDING:
+      return { ...state, fetchLoading: true };
+    case FETCH_LOGO_COVER_IMAGE_REJECTED:
+      return { ...state, fetchLoading: false };
+    case FETCH_LOGO_COVER_IMAGE_FULFILLED:
+      return {
+        ...state,
+        logo: action.payload.logo,
+        cover_image: action.payload.cover,
+        fetchLoading: false
+      };
+
     case FETCH_BUSINESS_DETAILS_PENDING:
       return { ...state, fetchLoading: true };
     case FETCH_BUSINESS_DETAILS_REJECTED:

@@ -44,11 +44,20 @@ class IndividualRegister extends Component {
   };
 
   onChange = (key, event) => {
-    this.setState({ [key]: event.target.value }, () => {
-      if (this.state.phone_number && !validatePhone(this.state.phone_number)) {
-        this.setState({ phone_validation_error: true });
-      } else this.setState({ phone_validation_error: false });
-    });
+    const val = event.target.value;
+
+    if (key === "phone_number") {
+      this.setState({ [key]: val }, () => {
+        if (
+          this.state.phone_number &&
+          !validatePhone(this.state.phone_number)
+        ) {
+          this.setState({ phone_validation_error: true });
+        } else this.setState({ phone_validation_error: false });
+      });
+    } else {
+      this.setState({ [key]: val });
+    }
   };
 
   responseFacebook = response => {

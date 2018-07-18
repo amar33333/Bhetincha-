@@ -53,6 +53,9 @@ class SubBusinessDetail extends Component {
         business_phone: businessData.business_phone
           ? businessData.business_phone
           : null,
+        phone_validation_error: businessData.business_phone
+          ? !validatePhone(businessData.business_phone)
+          : false,
         business_email: businessData.business_email
           ? businessData.business_email
           : null,
@@ -115,6 +118,10 @@ class SubBusinessDetail extends Component {
         ) {
           this.setState({ phone_validation_error: true });
         } else this.setState({ phone_validation_error: false });
+      });
+    } else {
+      this.setState({
+        [key]: val
       });
     }
   };
