@@ -39,7 +39,11 @@ class BusinessDetails extends Component {
 
     const body = this.subBusinessAdminDetailRef.getState();
     console.log("bosy: ", body);
-    if (!body.phone_validation_error)
+    if (
+      !body.phone_validation_error &&
+      !body.email_validation_error &&
+      !body.website_url_validation_error
+    )
       this.props.onBusinessDetailsEdit({
         body,
         id: this.props.cookies.user_data.business_id,

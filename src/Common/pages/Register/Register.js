@@ -27,18 +27,31 @@ class Register extends Component {
   };
 
   onChange = (key, event) => {
-    this.setState({ [key]: event.target.value }, () => {
-      if (
-        this.state.mobile_number &&
-        !validatePhone(this.state.mobile_number)
-      ) {
-        this.setState({ phone_validation_error: true });
-      } else this.setState({ phone_validation_error: false });
-    });
+    const val = event.target.value;
+
+    if (key === "business_name") {
+      let newBusinessName = val.replace(/\b\w/g, l => l.toUpperCase());
+      this.setState({
+        [key]: newBusinessName
+      });
+    } else if (key === "mobile_number") {
+      this.setState({ [key]: val }, () => {
+        if (
+          this.state.mobile_number &&
+          !validatePhone(this.state.mobile_number)
+        ) {
+          this.setState({ phone_validation_error: true });
+        } else this.setState({ phone_validation_error: false });
+      });
+    } else {
+      this.setState({
+        [key]: val
+      });
+    }
   };
 
   displayPhoneValidationInfo = () => {
-    if (this.state.phone_number)
+    if (this.state.mobile_number)
       if (this.state.phone_validation_error)
         return <p style={{ color: "red" }}>Invalid Phone Number</p>;
       else return <p style={{ color: "green" }}>Phone Number Valid</p>;

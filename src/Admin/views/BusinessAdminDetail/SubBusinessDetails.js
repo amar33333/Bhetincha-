@@ -14,7 +14,11 @@ import {
   Collapse
 } from "reactstrap";
 
-import { validatePhone } from "../../../Common/utils/Extras";
+import {
+  validatePhone,
+  validateEmail,
+  validateWebsiteURL
+} from "../../../Common/utils/Extras";
 
 class SubBusinessDetail extends Component {
   constructor(props) {
@@ -29,7 +33,9 @@ class SubBusinessDetail extends Component {
       categories: [],
       sub_categories: [],
       paymentMethod: [],
-      phone_validation_error: false
+      phone_validation_error: false,
+      email_validation_error: false,
+      website_url_validation_error: false
     };
 
     this.access_token = this.props.cookies
@@ -42,9 +48,9 @@ class SubBusinessDetail extends Component {
 
     // console.log("subbusiness detail props: ", nextProps);
     if (!nextProps.businessGet && businessData && nextProps.EDIT) {
-      // console.log("sbbusines detail: ", nextProps);
+      // console.log("EDIT: ", nextProps.EDIT);
       nextProps.onInitialPropsReceived();
-      console.log("sbbusines detail: ", businessData);
+      // console.log("sbbusines detail: ", businessData);
 
       return {
         business_name: businessData.business_name
@@ -53,10 +59,20 @@ class SubBusinessDetail extends Component {
         business_phone: businessData.business_phone
           ? businessData.business_phone
           : null,
+        phone_validation_error: businessData.business_phone
+          ? !validatePhone(businessData.business_phone)
+          : false,
+
         business_email: businessData.business_email
           ? businessData.business_email
           : null,
+        email_validation_error: businessData.business_email
+          ? !validateEmail(businessData.business_email)
+          : false,
         website: businessData.website ? businessData.website : "",
+        website_url_validation_error: businessData.website
+          ? !validateWebsiteURL(businessData.website)
+          : false,
         industry: businessData.industry
           ? { id: businessData.industry.id, name: businessData.industry.name }
           : "",
@@ -104,8 +120,13 @@ class SubBusinessDetail extends Component {
         [key]: newBusinessName
       });
     } else if (key === "business_email") {
-      this.setState({
-        [key]: val === "" ? null : val
+      this.setState({ [key]: val === "" ? null : val }, () => {
+        if (
+          this.state.business_email &&
+          !validateEmail(this.state.business_email)
+        ) {
+          this.setState({ email_validation_error: true });
+        } else this.setState({ email_validation_error: false });
       });
     } else if (key === "business_phone") {
       this.setState({ [key]: val === "" ? null : val }, () => {
@@ -115,6 +136,16 @@ class SubBusinessDetail extends Component {
         ) {
           this.setState({ phone_validation_error: true });
         } else this.setState({ phone_validation_error: false });
+      });
+    } else if (key === "website") {
+      this.setState({ [key]: val }, () => {
+        if (this.state.website && !validateWebsiteURL(this.state.website)) {
+          this.setState({ website_url_validation_error: true });
+        } else this.setState({ website_url_validation_error: false });
+      });
+    } else {
+      this.setState({
+        [key]: val
       });
     }
   };
@@ -126,14 +157,28 @@ class SubBusinessDetail extends Component {
       else return <p style={{ color: "green" }}>Phone Number Valid</p>;
   };
 
+  displayEmailValidationInfo = () => {
+    if (this.state.business_email)
+      if (this.state.email_validation_error)
+        return <p style={{ color: "red" }}>Invalid Email</p>;
+      else return <p style={{ color: "green" }}>Valid Email </p>;
+  };
+
+  displayWebsiteURLValidationInfo = () => {
+    if (this.state.website)
+      if (this.state.website_url_validation_error)
+        return <p style={{ color: "red" }}>Invalid Website URL</p>;
+      else return <p style={{ color: "green" }}>Valid Website URL </p>;
+  };
+
   handleSelectChange = (key, value) => {
-    console.log("vavas: ", key, value);
+    // console.log("vavas: ", key, value);
     this.setState({ [key]: value });
 
     if (key === "industry") {
       this.setState({ categories: [], sub_categories: [] });
 
-      console.log("indsustr value: ", value);
+      // console.log("indsustr value: ", value);
       if (value) {
         console.log("indsutry each Called: ", value);
 
@@ -145,7 +190,7 @@ class SubBusinessDetail extends Component {
           access_token: this.access_token
         });
       } else {
-        console.log("indsutry each NOT called: ", value);
+        // console.log("indsutry each NOT called: ", value);
       }
 
       if (!value) {
@@ -155,8 +200,8 @@ class SubBusinessDetail extends Component {
       // No use
       // this.props.onUnmountSubCategories();
     } else if (key === "categories") {
-      console.log("categories state: ", this.state.categories);
-      console.log("detaiL : ", key, value);
+      // console.log("categories state: ", this.state.categories);
+      // console.log("detaiL : ", key, value);
 
       this.setState({ sub_categories: [] });
 
@@ -166,7 +211,7 @@ class SubBusinessDetail extends Component {
       if (value.length > this.state.categories.length) {
         for (let i = 0; i < value.length; i++) {
           if (!this.doesInclude(this.state.categories, value[i])) {
-            console.log("unique found");
+            // console.log("unique found");
             diff = value[i];
             ADDED = true;
           }
@@ -174,22 +219,22 @@ class SubBusinessDetail extends Component {
       } else {
         for (let i = 0; i < this.state.categories.length; i++) {
           if (!this.doesInclude(value, this.state.categories[i])) {
-            console.log("unique found: ");
+            // console.log("unique found: ");
             diff = this.state.categories[i];
             ADDED = false;
           }
         }
       }
 
-      console.log("diff: ", diff);
+      // console.log("diff: ", diff);
       if (ADDED) {
-        console.log("ADDED: ", ADDED);
+        // console.log("ADDED: ", ADDED);
         this.props.onCategoryEachList({
           id: diff.id,
           access_token: this.access_token
         });
       } else {
-        console.log("ADDED: ", ADDED);
+        // console.log("ADDED: ", ADDED);
 
         if (diff) this.props.onRemoveCategoryData({ obj: diff });
       }
@@ -211,7 +256,7 @@ class SubBusinessDetail extends Component {
   };
 
   getState = () => {
-    console.log("business details: ", this.state);
+    // console.log("business details: ", this.state);
     const category_list = this.state.categories.map(category => category.id);
 
     const sub_category_list = this.state.sub_categories.map(
@@ -243,11 +288,12 @@ class SubBusinessDetail extends Component {
       categories: category_list,
       sub_categories: sub_category_list,
       paymentMethod: payment_methods_list
+      // business_email: undefined
     };
   };
 
   render() {
-    console.log("props subbusiness: ", this.props);
+    // console.log("props subbusiness: ", this.props);
     // console.log("state subbusiness: ", this.state);
 
     const industries = this.props.industries;
@@ -336,6 +382,7 @@ class SubBusinessDetail extends Component {
                     onChange={this.onChange.bind(this, "business_email")}
                   />
                 </FormGroup>
+                {this.displayEmailValidationInfo()}
               </Col>
               <Col xs="12" md="6">
                 <FormGroup>
@@ -348,6 +395,7 @@ class SubBusinessDetail extends Component {
                     onChange={this.onChange.bind(this, "website")}
                   />
                 </FormGroup>
+                {this.displayWebsiteURLValidationInfo()}
               </Col>
             </Row>
 

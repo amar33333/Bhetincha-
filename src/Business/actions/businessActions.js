@@ -19,7 +19,9 @@ import {
   onBranchPut,
   onBranchDelete,
   onBusinessDetailsGet,
-  onBusinessDetailsPut
+  onBusinessDetailsPut,
+  onBusinessLogoCoverImageGet,
+  onBusinessLogoCoverImagePut
 } from "../config/businessServerCall";
 
 import {
@@ -91,6 +93,12 @@ import {
   EDIT_BUSINESS_DETAILS_FULFILLED,
   EDIT_BUSINESS_DETAILS_PENDING,
   EDIT_BUSINESS_DETAILS_REJECTED,
+  FETCH_LOGO_COVER_IMAGE_FULFILLED,
+  FETCH_LOGO_COVER_IMAGE_PENDING,
+  FETCH_LOGO_COVER_IMAGE_REJECTED,
+  EDIT_LOGO_COVER_IMAGE_FULFILLED,
+  EDIT_LOGO_COVER_IMAGE_PENDING,
+  EDIT_LOGO_COVER_IMAGE_REJECTED,
   FETCH_CATEGORY_ARRAY_PENDING,
   FETCH_CATEGORY_ARRAY_FULFILLED,
   FETCH_CATEGORY_ARRAY_REJECTED,
@@ -101,6 +109,72 @@ import {
 const epics = [];
 
 export const onUnmountBranch = () => ({ type: UNMOUNT_BRANCH });
+
+export const onBusinessLogoCoverImageList = () => ({
+  type: FETCH_LOGO_COVER_IMAGE_PENDING
+});
+
+epics.push((action$, { getState }) =>
+  action$.ofType(FETCH_LOGO_COVER_IMAGE_PENDING).mergeMap(() => {
+    const cookies = getState().auth.cookies;
+    const access_token = cookies.token_data.access_token;
+    const id = cookies.user_data.business_id;
+
+    return onBusinessLogoCoverImageGet({ id, access_token })
+      .map(({ response }) => {
+        return {
+          type: FETCH_LOGO_COVER_IMAGE_FULFILLED,
+          payload: response
+        };
+      })
+      .catch(ajaxError => {
+        // toast.error(ajaxError.toString());
+        console.log("business detais errror: ", ajaxError);
+        return Observable.of({
+          type: FETCH_LOGO_COVER_IMAGE_REJECTED,
+          payload: ajaxError
+        });
+      });
+  })
+);
+
+export const onBusinessLogoCoverImageEdit = payload => ({
+  type: EDIT_LOGO_COVER_IMAGE_PENDING,
+  payload
+});
+
+epics.push((action$, { getState }) =>
+  action$.ofType(EDIT_LOGO_COVER_IMAGE_PENDING).mergeMap(({ payload }) => {
+    const cookies = getState().auth.cookies;
+    const access_token = cookies.token_data.access_token;
+    const id = cookies.user_data.business_id;
+    const { body } = payload;
+
+    return onBusinessLogoCoverImagePut({ id, body, access_token })
+      .concatMap(({ response }) => {
+        if (response.msg === "success") {
+          toast.success("Image Section Updated Successfully!");
+          return [
+            {
+              type: EDIT_LOGO_COVER_IMAGE_FULFILLED,
+              payload: response
+            },
+            {
+              type: FETCH_LOGO_COVER_IMAGE_PENDING,
+              payload: { id }
+            }
+          ];
+        } else throw new Error(response.msg);
+      })
+      .catch(ajaxError => {
+        toast.error(ajaxError.toString());
+        return Observable.of({
+          type: EDIT_LOGO_COVER_IMAGE_REJECTED,
+          payload: ajaxError
+        });
+      });
+  })
+);
 
 export const onBusinessDetailsList = payload => ({
   type: FETCH_BUSINESS_DETAILS_PENDING,
@@ -153,6 +227,8 @@ export const onBusinessDetailsEdit = payload => ({
 epics.push((action$, { getState }) =>
   action$.ofType(EDIT_BUSINESS_DETAILS_PENDING).mergeMap(({ payload }) => {
     const access_token = getState().auth.cookies.token_data.access_token;
+    const EDIT = getState().BusinessContainer.business_reducer.EDIT;
+
     const { id, body } = payload;
 
     return onBusinessDetailsPut({
@@ -160,11 +236,19 @@ epics.push((action$, { getState }) =>
       id,
       body
     })
-      .map(({ response }) => {
+      .concatMap(({ response }) => {
         if (response.msg === "success") {
           toast.success("Business Detail Updated Successfully!");
 
-          return { type: EDIT_BUSINESS_DETAILS_FULFILLED, payload: response };
+          return [
+            { type: EDIT_BUSINESS_DETAILS_FULFILLED, payload: response },
+            {
+              type: TOGGLE_EDIT,
+              payload: !EDIT
+            },
+
+            { type: FETCH_BUSINESS_DETAILS_PENDING, payload: { id } }
+          ];
         } else throw new Error(response.msg);
       })
       .catch(ajaxError => {
@@ -357,6 +441,8 @@ export const onWorkingHourEdit = payload => ({
 epics.push((action$, { getState }) =>
   action$.ofType(EDIT_WORKING_HOUR_PENDING).mergeMap(({ payload }) => {
     const access_token = getState().auth.cookies.token_data.access_token;
+    const EDIT = getState().BusinessContainer.business_reducer.EDIT;
+
     const { id, body } = payload;
 
     return onWorkingHourPut({ id, body, access_token })
@@ -364,6 +450,10 @@ epics.push((action$, { getState }) =>
         if (response.msg === "success") {
           toast.success("Working Hour Section Updated Successfully!");
           return [
+            {
+              type: TOGGLE_EDIT,
+              payload: !EDIT
+            },
             {
               type: EDIT_WORKING_HOUR_FULFILLED,
               payload: response
@@ -420,6 +510,8 @@ export const onAboutEdit = payload => ({
 epics.push((action$, { getState }) =>
   action$.ofType(EDIT_ABOUT_PENDING).mergeMap(({ payload }) => {
     const access_token = getState().auth.cookies.token_data.access_token;
+    const EDIT = getState().BusinessContainer.business_reducer.EDIT;
+
     const { id, body } = payload;
 
     return onAboutPut({ id, body, access_token })
@@ -427,6 +519,10 @@ epics.push((action$, { getState }) =>
         if (response.msg === "success") {
           toast.success("About Section Updated Successfully!");
           return [
+            {
+              type: TOGGLE_EDIT,
+              payload: !EDIT
+            },
             {
               type: EDIT_ABOUT_FULFILLED,
               payload: response
@@ -489,20 +585,22 @@ export const onPrimaryAddressEdit = ({
       });
 
       onPrimaryAddressGet({ id, access_token })
-        .then(response => {
+        .then(innerResponse => {
           // ToogleEDIT(!EDIT);
 
-          const countryId = response.data.address.country
-            ? response.data.address.country.id
+          console.log("EDIT: ", innerResponse);
+
+          const countryId = innerResponse.data.country
+            ? innerResponse.data.country.id
             : "";
-          const stateId = response.data.address.state
-            ? response.data.address.state.id
+          const stateId = innerResponse.data.state
+            ? innerResponse.data.state.id
             : "";
-          const districtId = response.data.address.district
-            ? response.data.address.district.id
+          const districtId = innerResponse.data.district
+            ? innerResponse.data.district.id
             : "";
-          const cityId = response.data.address.city
-            ? response.data.address.city.id
+          const cityId = innerResponse.data.city
+            ? innerResponse.data.city.id
             : "";
 
           getAddressTree(
@@ -518,7 +616,7 @@ export const onPrimaryAddressEdit = ({
           dispatch({ type: FETCH_ADDRESS_TREE_PENDING });
           dispatch({
             type: FETCH_PRIMARY_ADDRESS_FULFILLED,
-            payload: response.data
+            payload: innerResponse.data
           });
         })
         .catch(error =>
@@ -535,7 +633,10 @@ export const onPrimaryAddressEdit = ({
         });
       } else {
         toast.error("Error in Updating!!!");
-        dispatch({ type: EDIT_BUSINESS_REJECTED, payload: response.data.msg });
+        dispatch({
+          type: EDIT_PRIMARY_ADDRESS_REJECTED,
+          payload: response.data.msg
+        });
       }
     })
     .catch(error => {
@@ -678,7 +779,10 @@ export const onBusinessEdit = ({
         dispatch({ type: EDIT_BUSINESS_FULFILLED, payload: response.data });
       } else {
         toast.error("Error in Updating!!!");
-        dispatch({ type: EDIT_BUSINESS_REJECTED, payload: response.data.msg });
+        dispatch({
+          type: EDIT_PRIMARY_ADDRESS_REJECTED,
+          payload: response.data.msg
+        });
       }
     })
     .catch(error => {

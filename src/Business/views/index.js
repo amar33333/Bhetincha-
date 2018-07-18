@@ -5,8 +5,7 @@ import ProductEdit from "./Ecommerce/ProductEdit";
 import ProductView from "./Ecommerce/ProductView";
 
 import BusinessDetails from "./BusinessDetails/BusinessDetails";
-import BusinessLogo from "./BusinessLogo/BusinessLogo";
-import BusinessCoverImage from "./BusinessCoverImage/BusinessCoverImage";
+import BusinessLogoCoverImage from "./BusinessLogoCoverImage/BusinessLogoCoverImage";
 import BusinessPrimaryAddress from "./BusinessPrimaryAddress/BusinessPrimaryAddress";
 import BusinessBranchAddress from "./BusinessBranchAddress/BusinessBranchAddress";
 import AddBranch from "./BusinessBranchAddress/AddBranch";
@@ -23,8 +22,7 @@ export {
   BusinessAbout,
   BusinessBranchAddress,
   BusinessPrimaryAddress,
-  BusinessLogo,
-  BusinessCoverImage,
+  BusinessLogoCoverImage,
   BusinessWorkingHour,
   AddBranch
 };

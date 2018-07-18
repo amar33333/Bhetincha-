@@ -15,9 +15,24 @@ class CallerLogs extends Component {
 
   componentDidUpdate(prevProps) {
     if (this.props.logs !== prevProps.logs) {
-      this.setState({ logs: orderby(this.props.logs, ["date"], ["desc"]) });
+      this.setState({
+        logs: orderby(
+          this.props.logs.map(log => ({ ...log, loadmore: false })),
+          ["date"],
+          ["desc"]
+        )
+      });
     }
   }
+
+  handleLoadmore = (index, loadmore) => {
+    this.setState({
+      logs: this.state.logs.map((log, i) => ({
+        ...log,
+        loadmore: i === index ? loadmore : log.loadmore
+      }))
+    });
+  };
 
   render() {
     return (
@@ -35,7 +50,33 @@ class CallerLogs extends Component {
                 return (
                   <tr key={i}>
                     <td>{moment(log.date).fromNow()}</td>
-                    <td>{log.message}</td>
+                    <td>
+                      {log.loadmore ? (
+                        <span>
+                          {log.message}
+                          <small
+                            style={{ cursor: "pointer", color: "blue" }}
+                            onClick={() => this.handleLoadmore(i, false)}
+                          >
+                            Less
+                          </small>
+                        </span>
+                      ) : (
+                        <span>
+                          {`${log.message.slice(0, 12)}${
+                            log.message.length > 12 ? " ..." : ""
+                          }`}
+                          {log.message.length > 12 ? (
+                            <small
+                              style={{ cursor: "pointer", color: "blue" }}
+                              onClick={() => this.handleLoadmore(i, true)}
+                            >
+                              More
+                            </small>
+                          ) : null}
+                        </span>
+                      )}
+                    </td>
                     <td>{log.type === "regular" ? "Regular" : "Two Way"}</td>
                   </tr>
                 );
@@ -43,7 +84,7 @@ class CallerLogs extends Component {
             </tbody>
           </Table>
         )}
-        {this.state.logs.length && (
+        {this.state.logs.length > 5 && (
           <Button
             color="link"
             size="sm"

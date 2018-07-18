@@ -37,17 +37,12 @@ const items = {
       // permission: "CAN_VIEW_USERS"
     },
     {
-      name: "Logo",
-      url: `/${ROUTE_PARAMS_BUSINESS_NAME}/dashboard/business-logo`,
+      name: "Logo & Cover Image",
+      url: `/${ROUTE_PARAMS_BUSINESS_NAME}/dashboard/business-logo-cover-image`,
       icon: "fa fa-map-o"
       // permission: "CAN_VIEW_USERS"
     },
-    {
-      name: "CoverImage",
-      url: `/${ROUTE_PARAMS_BUSINESS_NAME}/dashboard/business-cover-image`,
-      icon: "fa fa-map-o"
-      // permission: "CAN_VIEW_USERS"
-    },
+
     {
       name: "About",
       url: `/${ROUTE_PARAMS_BUSINESS_NAME}/dashboard/business-about`,

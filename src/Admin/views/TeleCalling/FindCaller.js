@@ -20,6 +20,8 @@ import CallerDetail from "./CallerDetail";
 import CallerAddEdit from "./CallerAddEdit";
 import ComposeSMS from "./ComposeSMS";
 
+import { validatePhone } from "../../../Common/utils/Extras";
+
 class FindCaller extends Component {
   constructor(props) {
     super(props);
@@ -36,7 +38,7 @@ class FindCaller extends Component {
           params: { name: value, total: 5 }
         });
     } else if (key === "callerNumber") {
-      if (this.isValidNumber(value)) {
+      if (validatePhone(value)) {
         this.props.onTeleUserList({ params: { phone: value } });
         console.log("number");
       } else {
@@ -45,10 +47,10 @@ class FindCaller extends Component {
     }
   };
 
-  isValidNumber = number => number.length === 10;
+  // isValidNumber = number => number.length === 10;
 
   renderCaller = () => {
-    if (!this.isValidNumber(this.state.callerNumber)) {
+    if (!validatePhone(this.state.callerNumber)) {
       return <p>Enter a Valid Number</p>;
     } else if (this.props.fetchTeleUserLoading || this.props.userLoading) {
       return <div>Loading</div>;
@@ -156,7 +158,7 @@ class FindCaller extends Component {
           </CardBody>
         </Card>
         <ComposeSMS
-          valid={this.isValidNumber(this.state.callerNumber)}
+          valid={validatePhone(this.state.callerNumber)}
           registered={this.props.teleUser && this.props.teleUser.at}
           teleUser={this.props.teleUser}
           onTeleUserSMSSubmit={this.props.onTeleUserSMSSubmit}

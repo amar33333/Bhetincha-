@@ -23,8 +23,7 @@ import { toast } from "react-toastify";
 import FacebookLogin from "react-facebook-login";
 import GoogleLogin from "react-google-login";
 
-import { validatePhone } from "../../utils/Extras";
-
+import { validatePhone, validateEmail } from "../../../Common/utils/Extras";
 import {
   onIndividualRegisterSubmit,
   onFacebookLoginSubmit
@@ -40,15 +39,31 @@ class IndividualRegister extends Component {
     last_name: "",
     phone_number: "",
     checked: false,
-    phone_validation_error: false
+    phone_validation_error: false,
+    email_validation_error: false
   };
 
   onChange = (key, event) => {
-    this.setState({ [key]: event.target.value }, () => {
-      if (this.state.phone_number && !validatePhone(this.state.phone_number)) {
-        this.setState({ phone_validation_error: true });
-      } else this.setState({ phone_validation_error: false });
-    });
+    const val = event.target.value;
+
+    if (key === "phone_number") {
+      this.setState({ [key]: val }, () => {
+        if (
+          this.state.phone_number &&
+          !validatePhone(this.state.phone_number)
+        ) {
+          this.setState({ phone_validation_error: true });
+        } else this.setState({ phone_validation_error: false });
+      });
+    } else if (key === "email") {
+      this.setState({ [key]: val === "" ? null : val }, () => {
+        if (this.state.email && !validateEmail(this.state.email)) {
+          this.setState({ email_validation_error: true });
+        } else this.setState({ email_validation_error: false });
+      });
+    } else {
+      this.setState({ [key]: val });
+    }
   };
 
   responseFacebook = response => {
@@ -71,6 +86,13 @@ class IndividualRegister extends Component {
       else return <p style={{ color: "green" }}>Phone Number Valid</p>;
   };
 
+  displayEmailValidationInfo = () => {
+    if (this.state.email)
+      if (this.state.email_validation_error)
+        return <p style={{ color: "red" }}>Invalid Email</p>;
+      else return <p style={{ color: "green" }}>Valid Email </p>;
+  };
+
   onFormSubmit = event => {
     event.preventDefault();
     const {
@@ -82,10 +104,11 @@ class IndividualRegister extends Component {
       last_name,
       phone_number,
       phone_validation_error,
+      email_validation_error,
       checked
     } = this.state;
 
-    if (!phone_validation_error)
+    if (!phone_validation_error && !email_validation_error)
       if (password === confirm_password) {
         if (checked) {
           this.props.onIndividualRegisterSubmit({
@@ -184,6 +207,8 @@ class IndividualRegister extends Component {
                         onChange={this.onChange.bind(this, "email")}
                       />
                     </InputGroup>
+
+                    {this.displayEmailValidationInfo()}
                     <InputGroup className="mb-3">
                       <InputGroupAddon addonType="prepend">
                         <InputGroupText>
