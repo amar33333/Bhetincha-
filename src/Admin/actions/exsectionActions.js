@@ -100,8 +100,9 @@ epics.push((action$, { getState }) =>
   action$.ofType(CREATE_EXSECTION_SECTIONS_PENDING).mergeMap(action => {
     const parent = getState().AdminContainer.exsection.activeSection;
     const { name } = action.payload;
+    const hasAttr = true;
 
-    return onExsectionSectionPost({ name, parent })
+    return onExsectionSectionPost({ name, hasAttr, parent })
       .concatMap(({ response }) => {
         if (response.msg === "success") {
           toast.success("Section created successfully");

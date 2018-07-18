@@ -1396,11 +1396,11 @@ export const onExsectionSectionDetailGet = ({ uid }) =>
     }
   });
 
-export const onExsectionSectionPost = ({ name, parent }) =>
+export const onExsectionSectionPost = ({ name, hasAttr, parent }) =>
   ajax({
     method: "POST",
     url: EXSECTION_SECTION_URL,
-    body: { name, parent },
+    body: { name, hasAttr, parent },
     headers: {
       "Content-Type": "application/json"
     }

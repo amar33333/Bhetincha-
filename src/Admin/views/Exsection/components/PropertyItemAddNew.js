@@ -195,6 +195,24 @@ class PropertyItemAddNew extends Component {
                         </Col>
                       </FormGroup>
                     )}
+                    {this.state.fieldType.name === "MultipleChoices" && (
+                      <FormGroup row>
+                        <Label for="optionsMultiple" sm={3}>
+                          Options
+                        </Label>
+                        <Col sm={9}>
+                          <Select.Creatable
+                            multi
+                            onChange={optionsMultiple =>
+                              this.onChange("optionsMultiple", optionsMultiple)
+                            }
+                            value={this.state.optionsMultiple}
+                            noResultsText="Type option and press tab or enter"
+                            placeholder="Create options"
+                          />
+                        </Col>
+                      </FormGroup>
+                    )}
                     <FormGroup check>
                       <Label check>
                         <Input
@@ -230,6 +248,24 @@ class PropertyItemAddNew extends Component {
                                   )
                                 }
                                 value={this.state.defaultValueChoices}
+                              />
+                            </Col>
+                          </FormGroup>
+                        )}
+                        {this.state.fieldType.name === "MultipleChoices" && (
+                          <FormGroup row>
+                            <Label sm={3}>Default Value</Label>
+                            <Col sm={9}>
+                              <Select
+                                options={this.state.optionsMultiple}
+                                required
+                                onChange={defaultValueMultipleChoices =>
+                                  this.onChange(
+                                    "defaultValueMultipleChoices",
+                                    defaultValueMultipleChoices
+                                  )
+                                }
+                                value={this.state.defaultValueMultipleChoices}
                               />
                             </Col>
                           </FormGroup>
