@@ -47,9 +47,13 @@ class MainPage extends Component {
         return cat;
       }
     });
-    remainingcat.map((cat, index) => {
-      return <DropdownItem>{cat.name}</DropdownItem>;
-    });
+    return (
+      <DropdownMenu>
+        {remainingcat.map((cat, index) => {
+          return <DropdownItem>{cat.name}</DropdownItem>;
+        })}
+      </DropdownMenu>
+    );
   };
   render() {
     var lastCategory = this.props.categories.slice(-1)[0];
@@ -97,22 +101,8 @@ class MainPage extends Component {
                               ? `category`
                               : `categories`}
                           </DropdownToggle>
-                          <DropdownMenu>
-                            {this.renderRemainingCategories()}
-                          </DropdownMenu>
+                          {this.renderRemainingCategories()}
                         </Dropdown>
-                        // <Button
-                        //   color="link"
-                        //   className="ml-2"
-                        //   style={{
-                        //     color: "inherit"
-                        //   }}
-                        // >
-                        //   +{this.props.categories.length - MAX_CAT} more{" "}
-                        //   {this.props.categories.length - MAX_CAT === 1
-                        //     ? `category`
-                        //     : `categories`}
-                        // </Button>
                       )}
                       {/* {category.name} */}
                       {category.id !== lastCategory.id &&
@@ -129,7 +119,7 @@ class MainPage extends Component {
             <Container>
               <Row>
                 <Col xs="12" md="6">
-                  <h2>About Us</h2>
+                  {/* <h2>About Us</h2> */}
                   {this.props.data.tagline ? (
                     <h2>&#8220;{this.props.data.tagline}&#8221;</h2>
                   ) : null}
@@ -145,43 +135,47 @@ class MainPage extends Component {
                     <Col xs="12">
                       <Card>
                         <Card.Content header="Working Hour" />
-                        {this.props.workingHour.map((day, index) => {
-                          let start = moment(day.start).format("hh:mm A");
-                          let end = moment(day.end).format("hh:mm A");
+                        {this.props.alwaysOpen ? (
+                          <Card.Content>Always Open</Card.Content>
+                        ) : (
+                          this.props.workingHour.map((day, index) => {
+                            let start = moment(day.start).format("hh:mm A");
+                            let end = moment(day.end).format("hh:mm A");
 
-                          var today = new Date();
+                            var today = new Date();
 
-                          var momentNow = moment().format("hh:mm A");
-                          return (
-                            <Card.Content key={index}>
-                              <strong>{day.day}: </strong>{" "}
-                              {!day.holiday ? `${start} - ${end}` : "Holiday"}{" "}
-                              {(() => {
-                                if (index === today.getDay()) {
-                                  if (
-                                    !day.holiday &&
-                                    moment(momentNow, "hh:mm A").isBetween(
-                                      moment(start, "hh:mm A"),
-                                      moment(end, "hh:mm A")
-                                    )
-                                  ) {
-                                    return (
-                                      <span style={{ color: "blue" }}>
-                                        Open
-                                      </span>
-                                    );
-                                  } else {
-                                    return (
-                                      <span style={{ color: "red" }}>
-                                        Closed
-                                      </span>
-                                    );
+                            var momentNow = moment().format("hh:mm A");
+                            return (
+                              <Card.Content key={index}>
+                                <strong>{day.day}: </strong>{" "}
+                                {!day.holiday ? `${start} - ${end}` : "Holiday"}{" "}
+                                {(() => {
+                                  if (index === today.getDay()) {
+                                    if (
+                                      !day.holiday &&
+                                      moment(momentNow, "hh:mm A").isBetween(
+                                        moment(start, "hh:mm A"),
+                                        moment(end, "hh:mm A")
+                                      )
+                                    ) {
+                                      return (
+                                        <span style={{ color: "blue" }}>
+                                          Open
+                                        </span>
+                                      );
+                                    } else {
+                                      return (
+                                        <span style={{ color: "red" }}>
+                                          Closed
+                                        </span>
+                                      );
+                                    }
                                   }
-                                }
-                              })()}
-                            </Card.Content>
-                          );
-                        })}
+                                })()}
+                              </Card.Content>
+                            );
+                          })
+                        )}
                       </Card>
                     </Col>
                   </Row>
@@ -225,7 +219,14 @@ class MainPage extends Component {
 export default connect(
   ({
     MinisiteContainer: {
-      crud: { business_name, about, workingHour, industry, categories }
+      crud: {
+        business_name,
+        about,
+        workingHour,
+        alwaysOpen,
+        industry,
+        categories
+      }
     }
   }) => ({
     data: {
@@ -236,6 +237,7 @@ export default connect(
     },
     business_name,
     workingHour,
+    alwaysOpen,
     industry,
     categories
   })

@@ -77,18 +77,19 @@ class BusinessAdminDetail extends Component {
       ...this.subBusinessWorkingHourRef.getState()
     };
 
-    if (
-      !this.props.requiredParams.contactPerson ||
-      (this.propsData.address.contactPerson &&
-        this.propsData.address.contactPerson.length)
-    )
-      this.props.onBusinessCreate({
-        data: this.propsData,
-        access_token: this.access_token
-      });
-    else {
-      toast.error("Please add at-least One Contact Person");
-    }
+    if (!this.subBusinessAdminDetailRef.getState().phone_validation_error)
+      if (
+        !this.props.requiredParams.contactPerson ||
+        (this.propsData.address.contactPerson &&
+          this.propsData.address.contactPerson.length)
+      )
+        this.props.onBusinessCreate({
+          data: this.propsData,
+          access_token: this.access_token
+        });
+      else {
+        toast.error("Please add at-least One Contact Person");
+      }
 
     // this.subBusinessAdminDetailRef.clearState();
     // this.subBusinessAboutRef.clearState();

@@ -184,7 +184,7 @@ class BusinessList extends Component {
     else
       return this.state.searchResults.map((each_search_result, Searchindex) => {
         var momentNow = moment().format("hh:mm A");
-        var today = moment().day();
+        var today = moment().format("dddd");
 
         return (
           <Card fluid key={Searchindex}>
@@ -335,33 +335,52 @@ class BusinessList extends Component {
             >
               {each_search_result.workingHour &&
                 each_search_result.workingHour.map((day, index) => {
-                  let start = moment(day.start)
-                    .add({ hours: 5, minutes: 45 })
-                    .format("hh:mm A");
-                  let end = moment(day.end)
-                    .add({ hours: 5, minutes: 45 })
-                    .format("hh:mm A");
-                  if (index === today) {
+                  let newStart = day.start + "Z";
+                  newStart = moment(newStart).format("hh:mm A");
+                  let newEnd = day.end + "Z";
+                  newEnd = moment(newEnd).format("hh:mm A");
+                  if (day.day === today && each_search_result.alwaysOpen) {
+                    return (
+                      <small
+                        key={index}
+                        data-tooltip={`Always Open`}
+                        data-position="bottom center"
+                      >
+                        <i className="fa fa-clock-o" /> Open Now
+                      </small>
+                    );
+                  } else if (day.day === today && !day.holiday) {
                     if (
                       moment(momentNow, "hh:mm A").isBetween(
-                        moment(start, "hh:mm A"),
-                        moment(end, "hh:mm A")
+                        moment(newStart, "hh:mm A"),
+                        moment(newEnd, "hh:mm A")
                       )
                     ) {
                       return (
                         <small
                           key={index}
-                          data-tooltip={`${start} - ${end}`}
+                          data-tooltip={`${newStart} - ${newEnd}`}
                           data-position="bottom center"
                         >
                           <i className="fa fa-clock-o" /> Open Now
+                        </small>
+                      );
+                    } else if (day.day === today && day.holiday) {
+                      return (
+                        <small
+                          key={index}
+                          data-tooltip={`${newStart} - ${newEnd}`}
+                          data-position="bottom center"
+                          style={{ color: "red" }}
+                        >
+                          Holiday
                         </small>
                       );
                     } else {
                       return (
                         <small
                           key={index}
-                          data-tooltip={`${start} - ${end}`}
+                          data-tooltip={`${newStart} - ${newEnd}`}
                           data-position="bottom center"
                           style={{ color: "red" }}
                         >

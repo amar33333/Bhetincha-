@@ -17,6 +17,7 @@ import {
   onBranchPost,
   onBranchGet,
   onBranchPut,
+  onBranchDelete,
   onBusinessDetailsGet,
   onBusinessDetailsPut
 } from "../config/businessServerCall";
@@ -75,6 +76,9 @@ import {
   CREATE_BRANCH_FULFILLED,
   CREATE_BRANCH_PENDING,
   CREATE_BRANCH_REJECTED,
+  DELETE_BRANCH_FULFILLED,
+  DELETE_BRANCH_PENDING,
+  DELETE_BRANCH_REJECTED,
   EDIT_BRANCH_EACH_FULFILLED,
   EDIT_BRANCH_EACH_PENDING,
   EDIT_BRANCH_EACH_REJECTED,
@@ -114,26 +118,25 @@ epics.push((action$, { getState }) =>
         const ids = response.categories.map(category => category.id);
 
         console.log("ids: ", ids);
-        if (id !== "") {
-          return [
-            {
-              type: FETCH_BUSINESS_DETAILS_FULFILLED,
-              payload: response
-            },
-            {
-              type: FETCH_INDUSTRY_EACH_PENDING,
-              payload: { id }
-            },
-            {
-              type: FETCH_CATEGORY_ARRAY_PENDING,
-              payload: { ids }
-            }
-          ];
-        } else throw new Error("Industry Get Error");
+
+        return [
+          {
+            type: FETCH_BUSINESS_DETAILS_FULFILLED,
+            payload: response
+          },
+          {
+            type: FETCH_INDUSTRY_EACH_PENDING,
+            payload: { id }
+          },
+          {
+            type: FETCH_CATEGORY_ARRAY_PENDING,
+            payload: { ids }
+          }
+        ];
       })
       .catch(ajaxError => {
-        toast.error(ajaxError.toString());
-        console.log("detais errror: ", ajaxError);
+        // toast.error(ajaxError.toString());
+        console.log("business detais errror: ", ajaxError);
         return Observable.of({
           type: FETCH_BUSINESS_DETAILS_REJECTED,
           payload: ajaxError
@@ -170,6 +173,39 @@ epics.push((action$, { getState }) =>
           type: EDIT_BUSINESS_DETAILS_REJECTED,
           payload: ajaxError
         });
+      });
+  })
+);
+
+export const onBranchRemove = payload => ({
+  type: DELETE_BRANCH_PENDING,
+  payload
+});
+
+epics.push((action$, { getState }) =>
+  action$.ofType(DELETE_BRANCH_PENDING).mergeMap(action => {
+    const access_token = getState().auth.cookies.token_data.access_token;
+    const { business_slug, branch_id } = action.payload;
+
+    return onBranchDelete({ business_slug, branch_id, access_token })
+      .concatMap(({ response }) => {
+        if (response.msg === "success") {
+          toast.success("Branch Deleted Successfully!");
+          return [
+            {
+              type: FETCH_BUSINESS_BRANCH_PENDING,
+              payload: { business_slug }
+            },
+
+            { type: DELETE_BRANCH_FULFILLED }
+          ];
+        } else {
+          throw new Error(response.msg[Object.keys(response.msg)[0]][0]);
+        }
+      })
+      .catch(ajaxError => {
+        toast.error(ajaxError.toString());
+        return Observable.of({ type: DELETE_BRANCH_REJECTED });
       });
   })
 );

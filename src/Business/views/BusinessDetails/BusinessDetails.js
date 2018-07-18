@@ -37,17 +37,14 @@ class BusinessDetails extends Component {
   onFormEdit = event => {
     event.preventDefault();
 
-    console.log("details sumbit: ", {
-      ...this.subBusinessAdminDetailRef.getState()
-    });
-
-    this.props.onBusinessDetailsEdit({
-      body: {
-        ...this.subBusinessAdminDetailRef.getState()
-      },
-      id: this.props.cookies.user_data.business_id,
-      EDIT: this.props.EDIT
-    });
+    const body = this.subBusinessAdminDetailRef.getState();
+    console.log("bosy: ", body);
+    if (!body.phone_validation_error)
+      this.props.onBusinessDetailsEdit({
+        body,
+        id: this.props.cookies.user_data.business_id,
+        EDIT: this.props.EDIT
+      });
   };
 
   render() {

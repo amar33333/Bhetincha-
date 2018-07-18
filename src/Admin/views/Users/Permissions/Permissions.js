@@ -18,7 +18,9 @@ import {
   CardBody,
   ListGroup,
   ListGroupItem,
-  Label
+  Label,
+  FormGroup,
+  InputGroup
 } from "reactstrap";
 
 const exclude_list = ["GROUP", "PERMISSION", "USER"];
@@ -151,7 +153,7 @@ class Permissions extends Component {
           <ListGroupItem
             key={i}
             className="permission-checkbox"
-            style={{ width: "60%" }}
+            style={{ width: "100%", paddingLeft: "40px" }}
           >
             {key !== "nogroup" ? (
               this.state.group && this.state.group.name === "ADMIN" ? (
@@ -161,7 +163,7 @@ class Permissions extends Component {
                     type="checkbox"
                     checked={this.isCollectiveChecked(key)}
                   />
-                  <strong style={{ color: "red" }}>{key}</strong>
+                  <strong style={{ color: "#20a8d8" }}>{key}</strong>
                 </p>
               ) : (
                 <p>
@@ -173,30 +175,44 @@ class Permissions extends Component {
                       this.onCollectiveCheckboxChanged(event, key)
                     }
                   />
-                  <strong style={{ color: "red" }}>{key}</strong>
+                  <strong style={{ color: "#20a8d8" }}>{key}</strong>
                 </p>
               )
-            ) : null}
+            ) : (
+              <p>
+                <strong style={{ color: "#20a8d8" }}>Other Permissions</strong>
+              </p>
+            )}
             {checkbox_perm_list[key].map((item, j) => {
               return (
-                <Label key={item.id}>
-                  {this.state.group && this.state.group.name === "ADMIN" ? (
-                    <Input
-                      type="checkbox"
-                      checked={this.isChecked(item.id, key)}
-                      disabled
-                    />
-                  ) : (
-                    <Input
-                      disabled={this.props.loading}
-                      type="checkbox"
-                      checked={this.isChecked(item.id, key)}
-                      onChange={event => this.onCheckboxChanged(event, item.id)}
-                    />
-                  )}
+                <InputGroup
+                  style={{
+                    display: "inline",
+                    marginRight: "40px",
+                    marginLeft: "10px"
+                  }}
+                >
+                  <Label key={item.id}>
+                    {this.state.group && this.state.group.name === "ADMIN" ? (
+                      <Input
+                        type="checkbox"
+                        checked={this.isChecked(item.id, key)}
+                        disabled
+                      />
+                    ) : (
+                      <Input
+                        disabled={this.props.loading}
+                        type="checkbox"
+                        checked={this.isChecked(item.id, key)}
+                        onChange={event =>
+                          this.onCheckboxChanged(event, item.id)
+                        }
+                      />
+                    )}
 
-                  {item.name}
-                </Label>
+                    {item.name}
+                  </Label>
+                </InputGroup>
               );
             })}
           </ListGroupItem>

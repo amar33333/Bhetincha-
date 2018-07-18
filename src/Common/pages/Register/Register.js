@@ -14,48 +14,49 @@ import {
   Form
 } from "reactstrap";
 
-import FacebookLogin from "react-facebook-login";
-import GoogleLogin from "react-google-login";
-
 import { connect } from "react-redux";
+import { validatePhone } from "../../utils/Extras";
 
-import {
-  onBusinessRegisterSubmit,
-  onFacebookLoginSubmit
-} from "../../../actions";
+import { onBusinessRegisterSubmit } from "../../../actions";
 
 class Register extends Component {
-  state = { business_name: "", mobile_number: "" };
+  state = {
+    business_name: "",
+    mobile_number: "",
+    phone_validation_error: false
+  };
 
   onChange = (key, event) => {
-    this.setState({ [key]: event.target.value });
+    this.setState({ [key]: event.target.value }, () => {
+      if (
+        this.state.mobile_number &&
+        !validatePhone(this.state.mobile_number)
+      ) {
+        this.setState({ phone_validation_error: true });
+      } else this.setState({ phone_validation_error: false });
+    });
   };
 
-  responseFacebook = response => {
-    console.log("facebook response: ", response);
-    this.props.onFacebookLoginSubmit({ access_token: response.accessToken });
-  };
-
-  responseGoogle = response => {
-    console.log("google response: ", response);
-  };
-
-  componentClicked = () => {
-    console.log("facebook componenet cliked");
+  displayPhoneValidationInfo = () => {
+    if (this.state.phone_number)
+      if (this.state.phone_validation_error)
+        return <p style={{ color: "red" }}>Invalid Phone Number</p>;
+      else return <p style={{ color: "green" }}>Phone Number Valid</p>;
   };
 
   onFormSubmit = event => {
     event.preventDefault();
-    const { business_name, mobile_number } = this.state;
+    const { business_name, mobile_number, phone_validation_error } = this.state;
 
-    this.props.onBusinessRegisterSubmit({
-      body: {
-        business_name,
-        business_phone: mobile_number,
-        register: true
-      },
-      history: this.props.history
-    });
+    if (!phone_validation_error)
+      this.props.onBusinessRegisterSubmit({
+        body: {
+          business_name,
+          business_phone: mobile_number,
+          register: true
+        },
+        history: this.props.history
+      });
   };
 
   render() {
@@ -67,7 +68,7 @@ class Register extends Component {
               <Card className="mx-4">
                 <CardBody className="p-4">
                   <h1>Register - Business</h1>
-                  <p className="text-muted">Create your account</p>
+                  {/* <p className="text-muted">Create your account</p> */}
                   <Form onSubmit={this.onFormSubmit}>
                     <InputGroup className="mb-3">
                       <InputGroupAddon addonType="prepend">
@@ -93,11 +94,12 @@ class Register extends Component {
                       <Input
                         required
                         type="text"
-                        placeholder="Mobile Number"
+                        placeholder="Mobile Number Eg. 9843041699, (984)-3041699"
                         value={this.state.mobile_number}
                         onChange={this.onChange.bind(this, "mobile_number")}
                       />
                     </InputGroup>
+                    {this.displayPhoneValidationInfo()}
 
                     <Button color="success" block>
                       Create Account
@@ -105,7 +107,7 @@ class Register extends Component {
                   </Form>
                 </CardBody>
                 <CardFooter className="p-4">
-                  <Row>
+                  {/* <Row>
                     <Col xs="12" sm="6">
                       <Button className="btn-facebook" block>
                         <span>facebook</span>
@@ -116,7 +118,7 @@ class Register extends Component {
                         <span>twitter</span>
                       </Button>
                     </Col>
-                  </Row>
+                  </Row> */}
                   <span>
                     <a
                       href="#"
@@ -127,22 +129,6 @@ class Register extends Component {
                       Register as Individual{" "}
                     </a>
                   </span>
-                  <div>
-                    <FacebookLogin
-                      size="small"
-                      appId="2110205529228108"
-                      autoLoad={true}
-                      fields="name,email,picture"
-                      onClick={this.componentClicked}
-                      callback={this.responseFacebook}
-                    />
-                    <GoogleLogin
-                      clientId="317261253014-8bvqg3ehh145unueb8p67bomeapc9t3n.apps.googleusercontent.com"
-                      buttonText="Login With Google"
-                      onSuccess={this.responseGoogle}
-                      onFailure={this.responseGoogle}
-                    />
-                  </div>
                 </CardFooter>
               </Card>
             </Col>
@@ -162,7 +148,6 @@ const mapStateToProps = ({ auth }) => {
 export default connect(
   mapStateToProps,
   {
-    onBusinessRegisterSubmit,
-    onFacebookLoginSubmit
+    onBusinessRegisterSubmit
   }
 )(Register);
