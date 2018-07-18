@@ -19,10 +19,21 @@ import axios from "axios";
 import { ajax } from "rxjs/observable/dom/ajax";
 import querystring from "querystring";
 
-export const onBusinessLogoCoverImageGet = ({ access_token, business_slug }) =>
+export const onBusinessLogoCoverImageGet = ({ access_token, id }) =>
   ajax({
     method: "GET",
-    url: `${LOGO_COVER_IMAGE_GET_URL}${business_slug}/`,
+    url: `${LOGO_COVER_IMAGE_GET_URL}${id}/`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
+export const onBusinessLogoCoverImagePut = ({ access_token, body, id }) =>
+  ajax({
+    method: "PUT",
+    url: `${BUSINESS_URL}${id}/`,
+    body,
     headers: {
       "Content-Type": "application/json",
       Authorization: "Bearer " + access_token
