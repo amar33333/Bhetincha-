@@ -1367,6 +1367,17 @@ export const onExsectionAttributesGet = () =>
     }
   });
 
+export const onExsectionPropertiesPost = ({ body }) =>
+  ajax({
+    method: "POST",
+    url: EXSECTION_ATTRIBUTE_URL,
+    body,
+    headers: {
+      "Content-Type": "application/json"
+    }
+  });
+
+//section
 export const onExsectionSectionsGet = () =>
   ajax({
     method: "GET",
@@ -1376,7 +1387,7 @@ export const onExsectionSectionsGet = () =>
     }
   });
 
-export const onExSectionSectionDetailGet = ({ uid }) =>
+export const onExsectionSectionDetailGet = ({ uid }) =>
   ajax({
     method: "GET",
     url: `${EXSECTION_SECTION_URL}${uid}/`,

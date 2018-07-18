@@ -78,7 +78,9 @@ epics.push((action$, { getState }) =>
     .mergeMap(action => {
       const payload = getState().AdminContainer.ecommerce.activeCategory;
       const { body } = action.payload;
-
+      // console.log("Ecommerce : .......Attributes........");
+      // console.log(payload);
+      // console.log( action.payload );
       return onEcommercePropertiesPost({ body })
         .concatMap(({ response }) => {
           if (response.msg === "success") {

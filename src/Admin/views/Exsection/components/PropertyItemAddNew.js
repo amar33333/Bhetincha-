@@ -27,15 +27,109 @@ class PropertyItemAddNew extends Component {
       defaultValueString: "",
       defaultValueDateTime: new Date(),
       defaultValueChoices: null,
+      defaultValueMultipleChoices: null,
       defaultValueInteger: 0,
       defaultValueFloat: 0,
       options: [],
+      optionsMultiple: [],
       filterable: false,
       loading: false,
       error: false,
       propertySubmit: false
     };
   }
+
+  componentDidUpdate = (_, prevState) => {
+    if (prevState.propertySubmit && !this.props.loading) {
+      const updates = { propertySubmit: false };
+      if (!this.props.error) {
+        updates.name = "";
+        updates.fieldType = null;
+        updates.required = false;
+        updates.defaultValueString = "";
+        updates.defaultValueDateTime = new Date();
+        updates.defaultValueChoices = null;
+        updates.defaultValueMultipleChoices = null;
+        updates.defaultValueInteger = 0;
+        updates.defaultValueFloat = 0;
+        updates.options = [];
+        updates.filterable = false;
+      }
+      this.setState(updates, () => this.focusableInput.focus());
+    }
+  };
+
+  onChangeName = event =>
+    this.onChange(
+      "name",
+      event.target.value.replace(/\b\w/g, l => l.toUpperCase())
+    );
+
+  onChange = (key, value) => this.setState({ [key]: value });
+
+  onFormSubmit = event => {
+    event.preventDefault();
+
+    const {
+      name,
+      fieldType,
+      required,
+      defaultValueDateTime,
+      defaultValueFloat,
+      defaultValueInteger,
+      defaultValueChoices,
+      defaultValueMultipleChoices,
+      defaultValueString,
+      options,
+      optionsMultiple,
+      filterable
+    } = this.state;
+
+    const body = {
+      name,
+      attributeTypeId: fieldType.uid,
+      sectionId: this.props.activeSection,
+      required,
+      filterAble: filterable
+    };
+
+    if (fieldType.name === "Choices") {
+      body.options = options.map(({ value }) => value);
+    }
+
+    if (fieldType.name === "MultipleChoices") {
+      body.options = optionsMultiple.map(({ value }) => value);
+    }
+
+    if (required) {
+      switch (fieldType.name) {
+        case "Integer":
+          body.defaultValue = defaultValueInteger;
+          break;
+        case "String":
+          body.defaultValue = defaultValueString;
+          break;
+        case "Choices":
+          body.defaultValue = defaultValueChoices.value;
+          break;
+        case "Float":
+          body.defaultValue = defaultValueFloat;
+          break;
+        case "DateTime":
+          body.defaultValue = defaultValueDateTime;
+          break;
+        case "MultipleChoices":
+          body.defaultValue = defaultValueMultipleChoices.value;
+          break;
+        default:
+          break;
+      }
+    }
+
+    this.setState({ propertySubmit: true }, () =>
+      this.props.onPropertySubmit({ body })
+    );
+  };
 
   render() {
     return (
@@ -45,20 +139,18 @@ class PropertyItemAddNew extends Component {
             <strong>Add New Property</strong>
           </CardHeader>
           <CardBody>
-            <Form
-            //onSubmit={this.onFormSubmit}
-            >
+            <Form onSubmit={this.onFormSubmit}>
               <FormGroup className="mb-2 mr-sm-2 mb-sm-0">
                 <FormGroup row>
                   <Label sm={3}>Name</Label>
                   <Col sm={9}>
                     <Input
                       required
-                      //innerRef={ref => (this.focusableInput = ref)}
+                      innerRef={ref => (this.focusableInput = ref)}
                       placeholder="Property Name"
                       type="text"
                       value={this.state.name}
-                      //onChange={this.onChangeName}
+                      onChange={this.onChangeName}
                     />
                   </Col>
                 </FormGroup>
@@ -73,9 +165,9 @@ class PropertyItemAddNew extends Component {
                       required
                       name="fieldType"
                       value={this.state.fieldType}
-                      // onChange={fieldType =>
-                      // this.onChange("fieldType", fieldType)
-                      //}
+                      onChange={fieldType =>
+                        this.onChange("fieldType", fieldType)
+                      }
                       options={this.props.attributes}
                       valueKey="uid"
                       labelKey="name"
@@ -93,9 +185,9 @@ class PropertyItemAddNew extends Component {
                         <Col sm={9}>
                           <Select.Creatable
                             multi
-                            // onChange={options =>
-                            //   this.onChange("options", options)
-                            //}
+                            onChange={options =>
+                              this.onChange("options", options)
+                            }
                             value={this.state.options}
                             noResultsText="Type option and press tab or enter"
                             placeholder="Create options"
@@ -131,12 +223,12 @@ class PropertyItemAddNew extends Component {
                               <Select
                                 options={this.state.options}
                                 required
-                                //onChange={defaultValueChoices =>
-                                // this.onChange(
-                                //  "defaultValueChoices",
-                                defaultValueChoices
-                                //)
-                                //}
+                                onChange={defaultValueChoices =>
+                                  this.onChange(
+                                    "defaultValueChoices",
+                                    defaultValueChoices
+                                  )
+                                }
                                 value={this.state.defaultValueChoices}
                               />
                             </Col>
@@ -150,12 +242,12 @@ class PropertyItemAddNew extends Component {
                                 required
                                 placeholder="Default Value"
                                 value={this.state.defaultValueString}
-                                //onChange={event =>
-                                // this.onChange(
-                                // "defaultValueString",
-                                // event.target.value
-                                // )
-                                // }
+                                onChange={event =>
+                                  this.onChange(
+                                    "defaultValueString",
+                                    event.target.value
+                                  )
+                                }
                               />
                             </Col>
                           </FormGroup>
@@ -169,12 +261,12 @@ class PropertyItemAddNew extends Component {
                                 type="number"
                                 placeholder="Default Value"
                                 value={this.state.defaultValueInteger}
-                                //onChange={event =>
-                                // this.onChange(
-                                // "defaultValueInteger",
-                                //event.target.value
-                                // )
-                                // }
+                                onChange={event =>
+                                  this.onChange(
+                                    "defaultValueInteger",
+                                    event.target.value
+                                  )
+                                }
                               />
                             </Col>
                           </FormGroup>
@@ -189,12 +281,12 @@ class PropertyItemAddNew extends Component {
                                 step="0.01"
                                 placeholder="Default Value"
                                 value={this.state.defaultValueFloat}
-                                // onChange={event =>
-                                // this.onChange(
-                                //  "defaultValueFloat",
-                                // event.target.value
-                                //)
-                                // }
+                                onChange={event =>
+                                  this.onChange(
+                                    "defaultValueFloat",
+                                    event.target.value
+                                  )
+                                }
                               />
                             </Col>
                           </FormGroup>
@@ -206,12 +298,12 @@ class PropertyItemAddNew extends Component {
                               <DateTime
                                 inputProps={{ required: true }}
                                 value={this.state.defaultValueDateTime}
-                                //onChange={defaultValueDateTime =>
-                                // this.onChange(
-                                // "defaultValueDateTime",
-                                // defaultValueDateTime
-                                // )
-                                //}
+                                onChange={defaultValueDateTime =>
+                                  this.onChange(
+                                    "defaultValueDateTime",
+                                    defaultValueDateTime
+                                  )
+                                }
                               />
                             </Col>
                           </FormGroup>

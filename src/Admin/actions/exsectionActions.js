@@ -2,19 +2,22 @@ import { Observable } from "rxjs/Observable";
 import { toast } from "react-toastify";
 
 import {
-  FETCH_EXSECTION_ATTRIBUTES_PENDING,
-  FETCH_EXSECTION_ATTRIBUTES_FULFILLED,
-  FETCH_EXSECTION_ATTRIBUTES_REJECTED,
   FETCH_EXSECTION_SECTIONS_PENDING,
-  CHANGE_ACTIVE_EXSECTION_SECTION,
   FETCH_EXSECTION_SECTIONS_FULFILLED,
   FETCH_EXSECTION_SECTIONS_REJECTED,
+  CREATE_EXSECTION_SECTIONS_PENDING,
+  CREATE_EXSECTION_SECTIONS_FULFILLED,
+  CREATE_EXSECTION_SECTIONS_REJECTED,
   FETCH_EXSECTION_SECTION_PENDING,
   FETCH_EXSECTION_SECTION_REJECTED,
   FETCH_EXSECTION_SECTION_FULFILLED,
-  CREATE_EXSECTION_SECTIONS_PENDING,
-  CREATE_EXSECTION_SECTIONS_FULFILLED,
-  CREATE_EXSECTION_SECTIONS_REJECTED
+  CHANGE_ACTIVE_EXSECTION_SECTION,
+  FETCH_EXSECTION_ATTRIBUTES_PENDING,
+  FETCH_EXSECTION_ATTRIBUTES_FULFILLED,
+  FETCH_EXSECTION_ATTRIBUTES_REJECTED,
+  CREATE_EXSECTION_PROPERTY_SECTION_FULFILLED,
+  CREATE_EXSECTION_PROPERTY_SECTION_PENDING,
+  CREATE_EXSECTION_PROPERTY_SECTION_REJECTED
 } from "./types";
 
 //import { onEcommerceCategoriesGet } from "../config/adminServerCall";
@@ -22,39 +25,18 @@ import {
 import {
   onExsectionAttributesGet,
   onExsectionSectionsGet,
-  onExSectionSectionDetailGet,
-  onExsectionSectionPost
+  onExsectionSectionDetailGet,
+  onExsectionSectionPost,
+  onExsectionPropertiesPost
 } from "../config/adminServerCall";
 
 const epics = [];
 
-// attirbutes
-export const onAttributesListExsection = () => ({
-  type: FETCH_EXSECTION_ATTRIBUTES_PENDING
-});
-
-epics.push((action$, { getState }) =>
-  action$.ofType(FETCH_EXSECTION_ATTRIBUTES_PENDING).mergeMap(action =>
-    onExsectionAttributesGet()
-      .map(({ response }) => ({
-        type: FETCH_EXSECTION_ATTRIBUTES_FULFILLED,
-        payload: response
-      }))
-      .catch(ajaxError => {
-        console.log(ajaxError);
-        toast.error("Error Fetching Attributes");
-        return Observable.of({ type: FETCH_EXSECTION_ATTRIBUTES_REJECTED });
-      })
-  )
-);
-
 //sections
-
 export const onSectionsListExsection = () => ({
   type: FETCH_EXSECTION_SECTIONS_PENDING,
   first: true
 });
-
 epics.push((action$, { getState }) =>
   action$.ofType(FETCH_EXSECTION_SECTIONS_PENDING).mergeMap(action => {
     const { first } = action;
@@ -78,7 +60,7 @@ epics.push((action$, { getState }) =>
         ];
       })
       .catch(ajaxError => {
-        toast.error("Error Fetching Categories");
+        toast.error("Error Fetching Sections");
         return Observable.of({ type: FETCH_EXSECTION_SECTIONS_REJECTED });
       });
   })
@@ -91,7 +73,7 @@ epics.push((action$, { getState }) =>
 //       const { payload: newSection, oldSection } = action;
 //       if (!oldSection || newSection !== oldSection) {
 //         //return onEcommerceCategoryDetailGet({ uid: newCategory })
-//         return onExSectionSectionDetailGet({ uid: newSection })
+//         return onExsectionSectionDetailGet({ uid: newSection })
 //           .map(({ response }) => {
 //             return {
 //               type: FETCH_EXSECTION_SECTION_FULFILLED,
@@ -109,11 +91,11 @@ epics.push((action$, { getState }) =>
 //     .startWith({ type: FETCH_EXSECTION_SECTION_PENDING })
 // );
 
+//add section
 export const onSectionSubmitExsection = payload => ({
   type: CREATE_EXSECTION_SECTIONS_PENDING,
   payload
 });
-
 epics.push((action$, { getState }) =>
   action$.ofType(CREATE_EXSECTION_SECTIONS_PENDING).mergeMap(action => {
     const parent = getState().AdminContainer.exsection.activeSection;
@@ -122,7 +104,7 @@ epics.push((action$, { getState }) =>
     return onExsectionSectionPost({ name, parent })
       .concatMap(({ response }) => {
         if (response.msg === "success") {
-          toast.success("Category created successfully");
+          toast.success("Section created successfully");
           return [
             { type: CREATE_EXSECTION_SECTIONS_FULFILLED },
             { type: FETCH_EXSECTION_SECTIONS_PENDING }
@@ -138,18 +120,18 @@ epics.push((action$, { getState }) =>
   })
 );
 
-export const onChangeActiveSectionExSection = (newSection, oldSection) => ({
+export const onChangeActiveSectionExsection = (newSection, oldSection) => ({
   type: CHANGE_ACTIVE_EXSECTION_SECTION,
   payload: newSection,
   oldSection
 });
-
-epics.push(
-  (action$, { getState }) =>
-    action$.ofType(CHANGE_ACTIVE_EXSECTION_SECTION).mergeMap(action => {
+epics.push((action$, { getState }) =>
+  action$
+    .ofType(CHANGE_ACTIVE_EXSECTION_SECTION)
+    .mergeMap(action => {
       const { payload: newSection, oldSection } = action;
       if (!oldSection || newSection !== oldSection) {
-        return onExSectionSectionDetailGet({ uid: newSection })
+        return onExsectionSectionDetailGet({ uid: newSection })
           .map(({ response }) => {
             return {
               type: FETCH_EXSECTION_SECTION_FULFILLED,
@@ -157,18 +139,66 @@ epics.push(
             };
           })
           .catch(ajaxError => {
-            toast.error("Error fetching Categories");
+            toast.error("Error fetching Sections");
             return Observable.of({ type: FETCH_EXSECTION_SECTION_REJECTED });
           });
       } else {
         return Observable.empty();
       }
     })
-  //.startWith({ type: FETCH_EXSECTION_SECTION_PENDING })
+    .startWith({ type: FETCH_EXSECTION_SECTION_PENDING })
 );
 
-export const onPropertySubmitExsection = () => {
-  return "hello";
-};
+// attirbutes
+export const onAttributesListExsection = () => ({
+  type: FETCH_EXSECTION_ATTRIBUTES_PENDING
+});
+
+epics.push((action$, { getState }) =>
+  action$.ofType(FETCH_EXSECTION_ATTRIBUTES_PENDING).mergeMap(action =>
+    onExsectionAttributesGet()
+      .map(({ response }) => ({
+        type: FETCH_EXSECTION_ATTRIBUTES_FULFILLED,
+        payload: response
+      }))
+      .catch(ajaxError => {
+        console.log(ajaxError);
+        toast.error("Error Fetching Attributes");
+        return Observable.of({ type: FETCH_EXSECTION_ATTRIBUTES_REJECTED });
+      })
+  )
+);
+//Add Property(Attributes)
+export const onPropertySubmitExsection = payload => ({
+  type: CREATE_EXSECTION_PROPERTY_SECTION_PENDING,
+  payload
+});
+epics.push((action$, { getState }) =>
+  action$.ofType(CREATE_EXSECTION_PROPERTY_SECTION_PENDING).mergeMap(action => {
+    const payload = getState().AdminContainer.exsection.activeSection;
+    const { body } = action.payload;
+    console.log("Attributes........");
+    console.log(payload);
+    console.log(action.payload);
+    return onExsectionPropertiesPost({ body })
+      .concatMap(({ response }) => {
+        if (response.msg === "success") {
+          toast.success("Attribute created successfully");
+          return [
+            { type: CREATE_EXSECTION_PROPERTY_SECTION_FULFILLED },
+            { type: CHANGE_ACTIVE_EXSECTION_SECTION, payload }
+          ];
+        } else {
+          throw new Error(response.msg);
+        }
+      })
+      .catch(ajaxError => {
+        toast.error(ajaxError.toString());
+        return Observable.of({
+          type: CREATE_EXSECTION_PROPERTY_SECTION_REJECTED
+        });
+      });
+  })
+);
 
 export default epics;
