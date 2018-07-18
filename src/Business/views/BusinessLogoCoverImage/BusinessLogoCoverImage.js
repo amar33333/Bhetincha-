@@ -53,7 +53,7 @@ class BusinessLogoCoverImage extends Component {
             <strong>Logo</strong>
           </CardHeader>
           <CardBody>
-            <Col xs={12} md={3}>
+            <Col xs={12} sm={3}>
               {this.props.logo ? (
                 <img
                   style={{ width: "100%" }}
