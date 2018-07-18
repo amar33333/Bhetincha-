@@ -20,7 +20,8 @@ import {
   onBranchDelete,
   onBusinessDetailsGet,
   onBusinessDetailsPut,
-  onBusinessLogoCoverImageGet
+  onBusinessLogoCoverImageGet,
+  onBusinessLogoCoverImagePut
 } from "../config/businessServerCall";
 
 import {
@@ -95,6 +96,9 @@ import {
   FETCH_LOGO_COVER_IMAGE_FULFILLED,
   FETCH_LOGO_COVER_IMAGE_PENDING,
   FETCH_LOGO_COVER_IMAGE_REJECTED,
+  EDIT_LOGO_COVER_IMAGE_FULFILLED,
+  EDIT_LOGO_COVER_IMAGE_PENDING,
+  EDIT_LOGO_COVER_IMAGE_REJECTED,
   FETCH_CATEGORY_ARRAY_PENDING,
   FETCH_CATEGORY_ARRAY_FULFILLED,
   FETCH_CATEGORY_ARRAY_REJECTED,
@@ -106,17 +110,17 @@ const epics = [];
 
 export const onUnmountBranch = () => ({ type: UNMOUNT_BRANCH });
 
-export const onBusinessLogoCoverImageList = payload => ({
-  type: FETCH_LOGO_COVER_IMAGE_PENDING,
-  payload
+export const onBusinessLogoCoverImageList = () => ({
+  type: FETCH_LOGO_COVER_IMAGE_PENDING
 });
 
 epics.push((action$, { getState }) =>
-  action$.ofType(FETCH_LOGO_COVER_IMAGE_PENDING).mergeMap(({ payload }) => {
-    const access_token = getState().auth.cookies.token_data.access_token;
-    const { business_slug } = payload;
+  action$.ofType(FETCH_LOGO_COVER_IMAGE_PENDING).mergeMap(() => {
+    const cookies = getState().auth.cookies;
+    const access_token = cookies.token_data.access_token;
+    const id = cookies.user_data.business_id;
 
-    return onBusinessLogoCoverImageGet({ business_slug, access_token })
+    return onBusinessLogoCoverImageGet({ id, access_token })
       .map(({ response }) => {
         return {
           type: FETCH_LOGO_COVER_IMAGE_FULFILLED,
@@ -128,6 +132,44 @@ epics.push((action$, { getState }) =>
         console.log("business detais errror: ", ajaxError);
         return Observable.of({
           type: FETCH_LOGO_COVER_IMAGE_REJECTED,
+          payload: ajaxError
+        });
+      });
+  })
+);
+
+export const onBusinessLogoCoverImageEdit = payload => ({
+  type: EDIT_LOGO_COVER_IMAGE_PENDING,
+  payload
+});
+
+epics.push((action$, { getState }) =>
+  action$.ofType(EDIT_LOGO_COVER_IMAGE_PENDING).mergeMap(({ payload }) => {
+    const cookies = getState().auth.cookies;
+    const access_token = cookies.token_data.access_token;
+    const id = cookies.user_data.business_id;
+    const { body } = payload;
+
+    return onBusinessLogoCoverImagePut({ id, body, access_token })
+      .concatMap(({ response }) => {
+        if (response.msg === "success") {
+          toast.success("Image Section Updated Successfully!");
+          return [
+            {
+              type: EDIT_LOGO_COVER_IMAGE_FULFILLED,
+              payload: response
+            },
+            {
+              type: FETCH_LOGO_COVER_IMAGE_PENDING,
+              payload: { id }
+            }
+          ];
+        } else throw new Error(response.msg);
+      })
+      .catch(ajaxError => {
+        toast.error(ajaxError.toString());
+        return Observable.of({
+          type: EDIT_LOGO_COVER_IMAGE_REJECTED,
           payload: ajaxError
         });
       });

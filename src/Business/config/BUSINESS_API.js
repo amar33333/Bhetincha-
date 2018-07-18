@@ -33,3 +33,4 @@ export const ABOUT_GET_URL = `${MAIN_URL}/${ABOUT}`;
 export const WORKING_HOUR_GET_URL = `${MAIN_URL}/${WORKING_HOUR}`;
 export const BUSINESS_DETAILS_GET_URL = `${MAIN_URL}/${BUSINESS_DETAILS}`;
 export const LOGO_COVER_IMAGE_GET_URL = `${MAIN_URL}/${LOGO_COVER_IMAGE}`;
+export { MAIN_URL };
