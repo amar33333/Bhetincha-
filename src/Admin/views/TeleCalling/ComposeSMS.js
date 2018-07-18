@@ -49,7 +49,7 @@ class ComposeSMS extends Component {
       body: {
         log: {
           date: new Date().toISOString(),
-          message: "Tech Kunja",
+          message: this.props.composeSMSText,
           ...extra
         },
         at: this.props.teleUser.at
@@ -96,7 +96,13 @@ class ComposeSMS extends Component {
             <Button
               type="submit"
               color="primary"
-              disabled={!(this.props.valid && this.props.registered)}
+              disabled={
+                !(
+                  this.props.valid &&
+                  this.props.registered &&
+                  this.props.composeSMSText.length
+                )
+              }
             >
               Submit
             </Button>
