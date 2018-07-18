@@ -150,152 +150,159 @@ class BusinessEdit extends Component {
 
     return !this.props.loading ? (
       <div className="animated fadeIn">
-        <Col>
-          <Card>
-            <CardHeader>
-              <strong>Edit Business</strong>
-            </CardHeader>
-            <CardBody>
-              <form onSubmit={this.onEditFormSubmit}>
-                <SubBusinessDetails
-                  collapsed={this.state.businessAdminDetailCollapse}
-                  toggleCollapse={this.toggleCollapse.bind(
-                    this,
-                    "businessAdminDetailCollapse"
-                  )}
-                  ref={ref => (this.subBusinessAdminDetailRef = ref)}
-                  businessData={businessData}
-                  payment_methods={this.props.paymentMethods}
-                  industries={this.props.industries}
-                  onIndustryEachList={this.props.onIndustryEachList}
-                  onCategoryEachList={this.props.onCategoryEachList}
-                  onUnmountSubCategories={this.props.onUnmountSubCategories}
-                  onRemoveCategoryData={this.props.onRemoveCategoryData}
-                  cookies={this.props.cookies}
-                  industryData={this.props.industryData}
-                  categoryData={this.props.categoryData}
-                  onUnmountIndustryData={this.props.onUnmountIndustryData}
-                  onUnmountCategoryData={this.props.onUnmountCategoryData}
-                  /* {...this.props.general_setup} */
-                  businessGet={this.props.businessGet}
-                  onInitialPropsReceived={this.onInitialPropsReceived}
-                  EDIT={this.props.EDIT}
-                />
-                <SubBusinessPrimaryAddress
-                  collapsed={this.state.businessPrimaryAddressCollapse}
-                  toggleCollapse={this.toggleCollapse.bind(
-                    this,
-                    "businessPrimaryAddressCollapse"
-                  )}
-                  ref={ref => (this.subBusinessPrimaryAddressRef = ref)}
-                  cookies={this.props.cookies}
-                  address={address}
-                  {...this.props.general_setup}
-                  onAddressTreeList={this.props.onAddressTreeList}
-                  businessGet={this.props.businessGet}
-                  onInitialPropsReceived={this.onInitialPropsReceived}
-                  EDIT={this.props.EDIT}
-                />
-                {/* <SubBusinessBranchWrapper
-                  collapsed={this.state.businessBranchWrapperCollapse}
-                  toggleCollapse={this.toggleCollapse.bind(
-                    this,
-                    "businessBranchWrapperCollapse"
-                  )}
-                  ref={ref => (this.subBusinessBranchWrapperRef = ref)}
-                  cookies={this.props.cookies}
-                  branchAddress={branchAddress}
-                  {...this.props.general_setup}
-                  onAddressTreeList={this.props.onAddressTreeList}
-                  businessGet={this.props.businessGet}
-                  onInitialPropsReceived={this.onInitialPropsReceived}
-                  EDIT={this.props.EDIT}
-                /> */}
-                <SubBusinessAbout
-                  collapsed={this.state.businessAboutCollapse}
-                  toggleCollapse={this.toggleCollapse.bind(
-                    this,
-                    "businessAboutCollapse"
-                  )}
-                  ref={ref => (this.subBusinessAboutRef = ref)}
-                  about={about}
-                  company_types={this.props.companyTypes}
-                  businessGet={this.props.businessGet}
-                  onInitialPropsReceived={this.onInitialPropsReceived}
-                  EDIT={this.props.EDIT}
-                />
-                <SubBusinessLogo
-                  collapsed={this.state.businessLogoCollapse}
-                  toggleCollapse={this.toggleCollapse.bind(
-                    this,
-                    "businessLogoCollapse"
-                  )}
-                  ref={ref => (this.subBusinessLogoRef = ref)}
-                  imagePath={logo}
-                  businessGet={this.props.businessGet}
-                  onInitialPropsReceived={this.onInitialPropsReceived}
-                  EDIT={this.props.EDIT}
-                />
-                <SubBusinessCoverImage
-                  collapsed={this.state.businessCoverImageCollapse}
-                  toggleCollapse={this.toggleCollapse.bind(
-                    this,
-                    "businessCoverImageCollapse"
-                  )}
-                  ref={ref => (this.subBusinessCoverImageRef = ref)}
-                  imagePath={cover_photo}
-                  businessGet={this.props.businessGet}
-                  onInitialPropsReceived={this.onInitialPropsReceived}
-                  EDIT={this.props.EDIT}
-                />
-                <SubBusinessWorkingHour
-                  collapsed={this.state.businessWorkingHourCollapse}
-                  ref={ref => (this.subBusinessWorkingHourRef = ref)}
-                  toggleCollapse={this.toggleCollapse.bind(
-                    this,
-                    "businessWorkingHourCollapse"
-                  )}
-                  workingHour={workingHour}
-                  alwaysOpen={alwaysOpen}
-                  businessGet={this.props.businessGet}
-                  onInitialPropsReceived={this.onInitialPropsReceived}
-                  EDIT={this.props.EDIT}
-                />
-                <Row>
-                  <Col xs="12">
-                    <PermissionProvider permission="CAN_EDIT_BUSINESS">
-                      <Button
-                        color="primary"
-                        size="lg"
-                        style={{ marginRight: 20 }}
-                      >
-                        SAVE
-                      </Button>
-                    </PermissionProvider>
+        <Row>
+          <Col>
+            <form onSubmit={this.onEditFormSubmit}>
+              <SubBusinessDetails
+                collapsed={this.state.businessAdminDetailCollapse}
+                toggleCollapse={this.toggleCollapse.bind(
+                  this,
+                  "businessAdminDetailCollapse"
+                )}
+                ref={ref => (this.subBusinessAdminDetailRef = ref)}
+                businessData={businessData}
+                payment_methods={this.props.paymentMethods}
+                industries={this.props.industries}
+                onIndustryEachList={this.props.onIndustryEachList}
+                onCategoryEachList={this.props.onCategoryEachList}
+                onUnmountSubCategories={this.props.onUnmountSubCategories}
+                onRemoveCategoryData={this.props.onRemoveCategoryData}
+                cookies={this.props.cookies}
+                industryData={this.props.industryData}
+                categoryData={this.props.categoryData}
+                onUnmountIndustryData={this.props.onUnmountIndustryData}
+                onUnmountCategoryData={this.props.onUnmountCategoryData}
+                /* {...this.props.general_setup} */
+                businessGet={this.props.businessGet}
+                onInitialPropsReceived={this.onInitialPropsReceived}
+                EDIT={this.props.EDIT}
+              />
+              <SubBusinessPrimaryAddress
+                collapsed={this.state.businessPrimaryAddressCollapse}
+                toggleCollapse={this.toggleCollapse.bind(
+                  this,
+                  "businessPrimaryAddressCollapse"
+                )}
+                ref={ref => (this.subBusinessPrimaryAddressRef = ref)}
+                cookies={this.props.cookies}
+                address={address}
+                {...this.props.general_setup}
+                onAddressTreeList={this.props.onAddressTreeList}
+                businessGet={this.props.businessGet}
+                onInitialPropsReceived={this.onInitialPropsReceived}
+                EDIT={this.props.EDIT}
+              />
+              {/* <SubBusinessBranchWrapper
+                    collapsed={this.state.businessBranchWrapperCollapse}
+                    toggleCollapse={this.toggleCollapse.bind(
+                      this,
+                      "businessBranchWrapperCollapse"
+                    )}
+                    ref={ref => (this.subBusinessBranchWrapperRef = ref)}
+                    cookies={this.props.cookies}
+                    branchAddress={branchAddress}
+                    {...this.props.general_setup}
+                    onAddressTreeList={this.props.onAddressTreeList}
+                    businessGet={this.props.businessGet}
+                    onInitialPropsReceived={this.onInitialPropsReceived}
+                    EDIT={this.props.EDIT}
+                  /> */}
+              <Row>
+                <Col>
+                  <SubBusinessAbout
+                    collapsed={this.state.businessAboutCollapse}
+                    toggleCollapse={this.toggleCollapse.bind(
+                      this,
+                      "businessAboutCollapse"
+                    )}
+                    ref={ref => (this.subBusinessAboutRef = ref)}
+                    about={about}
+                    company_types={this.props.companyTypes}
+                    businessGet={this.props.businessGet}
+                    onInitialPropsReceived={this.onInitialPropsReceived}
+                    EDIT={this.props.EDIT}
+                  />
+                </Col>
+                <Col>
+                  <SubBusinessWorkingHour
+                    collapsed={this.state.businessWorkingHourCollapse}
+                    ref={ref => (this.subBusinessWorkingHourRef = ref)}
+                    toggleCollapse={this.toggleCollapse.bind(
+                      this,
+                      "businessWorkingHourCollapse"
+                    )}
+                    workingHour={workingHour}
+                    alwaysOpen={alwaysOpen}
+                    businessGet={this.props.businessGet}
+                    onInitialPropsReceived={this.onInitialPropsReceived}
+                    EDIT={this.props.EDIT}
+                  />
+                </Col>
+              </Row>
+              <Row>
+                <Col xs="12" md="6">
+                  <SubBusinessLogo
+                    collapsed={this.state.businessLogoCollapse}
+                    toggleCollapse={this.toggleCollapse.bind(
+                      this,
+                      "businessLogoCollapse"
+                    )}
+                    ref={ref => (this.subBusinessLogoRef = ref)}
+                    imagePath={logo}
+                    businessGet={this.props.businessGet}
+                    onInitialPropsReceived={this.onInitialPropsReceived}
+                    EDIT={this.props.EDIT}
+                  />
+                </Col>
+                <Col xs="12" md="6">
+                  <SubBusinessCoverImage
+                    collapsed={this.state.businessCoverImageCollapse}
+                    toggleCollapse={this.toggleCollapse.bind(
+                      this,
+                      "businessCoverImageCollapse"
+                    )}
+                    ref={ref => (this.subBusinessCoverImageRef = ref)}
+                    imagePath={cover_photo}
+                    businessGet={this.props.businessGet}
+                    onInitialPropsReceived={this.onInitialPropsReceived}
+                    EDIT={this.props.EDIT}
+                  />
+                </Col>
+              </Row>
+              <Row>
+                <Col xs="12">
+                  <PermissionProvider permission="CAN_EDIT_BUSINESS">
+                    <Button
+                      color="primary"
+                      size="lg"
+                      style={{ marginRight: 20 }}
+                    >
+                      SAVE
+                    </Button>
+                  </PermissionProvider>
 
-                    <PermissionProvider permission="CAN_BUSINESS_VERIFY">
-                      <Button
-                        color="success"
-                        size="lg"
-                        onClick={() => {
-                          console.log("verify button clicked: ", this.props);
-                          this.props.onBusinessVerify({
-                            id: this.props.businessData.id,
-                            body: {
-                              verified: true
-                            }
-                          });
-                        }}
-                      >
-                        VERIFY
-                      </Button>
-                    </PermissionProvider>
-                  </Col>
-                </Row>
-              </form>
-            </CardBody>
-          </Card>
-        </Col>
+                  <PermissionProvider permission="CAN_BUSINESS_VERIFY">
+                    <Button
+                      color="success"
+                      size="lg"
+                      onClick={() => {
+                        console.log("verify button clicked: ", this.props);
+                        this.props.onBusinessVerify({
+                          id: this.props.businessData.id,
+                          body: {
+                            verified: true
+                          }
+                        });
+                      }}
+                    >
+                      VERIFY
+                    </Button>
+                  </PermissionProvider>
+                </Col>
+              </Row>
+            </form>
+          </Col>
+        </Row>
       </div>
     ) : (
       <Loading />

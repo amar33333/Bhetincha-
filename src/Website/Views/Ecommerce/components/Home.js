@@ -1,9 +1,12 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 
+import { Row, Col } from "reactstrap";
+
 import ProductList from "./ProductList";
 import Filters from "./Filters";
 import MegaMenu from "./MegaMenu";
+import EcommerceMainNav from "./EcommerceMainNav";
 import ChildCategories from "./ChildCategories";
 
 import { onCategoriesList } from "../actions";
@@ -15,11 +18,23 @@ class Home extends Component {
 
   render() {
     return (
-      <div>
-        <div>This is home page</div>
-        <div>
-          <MegaMenu categories={this.props.categories} />
-        </div>
+      <div
+        style={{
+          backgroundColor: "rgba(247, 237, 237, 0.32)"
+        }}
+      >
+        <EcommerceMainNav />
+        {/* <Row>
+          <Col
+            xs="12"
+            md="4"
+            style={{
+              overflow: "visible"
+            }}
+          > */}
+        <MegaMenu categories={this.props.categories} />
+        {/* </Col>
+        </Row> */}
         <div>
           <ChildCategories categories={this.props.childCategories} />
         </div>

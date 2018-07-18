@@ -52,8 +52,9 @@ class SubBusinessCoverImage extends Component {
     this.props.imagePath ? (
       <img
         alt=""
-        width="840"
-        height="360"
+        // width="840"
+        // height="360"
+        className="img-fluid"
         src={`${MAIN_URL}${this.props.imagePath}`}
       />
     ) : null;
@@ -61,7 +62,7 @@ class SubBusinessCoverImage extends Component {
   render() {
     // console.log("logo: ", this.props);
     return (
-      <div className="animated fadeIn">
+      <div className="animated fadeIn mb-3">
         <Card>
           <CardHeader>
             <div
