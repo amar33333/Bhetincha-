@@ -85,14 +85,29 @@ export default function(state = INITIAL_STATE, action) {
       };
 
     case FETCH_BUSINESS_DETAILS_PENDING:
-      return { ...state, fetchLoading: true };
+      return { ...state, fetchLoading: true, businessGet: true };
     case FETCH_BUSINESS_DETAILS_REJECTED:
-      return { ...state, fetchLoading: false };
+      return { ...state, fetchLoading: false, businessGet: false };
     case FETCH_BUSINESS_DETAILS_FULFILLED:
       console.log("details: ", action.payload);
       return {
         ...state,
-        businessDetails: action.payload
+        businessDetails: action.payload,
+        businessGet: false,
+        fetchLoading: false
+      };
+
+    case EDIT_BUSINESS_DETAILS_PENDING:
+      return { ...state, fetchLoading: true, businessGet: true };
+
+    case EDIT_BUSINESS_DETAILS_REJECTED:
+      return { ...state, fetchLoading: false, businessGet: true };
+
+    case EDIT_BUSINESS_DETAILS_FULFILLED:
+      return {
+        ...state,
+        fetchLoading: false,
+        businessGet: true
       };
 
     case FETCH_BUSINESS_BRANCH_PENDING:
@@ -102,18 +117,33 @@ export default function(state = INITIAL_STATE, action) {
     case FETCH_BUSINESS_BRANCH_FULFILLED:
       return {
         ...state,
+        fetchLoading: false,
         businessBranchData: action.payload
       };
 
     case FETCH_BRANCH_EACH_PENDING:
-      return { ...state, fetchLoading: true };
+      return { ...state, fetchLoading: true, businessGet: true };
     case FETCH_BRANCH_EACH_REJECTED:
-      return { ...state, fetchLoading: false };
+      return { ...state, fetchLoading: false, businessGet: true };
     case FETCH_BRANCH_EACH_FULFILLED:
       return {
         ...state,
+        fetchLoading: false,
+        businessGet: true,
         branch: action.payload
       };
+
+    // case EDIT_BRANCH_EACH_PENDING:
+    //   return { ...state, fetchLoading: true, businessGet: true };
+    // case EDIT_BRANCH_EACH_REJECTED:
+    //   return { ...state, fetchLoading: false, businessGet: true };
+    // case EDIT_BRANCH_EACH_FULFILLED:
+    //   return {
+    //     ...state,
+    //     fetchLoading: false,
+    //     businessGet: true,
+    //     branch: action.payload
+    //   };
 
     case FETCH_BUSINESS_PENDING:
       return { ...state, loading: true };
@@ -207,7 +237,7 @@ export default function(state = INITIAL_STATE, action) {
       };
 
     case EDIT_PRIMARY_ADDRESS_REJECTED:
-      return { ...state, loading: false, businessGet: true };
+      return { ...state, fetchLoading: false, businessGet: true };
 
     case EDIT_BUSINESS_PENDING:
       return { ...state, fetchLoading: true, businessGet: true };

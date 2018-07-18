@@ -3,3 +3,15 @@ export const validatePhone = phoneNumber => {
   const phoneNumberPattern = /^\(?(9\d{2})\)?[- ]?(\d{3})[- ]?(\d{4})$/;
   return phoneNumberPattern.test(phoneNumber);
 };
+
+export const validateEmail = email => {
+  var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  console.log("email ; ", re.test(String(email).toLowerCase()));
+  return re.test(String(email).toLowerCase());
+};
+
+export const validateWebsiteURL = websiteURL => {
+  var re = /(http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
+  console.log("websiteURL ; ", re.test(websiteURL));
+  return re.test(websiteURL);
+};

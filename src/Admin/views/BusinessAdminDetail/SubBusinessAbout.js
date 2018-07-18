@@ -117,6 +117,7 @@ class SubBusinessAbout extends Component {
       about: {
         ...this.state,
         companyType: this.state.companyType ? this.state.companyType.id : ""
+        // tagline: undefined
       }
     };
   };

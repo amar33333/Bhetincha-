@@ -23,8 +23,16 @@ import {
   onCheckRegistrationList
 } from "../../../actions";
 
+import { validateEmail } from "../../../Common/utils/Extras";
+
 class UserRegister extends Component {
-  state = { username: "", password: "", confirm_password: "", email: "" };
+  state = {
+    username: "",
+    password: "",
+    confirm_password: "",
+    email: "",
+    email_validation_error: false
+  };
 
   componentDidMount() {
     const { id } = querystring.parse(this.props.location.search.slice(1));
@@ -41,30 +49,54 @@ class UserRegister extends Component {
   }
 
   onChange = (key, event) => {
-    this.setState({ [key]: event.target.value });
+    const val = event.target.value;
+
+    if (key === "email") {
+      this.setState({ [key]: val === "" ? null : val }, () => {
+        if (this.state.email && !validateEmail(this.state.email)) {
+          this.setState({ email_validation_error: true });
+        } else this.setState({ email_validation_error: false });
+      });
+    } else {
+      this.setState({ [key]: val });
+    }
+  };
+
+  displayEmailValidationInfo = () => {
+    if (this.state.email)
+      if (this.state.email_validation_error)
+        return <p style={{ color: "red" }}>Invalid Email</p>;
+      else return <p style={{ color: "green" }}>Valid Email </p>;
   };
 
   onFormSubmit = event => {
     event.preventDefault();
-    const { username, password, confirm_password, email } = this.state;
+    const {
+      username,
+      password,
+      confirm_password,
+      email,
+      email_validation_error
+    } = this.state;
     const { "?id": id } = querystring.parse(this.props.location.search);
     console.log("user regos; ", this.props);
-    if (password === confirm_password)
-      this.props.onUserRegisterSubmit({
-        id,
-        body: {
-          username,
-          password,
-          email
-        },
-        history: this.props.history,
-        slug: this.props.phone_verification_response
-          ? this.props.phone_verification_response.slug
-          : null
-      });
-    else {
-      toast.error("Password Mismatch !!!");
-    }
+    if (!email_validation_error)
+      if (password === confirm_password)
+        this.props.onUserRegisterSubmit({
+          id,
+          body: {
+            username,
+            password,
+            email
+          },
+          history: this.props.history,
+          slug: this.props.phone_verification_response
+            ? this.props.phone_verification_response.slug
+            : null
+        });
+      else {
+        toast.error("Password Mismatch !!!");
+      }
   };
 
   render() {
@@ -76,7 +108,7 @@ class UserRegister extends Component {
               <Card className="mx-4">
                 <CardBody className="p-4">
                   <h1>User Register</h1>
-                  <p className="text-muted">Create your account</p>
+                  {/* <p className="text-muted">Create your account</p> */}
                   <Form onSubmit={this.onFormSubmit}>
                     <InputGroup className="mb-3">
                       <InputGroupAddon addonType="prepend">
@@ -105,6 +137,7 @@ class UserRegister extends Component {
                         onChange={this.onChange.bind(this, "email")}
                       />
                     </InputGroup>
+                    {this.displayEmailValidationInfo()}
 
                     <InputGroup className="mb-4">
                       <InputGroupAddon addonType="prepend">

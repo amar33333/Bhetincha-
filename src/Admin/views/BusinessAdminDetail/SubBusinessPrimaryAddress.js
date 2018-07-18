@@ -345,6 +345,7 @@ class SubBusinessPrimaryAddress extends Component {
         district: this.state.district ? this.state.district.id : "",
         city: this.state.city ? this.state.city.id : "",
         area: this.state.area ? this.state.area.id : ""
+        // po_box: undefined
       }
     };
   };
