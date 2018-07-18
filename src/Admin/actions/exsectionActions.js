@@ -144,4 +144,31 @@ export const onChangeActiveSectionExSection = (newSection, oldSection) => ({
   oldSection
 });
 
+epics.push(
+  (action$, { getState }) =>
+    action$.ofType(CHANGE_ACTIVE_EXSECTION_SECTION).mergeMap(action => {
+      const { payload: newSection, oldSection } = action;
+      if (!oldSection || newSection !== oldSection) {
+        return onExSectionSectionDetailGet({ uid: newSection })
+          .map(({ response }) => {
+            return {
+              type: FETCH_EXSECTION_SECTION_FULFILLED,
+              payload: response
+            };
+          })
+          .catch(ajaxError => {
+            toast.error("Error fetching Categories");
+            return Observable.of({ type: FETCH_EXSECTION_SECTION_REJECTED });
+          });
+      } else {
+        return Observable.empty();
+      }
+    })
+  //.startWith({ type: FETCH_EXSECTION_SECTION_PENDING })
+);
+
+export const onPropertySubmitExsection = () => {
+  return "hello";
+};
+
 export default epics;

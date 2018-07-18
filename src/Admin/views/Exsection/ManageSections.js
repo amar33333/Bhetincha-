@@ -16,7 +16,8 @@ import {
   onSectionsListExsection,
   onSectionSubmitExsection,
   onChangeActiveSectionExSection,
-  onAttributesListExsection
+  onAttributesListExsection,
+  onPropertySubmitExsection
 } from "../../actions";
 
 class ManageSections extends Component {
@@ -26,7 +27,6 @@ class ManageSections extends Component {
   }
 
   render() {
-    console.log(this.props);
     return (
       <div className="animated fadeIn">
         <Container fluid>
@@ -42,25 +42,34 @@ class ManageSections extends Component {
               />
             </Col>
             <Col xs="12" md="9">
-              <BreadcrumbNav
-                breadCrumbs={[{ name: "Create Sections", uid: "001" }]}
-              />
-              <SectionDetailView
-                //name={this.props.selectedSectionDetail.name}
-                onSectionSubmit={this.props.onSectionSubmitExsection}
-              />
+              {this.props.selectedSectionDetail && (
+                <div>
+                  <BreadcrumbNav
+                    breadCrumbs={this.props.selectedSectionDetail.breadCrumbs}
+                    onChangeActiveCategory={
+                      this.props.onChangeActiveSectionExSection
+                    }
+                  />
+                  {!this.props.selectedSectionDetail.hasSec && (
+                    <SectionDetailView
+                      name={this.props.selectedSectionDetail.name}
+                      onSectionSubmit={this.props.onSectionSubmitExsection}
+                    />
+                  )}
 
-              <PropertyItemAddNew
-                //loading={this.props.propertyLoading}
-                //error={this.props.propertyError}
-                //activeSection={this.props.activeSection}
-                attributes={this.props.attributes}
-                //onPropertySubmit={this.props.onPropertySubmitExsection}
-              />
-              <PropertyList
-              //category={this.props.selectedSectionDetail}
-              //onPropertyRemove={this.props.onPropertyRemoveExsection}
-              />
+                  <PropertyItemAddNew
+                    loading={this.props.propertyLoading} //
+                    error={this.props.propertyError} //
+                    activeSection={this.props.activeSection} //
+                    attributes={this.props.attributes}
+                    onPropertySubmit={this.props.onPropertySubmitExsection} //
+                  />
+                  <PropertyList
+                  //category={this.props.selectedSectionDetail}
+                  //onPropertyRemove={this.props.onPropertyRemoveExsection}
+                  />
+                </div>
+              )}
             </Col>
           </Row>
         </Container>
@@ -95,6 +104,7 @@ export default connect(
     onSectionsListExsection,
     onAttributesListExsection,
     onSectionSubmitExsection,
-    onChangeActiveSectionExSection
+    onChangeActiveSectionExSection,
+    onPropertySubmitExsection
   }
 )(ManageSections);

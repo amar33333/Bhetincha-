@@ -46,8 +46,8 @@ export default function(state = INITIAL_STATE, action) {
       //console.log({ ...state, isOpenSections, ...extra }); //ok
       return { ...state, isOpenSections, ...extra };
 
-    // case FETCH_EXSECTION_SECTION_FULFILLED:
-    //   return { ...state, selectedSectionDetail: action.payload };
+    case FETCH_EXSECTION_SECTION_FULFILLED:
+      return { ...state, selectedSectionDetail: action.payload };
 
     default:
       return state;

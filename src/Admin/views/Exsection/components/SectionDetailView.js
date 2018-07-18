@@ -31,7 +31,7 @@ class SectionDetailView extends Component {
       <div>
         <Card>
           <CardHeader>
-            <strong>Add New Section inside</strong>
+            <strong>Add New Section inside {this.props.name} </strong>
           </CardHeader>
           <CardBody>
             <Form onSubmit={this.onFormSubmit} inline>
