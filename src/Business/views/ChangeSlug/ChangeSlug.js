@@ -55,7 +55,10 @@ class BusinessAbout extends Component {
     event.preventDefault();
 
     if (this.state.slug !== this.props.match.params.businessName)
-      this.props.onSlugEdit({ slug: this.state.slug });
+      this.props.onSlugEdit({
+        slug: this.state.slug,
+        history: this.props.history
+      });
     else toast.error("Previous Slug Cannot be Sent");
   };
 
@@ -95,6 +98,7 @@ class BusinessAbout extends Component {
                     </Col>
                     <Col xs="12">
                       <Button
+                        disabled={this.props.fetchLoading}
                         color="primary"
                         size="lg"
                         style={{ marginRight: 20 }}
@@ -115,10 +119,11 @@ class BusinessAbout extends Component {
 
 const mapStateToProps = ({
   BusinessContainer: {
-    business_reducer: { slugAvailable }
+    business_reducer: { slugAvailable, fetchLoading }
   }
 }) => ({
-  slugAvailable
+  slugAvailable,
+  fetchLoading
 });
 
 export default connect(

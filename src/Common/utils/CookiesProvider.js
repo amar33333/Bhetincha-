@@ -24,6 +24,13 @@ class CookiesProvider {
     else return null;
   };
 
+  static getExpiryDate = () => {
+    const expiry_date = cookies.get("expiry_date");
+
+    if (expiry_date) return expiry_date;
+    else return null;
+  };
+
   static setCookies = (key, object, path, expires) => {
     console.log("key: ", key);
     console.log("object: ", object);

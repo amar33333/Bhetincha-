@@ -34,6 +34,8 @@ import {
   onCityEachGet
 } from "../../Admin/config/adminServerCall";
 
+import { onUserGet } from "../../Common/utils/serverCall";
+
 import {
   FETCH_BUSINESS_FULFILLED,
   FETCH_BUSINESS_REJECTED,
@@ -114,6 +116,14 @@ import {
   TOGGLE_EDIT
 } from "./types";
 
+import {
+  FETCH_USER_FULFILLED,
+  FETCH_USER_REJECTED,
+  FETCH_USER_PENDING
+} from "../../actions/types";
+
+import CookiesProvider from "../../Common/utils/CookiesProvider";
+
 const epics = [];
 
 export const onUnmountBranch = () => ({ type: UNMOUNT_BRANCH });
@@ -161,22 +171,41 @@ epics.push((action$, { getState }) =>
     const access_token = cookies.token_data.access_token;
     const id = cookies.user_data.business_id;
 
-    const { slug } = payload;
+    const { slug, history } = payload;
 
     return onSlugPut({ id, access_token, slug })
-      .map(({ response }) => {
+      .mergeMap(({ response }) => {
         if (response.msg === "success") {
           toast.success("Slug Changed Successfully");
 
-          return {
-            type: EDIT_SLUG_FULFILLED,
-            payload: response
-          };
+          return onUserGet({ access_token });
         } else throw new Error(response.msg);
+      })
+      .concatMap(({ response }) => {
+        const { permissions, ...rest } = response;
+        console.log("permis rest: ", permissions, rest);
+        const expiryDate = new Date(CookiesProvider.getExpiryDate());
+        console.log("expiy Date: ", expiryDate);
+
+        CookiesProvider.setCookies("user_data", rest, "/", expiryDate);
+
+        return [
+          {
+            type: FETCH_USER_FULFILLED,
+            payload: {
+              cookies: {
+                token_data: CookiesProvider.getTokenData(),
+                user_data: { ...CookiesProvider.getUserData(), permissions }
+              }
+            },
+            history
+          }
+        ];
       })
 
       .catch(ajaxError => {
         toast.error(ajaxError.toString());
+        console.log("slug erro: ", ajaxError.toString());
         return Observable.of({
           type: EDIT_SLUG_REJECTED,
           payload: ajaxError

@@ -50,6 +50,9 @@ import {
   CHECK_SLUG_FULFILLED,
   CHECK_SLUG_PENDING,
   CHECK_SLUG_REJECTED,
+  EDIT_SLUG_FULFILLED,
+  EDIT_SLUG_PENDING,
+  EDIT_SLUG_REJECTED,
   UNMOUNT_BRANCH,
   TOGGLE_EDIT
 } from "../actions/types";
@@ -83,7 +86,18 @@ export default function(state = INITIAL_STATE, action) {
     case CHECK_SLUG_FULFILLED:
       return {
         ...state,
-        slugAvailable: action.payload.slug_available
+        slugAvailable: action.payload.slug_available,
+        fetchLoading: false
+      };
+
+    case EDIT_SLUG_PENDING:
+      return { ...state, fetchLoading: true };
+    case EDIT_SLUG_REJECTED:
+      return { ...state, fetchLoading: false };
+    case EDIT_SLUG_FULFILLED:
+      return {
+        ...state,
+        fetchLoading: false
       };
 
     case FETCH_LOGO_COVER_IMAGE_PENDING:

@@ -117,7 +117,8 @@ class IndividualRegister extends Component {
             email,
             first_name,
             last_name,
-            phone_number
+            phone_number,
+            history: this.props.history
           });
         } else toast.error("You have to agree to our User Agreement Policy");
       } else {
@@ -301,7 +302,7 @@ class IndividualRegister extends Component {
                       </Button>
                     </Col>
                   </Row> */}
-                  <div>
+                  {/* <div>
                     <FacebookLogin
                       size="small"
                       appId="2110205529228108"
@@ -317,7 +318,7 @@ class IndividualRegister extends Component {
                       onSuccess={this.responseGoogle}
                       onFailure={this.responseGoogle}
                     />
-                  </div>
+                  </div> */}
                 </CardFooter>
               </Card>
             </Col>

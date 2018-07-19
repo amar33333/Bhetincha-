@@ -11,10 +11,44 @@ import {
   RESEND_TOKEN_URL,
   CHECK_REGISTRATION_URL,
   FACEBOOK_LOGIN_URL,
-  GOOGLE_LOGIN_URL
+  GOOGLE_LOGIN_URL,
+  INDIVIDUAL_TOKEN_VERIFY_URL,
+  INDIVIDUAL_RESEND_TOKEN_URL,
+  INDIVIDUAL_LOGIN_CHECK_URL
 } from "./API";
 import querystring from "querystring";
 import { ajax } from "rxjs/observable/dom/ajax";
+
+export const onCheckUserActivatedPost = ({ body }) =>
+  ajax({
+    method: "POST",
+    body,
+    url: `${INDIVIDUAL_LOGIN_CHECK_URL}`,
+    headers: {
+      "Content-Type": "application/json"
+    }
+  });
+
+export const onIndividualResendTokenPost = ({ body }) =>
+  ajax({
+    method: "POST",
+    body,
+    url: `${INDIVIDUAL_RESEND_TOKEN_URL}`,
+    headers: {
+      "Content-Type": "application/json"
+    }
+  });
+
+export const onIndividualTokenPost = ({ body }) => {
+  return ajax({
+    method: "post",
+    url: `${INDIVIDUAL_TOKEN_VERIFY_URL}`,
+    body,
+    headers: {
+      "Content-Type": "application/json"
+    }
+  });
+};
 
 export const onFacebookLogin = ({ access_token }) => {
   console.log("paylaod: ", access_token);
@@ -64,7 +98,7 @@ export const onPhoneVerificationRequestPost = ({ id, phone }) =>
   });
 
 export const onPhoneVerificationTokenPost = ({ id, verificationToken }) => {
-  console.log("verifiL: ", verificationToken);
+  // console.log("verifiL: ", verificationToken);
   return ajax({
     method: "post",
     url: `${PHONE_VERIFICATION_TOKEN_SEND_URL}${id}/`,
