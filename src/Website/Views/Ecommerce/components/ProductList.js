@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import ProductItem from "./ProductItem";
-import Pagination from "./Pagination";
+import PaginationComponent from "./Pagination";
 import FilterRange from "./FilterRange";
 import { Container, Row, Col } from "reactstrap";
 import { Card } from "semantic-ui-react";
@@ -8,17 +8,14 @@ class ProductList extends Component {
   render() {
     return (
       <div>
-        <div>
-          <Pagination activeIndex={2} total={10} /> and{" "}
+        {/* <Container className="mb-5">
           {this.props.priceFilter && (
             <FilterRange
               min={this.props.priceFilter.min}
               max={this.props.priceFilter.max}
             />
           )}
-          and sort stuffs
-        </div>
-        <h2>Product ListList of products</h2>
+        </Container> */}
         <Container>
           <Card.Group itemsPerRow={4} stackable>
             {this.props.products.map(product => (
@@ -26,8 +23,11 @@ class ProductList extends Component {
             ))}
           </Card.Group>
         </Container>
-        <div>
-          <Pagination activeIndex={2} total={10} />
+        <div className="mt-5 text-center">
+          <PaginationComponent
+            activeIndex={1}
+            total={this.props.productCount}
+          />
         </div>
       </div>
     );

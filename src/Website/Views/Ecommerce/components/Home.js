@@ -1,9 +1,10 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 
-import { Row, Col } from "reactstrap";
+import { Container, Row, Col } from "reactstrap";
 
 import ProductList from "./ProductList";
+import PaginationComponent from "./Pagination";
 import Filters from "./Filters";
 import MegaMenu from "./MegaMenu";
 import EcommerceMainNav from "./EcommerceMainNav";
@@ -67,28 +68,51 @@ class Home extends Component {
           categories={this.props.categories}
           onSelect={this.onSelectCategory}
         />
-        <div>
-          {this.props.childCategories.length ? (
-            <ChildCategories
-              categories={this.props.childCategories}
-              onSelectCategory={this.onSelectCategory}
-            />
-          ) : (
-            ""
-          )}
-        </div>
-        <div>
-          <Filters filters={this.props.filterAttributes} />
-        </div>
-        <div>
-          <ProductList
-            priceFilter={this.props.filterAttributes.find(
-              x => x.name === "price"
-            )}
-            products={this.props.products}
-            productCount={this.props.productCount}
-          />
-        </div>
+        <Container fluid className="mt-3 mb-3 mr-2">
+          <Row>
+            <Col xs="12" md="2">
+              <Row>
+                <Col xs="12">
+                  {this.props.childCategories.length ? (
+                    <ChildCategories
+                      categories={this.props.childCategories}
+                      onSelectCategory={this.onSelectCategory}
+                    />
+                  ) : (
+                    ""
+                  )}
+                </Col>
+                <Col xs="12">
+                  <Filters filters={this.props.filterAttributes} />
+                </Col>
+              </Row>
+            </Col>
+            <Col xs="12" md="10">
+              <Row className="hor-filter-sort__container mb-3">
+                <Col>
+                  <PaginationComponent
+                    activeIndex={1}
+                    total={this.props.productCount}
+                  />
+                </Col>
+                <Col>filter price</Col>
+                <Col>sort</Col>
+              </Row>
+              <Row>
+                <Col xs="12">
+                  <ProductList
+                    priceFilter={this.props.filterAttributes.find(
+                      x => x.name === "price"
+                    )}
+                    products={this.props.products}
+                    productCount={this.props.productCount}
+                  />
+                </Col>
+              </Row>
+            </Col>
+          </Row>
+        </Container>
+        <Container fluid />
       </div>
     );
   }

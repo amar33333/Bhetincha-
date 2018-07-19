@@ -417,7 +417,7 @@ class BusinessList extends Component {
         }}
       >
         <Container fluid>
-          <Row style={{ paddingTop: "20px" }} className="mb-5">
+          <Row style={{ paddingTop: "20px" }} className="mb-5 result-page-meta">
             <Col xs="5">
               <small>
                 {`About ${this.props.search_results_count} results in ${this
@@ -438,6 +438,7 @@ class BusinessList extends Component {
                 </small>
               </div>
               <InputRange
+                id="distance-range-selector"
                 maxValue={20}
                 minValue={0}
                 step={1}

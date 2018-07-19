@@ -495,7 +495,7 @@ input.main-nav-search::placeholder {
   transition: none !important;
 }
 
-.input-range__label.input-range__label--value {
+.result-page-meta .input-range__label.input-range__label--value {
   display: none !important;
 }
 
@@ -609,4 +609,11 @@ input.main-nav-search::placeholder {
 .product-card-thumbnail {
   height: 200px;
   object-fit: cover;
+}
+
+.hor-filter-sort__container {
+  min-width: 50px;
+  border-top: 0.5px solid lightgray;
+  border-bottom: 0.5px solid lightgray;
+  padding: 10px 0;
 }
