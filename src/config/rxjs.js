@@ -11,6 +11,7 @@ import "rxjs/add/operator/startWith";
 import "rxjs/add/operator/mapTo";
 import "rxjs/add/operator/switchMap";
 
+import "rxjs/add/observable/throw";
 import "rxjs/add/observable/of";
 import "rxjs/add/observable/empty";
 
