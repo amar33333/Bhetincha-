@@ -1,3 +1,6 @@
+import React from "react";
+import { FormText } from "reactstrap";
+
 // This is for mobile number
 export const validatePhone = phoneNumber => {
   const phoneNumberPattern = /^\(?(9\d{2})\)?[- ]?(\d{3})[- ]?(\d{4})$/;
@@ -15,3 +18,11 @@ export const validateWebsiteURL = websiteURL => {
   console.log("websiteURL ; ", re.test(websiteURL));
   return re.test(websiteURL);
 };
+
+export const FaIconURLjsx = (
+  <FormText color="muted">
+    <a href="https://fontawesome.com/v4.7.0/icons/" target="_blank">
+      You can search icons here
+    </a>
+  </FormText>
+);
