@@ -2,13 +2,12 @@ import { Observable } from "rxjs/Observable";
 import { toast } from "react-toastify";
 
 import {
-  FETCH_EXSECTION_ATTRIBUTES_PENDING,
-  FETCH_EXSECTION_ATTRIBUTES_FULFILLED,
-  FETCH_EXSECTION_ATTRIBUTES_REJECTED,
   FETCH_EXSECTION_SECTIONS_PENDING,
-  CHANGE_ACTIVE_EXSECTION_SECTION,
   FETCH_EXSECTION_SECTIONS_FULFILLED,
   FETCH_EXSECTION_SECTIONS_REJECTED,
+  CREATE_EXSECTION_SECTIONS_PENDING,
+  CREATE_EXSECTION_SECTIONS_FULFILLED,
+  CREATE_EXSECTION_SECTIONS_REJECTED,
   FETCH_EXSECTION_SECTION_PENDING,
   FETCH_EXSECTION_SECTION_REJECTED,
   FETCH_EXSECTION_SECTION_FULFILLED,
@@ -17,7 +16,14 @@ import {
   CREATE_EXSECTION_SECTIONS_REJECTED,
   CREATE_EXSECTION_PROPERTY_PENDING,
   CREATE_EXSECTION_PROPERTY_FULFILED,
-  CREATE_EXSECTION_PROPERTY_REJECTED
+  CREATE_EXSECTION_PROPERTY_REJECTED,
+  CHANGE_ACTIVE_EXSECTION_SECTION,
+  FETCH_EXSECTION_ATTRIBUTES_PENDING,
+  FETCH_EXSECTION_ATTRIBUTES_FULFILLED,
+  FETCH_EXSECTION_ATTRIBUTES_REJECTED,
+  CREATE_EXSECTION_PROPERTY_SECTION_FULFILLED,
+  CREATE_EXSECTION_PROPERTY_SECTION_PENDING,
+  CREATE_EXSECTION_PROPERTY_SECTION_REJECTED
 } from "./types";
 
 //import { onEcommerceCategoriesGet } from "../config/adminServerCall";
@@ -25,40 +31,19 @@ import {
 import {
   onExsectionAttributesGet,
   onExsectionSectionsGet,
-  onExSectionSectionDetailGet,
+  onExsectionSectionDetailGet,
   onExsectionSectionPost,
-  onExsectionPropertiesPost
+  onExsectionPropertiesPost,
+  onExsectionAttributesPost
 } from "../config/adminServerCall";
 
 const epics = [];
 
-// attirbutes
-export const onAttributesListExsection = () => ({
-  type: FETCH_EXSECTION_ATTRIBUTES_PENDING
-});
-
-epics.push((action$, { getState }) =>
-  action$.ofType(FETCH_EXSECTION_ATTRIBUTES_PENDING).mergeMap(action =>
-    onExsectionAttributesGet()
-      .map(({ response }) => ({
-        type: FETCH_EXSECTION_ATTRIBUTES_FULFILLED,
-        payload: response
-      }))
-      .catch(ajaxError => {
-        console.log(ajaxError);
-        toast.error("Error Fetching Attributes");
-        return Observable.of({ type: FETCH_EXSECTION_ATTRIBUTES_REJECTED });
-      })
-  )
-);
-
 //sections
-
 export const onSectionsListExsection = () => ({
   type: FETCH_EXSECTION_SECTIONS_PENDING,
   first: true
 });
-
 epics.push((action$, { getState }) =>
   action$.ofType(FETCH_EXSECTION_SECTIONS_PENDING).mergeMap(action => {
     const { first } = action;
@@ -82,7 +67,7 @@ epics.push((action$, { getState }) =>
         ];
       })
       .catch(ajaxError => {
-        toast.error("Error Fetching Categories");
+        toast.error("Error Fetching Sections");
         return Observable.of({ type: FETCH_EXSECTION_SECTIONS_REJECTED });
       });
   })
@@ -95,7 +80,7 @@ epics.push((action$, { getState }) =>
 //       const { payload: newSection, oldSection } = action;
 //       if (!oldSection || newSection !== oldSection) {
 //         //return onEcommerceCategoryDetailGet({ uid: newCategory })
-//         return onExSectionSectionDetailGet({ uid: newSection })
+//         return onExsectionSectionDetailGet({ uid: newSection })
 //           .map(({ response }) => {
 //             return {
 //               type: FETCH_EXSECTION_SECTION_FULFILLED,
@@ -113,20 +98,21 @@ epics.push((action$, { getState }) =>
 //     .startWith({ type: FETCH_EXSECTION_SECTION_PENDING })
 // );
 
+//add section
 export const onSectionSubmitExsection = payload => ({
   type: CREATE_EXSECTION_SECTIONS_PENDING,
   payload
 });
-
 epics.push((action$, { getState }) =>
   action$.ofType(CREATE_EXSECTION_SECTIONS_PENDING).mergeMap(action => {
     const parent = getState().AdminContainer.exsection.activeSection;
     const { name } = action.payload;
+    const hasAttr = true;
 
-    return onExsectionSectionPost({ name, parent })
+    return onExsectionSectionPost({ name, hasAttr, parent })
       .concatMap(({ response }) => {
         if (response.msg === "success") {
-          toast.success("Sub Section created successfully");
+          toast.success("Section created successfully");
           return [
             { type: CREATE_EXSECTION_SECTIONS_FULFILLED },
             { type: FETCH_EXSECTION_SECTIONS_PENDING }
@@ -142,18 +128,18 @@ epics.push((action$, { getState }) =>
   })
 );
 
-export const onChangeActiveSectionExSection = (newSection, oldSection) => ({
+export const onChangeActiveSectionExsection = (newSection, oldSection) => ({
   type: CHANGE_ACTIVE_EXSECTION_SECTION,
   payload: newSection,
   oldSection
 });
-
-epics.push(
-  (action$, { getState }) =>
-    action$.ofType(CHANGE_ACTIVE_EXSECTION_SECTION).mergeMap(action => {
+epics.push((action$, { getState }) =>
+  action$
+    .ofType(CHANGE_ACTIVE_EXSECTION_SECTION)
+    .mergeMap(action => {
       const { payload: newSection, oldSection } = action;
       if (!oldSection || newSection !== oldSection) {
-        return onExSectionSectionDetailGet({ uid: newSection })
+        return onExsectionSectionDetailGet({ uid: newSection })
           .map(({ response }) => {
             return {
               type: FETCH_EXSECTION_SECTION_FULFILLED,
@@ -168,7 +154,7 @@ epics.push(
         return Observable.empty();
       }
     })
-  //.startWith({ type: FETCH_EXSECTION_SECTION_PENDING })
+    .startWith({ type: FETCH_EXSECTION_SECTION_PENDING })
 );
 
 export const onPropertySubmitExsection = payload => ({
@@ -179,7 +165,7 @@ epics.push((action$, { getState }) =>
   action$.ofType(CREATE_EXSECTION_PROPERTY_PENDING).mergeMap(action => {
     const payload = getState().AdminContainer.activeSection;
     const { body } = action.payload;
-    return onExsectionPropertiesPost({ body })
+    return onExsectionAttributesPost({ body })
       .concatMap(({ response }) => {
         if (response.msg === "UNSUCCESSFUL") {
           toast.success("Attributes Added successfully");

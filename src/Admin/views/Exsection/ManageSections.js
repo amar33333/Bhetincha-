@@ -15,7 +15,7 @@ import { PopoverDelete } from "../../../Common/components";
 import {
   onSectionsListExsection,
   onSectionSubmitExsection,
-  onChangeActiveSectionExSection,
+  onChangeActiveSectionExsection,
   onAttributesListExsection,
   onPropertySubmitExsection
 } from "../../actions";
@@ -27,6 +27,8 @@ class ManageSections extends Component {
   }
 
   render() {
+    //console.log("Loading Section.....");
+    //console.log(this.props);
     return (
       <div className="animated fadeIn">
         <Container fluid>
@@ -47,7 +49,7 @@ class ManageSections extends Component {
                   <BreadcrumbNav
                     breadCrumbs={this.props.selectedSectionDetail.breadCrumbs}
                     onChangeActiveCategory={
-                      this.props.onChangeActiveSectionExSection
+                      this.props.onChangeActiveSectionExsection
                     }
                   />
                   {this.props.selectedSectionDetail.hasSec && (
@@ -104,7 +106,7 @@ export default connect(
     onSectionsListExsection,
     onAttributesListExsection,
     onSectionSubmitExsection,
-    onChangeActiveSectionExSection,
+    onChangeActiveSectionExsection,
     onPropertySubmitExsection
   }
 )(ManageSections);

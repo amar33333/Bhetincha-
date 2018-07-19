@@ -2,7 +2,10 @@ import {
   FETCH_EXSECTION_ATTRIBUTES_FULFILLED,
   FETCH_EXSECTION_SECTIONS_FULFILLED,
   CHANGE_ACTIVE_EXSECTION_SECTION,
-  FETCH_EXSECTION_SECTION_FULFILLED
+  FETCH_EXSECTION_SECTION_FULFILLED,
+  CREATE_EXSECTION_PROPERTY_SECTION_FULFILLED,
+  CREATE_EXSECTION_PROPERTY_SECTION_PENDING,
+  CREATE_EXSECTION_PROPERTY_SECTION_REJECTED
 } from "../actions/types";
 
 const INITIAL_STATE = {
@@ -19,6 +22,15 @@ export default function(state = INITIAL_STATE, action) {
   let isOpenSections;
 
   switch (action.type) {
+    case CREATE_EXSECTION_PROPERTY_SECTION_FULFILLED:
+      return { ...state, propertyLoading: false, propertyError: false };
+
+    case CREATE_EXSECTION_PROPERTY_SECTION_PENDING:
+      return { ...state, propertyLoading: true, propertyError: false };
+
+    case CREATE_EXSECTION_PROPERTY_SECTION_REJECTED:
+      return { ...state, propertyLoading: false, propertyError: true };
+
     case FETCH_EXSECTION_ATTRIBUTES_FULFILLED:
       return { ...state, attributes: action.payload };
 
