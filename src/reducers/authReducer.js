@@ -28,6 +28,9 @@ import {
   GOOGLE_LOGIN_FULFILLED,
   GOOGLE_LOGIN_PENDING,
   GOOGLE_LOGIN_REJECTED,
+  CHECK_USER_ACTIVATED_PENDING,
+  CHECK_USER_ACTIVATED_FULFILLED,
+  CHECK_USER_ACTIVATED_REJECTED,
   LOGOUT_USER
 } from "../actions/types";
 
@@ -83,6 +86,15 @@ export default function(state = INITIAL_STATE, action) {
       return { ...state, ...action.payload, loading: false, error: false };
 
     case FETCH_USER_REJECTED:
+      return { ...state, loading: false, error: true };
+
+    case CHECK_USER_ACTIVATED_PENDING:
+      return { ...state, loading: true };
+
+    case CHECK_USER_ACTIVATED_FULFILLED:
+      return { ...state, loading: false, error: false };
+
+    case CHECK_USER_ACTIVATED_REJECTED:
       return { ...state, loading: false, error: true };
 
     case CREATE_BUSINESS_USER_PENDING:

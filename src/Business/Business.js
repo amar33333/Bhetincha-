@@ -28,7 +28,29 @@ class Business extends Component {
       "aside-menu-fixed",
       "aside-menu-hidden"
     );
+    this.updateSidebar();
+  }
 
+  componentDidUpdate(prevProps) {
+    if (
+      this.props.match.params[ROUTE_PARAMS_BUSINESS_NAME] !==
+      prevProps.match.params[ROUTE_PARAMS_BUSINESS_NAME]
+    ) {
+      this.updateSidebar();
+    }
+  }
+
+  componentWillUnmount() {
+    document.body.classList.remove(
+      "app",
+      "header-fixed",
+      "sidebar-fixed",
+      "aside-menu-fixed",
+      "aside-menu-hidden"
+    );
+  }
+
+  updateSidebar() {
     const routes = {};
     Object.keys(nav.routes).forEach(
       key =>
@@ -82,15 +104,6 @@ class Business extends Component {
     });
   }
 
-  componentWillUnmount() {
-    document.body.classList.remove(
-      "app",
-      "header-fixed",
-      "sidebar-fixed",
-      "aside-menu-fixed",
-      "aside-menu-hidden"
-    );
-  }
   render() {
     return (
       <div className="app">

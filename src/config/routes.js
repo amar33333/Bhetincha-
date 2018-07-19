@@ -9,7 +9,8 @@ import {
   Loading,
   MobileVerification,
   UserRegister,
-  IndividualRegister
+  IndividualRegister,
+  Activate
 } from "../Common/pages";
 import Website from "../Website";
 
@@ -59,6 +60,7 @@ class MainRoute extends Component {
             name="Register Page"
             component={Register}
           />
+          <Route exact path="/activate" name="Activate" component={Activate} />
           <Route
             exact
             path="/mobile-verification"

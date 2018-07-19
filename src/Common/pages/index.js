@@ -6,6 +6,7 @@ import Loading from "./Loading";
 import MobileVerification from "./MobileVerification";
 import UserRegister from "./UserRegister";
 import IndividualRegister from "./IndividualRegister";
+import Activate from "./Activate";
 
 export {
   Login,
@@ -15,5 +16,6 @@ export {
   Register,
   MobileVerification,
   UserRegister,
-  IndividualRegister
+  IndividualRegister,
+  Activate
 };

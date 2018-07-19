@@ -39,6 +39,15 @@ import {
   GOOGLE_LOGIN_FULFILLED,
   GOOGLE_LOGIN_PENDING,
   GOOGLE_LOGIN_REJECTED,
+  INDIVIDUAL_TOKEN_FULFILLED,
+  INDIVIDUAL_TOKEN_PENDING,
+  INDIVIDUAL_TOKEN_REJECTED,
+  RESEND_INDIVIDUAL_TOKEN_FULFILLED,
+  RESEND_INDIVIDUAL_TOKEN_PENDING,
+  RESEND_INDIVIDUAL_TOKEN_REJECTED,
+  CHECK_USER_ACTIVATED_PENDING,
+  CHECK_USER_ACTIVATED_FULFILLED,
+  CHECK_USER_ACTIVATED_REJECTED,
   LOGOUT_USER
 } from "./types";
 
@@ -64,7 +73,10 @@ import {
   onResendTokenPost,
   onCheckRegistrationGet,
   onFacebookLogin,
-  onGoogleLogin
+  onGoogleLogin,
+  onIndividualTokenPost,
+  onIndividualResendTokenPost,
+  onCheckUserActivatedPost
 } from "../Common/utils/serverCall";
 
 import querystring from "querystring";
@@ -108,6 +120,42 @@ epics.push(action$ =>
     //     CookiesProvider.getAllCookies()
     //   );
     // }
+  })
+);
+
+export const onCheckUserActivatedSubmit = payload => ({
+  type: CHECK_USER_ACTIVATED_PENDING,
+  payload
+});
+
+epics.push(action$ =>
+  action$.ofType(CHECK_USER_ACTIVATED_PENDING).mergeMap(action => {
+    const { body, history } = action.payload;
+    return onCheckUserActivatedPost({ body })
+      .concatMap(({ response }) => {
+        console.log("phone: ", response);
+        if (response.phone_activated) {
+          console.log("adasdsddasdadadasdasdasdsd");
+          return [
+            {
+              type: CHECK_USER_ACTIVATED_FULFILLED,
+              payload: response
+            },
+            {
+              type: FETCH_USER_PENDING,
+              payload: { ...body, history }
+            },
+            { type: TOGGLE_LOGIN_MODAL }
+          ];
+        } else throw new Error(response.phone_activated);
+      })
+      .catch(ajaxError => {
+        // toast.error(ajaxError.toString());
+        return Observable.of({
+          type: CHECK_USER_ACTIVATED_REJECTED,
+          payload: ajaxError
+        });
+      });
   })
 );
 
@@ -197,6 +245,9 @@ epics.push(action$ =>
     return onLogin({ username, password })
       .mergeMap(({ response }) => {
         CookiesProvider.setCookies("token_data", response, "/", expiryDate);
+        CookiesProvider.setCookies("expiry_date", expiryDate, "/", expiryDate);
+        console.log("login expiy Date: ", expiryDate);
+
         // cookies.set("token_data", response, "/", expiryDate);
 
         return onUserGet({ access_token: response.access_token });
@@ -207,7 +258,6 @@ epics.push(action$ =>
         console.log("permis rest: ", permissions, rest);
 
         CookiesProvider.setCookies("user_data", rest, "/", expiryDate);
-        console.log("cookei: ", CookiesProvider.getAllCookies());
         return [
           { type: TOGGLE_LOGIN_MODAL },
           {
@@ -435,35 +485,99 @@ epics.push(action$ =>
   })
 );
 
+export const onIndividualResendTokenSubmit = payload => ({
+  type: RESEND_INDIVIDUAL_TOKEN_PENDING,
+  payload
+});
+
+epics.push(action$ =>
+  action$.ofType(RESEND_INDIVIDUAL_TOKEN_PENDING).mergeMap(action => {
+    const { body } = action.payload;
+    return onIndividualResendTokenPost({ body })
+      .map(({ response }) => {
+        if (response.code) {
+          toast.success("Mobile Code Sent Successfully");
+
+          return {
+            type: RESEND_INDIVIDUAL_TOKEN_FULFILLED,
+            payload: response
+          };
+        } else {
+          throw new Error(response.msg);
+        }
+      })
+      .catch(ajaxError => {
+        toast.error(ajaxError.toString());
+        return Observable.of({
+          type: RESEND_INDIVIDUAL_TOKEN_REJECTED,
+          payload: ajaxError
+        });
+      });
+  })
+);
+
+export const onIndividualTokenSend = payload => ({
+  type: INDIVIDUAL_TOKEN_PENDING,
+  payload
+});
+
+epics.push(action$ =>
+  action$.ofType(INDIVIDUAL_TOKEN_PENDING).mergeMap(action => {
+    const { history, body } = action.payload;
+    return onIndividualTokenPost({ body })
+      .map(({ response }) => {
+        if (response.msg === "success") {
+          toast.success("Verified Successfully");
+          history.push({
+            pathname: "/login"
+          });
+          return {
+            type: INDIVIDUAL_TOKEN_FULFILLED,
+            payload: response
+          };
+        } else {
+          throw new Error(response.msg);
+        }
+      })
+      .catch(ajaxError => {
+        toast.error(ajaxError.toString());
+        return Observable.of({
+          type: INDIVIDUAL_TOKEN_REJECTED,
+          payload: ajaxError
+        });
+      });
+  })
+);
+
 export const onIndividualRegisterSubmit = payload => ({
   type: CREATE_INDIVIDUAL_USER_PENDING,
   payload
 });
 
 epics.push(action$ =>
-  action$.ofType(CREATE_INDIVIDUAL_USER_PENDING).mergeMap(action =>
-    onIndividualRegister({ ...action.payload })
-      .concatMap(({ response }) => {
-        if (response.msg === "success") {
-          toast.success("Registered Successfully");
+  action$.ofType(CREATE_INDIVIDUAL_USER_PENDING).mergeMap(action => {
+    const { history, phone_number } = action.payload;
 
-          return [
-            { type: TOGGLE_REGISTER_MODAL },
-            { type: CREATE_INDIVIDUAL_USER_FULFILLED, payload: response }
-          ];
-        } else {
-          throw new Error(response.msg[Object.keys(response.msg)[0]][0]);
-        }
+    return onIndividualRegister({ ...action.payload })
+      .map(({ response }) => {
+        // toast.success("Registered Successfully");
+        if (response.message) {
+          history.push({
+            pathname: "/activate",
+            state: { phone_number }
+          });
+          return { type: CREATE_INDIVIDUAL_USER_FULFILLED, payload: response };
+        } else throw new Error(response.msg[Object.keys(response.msg)[0]][0]);
       })
       .catch(ajaxError => {
         toast.error(ajaxError.toString());
-
+        console.log("error: ", ajaxError.toString());
         return Observable.of({
           type: CREATE_INDIVIDUAL_USER_REJECTED,
           payload: ajaxError
         });
-      })
-  )
+      });
+  })
 );
 
 export const onLogout = () => ({

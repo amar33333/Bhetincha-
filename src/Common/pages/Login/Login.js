@@ -1,40 +1,45 @@
 import React, { Component } from "react";
-import { connect } from "react-redux";
+import LaddaButton, { S, EXPAND_RIGHT } from "react-ladda";
 import {
   Button,
-  Card,
-  CardBody,
-  CardGroup,
   Col,
-  Container,
+  Row,
   Input,
   InputGroup,
   InputGroupAddon,
   InputGroupText,
-  Row,
+  Container,
+  CardGroup,
+  Card,
+  CardBody,
   Form
 } from "reactstrap";
 
-import { onSubmit } from "../../../actions";
+import { connect } from "react-redux";
+import { onSubmit, onCheckUserActivatedSubmit } from "../../../actions";
 
 class Login extends Component {
   state = { username: "", password: "" };
 
-  static getDerivedStateFromProps(nextProps, prevState) {
-    console.log("next prosp login: ", nextProps);
+  onForgotPassBtnClick = () => {
+    console.log("Forgot Password Clicked");
+  };
 
-    if (nextProps.statusClass === "fulfilled")
-      nextProps.history.push("/admin/dashboard");
-
-    return null;
-  }
-
-  onChange = (key, event) => this.setState({ [key]: event.target.value });
+  onChange = (key, event) => {
+    this.setState({ [key]: event.target.value });
+  };
 
   onFormSubmit = event => {
     event.preventDefault();
     const { username, password } = this.state;
-    this.props.onSubmit({ username, password });
+    // this.props.onSubmit({ username, password, history: this.props.history });
+    this.props.onCheckUserActivatedSubmit({
+      body: {
+        username,
+        password
+      },
+      history: this.props.history
+    });
   };
 
   render() {
@@ -49,8 +54,6 @@ class Login extends Component {
                 <Card className="p-4">
                   <CardBody>
                     <Form onSubmit={this.onFormSubmit}>
-                      <h1>Login</h1>
-                      <p className="text-muted">Sign In to your account</p>
                       <InputGroup className="mb-3">
                         <InputGroupAddon addonType="prepend">
                           <InputGroupText>
@@ -58,8 +61,9 @@ class Login extends Component {
                           </InputGroupText>
                         </InputGroupAddon>
                         <Input
+                          autoFocus
                           required
-                          disabled={loading}
+                          disabled={this.props.loading}
                           type="text"
                           placeholder="Username"
                           value={this.state.username}
@@ -74,48 +78,35 @@ class Login extends Component {
                         </InputGroupAddon>
                         <Input
                           required
-                          disabled={loading}
                           type="password"
-                          placeholder="Password"
+                          disabled={this.props.loading}
                           value={this.state.password}
                           onChange={this.onChange.bind(this, "password")}
+                          placeholder="Password"
                         />
                       </InputGroup>
+                      {this.props.error && "Username & Password Error"}
                       <Row>
                         <Col xs="6">
-                          <Button
-                            disabled={loading}
-                            color="primary"
-                            className="px-4"
+                          <LaddaButton
+                            loading={this.props.loading}
+                            data-size={S}
+                            data-style={EXPAND_RIGHT}
                           >
                             Login
-                          </Button>
+                          </LaddaButton>
                         </Col>
                         <Col xs="6" className="text-right">
-                          <Button color="link" className="px-0">
+                          <Button
+                            color="link"
+                            className="px-0"
+                            onClick={() => this.onForgotPassBtnClick()}
+                          >
                             Forgot password?
                           </Button>
                         </Col>
                       </Row>
                     </Form>
-                  </CardBody>
-                </Card>
-                <Card
-                  className="text-white bg-primary py-5 d-md-down-none"
-                  style={{ width: 44 + "%" }}
-                >
-                  <CardBody className="text-center">
-                    <div>
-                      <h2>Sign up</h2>
-                      <p>
-                        Lorem ipsum dolor sit amet, consectetur adipisicing
-                        elit, sed do eiusmod tempor incididunt ut labore et
-                        dolore magna aliqua.
-                      </p>
-                      <Button color="primary" className="mt-3" active>
-                        Register Now!
-                      </Button>
-                    </div>
                   </CardBody>
                 </Card>
               </CardGroup>
@@ -127,11 +118,11 @@ class Login extends Component {
   }
 }
 
-function mapStateToProps({ auth }) {
+const mapStateToProps = ({ auth }) => {
   return { ...auth };
-}
+};
 
 export default connect(
   mapStateToProps,
-  { onSubmit }
+  { onSubmit, onCheckUserActivatedSubmit }
 )(Login);
