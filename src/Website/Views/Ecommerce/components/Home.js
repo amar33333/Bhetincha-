@@ -35,9 +35,9 @@ class Home extends Component {
         <MegaMenu categories={this.props.categories} />
         {/* </Col>
         </Row> */}
-        <div>
+        {/* <div>
           <ChildCategories categories={this.props.childCategories} />
-        </div>
+        </div> */}
         <div>
           <Filters filters={this.props.filterAttributes} />
         </div>
