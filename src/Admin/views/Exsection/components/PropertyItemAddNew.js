@@ -58,8 +58,6 @@ class PropertyItemAddNew extends Component {
     }
   };
 
-<<<<<<< HEAD
-=======
   componentDidUpdate = (_, prevState) => {
     if (prevState.propertySubmit && !this.props.loading) {
       const updates = { propertySubmit: false };
@@ -80,7 +78,6 @@ class PropertyItemAddNew extends Component {
     }
   };
 
->>>>>>> fd5264ea7795f8a1acbde74b644ec571e508c2fd
   onChangeName = event =>
     this.onChange(
       "name",
@@ -152,10 +149,6 @@ class PropertyItemAddNew extends Component {
       this.props.onPropertySubmit({ body })
     );
   };
-<<<<<<< HEAD
-=======
-
->>>>>>> fd5264ea7795f8a1acbde74b644ec571e508c2fd
   render() {
     return (
       <div>
