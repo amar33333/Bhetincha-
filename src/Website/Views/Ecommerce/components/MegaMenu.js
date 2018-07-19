@@ -35,7 +35,7 @@ class MegaMenu extends Component {
             <div className="sub-cat-column" key={index}>
               <div
                 className="mb-2 mt-2 sub-menu-name"
-                onClick={() => console.log("Clicked::", cCat.name)}
+                onClick={() => this.props.onSelect(cCat.uid)}
               >
                 <strong>{cCat.name}</strong>
               </div>
@@ -48,16 +48,14 @@ class MegaMenu extends Component {
                         {ccCatIndex < MAX_CAT ? (
                           <p
                             className="ml-3 mb-0 sub-menu-item-name"
-                            onClick={() => console.log("Clicked::", ccCat.name)}
+                            onClick={() => this.props.onSelect(ccCat.uid)}
                           >
                             {ccCat.name}
                           </p>
                         ) : (
                           <small
                             className="ml-3 mb-0 sub-menu-item-name"
-                            onClick={() =>
-                              console.log("Clicked More of ::", cCat.name)
-                            }
+                            onClick={() => this.props.onSelect(cCat.uid)}
                           >
                             + {cCat.children.length - MAX_CAT} more{" "}
                             {cCat.children.length - MAX_CAT === 1
@@ -98,7 +96,7 @@ class MegaMenu extends Component {
                     }
                     key={index}
                     onMouseOver={e => this.handleCatHover(e, cat)}
-                    onClick={() => console.log("Clicked::", cat.name)}
+                    onClick={() => this.props.onSelect(cat.uid)}
                   >
                     {cat.className ? (
                       <i

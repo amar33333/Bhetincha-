@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
 import {
   Badge,
   Collapse,
@@ -37,7 +38,11 @@ class EcommerceMainNav extends Component {
           borderBottom: "0.5px solid lightgray"
         }}
       >
-        <NavbarBrand href="/">Bhetincha Shop</NavbarBrand>
+        {/* <NavbarBrand href="/">Bhetincha Shop</NavbarBrand> */}
+        <Link className="navbar-brand" to="/ecommerce">
+          Bhetincha Shop{" "}
+        </Link>
+
         <NavbarToggler onClick={this.toggle} />
         <Collapse isOpen={this.state.isOpen} navbar>
           <Nav className="ml-auto" navbar>

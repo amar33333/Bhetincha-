@@ -9,11 +9,40 @@ import MegaMenu from "./MegaMenu";
 import EcommerceMainNav from "./EcommerceMainNav";
 import ChildCategories from "./ChildCategories";
 
-import { onCategoriesList } from "../actions";
+import { onCategoriesList, onActiveCategoryChange } from "../actions";
 
 class Home extends Component {
   componentDidMount() {
-    this.props.onCategoriesList();
+    const { categoryId } = this.props.match.params;
+    if (categoryId) {
+      this.props.onActiveCategoryChange({
+        categoryId,
+        history: this.props.history
+      });
+    }
+    this.props.onCategoriesList({
+      changeActive: !Boolean(categoryId),
+      history: this.props.history
+    });
+  }
+
+  componentDidUpdate(prevProps) {
+    if (
+      prevProps.match.params.categoryId !== this.props.match.params.categoryId
+    ) {
+      const isCategoryId = Boolean(this.props.match.params.categoryId);
+      if (isCategoryId) {
+        this.props.onActiveCategoryChange({
+          categoryId: this.props.match.params.categoryId,
+          history: this.props.history
+        });
+      } else {
+        this.props.onCategoriesList({
+          changeActive: !isCategoryId,
+          history: this.props.history
+        });
+      }
+    }
   }
 
   render() {
@@ -32,7 +61,12 @@ class Home extends Component {
               overflow: "visible"
             }}
           > */}
-        <MegaMenu categories={this.props.categories} />
+        <MegaMenu
+          categories={this.props.categories}
+          onSelect={categoryId =>
+            this.props.history.push(`/ecommerce/${categoryId}`)
+          }
+        />
         {/* </Col>
         </Row> */}
         <div>
@@ -63,7 +97,8 @@ export default connect(
         childCategories,
         filterAttributes,
         products,
-        productCount
+        productCount,
+        activeCategory
       }
     }
   }) => ({
@@ -71,7 +106,8 @@ export default connect(
     childCategories,
     filterAttributes,
     products,
-    productCount
+    productCount,
+    activeCategory
   }),
-  { onCategoriesList }
+  { onCategoriesList, onActiveCategoryChange }
 )(Home);
