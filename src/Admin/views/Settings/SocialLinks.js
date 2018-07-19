@@ -24,6 +24,7 @@ import {
 
 import CustomModal from "../../../Common/components/CustomModal";
 import SocialLinkEditModal from "../../../Common/components/CustomModal/ModalTemplates/SocialLinkEditModal";
+import { FaIconURLjsx } from "../../../Common/utils/Extras";
 
 import PermissionProvider from "../../../Common/utils/PermissionProvider";
 
@@ -87,6 +88,7 @@ class SocialLinks extends Component {
                         onChange={this.onChange.bind(this, "className")}
                       />
                     </InputGroup>
+                    {FaIconURLjsx}
                     <Button type="submit" color="primary" value="Add Group">
                       <i className="fa fa-plus" /> Add Social Link
                     </Button>
