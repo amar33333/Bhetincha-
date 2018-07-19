@@ -13,7 +13,7 @@ class ProductItem extends Component {
       price
     } = this.props.product;
 
-    const discountedPrice = price + price * (discount / 100);
+    const discountedPrice = price - price * (discount / 100);
 
     const brandName = this.props.product["Brand Name"];
     console.log("product::", this.props.product);

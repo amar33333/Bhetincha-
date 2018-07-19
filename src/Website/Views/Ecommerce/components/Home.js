@@ -69,9 +69,9 @@ class Home extends Component {
         />
         {/* </Col>
         </Row> */}
-        {/* <div>
+        <div>
           <ChildCategories categories={this.props.childCategories} />
-        </div> */}
+        </div>
         <div>
           <Filters filters={this.props.filterAttributes} />
         </div>
