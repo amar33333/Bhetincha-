@@ -47,6 +47,9 @@ import {
   EDIT_BUSINESS_DETAILS_FULFILLED,
   EDIT_BUSINESS_DETAILS_PENDING,
   EDIT_BUSINESS_DETAILS_REJECTED,
+  CHECK_SLUG_FULFILLED,
+  CHECK_SLUG_PENDING,
+  CHECK_SLUG_REJECTED,
   UNMOUNT_BRANCH,
   TOGGLE_EDIT
 } from "../actions/types";
@@ -67,11 +70,22 @@ const INITIAL_STATE = {
   branch: null,
   businessDetails: null,
   logo: null,
-  cover_image: null
+  cover_image: null,
+  slugAvailable: true
 };
 
 export default function(state = INITIAL_STATE, action) {
   switch (action.type) {
+    case CHECK_SLUG_PENDING:
+      return { ...state, fetchLoading: true };
+    case CHECK_SLUG_REJECTED:
+      return { ...state, fetchLoading: false };
+    case CHECK_SLUG_FULFILLED:
+      return {
+        ...state,
+        slugAvailable: action.payload.slug_available
+      };
+
     case FETCH_LOGO_COVER_IMAGE_PENDING:
       return { ...state, fetchLoading: true };
     case FETCH_LOGO_COVER_IMAGE_REJECTED:

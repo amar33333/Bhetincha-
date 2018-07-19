@@ -11,6 +11,7 @@ import BusinessBranchAddress from "./BusinessBranchAddress/BusinessBranchAddress
 import AddBranch from "./BusinessBranchAddress/AddBranch";
 import BusinessWorkingHour from "./BusinessWorkingHour/BusinessWorkingHour";
 import BusinessAbout from "./BusinessAbout/BusinessAbout";
+import ChangeSlug from "./ChangeSlug/ChangeSlug";
 
 export {
   Dashboard,
@@ -24,5 +25,6 @@ export {
   BusinessPrimaryAddress,
   BusinessLogoCoverImage,
   BusinessWorkingHour,
-  AddBranch
+  AddBranch,
+  ChangeSlug
 };

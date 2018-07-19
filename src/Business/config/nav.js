@@ -19,6 +19,12 @@ const items = {
     //   // permission: "CAN_VIEW_USERS"
     // },
     {
+      name: "Change Slug",
+      url: `/${ROUTE_PARAMS_BUSINESS_NAME}/dashboard/change-slug`,
+      icon: "fa fa-map-o"
+      // permission: "CAN_VIEW_USERS"
+    },
+    {
       name: "Business Details",
       url: `/${ROUTE_PARAMS_BUSINESS_NAME}/dashboard/business-details`,
       icon: "fa fa-map-o"

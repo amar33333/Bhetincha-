@@ -12,7 +12,8 @@ import {
   ManageProducts,
   ProductEdit,
   ProductView,
-  AddBranch
+  AddBranch,
+  ChangeSlug
 } from "../views";
 
 import {
@@ -34,6 +35,11 @@ class BusinessRoute extends Component {
           name="Business Detail"
           component={BusinessDetail}
         /> */}
+        <Route
+          path={`/:${ROUTE_PARAMS_BUSINESS_NAME}/dashboard/change-slug`}
+          name="Change Slug"
+          component={ChangeSlug}
+        />
         <Route
           path={`/:${ROUTE_PARAMS_BUSINESS_NAME}/dashboard/business-details`}
           name="Business Details"

@@ -21,7 +21,9 @@ import {
   onBusinessDetailsGet,
   onBusinessDetailsPut,
   onBusinessLogoCoverImageGet,
-  onBusinessLogoCoverImagePut
+  onBusinessLogoCoverImagePut,
+  onSlugPut,
+  onSlugCheckPost
 } from "../config/businessServerCall";
 
 import {
@@ -102,6 +104,12 @@ import {
   FETCH_CATEGORY_ARRAY_PENDING,
   FETCH_CATEGORY_ARRAY_FULFILLED,
   FETCH_CATEGORY_ARRAY_REJECTED,
+  EDIT_SLUG_FULFILLED,
+  EDIT_SLUG_PENDING,
+  EDIT_SLUG_REJECTED,
+  CHECK_SLUG_FULFILLED,
+  CHECK_SLUG_PENDING,
+  CHECK_SLUG_REJECTED,
   UNMOUNT_BRANCH,
   TOGGLE_EDIT
 } from "./types";
@@ -109,6 +117,73 @@ import {
 const epics = [];
 
 export const onUnmountBranch = () => ({ type: UNMOUNT_BRANCH });
+
+export const onSlugCheckSubmit = payload => ({
+  type: CHECK_SLUG_PENDING,
+  payload
+});
+
+epics.push((action$, { getState }) =>
+  action$
+    .ofType(CHECK_SLUG_PENDING)
+    .debounceTime(200)
+    .switchMap(({ payload }) => {
+      const cookies = getState().auth.cookies;
+      const access_token = cookies.token_data.access_token;
+
+      const { slug } = payload;
+
+      return onSlugCheckPost({ access_token, slug })
+        .map(({ response }) => {
+          return {
+            type: CHECK_SLUG_FULFILLED,
+            payload: response
+          };
+        })
+        .catch(ajaxError => {
+          toast.error(ajaxError.toString());
+          return Observable.of({
+            type: CHECK_SLUG_REJECTED,
+            payload: ajaxError
+          });
+        });
+    })
+);
+
+export const onSlugEdit = payload => ({
+  type: EDIT_SLUG_PENDING,
+  payload
+});
+
+epics.push((action$, { getState }) =>
+  action$.ofType(EDIT_SLUG_PENDING).mergeMap(({ payload }) => {
+    const cookies = getState().auth.cookies;
+    const access_token = cookies.token_data.access_token;
+    const id = cookies.user_data.business_id;
+
+    const { slug } = payload;
+
+    return onSlugPut({ id, access_token, slug })
+      .map(({ response }) => {
+        if (response.msg === "success") {
+          toast.success("Slug Changed Successfully");
+
+          return {
+            type: EDIT_SLUG_FULFILLED,
+            payload: response
+          };
+        } else throw new Error(response.msg);
+      })
+
+      .catch(ajaxError => {
+        toast.error(ajaxError.toString());
+        return Observable.of({
+          type: EDIT_SLUG_REJECTED,
+          payload: ajaxError
+        });
+      });
+  })
+);
 
 export const onBusinessLogoCoverImageList = () => ({
   type: FETCH_LOGO_COVER_IMAGE_PENDING

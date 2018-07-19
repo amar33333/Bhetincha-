@@ -13,7 +13,9 @@ import {
   WORKING_HOUR_GET_URL,
   BUSINESS_DETAILS_GET_URL,
   LOGO_COVER_IMAGE_GET_URL,
-  ABOUT_GET_URL
+  ABOUT_GET_URL,
+  CHANGE_SLUG_URL,
+  CHECK_SLUG_URL
 } from "./BUSINESS_API";
 import axios from "axios";
 import { ajax } from "rxjs/observable/dom/ajax";
@@ -23,6 +25,32 @@ export const onBusinessLogoCoverImageGet = ({ access_token, id }) =>
   ajax({
     method: "GET",
     url: `${LOGO_COVER_IMAGE_GET_URL}${id}/`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
+export const onSlugCheckPost = ({ access_token, slug }) =>
+  ajax({
+    method: "POST",
+    url: `${CHECK_SLUG_URL}`,
+    body: {
+      slug
+    },
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
+export const onSlugPut = ({ access_token, id, slug }) =>
+  ajax({
+    method: "PUT",
+    url: `${CHANGE_SLUG_URL}${id}/`,
+    body: {
+      slug
+    },
     headers: {
       "Content-Type": "application/json",
       Authorization: "Bearer " + access_token
