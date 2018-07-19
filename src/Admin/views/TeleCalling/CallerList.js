@@ -13,6 +13,7 @@ export default props => (
         </thead>
         <tbody>
           {props.teleUsers.map((user, i) => {
+            if (!(user.mobileNumber || user.phone_number)) return null;
             let name = "";
             let number = "";
             let address = "";

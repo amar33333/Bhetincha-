@@ -20,7 +20,7 @@ import {
 
 import { BottomFooter } from "../components";
 import querystring from "querystring";
-import theme from "../components/theme-big.css";
+// import theme from "../components/theme-big.css";
 
 const placeholder = [
   "Search Anything....",
@@ -97,7 +97,7 @@ class Home extends Component {
           <Row className="centered">
             <Col xs="12" md="8" className="home-page__searchbar ">
               <AutoSuggestion
-                theme={theme}
+                // theme={theme}
                 placeholder={placeholder[0]}
                 valueKey="business_name"
                 autoFocus
