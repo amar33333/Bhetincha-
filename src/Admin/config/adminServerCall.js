@@ -1402,6 +1402,7 @@ export const onExsectionSectionPost = ({ name, hasAttr, parent }) =>
     method: "POST",
     url: EXSECTION_SECTION_URL,
     body: { name, hasAttr, parent },
+<<<<<<< HEAD
     headers: {
       "Content-Type": "application/json"
     }
@@ -1411,6 +1412,8 @@ export const onExsectionAttributesPost = ({ body }) =>
     method: "POST",
     url: EXSECTION_PROPERTY_URL,
     body,
+=======
+>>>>>>> fd5264ea7795f8a1acbde74b644ec571e508c2fd
     headers: {
       "Content-Type": "application/json"
     }

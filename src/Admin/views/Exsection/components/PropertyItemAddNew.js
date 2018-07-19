@@ -58,6 +58,29 @@ class PropertyItemAddNew extends Component {
     }
   };
 
+<<<<<<< HEAD
+=======
+  componentDidUpdate = (_, prevState) => {
+    if (prevState.propertySubmit && !this.props.loading) {
+      const updates = { propertySubmit: false };
+      if (!this.props.error) {
+        updates.name = "";
+        updates.fieldType = null;
+        updates.required = false;
+        updates.defaultValueString = "";
+        updates.defaultValueDateTime = new Date();
+        updates.defaultValueChoices = null;
+        updates.defaultValueMultipleChoices = null;
+        updates.defaultValueInteger = 0;
+        updates.defaultValueFloat = 0;
+        updates.options = [];
+        updates.filterable = false;
+      }
+      this.setState(updates, () => this.focusableInput.focus());
+    }
+  };
+
+>>>>>>> fd5264ea7795f8a1acbde74b644ec571e508c2fd
   onChangeName = event =>
     this.onChange(
       "name",
@@ -129,6 +152,10 @@ class PropertyItemAddNew extends Component {
       this.props.onPropertySubmit({ body })
     );
   };
+<<<<<<< HEAD
+=======
+
+>>>>>>> fd5264ea7795f8a1acbde74b644ec571e508c2fd
   render() {
     return (
       <div>
