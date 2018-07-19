@@ -209,10 +209,10 @@ class ProductAddEdit extends Component {
       if (defaultValue.name && defaultValue.name != name) {
         updates.name = name;
       }
-      if (defaultValue.price && defaultValue.price != price) {
+      if (defaultValue.price != price) {
         updates.price = parseFloat(price);
       }
-      if (defaultValue.discount && defaultValue.discount != discount) {
+      if (defaultValue.discount != discount) {
         updates.discount = parseFloat(discount);
       }
       if (profilePictureFile) {

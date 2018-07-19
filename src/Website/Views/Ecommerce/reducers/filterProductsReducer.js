@@ -13,7 +13,7 @@ import { FETCH_ECOMMERCE_PRODUCTS_FULFILLED } from "../actions/types";
 // }
 const INITIAL_STATE = {
   frm: 0,
-  size: 10,
+  size: 20,
   query: "",
   filters: [],
   sortby: null,

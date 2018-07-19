@@ -550,11 +550,12 @@ input.main-nav-search::placeholder {
 }
 
 .sub-menu {
+  position: relative;
   background-color: rgba(255, 255, 255, 0.99);
   padding: 10px 20px;
   margin-left: 3px;
   height: 100%;
-  width: 100%;
+  /* width: 100%; */
   border-bottom: 0.5px solid lightgray;
   border-right: 0.5px solid lightgray;
   -webkit-columns: 180px;
@@ -580,12 +581,23 @@ input.main-nav-search::placeholder {
 }
 
 .sub-cat-column {
+  display: inline-block;
+  width: 100%;
+  position: relative;
   -webkit-column-break-inside: avoid;
   page-break-inside: avoid;
   break-inside: avoid;
 }
 .sub-cat-column-content {
+  display: inline-block;
+  width: 100%;
+  position: relative;
   -webkit-column-break-inside: avoid;
   page-break-inside: avoid;
   break-inside: avoid;
+}
+
+.product-card-thumbnail {
+  height: 200px;
+  object-fit: cover;
 }

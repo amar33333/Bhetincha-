@@ -100,7 +100,17 @@ class MegaMenu extends Component {
                     onMouseOver={e => this.handleCatHover(e, cat)}
                     onClick={() => console.log("Clicked::", cat.name)}
                   >
-                    <Icon name="mobile" />
+                    {cat.className ? (
+                      <i
+                        className={cat.className}
+                        style={{
+                          marginRight: "0.4rem"
+                        }}
+                      />
+                    ) : (
+                      <Icon name="mobile" />
+                    )}
+
                     <p className="mb-0">{cat.name}</p>
                     <i
                       className="fa fa-angle-right ml-auto pr-1"
