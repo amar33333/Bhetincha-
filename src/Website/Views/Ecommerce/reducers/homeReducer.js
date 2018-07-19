@@ -11,7 +11,8 @@ const INITIAL_STATE = {
   childCategories: [],
   filterAttributes: [],
   productCount: 0,
-  products: []
+  products: [],
+  breadcrumbs: []
 };
 
 export default function(state = INITIAL_STATE, action) {
@@ -32,7 +33,8 @@ export default function(state = INITIAL_STATE, action) {
       return {
         ...state,
         childCategories: action.payload.child,
-        filterAttributes: action.payload.filterableAttributes
+        filterAttributes: action.payload.filterableAttributes,
+        breadcrumbs: action.payload.breadCrumbs
       };
 
     case FETCH_ECOMMERCE_PRODUCTS_FULFILLED:

@@ -7,7 +7,13 @@ class ChildCategories extends Component {
         Child
         <ul>
           {this.props.categories.map(category => (
-            <li key={category.uid}>{category.name}</li>
+            <li
+              key={category.uid}
+              style={{ cursor: "pointer" }}
+              onClick={() => this.props.onSelectCategory(category.uid)}
+            >
+              {category.name}
+            </li>
           ))}
         </ul>
       </div>

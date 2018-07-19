@@ -8,6 +8,7 @@ import Filters from "./Filters";
 import MegaMenu from "./MegaMenu";
 import EcommerceMainNav from "./EcommerceMainNav";
 import ChildCategories from "./ChildCategories";
+import Breadcrumbs from "./Breadcrumbs";
 
 import { onCategoriesList, onActiveCategoryChange } from "../actions";
 
@@ -45,6 +46,9 @@ class Home extends Component {
     }
   }
 
+  onSelectCategory = categoryId =>
+    this.props.history.push(`/ecommerce/${categoryId}`);
+
   render() {
     return (
       <div
@@ -53,24 +57,25 @@ class Home extends Component {
         }}
       >
         <EcommerceMainNav />
-        {/* <Row>
-          <Col
-            xs="12"
-            md="4"
-            style={{
-              overflow: "visible"
-            }}
-          > */}
+        {this.props.breadcrumbs.length > 1 && (
+          <Breadcrumbs
+            items={this.props.breadcrumbs}
+            onSelectCategory={this.onSelectCategory}
+          />
+        )}
         <MegaMenu
           categories={this.props.categories}
-          onSelect={categoryId =>
-            this.props.history.push(`/ecommerce/${categoryId}`)
-          }
+          onSelect={this.onSelectCategory}
         />
-        {/* </Col>
-        </Row> */}
         <div>
-          <ChildCategories categories={this.props.childCategories} />
+          {this.props.childCategories.length ? (
+            <ChildCategories
+              categories={this.props.childCategories}
+              onSelectCategory={this.onSelectCategory}
+            />
+          ) : (
+            ""
+          )}
         </div>
         <div>
           <Filters filters={this.props.filterAttributes} />
@@ -98,7 +103,8 @@ export default connect(
         filterAttributes,
         products,
         productCount,
-        activeCategory
+        activeCategory,
+        breadcrumbs
       }
     }
   }) => ({
@@ -107,7 +113,8 @@ export default connect(
     filterAttributes,
     products,
     productCount,
-    activeCategory
+    activeCategory,
+    breadcrumbs
   }),
   { onCategoriesList, onActiveCategoryChange }
 )(Home);
