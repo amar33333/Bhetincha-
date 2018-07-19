@@ -37,7 +37,7 @@ class ManageSections extends Component {
                 activeSection={this.props.activeSection} //activeCategory
                 onChangeActiveSection={
                   this.props.onChangeActiveSectionExSection
-                } //onChangeActiveCategory
+                }
                 isOpen={this.props.isOpenSections} //isOpenCategories
               />
             </Col>
@@ -50,7 +50,7 @@ class ManageSections extends Component {
                       this.props.onChangeActiveSectionExSection
                     }
                   />
-                  {!this.props.selectedSectionDetail.hasSec && (
+                  {this.props.selectedSectionDetail.hasSec && (
                     <SectionDetailView
                       name={this.props.selectedSectionDetail.name}
                       onSectionSubmit={this.props.onSectionSubmitExsection}

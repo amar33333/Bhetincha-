@@ -29,7 +29,8 @@ import {
   TELE_USER_SEND_SMS_URL,
   TELE_USER_SEARCH_NAME_URL,
   EXSECTION_SECTION_URL,
-  EXSECTION_ATTRIBUTE_URL
+  EXSECTION_ATTRIBUTE_URL,
+  EXSECTION_PROPERTY_URL
 } from "./ADMIN_API";
 
 import {
@@ -1390,6 +1391,15 @@ export const onExsectionSectionPost = ({ name, parent }) =>
     method: "POST",
     url: EXSECTION_SECTION_URL,
     body: { name, parent },
+    headers: {
+      "Content-Type": "application/json"
+    }
+  });
+export const onExsectionPropertiesPost = ({ body }) =>
+  ajax({
+    method: "POST",
+    url: EXSECTION_PROPERTY_URL,
+    body,
     headers: {
       "Content-Type": "application/json"
     }

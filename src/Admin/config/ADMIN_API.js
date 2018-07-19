@@ -81,5 +81,6 @@ export const ECOMMERCE_PRODUCT_URL = `${MAIN_URL}/${ECOMMERCE}/product/`;
 export const ECOMMERCE_PRODUCT_ATTRIBUTE_URL = `${ECOMMERCE_PRODUCT_URL}attributes/`;
 
 // section
+export const EXSECTION_PROPERTY_URL = `${MAIN_URL}/${EXSECTION}/prop/`;
 export const EXSECTION_SECTION_URL = `${MAIN_URL}/${EXSECTION}/sections/`;
 export const EXSECTION_ATTRIBUTE_URL = `${MAIN_URL}/${EXSECTION}/attribute/`;

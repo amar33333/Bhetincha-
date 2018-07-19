@@ -14,7 +14,10 @@ import {
   FETCH_EXSECTION_SECTION_FULFILLED,
   CREATE_EXSECTION_SECTIONS_PENDING,
   CREATE_EXSECTION_SECTIONS_FULFILLED,
-  CREATE_EXSECTION_SECTIONS_REJECTED
+  CREATE_EXSECTION_SECTIONS_REJECTED,
+  CREATE_EXSECTION_PROPERTY_PENDING,
+  CREATE_EXSECTION_PROPERTY_FULFILED,
+  CREATE_EXSECTION_PROPERTY_REJECTED
 } from "./types";
 
 //import { onEcommerceCategoriesGet } from "../config/adminServerCall";
@@ -23,7 +26,8 @@ import {
   onExsectionAttributesGet,
   onExsectionSectionsGet,
   onExSectionSectionDetailGet,
-  onExsectionSectionPost
+  onExsectionSectionPost,
+  onExsectionPropertiesPost
 } from "../config/adminServerCall";
 
 const epics = [];
@@ -122,7 +126,7 @@ epics.push((action$, { getState }) =>
     return onExsectionSectionPost({ name, parent })
       .concatMap(({ response }) => {
         if (response.msg === "success") {
-          toast.success("Category created successfully");
+          toast.success("Sub Section created successfully");
           return [
             { type: CREATE_EXSECTION_SECTIONS_FULFILLED },
             { type: FETCH_EXSECTION_SECTIONS_PENDING }
@@ -157,7 +161,7 @@ epics.push(
             };
           })
           .catch(ajaxError => {
-            toast.error("Error fetching Categories");
+            toast.error("Error fetching Sections");
             return Observable.of({ type: FETCH_EXSECTION_SECTION_REJECTED });
           });
       } else {
@@ -167,8 +171,32 @@ epics.push(
   //.startWith({ type: FETCH_EXSECTION_SECTION_PENDING })
 );
 
-export const onPropertySubmitExsection = () => {
-  return "hello";
-};
-
+export const onPropertySubmitExsection = payload => ({
+  type: CREATE_EXSECTION_PROPERTY_PENDING,
+  payload
+});
+epics.push((action$, { getState }) =>
+  action$.ofType(CREATE_EXSECTION_PROPERTY_PENDING).mergeMap(action => {
+    const payload = getState().AdminContainer.activeSection;
+    const { body } = action.payload;
+    return onExsectionPropertiesPost({ body })
+      .concatMap(({ response }) => {
+        if (response.msg === "UNSUCCESSFUL") {
+          toast.success("Attributes Added successfully");
+          return [
+            { type: CREATE_EXSECTION_PROPERTY_FULFILED },
+            { type: CHANGE_ACTIVE_EXSECTION_SECTION, payload }
+          ];
+        } else {
+          throw new Error(response.msg);
+        }
+      })
+      .catch(ajaxError => {
+        toast.error(ajaxError.toString());
+        return Observable.of({
+          type: CREATE_EXSECTION_PROPERTY_REJECTED
+        });
+      });
+  })
+);
 export default epics;
