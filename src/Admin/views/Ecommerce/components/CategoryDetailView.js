@@ -5,18 +5,16 @@ import {
   CardBody,
   Form,
   FormGroup,
-  // InputGroup,
-  // InputGroupAddon,
-  // InputGroupText,
   Input,
   Button,
   Label,
   Col
 } from "reactstrap";
 import { Select } from "../../../../Common/components";
+import { FaIconURLjsx } from "../../../../Common/utils/Extras";
 
 class CategoryDetailView extends Component {
-  state = { category: "", tags: [] };
+  state = { category: "", tags: [], className: "" };
 
   onChangeCategory = event =>
     this.setState({
@@ -27,9 +25,10 @@ class CategoryDetailView extends Component {
     event.preventDefault();
     this.props.onCategorySubmit({
       name: this.state.category,
-      tags: this.state.tags.map(({ value }) => value)
+      tags: this.state.tags.map(({ value }) => value),
+      className: this.state.className
     });
-    this.setState({ category: "", tags: [] });
+    this.setState({ category: "", tags: [], className: "" });
   };
 
   render() {
@@ -64,6 +63,19 @@ class CategoryDetailView extends Component {
                     noResultsText="Type option and press tab or enter"
                     placeholder="Create tags"
                   />
+                </Col>
+              </FormGroup>
+              <FormGroup row>
+                <Label sm={2}>Class Name</Label>
+                <Col sm={10}>
+                  <Input
+                    required
+                    type="text"
+                    placeholder="Eg. fa fa-industry"
+                    value={this.state.className}
+                    onChange={e => this.setState({ className: e.target.value })}
+                  />
+                  {FaIconURLjsx}
                 </Col>
               </FormGroup>
               {/* <FormGroup className="mb-2 mr-sm-2 mb-sm-0">

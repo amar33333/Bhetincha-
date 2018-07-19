@@ -5,9 +5,7 @@ import {
   CardBody,
   Form,
   FormGroup,
-  InputGroup,
-  InputGroupAddon,
-  InputGroupText,
+  FormText,
   Input,
   Button,
   Label,
@@ -15,13 +13,15 @@ import {
 } from "reactstrap";
 
 import { Select } from "../../../../Common/components";
+import { FaIconURLjsx } from "../../../../Common/utils/Extras";
 
 class CategoryEditView extends Component {
   constructor(props) {
     super(props);
-    const { name, hasProduct, tags } = props.category;
+    const { name, hasProduct, tags, className } = props.category;
     this.state = {
       name,
+      className: className || "",
       hasProduct,
       tags: tags
         ? tags.map(x => ({
@@ -35,9 +35,10 @@ class CategoryEditView extends Component {
 
   componentDidUpdate(prevProps) {
     if (prevProps.category !== this.props.category) {
-      const { name, hasProduct, tags } = this.props.category;
+      const { name, hasProduct, tags, className } = this.props.category;
       this.setState({
         name,
+        className: className || "",
         hasProduct,
         tags: tags
           ? tags.map(x => ({
@@ -57,22 +58,25 @@ class CategoryEditView extends Component {
 
   onFormSubmit = event => {
     event.preventDefault();
-    const { name, hasProduct, tags } = this.state;
+    const { name, hasProduct, tags, className } = this.state;
     const tagsString = tags.map(({ value }) => value);
     let body = {};
     if (name !== this.props.category.name) {
       body.name = name;
     }
+    if (className && className !== this.props.category.className) {
+      body.className = className;
+    }
     if (hasProduct !== this.props.category.hasProduct) {
       body.hasProduct = hasProduct;
     }
-    console.log(
-      tagsString,
-      this.props.tags,
-      (!this.props.tags && tagsString.length) ||
-        (this.props.tags &&
-          tagsString.sort().join(",") !== this.props.tags.sort().join(","))
-    );
+    // console.log(
+    //   tagsString,
+    //   this.props.tags,
+    //   (!this.props.tags && tagsString.length) ||
+    //     (this.props.tags &&
+    //       tagsString.sort().join(",") !== this.props.tags.sort().join(","))
+    // );
     if (
       (!this.props.category.tags && tagsString.length) ||
       (this.props.category.tags &&
@@ -132,6 +136,25 @@ class CategoryEditView extends Component {
                   noResultsText="Type option and press tab or enter"
                   placeholder="Create tags"
                 />
+              </Col>
+            </FormGroup>
+            <FormGroup row>
+              <Label sm={2}>Class Name</Label>
+              <Col sm={10}>
+                <Input
+                  required
+                  type="text"
+                  placeholder="Eg. fa fa-industry"
+                  value={this.state.className}
+                  onChange={e => this.setState({ className: e.target.value })}
+                />
+                {this.props.category.className && (
+                  <FormText color="muted">
+                    Current Selection:{" "}
+                    <span className={this.props.category.className} />
+                  </FormText>
+                )}
+                {FaIconURLjsx}
               </Col>
             </FormGroup>
             <Button color="primary">

@@ -8,13 +8,46 @@ import Filters from "./Filters";
 import MegaMenu from "./MegaMenu";
 import EcommerceMainNav from "./EcommerceMainNav";
 import ChildCategories from "./ChildCategories";
+import Breadcrumbs from "./Breadcrumbs";
 
-import { onCategoriesList } from "../actions";
+import { onCategoriesList, onActiveCategoryChange } from "../actions";
 
 class Home extends Component {
   componentDidMount() {
-    this.props.onCategoriesList();
+    const { categoryId } = this.props.match.params;
+    if (categoryId) {
+      this.props.onActiveCategoryChange({
+        categoryId,
+        history: this.props.history
+      });
+    }
+    this.props.onCategoriesList({
+      changeActive: !Boolean(categoryId),
+      history: this.props.history
+    });
   }
+
+  componentDidUpdate(prevProps) {
+    if (
+      prevProps.match.params.categoryId !== this.props.match.params.categoryId
+    ) {
+      const isCategoryId = Boolean(this.props.match.params.categoryId);
+      if (isCategoryId) {
+        this.props.onActiveCategoryChange({
+          categoryId: this.props.match.params.categoryId,
+          history: this.props.history
+        });
+      } else {
+        this.props.onCategoriesList({
+          changeActive: !isCategoryId,
+          history: this.props.history
+        });
+      }
+    }
+  }
+
+  onSelectCategory = categoryId =>
+    this.props.history.push(`/ecommerce/${categoryId}`);
 
   render() {
     return (
@@ -24,19 +57,25 @@ class Home extends Component {
         }}
       >
         <EcommerceMainNav />
-        {/* <Row>
-          <Col
-            xs="12"
-            md="4"
-            style={{
-              overflow: "visible"
-            }}
-          > */}
-        <MegaMenu categories={this.props.categories} />
-        {/* </Col>
-        </Row> */}
+        {this.props.breadcrumbs.length > 1 && (
+          <Breadcrumbs
+            items={this.props.breadcrumbs}
+            onSelectCategory={this.onSelectCategory}
+          />
+        )}
+        <MegaMenu
+          categories={this.props.categories}
+          onSelect={this.onSelectCategory}
+        />
         <div>
-          <ChildCategories categories={this.props.childCategories} />
+          {this.props.childCategories.length ? (
+            <ChildCategories
+              categories={this.props.childCategories}
+              onSelectCategory={this.onSelectCategory}
+            />
+          ) : (
+            ""
+          )}
         </div>
         <div>
           <Filters filters={this.props.filterAttributes} />
@@ -63,7 +102,9 @@ export default connect(
         childCategories,
         filterAttributes,
         products,
-        productCount
+        productCount,
+        activeCategory,
+        breadcrumbs
       }
     }
   }) => ({
@@ -71,7 +112,9 @@ export default connect(
     childCategories,
     filterAttributes,
     products,
-    productCount
+    productCount,
+    activeCategory,
+    breadcrumbs
   }),
-  { onCategoriesList }
+  { onCategoriesList, onActiveCategoryChange }
 )(Home);

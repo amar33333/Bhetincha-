@@ -10,7 +10,9 @@ import {
   FETCH_ECOMMERCE_CATEGORY_CONFIG_REJECTED,
   FETCH_ECOMMERCE_PRODUCTS_FULFILLED,
   FETCH_ECOMMERCE_PRODUCTS_PENDING,
-  FETCH_ECOMMERCE_PRODUCTS_REJECTED
+  FETCH_ECOMMERCE_PRODUCTS_REJECTED,
+  CHANGE_ACTIVE_ECOMMERCE_CATEGORY,
+  ROUTE_BACK_TO_ECOMMERCE_HOME
 } from "./types";
 
 import {
@@ -22,31 +24,42 @@ import {
 const epics = [];
 
 // categories
-export const onCategoriesList = () => ({
-  type: FETCH_ECOMMERCE_CATEGORIES_PENDING
+export const onCategoriesList = payload => ({
+  type: FETCH_ECOMMERCE_CATEGORIES_PENDING,
+  payload
 });
 
 epics.push((action$, { getState }) =>
   action$.ofType(FETCH_ECOMMERCE_CATEGORIES_PENDING).mergeMap(action => {
     return onEcommerceCategoriesGet()
       .concatMap(({ response }) => {
+        let extras = [];
+
+        if (action.payload.changeActive) {
+          extras = [
+            {
+              type: FETCH_ECOMMERCE_CATEGORY_CONFIG_PENDING,
+              payload: response.uid,
+              history: action.payload.history
+            },
+            {
+              type: FETCH_ECOMMERCE_PRODUCTS_PENDING,
+              payload: {
+                body: {
+                  categoryId: response.uid
+                }
+              }
+            }
+          ];
+        }
+
         return [
           {
             type: FETCH_ECOMMERCE_CATEGORIES_FULFILLED,
-            payload: response
+            payload: response,
+            changeActive: action.payload.changeActive
           },
-          {
-            type: FETCH_ECOMMERCE_CATEGORY_CONFIG_PENDING,
-            payload: response.uid
-          },
-          {
-            type: FETCH_ECOMMERCE_PRODUCTS_PENDING,
-            payload: {
-              body: {
-                categoryId: response.uid
-              }
-            }
-          }
+          ...extras
         ];
       })
       .catch(ajaxError => {
@@ -56,19 +69,49 @@ epics.push((action$, { getState }) =>
   })
 );
 
-export const onCategoryConfigList = payload => ({
-  type: FETCH_ECOMMERCE_CATEGORY_CONFIG_PENDING,
+export const onActiveCategoryChange = payload => ({
+  type: CHANGE_ACTIVE_ECOMMERCE_CATEGORY,
   payload
 });
+
+epics.push(action$ =>
+  action$.ofType(CHANGE_ACTIVE_ECOMMERCE_CATEGORY).concatMap(action => [
+    {
+      type: FETCH_ECOMMERCE_CATEGORY_CONFIG_PENDING,
+      payload: action.payload.categoryId,
+      history: action.payload.history
+    },
+    {
+      type: FETCH_ECOMMERCE_PRODUCTS_PENDING,
+      payload: {
+        body: {
+          categoryId: action.payload.categoryId
+        }
+      }
+    }
+  ])
+);
+
+// export const onCategoryConfigList = payload => ({
+//   type: FETCH_ECOMMERCE_CATEGORY_CONFIG_PENDING,
+//   payload
+// });
 
 epics.push((action$, { getState }) =>
   action$.ofType(FETCH_ECOMMERCE_CATEGORY_CONFIG_PENDING).mergeMap(action => {
     return onEcommerceCategoryConfigGet({ categoryId: action.payload })
       .map(({ response }) => {
-        return {
-          type: FETCH_ECOMMERCE_CATEGORY_CONFIG_FULFILLED,
-          payload: response
-        };
+        if (response.msg === "UNSUCCESFUL") {
+          return {
+            type: ROUTE_BACK_TO_ECOMMERCE_HOME,
+            history: action.history
+          };
+        } else {
+          return {
+            type: FETCH_ECOMMERCE_CATEGORY_CONFIG_FULFILLED,
+            payload: response
+          };
+        }
       })
       .catch(ajaxError => {
         toast.error("Error Loading Configuration");
@@ -77,6 +120,13 @@ epics.push((action$, { getState }) =>
         });
       });
   })
+);
+
+epics.push(action$ =>
+  action$
+    .ofType(ROUTE_BACK_TO_ECOMMERCE_HOME)
+    .do(({ history }) => history.push("/ecommerce"))
+    .ignoreElements()
 );
 
 export const onEcommerceProductsList = payload => ({
