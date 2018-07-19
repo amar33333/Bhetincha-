@@ -38,7 +38,7 @@ class ManageSections extends Component {
                 sections={this.props.sections} //categories
                 activeSection={this.props.activeSection} //activeCategory
                 onChangeActiveSection={
-                  this.props.onChangeActiveSectionExSection
+                  this.props.onChangeActiveSectionExsection
                 }
                 isOpen={this.props.isOpenSections} //isOpenCategories
               />
