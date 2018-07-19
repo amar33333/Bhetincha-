@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { AboutUs, CoverPhoto } from "./components";
+import { CoverPhoto } from "./components";
 import { connect } from "react-redux";
 
 import Rating from "react-rating";
@@ -8,7 +8,6 @@ import {
   Row,
   Col,
   Container,
-  Button,
   Dropdown,
   DropdownToggle,
   DropdownMenu,
@@ -77,41 +76,43 @@ class MainPage extends Component {
             (10 Ratings)
             <div>
               <strong>
-                <span className="mr-2">{this.props.industry.name}</span>
+                <span className="mr-2">
+                  {this.props.industry && this.props.industry.name}
+                </span>
                 <i className="fa fa-angle-right mr-2" />
-                {this.props.categories.map((category, catIndex) => {
-                  if (catIndex > MAX_CAT) return null;
-                  return (
-                    <span key={category.id}>
-                      {catIndex < MAX_CAT ? (
-                        category.name
-                      ) : (
-                        <Dropdown
-                          isOpen={this.state.dropdownOpen}
-                          toggle={this.toggle}
-                          tag="span"
-                          className="ml-2"
-                          style={{
-                            cursor: "pointer"
-                          }}
-                        >
-                          <DropdownToggle tag="small">
-                            +{this.props.categories.length - MAX_CAT} more{" "}
-                            {this.props.categories.length - MAX_CAT === 1
-                              ? `category`
-                              : `categories`}
-                          </DropdownToggle>
-                          {this.renderRemainingCategories()}
-                        </Dropdown>
-                      )}
-                      {/* {category.name} */}
-                      {category.id !== lastCategory.id &&
-                      catIndex < MAX_CAT - 1 ? (
-                        <span className="mx-2"> | </span>
-                      ) : null}
-                    </span>
-                  );
-                })}
+                {this.props.categories &&
+                  this.props.categories.map((category, catIndex) => {
+                    if (catIndex > MAX_CAT) return null;
+                    return (
+                      <span key={category.id}>
+                        {catIndex < MAX_CAT ? (
+                          category.name
+                        ) : (
+                          <Dropdown
+                            isOpen={this.state.dropdownOpen}
+                            toggle={this.toggle}
+                            tag="span"
+                            className="ml-2"
+                            style={{
+                              cursor: "pointer"
+                            }}
+                          >
+                            <DropdownToggle tag="small">
+                              +{this.props.categories.length - MAX_CAT} more{" "}
+                              {this.props.categories.length - MAX_CAT === 1
+                                ? `category`
+                                : `categories`}
+                            </DropdownToggle>
+                            {this.renderRemainingCategories()}
+                          </Dropdown>
+                        )}
+                        {category.id !== lastCategory.id &&
+                        catIndex < MAX_CAT - 1 ? (
+                          <span className="mx-2"> | </span>
+                        ) : null}
+                      </span>
+                    );
+                  })}
               </strong>
             </div>
           </div>
@@ -179,12 +180,12 @@ class MainPage extends Component {
                       </Card>
                     </Col>
                   </Row>
-                  {this.props.data.establishedYear ||
-                  this.props.data.companyType ? (
+                  {this.props.data &&
+                  (this.props.data.establishedYear ||
+                    this.props.data.companyType) ? (
                     <Row className="mb-3">
                       <Col xs="12">
                         <Card>
-                          {/* <Card.Content header="Information" /> */}
                           <Card.Content>
                             <strong>Established Year : </strong>
                             {this.props.data.establishedYear === "" ||

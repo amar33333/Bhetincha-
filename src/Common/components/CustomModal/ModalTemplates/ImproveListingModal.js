@@ -116,6 +116,8 @@ class ImproveListingModal extends Component {
                 valueKey="id"
                 labelKey="name"
               />
+            </FormGroup>
+            <FormGroup>
               <InputGroup>
                 <InputGroupAddon addonType="prepend">
                   <InputGroupText>New Problem Type</InputGroupText>
@@ -133,7 +135,7 @@ class ImproveListingModal extends Component {
           </Col>
         </Row>
         <Row>
-          <Col xs="12" md="9">
+          <Col xs="12" md="12">
             <FormGroup>
               <InputGroup>
                 <InputGroupAddon addonType="prepend">
@@ -147,7 +149,8 @@ class ImproveListingModal extends Component {
                   onChange={this.onChange.bind(this, "more_information")}
                 />
               </InputGroup>
-
+            </FormGroup>
+            <FormGroup>
               <InputGroup>
                 <InputGroupAddon addonType="prepend">
                   <InputGroupText>Your Name</InputGroupText>
@@ -160,7 +163,8 @@ class ImproveListingModal extends Component {
                   onChange={this.onChange.bind(this, "name")}
                 />
               </InputGroup>
-
+            </FormGroup>
+            <FormGroup>
               <InputGroup>
                 <InputGroupAddon addonType="prepend">
                   <InputGroupText>Your Email</InputGroupText>
@@ -201,10 +205,14 @@ class ImproveListingModal extends Component {
               </Label>
             </FormGroup>
           </Col>
-          <Col xs="12" md="2">
-            <Button fluid color="primary">
-              <span className="fa fa-check" /> SUBMIT
-            </Button>
+        </Row>
+        <Row className="mt-2">
+          <Col xs="12" md="12">
+            <FormGroup>
+              <Button fluid color="primary">
+                <span className="fa fa-check" /> Submit
+              </Button>
+            </FormGroup>
           </Col>
         </Row>
       </Form>
