@@ -7,7 +7,7 @@ import "./config/rxjs";
 import "./index.css";
 import store from "./config/store";
 import App from "./App";
-import registerServiceWorker from "./registerServiceWorker";
+// import registerServiceWorker from "./registerServiceWorker";
 
 import * as firebase from "firebase";
 
@@ -35,4 +35,4 @@ ReactDOM.render(
   </Provider>,
   document.getElementById("root")
 );
-registerServiceWorker();
+// registerServiceWorker();
