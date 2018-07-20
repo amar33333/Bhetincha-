@@ -7,7 +7,7 @@ import ProductList from "./ProductList";
 import PaginationComponent from "./Pagination";
 import Filters from "./Filters";
 import MegaMenu from "./MegaMenu";
-import EcommerceMainNav from "./EcommerceMainNav";
+// import EcommerceMainNav from "./EcommerceMainNav";
 import ChildCategories from "./ChildCategories";
 import Breadcrumbs from "./Breadcrumbs";
 
@@ -60,7 +60,7 @@ class Home extends Component {
           backgroundColor: "rgba(247, 237, 237, 0.32)"
         }}
       >
-        <EcommerceMainNav />
+        {/* <EcommerceMainNav /> */}
         {this.props.breadcrumbs.length > 1 && (
           <Breadcrumbs
             className="ecommerce-bread-crumbs"

@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import { onEcommerceProductEachList } from "../actions";
 import ProductDetail from "./ProductDetail";
 import ProductReviews from "./ProductReviews";
+import BreadcrumbNav from "./Breadcrumbs";
 
 class Product extends Component {
   componentDidMount() {
@@ -24,10 +25,25 @@ class Product extends Component {
     }
   }
 
+  onSelectCategory = categoryId =>
+    this.props.history.push(`/ecommerce/${categoryId}`);
+
   render() {
     return (
       <div>
-        <ProductDetail product={this.props.product} />
+        {this.props.product && (
+          <BreadcrumbNav
+            items={[
+              { name: this.props.product.name, uid: this.props.product.uid },
+              ...this.props.breadcrumbs
+            ]}
+            onSelectCategory={this.onSelectCategory}
+          />
+        )}
+        <ProductDetail
+          product={this.props.product}
+          attributes={this.props.attributes}
+        />
         <ProductReviews />
       </div>
     );
@@ -37,10 +53,12 @@ class Product extends Component {
 export default connect(
   ({
     EcommerceContainer: {
-      productDetail: { product }
+      productDetail: { product, attributes, breadcrumbs }
     }
   }) => ({
-    product
+    product,
+    attributes,
+    breadcrumbs
   }),
   { onEcommerceProductEachList }
 )(Product);
