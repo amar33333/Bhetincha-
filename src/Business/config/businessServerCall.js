@@ -81,7 +81,7 @@ export const onBusinessDetailsGet = ({ access_token, id }) =>
 export const onBusinessDetailsPut = ({ access_token, id, body }) =>
   ajax({
     method: "PUT",
-    url: `${BUSINESS_URL}${id}/`,
+    url: `${BUSINESS_PUT_URL}${id}/`,
     body,
     headers: {
       "Content-Type": "application/json",
@@ -144,7 +144,7 @@ export const onPrimaryAddressGet = ({ access_token, id }) =>
 export const onPrimaryAddressPut = ({ access_token, id, data }) =>
   axios({
     method: "PUT",
-    url: `${BUSINESS_URL}${id}/`,
+    url: `${BUSINESS_PUT_URL}${id}/`,
     data,
     headers: {
       "Content-Type": "application/json",

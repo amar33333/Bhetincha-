@@ -5,21 +5,25 @@ import MapComponent from "../../../../../Common/components/MapComponent";
 import { Col, Row, Container } from "reactstrap";
 import { Card, Button } from "semantic-ui-react";
 
+import { directionRenderer } from "../../../../../Common/utils/Extras";
+
 class Contact extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      position: { lat: 27.7172453, lng: 85.32391758465576 }
+      position: { lat: 27.7172453, lng: 85.32391758465576 },
+      source: null,
+      destination: null
     };
   }
 
   componentDidMount = () => {
     const lat = this.props.address && parseFloat(this.props.address.latitude);
     const lng = this.props.address && parseFloat(this.props.address.longitude);
-    setTimeout(() => {
-      var latLng = new window.google.maps.LatLng(lat, lng);
-      this.mapEl.googleMapEl.panTo(latLng);
-    }, 500);
+    // setTimeout(() => {
+    //   var latLng = new window.google.maps.LatLng(lat, lng);
+    //   this.mapEl.googleMapEl.panTo(latLng);
+    // }, 500);
 
     this.setState({
       position: {
@@ -29,12 +33,30 @@ class Contact extends Component {
     });
   };
 
+  drawPath = address => () => {
+    console.log("clicked drawa patha: ", address);
+
+    this.setState({
+      source: {
+        latitude: this.props.user_geo_coords.latitude,
+        longitude: this.props.user_geo_coords.longitude
+      },
+      destination: {
+        latitude: address.latitude,
+        longitude: address.longitude
+      }
+    });
+  };
+
   renderPrimaryAddress = () => {
     return (
       this.props.address && (
         <Col sm="3">
           <Card className="mb-3">
-            <Card.Content header="Head Office" />
+            <Card.Content
+              header="Head Office"
+              onClick={this.drawPath(this.props.address)}
+            />
             <Card.Content>
               {(this.props.address.addressLine1 ||
                 this.props.address.addressLine2) && (
@@ -109,7 +131,7 @@ class Contact extends Component {
   };
 
   renderBranchAddress = () => {
-    console.log("branch address:", this.props.branchAddress);
+    // console.log("branch address:", this.props.branchAddress);
     return (
       this.props.branchAddress &&
       this.props.branchAddress.map(branch => (
@@ -117,6 +139,7 @@ class Contact extends Component {
           <Card className="mb-3">
             <Card.Content
               header={branch.area ? `${branch.area.name} Branch` : "New Branch"}
+              onClick={this.drawPath(branch)}
             />
             <Card.Content>
               <p>
@@ -171,7 +194,7 @@ class Contact extends Component {
   };
 
   render() {
-    console.log("Contact props:", this.props);
+    console.log("Contact props:", this.state);
     return (
       <div
         style={{
@@ -181,6 +204,8 @@ class Contact extends Component {
         <MapComponent
           ref={ref => (this.mapEl = ref)}
           position={this.state.position}
+          source={this.state.source}
+          destination={this.state.destination}
           // onClick={this.onChangeLatLng}
           // onDragEnd={this.onChangeLatLng}
         />
@@ -212,12 +237,14 @@ export default connect(
         address,
         branchAddress
       }
-    }
+    },
+    home: { user_geo_coords }
   }) => ({
     business_name,
     business_email,
     business_phone,
     address,
-    branchAddress
+    branchAddress,
+    user_geo_coords
   })
 )(Contact);

@@ -137,24 +137,25 @@ class SubBusinessPrimaryAddress extends Component {
   handleAreaSelectChange = value => {
     // console.log("Value: ", value.name);
     let geocoder = new window.google.maps.Geocoder();
-    geocoder.geocode({ address: value.name }, (results, status) => {
-      if (status === "OK") {
-        const location = results[0].geometry.location;
-        var latLng = new window.google.maps.LatLng(
-          location.lat(),
-          location.lng()
-        );
-        this.mapComponentEl.googleMapEl.panTo(latLng);
-        this.setState({
-          area: value,
-          latitude: location.lat(),
-          longitude: location.lng()
-        });
-        // console.log("latLang: ", this.state.latitude, this.state.longitude);
-      } else {
-        // console.log("Location not found in map. Select Manually");
-      }
-    });
+    value &&
+      geocoder.geocode({ address: value.name }, (results, status) => {
+        if (status === "OK") {
+          const location = results[0].geometry.location;
+          var latLng = new window.google.maps.LatLng(
+            location.lat(),
+            location.lng()
+          );
+          this.mapComponentEl.googleMapEl.panTo(latLng);
+          this.setState({
+            area: value,
+            latitude: location.lat(),
+            longitude: location.lng()
+          });
+          // console.log("latLang: ", this.state.latitude, this.state.longitude);
+        } else {
+          // console.log("Location not found in map. Select Manually");
+        }
+      });
   };
 
   handleSelectChange = (key, value) => {

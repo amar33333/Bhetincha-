@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
-import { geolocated } from "react-geolocated";
+// import { geolocated } from "react-geolocated";
 
 import { NavHashLink } from "react-router-hash-link";
 import { MAIN_URL } from "../config/MINISITE_API";
@@ -349,11 +349,4 @@ export default connect(
     onSearchQuerySubmit,
     onSearchResultsList
   }
-)(
-  geolocated({
-    positionOptions: {
-      enableHighAccuracy: false
-    },
-    userDecisionTimeout: 5000
-  })(onClickOutside(BusinessNav))
-);
+)(onClickOutside(BusinessNav));

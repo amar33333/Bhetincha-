@@ -203,7 +203,7 @@ class SubBusinessDetail extends Component {
       // console.log("categories state: ", this.state.categories);
       // console.log("detaiL : ", key, value);
 
-      this.setState({ sub_categories: [] });
+      // this.setState({ sub_categories: [] });
 
       let diff = {};
       let ADDED = false;

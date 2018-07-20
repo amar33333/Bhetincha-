@@ -4,7 +4,8 @@ import {
   TOGGLE_IMPROVE_LISTING_MODAL,
   FETCH_PROBLEM_TYPES_FULFILLED,
   FETCH_PROBLEM_TYPES_PENDING,
-  FETCH_PROBLEM_TYPES_REJECTED
+  FETCH_PROBLEM_TYPES_REJECTED,
+  STORE_USER_GEO_LOCATION
 } from "../actions/types";
 
 const INITIAL_STATE = {
@@ -13,7 +14,8 @@ const INITIAL_STATE = {
   // phoneVerificationModal: false,
   improveListingModal: false,
   improveListingData: null,
-  problem_types: []
+  problem_types: [],
+  user_geo_coords: null
 };
 
 export default function(state = INITIAL_STATE, action) {
@@ -29,6 +31,12 @@ export default function(state = INITIAL_STATE, action) {
         ...state,
         improveListingModal: !state.improveListingModal,
         improveListingData: action.payload
+      };
+
+    case STORE_USER_GEO_LOCATION:
+      return {
+        ...state,
+        ...action.payload
       };
 
     case FETCH_PROBLEM_TYPES_PENDING:

@@ -1,5 +1,6 @@
 import React from "react";
 import { FormText } from "reactstrap";
+import { DirectionsRenderer } from "react-google-maps";
 
 // This is for mobile number
 export const validatePhone = phoneNumber => {
