@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 
 import { combineEpics } from "redux-observable";
+import EcommerceMainNav from "./components/EcommerceMainNav";
+
 import EcommerceRoutes from "./config/routes";
 import withRepics from "../../../config/withRepics";
 import ecommerceReducers from "./reducers";
@@ -8,7 +10,12 @@ import ecommerceEpics from "./config/epics";
 
 class Ecommerce extends Component {
   render() {
-    return <EcommerceRoutes />;
+    return (
+      <div>
+        <EcommerceMainNav />
+        <EcommerceRoutes />
+      </div>
+    );
   }
 }
 
