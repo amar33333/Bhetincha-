@@ -8,17 +8,17 @@ class WebsiteRoute extends Component {
       <Switch>
         <Route
           exact
-          path="/ecommerce/product"
+          path="/ecommerce/product/:productId"
           name="Ecommerce-product"
           component={Product}
         />
-        <Route exact path="/ecommerce" name="Ecommerce-home" component={Home} />
         <Route
           exact
           path="/ecommerce/:categoryId"
           name="Ecommerce-home-category"
           component={Home}
         />
+        <Route exact path="/ecommerce" name="Ecommerce-home" component={Home} />
         <Redirect from="/ecommerce" to="/ecommerce" />
       </Switch>
     );

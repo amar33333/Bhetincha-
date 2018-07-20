@@ -50,6 +50,9 @@ class Home extends Component {
   onSelectCategory = categoryId =>
     this.props.history.push(`/ecommerce/${categoryId}`);
 
+  onSelectProduct = productId =>
+    this.props.history.push(`/ecommerce/product/${productId}`);
+
   render() {
     return (
       <div
@@ -106,6 +109,7 @@ class Home extends Component {
                     )}
                     products={this.props.products}
                     productCount={this.props.productCount}
+                    onSelectProduct={this.onSelectProduct}
                   />
                 </Col>
               </Row>

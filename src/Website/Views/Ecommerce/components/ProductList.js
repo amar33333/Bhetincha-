@@ -19,7 +19,11 @@ class ProductList extends Component {
         <Container>
           <Card.Group itemsPerRow={4} stackable>
             {this.props.products.map(product => (
-              <ProductItem key={product._id} product={product._source} />
+              <ProductItem
+                key={product._id}
+                product={product._source}
+                onSelectProduct={this.props.onSelectProduct}
+              />
             ))}
           </Card.Group>
         </Container>

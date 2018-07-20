@@ -33,24 +33,14 @@ epics.push((action$, { getState }) =>
   action$.ofType(FETCH_ECOMMERCE_CATEGORIES_PENDING).mergeMap(action => {
     return onEcommerceCategoriesGet()
       .concatMap(({ response }) => {
-        let extras = [];
+        const extras = [];
 
         if (action.payload.changeActive) {
-          extras = [
-            {
-              type: FETCH_ECOMMERCE_CATEGORY_CONFIG_PENDING,
-              payload: response.uid,
-              history: action.payload.history
-            },
-            {
-              type: FETCH_ECOMMERCE_PRODUCTS_PENDING,
-              payload: {
-                body: {
-                  categoryId: response.uid
-                }
-              }
-            }
-          ];
+          extras.push({
+            type: FETCH_ECOMMERCE_CATEGORY_CONFIG_PENDING,
+            payload: response.uid,
+            history: action.payload.history
+          });
         }
 
         return [
@@ -75,21 +65,11 @@ export const onActiveCategoryChange = payload => ({
 });
 
 epics.push(action$ =>
-  action$.ofType(CHANGE_ACTIVE_ECOMMERCE_CATEGORY).concatMap(action => [
-    {
-      type: FETCH_ECOMMERCE_CATEGORY_CONFIG_PENDING,
-      payload: action.payload.categoryId,
-      history: action.payload.history
-    },
-    {
-      type: FETCH_ECOMMERCE_PRODUCTS_PENDING,
-      payload: {
-        body: {
-          categoryId: action.payload.categoryId
-        }
-      }
-    }
-  ])
+  action$.ofType(CHANGE_ACTIVE_ECOMMERCE_CATEGORY).map(action => ({
+    type: FETCH_ECOMMERCE_CATEGORY_CONFIG_PENDING,
+    payload: action.payload.categoryId,
+    history: action.payload.history
+  }))
 );
 
 // export const onCategoryConfigList = payload => ({
@@ -100,17 +80,29 @@ epics.push(action$ =>
 epics.push((action$, { getState }) =>
   action$.ofType(FETCH_ECOMMERCE_CATEGORY_CONFIG_PENDING).mergeMap(action => {
     return onEcommerceCategoryConfigGet({ categoryId: action.payload })
-      .map(({ response }) => {
+      .concatMap(({ response }) => {
         if (response.msg === "UNSUCCESFUL") {
-          return {
-            type: ROUTE_BACK_TO_ECOMMERCE_HOME,
-            history: action.history
-          };
+          return [
+            {
+              type: ROUTE_BACK_TO_ECOMMERCE_HOME,
+              history: action.history
+            }
+          ];
         } else {
-          return {
-            type: FETCH_ECOMMERCE_CATEGORY_CONFIG_FULFILLED,
-            payload: response
-          };
+          return [
+            {
+              type: FETCH_ECOMMERCE_CATEGORY_CONFIG_FULFILLED,
+              payload: response
+            },
+            {
+              type: FETCH_ECOMMERCE_PRODUCTS_PENDING,
+              payload: {
+                body: {
+                  categoryId: action.payload
+                }
+              }
+            }
+          ];
         }
       })
       .catch(ajaxError => {

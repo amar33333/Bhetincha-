@@ -21,7 +21,7 @@ class ChildCategories extends Component {
       <div>
         <Accordion>
           {this.props.categories.map(category => (
-            <div>
+            <div key={category.uid}>
               <Accordion.Title
                 active={activeIndex === category.uid}
                 index={0}

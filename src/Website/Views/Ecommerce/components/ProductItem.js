@@ -10,7 +10,8 @@ class ProductItem extends Component {
       profilePicture,
       discount,
       name,
-      price
+      price,
+      uid
     } = this.props.product;
 
     const discountedPrice = price - price * (discount / 100);
@@ -18,7 +19,10 @@ class ProductItem extends Component {
     const brandName = this.props.product["Brand Name"];
     console.log("product::", this.props.product);
     return (
-      <Card className="product-card">
+      <Card
+        className="product-card"
+        onClick={() => this.props.onSelectProduct(uid)}
+      >
         <Image
           src={`${MAIN_URL}${profilePicture}`}
           className="product-card-thumbnail"
