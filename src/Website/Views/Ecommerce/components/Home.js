@@ -63,6 +63,7 @@ class Home extends Component {
         <EcommerceMainNav />
         {this.props.breadcrumbs.length > 1 && (
           <Breadcrumbs
+            className="ecommerce-bread-crumbs"
             items={this.props.breadcrumbs}
             onSelectCategory={this.onSelectCategory}
           />

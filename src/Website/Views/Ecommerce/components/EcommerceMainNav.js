@@ -7,11 +7,9 @@ import {
   NavbarToggler,
   Nav,
   NavItem,
-  Button,
-  NavbarBrand,
   NavLink
 } from "reactstrap";
-import { Search, Grid, Header, Segment } from "semantic-ui-react";
+import { Search, Icon } from "semantic-ui-react";
 
 class EcommerceMainNav extends Component {
   constructor(props) {
@@ -43,7 +41,14 @@ class EcommerceMainNav extends Component {
           Bhetincha Shop{" "}
         </Link>
 
-        <NavbarToggler onClick={this.toggle} />
+        <Icon name="bars" />
+
+        <NavbarToggler
+          onClick={this.toggle}
+          style={{
+            color: "gray"
+          }}
+        />
         <Collapse isOpen={this.state.isOpen} navbar>
           <Nav className="ml-auto" navbar>
             <NavItem

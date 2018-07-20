@@ -617,3 +617,11 @@ input.main-nav-search::placeholder {
   border-bottom: 0.5px solid lightgray;
   padding: 10px 0;
 }
+.ecommerce-bread-crumbs {
+  margin-bottom: 0px;
+}
+
+.filter-title {
+  padding-top: 10px;
+  border-top: 0.5px solid lightgray;
+}

@@ -4,7 +4,7 @@ import { Breadcrumb, BreadcrumbItem } from "reactstrap";
 class BreadcrumbNav extends Component {
   render() {
     return (
-      <Breadcrumb>
+      <Breadcrumb className={this.props.className}>
         {this.props.items
           .slice(0, -1)
           .reverse()
