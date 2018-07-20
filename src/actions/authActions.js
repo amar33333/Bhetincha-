@@ -137,6 +137,7 @@ epics.push(action$ =>
         if (response.phone_activated) {
           console.log("adasdsddasdadadasdasdasdsd");
           return [
+            // { type: TOGGLE_LOGIN_MODAL },
             {
               type: CHECK_USER_ACTIVATED_FULFILLED,
               payload: response
@@ -144,8 +145,7 @@ epics.push(action$ =>
             {
               type: FETCH_USER_PENDING,
               payload: { ...body, history }
-            },
-            { type: TOGGLE_LOGIN_MODAL }
+            }
           ];
         } else throw new Error(response.phone_activated);
       })

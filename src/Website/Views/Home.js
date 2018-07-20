@@ -15,7 +15,8 @@ import { Avatar, AutoSuggestion } from "../components";
 import {
   toggleLoginModal,
   toggleRegisterModal,
-  onSearchQuerySubmit
+  onSearchQuerySubmit,
+  onStoreUserGeoLocation
 } from "../actions";
 
 import { BottomFooter } from "../components";
@@ -31,6 +32,21 @@ const placeholder = [
 
 class Home extends Component {
   state = { query: "", result: "" };
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.coords !== this.props.coords) {
+      this.props.onStoreUserGeoLocation({
+        user_geo_coords: {
+          accuracy: this.props.coords.accuracy,
+          altitude: this.props.coords.altitude,
+          altitudeAccuracy: this.props.coords.altitudeAccuracy,
+          latitude: this.props.coords.latitude,
+          longitude: this.props.coords.longitude,
+          speed: this.props.coords.speed
+        }
+      });
+    }
+  }
 
   renderLoginRegister = () =>
     !this.props.cookies ? (
@@ -151,12 +167,13 @@ export default connect(
   {
     toggleLoginModal,
     toggleRegisterModal,
-    onSearchQuerySubmit
+    onSearchQuerySubmit,
+    onStoreUserGeoLocation
   }
 )(
   geolocated({
     positionOptions: {
-      enableHighAccuracy: false
+      enableHighAccuracy: true
     },
     userDecisionTimeout: 5000
   })(Home)

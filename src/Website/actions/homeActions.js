@@ -13,7 +13,8 @@ import {
   FETCH_PROBLEM_TYPES_REJECTED,
   CREATE_IMPROVE_LISTING_FULFILLED,
   CREATE_IMPROVE_LISTING_PENDING,
-  CREATE_IMPROVE_LISTING_REJECTED
+  CREATE_IMPROVE_LISTING_REJECTED,
+  STORE_USER_GEO_LOCATION
 } from "./types";
 
 const epics = [];
@@ -28,6 +29,11 @@ export const toggleRegisterModal = () => ({
 
 export const toggleImproveListingModal = payload => ({
   type: TOGGLE_IMPROVE_LISTING_MODAL,
+  payload
+});
+
+export const onStoreUserGeoLocation = payload => ({
+  type: STORE_USER_GEO_LOCATION,
   payload
 });
 
@@ -57,10 +63,17 @@ export const onImproveListing = payload => ({
 epics.push(action$ =>
   action$.ofType(CREATE_IMPROVE_LISTING_PENDING).mergeMap(action => {
     return onImproveListingPost({ ...action.payload })
-      .map(({ response }) => ({
-        type: CREATE_IMPROVE_LISTING_FULFILLED,
-        payload: response
-      }))
+      .concatMap(({ response }) => {
+        return [
+          {
+            type: CREATE_IMPROVE_LISTING_FULFILLED,
+            payload: response
+          },
+          {
+            type: TOGGLE_IMPROVE_LISTING_MODAL
+          }
+        ];
+      })
       .catch(ajaxError =>
         Observable.of({ type: CREATE_IMPROVE_LISTING_REJECTED })
       );

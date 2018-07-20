@@ -1,7 +1,7 @@
 import { MAIN_URL } from "../../Common/utils/API";
 
 const BUSINESS = "business/business/";
-const BUSINESS_PUT = "business/business-put";
+const BUSINESS_PUT = "business/business-put/";
 const APP_BUSINESS_APPROVAL = "businessCollection/business/";
 const ALBUM = "business/album/";
 const PHOTO = "business/photo/";

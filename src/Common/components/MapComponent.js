@@ -1,16 +1,48 @@
+/* global google */
+
 import React, { Component } from "react";
 import {
   withScriptjs,
   withGoogleMap,
   GoogleMap,
-  Marker
+  Marker,
+  DirectionsRenderer
 } from "react-google-maps";
 import { GOOGLE_MAPS_URL } from "../utils/API";
 
 class GoogleMapComponent extends Component {
+  state = { directions: null };
+
   componentDidMount() {
     this.props.setRef(this.gEl);
   }
+
+  directionRenderer = ({ source, destination }) => {
+    const DirectionsService = new google.maps.DirectionsService();
+
+    DirectionsService.route(
+      {
+        origin: new google.maps.LatLng(
+          source ? source.latitude : "",
+          source ? source.longitude : ""
+        ),
+        destination: new google.maps.LatLng(
+          destination ? destination.latitude : "",
+          destination ? destination.longitude : ""
+        ),
+        travelMode: google.maps.TravelMode.DRIVING
+      },
+      (result, status) => {
+        if (status === google.maps.DirectionsStatus.OK) {
+          this.setState({ directions: result });
+        } else {
+          console.error(`error fetching directions ${result}`);
+        }
+      }
+    );
+    return <DirectionsRenderer directions={this.state.directions} />;
+  };
+
   render() {
     return (
       <GoogleMap
@@ -19,11 +51,15 @@ class GoogleMapComponent extends Component {
         defaultCenter={{ lat: 27.7172453, lng: 85.32391758465576 }}
         onClick={({ latLng }) => this.props.onClick({ latLng })}
       >
-        <Marker
+        {/* <Marker
           position={this.props.position}
           draggable
           onDragEnd={this.props.onDragEnd}
-        />
+        /> */}
+        {this.directionRenderer({
+          source: this.props.source,
+          destination: this.props.destination
+        })}
       </GoogleMap>
     );
   }
@@ -43,6 +79,8 @@ class MapComponent extends Component {
         {MyMapComponent && (
           <MyMapComponent
             setRef={ref => (this.googleMapEl = ref)}
+            source={this.props.source}
+            destination={this.props.destination}
             position={this.props.position}
             onClick={this.props.onClick}
             onDragEnd={this.props.onDragEnd}

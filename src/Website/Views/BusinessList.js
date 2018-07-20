@@ -173,6 +173,10 @@ class BusinessList extends Component {
     });
   };
 
+  popUpMapPath = address => () => {
+    console.log("path: ", address);
+  };
+
   renderSearchResults = () => {
     // console.log("search results: ", this.props);
     // if (!this.props.search_results_page_loading)
@@ -322,7 +326,11 @@ class BusinessList extends Component {
                   <i className="fa fa-phone" /> Call
                 </Col> */}
                 <Col sm="3">
-                  <Button circular basic>
+                  <Button
+                    circular
+                    basic
+                    onClick={this.popUpMapPath(each_search_result.address)}
+                  >
                     <i className="fa fa-location-arrow" /> Get Direction{" "}
                   </Button>
                 </Col>

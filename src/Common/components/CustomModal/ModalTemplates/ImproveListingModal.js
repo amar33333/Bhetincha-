@@ -44,6 +44,8 @@ class ImproveListingModal extends Component {
         this.state.problem_type.id === TYPE_A_NEW_ONE
       ) {
         this.setState({ new_problem_type_visible: true });
+      } else {
+        this.setState({ new_problem_type_visible: false });
       }
     });
   };

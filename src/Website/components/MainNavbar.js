@@ -6,7 +6,11 @@ import { geolocated } from "react-geolocated";
 import Avatar from "./Avatar";
 import AutoSuggestion from "./AutoSuggestion";
 
-import { onSearchQuerySubmit, onSearchResultsList } from "../actions";
+import {
+  onSearchQuerySubmit,
+  onSearchResultsList,
+  onStoreUserGeoLocation
+} from "../actions";
 import querystring from "querystring";
 // import theme from "./theme-small.css";
 
@@ -62,6 +66,21 @@ const theme = {
 };
 
 class MainNavbar extends Component {
+  componentDidUpdate(prevProps) {
+    if (prevProps.coords !== this.props.coords) {
+      this.props.onStoreUserGeoLocation({
+        user_geo_coords: {
+          accuracy: this.props.coords.accuracy,
+          altitude: this.props.coords.altitude,
+          altitudeAccuracy: this.props.coords.altitudeAccuracy,
+          latitude: this.props.coords.latitude,
+          longitude: this.props.coords.longitude,
+          speed: this.props.coords.speed
+        }
+      });
+    }
+  }
+
   render() {
     return (
       <Navbar
@@ -127,12 +146,13 @@ export default connect(
   }),
   {
     onSearchQuerySubmit,
-    onSearchResultsList
+    onSearchResultsList,
+    onStoreUserGeoLocation
   }
 )(
   geolocated({
     positionOptions: {
-      enableHighAccuracy: false
+      enableHighAccuracy: true
     },
     userDecisionTimeout: 5000
   })(MainNavbar)
