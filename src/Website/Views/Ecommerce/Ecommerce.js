@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 
 import { combineEpics } from "redux-observable";
-import EcommerceMainNav from "./components/EcommerceMainNav";
+// import EcommerceMainNav from "./components/EcommerceMainNav";
 
 import EcommerceRoutes from "./config/routes";
 import withRepics from "../../../config/withRepics";
@@ -10,9 +10,10 @@ import ecommerceEpics from "./config/epics";
 
 class Ecommerce extends Component {
   render() {
+    console.log("ecommerce props:::", this.props);
     return (
       <div>
-        <EcommerceMainNav />
+        {/* <EcommerceMainNav /> */}
         <EcommerceRoutes />
       </div>
     );

@@ -13,7 +13,7 @@ import Breadcrumbs from "./Breadcrumbs";
 
 import { onCategoriesList, onActiveCategoryChange } from "../actions";
 
-class Home extends Component {
+class MainHome extends Component {
   componentDidMount() {
     const { categoryId } = this.props.match.params;
     if (categoryId) {
@@ -64,13 +64,13 @@ class Home extends Component {
           categories={this.props.categories}
           onSelect={this.onSelectCategory}
         />
-        {this.props.breadcrumbs.length > 1 && (
+        {/* {this.props.breadcrumbs.length > 1 && (
           <Breadcrumbs
             className="ecommerce-bread-crumbs"
             items={this.props.breadcrumbs}
             onSelectCategory={this.onSelectCategory}
           />
-        )}
+        )} */}
         <Row>
           <Col xs="12" md="4">
             <MegaMenu
@@ -153,4 +153,4 @@ export default connect(
     breadcrumbs
   }),
   { onCategoriesList, onActiveCategoryChange }
-)(Home);
+)(MainHome);

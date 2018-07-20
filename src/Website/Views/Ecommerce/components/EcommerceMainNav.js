@@ -9,7 +9,9 @@ import {
   NavItem,
   NavLink
 } from "reactstrap";
-import { Search, Icon } from "semantic-ui-react";
+import { Dropdown, Search, Icon } from "semantic-ui-react";
+
+import MegaMenu from "./MegaMenu";
 
 class EcommerceMainNav extends Component {
   constructor(props) {
@@ -29,72 +31,110 @@ class EcommerceMainNav extends Component {
   render() {
     const { isLoading, value, results } = this.state;
     return (
-      <Navbar
-        expand="md"
+      <div
         style={{
-          backgroundColor: "white",
-          borderBottom: "0.5px solid lightgray"
+          position: "relative"
         }}
       >
-        {/* <NavbarBrand href="/">Bhetincha Shop</NavbarBrand> */}
-        <Link className="navbar-brand" to="/ecommerce">
-          Bhetincha Shop{" "}
-        </Link>
-
-        <Icon name="bars" />
-
-        <NavbarToggler
-          onClick={this.toggle}
+        <Navbar
+          expand="md"
           style={{
-            color: "gray"
+            backgroundColor: "white",
+            borderBottom: "0.5px solid lightgray"
           }}
-        />
-        <Collapse isOpen={this.state.isOpen} navbar>
-          <Nav className="ml-auto" navbar>
-            <NavItem
-              style={{
-                minWidth: "350px"
-              }}
-            >
-              <Search
-                className="mr-2 ecommerce-search-container"
-                fluid
-                loading={isLoading}
-                onResultSelect={this.handleResultSelect}
-                // onSearchChange={_.debounce(this.handleSearchChange, 500, {
-                //   leading: true
-                // })}
-                results={results}
-                value={value}
-                {...this.props}
+        >
+          {/* <NavbarBrand href="/">Bhetincha Shop</NavbarBrand> */}
+          {/* <Icon
+            name="bars"
+            onMouseOver={e => this.handleTogglerHover(e)}
+            onMouseLeave={e => this.handleTogglerHoverLeave(e)}
+            style={{
+              cursor: "pointer",
+              marginRight: "20px"
+            }}
+          /> */}
+          <Dropdown
+            className="ecommerce-nav__megamenu__dropdown"
+            icon="bars"
+            style={{
+              cursor: "pointer",
+              marginRight: "20px"
+            }}
+          >
+            <Dropdown.Menu>
+              {/* <div className="arrow-up" /> */}
+              <MegaMenu
+                categories={this.props.categories}
+                onSelect={this.onSelectCategory}
               />
-            </NavItem>
-            <NavItem>
-              <NavLink>Need Help?</NavLink>
-            </NavItem>
-            <NavItem>
-              <NavLink>Your Account</NavLink>
-            </NavItem>
-            <NavItem>
-              <NavLink>
-                <i
-                  className="fa fa-shopping-cart"
-                  style={{ fontSize: "1.5rem" }}
+            </Dropdown.Menu>
+          </Dropdown>
+
+          <Link className="navbar-brand" to="/ecommerce">
+            Bhetincha Shop{" "}
+          </Link>
+
+          <NavbarToggler
+            onClick={this.toggle}
+            style={{
+              color: "gray"
+            }}
+          />
+          <Collapse isOpen={this.state.isOpen} navbar>
+            <Nav className="ml-auto" navbar>
+              <NavItem
+                style={{
+                  minWidth: "350px"
+                }}
+              >
+                <Search
+                  className="mr-2 ecommerce-search-container"
+                  fluid
+                  loading={isLoading}
+                  onResultSelect={this.handleResultSelect}
+                  // onSearchChange={_.debounce(this.handleSearchChange, 500, {
+                  //   leading: true
+                  // })}
+                  results={results}
+                  value={value}
+                  {...this.props}
                 />
-                <Badge
-                  color="primary"
-                  pill
-                  style={{
-                    fontSize: "0.6rem"
-                  }}
-                >
-                  2
-                </Badge>
-              </NavLink>
-            </NavItem>
-          </Nav>
-        </Collapse>
-      </Navbar>
+              </NavItem>
+              <NavItem>
+                <NavLink>Need Help?</NavLink>
+              </NavItem>
+              <NavItem>
+                <NavLink>Your Account</NavLink>
+              </NavItem>
+              <NavItem>
+                <NavLink>
+                  <i
+                    className="fa fa-shopping-cart"
+                    style={{ fontSize: "1.5rem" }}
+                  />
+                  <Badge
+                    color="primary"
+                    pill
+                    style={{
+                      fontSize: "0.6rem"
+                    }}
+                  >
+                    2
+                  </Badge>
+                </NavLink>
+              </NavItem>
+            </Nav>
+          </Collapse>
+        </Navbar>
+        {/* {this.state.menuOpen ? (
+          <div className="mega-menu__container__main_nav">
+            <MegaMenu
+              categories={this.props.categories}
+              onSelect={this.onSelectCategory}
+            />
+          </div>
+        ) : null} */}
+      </div>
     );
   }
 }

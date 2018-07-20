@@ -4,6 +4,8 @@ import { toast } from "react-toastify";
 import MapComponent from "../../../Common/components/MapComponent";
 
 import Select from "react-select";
+import TagsInput from "react-tagsinput";
+import "react-tagsinput/react-tagsinput.css";
 
 import {
   Button,
@@ -103,7 +105,7 @@ class AddBranch extends Component {
         landlineNumber: branch.landlineNumber ? branch.landlineNumber : "",
         otherLandlineNumber: branch.otherLandlineNumber
           ? branch.otherLandlineNumber
-          : "",
+          : [],
         house_no: branch.house_no ? branch.house_no : "",
         landmark: branch.landmark ? branch.landmark : "",
         addressLine1: branch.addressLine1 ? branch.addressLine1 : "",
@@ -627,12 +629,18 @@ class AddBranch extends Component {
               <Col xs="12" md="4">
                 <FormGroup>
                   <Label for="bname">Other Branch LandLine Number</Label>
-                  <Input
-                    type="text"
+
+                  <TagsInput
+                    onlyUnique
+                    inputProps={{
+                      placeholder: "Add new Landline no."
+                    }}
+                    disabled={this.props.loading}
+                    addKeys={[9, 188]}
                     value={this.state.otherLandlineNumber}
-                    onChange={event => {
+                    onChange={tags => {
                       this.setState({
-                        otherLandlineNumber: [event.target.value]
+                        otherLandlineNumber: tags
                       });
                     }}
                   />

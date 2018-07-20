@@ -283,15 +283,29 @@ class BusinessList extends Component {
                       23
                     </Badge>
                   </Col> */}
-                <Col
-                  sm="2"
-                  style={{ cursor: "pointer" }}
-                  onClick={this.onClaimed(each_search_result.id)}
-                >
-                  <Button circular basic>
-                    <i className="fa fa-unlock" /> Claim
-                  </Button>
-                </Col>
+
+                {each_search_result.claimed ? (
+                  <Col
+                    sm="2"
+                    style={{ cursor: "pointer" }}
+                    // onClick={this.onClaimed(each_search_result.id)}
+                  >
+                    <Button circular basic>
+                      <i className="fa fa-lock" /> Claimed
+                    </Button>
+                  </Col>
+                ) : (
+                  <Col
+                    sm="2"
+                    style={{ cursor: "pointer" }}
+                    onClick={this.onClaimed(each_search_result.id)}
+                  >
+                    <Button circular basic>
+                      <i className="fa fa-unlock" /> Claim
+                    </Button>
+                  </Col>
+                )}
+
                 <Col
                   sm="3"
                   style={{ cursor: "pointer" }}
