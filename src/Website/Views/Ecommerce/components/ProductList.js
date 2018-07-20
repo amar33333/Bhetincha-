@@ -22,6 +22,7 @@ class ProductList extends Component {
               <ProductItem
                 key={product._id}
                 product={product._source}
+                id={product._id}
                 onSelectProduct={this.props.onSelectProduct}
               />
             ))}
