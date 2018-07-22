@@ -544,20 +544,26 @@ input.main-nav-search::placeholder {
   z-index: 20;
   flex: 1;
   top: 0;
-  left: 304px;
+  left: 100%;
   height: 100%;
-  width: 100%;
+  width: 300%;
   /* border-bottom: 0.5px solid lightgray;
   border-right: 0.5px solid lightgray; */
 }
 
 .sub-menu {
+  /* position: absolute;
+  display: flex;
+  z-index: 20;
+  flex: 1;
+  top: 0;
+  left: 100%; */
   position: relative;
   background-color: rgba(255, 255, 255, 0.99);
   padding: 10px 20px;
   margin-left: 0px;
   height: 100%;
-  /* width: 100%; */
+  max-width: 100%;
   border-bottom: 0.5px solid lightgray;
   border-right: 0.5px solid lightgray;
   border-left: 0.5px solid lightgray;

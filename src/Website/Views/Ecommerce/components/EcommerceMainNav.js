@@ -57,7 +57,7 @@ class EcommerceMainNav extends Component {
             }}
           /> */}
 
-          {this.props.isHome && (
+          {!this.props.isHome && (
             <Dropdown
               className="ecommerce-nav__megamenu__dropdown"
               icon="bars"
@@ -66,7 +66,11 @@ class EcommerceMainNav extends Component {
                 marginRight: "20px"
               }}
             >
-              <Dropdown.Menu>
+              <Dropdown.Menu
+                style={{
+                  width: "100%"
+                }}
+              >
                 <MegaMenu
                   categories={this.props.categories}
                   onSelect={this.props.onSelect}
