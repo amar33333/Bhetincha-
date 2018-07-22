@@ -8,6 +8,7 @@ class CustomModal extends Component {
         isOpen={this.props.isOpen}
         toggle={this.props.toggle}
         className={this.props.className}
+        size={this.props.size}
       >
         <ModalHeader toggle={this.props.toggleModal}>
           {this.props.title}

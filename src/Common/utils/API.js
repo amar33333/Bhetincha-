@@ -25,6 +25,8 @@ const CHECK_REGISTRATION = "business/checkurl/";
 const SOCIAL = "api/accounts/social";
 const INDIVIDUAL_TOKEN_VERIFY = "individual/token-verify/";
 const INDIVIDUAL_LOGIN_CHECK = "individual/login/";
+const FORGOT_PASSWORD = "api/accounts/send-reset-token/";
+const FORGOT_PASSWORD_TOKEN = "api/accounts/change-password/";
 
 const O_TOKEN = "o/token/";
 export const CLIENT_ID = "z5LMYuXtl4eFF7iyMIKA0LzZSu4awMBGg8hUsXH4";
@@ -46,6 +48,8 @@ export const GOOGLE_LOGIN_URL = `${MAIN_URL}/${SOCIAL}/google/`;
 export const INDIVIDUAL_TOKEN_VERIFY_URL = `${MAIN_URL}/${INDIVIDUAL_TOKEN_VERIFY}`;
 export const INDIVIDUAL_RESEND_TOKEN_URL = `${MAIN_URL}/${INDIVIDUAL_RESEND_TOKEN}`;
 export const INDIVIDUAL_LOGIN_CHECK_URL = `${MAIN_URL}/${INDIVIDUAL_LOGIN_CHECK}`;
+export const FORGOT_PASSWORD_URL = `${MAIN_URL}/${FORGOT_PASSWORD}`;
+export const FORGOT_PASSWORD_TOKEN_URL = `${MAIN_URL}/${FORGOT_PASSWORD_TOKEN}`;
 // export const REGISTER_URL = `${MAIN_URL}/${API}/${ACCOUNTS}/${USER}`;
 
 export const O_TOKEN_URL = `${MAIN_URL}/${O_TOKEN}`;

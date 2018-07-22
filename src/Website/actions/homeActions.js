@@ -14,7 +14,8 @@ import {
   CREATE_IMPROVE_LISTING_FULFILLED,
   CREATE_IMPROVE_LISTING_PENDING,
   CREATE_IMPROVE_LISTING_REJECTED,
-  STORE_USER_GEO_LOCATION
+  STORE_USER_GEO_LOCATION,
+  TOGGLE_GET_DIRECTION_MODAL
 } from "./types";
 
 const epics = [];
@@ -29,6 +30,11 @@ export const toggleRegisterModal = () => ({
 
 export const toggleImproveListingModal = payload => ({
   type: TOGGLE_IMPROVE_LISTING_MODAL,
+  payload
+});
+
+export const toggleGetDirectionModal = payload => ({
+  type: TOGGLE_GET_DIRECTION_MODAL,
   payload
 });
 

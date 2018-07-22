@@ -19,7 +19,10 @@ class GoogleMapComponent extends Component {
 
   directionRenderer = ({ source, destination }) => {
     const DirectionsService = new google.maps.DirectionsService();
-
+    // console.log("srouce: ", source, "desit: ", destination);
+    // if (!destination.latitude || !destination.longitude) {
+    //   toast.error("Selected Address Does Not Have Location Coordinates");
+    // }
     DirectionsService.route(
       {
         origin: new google.maps.LatLng(

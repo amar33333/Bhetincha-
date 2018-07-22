@@ -14,7 +14,9 @@ import {
   GOOGLE_LOGIN_URL,
   INDIVIDUAL_TOKEN_VERIFY_URL,
   INDIVIDUAL_RESEND_TOKEN_URL,
-  INDIVIDUAL_LOGIN_CHECK_URL
+  INDIVIDUAL_LOGIN_CHECK_URL,
+  FORGOT_PASSWORD_URL,
+  FORGOT_PASSWORD_TOKEN_URL
 } from "./API";
 import querystring from "querystring";
 import { ajax } from "rxjs/observable/dom/ajax";
@@ -24,6 +26,26 @@ export const onCheckUserActivatedPost = ({ body }) =>
     method: "POST",
     body,
     url: `${INDIVIDUAL_LOGIN_CHECK_URL}`,
+    headers: {
+      "Content-Type": "application/json"
+    }
+  });
+
+export const onForgotPasswordPost = ({ body }) =>
+  ajax({
+    method: "POST",
+    body,
+    url: `${FORGOT_PASSWORD_URL}`,
+    headers: {
+      "Content-Type": "application/json"
+    }
+  });
+
+export const onForgotPasswordTokenPost = ({ body }) =>
+  ajax({
+    method: "POST",
+    body,
+    url: `${FORGOT_PASSWORD_TOKEN_URL}`,
     headers: {
       "Content-Type": "application/json"
     }

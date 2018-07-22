@@ -10,7 +10,9 @@ import {
   MobileVerification,
   UserRegister,
   IndividualRegister,
-  Activate
+  Activate,
+  ForgotPassword,
+  ForgotPasswordToken
 } from "../Common/pages";
 import Website from "../Website";
 
@@ -61,6 +63,18 @@ class MainRoute extends Component {
             component={Register}
           />
           <Route exact path="/activate" name="Activate" component={Activate} />
+          <Route
+            exact
+            path="/forgot-password"
+            name="Forgot Password"
+            component={ForgotPassword}
+          />
+          <Route
+            exact
+            path="/forgot-password-token"
+            name="Forgot Password Tokem"
+            component={ForgotPasswordToken}
+          />
           <Route
             exact
             path="/mobile-verification"
