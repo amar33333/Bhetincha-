@@ -60,10 +60,11 @@ class Home extends Component {
           backgroundColor: "rgba(247, 237, 237, 0.32)"
         }}
       >
-        {/* <EcommerceMainNav
+        <EcommerceMainNav
           categories={this.props.categories}
           onSelect={this.onSelectCategory}
-        /> */}
+          isHome={!Boolean(this.props.match.params.categoryId)}
+        />
         {this.props.breadcrumbs.length > 1 && (
           <Breadcrumbs
             className="ecommerce-bread-crumbs"
@@ -105,8 +106,8 @@ class Home extends Component {
               <Row className="hor-filter-sort__container mb-3">
                 <Col>
                   <PaginationComponent
-                    activeIndex={1}
-                    total={this.props.productCount}
+                    activePage={1}
+                    totalPages={this.props.productCount}
                   />
                 </Col>
                 <Col>filter price</Col>
