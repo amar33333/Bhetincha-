@@ -24,7 +24,7 @@ class WebsiteRoute extends Component {
           name="Ecommerce-home-main-main"
           component={MainHome}
         />
-        <Route exact path="/ecommerce" name="Ecommerce-home" component={Home} />
+        <Route path="/ecommerce" name="Ecommerce-home" component={Home} />
         <Redirect from="/ecommerce" to="/ecommerce" />
       </Switch>
     );

@@ -13,13 +13,16 @@ class Ecommerce extends Component {
   onSelectCategory = categoryId =>
     this.props.history.push(`/ecommerce/${categoryId}`);
 
+  componentDidUpdate() {
+    console.log("ishome:::", this.props.isHome);
+  }
+
   render() {
     return (
       <div>
         <EcommerceMainNav
           categories={this.props.categories}
           onSelect={this.onSelectCategory}
-          isHome={!Boolean(this.props.match.params.categoryId)}
         />
         <EcommerceRoutes />
       </div>

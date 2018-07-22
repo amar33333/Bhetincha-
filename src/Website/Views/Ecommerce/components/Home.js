@@ -10,6 +10,7 @@ import MegaMenu from "./MegaMenu";
 import EcommerceMainNav from "./EcommerceMainNav";
 import ChildCategories from "./ChildCategories";
 import Breadcrumbs from "./Breadcrumbs";
+import banner from "../../../../static/img/ebanner.jpg";
 
 import { onCategoriesList, onActiveCategoryChange } from "../actions";
 
@@ -73,12 +74,19 @@ class Home extends Component {
         )}
         {!this.props.match.params.categoryId && (
           <Row>
-            <Col xs="12" md="4">
+            <Col xs="12" md="3" className="mr-0">
               <MegaMenu
                 categories={this.props.categories}
                 onSelect={this.onSelectCategory}
               />
             </Col>
+            <Col
+              md="9"
+              clssName="hidden-xs-down ml-0"
+              style={{
+                backgroundImage: `url(${banner})`
+              }}
+            />
           </Row>
         )}
         <Container fluid className="mt-3 mb-3 mr-2">

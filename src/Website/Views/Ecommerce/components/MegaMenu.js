@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { Icon } from "semantic-ui-react";
 import { spawn } from "child_process";
-import banner from "../../../../static/img/ebanner.jpg";
 
 const MAX_CAT = 4;
 class MegaMenu extends Component {
@@ -80,9 +79,9 @@ class MegaMenu extends Component {
     return (
       <div className="menu-container pl-3" onMouseLeave={this.handleMouseOut}>
         <div
-          style={{
-            width: "300px"
-          }}
+        // style={{
+        //   width: "300px"
+        // }}
         >
           <div className="menu-list-container pt-1 pb-2">
             {this.props.categories.children &&
@@ -127,9 +126,6 @@ class MegaMenu extends Component {
         <div
           className="ml-2 sub-menu-container"
           onMouseOver={e => this.handleMouseOn}
-          style={{
-            backgroundImage: `url(${banner})`
-          }}
         >
           {this.state.mouseOn && this.renderSubCats()}
         </div>

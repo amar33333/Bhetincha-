@@ -53,22 +53,24 @@ class EcommerceMainNav extends Component {
               marginRight: "20px"
             }}
           /> */}
-          <Dropdown
-            className="ecommerce-nav__megamenu__dropdown"
-            icon="bars"
-            style={{
-              cursor: "pointer",
-              marginRight: "20px"
-            }}
-          >
-            <Dropdown.Menu>
-              {/* <div className="arrow-up" /> */}
-              <MegaMenu
-                categories={this.props.categories}
-                onSelect={this.props.onSelect}
-              />
-            </Dropdown.Menu>
-          </Dropdown>
+
+          {this.props.isHome && (
+            <Dropdown
+              className="ecommerce-nav__megamenu__dropdown"
+              icon="bars"
+              style={{
+                cursor: "pointer",
+                marginRight: "20px"
+              }}
+            >
+              <Dropdown.Menu>
+                <MegaMenu
+                  categories={this.props.categories}
+                  onSelect={this.props.onSelect}
+                />
+              </Dropdown.Menu>
+            </Dropdown>
+          )}
 
           <Link className="navbar-brand" to="/ecommerce">
             Bhetincha Shop{" "}

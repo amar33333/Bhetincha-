@@ -519,6 +519,7 @@ input.main-nav-search::placeholder {
   padding-left: 5px;
   border: 0.5px solid lightgray;
   border-top: none;
+  z-index: 20;
 }
 
 .category-list-item {
@@ -540,6 +541,7 @@ input.main-nav-search::placeholder {
 .sub-menu-container {
   position: absolute;
   display: flex;
+  z-index: 20;
   flex: 1;
   top: 0;
   left: 304px;
