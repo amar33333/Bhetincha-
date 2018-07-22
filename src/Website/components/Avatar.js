@@ -15,9 +15,11 @@ import {
   ROUTE_PARAMS_INDIVIDUAL_NAME
 } from "../../config/CONSTANTS";
 
+import { MAIN_URL } from "../../Common/utils/API";
+
 import { Link } from "react-router-dom";
 
-import avatar from "../../static/img/avatar.jpg";
+import avatar from "../../static/img/avatar.png";
 import avatarItems from "../config/avatarItems";
 
 const greetings = [
@@ -113,6 +115,7 @@ class Avatar extends Component {
 
   render() {
     greetings.sort(() => Math.random() - 0.5);
+    console.log("logo", this.props.cookies.user_data.logo);
     return (
       <Dropdown
         isOpen={this.state.isOpen}
@@ -125,7 +128,15 @@ class Avatar extends Component {
           data-toggle="dropdown"
           aria-expanded={this.state.isOpen}
         >
-          <img className="avatar" alt="Avatar" src={avatar} />
+          <img
+            className="avatar"
+            alt="Avatar"
+            src={
+              this.props.cookies && this.props.cookies.user_data.logo
+                ? `${MAIN_URL}${this.props.cookies.user_data.logo}`
+                : avatar
+            }
+          />
           {/* <i className="fa fa-chevron-down profile-dropdown__icon" /> */}
         </DropdownToggle>
         <DropdownMenu right>
