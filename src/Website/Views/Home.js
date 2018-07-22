@@ -6,20 +6,20 @@ import { geolocated } from "react-geolocated";
 import logo from "../../static/img/logo.png";
 import "./home.css";
 
-import CustomModal from "../../Common/components/CustomModal";
-import LoginModal from "../../Common/components/CustomModal/ModalTemplates/LoginModal";
-import RegisterModal from "../../Common/components/CustomModal/ModalTemplates/RegisterModal";
+// import CustomModal from "../../Common/components/CustomModal";
+// import LoginModal from "../../Common/components/CustomModal/ModalTemplates/LoginModal";
+// import RegisterModal from "../../Common/components/CustomModal/ModalTemplates/RegisterModal";
 
 import { Avatar, AutoSuggestion } from "../components";
 
 import {
-  toggleLoginModal,
-  toggleRegisterModal,
+  // toggleLoginModal,
+  // toggleRegisterModal,
   onSearchQuerySubmit,
   onStoreUserGeoLocation
 } from "../actions";
 
-import { BottomFooter } from "../components";
+import { BottomFooter, LoginRegister } from "../components";
 import querystring from "querystring";
 // import theme from "../components/theme-big.css";
 
@@ -48,62 +48,75 @@ class Home extends Component {
     }
   }
 
-  renderLoginRegister = () =>
-    !this.props.cookies ? (
-      <div className="home-page__header">
-        <Button
-          outline
-          className="login-btn"
-          onClick={this.props.toggleLoginModal}
-          variant="raised"
-          color="primary"
-        >
-          Login
-        </Button>
+  // renderLoginRegister = () =>
+  //   !this.props.cookies ? (
+  //     <div className="home-page__header">
+  //       <Button
+  //         outline
+  //         className="login-btn"
+  //         onClick={this.props.toggleLoginModal}
+  //         variant="raised"
+  //         color="primary"
+  //       >
+  //         Login
+  //       </Button>
 
-        <CustomModal
-          title="Login To Bhetincha"
-          isOpen={this.props.loginModal}
-          toggle={this.props.toggleLoginModal}
-          className={"modal-xs" + this.props.className}
-        >
-          <LoginModal {...this.props} />
-        </CustomModal>
+  //       <CustomModal
+  //         title="Login To Bhetincha"
+  //         isOpen={this.props.loginModal}
+  //         toggle={this.props.toggleLoginModal}
+  //         className={"modal-xs" + this.props.className}
+  //       >
+  //         <LoginModal {...this.props} />
+  //       </CustomModal>
 
-        <CustomModal
-          title="Register In Bhetincha"
-          isOpen={this.props.registerModal}
-          toggle={this.props.toggleRegisterModal}
-          className={"register_modal " + this.props.className}
-        >
-          <RegisterModal {...this.props} />
-        </CustomModal>
+  //       <CustomModal
+  //         title="Register In Bhetincha"
+  //         isOpen={this.props.registerModal}
+  //         toggle={this.props.toggleRegisterModal}
+  //         className={"register_modal " + this.props.className}
+  //       >
+  //         <RegisterModal {...this.props} />
+  //       </CustomModal>
 
-        <Button
-          //onClick={this.props.toggleRegisterModal}
-          onClick={() => this.props.history.push("/business-register")}
-          variant="raised"
-          color="success"
-        >
-          Register
-        </Button>
-      </div>
-    ) : (
-      <div
-        className="home-page__header"
-        style={{
-          marginRight: "80px"
-        }}
-      >
-        <Avatar />
-      </div>
-    );
+  //       <Button
+  //         //onClick={this.props.toggleRegisterModal}
+  //         onClick={() => this.props.history.push("/business-register")}
+  //         variant="raised"
+  //         color="success"
+  //       >
+  //         Register
+  //       </Button>
+  //     </div>
+  //   ) : (
+  //     <div
+  //       className="home-page__header"
+  //       style={{
+  //         marginRight: "80px"
+  //       }}
+  //     >
+  //       <Avatar />
+  //     </div>
+  //   );
 
   render() {
     placeholder.sort(() => Math.random() - 0.5);
     return (
       <div className="body-wrapper">
-        {this.renderLoginRegister()}
+        {!this.props.cookies ? (
+          <div className="home-page__header">
+            <LoginRegister history={this.props.history} />
+          </div>
+        ) : (
+          <div
+            className="home-page__header"
+            style={{
+              marginRight: "80px"
+            }}
+          >
+            <Avatar />
+          </div>
+        )}
         <Container className="full-height">
           <Row>
             <Col xs="12" className="centered">
@@ -165,8 +178,8 @@ export default connect(
     search_result
   }),
   {
-    toggleLoginModal,
-    toggleRegisterModal,
+    // toggleLoginModal,
+    // toggleRegisterModal,
     onSearchQuerySubmit,
     onStoreUserGeoLocation
   }

@@ -11,6 +11,9 @@ import {
 } from "reactstrap";
 import { Dropdown, Search, Icon } from "semantic-ui-react";
 
+import LoginRegister from "../../../components/LoginRegister";
+import Avatar from "../../../components/Avatar";
+
 import MegaMenu from "./MegaMenu";
 
 class EcommerceMainNav extends Component {
@@ -109,7 +112,13 @@ class EcommerceMainNav extends Component {
                 <NavLink>Need Help?</NavLink>
               </NavItem>
               <NavItem>
-                <NavLink>Your Account</NavLink>
+                <NavLink>
+                  {this.props.cookies ? (
+                    <Avatar />
+                  ) : (
+                    <LoginRegister history={this.props.history} />
+                  )}
+                </NavLink>
               </NavItem>
               <NavItem>
                 <NavLink>
