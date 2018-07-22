@@ -81,7 +81,7 @@ class Home extends Component {
         )}
         {!this.props.match.params.categoryId && (
           <Row>
-            <Col xs="12" md="3" className="mr-0">
+            <Col xs="12" md="3" className="mr-0 pr-0">
               <MegaMenu
                 categories={this.props.categories}
                 onSelect={this.onSelectCategory}

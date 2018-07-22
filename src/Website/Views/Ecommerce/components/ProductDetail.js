@@ -1,10 +1,12 @@
 import React, { Component } from "react";
 
+import { Container, Row, Col } from "reactstrap";
+
 class ProductDetail extends Component {
   render() {
     const { product } = this.props;
     return (
-      <div>
+      <Container>
         Product Detail
         {product && (
           <div>
@@ -25,7 +27,7 @@ class ProductDetail extends Component {
             })}
           </div>
         )}
-      </div>
+      </Container>
     );
   }
 }

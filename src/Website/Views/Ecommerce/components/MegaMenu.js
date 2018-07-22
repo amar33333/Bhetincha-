@@ -78,53 +78,47 @@ class MegaMenu extends Component {
   render() {
     return (
       <div className="menu-container pl-3" onMouseLeave={this.handleMouseOut}>
-        <div
-        // style={{
-        //   width: "300px"
-        // }}
-        >
-          <div className="menu-list-container pt-1 pb-2">
-            {this.props.categories.children &&
-              this.props.categories.children.map((cat, index) => {
-                return (
-                  <div
-                    // className="category-list-item"
-                    className={
-                      cat === this.state.activeItem
-                        ? `category-list-item active-menu-name`
-                        : `category-list-item`
-                    }
-                    key={index}
-                    onMouseOver={e => this.handleCatHover(e, cat)}
-                    onClick={() => this.props.onSelect(cat.uid)}
-                  >
-                    {cat.className ? (
-                      <i
-                        className={cat.className}
-                        style={{
-                          marginRight: "0.4rem",
-                          marginLeft: "0.2rem"
-                        }}
-                      />
-                    ) : (
-                      <Icon name="mobile" />
-                    )}
-
-                    <p className="mb-0">{cat.name}</p>
+        <div className="menu-list-container pt-1 pb-2">
+          {this.props.categories.children &&
+            this.props.categories.children.map((cat, index) => {
+              return (
+                <div
+                  // className="category-list-item"
+                  className={
+                    cat === this.state.activeItem
+                      ? `category-list-item active-menu-name`
+                      : `category-list-item`
+                  }
+                  key={index}
+                  onMouseOver={e => this.handleCatHover(e, cat)}
+                  onClick={() => this.props.onSelect(cat.uid)}
+                >
+                  {cat.className ? (
                     <i
-                      className="fa fa-angle-right ml-auto pr-1"
+                      className={cat.className}
                       style={{
-                        height: "5px !important"
+                        marginRight: "0.4rem",
+                        marginLeft: "0.2rem"
                       }}
                     />
-                  </div>
-                );
-              })}
-          </div>
+                  ) : (
+                    <Icon name="mobile" />
+                  )}
+
+                  <p className="mb-0">{cat.name}</p>
+                  <i
+                    className="fa fa-angle-right ml-auto pr-1"
+                    style={{
+                      height: "5px !important"
+                    }}
+                  />
+                </div>
+              );
+            })}
         </div>
 
         <div
-          className="ml-2 sub-menu-container"
+          className="sub-menu-container"
           onMouseOver={e => this.handleMouseOn}
         >
           {this.state.mouseOn && this.renderSubCats()}

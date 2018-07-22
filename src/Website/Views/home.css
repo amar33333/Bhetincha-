@@ -509,7 +509,6 @@ input.main-nav-search::placeholder {
   height: 100%;
   width: 100%;
   position: relative;
-  /* border-top: 0.5px solid lightgray; */
 }
 
 .menu-list-container {
@@ -518,19 +517,16 @@ input.main-nav-search::placeholder {
   padding-right: 5px;
   padding-left: 5px;
   border: 0.5px solid lightgray;
-  border-top: none;
+  /* border-top: none; */
   z-index: 20;
 }
 
 .category-list-item {
   display: flex;
   flex-direction: row;
-  /* margin: 5px 5px -5px 5px; */
   padding-top: 5px;
   padding-bottom: 5px;
   cursor: pointer;
-  /* margin-bottom: -5px; */
-  /* height: 30px; */
 }
 
 .category-list-item:hover {
@@ -544,11 +540,10 @@ input.main-nav-search::placeholder {
   z-index: 20;
   flex: 1;
   top: 0;
-  left: 304px;
+  left: 100%;
   height: 100%;
-  width: 100%;
-  /* border-bottom: 0.5px solid lightgray;
-  border-right: 0.5px solid lightgray; */
+  width: 600px;
+  overflow: hidden;
 }
 
 .sub-menu {
@@ -557,10 +552,9 @@ input.main-nav-search::placeholder {
   padding: 10px 20px;
   margin-left: 0px;
   height: 100%;
-  /* width: 100%; */
-  border-bottom: 0.5px solid lightgray;
-  border-right: 0.5px solid lightgray;
-  border-left: 0.5px solid lightgray;
+  max-width: 100%;
+  border: 0.5px solid lightgray;
+  border-right: left;
   -webkit-columns: 180px;
   -moz-columns: 180px;
   columns: 180px;
@@ -631,8 +625,8 @@ input.main-nav-search::placeholder {
 
 .mega-menu__container__main_nav {
   position: absolute;
-  top: 15px;
-  left: 20px;
+  top: 45px;
+  left: 0px;
 }
 
 .ecommerce-nav__megamenu__dropdown.ui.dropdown .menu {
@@ -641,11 +635,36 @@ input.main-nav-search::placeholder {
   margin-top: 20px;
 }
 .arrow-up {
-  width: 0;
-  height: 0;
-  border-left: 5px solid transparent;
-  border-right: 5px solid transparent;
-  border-bottom: 5px solid lightgray;
+  width: 100%;
+  height: 28px;
+  position: absolute;
+  overflow: hidden;
+  left: 10px;
+  top: -25px;
+  z-index: 25;
+}
+
+.arrow-up::before {
+  background-color: #d3d3d3;
+  top: 22px;
+  content: "";
+  width: 40px;
+  height: 40px;
+  left: -7px;
+  -webkit-transform: rotate(45deg);
+  transform: rotate(45deg);
+  position: absolute;
+}
+.arrow-up::after {
+  background-color: #fff;
+  top: 23px;
+  content: "";
+  width: 40px;
+  height: 40px;
+  left: -7px;
+  -webkit-transform: rotate(45deg);
+  transform: rotate(45deg);
+  position: absolute;
 }
 .react-tagsinput-input {
   width: 140px !important;
