@@ -60,10 +60,10 @@ class Home extends Component {
           backgroundColor: "rgba(247, 237, 237, 0.32)"
         }}
       >
-        <EcommerceMainNav
+        {/* <EcommerceMainNav
           categories={this.props.categories}
           onSelect={this.onSelectCategory}
-        />
+        /> */}
         {this.props.breadcrumbs.length > 1 && (
           <Breadcrumbs
             className="ecommerce-bread-crumbs"
@@ -71,20 +71,23 @@ class Home extends Component {
             onSelectCategory={this.onSelectCategory}
           />
         )}
-        <Row>
-          <Col xs="12" md="4">
-            <MegaMenu
-              categories={this.props.categories}
-              onSelect={this.onSelectCategory}
-            />
-          </Col>
-        </Row>
+        {!this.props.match.params.categoryId && (
+          <Row>
+            <Col xs="12" md="4">
+              <MegaMenu
+                categories={this.props.categories}
+                onSelect={this.onSelectCategory}
+              />
+            </Col>
+          </Row>
+        )}
         <Container fluid className="mt-3 mb-3 mr-2">
           <Row>
             <Col xs="12" md="2">
               <Row>
                 <Col xs="12">
-                  {this.props.childCategories.length ? (
+                  {this.props.match.params.categoryId &&
+                  this.props.childCategories.length ? (
                     <ChildCategories
                       categories={this.props.childCategories}
                       onSelectCategory={this.onSelectCategory}

@@ -65,7 +65,7 @@ class EcommerceMainNav extends Component {
               {/* <div className="arrow-up" /> */}
               <MegaMenu
                 categories={this.props.categories}
-                onSelect={this.onSelectCategory}
+                onSelect={this.props.onSelect}
               />
             </Dropdown.Menu>
           </Dropdown>
@@ -90,14 +90,14 @@ class EcommerceMainNav extends Component {
                 <Search
                   className="mr-2 ecommerce-search-container"
                   fluid
-                  loading={isLoading}
-                  onResultSelect={this.handleResultSelect}
-                  // onSearchChange={_.debounce(this.handleSearchChange, 500, {
-                  //   leading: true
-                  // })}
-                  results={results}
-                  value={value}
-                  {...this.props}
+                  // loading={isLoading}
+                  // onResultSelect={this.handleResultSelect}
+                  // // onSearchChange={_.debounce(this.handleSearchChange, 500, {
+                  // //   leading: true
+                  // // })}
+                  // results={results}
+                  // value={value}
+                  // {...this.props}
                 />
               </NavItem>
               <NavItem>
