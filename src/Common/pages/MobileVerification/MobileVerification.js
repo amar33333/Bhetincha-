@@ -52,12 +52,12 @@ class MobileVerification extends Component {
       this.props.checkRegistrationData.status === 404
     )
       this.props.history.push("/404");
-    else if (this.props.checkRegistrationData === "token_verified") {
-      this.props.history.push({
-        pathname: "/user-register",
-        search: `?${querystring.stringify({ id })}`
-      });
-    }
+    // else if (this.props.checkRegistrationData === "token_verified") {
+    //   this.props.history.push({
+    //     pathname: "/user-register",
+    //     search: `?${querystring.stringify({ id })}`
+    //   });
+    // }
   }
 
   displayEmailValidationInfo = () => {
@@ -84,22 +84,15 @@ class MobileVerification extends Component {
   onFormSubmit = event => {
     event.preventDefault();
     const {
-      verificationToken,
+      verificationToken: token,
       username,
       password,
       confirm_password,
       email,
       email_validation_error
     } = this.state;
-    // console.log("mobile verif - props: ", this.props);
 
     const { id } = querystring.parse(this.props.location.search.slice(1));
-
-    // this.props.onPhoneVerificationTokenSend({
-    //   id,
-    //   verificationToken,
-    //   history: this.props.history
-    // });
 
     if (!email_validation_error)
       if (password === confirm_password)
@@ -109,7 +102,7 @@ class MobileVerification extends Component {
             username,
             password,
             email,
-            verificationToken
+            token
           },
           history: this.props.history,
           slug: this.props.phone_verification_response
@@ -136,8 +129,8 @@ class MobileVerification extends Component {
             <Col md="6">
               <Card className="mx-4">
                 <CardBody className="p-4">
-                  <h1>Mobile Verification</h1>
-                  <p className="text-muted">Verify Your Account</p>
+                  <h1>Register Your Account</h1>
+                  {/* <p className="text-muted">Verify Your Account</p> */}
                   <Form onSubmit={this.onFormSubmit}>
                     <InputGroup className="mb-3">
                       <InputGroupAddon addonType="prepend">
@@ -232,7 +225,7 @@ class MobileVerification extends Component {
                           data-size={S}
                           data-style={EXPAND_RIGHT}
                         >
-                          VERIFY
+                          CREATE ACCOUNT
                         </Button>
                       </Col>
                     </Row>

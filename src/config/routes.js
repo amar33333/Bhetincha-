@@ -88,17 +88,17 @@ class MainRoute extends Component {
             name="Forgot Password Tokem"
             component={ForgotPasswordToken}
           />
-          <Route
+          {/* <Route
             exact
             path="/mobile-verification"
             name="Mobile Verification"
             component={MobileVerification}
-          />
+          /> */}
           <Route
             exact
             path="/user-register"
             name="User Register"
-            component={UserRegister}
+            component={MobileVerification}
           />
           <Route
             exact
@@ -126,15 +126,17 @@ class MainRoute extends Component {
             component={AsyncBusiness}
             permission="CAN_ACCESS_BUSINESS_PANEL"
           />
-          <Route
+          <CustomRoute
             path={`/:${ROUTE_PARAMS_INDIVIDUAL_NAME}/userdashboard`}
             name="Individual Dashboard"
             component={AsyncIndividual}
+            permission="CAN_ACCESS_INDIVIDUAL_PANEL"
           />
-          <Route
+          <CustomRoute
             path={`/:${ROUTE_PARAMS_INDIVIDUAL_NAME}/userdashboard/:${ROUTE_PARAMS_INDIVIDUAL_ROUTE}`}
             name="Individual Dashboard"
             component={AsyncIndividual}
+            permission="CAN_ACCESS_INDIVIDUAL_PANEL"
           />
           <Route path="/" name="Website" component={Website} />
         </Switch>

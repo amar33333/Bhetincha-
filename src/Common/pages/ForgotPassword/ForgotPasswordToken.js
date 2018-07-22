@@ -115,7 +115,7 @@ class ForgotPasswordToken extends Component {
                       <Input
                         required
                         //disabled={this.props.loading}
-                        type="text"
+                        type="password"
                         placeholder="New Password"
                         value={this.state.password}
                         onChange={this.onChange.bind(this, "password")}
@@ -132,7 +132,7 @@ class ForgotPasswordToken extends Component {
                       <Input
                         required
                         //disabled={this.props.loading}
-                        type="text"
+                        type="password"
                         placeholder="Confirm New Password"
                         value={this.state.confirm_password}
                         onChange={this.onChange.bind(this, "confirm_password")}

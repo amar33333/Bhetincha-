@@ -543,9 +543,9 @@ epics.push(action$ =>
     return onBusinessRegister({ ...action.payload })
       .map(({ response }) => {
         if (response.id) {
-          toast.success("Registered Successfully");
+          // toast.success("Registered Successfully");
           history.push({
-            pathname: "/mobile-verification",
+            pathname: "/user-register",
             search: `?${querystring.stringify({ id: response.id })}`
           });
           return { type: CREATE_BUSINESS_USER_FULFILLED, payload: response };
