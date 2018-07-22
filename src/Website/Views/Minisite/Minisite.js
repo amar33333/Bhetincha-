@@ -39,7 +39,7 @@ class Minisite extends Component {
     console.log("props in minisite:", this.props);
     return (
       <div>
-        <MainNavbar extraClassName="small" />
+        <MainNavbar extraClassName="small" history={this.props.history} />
         <BusinessNav
           history={this.props.history}
           businessName={this.props.match.params[ROUTE_PARAMS_BUSINESS_NAME]}

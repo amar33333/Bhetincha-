@@ -1,7 +1,8 @@
 import {
   USER_GROUP_BUSINESS,
   USER_GROUP_INDIVIDUAL,
-  ROUTE_PARAMS_BUSINESS_NAME
+  ROUTE_PARAMS_BUSINESS_NAME,
+  ROUTE_PARAMS_INDIVIDUAL_NAME
 } from "../../config/CONSTANTS";
 
 export default [
@@ -26,7 +27,7 @@ export default [
     title: "Profile",
     id: "profile",
     badge: false,
-    link: "/",
+    link: `/${ROUTE_PARAMS_INDIVIDUAL_NAME}/userdashboard`,
     group: USER_GROUP_INDIVIDUAL
   },
   {

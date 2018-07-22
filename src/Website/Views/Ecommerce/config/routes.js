@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Route, Switch, Redirect } from "react-router-dom";
-import { Product, Home } from "../components";
+import { Product, Home, MainHome } from "../components";
 
 class WebsiteRoute extends Component {
   render() {
@@ -18,7 +18,13 @@ class WebsiteRoute extends Component {
           name="Ecommerce-home-category"
           component={Home}
         />
-        <Route exact path="/ecommerce" name="Ecommerce-home" component={Home} />
+        <Route
+          exact
+          path="/ecommerce-main"
+          name="Ecommerce-home-main-main"
+          component={MainHome}
+        />
+        <Route path="/ecommerce" name="Ecommerce-home" component={Home} />
         <Redirect from="/ecommerce" to="/ecommerce" />
       </Switch>
     );

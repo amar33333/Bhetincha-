@@ -85,7 +85,7 @@ class PropertyItemAddNew extends Component {
     } = this.state;
 
     const body = {
-      name,
+      name: name.split(" ").join("_"),
       attributeTypeId: fieldType.uid,
       categoryId: this.props.activeCategory,
       required,

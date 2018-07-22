@@ -23,17 +23,19 @@ class FilterRange extends Component {
 
   render() {
     return (
-      <InputRange
-        draggableTrack
-        name="filterRangeSlider"
-        maxValue={this.state.maxValue}
-        minValue={this.state.minValue}
-        step={500}
-        formatLabel={value => `Rs. ${value}`}
-        onChange={value => this.handleSetRange(value)}
-        onChangeComplete={value => this.handleSetRangeChange(value)}
-        value={this.state.value}
-      />
+      <div className="mt-1 pl-2">
+        <InputRange
+          draggableTrack
+          name="filterRangeSlider"
+          maxValue={this.state.maxValue}
+          minValue={this.state.minValue}
+          step={500}
+          formatLabel={value => `Rs. ${value}`}
+          onChange={value => this.handleSetRange(value)}
+          onChangeComplete={value => this.handleSetRangeChange(value)}
+          value={this.state.value}
+        />
+      </div>
     );
   }
 }

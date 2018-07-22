@@ -129,10 +129,22 @@ export const onEcommerceProductsList = payload => ({
 epics.push((action$, { getState }) =>
   action$.ofType(FETCH_ECOMMERCE_PRODUCTS_PENDING).switchMap(action => {
     const {
+      home: { activeCategory },
       filterProducts: { frm, size, query, filters, sortby, desc }
     } = getState().EcommerceContainer;
 
-    let body = { ...action.payload.body };
+    let body = {};
+    // action.payload && action.payload.body ? { ...action.payload.body } : {};
+    if (
+      action.payload &&
+      action.payload.body &&
+      action.payload.body.categoryId
+    ) {
+      body.categoryId = action.payload.body.categoryId;
+    } else {
+      console.log(activeCategory, "active caetgory");
+      body.categoryId = activeCategory;
+    }
 
     body.frm = frm;
     body.size = size;

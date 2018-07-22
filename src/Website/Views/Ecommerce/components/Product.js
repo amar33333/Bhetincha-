@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 
 import { onEcommerceProductEachList } from "../actions";
+import EcommerceMainNav from "./EcommerceMainNav";
 import ProductDetail from "./ProductDetail";
 import ProductReviews from "./ProductReviews";
 import BreadcrumbNav from "./Breadcrumbs";
@@ -31,6 +32,12 @@ class Product extends Component {
   render() {
     return (
       <div>
+        <EcommerceMainNav
+          history={this.props.history}
+          cookies={this.props.cookies}
+          categories={this.props.categories}
+          onSelect={this.onSelectCategory}
+        />
         {this.props.product && (
           <BreadcrumbNav
             items={[
@@ -52,13 +59,17 @@ class Product extends Component {
 
 export default connect(
   ({
+    auth: { cookies },
     EcommerceContainer: {
-      productDetail: { product, attributes, breadcrumbs }
+      productDetail: { product, attributes, breadcrumbs },
+      home: { categories }
     }
   }) => ({
+    cookies,
     product,
     attributes,
-    breadcrumbs
+    breadcrumbs,
+    categories
   }),
   { onEcommerceProductEachList }
 )(Product);

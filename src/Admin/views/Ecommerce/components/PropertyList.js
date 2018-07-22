@@ -99,7 +99,11 @@ class PropertyList extends Component {
           />
         )
       },
-      { Header: "Name", accessor: "name" },
+      {
+        Header: "Name",
+        accessor: "name",
+        Cell: ({ value }) => value.split("_").join(" ")
+      },
       { Header: "Category", accessor: "category" },
       { Header: "Field Type", accessor: "fieldType" },
       {

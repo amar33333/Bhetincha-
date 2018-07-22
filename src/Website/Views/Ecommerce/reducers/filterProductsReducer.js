@@ -1,4 +1,7 @@
-import { FETCH_ECOMMERCE_PRODUCTS_FULFILLED } from "../actions/types";
+import {
+  FETCH_ECOMMERCE_PRODUCTS_FULFILLED,
+  FILTER_PARAMETERS_CHANGE_PRODUCTS_LIST
+} from "../actions/types";
 
 // {
 //   "query":"world",
@@ -13,7 +16,7 @@ import { FETCH_ECOMMERCE_PRODUCTS_FULFILLED } from "../actions/types";
 // }
 const INITIAL_STATE = {
   frm: 0,
-  size: 20,
+  size: 2,
   query: "",
   filters: [],
   sortby: null,
@@ -22,6 +25,9 @@ const INITIAL_STATE = {
 
 export default function(state = INITIAL_STATE, action) {
   switch (action.type) {
+    case FILTER_PARAMETERS_CHANGE_PRODUCTS_LIST:
+      return { ...state, ...action.payload };
+
     // case FETCH_ECOMMERCE_PRODUCTS_FULFILLED:
     //   return {
     //     ...state

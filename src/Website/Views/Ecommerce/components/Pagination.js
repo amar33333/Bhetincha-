@@ -2,34 +2,41 @@ import React, { Component } from "react";
 import { Pagination } from "semantic-ui-react";
 
 class PaginationComponent extends Component {
-  state = {
-    activePage: 1,
-    boundaryRange: 1,
-    siblingRange: 1,
-    showEllipsis: true,
-    showFirstAndLastNav: true,
-    showPreviousAndNextNav: true,
-    // totalPages: this.props.productCount
-    totalPages: 10
-  };
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      // activePage: props.activePage,
+      boundaryRange: 1,
+      siblingRange: 1,
+      showEllipsis: true,
+      showFirstAndLastNav: true,
+      showPreviousAndNextNav: true
+      // totalPages: this.props.productCount
+      // totalPages: props.totalPages
+    };
+  }
 
   handlePaginationChange = (e, { activePage }) => this.setState({ activePage });
+
   render() {
     const {
-      activePage,
       boundaryRange,
       siblingRange,
       showEllipsis,
       showFirstAndLastNav,
-      showPreviousAndNextNav,
-      totalPages
+      showPreviousAndNextNav
     } = this.state;
+    const { activePage, totalPages, handlePaginationChange } = this.props;
+
+    if (totalPages < 2) return null;
+
     return (
       <Pagination
         id="page"
         activePage={activePage}
         boundaryRange={boundaryRange}
-        onPageChange={this.handlePaginationChange}
+        onPageChange={handlePaginationChange}
         size="mini"
         siblingRange={siblingRange}
         totalPages={totalPages}

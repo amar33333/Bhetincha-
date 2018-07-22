@@ -1,4 +1,5 @@
 const HOST = "https://bhetincha.app";
+// const HOST = "http://202.51.75.111";
 const MONGO_PORT = "8025";
 // const MONGO_PORT = "8000";
 const ELASTIC_PORT = "9200";

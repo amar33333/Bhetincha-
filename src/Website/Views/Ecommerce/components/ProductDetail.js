@@ -1,10 +1,12 @@
 import React, { Component } from "react";
 
+import { Container, Row, Col } from "reactstrap";
+
 class ProductDetail extends Component {
   render() {
     const { product } = this.props;
     return (
-      <div>
+      <Container>
         Product Detail
         {product && (
           <div>
@@ -15,7 +17,8 @@ class ProductDetail extends Component {
               if (product[attribute.name]) {
                 return (
                   <p key={attribute.uid}>
-                    {attribute.name}: {product[attribute.name]}
+                    {attribute.name.split("_").join(" ")}:
+                    {product[attribute.name]}
                   </p>
                 );
               } else {
@@ -24,7 +27,7 @@ class ProductDetail extends Component {
             })}
           </div>
         )}
-      </div>
+      </Container>
     );
   }
 }

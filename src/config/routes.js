@@ -22,8 +22,11 @@ import CustomRoute from "../Common/utils/CustomRoute";
 import {
   ROUTE_PARAMS_BUSINESS_NAME,
   ROUTE_PARAMS_BUSINESS_ROUTE,
+  ROUTE_PARAMS_INDIVIDUAL_NAME,
+  ROUTE_PARAMS_INDIVIDUAL_ROUTE,
   USER_GROUP_BUSINESS,
-  USER_GROUP_ADMIN
+  USER_GROUP_ADMIN,
+  USER_GROUP_INDIVIDUAL
   // USER_GROUP_INDIVIDUAL
 } from "./CONSTANTS";
 
@@ -42,6 +45,16 @@ const AsyncBusiness = props => (
     history={props.history}
     group={USER_GROUP_BUSINESS}
     load={() => import("../Business")}
+  >
+    {Component => (Component === null ? <Loading /> : <Component {...props} />)}
+  </DynamicImport>
+);
+
+const AsyncIndividual = props => (
+  <DynamicImport
+    history={props.history}
+    group={USER_GROUP_INDIVIDUAL}
+    load={() => import("../Individual")}
   >
     {Component => (Component === null ? <Loading /> : <Component {...props} />)}
   </DynamicImport>
@@ -112,6 +125,16 @@ class MainRoute extends Component {
             name="Business Dashboard"
             component={AsyncBusiness}
             permission="CAN_ACCESS_BUSINESS_PANEL"
+          />
+          <Route
+            path={`/:${ROUTE_PARAMS_INDIVIDUAL_NAME}/userdashboard`}
+            name="Individual Dashboard"
+            component={AsyncIndividual}
+          />
+          <Route
+            path={`/:${ROUTE_PARAMS_INDIVIDUAL_NAME}/userdashboard/:${ROUTE_PARAMS_INDIVIDUAL_ROUTE}`}
+            name="Individual Dashboard"
+            component={AsyncIndividual}
           />
           <Route path="/" name="Website" component={Website} />
         </Switch>

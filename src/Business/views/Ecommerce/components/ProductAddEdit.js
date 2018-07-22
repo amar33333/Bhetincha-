@@ -266,7 +266,7 @@ class ProductAddEdit extends Component {
       case "DateTime":
         return (
           <FormGroup row key={attribute.uid}>
-            <Label sm={3}>{`${attribute.name} ${
+            <Label sm={3}>{`${attribute.name.split("_").join(" ")} ${
               attribute.required ? "*" : ""
             }`}</Label>
             <Col sm={9}>
@@ -282,7 +282,7 @@ class ProductAddEdit extends Component {
       case "Float":
         return (
           <FormGroup row key={attribute.uid}>
-            <Label sm={3}>{`${attribute.name} ${
+            <Label sm={3}>{`${attribute.name.split("_").join(" ")} ${
               attribute.required ? "*" : ""
             }`}</Label>
             <Col sm={9}>
@@ -303,7 +303,7 @@ class ProductAddEdit extends Component {
       case "Integer":
         return (
           <FormGroup row key={attribute.uid}>
-            <Label sm={3}>{`${attribute.name} ${
+            <Label sm={3}>{`${attribute.name.split("_").join(" ")} ${
               attribute.required ? "*" : ""
             }`}</Label>
             <Col sm={9}>
@@ -323,7 +323,7 @@ class ProductAddEdit extends Component {
       case "String":
         return (
           <FormGroup row key={attribute.uid}>
-            <Label sm={3}>{`${attribute.name} ${
+            <Label sm={3}>{`${attribute.name.split("_").join(" ")} ${
               attribute.required ? "*" : ""
             }`}</Label>
             <Col sm={9}>
@@ -342,7 +342,7 @@ class ProductAddEdit extends Component {
       case "Choices":
         return (
           <FormGroup row key={attribute.uid}>
-            <Label sm={3}>{`${attribute.name} ${
+            <Label sm={3}>{`${attribute.name.split("_").join(" ")} ${
               attribute.required ? "*" : ""
             }`}</Label>
             <Col sm={9}>
@@ -361,7 +361,7 @@ class ProductAddEdit extends Component {
       case "MultipleChoices":
         return (
           <FormGroup row key={attribute.uid}>
-            <Label sm={3}>{`${attribute.name} ${
+            <Label sm={3}>{`${attribute.name.split("_").join(" ")} ${
               attribute.required ? "*" : ""
             }`}</Label>
             <Col sm={9}>

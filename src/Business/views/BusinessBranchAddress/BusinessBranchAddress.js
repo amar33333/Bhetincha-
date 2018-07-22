@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { Button } from "reactstrap";
 import ReactTable from "react-table";
+import TagsInput from "react-tagsinput";
+import "react-tagsinput/react-tagsinput.css";
 import { PopoverDelete, PaginationComponent } from "../../../Common/components";
 import filterCaseInsensitive from "../../../Common/utils/filterCaseInsesitive";
 
@@ -143,7 +145,7 @@ class BusinessBranchAddress extends Component {
 
   componentDidMount = () => {
     this.props.onBusinessBranchList({
-      business_slug: this.props.cookies.user_data.slug
+      business_slug: this.props.match.params.businessName
     });
   };
 

@@ -5,8 +5,8 @@ import FilterRange from "./FilterRange";
 class Filters extends Component {
   render() {
     return (
-      <div>
-        Hamro Filters
+      <div className="mt-5">
+        <h4 className="filter-title">Price</h4>
         {this.props.filters.map((data, i) => {
           if (data.name === "discount") {
             return (

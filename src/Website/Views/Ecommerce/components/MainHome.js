@@ -10,15 +10,10 @@ import MegaMenu from "./MegaMenu";
 import EcommerceMainNav from "./EcommerceMainNav";
 import ChildCategories from "./ChildCategories";
 import Breadcrumbs from "./Breadcrumbs";
-import banner from "../../../../static/img/ebanner.jpg";
 
-import {
-  onCategoriesList,
-  onActiveCategoryChange,
-  onFilterParametersChangeProductsList
-} from "../actions";
+import { onCategoriesList, onActiveCategoryChange } from "../actions";
 
-class Home extends Component {
+class MainHome extends Component {
   componentDidMount() {
     const { categoryId } = this.props.match.params;
     if (categoryId) {
@@ -67,42 +62,30 @@ class Home extends Component {
       >
         <EcommerceMainNav
           history={this.props.history}
-          cookies={this.props.cookies}
           categories={this.props.categories}
           onSelect={this.onSelectCategory}
-          isHome={!Boolean(this.props.match.params.categoryId)}
         />
-        {this.props.breadcrumbs.length > 1 && (
+        {/* {this.props.breadcrumbs.length > 1 && (
           <Breadcrumbs
             className="ecommerce-bread-crumbs"
             items={this.props.breadcrumbs}
             onSelectCategory={this.onSelectCategory}
           />
-        )}
-        {!this.props.match.params.categoryId && (
-          <Row>
-            <Col xs="12" md="3" className="mr-0 pr-0">
-              <MegaMenu
-                categories={this.props.categories}
-                onSelect={this.onSelectCategory}
-              />
-            </Col>
-            <Col
-              md="9"
-              className="hidden-xs-down ml-0"
-              style={{
-                backgroundImage: `url(${banner})`
-              }}
+        )} */}
+        <Row>
+          <Col xs="12" md="4">
+            <MegaMenu
+              categories={this.props.categories}
+              onSelect={this.onSelectCategory}
             />
-          </Row>
-        )}
+          </Col>
+        </Row>
         <Container fluid className="mt-3 mb-3 mr-2">
           <Row>
             <Col xs="12" md="2">
               <Row>
                 <Col xs="12">
-                  {this.props.match.params.categoryId &&
-                  this.props.childCategories.length ? (
+                  {this.props.childCategories.length ? (
                     <ChildCategories
                       categories={this.props.childCategories}
                       onSelectCategory={this.onSelectCategory}
@@ -117,25 +100,28 @@ class Home extends Component {
               </Row>
             </Col>
             <Col xs="12" md="10">
-              <ProductList
-                priceFilter={this.props.filterAttributes.find(
-                  x => x.name === "price"
-                )}
-                products={this.props.products}
-                productCount={this.props.productCount}
-                activePage={
-                  this.props.productFromIndex / this.props.productPerPage + 1
-                }
-                totalPages={Math.ceil(
-                  this.props.productCount / this.props.productPerPage
-                )}
-                onSelectProduct={this.onSelectProduct}
-                handlePaginationChange={(_, { activePage }) => {
-                  this.props.onFilterParametersChangeProductsList({
-                    frm: (activePage - 1) * this.props.productPerPage
-                  });
-                }}
-              />
+              <Row className="hor-filter-sort__container mb-3">
+                <Col>
+                  <PaginationComponent
+                    activeIndex={1}
+                    total={this.props.productCount}
+                  />
+                </Col>
+                <Col>filter price</Col>
+                <Col>sort</Col>
+              </Row>
+              <Row>
+                <Col xs="12">
+                  <ProductList
+                    priceFilter={this.props.filterAttributes.find(
+                      x => x.name === "price"
+                    )}
+                    products={this.props.products}
+                    productCount={this.props.productCount}
+                    onSelectProduct={this.onSelectProduct}
+                  />
+                </Col>
+              </Row>
             </Col>
           </Row>
         </Container>
@@ -147,7 +133,6 @@ class Home extends Component {
 
 export default connect(
   ({
-    auth: { cookies },
     EcommerceContainer: {
       home: {
         categories,
@@ -157,8 +142,7 @@ export default connect(
         productCount,
         activeCategory,
         breadcrumbs
-      },
-      filterProducts: { frm: productFromIndex, size: productPerPage }
+      }
     }
   }) => ({
     categories,
@@ -167,14 +151,7 @@ export default connect(
     products,
     productCount,
     activeCategory,
-    breadcrumbs,
-    productFromIndex,
-    productPerPage,
-    cookies
+    breadcrumbs
   }),
-  {
-    onCategoriesList,
-    onActiveCategoryChange,
-    onFilterParametersChangeProductsList
-  }
-)(Home);
+  { onCategoriesList, onActiveCategoryChange }
+)(MainHome);

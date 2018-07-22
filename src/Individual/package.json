@@ -1,0 +1,6 @@
+{
+  "name": "individual",
+  "version": "0.0.0",
+  "private": true,
+  "main": "./Individual.js"
+}

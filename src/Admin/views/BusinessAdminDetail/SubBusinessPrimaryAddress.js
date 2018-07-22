@@ -2,6 +2,8 @@ import React, { Component } from "react";
 
 import Select from "react-select";
 import { toast } from "react-toastify";
+import TagsInput from "react-tagsinput";
+import "react-tagsinput/react-tagsinput.css";
 
 import MapComponent from "../../../Common/components/MapComponent";
 
@@ -76,7 +78,7 @@ class SubBusinessPrimaryAddress extends Component {
         landlineNumber: address.landlineNumber ? address.landlineNumber : "",
         otherLandlineNumber: address.otherLandlineNumber
           ? address.otherLandlineNumber
-          : "",
+          : [],
         house_no: address.house_no ? address.house_no : "",
         landmark: address.landmark ? address.landmark : "",
         addressLine1: address.addressLine1 ? address.addressLine1 : "",
@@ -643,15 +645,20 @@ class SubBusinessPrimaryAddress extends Component {
               <Col xs="12" md="4">
                 <FormGroup>
                   <Label for="bname">Other LandLine Number</Label>
-                  <Input
-                    type="text"
+
+                  <TagsInput
+                    onlyUnique
+                    inputProps={{
+                      placeholder: "Add new Landline no."
+                    }}
+                    disabled={this.props.loading}
+                    addKeys={[9, 188]}
                     value={this.state.otherLandlineNumber}
-                    onChange={event => {
+                    onChange={tags => {
                       this.setState({
-                        otherLandlineNumber: [event.target.value]
+                        otherLandlineNumber: tags
                       });
                     }}
-                    onKeyDown={this._handleKeyPress}
                   />
                 </FormGroup>
               </Col>

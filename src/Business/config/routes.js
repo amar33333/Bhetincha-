@@ -26,6 +26,7 @@ class BusinessRoute extends Component {
     return (
       <Switch>
         <Route
+          exact
           path={`/:${ROUTE_PARAMS_BUSINESS_NAME}/dashboard/home`}
           name="Dashboard"
           component={Dashboard}
