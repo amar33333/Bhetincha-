@@ -28,6 +28,9 @@ class EcommerceMainNav extends Component {
   handleResultSelect = (e, { result }) =>
     this.setState({ value: result.title });
 
+  componentDidUpdate() {
+    console.log("updates", this.props.isHome);
+  }
   render() {
     const { isLoading, value, results } = this.state;
     return (
