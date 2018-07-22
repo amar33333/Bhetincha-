@@ -49,31 +49,48 @@ class GetDirectionModal extends Component {
   }
 
   handleSelectChange = value => {
-    this.setState({
-      address: value,
-      destination: {
-        latitude: value.location ? value.location.lat : "",
-        longitude: value.location ? value.location.lon : ""
+    this.setState(
+      {
+        address: value,
+        destination: {
+          latitude: value && value.location ? value.location.lat : "",
+          longitude: value && value.location ? value.location.lon : ""
+        }
+      },
+      () => {
+        if (!this.state.source.latitude || !this.state.source.longitude) {
+          this.setState({ source_error: true });
+        } else this.setState({ source_error: false });
+
+        if (
+          !this.state.destination.latitude ||
+          !this.state.destination.longitude
+        ) {
+          this.setState({ destination_error: true });
+        } else this.setState({ destination_error: false });
       }
-    });
+    );
   };
 
   renderMapComponent = () => (
     <div>
-      <MapComponent
-        position={this.state.position}
-        source={this.state.source}
-        destination={this.state.destination}
-      />
+      <p className="mt-1 mb-2">
+        Get direction to Head office or branch office(s):
+      </p>
       <Select
         name="Primary-Branch Address"
         placeholder="Select a Different Branch"
-        className="Primary-Branch"
+        className="Primary-Branch mb-3"
         value={this.state.address && this.state.address.addressID}
         onChange={this.handleSelectChange}
         options={this.props.data ? this.props.data.addresses : []}
         valueKey="addressID"
         labelKey="address_title"
+      />
+      <MapComponent
+        position={this.state.position}
+        source={this.state.source}
+        destination={this.state.destination}
       />
     </div>
   );
@@ -103,7 +120,7 @@ class GetDirectionModal extends Component {
   };
 
   render() {
-    return this.state.source_error || this.state.destination_error
+    return this.state.source_error
       ? this.renderErrorComponent()
       : this.renderMapComponent();
   }

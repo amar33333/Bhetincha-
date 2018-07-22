@@ -186,7 +186,7 @@ class BusinessList extends Component {
     let addresses = [];
 
     if (primary_address)
-      addresses = [{ ...primary_address, address_title: "Primary Address" }];
+      addresses = [{ ...primary_address, address_title: "Head Office" }];
     if (branchAddress && branchAddress.length)
       addresses = [...addresses, ...branchAddress];
 
