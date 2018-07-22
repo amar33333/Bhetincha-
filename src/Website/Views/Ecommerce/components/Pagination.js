@@ -27,16 +27,16 @@ class PaginationComponent extends Component {
       showFirstAndLastNav,
       showPreviousAndNextNav
     } = this.state;
-    // const { activePage, totalPages, handlePaginationChange } = this.props;
+    const { activePage, totalPages, handlePaginationChange } = this.props;
 
-    const activePage = 1;
-    const totalPages = 10;
+    if (totalPages < 2) return null;
+
     return (
       <Pagination
         id="page"
         activePage={activePage}
         boundaryRange={boundaryRange}
-        onPageChange={this.handlePaginationChange}
+        onPageChange={handlePaginationChange}
         size="mini"
         siblingRange={siblingRange}
         totalPages={totalPages}
