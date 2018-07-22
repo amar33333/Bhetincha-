@@ -16,7 +16,7 @@ import {
 // }
 const INITIAL_STATE = {
   frm: 0,
-  size: 2,
+  size: 20,
   query: "",
   filters: [],
   sortby: null,

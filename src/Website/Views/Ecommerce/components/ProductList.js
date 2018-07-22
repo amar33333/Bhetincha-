@@ -19,12 +19,13 @@ class ProductList extends Component {
           </Col>
           <Col>
             filter price
-            {/* {this.props.priceFilter && (
-            <FilterRange
-              min={this.props.priceFilter.min}
-              max={this.props.priceFilter.max}
-            />
-          )} */}
+            {this.props.priceFilter && (
+              <FilterRange
+                withTitle={false}
+                min={this.props.priceFilter.min}
+                max={this.props.priceFilter.max}
+              />
+            )}
           </Col>
 
           <Col>sort</Col>

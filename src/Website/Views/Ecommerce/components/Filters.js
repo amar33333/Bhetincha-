@@ -5,12 +5,12 @@ import FilterRange from "./FilterRange";
 class Filters extends Component {
   render() {
     return (
-      <div className="mt-5">
-        <h4 className="filter-title">Price</h4>
+      <div className="mt-5 pl-2">
         {this.props.filters.map((data, i) => {
           if (data.name === "discount") {
             return (
               <FilterRange
+                withTitle={true}
                 key={i}
                 min={data.min}
                 max={data.max}
@@ -25,7 +25,7 @@ class Filters extends Component {
               <FilterChoice
                 key={data.uid}
                 options={data.options}
-                name={data.name}
+                name={data.name.split("_").join(" ")}
               />
             );
           } else if (
@@ -34,9 +34,10 @@ class Filters extends Component {
           ) {
             return (
               <FilterRange
+                withTitle={true}
                 key={data.uid}
                 options={data.options}
-                name={data.name}
+                name={data.name.split("_").join(" ")}
               />
             );
           }
