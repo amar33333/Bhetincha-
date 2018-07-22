@@ -9,7 +9,7 @@ import {
   NavItem,
   NavLink
 } from "reactstrap";
-import { Dropdown, Search, Icon } from "semantic-ui-react";
+import { Search, Icon } from "semantic-ui-react";
 
 import MegaMenu from "./MegaMenu";
 
@@ -17,7 +17,8 @@ class EcommerceMainNav extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isOpen: false
+      isOpen: false,
+      menuOpen: false
     };
   }
   toggle = () => {
@@ -31,6 +32,19 @@ class EcommerceMainNav extends Component {
   componentDidUpdate() {
     console.log("updates", this.props.isHome);
   }
+
+  handleToggleMegaMenu = () => {
+    this.setState({
+      menuOpen: !this.state.menuOpen
+    });
+  };
+
+  handleTogglerHoverLeave = () => {
+    this.setState({
+      menuOpen: false
+    });
+  };
+
   render() {
     const { isLoading, value, results } = this.state;
     return (
@@ -46,37 +60,15 @@ class EcommerceMainNav extends Component {
             borderBottom: "0.5px solid lightgray"
           }}
         >
-          {/* <NavbarBrand href="/">Bhetincha Shop</NavbarBrand> */}
-          {/* <Icon
-            name="bars"
-            onMouseOver={e => this.handleTogglerHover(e)}
-            onMouseLeave={e => this.handleTogglerHoverLeave(e)}
-            style={{
-              cursor: "pointer",
-              marginRight: "20px"
-            }}
-          /> */}
-
           {!this.props.isHome && (
-            <Dropdown
-              className="ecommerce-nav__megamenu__dropdown"
-              icon="bars"
+            <Icon
+              name="bars"
+              onMouseOver={e => this.handleToggleMegaMenu(e)}
               style={{
                 cursor: "pointer",
                 marginRight: "20px"
               }}
-            >
-              <Dropdown.Menu
-                style={{
-                  width: "100%"
-                }}
-              >
-                <MegaMenu
-                  categories={this.props.categories}
-                  onSelect={this.props.onSelect}
-                />
-              </Dropdown.Menu>
-            </Dropdown>
+            />
           )}
 
           <Link className="navbar-brand" to="/ecommerce">
@@ -135,14 +127,25 @@ class EcommerceMainNav extends Component {
             </Nav>
           </Collapse>
         </Navbar>
-        {/* {this.state.menuOpen ? (
-          <div className="mega-menu__container__main_nav">
-            <MegaMenu
-              categories={this.props.categories}
-              onSelect={this.onSelectCategory}
-            />
+        {this.state.menuOpen ? (
+          <div
+            className="mega-menu__container__main_nav"
+            onMouseLeave={e => this.handleTogglerHoverLeave(e)}
+          >
+            <div className="arrow-up" />
+
+            <div
+              style={{
+                marginLeft: "-10px"
+              }}
+            >
+              <MegaMenu
+                categories={this.props.categories}
+                onSelect={this.props.onSelect}
+              />
+            </div>
           </div>
-        ) : null} */}
+        ) : null}
       </div>
     );
   }

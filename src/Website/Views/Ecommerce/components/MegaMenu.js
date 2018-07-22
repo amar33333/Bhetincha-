@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { Icon } from "semantic-ui-react";
 import { spawn } from "child_process";
-import { Row, Col } from "reactstrap";
 
 const MAX_CAT = 4;
 class MegaMenu extends Component {
@@ -79,7 +78,7 @@ class MegaMenu extends Component {
   render() {
     return (
       <div className="menu-container pl-3" onMouseLeave={this.handleMouseOut}>
-        <div xs="12" className="menu-list-container pt-1 pb-2">
+        <div className="menu-list-container pt-1 pb-2">
           {this.props.categories.children &&
             this.props.categories.children.map((cat, index) => {
               return (
@@ -119,12 +118,11 @@ class MegaMenu extends Component {
         </div>
 
         <div
-          className=" sub-menu-container"
+          className="sub-menu-container"
           onMouseOver={e => this.handleMouseOn}
         >
           {this.state.mouseOn && this.renderSubCats()}
         </div>
-        {/* {this.state.mouseOn && this.renderSubCats()} */}
       </div>
     );
   }
