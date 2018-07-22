@@ -1,3 +1,12 @@
+/*
+ *
+ * THIS FILE IS NOT USED...
+ * REFER TO `MobileVerification.js`
+ * everything is merged into that file
+ * Usser Register is handled in that file..
+ * this file is useless 
+ */
+
 import React, { Component } from "react";
 import {
   Button,

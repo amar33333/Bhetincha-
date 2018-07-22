@@ -10,7 +10,9 @@ import {
   MobileVerification,
   UserRegister,
   IndividualRegister,
-  Activate
+  Activate,
+  ForgotPassword,
+  ForgotPasswordToken
 } from "../Common/pages";
 import Website from "../Website";
 
@@ -20,8 +22,11 @@ import CustomRoute from "../Common/utils/CustomRoute";
 import {
   ROUTE_PARAMS_BUSINESS_NAME,
   ROUTE_PARAMS_BUSINESS_ROUTE,
+  ROUTE_PARAMS_INDIVIDUAL_NAME,
+  ROUTE_PARAMS_INDIVIDUAL_ROUTE,
   USER_GROUP_BUSINESS,
-  USER_GROUP_ADMIN
+  USER_GROUP_ADMIN,
+  USER_GROUP_INDIVIDUAL
   // USER_GROUP_INDIVIDUAL
 } from "./CONSTANTS";
 
@@ -45,6 +50,16 @@ const AsyncBusiness = props => (
   </DynamicImport>
 );
 
+const AsyncIndividual = props => (
+  <DynamicImport
+    history={props.history}
+    group={USER_GROUP_INDIVIDUAL}
+    load={() => import("../Individual")}
+  >
+    {Component => (Component === null ? <Loading /> : <Component {...props} />)}
+  </DynamicImport>
+);
+
 class MainRoute extends Component {
   render() {
     console.log("mainroute");
@@ -63,15 +78,27 @@ class MainRoute extends Component {
           <Route exact path="/activate" name="Activate" component={Activate} />
           <Route
             exact
+            path="/forgot-password"
+            name="Forgot Password"
+            component={ForgotPassword}
+          />
+          <Route
+            exact
+            path="/forgot-password-token"
+            name="Forgot Password Tokem"
+            component={ForgotPasswordToken}
+          />
+          {/* <Route
+            exact
             path="/mobile-verification"
             name="Mobile Verification"
             component={MobileVerification}
-          />
+          /> */}
           <Route
             exact
             path="/user-register"
             name="User Register"
-            component={UserRegister}
+            component={MobileVerification}
           />
           <Route
             exact
@@ -98,6 +125,18 @@ class MainRoute extends Component {
             name="Business Dashboard"
             component={AsyncBusiness}
             permission="CAN_ACCESS_BUSINESS_PANEL"
+          />
+          <CustomRoute
+            path={`/:${ROUTE_PARAMS_INDIVIDUAL_NAME}/userdashboard`}
+            name="Individual Dashboard"
+            component={AsyncIndividual}
+            permission="CAN_ACCESS_INDIVIDUAL_PANEL"
+          />
+          <CustomRoute
+            path={`/:${ROUTE_PARAMS_INDIVIDUAL_NAME}/userdashboard/:${ROUTE_PARAMS_INDIVIDUAL_ROUTE}`}
+            name="Individual Dashboard"
+            component={AsyncIndividual}
+            permission="CAN_ACCESS_INDIVIDUAL_PANEL"
           />
           <Route path="/" name="Website" component={Website} />
         </Switch>

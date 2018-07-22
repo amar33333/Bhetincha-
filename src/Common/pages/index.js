@@ -7,6 +7,8 @@ import MobileVerification from "./MobileVerification";
 import UserRegister from "./UserRegister";
 import IndividualRegister from "./IndividualRegister";
 import Activate from "./Activate";
+import ForgotPassword from "./ForgotPassword/ForgotPassword";
+import ForgotPasswordToken from "./ForgotPassword/ForgotPasswordToken";
 
 export {
   Login,
@@ -17,5 +19,7 @@ export {
   MobileVerification,
   UserRegister,
   IndividualRegister,
-  Activate
+  Activate,
+  ForgotPassword,
+  ForgotPasswordToken
 };

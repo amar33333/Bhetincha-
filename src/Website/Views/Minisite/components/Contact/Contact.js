@@ -38,8 +38,10 @@ class Contact extends Component {
 
     this.setState({
       source: {
-        latitude: this.props.user_geo_coords.latitude,
-        longitude: this.props.user_geo_coords.longitude
+        latitude:
+          this.props.user_geo_coords && this.props.user_geo_coords.latitude,
+        longitude:
+          this.props.user_geo_coords && this.props.user_geo_coords.longitude
       },
       destination: {
         latitude: address.latitude,

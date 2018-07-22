@@ -48,6 +48,12 @@ import {
   CHECK_USER_ACTIVATED_PENDING,
   CHECK_USER_ACTIVATED_FULFILLED,
   CHECK_USER_ACTIVATED_REJECTED,
+  FORGOT_PASSWORD_FULFILLED,
+  FORGOT_PASSWORD_PENDING,
+  FORGOT_PASSWORD_REJECTED,
+  FORGOT_PASSWORD_TOKEN_FULFILLED,
+  FORGOT_PASSWORD_TOKEN_PENDING,
+  FORGOT_PASSWORD_TOKEN_REJECTED,
   LOGOUT_USER
 } from "./types";
 
@@ -76,7 +82,9 @@ import {
   onGoogleLogin,
   onIndividualTokenPost,
   onIndividualResendTokenPost,
-  onCheckUserActivatedPost
+  onCheckUserActivatedPost,
+  onForgotPasswordPost,
+  onForgotPasswordTokenPost
 } from "../Common/utils/serverCall";
 
 import querystring from "querystring";
@@ -340,6 +348,76 @@ epics.push(action$ =>
   })
 );
 
+export const onForgotPasswordSubmit = payload => ({
+  type: FORGOT_PASSWORD_PENDING,
+  payload
+});
+
+epics.push(action$ =>
+  action$.ofType(FORGOT_PASSWORD_PENDING).mergeMap(action => {
+    const {
+      history,
+      body: { phone_number }
+    } = action.payload;
+    return onForgotPasswordPost({ ...action.payload })
+      .map(({ response }) => {
+        if (response.id) {
+          // toast.success("Request Sent Successfully");
+          history.push({
+            pathname: "/forgot-password-token",
+            state: { phone_number }
+          });
+          return {
+            type: FORGOT_PASSWORD_FULFILLED,
+            payload: response
+          };
+        } else {
+          throw new Error(response.msg);
+        }
+      })
+      .catch(ajaxError => {
+        toast.error(ajaxError.toString());
+        return Observable.of({
+          type: FORGOT_PASSWORD_REJECTED,
+          payload: ajaxError
+        });
+      });
+  })
+);
+
+export const onForgotPasswordTokenSubmit = payload => ({
+  type: FORGOT_PASSWORD_TOKEN_PENDING,
+  payload
+});
+
+epics.push(action$ =>
+  action$.ofType(FORGOT_PASSWORD_TOKEN_PENDING).mergeMap(action => {
+    const { history } = action.payload;
+    return onForgotPasswordTokenPost({ ...action.payload })
+      .map(({ response }) => {
+        if (response.msg === "success") {
+          // toast.success("Request Sent Successfully");
+          history.push({
+            pathname: "/login"
+          });
+          return {
+            type: FORGOT_PASSWORD_TOKEN_FULFILLED,
+            payload: response
+          };
+        } else {
+          throw new Error(response.msg);
+        }
+      })
+      .catch(ajaxError => {
+        toast.error(ajaxError.toString());
+        return Observable.of({
+          type: FORGOT_PASSWORD_TOKEN_REJECTED,
+          payload: ajaxError
+        });
+      });
+  })
+);
+
 export const onPhoneVerificationTokenSend = payload => ({
   type: SEND_PHONE_VERIFICATION_TOKEN_PENDING,
   payload
@@ -465,9 +543,9 @@ epics.push(action$ =>
     return onBusinessRegister({ ...action.payload })
       .map(({ response }) => {
         if (response.id) {
-          toast.success("Registered Successfully");
+          // toast.success("Registered Successfully");
           history.push({
-            pathname: "/mobile-verification",
+            pathname: "/user-register",
             search: `?${querystring.stringify({ id: response.id })}`
           });
           return { type: CREATE_BUSINESS_USER_FULFILLED, payload: response };

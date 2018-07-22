@@ -1,5 +1,7 @@
 export const ROUTE_PARAMS_BUSINESS_NAME = "businessName";
 export const ROUTE_PARAMS_BUSINESS_ROUTE = "businessRoute";
+export const ROUTE_PARAMS_INDIVIDUAL_NAME = "individualName";
+export const ROUTE_PARAMS_INDIVIDUAL_ROUTE = "individualRoute";
 export const ROUTE_PARAMS_MINISITE_BUSINESS_ROUTE = "minisiteRoute";
 
 export const USER_GROUP_BUSINESS = "BUSINESS";

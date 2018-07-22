@@ -19,6 +19,7 @@ class LoginModal extends Component {
 
   onForgotPassBtnClick = () => {
     console.log("Forgot Password Clicked");
+    this.props.history.push("/forgot-password");
   };
 
   onChange = (key, event) => {

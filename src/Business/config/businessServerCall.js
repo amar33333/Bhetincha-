@@ -309,7 +309,7 @@ export const onBusinessPut = ({ id, access_token, data }) => {
 
   return axios({
     method: "PUT",
-    url: `${BUSINESS_PUT_URL}/${id}/`,
+    url: `${BUSINESS_PUT_URL}${id}/`,
     data: data,
     headers: {
       "Content-Type": "application/json",

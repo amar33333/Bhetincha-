@@ -5,7 +5,8 @@ import {
   FETCH_PROBLEM_TYPES_FULFILLED,
   FETCH_PROBLEM_TYPES_PENDING,
   FETCH_PROBLEM_TYPES_REJECTED,
-  STORE_USER_GEO_LOCATION
+  STORE_USER_GEO_LOCATION,
+  TOGGLE_GET_DIRECTION_MODAL
 } from "../actions/types";
 
 const INITIAL_STATE = {
@@ -15,7 +16,9 @@ const INITIAL_STATE = {
   improveListingModal: false,
   improveListingData: null,
   problem_types: [],
-  user_geo_coords: null
+  user_geo_coords: null,
+  getDirectionModal: false,
+  getDirectionData: null
 };
 
 export default function(state = INITIAL_STATE, action) {
@@ -25,6 +28,15 @@ export default function(state = INITIAL_STATE, action) {
 
     case TOGGLE_REGISTER_MODAL:
       return { ...state, registerModal: !state.registerModal };
+
+    case TOGGLE_GET_DIRECTION_MODAL:
+      console.log("ascasc: ", action);
+
+      return {
+        ...state,
+        getDirectionModal: !state.getDirectionModal,
+        getDirectionData: action.payload
+      };
 
     case TOGGLE_IMPROVE_LISTING_MODAL:
       return {

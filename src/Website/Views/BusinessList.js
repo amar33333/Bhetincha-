@@ -40,13 +40,15 @@ import {
 import {
   toggleImproveListingModal,
   onProblemTypesList,
-  onImproveListing
+  onImproveListing,
+  toggleGetDirectionModal
 } from "../actions";
 
 import { onSearchResultsList } from "../actions";
 import CustomModal from "../../Common/components/CustomModal";
 import PhoneVerificationModal from "../../Common/components/CustomModal/ModalTemplates/PhoneVerificationModal";
 import ImproveListingModal from "../../Common/components/CustomModal/ModalTemplates/ImproveListingModal";
+import GetDirectionModal from "../../Common/components/CustomModal/ModalTemplates/GetDirectionModal";
 
 class BusinessList extends Component {
   state = {
@@ -173,8 +175,25 @@ class BusinessList extends Component {
     });
   };
 
-  popUpMapPath = address => () => {
-    console.log("path: ", address);
+  onGetDirectionClicked = ({ primary_address, branchAddress }) => () => {
+    const source = {
+      latitude:
+        this.props.user_geo_coords && this.props.user_geo_coords.latitude,
+      longitude:
+        this.props.user_geo_coords && this.props.user_geo_coords.longitude
+    };
+
+    let addresses = [];
+
+    if (primary_address)
+      addresses = [{ ...primary_address, address_title: "Primary Address" }];
+    if (branchAddress && branchAddress.length)
+      addresses = [...addresses, ...branchAddress];
+
+    this.props.toggleGetDirectionModal({
+      source,
+      addresses
+    });
   };
 
   renderSearchResults = () => {
@@ -329,7 +348,10 @@ class BusinessList extends Component {
                   <Button
                     circular
                     basic
-                    onClick={this.popUpMapPath(each_search_result.address)}
+                    onClick={this.onGetDirectionClicked({
+                      primary_address: each_search_result.address,
+                      branchAddress: each_search_result.branchAddress
+                    })}
                   >
                     <i className="fa fa-location-arrow" /> Get Direction{" "}
                   </Button>
@@ -548,6 +570,15 @@ class BusinessList extends Component {
             problem_types={this.props.problem_types}
           />
         </CustomModal>
+        <CustomModal
+          title="Get Direction"
+          isOpen={this.props.getDirectionModal}
+          toggle={this.props.toggleGetDirectionModal}
+          className={"modal-xs" + this.props.className}
+          size="lg"
+        >
+          <GetDirectionModal data={this.props.getDirectionData} />
+        </CustomModal>
       </div>
     );
   }
@@ -573,6 +604,7 @@ export default connect(
   }),
   {
     togglePhoneVerificationModal,
+    toggleGetDirectionModal,
     toggleImproveListingModal,
     onSearchResultsList,
     onPhoneVerificationRequest,
