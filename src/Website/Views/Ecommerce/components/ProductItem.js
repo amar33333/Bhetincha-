@@ -10,12 +10,12 @@ class ProductItem extends Component {
       profilePicture,
       discount,
       name,
-      price
+      price,
+      Brand_Name: brandName
     } = this.props.product;
 
     const discountedPrice = price - price * (discount / 100);
 
-    const brandName = this.props.product["Brand Name"];
     console.log("product::", this.props.product);
     return (
       <Card

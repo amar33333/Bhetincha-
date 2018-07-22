@@ -32,7 +32,8 @@ class ProductDetail extends Component {
               if (productDetail[attribute.name]) {
                 return (
                   <p key={attribute.uid}>
-                    {attribute.name}: {productDetail[attribute.name]}
+                    {attribute.name.split("_").join(" ")}:
+                    {productDetail[attribute.name]}
                   </p>
                 );
               } else {
