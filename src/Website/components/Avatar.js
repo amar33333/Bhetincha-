@@ -11,7 +11,8 @@ import {
 import {
   USER_GROUP_BUSINESS,
   USER_GROUP_INDIVIDUAL,
-  ROUTE_PARAMS_BUSINESS_NAME
+  ROUTE_PARAMS_BUSINESS_NAME,
+  ROUTE_PARAMS_INDIVIDUAL_NAME
 } from "../../config/CONSTANTS";
 
 import { Link } from "react-router-dom";
@@ -54,10 +55,19 @@ class Avatar extends Component {
             <div key={i}>
               <DropdownItem divider />
               <Link
-                to={avatarItem.link.replace(
-                  ROUTE_PARAMS_BUSINESS_NAME,
-                  this.state.slug
-                )}
+                to={
+                  this.state.group === USER_GROUP_BUSINESS
+                    ? avatarItem.link.replace(
+                        ROUTE_PARAMS_BUSINESS_NAME,
+                        this.state.slug
+                      )
+                    : this.state.group === USER_GROUP_INDIVIDUAL
+                      ? avatarItem.link.replace(
+                          ROUTE_PARAMS_INDIVIDUAL_NAME,
+                          this.props.cookies.user_data.username
+                        )
+                      : avatarItem.link
+                }
               >
                 <div
                   onClick={this.profileDropdowntoggle}
