@@ -28,7 +28,6 @@ class Individual extends Component {
       "aside-menu-fixed",
       "aside-menu-hidden"
     );
-    console.log(this.props.match.params[ROUTE_PARAMS_INDIVIDUAL_NAME]);
     this.updateSidebar();
   }
 
