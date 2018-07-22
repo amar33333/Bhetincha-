@@ -61,6 +61,7 @@ class MainHome extends Component {
         }}
       >
         <EcommerceMainNav
+          history={this.props.history}
           categories={this.props.categories}
           onSelect={this.onSelectCategory}
         />

@@ -66,6 +66,8 @@ class Home extends Component {
         }}
       >
         <EcommerceMainNav
+          history={this.props.history}
+          cookies={this.props.cookies}
           categories={this.props.categories}
           onSelect={this.onSelectCategory}
           isHome={!Boolean(this.props.match.params.categoryId)}
@@ -145,6 +147,7 @@ class Home extends Component {
 
 export default connect(
   ({
+    auth: { cookies },
     EcommerceContainer: {
       home: {
         categories,
@@ -166,7 +169,8 @@ export default connect(
     activeCategory,
     breadcrumbs,
     productFromIndex,
-    productPerPage
+    productPerPage,
+    cookies
   }),
   {
     onCategoriesList,

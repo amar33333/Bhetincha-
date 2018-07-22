@@ -5,6 +5,7 @@ import { Navbar, NavbarBrand, NavItem, Input } from "reactstrap";
 import { geolocated } from "react-geolocated";
 import Avatar from "./Avatar";
 import AutoSuggestion from "./AutoSuggestion";
+import LoginRegister from "./LoginRegister";
 
 import {
   onSearchQuerySubmit,
@@ -132,7 +133,11 @@ class MainNavbar extends Component {
         </NavItem>
         {/* <div className="pull-right">{this.props.cookies && <Avatar />}</div> */}
         <NavItem className="ml-auto">
-          {this.props.cookies && <Avatar />}
+          {this.props.cookies ? (
+            <Avatar />
+          ) : (
+            <LoginRegister history={this.props.history} />
+          )}
         </NavItem>
       </Navbar>
     );

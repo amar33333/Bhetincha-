@@ -33,6 +33,8 @@ class Product extends Component {
     return (
       <div>
         <EcommerceMainNav
+          history={this.props.history}
+          cookies={this.props.cookies}
           categories={this.props.categories}
           onSelect={this.onSelectCategory}
         />
@@ -57,11 +59,13 @@ class Product extends Component {
 
 export default connect(
   ({
+    auth: { cookies },
     EcommerceContainer: {
       productDetail: { product, attributes, breadcrumbs },
       home: { categories }
     }
   }) => ({
+    cookies,
     product,
     attributes,
     breadcrumbs,
