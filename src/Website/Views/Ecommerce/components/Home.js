@@ -12,7 +12,11 @@ import ChildCategories from "./ChildCategories";
 import Breadcrumbs from "./Breadcrumbs";
 import banner from "../../../../static/img/ebanner.jpg";
 
-import { onCategoriesList, onActiveCategoryChange } from "../actions";
+import {
+  onCategoriesList,
+  onActiveCategoryChange,
+  onFilterParametersChangeProductsList
+} from "../actions";
 
 class Home extends Component {
   componentDidMount() {
@@ -83,7 +87,7 @@ class Home extends Component {
             </Col>
             <Col
               md="9"
-              clssName="hidden-xs-down ml-0"
+              className="hidden-xs-down ml-0"
               style={{
                 backgroundImage: `url(${banner})`
               }}
@@ -111,28 +115,25 @@ class Home extends Component {
               </Row>
             </Col>
             <Col xs="12" md="10">
-              <Row className="hor-filter-sort__container mb-3">
-                <Col>
-                  <PaginationComponent
-                    activePage={1}
-                    totalPages={this.props.productCount}
-                  />
-                </Col>
-                <Col>filter price</Col>
-                <Col>sort</Col>
-              </Row>
-              <Row>
-                <Col xs="12">
-                  <ProductList
-                    priceFilter={this.props.filterAttributes.find(
-                      x => x.name === "price"
-                    )}
-                    products={this.props.products}
-                    productCount={this.props.productCount}
-                    onSelectProduct={this.onSelectProduct}
-                  />
-                </Col>
-              </Row>
+              <ProductList
+                priceFilter={this.props.filterAttributes.find(
+                  x => x.name === "price"
+                )}
+                products={this.props.products}
+                productCount={this.props.productCount}
+                activePage={
+                  this.props.productFromIndex / this.props.productPerPage + 1
+                }
+                totalPages={Math.ceil(
+                  this.props.productCount / this.props.productPerPage
+                )}
+                onSelectProduct={this.onSelectProduct}
+                handlePaginationChange={(_, { activePage }) => {
+                  this.props.onFilterParametersChangeProductsList({
+                    frm: (activePage - 1) * this.props.productPerPage
+                  });
+                }}
+              />
             </Col>
           </Row>
         </Container>
@@ -153,7 +154,8 @@ export default connect(
         productCount,
         activeCategory,
         breadcrumbs
-      }
+      },
+      filterProducts: { frm: productFromIndex, size: productPerPage }
     }
   }) => ({
     categories,
@@ -162,7 +164,13 @@ export default connect(
     products,
     productCount,
     activeCategory,
-    breadcrumbs
+    breadcrumbs,
+    productFromIndex,
+    productPerPage
   }),
-  { onCategoriesList, onActiveCategoryChange }
+  {
+    onCategoriesList,
+    onActiveCategoryChange,
+    onFilterParametersChangeProductsList
+  }
 )(Home);
