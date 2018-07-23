@@ -34,7 +34,8 @@ import { Link } from "react-router-dom";
 
 import {
   togglePhoneVerificationModal,
-  onPhoneVerificationRequest
+  onPhoneVerificationRequest,
+  onResetPhoneVerificationRequestError
 } from "../../actions";
 
 import {
@@ -73,8 +74,12 @@ class BusinessList extends Component {
       query: parsedUrlStringObject["query"],
       frm,
       size,
-      lat: parsedUrlStringObject["lat"],
-      lon: parsedUrlStringObject["lon"],
+      lat: this.props.user_geo_coords
+        ? this.props.user_geo_coords.latitude
+        : undefined,
+      lon: this.props.user_geo_coords
+        ? this.props.user_geo_coords.longitude
+        : undefined,
       distance: this.state.distance
     });
 
@@ -102,8 +107,12 @@ class BusinessList extends Component {
           query: parsedUrlStringObject["query"],
           frm,
           size,
-          lat: parsedUrlStringObject["lat"],
-          lon: parsedUrlStringObject["lon"],
+          lat: this.props.user_geo_coords
+            ? this.props.user_geo_coords.latitude
+            : undefined,
+          lon: this.props.user_geo_coords
+            ? this.props.user_geo_coords.longitude
+            : undefined,
           distance: this.state.distance
         });
         this.setState({ searchResults: [], frm: frm + size });
@@ -123,6 +132,7 @@ class BusinessList extends Component {
   }
 
   onClaimed = id => () => {
+    console.log("claim id: ", id);
     this.props.togglePhoneVerificationModal({ id });
   };
 
@@ -161,8 +171,12 @@ class BusinessList extends Component {
         query: parsedUrlStringObject["query"],
         frm,
         size,
-        lat: parsedUrlStringObject["lat"],
-        lon: parsedUrlStringObject["lon"],
+        lat: this.props.user_geo_coords
+          ? this.props.user_geo_coords.latitude
+          : undefined,
+        lon: this.props.user_geo_coords
+          ? this.props.user_geo_coords.longitude
+          : undefined,
         distance: this.state.distance
       });
       this.setState({ frm: frm + size });
@@ -443,7 +457,7 @@ class BusinessList extends Component {
   };
 
   render() {
-    // console.log("business list: ", this.props);
+    console.log("business list: ", this.props);
     // console.log("business list state: ", this.state);
     // this.props.search_result && console.log(this.props.search_result);
     const loader = (
@@ -508,8 +522,12 @@ class BusinessList extends Component {
                         query: parsedUrlStringObject["query"],
                         frm,
                         size,
-                        lat: parsedUrlStringObject["lat"],
-                        lon: parsedUrlStringObject["lon"],
+                        lat: this.props.user_geo_coords
+                          ? this.props.user_geo_coords.latitude
+                          : undefined,
+                        lon: this.props.user_geo_coords
+                          ? this.props.user_geo_coords.longitude
+                          : undefined,
                         distance: this.state.distance
                       });
                       this.setState({
@@ -553,6 +571,9 @@ class BusinessList extends Component {
             onPhoneVerificationRequest={this.props.onPhoneVerificationRequest}
             phone_verification_request_error={
               this.props.phone_verification_request_error
+            }
+            onResetPhoneVerificationRequestError={
+              this.props.onResetPhoneVerificationRequestError
             }
             history={this.props.history}
           />
@@ -609,6 +630,7 @@ export default connect(
     onSearchResultsList,
     onPhoneVerificationRequest,
     onProblemTypesList,
-    onImproveListing
+    onImproveListing,
+    onResetPhoneVerificationRequestError
   }
 )(BusinessList);

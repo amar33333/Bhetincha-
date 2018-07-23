@@ -31,6 +31,7 @@ import {
   CHECK_USER_ACTIVATED_PENDING,
   CHECK_USER_ACTIVATED_FULFILLED,
   CHECK_USER_ACTIVATED_REJECTED,
+  RESET_PHONE_VERIFICATION_REQUEST_ERROR,
   LOGOUT_USER
 } from "../actions/types";
 
@@ -130,6 +131,13 @@ export default function(state = INITIAL_STATE, action) {
         ...state,
         loading: false,
         phone_verification_request_error: action.payload
+      };
+
+    case RESET_PHONE_VERIFICATION_REQUEST_ERROR:
+      return {
+        ...state,
+        loading: false,
+        phone_verification_request_error: null
       };
 
     case SEND_PHONE_VERIFICATION_TOKEN_PENDING:
