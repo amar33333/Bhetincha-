@@ -20,10 +20,6 @@ class Contact extends Component {
   componentDidMount = () => {
     const lat = this.props.address && parseFloat(this.props.address.latitude);
     const lng = this.props.address && parseFloat(this.props.address.longitude);
-    // setTimeout(() => {
-    //   var latLng = new window.google.maps.LatLng(lat, lng);
-    //   this.mapEl.googleMapEl.panTo(latLng);
-    // }, 500);
 
     this.setState({
       position: {
@@ -56,9 +52,20 @@ class Contact extends Component {
         <Col sm="3">
           <Card className="mb-3">
             <Card.Content
-              header="Head Office"
+              // header={branch.area ? `${branch.area.name} Branch` : "New Branch"}
               onClick={this.drawPath(this.props.address)}
-            />
+            >
+              <Card.Header>
+                <div
+                  className="address-card-header"
+                  data-tooltip={`Get Direction to this Address`}
+                  data-position="bottom center"
+                >
+                  <span>Head Office</span>
+                  <i className="fa fa-location-arrow" />
+                </div>
+              </Card.Header>
+            </Card.Content>
             <Card.Content>
               {(this.props.address.addressLine1 ||
                 this.props.address.addressLine2) && (
@@ -133,7 +140,6 @@ class Contact extends Component {
   };
 
   renderBranchAddress = () => {
-    // console.log("branch address:", this.props.branchAddress);
     return (
       this.props.branchAddress &&
       this.props.branchAddress.map(branch => (
@@ -141,9 +147,19 @@ class Contact extends Component {
           <Card className="mb-3">
             <Card.Content
               // header={branch.area ? `${branch.area.name} Branch` : "New Branch"}
-              header={branch.address_title}
               onClick={this.drawPath(branch)}
-            />
+            >
+              <Card.Header>
+                <div
+                  className="address-card-header"
+                  data-tooltip={`Get Direction to this Address`}
+                  data-position="bottom center"
+                >
+                  {branch.address_title}
+                  <i className="fa fa-location-arrow" />
+                </div>
+              </Card.Header>
+            </Card.Content>
             <Card.Content>
               <p>
                 {branch.area

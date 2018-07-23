@@ -203,3 +203,16 @@ img.minisite__album-thumbnail {
 .progressbar-blue .CircularProgressbar-path {
   stroke: blue !important;
 }
+
+/* ========== Contact =========== */
+.address-card-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  cursor: pointer;
+}
+
+.address-card-header .fa.fa-location-arrow {
+  color: gray;
+  font-size: 12px;
+}

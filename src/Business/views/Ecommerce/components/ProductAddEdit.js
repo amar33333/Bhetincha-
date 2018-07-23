@@ -9,15 +9,9 @@ import {
   Row,
   Col,
   Input,
-  InputGroup,
-  InputGroupDropdown,
-  InputGroupButtonDropdown,
-  InputGroupAddon,
   Button,
-  Dropdown,
-  DropdownToggle,
-  DropdownMenu,
-  DropdownItem
+  InputGroup,
+  InputGroupAddon
 } from "reactstrap";
 import Select from "react-select";
 
@@ -311,13 +305,15 @@ class ProductAddEdit extends Component {
                     this.onChange(attribute.name, event.target.value)
                   }
                 />
-                <Input type="select" name="select" id="exampleSelect">
-                  <option>1</option>
-                  <option>2</option>
-                  <option>3</option>
-                  <option>4</option>
-                  <option>5</option>
-                </Input>
+                <InputGroupAddon addonType="append">
+                  <Input type="select" name="select" id="exampleSelect">
+                    <option>Rs.</option>
+                    <option>Kg.</option>
+                    <option>m.</option>
+                    <option>KM</option>
+                    <option>ft.</option>
+                  </Input>
+                </InputGroupAddon>
               </InputGroup>
             </Col>
           </FormGroup>
