@@ -33,7 +33,7 @@ class LoginRegister extends Component {
               fluid
               onClick={this.props.toggleLoginModal}
               variant="raised"
-              color="primary"
+              color="blue"
             >
               Login
             </Button>

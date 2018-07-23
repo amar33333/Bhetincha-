@@ -1,12 +1,8 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import {
-  Dropdown,
-  DropdownMenu,
-  DropdownToggle,
-  DropdownItem,
-  Badge
-} from "reactstrap";
+import { Badge } from "reactstrap";
+
+import { Dropdown } from "semantic-ui-react";
 
 import {
   USER_GROUP_BUSINESS,
@@ -33,7 +29,7 @@ const greetings = [
 ];
 
 class Avatar extends Component {
-  state = { isOpen: false };
+  state = {};
 
   static getDerivedStateFromProps = nextProps => ({
     group: nextProps.cookies.user_data.groups[0].name,
@@ -41,115 +37,97 @@ class Avatar extends Component {
     slug: nextProps.cookies.user_data.slug
   });
 
-  profileDropdowntoggle = () => this.setState({ isOpen: !this.state.isOpen });
-
-  renderDropdownItems = () =>
-    avatarItems.map((avatarItem, i) => {
-      if (
-        !avatarItem.group ||
-        (avatarItem.group === "ADMIN" &&
-          this.state.group !== USER_GROUP_BUSINESS &&
-          this.state.group !== USER_GROUP_INDIVIDUAL) ||
-        avatarItem.group === this.state.group
-      ) {
-        if (avatarItem.link) {
-          return (
-            <div key={i}>
-              <DropdownItem divider />
-              <Link
-                to={
-                  this.state.group === USER_GROUP_BUSINESS
-                    ? avatarItem.link.replace(
-                        ROUTE_PARAMS_BUSINESS_NAME,
-                        this.state.slug
-                      )
-                    : this.state.group === USER_GROUP_INDIVIDUAL
-                      ? avatarItem.link.replace(
-                          ROUTE_PARAMS_INDIVIDUAL_NAME,
-                          this.props.cookies.user_data.username
-                        )
-                      : avatarItem.link
-                }
-              >
-                <div
-                  onClick={this.profileDropdowntoggle}
-                  className="profile-dropdown__item"
-                >
-                  <i
-                    className={`${
-                      avatarItem.className
-                    } profile-dropdown__item__icon`}
-                  />
-                  {avatarItem.title}
-                  {avatarItem.badge && <Badge color="warning">4</Badge>}
-                </div>
-              </Link>
-            </div>
-          );
-        } else if (this.props.show && avatarItem.group === this.props.nonLink) {
-          return (
-            <div key={i}>
-              <DropdownItem divider />
-              <div
-                onClick={() => {
-                  this.profileDropdowntoggle();
-                  this.props.onClick();
-                }}
-                className="profile-dropdown__item"
-              >
-                <i
-                  className={`${
-                    avatarItem.className[Number(this.props.titleIndex)]
-                  } profile-dropdown__item__icon`}
-                />
-                {avatarItem.title[Number(this.props.titleIndex)]}
-                {avatarItem.badge && <Badge color="warning">4</Badge>}
-              </div>
-            </div>
-          );
-        }
-        return null;
-      }
-      return null;
-    });
-
   render() {
+    const trigger = (
+      <span>
+        <img
+          className="avatar"
+          alt="Avatar"
+          src={
+            this.props.cookies && this.props.cookies.user_data.logo
+              ? `${MAIN_URL}${this.props.cookies.user_data.logo}`
+              : avatar
+          }
+        />
+      </span>
+    );
     greetings.sort(() => Math.random() - 0.5);
-    console.log("logo", this.props.cookies.user_data.logo);
     return (
-      <Dropdown
-        isOpen={this.state.isOpen}
-        toggle={this.profileDropdowntoggle}
-        // direction="left"
-      >
-        <DropdownToggle
-          tag="span"
-          onClick={this.profileDropdowntoggle}
-          data-toggle="dropdown"
-          aria-expanded={this.state.isOpen}
-        >
-          <img
-            className="avatar"
-            alt="Avatar"
-            src={
-              this.props.cookies && this.props.cookies.user_data.logo
-                ? `${MAIN_URL}${this.props.cookies.user_data.logo}`
-                : avatar
-            }
+      <Dropdown trigger={trigger} pointing="top right" icon={null}>
+        <Dropdown.Menu>
+          <Dropdown.Header
+            content={`${greetings[0]}, ${this.state.username}!`}
           />
-          {/* <i className="fa fa-chevron-down profile-dropdown__icon" /> */}
-        </DropdownToggle>
-        <DropdownMenu right>
-          <div className="profile-dropdown">
-            <div
-              onClick={this.profileDropdowntoggle}
-              className="profile-dropdown__item__heading"
-            >
-              <strong>{`${greetings[0]}, ${this.state.username}!`}</strong>
-            </div>
-            {this.renderDropdownItems()}
-          </div>
-        </DropdownMenu>
+          <Dropdown.Divider />
+          {avatarItems.map((avatarItem, i) => {
+            if (
+              !avatarItem.group ||
+              (avatarItem.group === "ADMIN" &&
+                this.state.group !== USER_GROUP_BUSINESS &&
+                this.state.group !== USER_GROUP_INDIVIDUAL) ||
+              avatarItem.group === this.state.group
+            ) {
+              if (avatarItem.link) {
+                return (
+                  <Dropdown.Item key={i}>
+                    <Link
+                      style={{
+                        color: "inherit"
+                      }}
+                      to={
+                        this.state.group === USER_GROUP_BUSINESS
+                          ? avatarItem.link.replace(
+                              ROUTE_PARAMS_BUSINESS_NAME,
+                              this.state.slug
+                            )
+                          : this.state.group === USER_GROUP_INDIVIDUAL
+                            ? avatarItem.link.replace(
+                                ROUTE_PARAMS_INDIVIDUAL_NAME,
+                                this.props.cookies.user_data.username
+                              )
+                            : avatarItem.link
+                      }
+                    >
+                      <i
+                        className={`${
+                          avatarItem.className
+                        } profile-dropdown__item__icon`}
+                      />
+                      {avatarItem.title}
+                      {avatarItem.badge && <Badge color="warning">4</Badge>}
+                    </Link>
+                  </Dropdown.Item>
+                );
+              } else if (
+                this.props.show &&
+                avatarItem.group === this.props.nonLink
+              ) {
+                return (
+                  <div key={i}>
+                    <Dropdown.Divider />
+                    <div
+                      onClick={() => {
+                        this.profileDropdowntoggle();
+                        this.props.onClick();
+                      }}
+                      className="profile-dropdown__item"
+                    >
+                      <i
+                        className={`${
+                          avatarItem.className[Number(this.props.titleIndex)]
+                        } profile-dropdown__item__icon`}
+                      />
+                      {avatarItem.title[Number(this.props.titleIndex)]}
+                      {avatarItem.badge && <Badge color="warning">4</Badge>}
+                    </div>
+                  </div>
+                );
+              }
+              return null;
+            }
+            return null;
+          })}
+        </Dropdown.Menu>
       </Dropdown>
     );
   }
