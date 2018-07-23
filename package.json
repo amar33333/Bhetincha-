@@ -38,6 +38,7 @@
     "react-grid-gallery": "^0.4.8",
     "react-grid-layout": "^0.16.6",
     "react-image-gallery": "^0.8.7",
+    "react-image-magnify": "^2.7.0",
     "react-image-show": "^0.2.4",
     "react-infinite-scroller": "^1.2.0",
     "react-input-range": "^1.3.0",

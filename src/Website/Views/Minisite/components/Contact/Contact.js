@@ -140,7 +140,8 @@ class Contact extends Component {
         <Col sm="3">
           <Card className="mb-3">
             <Card.Content
-              header={branch.area ? `${branch.area.name} Branch` : "New Branch"}
+              // header={branch.area ? `${branch.area.name} Branch` : "New Branch"}
+              header={branch.address_title}
               onClick={this.drawPath(branch)}
             />
             <Card.Content>
