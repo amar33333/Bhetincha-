@@ -16,7 +16,6 @@ class ProductItem extends Component {
 
     const discountedPrice = price - price * (discount / 100);
 
-    console.log("product::", this.props.product);
     return (
       <Card
         className="product-card"

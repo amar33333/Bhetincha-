@@ -32,10 +32,6 @@ class EcommerceMainNav extends Component {
   handleResultSelect = (e, { result }) =>
     this.setState({ value: result.title });
 
-  componentDidUpdate() {
-    console.log("updates", this.props.isHome);
-  }
-
   handleToggleMegaMenu = () => {
     this.setState({
       menuOpen: !this.state.menuOpen

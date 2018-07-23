@@ -10,7 +10,7 @@ class Filters extends Component {
           if (data.name === "discount") {
             return (
               <FilterRange
-                withTitle={true}
+                withTitle
                 key={i}
                 min={data.min}
                 max={data.max}
@@ -34,14 +34,14 @@ class Filters extends Component {
           ) {
             return (
               <FilterRange
-                withTitle={true}
+                withTitle
                 key={data.uid}
-                options={data.options}
+                min={data.min}
+                max={data.max}
                 name={data.name.split("_").join(" ")}
               />
             );
           }
-
           return null;
         })}
       </div>

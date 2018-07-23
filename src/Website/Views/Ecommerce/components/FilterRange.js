@@ -5,14 +5,26 @@ class FilterRange extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      maxValue: 10000,
-      minValue: 50,
       value: {
-        max: 8000,
-        min: 5000
+        max: props.max,
+        min: props.min
       }
     };
   }
+
+  componentDidUpdate(prevProps) {
+    const value = {};
+    if (prevProps.min !== this.props.min) {
+      value.min = this.props.min;
+    }
+    if (prevProps.max !== this.props.max) {
+      value.max = this.props.max;
+    }
+    if (Object.keys(value).length) {
+      this.setState({ value });
+    }
+  }
+
   handleSetRange = value => {
     this.setState({ value: value });
   };
@@ -31,9 +43,9 @@ class FilterRange extends Component {
           <InputRange
             draggableTrack
             name="filterRangeSlider"
-            maxValue={this.state.maxValue}
-            minValue={this.state.minValue}
-            step={500}
+            maxValue={this.props.max}
+            minValue={this.props.min}
+            step={parseInt((this.props.max - this.props.min) / 100, 10)}
             formatLabel={value => `Rs. ${value}`}
             onChange={value => this.handleSetRange(value)}
             onChangeComplete={value => this.handleSetRangeChange(value)}

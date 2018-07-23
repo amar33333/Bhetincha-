@@ -9,7 +9,7 @@ class FilterChoice extends Component {
         <h4 className="filter-title mt-2">{this.props.name}</h4>
         {this.props.options.map(opt => {
           return (
-            <Row>
+            <Row key={opt}>
               <Col>
                 <Checkbox label={opt} />
               </Col>

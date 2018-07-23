@@ -173,6 +173,17 @@ class TeleCalling extends Component {
           const data = business._source;
           let addresses = [];
           let selectedAddress = null;
+
+          // TODO: after elastic implementation... In case of inner hits (not working right now):
+          // const selectedAddress = business.inner_hits.branchAddress.hits.total
+          //   ? business.inner_hits.branchAddress.hits.hits[0]._source
+          //   : data.address;
+
+          // if (!selectedAddress.landlineNumber) {
+          //   selectedAddress.landlineNumber = data.address.landlineNumber;
+          // }
+
+          // console.log("address", selectedAddress);
           if (data.address) {
             addresses.push(data.address);
           }
