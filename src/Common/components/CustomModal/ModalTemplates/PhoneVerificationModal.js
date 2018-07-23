@@ -14,6 +14,10 @@ import {
 class PhoneVerificationModal extends Component {
   state = { phone: "" };
 
+  componentWillUnmount() {
+    // this.props.onResetPhoneVerificationRequestError();
+  }
+
   onChange = (key, event) => {
     this.setState({ [key]: event.target.value });
   };

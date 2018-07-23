@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import LaddaButton, { S, EXPAND_RIGHT } from "react-ladda";
 import { toast } from "react-toastify";
+import { Alert } from "reactstrap";
 
 import {
   Button,
@@ -35,7 +36,12 @@ class MobileVerification extends Component {
     password: "",
     confirm_password: "",
     email: "",
-    email_validation_error: false
+    email_validation_error: false,
+    visible: true
+  };
+
+  onDismiss = () => {
+    this.setState({ visible: false });
   };
 
   componentDidMount() {
@@ -120,6 +126,29 @@ class MobileVerification extends Component {
     this.props.onResendTokenRequest({ id });
   };
 
+  displayBusinessAlreadyExistsError = () => {
+    if (this.props.location.state && this.props.location.state.already)
+      return (
+        <Alert
+          color="warning"
+          isOpen={this.state.visible}
+          toggle={this.onDismiss}
+        >
+          <p>
+            This mobile number:{" "}
+            <span style={{ color: "blue" }}>
+              {this.props.location.state.business_phone}{" "}
+            </span>
+            already exists in Business Name:{" "}
+            <span style={{ color: "red" }}>
+              {this.props.location.state.business_name}
+            </span>
+            <p>A Link has also has been Sent to the above mobile number.</p>
+          </p>
+        </Alert>
+      );
+  };
+
   render() {
     console.log("mobile props: ", this.props);
     return (
@@ -129,6 +158,7 @@ class MobileVerification extends Component {
             <Col md="6">
               <Card className="mx-4">
                 <CardBody className="p-4">
+                  {this.displayBusinessAlreadyExistsError()}
                   <h1>Register Your Account</h1>
                   {/* <p className="text-muted">Verify Your Account</p> */}
                   <Form onSubmit={this.onFormSubmit}>
@@ -208,7 +238,6 @@ class MobileVerification extends Component {
                         onChange={this.onChange.bind(this, "confirm_password")}
                       />
                     </InputGroup>
-
                     <Row>
                       <Col xs="6">
                         <span>
@@ -218,14 +247,15 @@ class MobileVerification extends Component {
                         </span>
                       </Col>
                     </Row>
-                    <Row>
+                    <Row className="mt-2">
                       <Col xs="6">
                         <Button
+                          color="primary"
                           //loading={this.props.loading}
                           data-size={S}
                           data-style={EXPAND_RIGHT}
                         >
-                          CREATE ACCOUNT
+                          Create Account
                         </Button>
                       </Col>
                     </Row>

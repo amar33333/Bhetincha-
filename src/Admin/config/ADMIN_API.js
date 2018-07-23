@@ -34,6 +34,7 @@ const VERIFY_BUSINESS = "business/business/";
 const BUSINESS_TELE_CALLING = "search/business-tc/";
 const LOCATION = "address/list-places/";
 const SOCIAL_LINK = "business/social-link/";
+const IMPROVE_LISTING = "business/improve-listing/";
 
 const ECOMMERCE = "ecommerce";
 
@@ -71,6 +72,7 @@ export const TELE_USER_SEND_SMS_URL = `${MAIN_URL}/${TELE_USER_SEND_SMS}`;
 
 export const LOCATION_URL = `${MAIN_URL}/${LOCATION}`;
 export const SOCIAL_LINK_URL = `${MAIN_URL}/${SOCIAL_LINK}`;
+export const IMPROVE_LISTING_URL = `${MAIN_URL}/${IMPROVE_LISTING}`;
 
 // ecommerce
 export const ECOMMERCE_CATEGORY_URL = `${MAIN_URL}/${ECOMMERCE}/category/`;

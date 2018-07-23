@@ -54,6 +54,7 @@ import {
   FORGOT_PASSWORD_TOKEN_FULFILLED,
   FORGOT_PASSWORD_TOKEN_PENDING,
   FORGOT_PASSWORD_TOKEN_REJECTED,
+  RESET_PHONE_VERIFICATION_REQUEST_ERROR,
   LOGOUT_USER
 } from "./types";
 
@@ -306,6 +307,10 @@ epics.push((action$, { getState }) =>
     .ignoreElements()
 );
 
+export const onResetPhoneVerificationRequestError = () => ({
+  type: RESET_PHONE_VERIFICATION_REQUEST_ERROR
+});
+
 export const onPhoneVerificationRequest = payload => ({
   type: REQUEST_PHONE_VERIFICATION_PENDING,
   payload
@@ -321,7 +326,7 @@ epics.push(action$ =>
           toast.success("Request Sent Successfully");
 
           history.push({
-            pathname: "/mobile-verification",
+            pathname: "/user-register",
             search: `?${querystring.stringify({ id: response.id })}`
           });
           return [
@@ -538,7 +543,10 @@ export const onBusinessRegisterSubmit = payload => ({
 
 epics.push(action$ =>
   action$.ofType(CREATE_BUSINESS_USER_PENDING).mergeMap(action => {
-    const { history } = action.payload;
+    const {
+      history,
+      body: { business_phone }
+    } = action.payload;
 
     return onBusinessRegister({ ...action.payload })
       .map(({ response }) => {
@@ -546,7 +554,12 @@ epics.push(action$ =>
           // toast.success("Registered Successfully");
           history.push({
             pathname: "/user-register",
-            search: `?${querystring.stringify({ id: response.id })}`
+            search: `?${querystring.stringify({ id: response.id })}`,
+            state: {
+              business_name: response.business_name,
+              already: response.already,
+              business_phone
+            }
           });
           return { type: CREATE_BUSINESS_USER_FULFILLED, payload: response };
         } else {

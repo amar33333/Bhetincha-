@@ -223,6 +223,12 @@ const items = {
           url: "/admin/manage-social-links",
           icon: "icon-user-follow",
           permission: "CAN_VIEW_SOCIAL_LINKS"
+        },
+        {
+          name: "Improve Listing",
+          url: "/admin/improve-listing",
+          icon: "icon-user-follow",
+          permission: "CAN_VIEW_SOCIAL_LINKS"
         }
       ]
     },

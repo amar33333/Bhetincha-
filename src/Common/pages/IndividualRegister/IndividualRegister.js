@@ -23,6 +23,8 @@ import { toast } from "react-toastify";
 import FacebookLogin from "react-facebook-login";
 import GoogleLogin from "react-google-login";
 
+import background from "../../../static/img/balloon.JPG";
+
 import { validatePhone, validateEmail } from "../../../Common/utils/Extras";
 import {
   onIndividualRegisterSubmit,
@@ -128,13 +130,20 @@ class IndividualRegister extends Component {
 
   render() {
     return (
-      <div className="app flex-row align-items-center">
+      <div
+        className="app flex-row align-items-center"
+        style={{
+          backgroundRepeat: "no-repeat",
+          backgroundSize: "cover",
+          backgroundImage: `url(${background})`
+        }}
+      >
         <Container>
           <Row className="justify-content-center">
             <Col md="6">
               <Card className="mx-4">
                 <CardBody className="p-4">
-                  <h1>IndividualRegister - Business</h1>
+                  <h1>Individual Register</h1>
                   <p className="text-muted">Create your account</p>
                   <Form onSubmit={this.onFormSubmit}>
                     <InputGroup className="mb-3">
@@ -274,22 +283,23 @@ class IndividualRegister extends Component {
                       </Col>
                     </FormGroup>
 
-                    <Button color="success" block>
+                    <Button color="success" block className="mt-2">
                       Create Account
                     </Button>
                   </Form>
                 </CardBody>
-                <span>
-                  <a
-                    href="#"
-                    onClick={() =>
-                      this.props.history.push("/business-register")
-                    }
-                  >
-                    Register as Business{" "}
-                  </a>
-                </span>
+
                 <CardFooter className="p-4">
+                  <span>
+                    <a
+                      href="#"
+                      onClick={() =>
+                        this.props.history.push("/business-register")
+                      }
+                    >
+                      Register as Business{" "}
+                    </a>
+                  </span>
                   {/* <Row>
                     <Col xs="12" sm="6">
                       <Button className="btn-facebook" block>

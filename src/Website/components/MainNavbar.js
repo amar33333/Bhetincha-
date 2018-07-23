@@ -118,9 +118,9 @@ class MainNavbar extends Component {
                 //query: keyword
                 //search: `?query=${keyword}&frm=0&size=5`
                 search: `?${querystring.stringify({
-                  query: keyword,
-                  lat: this.props.coords && this.props.coords.latitude,
-                  lon: this.props.coords && this.props.coords.longitude
+                  query: keyword
+                  /* lat: this.props.coords && this.props.coords.latitude,
+                  lon: this.props.coords && this.props.coords.longitude*/
 
                   //frm: 0,
                   //size: 5
