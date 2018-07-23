@@ -538,7 +538,10 @@ export const onBusinessRegisterSubmit = payload => ({
 
 epics.push(action$ =>
   action$.ofType(CREATE_BUSINESS_USER_PENDING).mergeMap(action => {
-    const { history } = action.payload;
+    const {
+      history,
+      body: { business_phone }
+    } = action.payload;
 
     return onBusinessRegister({ ...action.payload })
       .map(({ response }) => {
@@ -546,7 +549,12 @@ epics.push(action$ =>
           // toast.success("Registered Successfully");
           history.push({
             pathname: "/user-register",
-            search: `?${querystring.stringify({ id: response.id })}`
+            search: `?${querystring.stringify({ id: response.id })}`,
+            state: {
+              business_name: response.business_name,
+              already: response.already,
+              business_phone
+            }
           });
           return { type: CREATE_BUSINESS_USER_FULFILLED, payload: response };
         } else {

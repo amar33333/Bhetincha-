@@ -29,7 +29,8 @@ import {
   TELE_USER_SEND_SMS_URL,
   TELE_USER_SEARCH_NAME_URL,
   ECOMMERCE_CATEGORY_CONFIG_URL,
-  ECOMMERCE_PRODUCT_SEARCH_URL
+  ECOMMERCE_PRODUCT_SEARCH_URL,
+  IMPROVE_LISTING_URL
 } from "./ADMIN_API";
 
 import {
@@ -48,6 +49,16 @@ export const onSocialLinkPost = ({ body, access_token }) =>
     method: "POST",
     url: SOCIAL_LINK_URL,
     body,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
+export const onImproveListingGet = ({ access_token }) =>
+  ajax({
+    method: "GET",
+    url: IMPROVE_LISTING_URL,
     headers: {
       "Content-Type": "application/json",
       Authorization: "Bearer " + access_token

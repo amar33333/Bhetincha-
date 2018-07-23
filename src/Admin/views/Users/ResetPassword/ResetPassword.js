@@ -46,14 +46,15 @@ class ResetPassword extends Component {
       selectedOption: { id }
     } = this.state;
 
-    if (password === conf_new_password)
+    if (password === conf_new_password) {
       this.props.onUserEdit({
         id,
         body: {
           password
         }
       });
-    else toast.error("Password Mismatch !!! ");
+      this.clearState();
+    } else toast.error("Password Mismatch !!! ");
   }
 
   onChange(field, e) {
@@ -62,10 +63,18 @@ class ResetPassword extends Component {
     this.setState({ [field]: value });
   }
 
+  clearState = () => {
+    this.setState({
+      selectedOption: "",
+      new_password: "",
+      conf_new_password: ""
+    });
+  };
+
   render() {
     const { selectedOption } = this.state;
     const value = selectedOption && selectedOption.id;
-    console.log("reset state: ", this.state);
+    // console.log("reset state: ", this.state);
 
     return !this.props.usersFetchLoading ? (
       <div className="animated fadeIn">

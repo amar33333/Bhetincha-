@@ -14,6 +14,7 @@ import TeleCalling from "./TeleCalling/TeleCalling";
 import ManageBranchs from "./BusinessAdminDetail/ManageBranchs";
 import AddBranch from "./BusinessAdminDetail/AddBranch";
 import ResetPassword from "./Users/ResetPassword";
+import ImproveListings from "./Settings/ImproveListings";
 
 import {
   Areas,
@@ -57,5 +58,6 @@ export {
   TeleCalling,
   ManageBranchs,
   AddBranch,
-  ResetPassword
+  ResetPassword,
+  ImproveListings
 };

@@ -120,6 +120,25 @@ class MobileVerification extends Component {
     this.props.onResendTokenRequest({ id });
   };
 
+  displayBusinessAlreadyExistsError = () => {
+    if (this.props.location.state && this.props.location.state.already)
+      return (
+        <div style={{ background: "#77C96A", color: "white" }}>
+          <p>
+            This mobile number:{" "}
+            <span style={{ color: "blue" }}>
+              {this.props.location.state.business_phone}{" "}
+            </span>
+            already exists in Business Name:{" "}
+            <span style={{ color: "red" }}>
+              {this.props.location.state.business_name}
+            </span>
+            <p>A Link has also has been Sent to the above mobile number.</p>
+          </p>
+        </div>
+      );
+  };
+
   render() {
     console.log("mobile props: ", this.props);
     return (
@@ -129,6 +148,7 @@ class MobileVerification extends Component {
             <Col md="6">
               <Card className="mx-4">
                 <CardBody className="p-4">
+                  {this.displayBusinessAlreadyExistsError()}
                   <h1>Register Your Account</h1>
                   {/* <p className="text-muted">Verify Your Account</p> */}
                   <Form onSubmit={this.onFormSubmit}>

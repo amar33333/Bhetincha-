@@ -2,14 +2,18 @@ import {
   FETCH_SOCIAL_LINK_FULFILLED,
   FETCH_SOCIAL_LINK_PENDING,
   FETCH_SOCIAL_LINK_REJECTED,
-  TOGGLE_SOCIAL_LINK_EDIT_MODAL
+  TOGGLE_SOCIAL_LINK_EDIT_MODAL,
+  FETCH_IMPROVE_LISTING_FULFILLED,
+  FETCH_IMPROVE_LISTING_PENDING,
+  FETCH_IMPROVE_LISTING_REJECTED
 } from "../actions/types";
 
 const INITIAL_STATE = {
   social_links: [],
   social_linksFetchLoading: false,
   socialLinkEditData: null,
-  socialLinkEditModal: false
+  socialLinkEditModal: false,
+  improveListings: []
 };
 
 export default function(state = INITIAL_STATE, action) {
@@ -29,6 +33,18 @@ export default function(state = INITIAL_STATE, action) {
 
     case FETCH_SOCIAL_LINK_REJECTED:
       return { ...state, social_linksFetchLoading: false };
+
+    case FETCH_IMPROVE_LISTING_PENDING:
+      return { ...state };
+
+    case FETCH_IMPROVE_LISTING_FULFILLED:
+      return {
+        ...state,
+        improveListings: action.payload
+      };
+
+    case FETCH_IMPROVE_LISTING_REJECTED:
+      return { ...state };
 
     case TOGGLE_SOCIAL_LINK_EDIT_MODAL:
       return {

@@ -28,7 +28,8 @@ import {
   TeleCalling,
   ManageBranchs,
   AddBranch,
-  ResetPassword
+  ResetPassword,
+  ImproveListings
 } from "../views";
 
 import { ManageCategories } from "../views/Ecommerce";
@@ -253,6 +254,12 @@ class AdminRoute extends Component {
           path="/admin/manage-social-links"
           name="Social Links"
           component={SocialLinks}
+          permission="CAN_VIEW_SOCIAL_LINKS"
+        />
+        <CustomRoute
+          path="/admin/improve-listing"
+          name="Improve Listing"
+          component={ImproveListings}
           permission="CAN_VIEW_SOCIAL_LINKS"
         />
         <Redirect from="/admin" to="/admin/dashboard" />

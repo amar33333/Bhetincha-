@@ -5,7 +5,8 @@ import {
   onSocialLinkPost,
   onSocialLinksGet,
   onSocialLinkEachDelete,
-  onSocialLinkPut
+  onSocialLinkPut,
+  onImproveListingGet
 } from "../config/adminServerCall";
 import {
   CREATE_SOCIAL_LINK_FULFILLED,
@@ -20,10 +21,33 @@ import {
   EDIT_SOCIAL_LINK_FULFILLED,
   EDIT_SOCIAL_LINK_PENDING,
   EDIT_SOCIAL_LINK_REJECTED,
+  FETCH_IMPROVE_LISTING_FULFILLED,
+  FETCH_IMPROVE_LISTING_PENDING,
+  FETCH_IMPROVE_LISTING_REJECTED,
   TOGGLE_SOCIAL_LINK_EDIT_MODAL
 } from "./types";
 
 const epics = [];
+
+export const onImproveListingList = () => ({
+  type: FETCH_IMPROVE_LISTING_PENDING
+});
+
+epics.push((action$, { getState }) =>
+  action$.ofType(FETCH_IMPROVE_LISTING_PENDING).mergeMap(action =>
+    onImproveListingGet({
+      access_token: getState().auth.cookies.token_data.access_token
+    })
+      .map(({ response }) => {
+        return { type: FETCH_IMPROVE_LISTING_FULFILLED, payload: response };
+      })
+      .catch(ajaxError => {
+        toast.error("Error Improve Listings !!!");
+        console.log("setingactiond: ", ajaxError);
+        return Observable.of({ type: FETCH_IMPROVE_LISTING_REJECTED });
+      })
+  )
+);
 
 export const onSocialLinkSubmit = payload => ({
   type: CREATE_SOCIAL_LINK_PENDING,
