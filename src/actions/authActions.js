@@ -54,6 +54,7 @@ import {
   FORGOT_PASSWORD_TOKEN_FULFILLED,
   FORGOT_PASSWORD_TOKEN_PENDING,
   FORGOT_PASSWORD_TOKEN_REJECTED,
+  RESET_PHONE_VERIFICATION_REQUEST_ERROR,
   LOGOUT_USER
 } from "./types";
 
@@ -306,6 +307,10 @@ epics.push((action$, { getState }) =>
     .ignoreElements()
 );
 
+export const onResetPhoneVerificationRequestError = () => ({
+  type: RESET_PHONE_VERIFICATION_REQUEST_ERROR
+});
+
 export const onPhoneVerificationRequest = payload => ({
   type: REQUEST_PHONE_VERIFICATION_PENDING,
   payload
@@ -321,7 +326,7 @@ epics.push(action$ =>
           toast.success("Request Sent Successfully");
 
           history.push({
-            pathname: "/mobile-verification",
+            pathname: "/user-register",
             search: `?${querystring.stringify({ id: response.id })}`
           });
           return [

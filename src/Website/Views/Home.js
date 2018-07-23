@@ -147,13 +147,13 @@ class Home extends Component {
                           placeholder[0] !== "Search Anything...."
                             ? placeholder[0]
                             : ""
-                        }`,
-                      lat:
+                        }`
+                      /* lat:
                         (this.props.coords && this.props.coords.latitude) ||
                         undefined,
                       lon:
                         (this.props.coords && this.props.coords.longitude) ||
-                        undefined
+                        undefined*/
                       // distance: 0
                       //frm: 0,
                       //size:

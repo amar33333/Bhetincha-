@@ -102,7 +102,7 @@ export const onWorkingHourGet = ({ access_token, id }) =>
 export const onWorkingHourPut = ({ access_token, body, id }) =>
   ajax({
     method: "PUT",
-    url: `${BUSINESS_PUT_URL}/${id}/`,
+    url: `${BUSINESS_PUT_URL}${id}/`,
     body,
     headers: {
       "Content-Type": "application/json",
