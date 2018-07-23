@@ -4,6 +4,7 @@ import { Button, Col, Row, Input, Form, Container } from "reactstrap";
 
 import { connect } from "react-redux";
 import { onForgotPasswordSubmit } from "../../../actions";
+import background from "../../../static/img/forget.jpeg";
 
 class ForgotPassword extends Component {
   state = { username_mobile: "" };
@@ -31,53 +32,82 @@ class ForgotPassword extends Component {
   render() {
     console.log("mobile props: ", this.props);
     return (
-      <div className="app flex-row align-items-center">
-        <Container>
-          <Row className="justify-content-center">
-            <Col md="6">
-              <h2>Forgot your Password?</h2>
-              <p>
-                Don't Worry. Resetting Password is easy, just tell us the mobile
-                number or Username you registered with Bhetinchha.
-              </p>
-              <Form onSubmit={this.onFormSubmit}>
-                <Input
-                  autoFocus
-                  required
-                  size="lg"
-                  //disabled={this.props.loading}
-                  type="text"
-                  placeholder="Enter Your Username or Mobile Number"
-                  value={this.state.username_mobile}
-                  onChange={this.onChange.bind(this, "username_mobile")}
-                />
-                <Row className="mt-3">
-                  <Col xs="6">
-                    <span>
-                      <a href="#" onClick={this.onAlreadyHaveACode}>
-                        Already Have a Code
-                      </a>
-                    </span>
-                  </Col>
-                </Row>
-                <Row className="mt-2">
-                  <Col xs="6">
-                    <Button
-                      block
-                      size="lg"
-                      color="primary"
-                      //loading={this.props.loading}
-                      data-size={S}
-                      data-style={EXPAND_RIGHT}
-                    >
-                      Submit
-                    </Button>
-                  </Col>
-                </Row>
-              </Form>
-            </Col>
-          </Row>
-        </Container>
+      <div
+        style={{
+          backgroundRepeat: "no-repeat",
+          backgroundSize: "cover",
+          backgroundImage: `url(${background})`
+        }}
+      >
+        <div
+          className="pt-3"
+          style={{
+            position: "absolute",
+            top: "10px",
+            left: "20px",
+            color: "#e6e0d5"
+          }}
+        >
+          <Container>
+            <a
+              href="/"
+              style={{
+                color: "inherit"
+              }}
+            >
+              <i className="fa fa-angle-left" />
+              <span className="ml-2"> Back to home </span>
+            </a>
+          </Container>
+        </div>
+        <div className="app flex-row align-items-center">
+          <Container>
+            <Row className="justify-content-center">
+              <Col md="6" className="forget-pass-wrapper">
+                <h2>Forgot your Password?</h2>
+                <p>
+                  Don't Worry. Resetting Password is easy, just tell us the
+                  mobile number or Username you registered with Bhetinchha.
+                </p>
+                <Form onSubmit={this.onFormSubmit}>
+                  <Input
+                    autoFocus
+                    required
+                    size="lg"
+                    //disabled={this.props.loading}
+                    type="text"
+                    placeholder="Enter Your Username or Mobile Number"
+                    value={this.state.username_mobile}
+                    onChange={this.onChange.bind(this, "username_mobile")}
+                  />
+                  <Row className="mt-3">
+                    <Col xs="6">
+                      <span>
+                        <a href="#" onClick={this.onAlreadyHaveACode}>
+                          Already Have a Code
+                        </a>
+                      </span>
+                    </Col>
+                  </Row>
+                  <Row className="mt-2">
+                    <Col xs="6">
+                      <Button
+                        block
+                        size="lg"
+                        color="primary"
+                        //loading={this.props.loading}
+                        data-size={S}
+                        data-style={EXPAND_RIGHT}
+                      >
+                        Submit
+                      </Button>
+                    </Col>
+                  </Row>
+                </Form>
+              </Col>
+            </Row>
+          </Container>
+        </div>
       </div>
     );
   }

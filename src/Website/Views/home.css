@@ -280,6 +280,20 @@ input.main-nav-search::placeholder {
   color: inherit;
 }
 
+.forget-pass-wrapper {
+  background-color: #f0f3f5eb;
+  padding: 20px;
+}
+
+.login-modal-wrapper {
+  padding: 20px;
+}
+
+.modal-title {
+  color: #018fd7;
+  margin-bottom: 20px;
+}
+
 /* ======== Admin ============= */
 
 .hr-centered {

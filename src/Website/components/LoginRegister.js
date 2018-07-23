@@ -39,7 +39,7 @@ class LoginRegister extends Component {
             </Button>
 
             <CustomModal
-              title="Login To Bhetincha"
+              // title="Login To Bhetincha"
               isOpen={this.props.loginModal}
               toggle={this.props.toggleLoginModal}
               className={"modal-xs" + this.props.className}

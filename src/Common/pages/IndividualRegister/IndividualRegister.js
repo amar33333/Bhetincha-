@@ -131,209 +131,234 @@ class IndividualRegister extends Component {
   render() {
     return (
       <div
-        className="app flex-row align-items-center"
         style={{
           backgroundRepeat: "no-repeat",
           backgroundSize: "cover",
           backgroundImage: `url(${background})`
         }}
       >
-        <Container>
-          <Row className="justify-content-center">
-            <Col md="6">
-              <Card className="mx-4">
-                <CardBody className="p-4">
-                  <h1>Individual Register</h1>
-                  <p className="text-muted">Create your account</p>
-                  <Form onSubmit={this.onFormSubmit}>
-                    <InputGroup className="mb-3">
-                      <InputGroupAddon addonType="prepend">
-                        <InputGroupText>
-                          <i className="icon-user" />
-                        </InputGroupText>
-                      </InputGroupAddon>
-                      <Input
-                        autoFocus
-                        required
-                        type="text"
-                        placeholder="First Name"
-                        value={this.state.first_name}
-                        onChange={this.onChange.bind(this, "first_name")}
-                      />
-                    </InputGroup>
-                    <InputGroup className="mb-3">
-                      <InputGroupAddon addonType="prepend">
-                        <InputGroupText>
-                          <i className="icon-user" />
-                        </InputGroupText>
-                      </InputGroupAddon>
-                      <Input
-                        required
-                        type="text"
-                        placeholder="Last Name"
-                        value={this.state.last_name}
-                        onChange={this.onChange.bind(this, "last_name")}
-                      />
-                    </InputGroup>
-                    <InputGroup className="mb-3">
-                      <InputGroupAddon addonType="prepend">
-                        <InputGroupText>
-                          <i className="icon-user" />
-                        </InputGroupText>
-                      </InputGroupAddon>
-                      <Input
-                        required
-                        type="text"
-                        placeholder="Mobile Number Eg. 9843041699, (984)-3041699"
-                        value={this.state.phone_number}
-                        onChange={this.onChange.bind(this, "phone_number")}
-                      />
-                    </InputGroup>
-                    {this.displayPhoneValidationInfo()}
+        <div
+          className="pt-3"
+          style={{
+            position: "absolute",
+            top: "10px",
+            left: "20px",
+            color: "#e6e0d5"
+          }}
+        >
+          <Container>
+            <a
+              href="/"
+              style={{
+                color: "inherit"
+              }}
+            >
+              <i className="fa fa-angle-left" />
+              <span className="ml-2"> Back to home </span>
+            </a>
+          </Container>
+        </div>
+        <div className="app flex-row align-items-center">
+          <Container>
+            <Row className="justify-content-center">
+              <Col md="6">
+                <Card className="mx-4">
+                  <CardBody className="p-4">
+                    <h1>Individual Register</h1>
+                    <p className="text-muted">Create your account</p>
+                    <Form onSubmit={this.onFormSubmit}>
+                      <InputGroup className="mb-3">
+                        <InputGroupAddon addonType="prepend">
+                          <InputGroupText>
+                            <i className="icon-user" />
+                          </InputGroupText>
+                        </InputGroupAddon>
+                        <Input
+                          autoFocus
+                          required
+                          type="text"
+                          placeholder="First Name"
+                          value={this.state.first_name}
+                          onChange={this.onChange.bind(this, "first_name")}
+                        />
+                      </InputGroup>
+                      <InputGroup className="mb-3">
+                        <InputGroupAddon addonType="prepend">
+                          <InputGroupText>
+                            <i className="icon-user" />
+                          </InputGroupText>
+                        </InputGroupAddon>
+                        <Input
+                          required
+                          type="text"
+                          placeholder="Last Name"
+                          value={this.state.last_name}
+                          onChange={this.onChange.bind(this, "last_name")}
+                        />
+                      </InputGroup>
+                      <InputGroup className="mb-3">
+                        <InputGroupAddon addonType="prepend">
+                          <InputGroupText>
+                            <i className="icon-user" />
+                          </InputGroupText>
+                        </InputGroupAddon>
+                        <Input
+                          required
+                          type="text"
+                          placeholder="Mobile Number Eg. 9843041699, (984)-3041699"
+                          value={this.state.phone_number}
+                          onChange={this.onChange.bind(this, "phone_number")}
+                        />
+                      </InputGroup>
+                      {this.displayPhoneValidationInfo()}
 
-                    <InputGroup className="mb-3">
-                      <InputGroupAddon addonType="prepend">
-                        <InputGroupText>
-                          <i className="icon-user" />
-                        </InputGroupText>
-                      </InputGroupAddon>
-                      <Input
-                        required
-                        type="text"
-                        placeholder="Username"
-                        value={this.state.username}
-                        onChange={this.onChange.bind(this, "username")}
-                      />
-                    </InputGroup>
-                    <InputGroup className="mb-3">
-                      <InputGroupAddon addonType="prepend">
-                        <InputGroupText>@</InputGroupText>
-                      </InputGroupAddon>
-                      <Input
-                        required
-                        type="text"
-                        placeholder="Email"
-                        value={this.state.email}
-                        onChange={this.onChange.bind(this, "email")}
-                      />
-                    </InputGroup>
+                      <InputGroup className="mb-3">
+                        <InputGroupAddon addonType="prepend">
+                          <InputGroupText>
+                            <i className="icon-user" />
+                          </InputGroupText>
+                        </InputGroupAddon>
+                        <Input
+                          required
+                          type="text"
+                          placeholder="Username"
+                          value={this.state.username}
+                          onChange={this.onChange.bind(this, "username")}
+                        />
+                      </InputGroup>
+                      <InputGroup className="mb-3">
+                        <InputGroupAddon addonType="prepend">
+                          <InputGroupText>@</InputGroupText>
+                        </InputGroupAddon>
+                        <Input
+                          required
+                          type="text"
+                          placeholder="Email"
+                          value={this.state.email}
+                          onChange={this.onChange.bind(this, "email")}
+                        />
+                      </InputGroup>
 
-                    {this.displayEmailValidationInfo()}
-                    <InputGroup className="mb-3">
-                      <InputGroupAddon addonType="prepend">
-                        <InputGroupText>
-                          <i className="icon-lock" />
-                        </InputGroupText>
-                      </InputGroupAddon>
-                      <Input
-                        required
-                        type="password"
-                        value={this.state.password}
-                        onChange={this.onChange.bind(this, "password")}
-                        placeholder="Password"
-                      />
-                    </InputGroup>
-                    <InputGroup className="mb-4">
-                      <InputGroupAddon addonType="prepend">
-                        <InputGroupText>
-                          <i className="icon-lock" />
-                        </InputGroupText>
-                      </InputGroupAddon>
-                      <Input
-                        required
-                        value={this.state.confirm_password}
-                        type="password"
-                        placeholder="Repeat password"
-                        onChange={this.onChange.bind(this, "confirm_password")}
-                      />
-                    </InputGroup>
-                    <FormGroup check>
-                      <Col sm={{ size: 10 }}>
-                        <FormGroup check>
-                          <Label check>
-                            <Input
-                              type="checkbox"
-                              id="checkbox2"
-                              onChange={event =>
-                                this.setState(
-                                  { checked: event.target.checked },
-                                  () => console.log("state: ", this.state)
-                                )
-                              }
-                            />{" "}
-                            I agree to{" "}
-                            <a
-                              href="http://techkunja.com.np"
-                              rel="noopener noreferrer"
-                              target="_blank"
-                            >
-                              User Agreement
-                            </a>{" "}
-                            and{" "}
-                            <a
-                              href="http://techkunja.com.np"
-                              rel="noopener noreferrer"
-                              target="_blank"
-                            >
-                              Privacy Policy
-                            </a>{" "}
-                            of Bhetincha.
-                          </Label>
-                        </FormGroup>
+                      {this.displayEmailValidationInfo()}
+                      <InputGroup className="mb-3">
+                        <InputGroupAddon addonType="prepend">
+                          <InputGroupText>
+                            <i className="icon-lock" />
+                          </InputGroupText>
+                        </InputGroupAddon>
+                        <Input
+                          required
+                          type="password"
+                          value={this.state.password}
+                          onChange={this.onChange.bind(this, "password")}
+                          placeholder="Password"
+                        />
+                      </InputGroup>
+                      <InputGroup className="mb-4">
+                        <InputGroupAddon addonType="prepend">
+                          <InputGroupText>
+                            <i className="icon-lock" />
+                          </InputGroupText>
+                        </InputGroupAddon>
+                        <Input
+                          required
+                          value={this.state.confirm_password}
+                          type="password"
+                          placeholder="Repeat password"
+                          onChange={this.onChange.bind(
+                            this,
+                            "confirm_password"
+                          )}
+                        />
+                      </InputGroup>
+                      <FormGroup check>
+                        <Col sm={{ size: 10 }}>
+                          <FormGroup check>
+                            <Label check>
+                              <Input
+                                type="checkbox"
+                                id="checkbox2"
+                                onChange={event =>
+                                  this.setState(
+                                    { checked: event.target.checked },
+                                    () => console.log("state: ", this.state)
+                                  )
+                                }
+                              />{" "}
+                              I agree to{" "}
+                              <a
+                                href="http://techkunja.com.np"
+                                rel="noopener noreferrer"
+                                target="_blank"
+                              >
+                                User Agreement
+                              </a>{" "}
+                              and{" "}
+                              <a
+                                href="http://techkunja.com.np"
+                                rel="noopener noreferrer"
+                                target="_blank"
+                              >
+                                Privacy Policy
+                              </a>{" "}
+                              of Bhetincha.
+                            </Label>
+                          </FormGroup>
+                        </Col>
+                      </FormGroup>
+
+                      <Button color="success" block className="mt-2">
+                        Create Account
+                      </Button>
+                    </Form>
+                  </CardBody>
+
+                  <CardFooter className="p-4">
+                    <span>
+                      <a
+                        href="#"
+                        onClick={() =>
+                          this.props.history.push("/business-register")
+                        }
+                      >
+                        Register as Business{" "}
+                      </a>
+                    </span>
+                    {/* <Row>
+                      <Col xs="12" sm="6">
+                        <Button className="btn-facebook" block>
+                          <span>facebook</span>
+                        </Button>
                       </Col>
-                    </FormGroup>
-
-                    <Button color="success" block className="mt-2">
-                      Create Account
-                    </Button>
-                  </Form>
-                </CardBody>
-
-                <CardFooter className="p-4">
-                  <span>
-                    <a
-                      href="#"
-                      onClick={() =>
-                        this.props.history.push("/business-register")
-                      }
-                    >
-                      Register as Business{" "}
-                    </a>
-                  </span>
-                  {/* <Row>
-                    <Col xs="12" sm="6">
-                      <Button className="btn-facebook" block>
-                        <span>facebook</span>
-                      </Button>
-                    </Col>
-                    <Col xs="12" sm="6">
-                      <Button className="btn-twitter" block>
-                        <span>twitter</span>
-                      </Button>
-                    </Col>
-                  </Row> */}
-                  {/* <div>
-                    <FacebookLogin
-                      size="small"
-                      appId="2110205529228108"
-                      autoLoad={false}
-                      fields="name,email,picture"
-                      onClick={this.componentClicked}
-                      callback={this.responseFacebook}
-                    />
-                    <GoogleLogin
-                      autoLoad={false}
-                      clientId="317261253014-8bvqg3ehh145unueb8p67bomeapc9t3n.apps.googleusercontent.com"
-                      buttonText="Login With Google"
-                      onSuccess={this.responseGoogle}
-                      onFailure={this.responseGoogle}
-                    />
-                  </div> */}
-                </CardFooter>
-              </Card>
-            </Col>
-          </Row>
-        </Container>
+                      <Col xs="12" sm="6">
+                        <Button className="btn-twitter" block>
+                          <span>twitter</span>
+                        </Button>
+                      </Col>
+                    </Row> */}
+                    {/* <div>
+                      <FacebookLogin
+                        size="small"
+                        appId="2110205529228108"
+                        autoLoad={false}
+                        fields="name,email,picture"
+                        onClick={this.componentClicked}
+                        callback={this.responseFacebook}
+                      />
+                      <GoogleLogin
+                        autoLoad={false}
+                        clientId="317261253014-8bvqg3ehh145unueb8p67bomeapc9t3n.apps.googleusercontent.com"
+                        buttonText="Login With Google"
+                        onSuccess={this.responseGoogle}
+                        onFailure={this.responseGoogle}
+                      />
+                    </div> */}
+                  </CardFooter>
+                </Card>
+              </Col>
+            </Row>
+          </Container>
+        </div>
       </div>
     );
   }

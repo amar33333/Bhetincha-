@@ -10,9 +10,12 @@ class CustomModal extends Component {
         className={this.props.className}
         size={this.props.size}
       >
-        <ModalHeader toggle={this.props.toggleModal}>
-          {this.props.title}
-        </ModalHeader>
+        {this.props.title ? (
+          <ModalHeader toggle={this.props.toggleModal}>
+            {this.props.title}
+          </ModalHeader>
+        ) : null}
+
         <ModalBody>{this.props.children}</ModalBody>
       </Modal>
     );
