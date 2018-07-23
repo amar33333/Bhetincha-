@@ -97,7 +97,8 @@ class PropertyList extends Component {
               __html: this.state.properties[cellInfo.index][cellInfo.column.id]
             }}
           />
-        )
+        ),
+        width: 70
       },
       {
         Header: "Name",
@@ -113,6 +114,11 @@ class PropertyList extends Component {
       {
         Header: "Filterable",
         accessor: "filterAble"
+      },
+      {
+        Header: "Unit",
+        accessor: "unit",
+        Cell: ({ value }) => value.join(", ")
       },
       {
         Header: "Actions",

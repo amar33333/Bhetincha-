@@ -9,7 +9,15 @@ import {
   Row,
   Col,
   Input,
-  Button
+  InputGroup,
+  InputGroupDropdown,
+  InputGroupButtonDropdown,
+  InputGroupAddon,
+  Button,
+  Dropdown,
+  DropdownToggle,
+  DropdownMenu,
+  DropdownItem
 } from "reactstrap";
 import Select from "react-select";
 
@@ -33,6 +41,7 @@ class ProductAddEdit extends Component {
     }
 
     this.state = {
+      dropdownOpen: false,
       productSubmit: false,
       name: "",
       price: "",
@@ -45,6 +54,11 @@ class ProductAddEdit extends Component {
       ...extra
     };
   }
+  toggleDropDown = () => {
+    this.setState({
+      dropdownOpen: !this.state.dropdownOpen
+    });
+  };
 
   componentDidUpdate(prevProps, prevState) {
     if (
@@ -286,16 +300,25 @@ class ProductAddEdit extends Component {
               attribute.required ? "*" : ""
             }`}</Label>
             <Col sm={9}>
-              <Input
-                required={attribute.required}
-                type="number"
-                step="0.01"
-                placeholder={attribute.name}
-                value={this.state[attribute.name]}
-                onChange={event =>
-                  this.onChange(attribute.name, event.target.value)
-                }
-              />
+              <InputGroup>
+                <Input
+                  required={attribute.required}
+                  type="number"
+                  step="0.01"
+                  placeholder={attribute.name}
+                  value={this.state[attribute.name]}
+                  onChange={event =>
+                    this.onChange(attribute.name, event.target.value)
+                  }
+                />
+                <Input type="select" name="select" id="exampleSelect">
+                  <option>1</option>
+                  <option>2</option>
+                  <option>3</option>
+                  <option>4</option>
+                  <option>5</option>
+                </Input>
+              </InputGroup>
             </Col>
           </FormGroup>
         );

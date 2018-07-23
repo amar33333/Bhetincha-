@@ -21,6 +21,7 @@ class PropertyItemAddNew extends Component {
 
     this.state = {
       name: "",
+      unit: [],
       fieldType: null,
       required: false,
       defaultValueString: "",
@@ -43,6 +44,7 @@ class PropertyItemAddNew extends Component {
       const updates = { propertySubmit: false };
       if (!this.props.error) {
         updates.name = "";
+        updates.unit = [];
         updates.fieldType = null;
         updates.required = false;
         updates.defaultValueString = "";
@@ -71,6 +73,7 @@ class PropertyItemAddNew extends Component {
 
     const {
       name,
+      unit,
       fieldType,
       required,
       defaultValueDateTime,
@@ -86,6 +89,7 @@ class PropertyItemAddNew extends Component {
 
     const body = {
       name: name.split(" ").join("_"),
+      unit: unit.map(({ value }) => value),
       attributeTypeId: fieldType.uid,
       categoryId: this.props.activeCategory,
       required,
@@ -170,6 +174,18 @@ class PropertyItemAddNew extends Component {
                       options={this.props.attributes}
                       valueKey="uid"
                       labelKey="name"
+                    />
+                  </Col>
+                </FormGroup>
+                <FormGroup row>
+                  <Label sm={3}>Units</Label>
+                  <Col sm={9}>
+                    <Select.Creatable
+                      multi
+                      onChange={unit => this.setState({ unit })}
+                      value={this.state.unit}
+                      noResultsText="Type unit and press tab or enter"
+                      placeholder="Create Units"
                     />
                   </Col>
                 </FormGroup>

@@ -4,7 +4,6 @@ import PaginationComponent from "./Pagination";
 import FilterRange from "./FilterRange";
 import { Container, Row, Col } from "reactstrap";
 import { Card, Select } from "semantic-ui-react";
-import { filter } from "rxjs/operators";
 
 const filterOptions = [
   {
