@@ -4,7 +4,6 @@ import { connect } from "react-redux";
 import { Container, Row, Col } from "reactstrap";
 
 import ProductList from "./ProductList";
-import PaginationComponent from "./Pagination";
 import Filters from "./Filters";
 import MegaMenu from "./MegaMenu";
 import EcommerceMainNav from "./EcommerceMainNav";
@@ -57,6 +56,21 @@ class Home extends Component {
 
   onSelectProduct = productId =>
     this.props.history.push(`/ecommerce/product/${productId}`);
+
+  handleFilterChange = data => {
+    const contains = this.props.filters.find(x => x.name === data.name);
+    let filters = [...this.props.filters.filter(x => x.name !== data.name)];
+    if (contains) {
+      if (["Choices", "MultipleChoices"].includes(data.fieldType)) {
+        if (data.data.length) filters.push(data);
+      } else {
+        filters.push(data);
+      }
+    } else {
+      filters.push(data);
+    }
+    this.props.onFilterParametersChangeProductsList({ filters });
+  };
 
   render() {
     return (
@@ -112,7 +126,11 @@ class Home extends Component {
                   )}
                 </Col>
                 <Col xs="12">
-                  <Filters filters={this.props.filterAttributes} />
+                  <Filters
+                    filters={this.props.filterAttributes}
+                    // selectedFilters={this.props.filters}
+                    handleFilterChange={this.handleFilterChange}
+                  />
                 </Col>
               </Row>
             </Col>
@@ -133,6 +151,13 @@ class Home extends Component {
                 handlePaginationChange={(_, { activePage }) => {
                   this.props.onFilterParametersChangeProductsList({
                     frm: (activePage - 1) * this.props.productPerPage
+                  });
+                }}
+                handleFilterChange={this.handleFilterChange}
+                handleSortChange={({ sortby, desc }) => {
+                  this.props.onFilterParametersChangeProductsList({
+                    sortby,
+                    desc
                   });
                 }}
               />
@@ -158,7 +183,7 @@ export default connect(
         activeCategory,
         breadcrumbs
       },
-      filterProducts: { frm: productFromIndex, size: productPerPage }
+      filterProducts: { frm: productFromIndex, size: productPerPage, filters }
     }
   }) => ({
     categories,
@@ -170,7 +195,8 @@ export default connect(
     breadcrumbs,
     productFromIndex,
     productPerPage,
-    cookies
+    cookies,
+    filters
   }),
   {
     onCategoriesList,

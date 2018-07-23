@@ -12,33 +12,60 @@ class Filters extends Component {
               <FilterRange
                 withTitle
                 key={i}
-                min={data.min}
-                max={data.max}
+                value={{ min: data.min, max: data.max }}
                 name="Discount"
+                onChangeComplete={({ min, max }) =>
+                  this.props.handleFilterChange({
+                    lte: max,
+                    gte: min,
+                    fieldType: data.fieldType,
+                    name: data.name
+                  })
+                }
               />
             );
+          } else if (data.name === "price") {
+            return null;
           } else if (
             data.fieldType &&
             ["Choices", "MultipleChoices"].includes(data.fieldType)
           ) {
             return (
               <FilterChoice
-                key={data.uid}
+                key={i}
                 options={data.options}
                 name={data.name.split("_").join(" ")}
+                onChange={checked => {
+                  this.props.handleFilterChange({
+                    data: checked,
+                    fieldType: data.fieldType,
+                    name: data.name
+                  });
+                }}
               />
             );
           } else if (
             data.fieldType &&
-            ["Integer", "Float", "DateTime"].includes(data.fieldType)
+            [
+              "Integer",
+              "Float"
+              //  "DateTime"
+            ].includes(data.fieldType)
           ) {
             return (
               <FilterRange
                 withTitle
-                key={data.uid}
-                min={data.min}
-                max={data.max}
+                key={i}
+                value={{ min: data.min, max: data.max }}
                 name={data.name.split("_").join(" ")}
+                onChangeComplete={({ min, max }) =>
+                  this.props.handleFilterChange({
+                    lte: max,
+                    gte: min,
+                    fieldType: data.fieldType,
+                    name: data.name
+                  })
+                }
               />
             );
           }

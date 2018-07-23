@@ -1,6 +1,7 @@
 import {
   FETCH_ECOMMERCE_PRODUCTS_FULFILLED,
-  FILTER_PARAMETERS_CHANGE_PRODUCTS_LIST
+  FILTER_PARAMETERS_CHANGE_PRODUCTS_LIST,
+  FETCH_ECOMMERCE_CATEGORY_CONFIG_FULFILLED
 } from "../actions/types";
 
 // {
@@ -28,6 +29,8 @@ export default function(state = INITIAL_STATE, action) {
     case FILTER_PARAMETERS_CHANGE_PRODUCTS_LIST:
       return { ...state, ...action.payload };
 
+    case FETCH_ECOMMERCE_CATEGORY_CONFIG_FULFILLED:
+      return { ...state, filters: [] };
     // case FETCH_ECOMMERCE_PRODUCTS_FULFILLED:
     //   return {
     //     ...state
