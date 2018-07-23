@@ -19,6 +19,8 @@ import { validatePhone } from "../../utils/Extras";
 
 import { onBusinessRegisterSubmit } from "../../../actions";
 
+import background from "../../../static/img/city_new.jpg";
+
 class Register extends Component {
   state = {
     business_name: "",
@@ -74,7 +76,14 @@ class Register extends Component {
 
   render() {
     return (
-      <div className="app flex-row align-items-center">
+      <div
+        className="app flex-row align-items-center"
+        style={{
+          backgroundRepeat: "no-repeat",
+          backgroundSize: "cover",
+          backgroundImage: `url(${background})`
+        }}
+      >
         <Container>
           <Row className="justify-content-center">
             <Col md="6">
