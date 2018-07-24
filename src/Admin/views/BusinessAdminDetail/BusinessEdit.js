@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import { toast } from "react-toastify";
 
 import { Row, Col, Card, CardHeader, CardBody, Button } from "reactstrap";
 
@@ -85,7 +86,13 @@ class BusinessEdit extends Component {
 
     console.log("this.propsdttaa: ", this.propsData);
 
-    if (!this.subBusinessAdminDetailRef.getState().phone_validation_error)
+    if (
+      !this.subBusinessAdminDetailRef.getState().phone_validation_error &&
+      !this.subBusinessAdminDetailRef.getState().email_validation_error &&
+      !this.subBusinessAdminDetailRef.getState().website_validation_error &&
+      !this.subBusinessPrimaryAddressRef.getState().address
+        .email_validation_error
+    )
       this.props.onBusinessEdit({
         id: this.props.businessData.id,
         data: this.propsData,
@@ -168,6 +175,7 @@ class BusinessEdit extends Component {
                 onCategoryEachList={this.props.onCategoryEachList}
                 onUnmountSubCategories={this.props.onUnmountSubCategories}
                 onRemoveCategoryData={this.props.onRemoveCategoryData}
+                businessCreateErrors={this.props.businessCreateErrors}
                 cookies={this.props.cookies}
                 industryData={this.props.industryData}
                 categoryData={this.props.categoryData}
@@ -192,6 +200,7 @@ class BusinessEdit extends Component {
                 businessGet={this.props.businessGet}
                 onInitialPropsReceived={this.onInitialPropsReceived}
                 EDIT={this.props.EDIT}
+                businessCreateErrors={this.props.businessCreateErrors}
               />
               {/* <SubBusinessBranchWrapper
                     collapsed={this.state.businessBranchWrapperCollapse}
@@ -222,6 +231,7 @@ class BusinessEdit extends Component {
                     businessGet={this.props.businessGet}
                     onInitialPropsReceived={this.onInitialPropsReceived}
                     EDIT={this.props.EDIT}
+                    businessCreateErrors={this.props.businessCreateErrors}
                   />
                 </Col>
                 <Col>
@@ -237,6 +247,7 @@ class BusinessEdit extends Component {
                     businessGet={this.props.businessGet}
                     onInitialPropsReceived={this.onInitialPropsReceived}
                     EDIT={this.props.EDIT}
+                    businessCreateErrors={this.props.businessCreateErrors}
                   />
                 </Col>
               </Row>
@@ -253,6 +264,7 @@ class BusinessEdit extends Component {
                     businessGet={this.props.businessGet}
                     onInitialPropsReceived={this.onInitialPropsReceived}
                     EDIT={this.props.EDIT}
+                    businessCreateErrors={this.props.businessCreateErrors}
                   />
                 </Col>
                 <Col xs="12" md="6">
@@ -267,6 +279,7 @@ class BusinessEdit extends Component {
                     businessGet={this.props.businessGet}
                     onInitialPropsReceived={this.onInitialPropsReceived}
                     EDIT={this.props.EDIT}
+                    businessCreateErrors={this.props.businessCreateErrors}
                   />
                 </Col>
               </Row>
@@ -325,6 +338,7 @@ export default connect(
     categoryData: categories.categoryData,
     industries: industries.industries,
     industryData: industries.industryData,
+    businessCreateErrors: business_reducer.businessCreateErrors,
     ...auth,
     general_setup
   }),

@@ -72,7 +72,6 @@ class Register extends Component {
   };
 
   render() {
-    console.log("porpos: ", this.props);
     return (
       <div
         style={{
@@ -171,6 +170,12 @@ class Register extends Component {
                     </a>
                   </Col>
                 </Row>
+                <ErrorHandling
+                  error={
+                    this.props.registerErrors &&
+                    this.props.registerErrors.abusiness_phone
+                  }
+                />
               </Col>
             </Row>
           </Container>

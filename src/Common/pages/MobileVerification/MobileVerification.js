@@ -25,7 +25,7 @@ import {
   onUserRegisterSubmit
 } from "../../../actions";
 
-import { validateEmail } from "../../../Common/utils/Extras";
+import { validateEmail, ErrorHandling } from "../../../Common/utils/Extras";
 import background from "../../../static/img/city_new.jpg";
 
 class MobileVerification extends Component {
@@ -99,24 +99,24 @@ class MobileVerification extends Component {
 
     const { id } = querystring.parse(this.props.location.search.slice(1));
 
-    if (!email_validation_error)
-      if (password === confirm_password)
-        this.props.onUserRegisterSubmit({
-          id,
-          body: {
-            username,
-            password,
-            email,
-            token
-          },
-          history: this.props.history,
-          slug: this.props.phone_verification_response
-            ? this.props.phone_verification_response.slug
-            : null
-        });
-      else {
-        toast.error("Password Mismatch !!!");
-      }
+    // if (!email_validation_error)
+    if (password === confirm_password)
+      this.props.onUserRegisterSubmit({
+        id,
+        body: {
+          username,
+          password,
+          email,
+          token
+        },
+        history: this.props.history,
+        slug: this.props.phone_verification_response
+          ? this.props.phone_verification_response.slug
+          : null
+      });
+    else {
+      toast.error("Password Mismatch !!!");
+    }
   };
 
   onResendToken = () => {
@@ -149,7 +149,6 @@ class MobileVerification extends Component {
   };
 
   render() {
-    console.log("mobile props: ", this.props);
     return (
       <div
         style={{
@@ -208,6 +207,7 @@ class MobileVerification extends Component {
                       value={this.state.verificationToken}
                       onChange={this.onChange.bind(this, "verificationToken")}
                     />
+                    <ErrorHandling error={this.props.registerErrors} />
                   </InputGroup>
                   <InputGroup className="mb-3">
                     <InputGroupAddon addonType="prepend">
@@ -224,6 +224,12 @@ class MobileVerification extends Component {
                       onChange={this.onChange.bind(this, "username")}
                     />
                   </InputGroup>
+                  <ErrorHandling
+                    error={
+                      this.props.registerErrors &&
+                      this.props.registerErrors.username
+                    }
+                  />
                   <InputGroup className="mb-3">
                     <InputGroupAddon addonType="prepend">
                       <InputGroupText>@</InputGroupText>
@@ -237,7 +243,12 @@ class MobileVerification extends Component {
                     />
                   </InputGroup>
                   {this.displayEmailValidationInfo()}
-
+                  <ErrorHandling
+                    error={
+                      this.props.registerErrors &&
+                      this.props.registerErrors.email
+                    }
+                  />
                   <InputGroup className="mb-4">
                     <InputGroupAddon addonType="prepend">
                       <InputGroupText>

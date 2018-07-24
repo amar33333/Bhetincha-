@@ -32,14 +32,18 @@ class BusinessPrimaryAddress extends Component {
   onFormEdit = event => {
     event.preventDefault();
 
-    this.props.onPrimaryAddressEdit({
-      data: {
-        ...this.subBusinessPrimaryAddressRef.getState()
-      },
-      id: this.props.cookies.user_data.business_id,
-      access_token: this.access_token,
-      EDIT: this.props.EDIT
-    });
+    if (
+      !this.subBusinessPrimaryAddressRef.getState().address
+        .email_validation_error
+    )
+      this.props.onPrimaryAddressEdit({
+        data: {
+          ...this.subBusinessPrimaryAddressRef.getState()
+        },
+        id: this.props.cookies.user_data.business_id,
+        access_token: this.access_token,
+        EDIT: this.props.EDIT
+      });
   };
 
   render() {
@@ -55,6 +59,7 @@ class BusinessPrimaryAddress extends Component {
             businessGet={this.props.businessGet}
             onInitialPropsReceived={this.onInitialPropsReceived}
             EDIT={this.props.EDIT}
+            primaryAddressEditErrors={this.props.primaryAddressEditErrors}
           />
           <Row>
             <Col xs="12">
@@ -71,7 +76,12 @@ class BusinessPrimaryAddress extends Component {
 
 const mapStateToProps = ({
   BusinessContainer: {
-    business_reducer: { primary_address_details, businessGet, EDIT },
+    business_reducer: {
+      primary_address_details,
+      businessGet,
+      EDIT,
+      primaryAddressEditErrors
+    },
     primary_address: { countries }
   },
   auth: { cookies }
@@ -81,7 +91,8 @@ const mapStateToProps = ({
     businessGet,
     EDIT,
     cookies,
-    countries
+    countries,
+    primaryAddressEditErrors
   };
 };
 

@@ -53,6 +53,12 @@ import {
   EDIT_SLUG_FULFILLED,
   EDIT_SLUG_PENDING,
   EDIT_SLUG_REJECTED,
+  CREATE_BRANCH_FULFILLED,
+  CREATE_BRANCH_REJECTED,
+  CREATE_BRANCH_PENDING,
+  EDIT_BRANCH_EACH_FULFILLED,
+  EDIT_BRANCH_EACH_PENDING,
+  EDIT_BRANCH_EACH_REJECTED,
   UNMOUNT_BRANCH,
   TOGGLE_EDIT
 } from "../actions/types";
@@ -74,11 +80,32 @@ const INITIAL_STATE = {
   businessDetails: null,
   logo: null,
   cover_image: null,
-  slugAvailable: true
+  slugAvailable: true,
+  primaryAddressEditErrors: null,
+  branchCreateEditErrors: null,
+  businessDetailsEditErrors: null
 };
 
 export default function(state = INITIAL_STATE, action) {
   switch (action.type) {
+    case CREATE_BRANCH_PENDING:
+      return {
+        ...state,
+        fetchLoading: true
+      };
+    case CREATE_BRANCH_REJECTED:
+      return {
+        ...state,
+        fetchLoading: false,
+        branchCreateEditErrors: action.payload
+      };
+    case CREATE_BRANCH_FULFILLED:
+      return {
+        ...state,
+        fetchLoading: false,
+        branchCreateEditErrors: null
+      };
+
     case CHECK_SLUG_PENDING:
       return { ...state, fetchLoading: true };
     case CHECK_SLUG_REJECTED:
@@ -129,13 +156,19 @@ export default function(state = INITIAL_STATE, action) {
       return { ...state, fetchLoading: true, businessGet: true };
 
     case EDIT_BUSINESS_DETAILS_REJECTED:
-      return { ...state, fetchLoading: false, businessGet: true };
+      return {
+        ...state,
+        fetchLoading: false,
+        businessGet: true,
+        businessDetailsEditErrors: action.payload
+      };
 
     case EDIT_BUSINESS_DETAILS_FULFILLED:
       return {
         ...state,
         fetchLoading: false,
-        businessGet: true
+        businessGet: true,
+        businessDetailsEditErrors: null
       };
 
     case FETCH_BUSINESS_BRANCH_PENDING:
@@ -161,17 +194,23 @@ export default function(state = INITIAL_STATE, action) {
         branch: action.payload
       };
 
-    // case EDIT_BRANCH_EACH_PENDING:
-    //   return { ...state, fetchLoading: true, businessGet: true };
-    // case EDIT_BRANCH_EACH_REJECTED:
-    //   return { ...state, fetchLoading: false, businessGet: true };
-    // case EDIT_BRANCH_EACH_FULFILLED:
-    //   return {
-    //     ...state,
-    //     fetchLoading: false,
-    //     businessGet: true,
-    //     branch: action.payload
-    //   };
+    case EDIT_BRANCH_EACH_PENDING:
+      return { ...state, fetchLoading: true, businessGet: true };
+    case EDIT_BRANCH_EACH_REJECTED:
+      return {
+        ...state,
+        fetchLoading: false,
+        businessGet: true,
+        branchCreateEditErrors: action.payload
+      };
+    case EDIT_BRANCH_EACH_FULFILLED:
+      return {
+        ...state,
+        fetchLoading: false,
+        businessGet: true,
+        branch: action.payload,
+        branchCreateEditErrors: action.payload
+      };
 
     case FETCH_BUSINESS_PENDING:
       return { ...state, loading: true };
@@ -261,11 +300,17 @@ export default function(state = INITIAL_STATE, action) {
       return {
         ...state,
         businessGet: true,
-        loading: false
+        loading: false,
+        primaryAddressEditErrors: null
       };
 
     case EDIT_PRIMARY_ADDRESS_REJECTED:
-      return { ...state, fetchLoading: false, businessGet: true };
+      return {
+        ...state,
+        fetchLoading: false,
+        businessGet: true,
+        primaryAddressEditErrors: action.payload
+      };
 
     case EDIT_BUSINESS_PENDING:
       return { ...state, fetchLoading: true, businessGet: true };

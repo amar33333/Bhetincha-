@@ -13,6 +13,8 @@ import {
   Collapse
 } from "reactstrap";
 
+import { validatePhone, validateEmail } from "../../../Common/utils/Extras";
+
 class SubBusinessContact extends Component {
   constructor(props) {
     super(props);
@@ -23,7 +25,9 @@ class SubBusinessContact extends Component {
       designation: props.contact.designation,
       mobileNumber: props.contact.mobileNumber,
       department: props.contact.department,
-      collapsed: false
+      collapsed: false,
+      email_validation_error: false,
+      phone_validation_error: false
     };
   }
   toggleCollapse = () => {
@@ -58,20 +62,55 @@ class SubBusinessContact extends Component {
   // };
 
   onChange = (key, event) => {
+    const val = event.target.value;
+
     if (key === "name" || key === "department" || key === "designation") {
       this.setState(
         {
-          [key]: event.target.value.replace(/\b\w/g, l => l.toUpperCase())
+          [key]: val.replace(/\b\w/g, l => l.toUpperCase())
         },
         () => {
           this.props.onContactSave(this.state);
         }
       );
+    } else if (key === "email") {
+      this.setState({ [key]: val === "" ? null : val }, () => {
+        this.props.onContactSave(this.state);
+
+        if (this.state.email && !validateEmail(this.state.email)) {
+          this.setState({ email_validation_error: true });
+        } else this.setState({ email_validation_error: false });
+      });
+    } else if (key === "mobileNumber") {
+      this.setState({ [key]: val === "" ? null : val }, () => {
+        this.props.onContactSave(this.state);
+
+        if (
+          this.state.mobileNumber &&
+          !validatePhone(this.state.mobileNumber)
+        ) {
+          this.setState({ phone_validation_error: true });
+        } else this.setState({ phone_validation_error: false });
+      });
     } else {
-      this.setState({ [key]: event.target.value }, () => {
+      this.setState({ [key]: val }, () => {
         this.props.onContactSave(this.state);
       });
     }
+  };
+
+  displayPhoneValidationInfo = () => {
+    if (this.state.mobileNumber)
+      if (this.state.phone_validation_error)
+        return <p style={{ color: "red" }}>Invalid Phone Number</p>;
+      else return <p style={{ color: "green" }}>Phone Number Valid</p>;
+  };
+
+  displayEmailValidationInfo = () => {
+    if (this.state.email)
+      if (this.state.email_validation_error)
+        return <p style={{ color: "red" }}>Invalid Email</p>;
+      else return <p style={{ color: "green" }}>Valid Email </p>;
   };
 
   onContactDelete = () => {
@@ -85,7 +124,9 @@ class SubBusinessContact extends Component {
       email: "",
       designation: "",
       mobileNumber: "",
-      department: ""
+      department: "",
+      email_validation_error: false,
+      phone_validation_error: false
     });
   };
 
@@ -160,6 +201,7 @@ class SubBusinessContact extends Component {
                     onChange={this.onChange.bind(this, "email")}
                   />
                 </FormGroup>
+                {this.displayEmailValidationInfo()}
               </Col>
               <Col xs="12" md="4">
                 <FormGroup>
@@ -182,6 +224,7 @@ class SubBusinessContact extends Component {
                     onChange={this.onChange.bind(this, "mobileNumber")}
                   />
                 </FormGroup>
+                {this.displayPhoneValidationInfo()}
               </Col>
             </Row>
             <Row style={{ marginBottom: 15 }}>

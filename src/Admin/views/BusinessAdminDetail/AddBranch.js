@@ -23,6 +23,8 @@ import {
 import { connect } from "react-redux";
 import SubBusinessContact from "./SubBusinessContact";
 
+import { validateEmail, ErrorHandling } from "../../../Common/utils/Extras";
+
 import {
   onAddressTreeList,
   onCountryList,
@@ -55,7 +57,8 @@ class AddBranch extends Component {
       tollFreeNumber: "",
       latitude: 27.7172453,
       longitude: 85.32391758465576,
-      contactPerson: []
+      contactPerson: [],
+      email_validation_error: false
     };
 
     this.countries = [];
@@ -143,13 +146,28 @@ class AddBranch extends Component {
   };
 
   onChange = (key, event) => {
+    const val = event.target.value;
+
     if (key === "addressLine1" || key === "addressLine2") {
       this.setState({
-        [key]: event.target.value.replace(/\b\w/g, l => l.toUpperCase())
+        [key]: val.replace(/\b\w/g, l => l.toUpperCase())
+      });
+    } else if (key === "email") {
+      this.setState({ [key]: val === "" ? null : val }, () => {
+        if (this.state.email && !validateEmail(this.state.email)) {
+          this.setState({ email_validation_error: true });
+        } else this.setState({ email_validation_error: false });
       });
     } else {
-      this.setState({ [key]: event.target.value });
+      this.setState({ [key]: val });
     }
+  };
+
+  displayEmailValidationInfo = () => {
+    if (this.state.email)
+      if (this.state.email_validation_error)
+        return <p style={{ color: "red" }}>Invalid Email</p>;
+      else return <p style={{ color: "green" }}>Valid Email </p>;
   };
 
   onChangeLatLng = ({ latLng }) => {
@@ -259,7 +277,8 @@ class AddBranch extends Component {
       addressLine2: "",
       po_box: "",
       tollFreeNumber: "",
-      contactPerson: []
+      contactPerson: [],
+      email_validation_error: false
     });
 
     // this.subBusinessBranchContactWrapperRef.clearState();
@@ -356,22 +375,24 @@ class AddBranch extends Component {
   };
 
   onBranchSave = () => {
-    this.props.onBranchAdd({
-      body: {
-        branchAddress: [this.getRefinedState()]
-      },
-      business_slug: this.props.match.params.businessSlug
-    });
+    if (!this.state.email_validation_error)
+      this.props.onBranchAdd({
+        body: {
+          branchAddress: [this.getRefinedState()]
+        },
+        business_slug: this.props.match.params.businessSlug
+      });
   };
 
   onBranchEdit = () => {
-    this.props.onBranchEdit({
-      body: {
-        ...this.getRefinedState()
-      },
-      branch_id: this.props.match.params.id,
-      business_slug: this.props.match.params.businessSlug
-    });
+    if (!this.state.email_validation_error)
+      this.props.onBranchEdit({
+        body: {
+          ...this.getRefinedState()
+        },
+        branch_id: this.props.match.params.id,
+        business_slug: this.props.match.params.businessSlug
+      });
   };
 
   render() {
@@ -614,6 +635,14 @@ class AddBranch extends Component {
                     onKeyDown={this._handleKeyPress}
                     onChange={this.onChange.bind(this, "email")}
                   />
+                  {this.displayEmailValidationInfo()}
+                  <ErrorHandling
+                    error={
+                      this.props.branchCreateEditErrors &&
+                      this.props.branchCreateEditErrors.branchAddress &&
+                      this.props.branchCreateEditErrors.branchAddress.email
+                    }
+                  />
                 </FormGroup>
               </Col>
               <Col xs="12" md="4">
@@ -759,6 +788,14 @@ class AddBranch extends Component {
                         </Button>
                       </Col>
                     </Row>
+                    <ErrorHandling
+                      errors={
+                        this.props.branchCreateEditErrors &&
+                        this.props.branchCreateEditErrors.branchAddress &&
+                        this.props.branchCreateEditErrors.branchAddress
+                          .contactPerson
+                      }
+                    />
                   </CardBody>
                 </Collapse>
               </Card>
@@ -804,14 +841,15 @@ export default connect(
       }
     },
     AdminContainer: {
-      business_reducer: { branch, EDIT },
+      business_reducer: { branch, EDIT, branchCreateEditErrors },
       general_setup: { countries }
     }
   }) => ({
     access_token,
     branch,
     EDIT,
-    countries
+    countries,
+    branchCreateEditErrors
   }),
   {
     onAddressTreeList,

@@ -47,9 +47,12 @@ import {
   FETCH_BUSINESS_BRANCH_FULFILLED,
   FETCH_BUSINESS_BRANCH_PENDING,
   FETCH_BUSINESS_BRANCH_REJECTED,
-  CREATE_BUSINESS_FULFILLED,
-  CREATE_BUSINESS_REJECTED,
-  CREATE_BUSINESS_PENDING,
+  CREATE_BRANCH_FULFILLED,
+  CREATE_BRANCH_REJECTED,
+  CREATE_BRANCH_PENDING,
+  EDIT_BRANCH_EACH_FULFILLED,
+  EDIT_BRANCH_EACH_PENDING,
+  EDIT_BRANCH_EACH_REJECTED,
   UNMOUNT_BRANCH,
   UNMOUNT_PAYMENT_METHOD,
   UNMOUNT_COMPANY_TYPE
@@ -98,27 +101,45 @@ const INITIAL_STATE = {
   businessData: null,
   branch: null,
   businessBranchData: [],
-  businessCreateErrors: null
+  branchCreateEditErrors: null
 };
 
 export default function(state = INITIAL_STATE, action) {
   switch (action.type) {
-    case CREATE_BUSINESS_PENDING:
+    case EDIT_BRANCH_EACH_PENDING:
       return {
         ...state,
         fetchLoading: true
       };
-    case CREATE_BUSINESS_REJECTED:
+    case EDIT_BRANCH_EACH_REJECTED:
       return {
         ...state,
         fetchLoading: false,
-        businessCreateErrors: action.payload
+        branchCreateEditErrors: action.payload
       };
-    case CREATE_BUSINESS_FULFILLED:
+    case EDIT_BRANCH_EACH_FULFILLED:
       return {
         ...state,
         fetchLoading: false,
-        businessCreateErrors: null
+        branchCreateEditErrors: null
+      };
+
+    case CREATE_BRANCH_PENDING:
+      return {
+        ...state,
+        fetchLoading: true
+      };
+    case CREATE_BRANCH_REJECTED:
+      return {
+        ...state,
+        fetchLoading: false,
+        branchCreateEditErrors: action.payload
+      };
+    case CREATE_BRANCH_FULFILLED:
+      return {
+        ...state,
+        fetchLoading: false,
+        branchCreateEditErrors: null
       };
 
     case FETCH_BUSINESS_BRANCH_PENDING:
@@ -203,13 +224,20 @@ export default function(state = INITIAL_STATE, action) {
     case EDIT_BUSINESS_PENDING:
       return { ...state, fetchLoading: true, businessGet: true };
     case EDIT_BUSINESS_REJECTED:
-      return { ...state, fetchLoading: false, businessGet: true };
+      console.log("edit error: ", action.payload);
+      return {
+        ...state,
+        fetchLoading: false,
+        businessGet: true
+        // businessCreateErrors: action.payload
+      };
     case EDIT_BUSINESS_FULFILLED:
       return {
         ...state,
         fetchLoading: false,
         businessGet: true,
         editBusinessSuccess: action.payload
+        // businessCreateErrors: null
       };
 
     case FETCH_BUSINESS_EACH_PENDING:

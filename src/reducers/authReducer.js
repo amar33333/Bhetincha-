@@ -32,6 +32,13 @@ import {
   CHECK_USER_ACTIVATED_FULFILLED,
   CHECK_USER_ACTIVATED_REJECTED,
   RESET_PHONE_VERIFICATION_REQUEST_ERROR,
+  CREATE_USER_FULFILLED,
+  CREATE_USER_REJECTED,
+  CREATE_USER_PENDING,
+  INDIVIDUAL_TOKEN_FULFILLED,
+  INDIVIDUAL_TOKEN_PENDING,
+  INDIVIDUAL_TOKEN_REJECTED,
+  RESET_AUTH_ERRORS,
   LOGOUT_USER
 } from "../actions/types";
 
@@ -56,6 +63,9 @@ const INITIAL_STATE = {
 
 export default function(state = INITIAL_STATE, action) {
   switch (action.type) {
+    case RESET_AUTH_ERRORS:
+      return { ...state, registerErrors: null };
+
     case LOGOUT_USER:
       return { ...state, cookies: action.payload };
 
@@ -103,19 +113,59 @@ export default function(state = INITIAL_STATE, action) {
       return { ...state, loading: true };
 
     case CREATE_BUSINESS_USER_FULFILLED:
-      return { ...state, business_user: action.payload, loading: false };
+      return {
+        ...state,
+        business_user: action.payload,
+        loading: false,
+        registerErrors: null
+      };
 
     case CREATE_BUSINESS_USER_REJECTED:
       return { ...state, loading: false, registerErrors: action.payload };
+
+    case INDIVIDUAL_TOKEN_PENDING:
+      return { ...state, loading: true };
+
+    case INDIVIDUAL_TOKEN_FULFILLED:
+      return {
+        ...state,
+        loading: false,
+        registerErrors: null
+      };
+
+    case INDIVIDUAL_TOKEN_REJECTED:
+      return { ...state, loading: false, registerErrors: action.payload };
+
+    case CREATE_USER_PENDING:
+      return { ...state, loading: true };
+
+    case CREATE_USER_FULFILLED:
+      return {
+        ...state,
+        loading: false,
+        registerErrors: null
+      };
+
+    case CREATE_USER_REJECTED:
+      return {
+        ...state,
+        loading: false,
+        registerErrors: action.payload
+      };
 
     case CREATE_INDIVIDUAL_USER_PENDING:
       return { ...state, loading: true };
 
     case CREATE_INDIVIDUAL_USER_FULFILLED:
-      return { ...state, individual_user: action.payload, loading: false };
+      return {
+        ...state,
+        individual_user: action.payload,
+        loading: false,
+        registerErrors: null
+      };
 
     case CREATE_INDIVIDUAL_USER_REJECTED:
-      return { ...state, loading: false };
+      return { ...state, loading: false, registerErrors: action.payload };
 
     case REQUEST_PHONE_VERIFICATION_PENDING:
       return { ...state, loading: true };

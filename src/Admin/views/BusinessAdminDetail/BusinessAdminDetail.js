@@ -66,7 +66,7 @@ class BusinessAdminDetail extends Component {
   onFormSubmit = event => {
     event.preventDefault();
 
-    console.log("onformsubmit:");
+    console.log("onformsubmit:", this.subBusinessPrimaryAddressRef.getState());
     this.propsData = {
       ...this.subBusinessAdminDetailRef.getState(),
       ...this.subBusinessAboutRef.getState(),
@@ -77,19 +77,25 @@ class BusinessAdminDetail extends Component {
       ...this.subBusinessWorkingHourRef.getState()
     };
 
-    // if (!this.subBusinessAdminDetailRef.getState().phone_validation_error)
-    // if (
-    //   !this.props.requiredParams.contactPerson ||
-    //   (this.propsData.address.contactPerson &&
-    //     this.propsData.address.contactPerson.length)
-    // )
-    this.props.onBusinessCreate({
-      data: this.propsData,
-      access_token: this.access_token
-    });
-    // else {
-    //   toast.error("Please add at-least One Contact Person");
-    // }
+    if (
+      !this.subBusinessAdminDetailRef.getState().phone_validation_error &&
+      !this.subBusinessAdminDetailRef.getState().email_validation_error &&
+      !this.subBusinessAdminDetailRef.getState().website_validation_error &&
+      !this.subBusinessPrimaryAddressRef.getState().address
+        .email_validation_error
+    )
+      if (
+        !this.props.requiredParams.contactPerson ||
+        (this.propsData.address.contactPerson &&
+          this.propsData.address.contactPerson.length)
+      )
+        this.props.onBusinessCreate({
+          data: this.propsData,
+          access_token: this.access_token
+        });
+      else {
+        toast.error("Please add at-least One Contact Person");
+      }
 
     // this.subBusinessAdminDetailRef.clearState();
     // this.subBusinessAboutRef.clearState();
@@ -197,6 +203,7 @@ class BusinessAdminDetail extends Component {
                   "businessLogoCollapse"
                 )}
                 ref={ref => (this.subBusinessLogoRef = ref)}
+                businessCreateErrors={this.props.businessCreateErrors}
               />
             </Col>
             <Col>
@@ -207,6 +214,7 @@ class BusinessAdminDetail extends Component {
                   "businessCoverImageCollapse"
                 )}
                 ref={ref => (this.subBusinessCoverImageRef = ref)}
+                businessCreateErrors={this.props.businessCreateErrors}
               />
             </Col>
           </Row>
@@ -220,6 +228,7 @@ class BusinessAdminDetail extends Component {
                 )}
                 ref={ref => (this.subBusinessAboutRef = ref)}
                 company_types={this.props.company_types}
+                businessCreateErrors={this.props.businessCreateErrors}
               />
             </Col>
             <Col>
@@ -230,6 +239,7 @@ class BusinessAdminDetail extends Component {
                   this,
                   "businessWorkingHourCollapse"
                 )}
+                businessCreateErrors={this.props.businessCreateErrors}
               />
             </Col>
           </Row>

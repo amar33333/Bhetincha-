@@ -23,7 +23,14 @@ import {
   InputGroup
 } from "reactstrap";
 
-const exclude_list = ["GROUP", "INDUSTRY", "USER"];
+const exclude_group_list = [];
+
+const exclude_nogroup_list = [
+  "CAN_ACCESS_BUSINESS_PANEL",
+  "CAN_ACCESS_PANEL_ADMIN",
+  "CAN_ACCESS_INDIVIDUAL_PANEL",
+  "CAN_ACCESS_PERMISSION"
+];
 
 class Permissions extends Component {
   constructor(props) {
@@ -42,7 +49,26 @@ class Permissions extends Component {
   }
 
   static getDerivedStateFromProps = (nextProps, prevState) => {
-    console.log("permision props: ", nextProps);
+    console.log("permision props: ", exclude_group_list);
+    let temp_excluded_permissions_list = {};
+
+    if (nextProps.permissions_list)
+      for (let eachKey in nextProps.permissions_list) {
+        if (eachKey !== "nogroup") {
+          if (exclude_group_list.indexOf(eachKey) === -1)
+            temp_excluded_permissions_list = {
+              ...temp_excluded_permissions_list,
+              [eachKey]: nextProps.permissions_list[eachKey]
+            };
+        } else {
+          temp_excluded_permissions_list = {
+            ...temp_excluded_permissions_list,
+            [eachKey]: nextProps.permissions_list[eachKey].filter(
+              nogroupEach => !exclude_nogroup_list.includes(nogroupEach.name)
+            )
+          };
+        }
+      }
 
     return {
       groups: nextProps.groups,
@@ -51,11 +77,14 @@ class Permissions extends Component {
         : nextProps.groups.find(item => item.name === "ADMIN"),
 
       permissions_list: nextProps.permissions_list,
-      excluded_permissions_list:
-        nextProps.permissions_list &&
-        Object.keys(nextProps.permissions_list).filter(
-          eachKey => exclude_list.indexOf(eachKey) === -1
-        )
+      excluded_permissions_list: temp_excluded_permissions_list
+      // excluded_permissions_list:
+      //   nextProps.permissions_list &&
+      //   Object.keys(nextProps.permissions_list).map(
+      //     eachKey =>
+      //       exclude_list.indexOf(eachKey) === -1 &&
+      //       nextProps.permissions_list[eachKey]
+      //   )
     };
   };
 
@@ -142,7 +171,7 @@ class Permissions extends Component {
     const checkbox_perm_list =
       this.state.group && this.state.group.name === "ADMIN"
         ? this.state.permissions_list
-        : this.state.permissions_list;
+        : this.state.excluded_permissions_list;
 
     // console.log("checkbox perm list: ", checkbox_perm_list);
     console.log("permission state: ", this.state);
@@ -189,6 +218,7 @@ class Permissions extends Component {
             {checkbox_perm_list[key].map((item, j) => {
               return (
                 <InputGroup
+                  key={j}
                   style={{
                     display: "inline",
                     marginRight: "40px",

@@ -123,7 +123,7 @@ export const onAboutGet = ({ access_token, id }) =>
 export const onAboutPut = ({ access_token, body, id }) =>
   ajax({
     method: "PUT",
-    url: `${BUSINESS_URL}${id}/`,
+    url: `${BUSINESS_PUT_URL}${id}/`,
     body,
     headers: {
       "Content-Type": "application/json",
