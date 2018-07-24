@@ -26,14 +26,24 @@ class ProductDetail extends Component {
             </div>
             <h3>Product Information</h3>
             <p>Name: {productDetail.name}</p>
-            <p>Price: {productDetail.price}</p>
-            <p>Discount: {productDetail.discount}</p>
+            <p>Price: {productDetail.price} Rs</p>
+            <p>Discount: {productDetail.discount} %</p>
             {this.props.attributes.map(attribute => {
-              if (productDetail[attribute.name]) {
+              let selectedKey = "";
+              if (
+                Object.keys(productDetail).find(key => {
+                  const found = key.split("--")[0] === attribute.name;
+                  if (found) selectedKey = key;
+                  return found;
+                })
+              ) {
                 return (
                   <p key={attribute.uid}>
                     {attribute.name.split("_").join(" ")}:
-                    {productDetail[attribute.name]}
+                    {productDetail[selectedKey]}{" "}
+                    {selectedKey.split("--").length > 1
+                      ? selectedKey.split("--")[1]
+                      : ""}
                   </p>
                 );
               } else {
