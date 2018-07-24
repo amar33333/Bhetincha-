@@ -61,6 +61,7 @@ class ProductList extends Component {
                     name: this.props.priceFilter.name
                   })
                 }
+                unit="Rs"
               />
             )}
           </Col>

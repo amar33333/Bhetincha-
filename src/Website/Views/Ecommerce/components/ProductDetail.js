@@ -137,14 +137,21 @@ class ProductDetail extends Component {
                 <Row>
                   <Col>
                     {this.props.attributes.map(attribute => {
-                      if (product[attribute.name]) {
+                      let selectedKey = "";
+                      if (
+                        Object.keys(product).find(key => {
+                          const found = key.split("--")[0] === attribute.name;
+                          if (found) selectedKey = key;
+                          return found;
+                        })
+                      ) {
                         return (
                           <p key={attribute.uid} className="product-spec-item">
                             {attribute.name.split("_").join(" ")}:
                             <span className="ml-3">
-                              {product[attribute.name] instanceof Array
-                                ? product[attribute.name].map(inst => {
-                                    var last = product[attribute.name].slice(
+                              {product[selectedKey] instanceof Array
+                                ? product[selectedKey].map(inst => {
+                                    var last = product[selectedKey].slice(
                                       -1
                                     )[0];
                                     return (
@@ -156,7 +163,11 @@ class ProductDetail extends Component {
                                       </span>
                                     );
                                   })
-                                : product[attribute.name]}
+                                : `${product[selectedKey]} ${
+                                    selectedKey.split("--").length > 1
+                                      ? selectedKey.split("--")[1]
+                                      : ""
+                                  }`}
                             </span>
                           </p>
                         );
