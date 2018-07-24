@@ -10,7 +10,8 @@ import {
   Col,
   Input,
   Button,
-  InputGroup
+  InputGroup,
+  InputGroupAddon
 } from "reactstrap";
 import Select from "react-select";
 
@@ -321,7 +322,9 @@ class ProductAddEdit extends Component {
                   onChange={value => this.onChange(attribute.name, value)}
                 />
                 {attribute.unit && attribute.unit.length ? (
-                  <div> {attribute.unit[0]}</div>
+                  <InputGroupAddon addonType="append">
+                    {attribute.unit[0]}
+                  </InputGroupAddon>
                 ) : null}
               </InputGroup>
             </Col>
@@ -347,7 +350,9 @@ class ProductAddEdit extends Component {
                   }
                 />
                 {attribute.unit && attribute.unit.length ? (
-                  <div> {attribute.unit[0]}</div>
+                  <InputGroupAddon addonType="append">
+                    {attribute.unit[0]}
+                  </InputGroupAddon>
                 ) : null}
               </InputGroup>
             </Col>
@@ -372,7 +377,9 @@ class ProductAddEdit extends Component {
                   }
                 />
                 {attribute.unit && attribute.unit.length ? (
-                  <div> {attribute.unit[0]}</div>
+                  <InputGroupAddon addonType="append">
+                    {attribute.unit[0]}
+                  </InputGroupAddon>
                 ) : null}
               </InputGroup>
             </Col>
@@ -396,7 +403,9 @@ class ProductAddEdit extends Component {
                   }
                 />
                 {attribute.unit && attribute.unit.length ? (
-                  <div> {attribute.unit[0]}</div>
+                  <InputGroupAddon addonType="append">
+                    {attribute.unit[0]}
+                  </InputGroupAddon>
                 ) : null}
               </InputGroup>
             </Col>
@@ -420,7 +429,9 @@ class ProductAddEdit extends Component {
                   value={this.state[attribute.name]}
                 />
                 {attribute.unit && attribute.unit.length ? (
-                  <div> {attribute.unit[0]}</div>
+                  <InputGroupAddon addonType="append">
+                    {attribute.unit[0]}
+                  </InputGroupAddon>
                 ) : null}
               </InputGroup>
             </Col>
@@ -444,7 +455,9 @@ class ProductAddEdit extends Component {
                   value={this.state[attribute.name]}
                 />
                 {attribute.unit && attribute.unit.length ? (
-                  <div> {attribute.unit[0]}</div>
+                  <InputGroupAddon addonType="append">
+                    {attribute.unit[0]}
+                  </InputGroupAddon>
                 ) : null}
               </InputGroup>
             </Col>
