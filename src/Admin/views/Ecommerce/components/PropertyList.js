@@ -61,43 +61,50 @@ class PropertyList extends Component {
       {
         Header: "Ordering",
         accessor: "order",
-        Cell: cellInfo => (
-          <div
-            key={cellInfo.original.uid}
-            style={{ backgroundColor: "#fafafa" }}
-            contentEditable
-            suppressContentEditableWarning
-            onBlur={e => {
-              const value = parseInt(e.target.innerHTML, 10);
-              if (!isNaN(value)) {
-                const properties = [...this.state.properties];
-                if (value !== properties[cellInfo.index][cellInfo.column.id]) {
-                  this.props.onPropertyUpdate({
-                    body: {
-                      order: value,
-                      categoryId: this.props.activeCategory,
-                      relationshipId: cellInfo.original.uid
-                    }
-                  });
+        Cell: cellInfo =>
+          cellInfo.original.uidPage !== cellInfo.original.uidCategory ? (
+            <div>{cellInfo.value}</div>
+          ) : (
+            <div
+              key={cellInfo.original.uid}
+              style={{ backgroundColor: "#fafafa" }}
+              contentEditable
+              suppressContentEditableWarning
+              onBlur={e => {
+                const value = parseInt(e.target.innerHTML, 10);
+                if (!isNaN(value)) {
+                  const properties = [...this.state.properties];
+                  if (
+                    value !== properties[cellInfo.index][cellInfo.column.id]
+                  ) {
+                    this.props.onPropertyUpdate({
+                      body: {
+                        order: value,
+                        categoryId: this.props.activeCategory,
+                        relationshipId: cellInfo.original.uid
+                      }
+                    });
+                  } else {
+                    e.target.innerHTML = value;
+                  }
                 } else {
-                  e.target.innerHTML = value;
+                  e.target.innerHTML = this.state.properties[cellInfo.index][
+                    cellInfo.column.id
+                  ];
                 }
-              } else {
-                e.target.innerHTML = this.state.properties[cellInfo.index][
+              }}
+              onKeyDown={event => {
+                if (event.keyCode === 13) {
+                  event.target.blur();
+                }
+              }}
+              dangerouslySetInnerHTML={{
+                __html: this.state.properties[cellInfo.index][
                   cellInfo.column.id
-                ];
-              }
-            }}
-            onKeyDown={event => {
-              if (event.keyCode === 13) {
-                event.target.blur();
-              }
-            }}
-            dangerouslySetInnerHTML={{
-              __html: this.state.properties[cellInfo.index][cellInfo.column.id]
-            }}
-          />
-        ),
+                ]
+              }}
+            />
+          ),
         width: 70
       },
       {

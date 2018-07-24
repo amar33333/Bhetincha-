@@ -92,13 +92,32 @@ class ProductDetail extends Component {
             <Col xs="12" md="5">
               <div>
                 <p className="product-detail__title">{product.name}</p>
-                <span>
-                  <Button color="link">Edit</Button>
-                </span>
+                {this.props.cookies &&
+                  this.props.cookies.user_data &&
+                  this.props.cookies.user_data.business_id &&
+                  this.props.cookies.user_data.business_id ===
+                    product.businessId && (
+                    <span>
+                      <Button
+                        color="link"
+                        onClick={() =>
+                          this.props.history.push(
+                            `/${
+                              product.businessSlug
+                            }/dashboard/ecommerce/manage-products/${
+                              product.uid
+                            }/edit`
+                          )
+                        }
+                      >
+                        Edit
+                      </Button>
+                    </span>
+                  )}
                 <p>
                   <small>By {product.businessName}</small>
                 </p>
-                <p>{product.Discription}</p>
+                <p>{product.Description}</p>
                 <Row>
                   <Col xs="8">
                     <Row>
@@ -142,6 +161,7 @@ class ProductDetail extends Component {
                 <Row>
                   <Col>
                     {this.props.attributes.map(attribute => {
+                      if (attribute.name === "Description") return null;
                       let selectedKey = "";
                       if (
                         Object.keys(product).find(key => {

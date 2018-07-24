@@ -88,6 +88,7 @@ class ProductList extends Component {
         <Row>
           <Col xs="12">
             <Container>
+              {!this.props.products.length && <div>No Products</div>}
               <Card.Group itemsPerRow={4} stackable>
                 {this.props.products.map(product => (
                   <ProductItem

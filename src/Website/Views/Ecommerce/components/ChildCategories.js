@@ -17,7 +17,11 @@ class ChildCategories extends Component {
               onClick={() => this.props.onSelectCategory(category.uid)}
               key={category.uid}
               icon="angle right"
-              content={<a href="#">{category.name}</a>}
+              content={
+                <span style={{ color: "blue", cursor: "pointer" }}>
+                  {category.name}
+                </span>
+              }
             />
           ))}
         </List>

@@ -25,6 +25,7 @@ class PropertyItemAddNew extends Component {
       fieldType: null,
       required: false,
       defaultValueString: "",
+      defaultValueLongString: "",
       defaultValueDateTime: new Date(),
       defaultValueChoices: null,
       defaultValueMultipleChoices: null,
@@ -48,6 +49,7 @@ class PropertyItemAddNew extends Component {
         updates.fieldType = null;
         updates.required = false;
         updates.defaultValueString = "";
+        updates.defaultValueLongString = "";
         updates.defaultValueDateTime = new Date();
         updates.defaultValueChoices = null;
         updates.defaultValueMultipleChoices = null;
@@ -82,6 +84,7 @@ class PropertyItemAddNew extends Component {
       defaultValueChoices,
       defaultValueMultipleChoices,
       defaultValueString,
+      defaultValueLongString,
       options,
       optionsMultiple,
       filterable
@@ -123,6 +126,9 @@ class PropertyItemAddNew extends Component {
           break;
         case "MultipleChoices":
           body.defaultValue = defaultValueMultipleChoices.value;
+          break;
+        case "LongString":
+          body.defaultValue = defaultValueLongString;
           break;
         default:
           break;
@@ -295,6 +301,25 @@ class PropertyItemAddNew extends Component {
                                 onChange={event =>
                                   this.onChange(
                                     "defaultValueString",
+                                    event.target.value
+                                  )
+                                }
+                              />
+                            </Col>
+                          </FormGroup>
+                        )}
+                        {this.state.fieldType.name === "LongString" && (
+                          <FormGroup row>
+                            <Label sm={3}>Default Value</Label>
+                            <Col sm={9}>
+                              <Input
+                                required
+                                type="textarea"
+                                placeholder="Default Value"
+                                value={this.state.defaultValueLongString}
+                                onChange={event =>
+                                  this.onChange(
+                                    "defaultValueLongString",
                                     event.target.value
                                   )
                                 }

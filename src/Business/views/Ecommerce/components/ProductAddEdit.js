@@ -75,11 +75,9 @@ class ProductAddEdit extends Component {
     }
 
     if (prevState.productSubmit && !this.props.loading) {
-      console.log("loading");
       let updates = { productSubmit: false };
       if (!this.props.error) {
         if (!this.props.add) {
-          console.log("error");
           this.props.routeToView();
         }
         const file = document.querySelector(".file-product-add");
@@ -395,6 +393,33 @@ class ProductAddEdit extends Component {
             <Col sm={9}>
               <InputGroup className="add-product-ecommerce-biz">
                 <Input
+                  required={attribute.required}
+                  placeholder={attribute.name}
+                  value={this.state[attribute.name]}
+                  onChange={event =>
+                    this.onChange(attribute.name, event.target.value)
+                  }
+                />
+                {attribute.unit && attribute.unit.length ? (
+                  <InputGroupAddon addonType="append">
+                    {attribute.unit[0]}
+                  </InputGroupAddon>
+                ) : null}
+              </InputGroup>
+            </Col>
+          </FormGroup>
+        );
+
+      case "LongString":
+        return (
+          <FormGroup row key={attribute.uid}>
+            <Label sm={3}>{`${attribute.name.split("_").join(" ")} ${
+              attribute.required ? "*" : ""
+            }`}</Label>
+            <Col sm={9}>
+              <InputGroup className="add-product-ecommerce-biz">
+                <Input
+                  type="textarea"
                   required={attribute.required}
                   placeholder={attribute.name}
                   value={this.state[attribute.name]}
