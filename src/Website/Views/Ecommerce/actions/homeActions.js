@@ -12,7 +12,8 @@ import {
   FETCH_ECOMMERCE_PRODUCTS_PENDING,
   FETCH_ECOMMERCE_PRODUCTS_REJECTED,
   CHANGE_ACTIVE_ECOMMERCE_CATEGORY,
-  ROUTE_BACK_TO_ECOMMERCE_HOME
+  ROUTE_BACK_TO_ECOMMERCE_HOME,
+  FILTER_PARAMETERS_CHANGE_BUSINESS_SLUG_PRODUCTS_LIST
 } from "./types";
 
 import {
@@ -39,7 +40,8 @@ epics.push((action$, { getState }) =>
           extras.push({
             type: FETCH_ECOMMERCE_CATEGORY_CONFIG_PENDING,
             payload: response.uid,
-            history: action.payload.history
+            history: action.payload.history,
+            businessSlug: action.payload.businessSlug
           });
         }
 
@@ -68,7 +70,8 @@ epics.push(action$ =>
   action$.ofType(CHANGE_ACTIVE_ECOMMERCE_CATEGORY).map(action => ({
     type: FETCH_ECOMMERCE_CATEGORY_CONFIG_PENDING,
     payload: action.payload.categoryId,
-    history: action.payload.history
+    history: action.payload.history,
+    businessSlug: action.payload.businessSlug
   }))
 );
 
@@ -98,7 +101,8 @@ epics.push((action$, { getState }) =>
               type: FETCH_ECOMMERCE_PRODUCTS_PENDING,
               payload: {
                 body: {
-                  categoryId: action.payload
+                  categoryId: action.payload,
+                  businessSlug: action.businessSlug
                 }
               }
             }
@@ -130,10 +134,11 @@ epics.push((action$, { getState }) =>
   action$.ofType(FETCH_ECOMMERCE_PRODUCTS_PENDING).switchMap(action => {
     const {
       home: { activeCategory },
-      filterProducts: { frm, size, query, filters, sortby, desc }
+      filterProducts: { frm, size, query, filters, sortby, desc, businessSlug }
     } = getState().EcommerceContainer;
 
     let body = {};
+    const extras = [];
     // action.payload && action.payload.body ? { ...action.payload.body } : {};
     if (
       action.payload &&
@@ -143,6 +148,18 @@ epics.push((action$, { getState }) =>
       body.categoryId = action.payload.body.categoryId;
     } else {
       body.categoryId = activeCategory;
+    }
+
+    if (
+      action.payload &&
+      action.payload.body &&
+      action.payload.body.businessSlug
+    ) {
+      body.businessSlug = action.payload.body.businessSlug;
+      extras.push({
+        type: FILTER_PARAMETERS_CHANGE_BUSINESS_SLUG_PRODUCTS_LIST,
+        payload: action.payload.body.businessSlug
+      });
     }
 
     body.frm = frm;
@@ -157,13 +174,19 @@ epics.push((action$, { getState }) =>
       body.sortby = sortby;
       body.desc = desc;
     }
+    if (businessSlug) {
+      body.businessSlug = businessSlug;
+    }
 
     return onEcommerceProductsGet({ body })
-      .map(({ response }) => {
-        return {
-          type: FETCH_ECOMMERCE_PRODUCTS_FULFILLED,
-          payload: response
-        };
+      .concatMap(({ response }) => {
+        return [
+          {
+            type: FETCH_ECOMMERCE_PRODUCTS_FULFILLED,
+            payload: response
+          },
+          ...extras
+        ];
       })
       .catch(ajaxError => {
         toast.error("Error Loading Products");

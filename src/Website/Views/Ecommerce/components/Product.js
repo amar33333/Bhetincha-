@@ -54,6 +54,8 @@ class Product extends Component {
         <ProductDetail
           product={this.props.product}
           attributes={this.props.attributes}
+          cookies={this.props.cookies}
+          history={this.props.history}
         />
         {/* <ProductReviews /> */}
       </div>
