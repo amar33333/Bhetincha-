@@ -1,6 +1,5 @@
-import React from "react";
+import React, { Component } from "react";
 import { FormText } from "reactstrap";
-import { DirectionsRenderer } from "react-google-maps";
 
 // This is for mobile number
 export const validatePhone = phoneNumber => {
@@ -27,3 +26,9 @@ export const FaIconURLjsx = (
     </a>
   </FormText>
 );
+
+export class ErrorHandling extends Component {
+  render() {
+    return <p style={{ color: "red" }}>{this.props.error}</p>;
+  }
+}

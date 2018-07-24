@@ -142,7 +142,6 @@ epics.push((action$, { getState }) =>
     ) {
       body.categoryId = action.payload.body.categoryId;
     } else {
-      console.log(activeCategory, "active caetgory");
       body.categoryId = activeCategory;
     }
 

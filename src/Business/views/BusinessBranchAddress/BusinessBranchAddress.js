@@ -145,7 +145,7 @@ class BusinessBranchAddress extends Component {
 
   componentDidMount = () => {
     this.props.onBusinessBranchList({
-      business_slug: this.props.match.params.businessName
+      business_slug: this.props.cookies.user_data.slug
     });
   };
 

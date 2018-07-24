@@ -47,6 +47,9 @@ import {
   FETCH_BUSINESS_BRANCH_FULFILLED,
   FETCH_BUSINESS_BRANCH_PENDING,
   FETCH_BUSINESS_BRANCH_REJECTED,
+  CREATE_BUSINESS_FULFILLED,
+  CREATE_BUSINESS_REJECTED,
+  CREATE_BUSINESS_PENDING,
   UNMOUNT_BRANCH,
   UNMOUNT_PAYMENT_METHOD,
   UNMOUNT_COMPANY_TYPE
@@ -94,11 +97,30 @@ const INITIAL_STATE = {
 
   businessData: null,
   branch: null,
-  businessBranchData: []
+  businessBranchData: [],
+  businessCreateErrors: null
 };
 
 export default function(state = INITIAL_STATE, action) {
   switch (action.type) {
+    case CREATE_BUSINESS_PENDING:
+      return {
+        ...state,
+        fetchLoading: true
+      };
+    case CREATE_BUSINESS_REJECTED:
+      return {
+        ...state,
+        fetchLoading: false,
+        businessCreateErrors: action.payload
+      };
+    case CREATE_BUSINESS_FULFILLED:
+      return {
+        ...state,
+        fetchLoading: false,
+        businessCreateErrors: null
+      };
+
     case FETCH_BUSINESS_BRANCH_PENDING:
       return { ...state, fetchLoading: true };
     case FETCH_BUSINESS_BRANCH_REJECTED:

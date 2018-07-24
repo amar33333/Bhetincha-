@@ -66,7 +66,7 @@ class BusinessAdminDetail extends Component {
   onFormSubmit = event => {
     event.preventDefault();
 
-    console.log("onformsubmit");
+    console.log("onformsubmit:");
     this.propsData = {
       ...this.subBusinessAdminDetailRef.getState(),
       ...this.subBusinessAboutRef.getState(),
@@ -77,19 +77,19 @@ class BusinessAdminDetail extends Component {
       ...this.subBusinessWorkingHourRef.getState()
     };
 
-    if (!this.subBusinessAdminDetailRef.getState().phone_validation_error)
-      if (
-        !this.props.requiredParams.contactPerson ||
-        (this.propsData.address.contactPerson &&
-          this.propsData.address.contactPerson.length)
-      )
-        this.props.onBusinessCreate({
-          data: this.propsData,
-          access_token: this.access_token
-        });
-      else {
-        toast.error("Please add at-least One Contact Person");
-      }
+    // if (!this.subBusinessAdminDetailRef.getState().phone_validation_error)
+    // if (
+    //   !this.props.requiredParams.contactPerson ||
+    //   (this.propsData.address.contactPerson &&
+    //     this.propsData.address.contactPerson.length)
+    // )
+    this.props.onBusinessCreate({
+      data: this.propsData,
+      access_token: this.access_token
+    });
+    // else {
+    //   toast.error("Please add at-least One Contact Person");
+    // }
 
     // this.subBusinessAdminDetailRef.clearState();
     // this.subBusinessAboutRef.clearState();
@@ -155,7 +155,7 @@ class BusinessAdminDetail extends Component {
   };
 
   render() {
-    console.log("busines admin props: ", this.props);
+    // console.log("busines admin props: ", this.props);
     return (
       <div className="animated fadeIn" style={{ marginBottom: "20px" }}>
         {/* {this.renderErrors()} */}

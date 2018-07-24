@@ -794,14 +794,14 @@ epics.push((action$, { getState }) =>
           toast.success("Business Created Successfully!");
           return { type: CREATE_BUSINESS_FULFILLED };
         } else {
-          throw new Error(response.msg[Object.keys(response.msg)[0]][0]);
+          throw new Error(JSON.stringify(response.msg));
         }
       })
       .catch(ajaxError => {
-        toast.error(ajaxError.toString());
+        // toast.error(ajaxError.toString());
         return Observable.of({
           type: CREATE_BUSINESS_REJECTED,
-          payload: ajaxError
+          payload: JSON.parse(ajaxError.message)
         });
       });
   })

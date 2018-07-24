@@ -1,0 +1,7 @@
+.add-product-ecommerce-biz > :first-child {
+  width: 70%;
+}
+
+.add-product-ecommerce-biz > :nth-child(2) {
+  width: 30%;
+}
