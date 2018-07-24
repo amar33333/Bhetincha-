@@ -1,9 +1,6 @@
 import React, { Component } from "react";
 import {
   Button,
-  Card,
-  CardBody,
-  CardFooter,
   Col,
   Container,
   Input,
@@ -107,50 +104,49 @@ class Register extends Component {
         <div className="app flex-row align-items-center">
           <Container>
             <Row className="justify-content-center">
-              <Col md="6">
-                <Card className="mx-4">
-                  <CardBody className="p-4">
-                    <h1>Register - Business</h1>
-                    {/* <p className="text-muted">Create your account</p> */}
-                    <Form onSubmit={this.onFormSubmit}>
-                      <InputGroup className="mb-3">
-                        <InputGroupAddon addonType="prepend">
-                          <InputGroupText>
-                            <i className="icon-user" />
-                          </InputGroupText>
-                        </InputGroupAddon>
-                        <Input
-                          autoFocus
-                          required
-                          type="text"
-                          placeholder="Business Name"
-                          value={this.state.business_name}
-                          onChange={this.onChange.bind(this, "business_name")}
-                        />
-                      </InputGroup>
-                      <InputGroup className="mb-3">
-                        <InputGroupAddon addonType="prepend">
-                          <InputGroupText>
-                            <i className="icon-phone" />
-                          </InputGroupText>
-                        </InputGroupAddon>
-                        <Input
-                          required
-                          type="text"
-                          placeholder="Mobile Number Eg. 9843041699, (984)-3041699"
-                          value={this.state.mobile_number}
-                          onChange={this.onChange.bind(this, "mobile_number")}
-                        />
-                      </InputGroup>
-                      {this.displayPhoneValidationInfo()}
+              <Col md="6" className="central-dialog-wrapper">
+                <h1>Register - Business</h1>
+                {/* <p className="text-muted">Create your account</p> */}
+                <Form onSubmit={this.onFormSubmit}>
+                  <InputGroup className="mb-3">
+                    <InputGroupAddon addonType="prepend">
+                      <InputGroupText>
+                        <i className="icon-user" />
+                      </InputGroupText>
+                    </InputGroupAddon>
+                    <Input
+                      size="lg"
+                      autoFocus
+                      required
+                      type="text"
+                      placeholder="Business Name"
+                      value={this.state.business_name}
+                      onChange={this.onChange.bind(this, "business_name")}
+                    />
+                  </InputGroup>
+                  <InputGroup className="mb-3">
+                    <InputGroupAddon addonType="prepend">
+                      <InputGroupText>
+                        <i className="icon-phone" />
+                      </InputGroupText>
+                    </InputGroupAddon>
+                    <Input
+                      size="lg"
+                      required
+                      type="text"
+                      placeholder="Mobile Number Eg. 9843041699, (984)-3041699"
+                      value={this.state.mobile_number}
+                      onChange={this.onChange.bind(this, "mobile_number")}
+                    />
+                  </InputGroup>
+                  {this.displayPhoneValidationInfo()}
 
-                      <Button color="success" block>
-                        Create Account
-                      </Button>
-                    </Form>
-                  </CardBody>
-                  <CardFooter className="p-4">
-                    {/* <Row>
+                  <Button color="success" block>
+                    Create Account
+                  </Button>
+                </Form>
+
+                {/* <Row>
                       <Col xs="12" sm="6">
                         <Button className="btn-facebook" block>
                           <span>facebook</span>
@@ -162,18 +158,18 @@ class Register extends Component {
                         </Button>
                       </Col>
                     </Row> */}
-                    <span>
-                      <a
-                        href="#"
-                        onClick={() =>
-                          this.props.history.push("/individual-register")
-                        }
-                      >
-                        Register as Individual{" "}
-                      </a>
-                    </span>
-                  </CardFooter>
-                </Card>
+                <Row className="pt-2">
+                  <Col>
+                    <a
+                      href="#"
+                      onClick={() =>
+                        this.props.history.push("/individual-register")
+                      }
+                    >
+                      Register as Individual{" "}
+                    </a>
+                  </Col>
+                </Row>
               </Col>
             </Row>
           </Container>

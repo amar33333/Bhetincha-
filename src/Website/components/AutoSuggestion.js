@@ -30,7 +30,16 @@ class AutoSuggestion extends Component {
   //   </div>
   // );
 
-  renderSuggestion = suggestion => <div>{suggestion[this.props.valueKey]}</div>;
+  renderSuggestion = suggestion => (
+    <div
+      style={{
+        fontSize: "16px",
+        marginBottom: "0px"
+      }}
+    >
+      {suggestion[this.props.valueKey]}
+    </div>
+  );
 
   render() {
     return (

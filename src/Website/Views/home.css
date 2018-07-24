@@ -6,11 +6,8 @@ body {
 
 .body-wrapper {
   position: relative;
-  /* min-height: 70vh; */
   background-color: rgba(255, 255, 255, 0.5) !important;
   margin-top: 0px !important;
-  /* padding: 15px; */
-  /* padding-top: 60px; */
 }
 
 .full-height {
@@ -100,10 +97,9 @@ input.main-nav-search::placeholder {
 
 /*=============== Home page css ================= */
 .home-page__header {
+  position: absolute;
+  right: 80px;
   padding: 2rem 2rem 0 0;
-  display: flex;
-  justify-content: flex-end;
-  align-items: flex-end;
 }
 
 .home-page__header .login-btn {
@@ -172,12 +168,15 @@ input.main-nav-search::placeholder {
   z-index: 2;
 }
 
+.react-autosuggest__suggestion {
+  padding: 4px 20px !important;
+}
+
 .react-autosuggest__suggestions-list li {
   color: rgb(22, 22, 114);
 }
 .home-page__logo {
-  margin-top: 10%;
-  width: 50%;
+  width: 60%;
 }
 
 @media screen and (max-width: 450px) {
@@ -280,7 +279,7 @@ input.main-nav-search::placeholder {
   color: inherit;
 }
 
-.forget-pass-wrapper {
+.central-dialog-wrapper {
   background-color: #f0f3f5eb;
   padding: 20px;
 }

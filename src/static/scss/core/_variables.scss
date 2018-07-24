@@ -41,21 +41,28 @@ $layout-transition-speed: 0.25s !default;
 $navbar-height: 55px !default;
 $navbar-bg: #fff !default;
 $navbar-border: (
-  bottom: (size: 1px, style: solid, color: $border-color)
+  bottom: (
+    size: 1px,
+    style: solid,
+    color: $border-color
+  )
 ) !default;
 $navbar-brand-width: 155px !default;
 $navbar-brand-bg: #fff !default;
-$navbar-brand-logo: url("../img/logo.png") !default;
+$navbar-brand-logo: url("../img/logo_hd.png") !default;
 $navbar-brand-logo-size: 70px auto !default;
 $navbar-brand-border: (
-  bottom: (size: 1px, style: solid, color: $border-color)
+  bottom: (
+    size: 1px,
+    style: solid,
+    color: $border-color
+  )
 ) !default;
 $navbar-brand-minimized-width: 50px !default;
 $navbar-brand-minimized-bg: $navbar-brand-bg !default;
 $navbar-brand-minimized-logo: url("../img/logo-symbol.png") !default;
 $navbar-brand-minimized-logo-size: 24px !default;
 $navbar-brand-minimized-border: $navbar-brand-border !default;
-
 $navbar-color: $gray-600 !default;
 $navbar-hover-color: $gray-800 !default;
 $navbar-active-color: $gray-800 !default;
@@ -152,10 +159,18 @@ $sidebar-minimizer-hover-indicator: str-replace(
 $top-nav-bg: #fff !default;
 $top-nav-color: $body-color !default;
 $top-nav-borders: (
-  bottom: (size: 1px, style: solid, color: $border-color)
+  bottom: (
+    size: 1px,
+    style: solid,
+    color: $border-color
+  )
 ) !default;
 $top-nav-ul-borders: (
-  all: (size: 1px, style: solid, color: $border-color)
+  all: (
+    size: 1px,
+    style: solid,
+    color: $border-color
+  )
 ) !default;
 $top-nav-hover-color: #fff !default;
 $top-nav-hover-bg: theme-color("primary") !default;
@@ -164,14 +179,22 @@ $top-nav-active-bg: theme-color("primary") !default;
 $top-nav-height: $navbar-height - 15px !default;
 // Breadcrumb
 $breadcrumb-borders: (
-  bottom: (size: 1px, style: solid, color: $border-color)
+  bottom: (
+    size: 1px,
+    style: solid,
+    color: $border-color
+  )
 ) !default;
 // Aside
 $aside-menu-width: 250px !default;
 $aside-menu-color: $gray-800 !default;
 $aside-menu-bg: #fff !default;
 $aside-menu-borders: (
-  left: (size: 1px, style: solid, color: $border-color)
+  left: (
+    size: 1px,
+    style: solid,
+    color: $border-color
+  )
 ) !default;
 $aside-menu-nav-padding-y: 0.75rem !default;
 $aside-menu-nav-padding-x: 1rem !default;
@@ -180,9 +203,12 @@ $footer-height: 50px !default;
 $footer-bg: $gray-100 !default;
 $footer-color: $body-color !default;
 $footer-borders: (
-  top: (size: 1px, style: solid, color: $border-color)
+  top: (
+    size: 1px,
+    style: solid,
+    color: $border-color
+  )
 ) !default;
-
 // Cards
 $card-icon-bg: transparent !default;
 $card-icon-color: $body-color !default;
