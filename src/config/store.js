@@ -12,8 +12,7 @@ const enhancers = [];
 if (process.env.NODE_ENV === "development") {
   const { logger } = require("redux-logger");
   middleware.push(logger);
-  (window.navigator.platform !== "iPad" ||
-    window.navigator.platform !== "Linux armv8l") &&
+  window.navigator.platform !== "iPad" &&
     enhancers.push(
       window.__REDUX_DEVTOOLS_EXTENSION__ &&
         window.__REDUX_DEVTOOLS_EXTENSION__()

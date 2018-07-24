@@ -91,7 +91,7 @@ class ForgotPasswordToken extends Component {
         <div className="app flex-row align-items-center">
           <Container>
             <Row className="justify-content-center">
-              <Col md="6" className="forget-pass-wrapper">
+              <Col md="6" className="central-dialog-wrapper">
                 <h2>Forgot Password</h2>
                 <p>
                   If you have already recived password reset token, please enter
