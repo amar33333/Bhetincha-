@@ -4,7 +4,7 @@
   "private": true,
   "dependencies": {
     "axios": "^0.18.0",
-    "bootstrap": "4.0.0",
+    "bootstrap": ">=4.0.0",
     "chart.js": "2.7.2",
     "classnames": "^2.2.3",
     "firebase": "^5.0.4",
@@ -61,7 +61,7 @@
     "react-tether": "^0.6.1",
     "react-toastify": "^4.0.0-rc.5",
     "react-treebeard": "^2.1.0",
-    "reactstrap": "5.0.0-beta",
+    "reactstrap": "^6.3.0",
     "redux": "^3.7.2",
     "redux-observable": "^0.18.0",
     "redux-thunk": "^2.2.0",
