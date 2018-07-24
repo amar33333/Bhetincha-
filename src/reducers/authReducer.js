@@ -50,7 +50,8 @@ const INITIAL_STATE = {
   checkRegistrationData: null,
   phone_verification_request_error: null,
   facebookLogin: null,
-  googleLogin: null
+  googleLogin: null,
+  registerErrors: null
 };
 
 export default function(state = INITIAL_STATE, action) {
@@ -105,7 +106,7 @@ export default function(state = INITIAL_STATE, action) {
       return { ...state, business_user: action.payload, loading: false };
 
     case CREATE_BUSINESS_USER_REJECTED:
-      return { ...state, loading: false };
+      return { ...state, loading: false, registerErrors: action.payload };
 
     case CREATE_INDIVIDUAL_USER_PENDING:
       return { ...state, loading: true };

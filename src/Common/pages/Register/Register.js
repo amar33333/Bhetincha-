@@ -12,7 +12,7 @@ import {
 } from "reactstrap";
 
 import { connect } from "react-redux";
-import { validatePhone } from "../../utils/Extras";
+import { validatePhone, ErrorHandling } from "../../utils/Extras";
 
 import { onBusinessRegisterSubmit } from "../../../actions";
 
@@ -72,6 +72,7 @@ class Register extends Component {
   };
 
   render() {
+    console.log("porpos: ", this.props);
     return (
       <div
         style={{

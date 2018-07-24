@@ -23,7 +23,7 @@ import {
   InputGroup
 } from "reactstrap";
 
-const exclude_list = ["GROUP", "PERMISSION", "USER"];
+const exclude_list = ["GROUP", "INDUSTRY", "USER"];
 
 class Permissions extends Component {
   constructor(props) {
@@ -53,7 +53,9 @@ class Permissions extends Component {
       permissions_list: nextProps.permissions_list,
       excluded_permissions_list:
         nextProps.permissions_list &&
-        exclude_list.map(eachKey => !(eachKey in nextProps.permissions_list))
+        Object.keys(nextProps.permissions_list).filter(
+          eachKey => exclude_list.indexOf(eachKey) === -1
+        )
     };
   };
 
@@ -142,7 +144,8 @@ class Permissions extends Component {
         ? this.state.permissions_list
         : this.state.permissions_list;
 
-    console.log("checkbox perm list: ", checkbox_perm_list);
+    // console.log("checkbox perm list: ", checkbox_perm_list);
+    console.log("permission state: ", this.state);
 
     return (
       checkbox_perm_list &&

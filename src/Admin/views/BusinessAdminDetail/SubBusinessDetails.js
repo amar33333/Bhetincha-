@@ -17,7 +17,8 @@ import {
 import {
   validatePhone,
   validateEmail,
-  validateWebsiteURL
+  validateWebsiteURL,
+  ErrorHandling
 } from "../../../Common/utils/Extras";
 
 class SubBusinessDetail extends Component {
@@ -293,7 +294,7 @@ class SubBusinessDetail extends Component {
   };
 
   render() {
-    // console.log("props subbusiness: ", this.props);
+    console.log("props subbusiness: ", this.props);
     // console.log("state subbusiness: ", this.state);
 
     const industries = this.props.industries;
@@ -357,6 +358,12 @@ class SubBusinessDetail extends Component {
                     onKeyDown={this._handleKeyPress}
                   />
                 </FormGroup>
+                <ErrorHandling
+                  error={
+                    this.props.businessCreateErrors &&
+                    this.props.businessCreateErrors.business_name
+                  }
+                />
               </Col>
               <Col xs="12" md="6">
                 <FormGroup>
@@ -370,19 +377,31 @@ class SubBusinessDetail extends Component {
                   />
                 </FormGroup>
                 {this.displayPhoneValidationInfo()}
+                <ErrorHandling
+                  error={
+                    this.props.businessCreateErrors &&
+                    this.props.businessCreateErrors.business_phone
+                  }
+                />
               </Col>
               <Col xs="12" md="6">
                 <FormGroup>
                   <Label for="business_email">Business Email</Label>
                   <Input
                     //required
-                    type="email"
+                    type="text"
                     value={this.state.business_email}
                     onKeyDown={this._handleKeyPress}
                     onChange={this.onChange.bind(this, "business_email")}
                   />
                 </FormGroup>
                 {this.displayEmailValidationInfo()}
+                <ErrorHandling
+                  error={
+                    this.props.businessCreateErrors &&
+                    this.props.businessCreateErrors.business_email
+                  }
+                />
               </Col>
               <Col xs="12" md="6">
                 <FormGroup>
@@ -396,6 +415,12 @@ class SubBusinessDetail extends Component {
                   />
                 </FormGroup>
                 {this.displayWebsiteURLValidationInfo()}
+                <ErrorHandling
+                  error={
+                    this.props.businessCreateErrors &&
+                    this.props.businessCreateErrors.business_website
+                  }
+                />
               </Col>
             </Row>
 
@@ -404,7 +429,7 @@ class SubBusinessDetail extends Component {
                 <FormGroup>
                   <Label for="group">Business Industry</Label>
                   <Select
-                    required
+                    //required
                     name="Industry"
                     placeholder="Select an Industry"
                     noResultsText="No Data Found"
@@ -416,12 +441,18 @@ class SubBusinessDetail extends Component {
                     labelKey="name"
                   />
                 </FormGroup>
+                <ErrorHandling
+                  error={
+                    this.props.businessCreateErrors &&
+                    this.props.businessCreateErrors.industry
+                  }
+                />
               </Col>
               <Col xs="12" md="6">
                 <FormGroup>
                   <Label for="group">Business Category</Label>
                   <Select
-                    required
+                    //required
                     name="Category"
                     placeholder="Select Category (Multiple if any)"
                     noResultsText="No Data Found"
@@ -435,6 +466,12 @@ class SubBusinessDetail extends Component {
                     labelKey="name"
                   />
                 </FormGroup>
+                <ErrorHandling
+                  error={
+                    this.props.businessCreateErrors &&
+                    this.props.businessCreateErrors.categories
+                  }
+                />
               </Col>
             </Row>
             <Row>
@@ -459,6 +496,12 @@ class SubBusinessDetail extends Component {
                     labelKey="name"
                   />
                 </FormGroup>
+                <ErrorHandling
+                  error={
+                    this.props.businessCreateErrors &&
+                    this.props.businessCreateErrors.sub_categories
+                  }
+                />
               </Col>
               <Col xs="12" md="6">
                 <FormGroup>
@@ -480,6 +523,12 @@ class SubBusinessDetail extends Component {
                     labelKey="name"
                   />
                 </FormGroup>
+                <ErrorHandling
+                  error={
+                    this.props.businessCreateErrors &&
+                    this.props.businessCreateErrors.paymentMethod
+                  }
+                />
               </Col>
             </Row>
           </CardBody>
