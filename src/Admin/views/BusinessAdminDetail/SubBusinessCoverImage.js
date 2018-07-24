@@ -2,15 +2,7 @@ import React, { Component } from "react";
 
 import FileBase64 from "react-file-base64";
 
-import {
-  Row,
-  Col,
-  Card,
-  CardHeader,
-  CardBody,
-  Button,
-  Collapse
-} from "reactstrap";
+import { Row, Col, Card, CardHeader, CardBody } from "reactstrap";
 
 import { MAIN_URL } from "../../../Common/utils/API";
 

@@ -108,11 +108,6 @@ class AboutUs extends Component {
                       let end = moment(day.end).format("hh:mm A");
 
                       var today = new Date();
-                      var now = today.toLocaleTimeString([], {
-                        hour: "2-digit",
-                        minute: "2-digit",
-                        hour12: true
-                      });
 
                       var momentNow = moment().format("hh:mm A");
 

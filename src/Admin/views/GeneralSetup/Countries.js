@@ -118,7 +118,7 @@ class Countries extends Component {
     return (
       <div className="animated fadeIn">
         <Row className="hr-centered">
-          <Col xs="12" md="8">
+          <Col xs="12" md="6">
             <PermissionProvider permission="CAN_ADD_COUNTRY">
               <Card>
                 <CardHeader>

@@ -9,7 +9,6 @@ import {
   InputGroupAddon,
   InputGroupText,
   Form,
-  Table,
   FormGroup,
   Card,
   CardBody,
@@ -20,7 +19,6 @@ import {
 } from "reactstrap";
 import debounce from "lodash.debounce";
 import { Tab } from "semantic-ui-react";
-import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 
 import { Select } from "../../../Common/components";

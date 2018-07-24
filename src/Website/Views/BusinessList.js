@@ -17,14 +17,7 @@ import "react-input-range/lib/css/index.css";
 
 import { MAIN_URL } from "../../Common/utils/API";
 
-import {
-  Card,
-  Divider,
-  Button,
-  Input,
-  Dimmer,
-  Loader
-} from "semantic-ui-react";
+import { Card, Divider, Button, Loader } from "semantic-ui-react";
 import moment from "moment";
 // import avatar from "../../static/img/avatar.jpg";
 // import avatar from "../../static/img/avatar.jpg";
@@ -457,9 +450,6 @@ class BusinessList extends Component {
   };
 
   render() {
-    console.log("business list: ", this.props);
-    // console.log("business list state: ", this.state);
-    // this.props.search_result && console.log(this.props.search_result);
     const loader = (
       <div className="loader">
         <Loader active inline="centered">
@@ -481,10 +471,6 @@ class BusinessList extends Component {
                 {`About ${this.props.search_results_count} results in ${this
                   .props.time_taken / 1000}s`}
               </small>
-              {/* <p>
-                Your Position: {this.props.coords && this.props.coords.latitude},{" "}
-                {this.props.coords && this.props.coords.longitude}
-              </p> */}
             </Col>
             <Col xs="3">
               <div className="mb-2">
