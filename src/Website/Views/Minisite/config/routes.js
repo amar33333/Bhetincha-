@@ -1,7 +1,13 @@
 import React, { Component } from "react";
 import { Route, Switch, Redirect } from "react-router-dom";
 import MainPage from "../MainPage";
-import { Gallery, AboutUs, Contact } from "../components";
+import {
+  Gallery,
+  AboutUs,
+  Contact,
+  Ecommerce,
+  EcommerceProduct
+} from "../components";
 
 import {
   ROUTE_PARAMS_BUSINESS_NAME,
@@ -38,6 +44,21 @@ class MinisiteRoute extends Component {
           path={`/:${ROUTE_PARAMS_BUSINESS_NAME}/about`}
           name="about-us"
           component={AboutUs}
+        />
+        <Route
+          path={`/:${ROUTE_PARAMS_BUSINESS_NAME}/ecommerce/product/:productId`}
+          name="ecommerce"
+          component={EcommerceProduct}
+        />
+        <Route
+          path={`/:${ROUTE_PARAMS_BUSINESS_NAME}/ecommerce/:categoryId`}
+          name="ecommerce"
+          component={Ecommerce}
+        />
+        <Route
+          path={`/:${ROUTE_PARAMS_BUSINESS_NAME}/ecommerce`}
+          name="ecommerce"
+          component={Ecommerce}
         />
         <Route
           path={`/:${ROUTE_PARAMS_BUSINESS_NAME}/contact`}

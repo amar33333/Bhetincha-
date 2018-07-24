@@ -52,10 +52,14 @@ class Home extends Component {
   }
 
   onSelectCategory = categoryId =>
-    this.props.history.push(`/ecommerce/${categoryId}`);
+    this.props.history.push(
+      `${this.props.ECOMMERCE_URL || "/ecommerce/"}${categoryId}`
+    );
 
   onSelectProduct = productId =>
-    this.props.history.push(`/ecommerce/product/${productId}`);
+    this.props.history.push(
+      `${this.props.ECOMMERCE_URL || "/ecommerce/"}product/${productId}`
+    );
 
   handleFilterChange = data => {
     const contains = this.props.filters.find(x => x.name === data.name);
@@ -79,13 +83,15 @@ class Home extends Component {
           backgroundColor: "rgba(247, 237, 237, 0.32)"
         }}
       >
-        <EcommerceMainNav
-          history={this.props.history}
-          cookies={this.props.cookies}
-          categories={this.props.categories}
-          onSelect={this.onSelectCategory}
-          isHome={!Boolean(this.props.match.params.categoryId)}
-        />
+        {!this.props.accessFromOutside && (
+          <EcommerceMainNav
+            history={this.props.history}
+            cookies={this.props.cookies}
+            categories={this.props.categories}
+            onSelect={this.onSelectCategory}
+            isHome={!Boolean(this.props.match.params.categoryId)}
+          />
+        )}
         {this.props.breadcrumbs.length > 1 && (
           <Breadcrumbs
             className="ecommerce-bread-crumbs"
