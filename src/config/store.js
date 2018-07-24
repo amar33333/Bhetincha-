@@ -10,8 +10,8 @@ const middleware = [thunkMiddleware, epicMiddleware];
 const enhancers = [];
 
 if (process.env.NODE_ENV === "development") {
-  const { logger } = require("redux-logger");
-  middleware.push(logger);
+  // const { logger } = require("redux-logger");
+  // middleware.push(logger);
   (window.navigator.platform !== "iPad" ||
     window.navigator.platform !== "Linux armv8l") &&
     enhancers.push(

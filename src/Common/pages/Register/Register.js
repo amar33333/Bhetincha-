@@ -15,7 +15,7 @@ import {
 } from "reactstrap";
 
 import { connect } from "react-redux";
-import { validatePhone } from "../../utils/Extras";
+import { validatePhone, ErrorHandling } from "../../utils/Extras";
 
 import { onBusinessRegisterSubmit } from "../../../actions";
 
@@ -75,6 +75,7 @@ class Register extends Component {
   };
 
   render() {
+    console.log("porpos: ", this.props);
     return (
       <div
         style={{
@@ -143,7 +144,12 @@ class Register extends Component {
                         />
                       </InputGroup>
                       {this.displayPhoneValidationInfo()}
-
+                      <ErrorHandling
+                        error={
+                          this.props.businessCreateErrors &&
+                          this.props.businessCreateErrors.business_phone
+                        }
+                      />
                       <Button color="success" block>
                         Create Account
                       </Button>

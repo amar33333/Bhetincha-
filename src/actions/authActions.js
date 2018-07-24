@@ -518,7 +518,7 @@ epics.push(action$ =>
             { type: TOGGLE_LOGIN_MODAL }
           ];
         } else {
-          throw new Error(response.msg[Object.keys(response.msg)[0]][0]);
+          throw new Error(response.msg);
         }
       })
       .catch(ajaxError => {
@@ -563,14 +563,14 @@ epics.push(action$ =>
           });
           return { type: CREATE_BUSINESS_USER_FULFILLED, payload: response };
         } else {
-          throw new Error(response.msg);
+          throw new Error(JSON.stringify(response.msg));
         }
       })
       .catch(ajaxError => {
         toast.error(ajaxError.toString());
         return Observable.of({
           type: CREATE_BUSINESS_USER_REJECTED,
-          payload: ajaxError
+          payload: JSON.parse(ajaxError.message)
         });
       });
   })

@@ -28,44 +28,44 @@ class subBusinessWorkingHour extends Component {
       workingHour: [
         {
           day: "Sunday",
-          start: "",
-          end: "",
+          start: undefined,
+          end: undefined,
           holiday: false
         },
         {
           day: "Monday",
-          start: "",
-          end: "",
+          start: undefined,
+          end: undefined,
           holiday: false
         },
         {
           day: "Tuesday",
-          start: "",
-          end: "",
+          start: undefined,
+          end: undefined,
           holiday: false
         },
         {
           day: "Wednesday",
-          start: "",
-          end: "",
+          start: undefined,
+          end: undefined,
           holiday: false
         },
         {
           day: "Thursday",
-          start: "",
-          end: "",
+          start: undefined,
+          end: undefined,
           holiday: false
         },
         {
           day: "Friday",
-          start: "",
-          end: "",
+          start: undefined,
+          end: undefined,
           holiday: false
         },
         {
           day: "Saturday",
-          start: "",
-          end: "",
+          start: undefined,
+          end: undefined,
           holiday: true
         }
       ]
@@ -94,7 +94,9 @@ class subBusinessWorkingHour extends Component {
     return null;
   };
 
-  getState = () => this.state;
+  getState = () =>
+    this.state.alwaysOpen ? { alwaysOpen: this.state.alwaysOpen } : this.state;
+
   toggleHoliday = day => {
     const newWorkingHour = this.state.workingHour.map(each => {
       if (each.day === day) {
