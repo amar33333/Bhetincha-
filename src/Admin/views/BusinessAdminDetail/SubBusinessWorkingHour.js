@@ -1,18 +1,15 @@
 import React, { Component } from "react";
 import moment from "moment";
-import Datetime from "react-datetime";
-import "react-datetime/css/react-datetime.css";
 
 import {
-  Collapse,
   Label,
   Input,
+  CustomInput,
   Card,
   CardHeader,
   CardBody,
   Row,
   Col,
-  Button,
   FormGroup
 } from "reactstrap";
 
@@ -214,9 +211,10 @@ class subBusinessWorkingHour extends Component {
                 <Col xs="6" md="4">
                   {day.holiday ? null : (
                     <span>
-                      <Input
+                      <CustomInput
                         type="select"
                         name="select"
+                        id="start-hour"
                         onChange={e => {
                           this.handleStartHourChange(e, day.day);
                         }}
@@ -238,16 +236,17 @@ class subBusinessWorkingHour extends Component {
                             {moment(date).format("h:mm A")}
                           </option>
                         ))}
-                      </Input>
+                      </CustomInput>
                     </span>
                   )}
                 </Col>
                 <Col xs="6" md="4">
                   {day.holiday ? null : (
                     <span>
-                      <Input
+                      <CustomInput
                         type="select"
                         name="select"
+                        id="closing-hour"
                         onChange={e => {
                           this.handleClosingHourChange(e, day.day);
                         }}
@@ -269,7 +268,7 @@ class subBusinessWorkingHour extends Component {
                             {moment(date).format("h:mm A")}
                           </option>
                         ))}
-                      </Input>
+                      </CustomInput>
                     </span>
                   )}
                 </Col>
@@ -279,69 +278,6 @@ class subBusinessWorkingHour extends Component {
         </SemanticCard>
       </FormGroup>
     );
-  };
-  renderWorkingHours = () => {
-    return this.state.workingHour.map(day => (
-      <FormGroup key={day.day}>
-        <Card body outline color={day.holiday ? "danger" : "primary"}>
-          <CardBody>
-            <Row>
-              <Col xs="6" md="2">
-                <strong>{day.day}</strong>
-              </Col>
-              <Col xs="6" md="2">
-                <Label check>
-                  <Input
-                    type="checkbox"
-                    checked={day.holiday}
-                    onChange={this.toggleHoliday.bind(this, day.day)}
-                  />
-                  Holiday
-                </Label>
-              </Col>
-              <Col xs="6" md="4">
-                {day.holiday ? null : (
-                  <span>
-                    <Label>Opens at: </Label>
-                    <Datetime
-                      dateFormat={false}
-                      value={moment(day.start).format("hh:mm a")}
-                      // defaultValue={moment("2018-05-01T10:00").format(
-                      //   "hh:mm a"
-                      // )}
-                      onChange={time => {
-                        this.handleStartHourChange(time, day.day);
-                      }}
-                      viewMode={"time"}
-                      // utc={true}
-                    />
-                  </span>
-                )}
-              </Col>
-              <Col xs="6" md="4">
-                {day.holiday ? null : (
-                  <span>
-                    <Label>Closes at: </Label>
-                    <Datetime
-                      dateFormat={false}
-                      value={moment(day.end).format("hh:mm a")}
-                      // defaultValue={moment("2018-05-01T17:00").format(
-                      //   "hh:mm a"
-                      // )}
-                      onChange={time =>
-                        this.handleClosingHourChange(time, day.day)
-                      }
-                      viewMode={"time"}
-                      // utc={true}
-                    />
-                  </span>
-                )}
-              </Col>
-            </Row>
-          </CardBody>
-        </Card>
-      </FormGroup>
-    ));
   };
 
   render() {
