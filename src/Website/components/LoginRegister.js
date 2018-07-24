@@ -16,11 +16,28 @@ const trigger = (
 );
 
 class LoginRegister extends Component {
+  state = {
+    opened: null
+  };
+
+  handleDropdownBlur = () => {
+    this.setState({
+      opened: false
+    });
+  };
   render() {
     return (
       <div className="login-register-avatar">
-        <Dropdown trigger={trigger} pointing="top right" icon={null}>
+        <Dropdown
+          closeOnBlur
+          closeOnChange
+          onBlur={this.handleDropdownBlur}
+          trigger={trigger}
+          pointing="top right"
+          icon={null}
+        >
           <Dropdown.Menu
+            open={this.state.opened}
             style={{
               padding: "10px"
             }}

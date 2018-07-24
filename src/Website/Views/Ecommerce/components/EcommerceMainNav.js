@@ -80,57 +80,53 @@ class EcommerceMainNav extends Component {
               color: "gray"
             }}
           />
-          <Collapse isOpen={this.state.isOpen} navbar>
-            <Nav className="ml-auto" navbar>
-              <NavItem
-                style={{
-                  minWidth: "350px"
-                }}
-              >
-                <Search
-                  className="mr-2 ecommerce-search-container"
-                  fluid
-                  // loading={isLoading}
-                  // onResultSelect={this.handleResultSelect}
-                  // // onSearchChange={_.debounce(this.handleSearchChange, 500, {
-                  // //   leading: true
-                  // // })}
-                  // results={results}
-                  // value={value}
-                  // {...this.props}
+          {/* <Collapse isOpen={this.state.isOpen} navbar> */}
+          <Nav className="ml-auto" navbar>
+            <NavItem
+              style={{
+                minWidth: "350px"
+              }}
+            >
+              <Search
+                className="mr-2 ecommerce-search-container"
+                fluid
+                // loading={isLoading}
+                // onResultSelect={this.handleResultSelect}
+                // // onSearchChange={_.debounce(this.handleSearchChange, 500, {
+                // //   leading: true
+                // // })}
+                // results={results}
+                // value={value}
+                // {...this.props}
+              />
+            </NavItem>
+            <NavItem>
+              <NavLink>Need Help?</NavLink>
+            </NavItem>
+            {this.props.cookies ? (
+              <Avatar />
+            ) : (
+              <LoginRegister history={this.props.history} />
+            )}
+            <NavItem>
+              <NavLink>
+                <i
+                  className="fa fa-shopping-cart"
+                  style={{ fontSize: "1.5rem" }}
                 />
-              </NavItem>
-              <NavItem>
-                <NavLink>Need Help?</NavLink>
-              </NavItem>
-              <NavItem>
-                <NavLink>
-                  {this.props.cookies ? (
-                    <Avatar />
-                  ) : (
-                    <LoginRegister history={this.props.history} />
-                  )}
-                </NavLink>
-              </NavItem>
-              <NavItem>
-                <NavLink>
-                  <i
-                    className="fa fa-shopping-cart"
-                    style={{ fontSize: "1.5rem" }}
-                  />
-                  <Badge
-                    color="primary"
-                    pill
-                    style={{
-                      fontSize: "0.6rem"
-                    }}
-                  >
-                    2
-                  </Badge>
-                </NavLink>
-              </NavItem>
-            </Nav>
-          </Collapse>
+                <Badge
+                  color="primary"
+                  pill
+                  style={{
+                    fontSize: "0.6rem"
+                  }}
+                >
+                  2
+                </Badge>
+              </NavLink>
+            </NavItem>
+          </Nav>
+          {/* </Collapse> */}
         </Navbar>
         {this.state.menuOpen ? (
           <div

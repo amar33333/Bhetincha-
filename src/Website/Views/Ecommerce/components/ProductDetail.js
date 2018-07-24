@@ -91,8 +91,13 @@ class ProductDetail extends Component {
             </Col>
             <Col xs="12" md="5">
               <div>
-                <h2 className="product-detail__title">{product.name}</h2>
-                <small>By {product.businessName}</small>
+                <p className="product-detail__title">{product.name}</p>
+                <span>
+                  <Button color="link">Edit</Button>
+                </span>
+                <p>
+                  <small>By {product.businessName}</small>
+                </p>
                 <p>{product.Discription}</p>
                 <Row>
                   <Col xs="8">
