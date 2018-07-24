@@ -9,7 +9,10 @@ import {
   CREATE_ECOMMERCE_PRODUCT_REJECTED,
   FETCH_ECOMMERCE_PRODUCT_EACH_FULFILLED,
   FETCH_ECOMMERCE_PRODUCT_EACH_PENDING,
-  FETCH_ECOMMERCE_PRODUCT_EACH_REJECTED
+  FETCH_ECOMMERCE_PRODUCT_EACH_REJECTED,
+  UPDATE_ECOMMERCE_PRODUCT_PENDING,
+  UPDATE_ECOMMERCE_PRODUCT_FULFILLED,
+  UPDATE_ECOMMERCE_PRODUCT_REJECTED
 } from "../actions/types";
 
 const INITIAL_STATE = {
@@ -34,6 +37,15 @@ export default function(state = INITIAL_STATE, action) {
       return { ...state, productLoading: true, productError: false };
 
     case CREATE_ECOMMERCE_PRODUCT_REJECTED:
+      return { ...state, productLoading: false, productError: true };
+
+    case UPDATE_ECOMMERCE_PRODUCT_FULFILLED:
+      return { ...state, productLoading: false, productError: false };
+
+    case UPDATE_ECOMMERCE_PRODUCT_PENDING:
+      return { ...state, productLoading: true, productError: false };
+
+    case UPDATE_ECOMMERCE_PRODUCT_REJECTED:
       return { ...state, productLoading: false, productError: true };
 
     case FETCH_ECOMMERCE_PRODUCT_EACH_FULFILLED:

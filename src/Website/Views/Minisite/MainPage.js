@@ -49,7 +49,7 @@ class MainPage extends Component {
     return (
       <Dropdown.Menu>
         {remainingcat.map((cat, index) => {
-          return <Dropdown.Item>{cat.name}</Dropdown.Item>;
+          return <Dropdown.Item key={index}>{cat.name}</Dropdown.Item>;
         })}
       </Dropdown.Menu>
     );

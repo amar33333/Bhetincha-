@@ -91,9 +91,33 @@ class ProductDetail extends Component {
             </Col>
             <Col xs="12" md="5">
               <div>
-                <h2 className="product-detail__title">{product.name}</h2>
-                <small>By {product.businessName}</small>
-                <p>{product.Discription}</p>
+                <p className="product-detail__title">{product.name}</p>
+                {this.props.cookies &&
+                  this.props.cookies.user_data &&
+                  this.props.cookies.user_data.business_id &&
+                  this.props.cookies.user_data.business_id ===
+                    product.businessId && (
+                    <span>
+                      <Button
+                        color="link"
+                        onClick={() =>
+                          this.props.history.push(
+                            `/${
+                              product.businessSlug
+                            }/dashboard/ecommerce/manage-products/${
+                              product.uid
+                            }/edit`
+                          )
+                        }
+                      >
+                        Edit
+                      </Button>
+                    </span>
+                  )}
+                <p>
+                  <small>By {product.businessName}</small>
+                </p>
+                <p>{product.Description}</p>
                 <Row>
                   <Col xs="8">
                     <Row>
@@ -137,14 +161,22 @@ class ProductDetail extends Component {
                 <Row>
                   <Col>
                     {this.props.attributes.map(attribute => {
-                      if (product[attribute.name]) {
+                      if (attribute.name === "Description") return null;
+                      let selectedKey = "";
+                      if (
+                        Object.keys(product).find(key => {
+                          const found = key.split("--")[0] === attribute.name;
+                          if (found) selectedKey = key;
+                          return found;
+                        })
+                      ) {
                         return (
                           <p key={attribute.uid} className="product-spec-item">
                             {attribute.name.split("_").join(" ")}:
                             <span className="ml-3">
-                              {product[attribute.name] instanceof Array
-                                ? product[attribute.name].map(inst => {
-                                    var last = product[attribute.name].slice(
+                              {product[selectedKey] instanceof Array
+                                ? product[selectedKey].map(inst => {
+                                    var last = product[selectedKey].slice(
                                       -1
                                     )[0];
                                     return (
@@ -156,7 +188,11 @@ class ProductDetail extends Component {
                                       </span>
                                     );
                                   })
-                                : product[attribute.name]}
+                                : `${product[selectedKey]} ${
+                                    selectedKey.split("--").length > 1
+                                      ? selectedKey.split("--")[1]
+                                      : ""
+                                  }`}
                             </span>
                           </p>
                         );

@@ -9,7 +9,6 @@ import Filters from "./Filters";
 import MegaMenu from "./MegaMenu";
 import EcommerceMainNav from "./EcommerceMainNav";
 import ChildCategories from "./ChildCategories";
-import Breadcrumbs from "./Breadcrumbs";
 
 import { onCategoriesList, onActiveCategoryChange } from "../actions";
 

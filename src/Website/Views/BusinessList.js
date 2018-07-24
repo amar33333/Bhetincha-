@@ -17,14 +17,7 @@ import "react-input-range/lib/css/index.css";
 
 import { MAIN_URL } from "../../Common/utils/API";
 
-import {
-  Card,
-  Divider,
-  Button,
-  Input,
-  Dimmer,
-  Loader
-} from "semantic-ui-react";
+import { Card, Divider, Button, Loader } from "semantic-ui-react";
 import moment from "moment";
 // import avatar from "../../static/img/avatar.jpg";
 // import avatar from "../../static/img/avatar.jpg";
@@ -323,33 +316,39 @@ class BusinessList extends Component {
 
                 {each_search_result.claimed ? (
                   <Col
+                    xs="2"
                     sm="2"
                     style={{ cursor: "pointer" }}
                     // onClick={this.onClaimed(each_search_result.id)}
                   >
                     <Button circular basic>
-                      <i className="fa fa-lock" /> Claimed
+                      <i className="fa fa-lock" />{" "}
+                      <span className="d-none d-md-inline">Claimed</span>
                     </Button>
                   </Col>
                 ) : (
                   <Col
+                    xs="2"
                     sm="2"
                     style={{ cursor: "pointer" }}
                     onClick={this.onClaimed(each_search_result.id)}
                   >
                     <Button circular basic>
-                      <i className="fa fa-unlock" /> Claim
+                      <i className="fa fa-unlock" />{" "}
+                      <span className="d-none d-md-inline">Claim</span>
                     </Button>
                   </Col>
                 )}
 
                 <Col
+                  xs="2"
                   sm="3"
                   style={{ cursor: "pointer" }}
                   onClick={this.onImproveListingClicked(each_search_result)}
                 >
                   <Button circular basic>
-                    <i className="fa fa-list" /> Improve Listing
+                    <i className="fa fa-list" />{" "}
+                    <span className="d-none d-md-inline">Improve Listing</span>
                   </Button>
                 </Col>
                 {/* <Col sm="2">
@@ -358,7 +357,7 @@ class BusinessList extends Component {
                 <Col sm="2">
                   <i className="fa fa-phone" /> Call
                 </Col> */}
-                <Col sm="3">
+                <Col sm="3" xs="2">
                   <Button
                     circular
                     basic
@@ -367,13 +366,15 @@ class BusinessList extends Component {
                       branchAddress: each_search_result.branchAddress
                     })}
                   >
-                    <i className="fa fa-location-arrow" /> Get Direction{" "}
+                    <i className="fa fa-location-arrow" />{" "}
+                    <span className="d-none d-md-inline">Get Direction</span>
                   </Button>
                 </Col>
                 {each_search_result.industry === "Restaurants" ? (
                   <Col sm="3">
                     <Button circular basic>
-                      <i className="fa fa-cutlery" aria-hidden="true" /> View
+                      <i className="fa fa-cutlery" aria-hidden="true" />{" "}
+                      <span className="d-none d-md-inline">View </span>
                       Menu
                     </Button>
                   </Col>
@@ -457,9 +458,6 @@ class BusinessList extends Component {
   };
 
   render() {
-    console.log("business list: ", this.props);
-    // console.log("business list state: ", this.state);
-    // this.props.search_result && console.log(this.props.search_result);
     const loader = (
       <div className="loader">
         <Loader active inline="centered">
@@ -481,10 +479,6 @@ class BusinessList extends Component {
                 {`About ${this.props.search_results_count} results in ${this
                   .props.time_taken / 1000}s`}
               </small>
-              {/* <p>
-                Your Position: {this.props.coords && this.props.coords.latitude},{" "}
-                {this.props.coords && this.props.coords.longitude}
-              </p> */}
             </Col>
             <Col xs="3">
               <div className="mb-2">

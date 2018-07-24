@@ -14,8 +14,11 @@ import banner from "../../../../static/img/ebanner.jpg";
 import {
   onCategoriesList,
   onActiveCategoryChange,
-  onFilterParametersChangeProductsList
+  onFilterParametersChangeProductsList,
+  onFilterParametersClearProductsList
 } from "../actions";
+
+import { ROUTE_PARAMS_BUSINESS_NAME } from "../../../../config/CONSTANTS";
 
 class Home extends Component {
   componentDidMount() {
@@ -23,12 +26,14 @@ class Home extends Component {
     if (categoryId) {
       this.props.onActiveCategoryChange({
         categoryId,
-        history: this.props.history
+        history: this.props.history,
+        businessSlug: this.props.match.params[ROUTE_PARAMS_BUSINESS_NAME]
       });
     }
     this.props.onCategoriesList({
       changeActive: !Boolean(categoryId),
-      history: this.props.history
+      history: this.props.history,
+      businessSlug: this.props.match.params[ROUTE_PARAMS_BUSINESS_NAME]
     });
   }
 
@@ -40,22 +45,32 @@ class Home extends Component {
       if (isCategoryId) {
         this.props.onActiveCategoryChange({
           categoryId: this.props.match.params.categoryId,
-          history: this.props.history
+          history: this.props.history,
+          businessSlug: this.props.match.params[ROUTE_PARAMS_BUSINESS_NAME]
         });
       } else {
         this.props.onCategoriesList({
           changeActive: !isCategoryId,
-          history: this.props.history
+          history: this.props.history,
+          businessSlug: this.props.match.params[ROUTE_PARAMS_BUSINESS_NAME]
         });
       }
     }
   }
 
+  componentWillUnmount() {
+    this.props.onFilterParametersClearProductsList();
+  }
+
   onSelectCategory = categoryId =>
-    this.props.history.push(`/ecommerce/${categoryId}`);
+    this.props.history.push(
+      `${this.props.ECOMMERCE_URL || "/ecommerce/"}${categoryId || ""}`
+    );
 
   onSelectProduct = productId =>
-    this.props.history.push(`/ecommerce/product/${productId}`);
+    this.props.history.push(
+      `${this.props.ECOMMERCE_URL || "/ecommerce/"}product/${productId}`
+    );
 
   handleFilterChange = data => {
     const contains = this.props.filters.find(x => x.name === data.name);
@@ -79,13 +94,15 @@ class Home extends Component {
           backgroundColor: "rgba(247, 237, 237, 0.32)"
         }}
       >
-        <EcommerceMainNav
-          history={this.props.history}
-          cookies={this.props.cookies}
-          categories={this.props.categories}
-          onSelect={this.onSelectCategory}
-          isHome={!Boolean(this.props.match.params.categoryId)}
-        />
+        {!this.props.accessFromOutside && (
+          <EcommerceMainNav
+            history={this.props.history}
+            cookies={this.props.cookies}
+            categories={this.props.categories}
+            onSelect={this.onSelectCategory}
+            isHome={!Boolean(this.props.match.params.categoryId)}
+          />
+        )}
         {this.props.breadcrumbs.length > 1 && (
           <Breadcrumbs
             className="ecommerce-bread-crumbs"
@@ -93,32 +110,44 @@ class Home extends Component {
             onSelectCategory={this.onSelectCategory}
           />
         )}
-        {!this.props.match.params.categoryId && (
-          <Row>
-            <Col xs="12" md="3" className="mr-0 pr-0">
-              <MegaMenu
-                categories={this.props.categories}
-                onSelect={this.onSelectCategory}
-              />
-            </Col>
-            <Col
-              md="9"
-              className="hidden-xs-down ml-0"
+        {!this.props.accessFromOutside &&
+          !this.props.match.params.categoryId && (
+            <Row
               style={{
-                backgroundImage: `url(${banner})`
+                minHeight: "200px"
               }}
-            />
-          </Row>
-        )}
+            >
+              <Col xs="12" md="3" className="mr-0 pr-0">
+                <MegaMenu
+                  categories={this.props.categories}
+                  onSelect={this.onSelectCategory}
+                />
+              </Col>
+              <Col
+                md="9"
+                className="hidden-xs-down ml-0"
+                style={{
+                  backgroundImage: `url(${banner})`
+                }}
+              />
+            </Row>
+          )}
         <Container fluid className="mt-3 mb-3 mr-2">
           <Row>
             <Col xs="12" md="2">
               <Row>
                 <Col xs="12">
-                  {this.props.match.params.categoryId &&
-                  this.props.childCategories.length ? (
+                  {(this.props.match.params.categoryId &&
+                    this.props.childCategories.length) ||
+                  (this.props.accessFromOutside &&
+                    !this.props.match.params.categoryId) ? (
                     <ChildCategories
-                      categories={this.props.childCategories}
+                      categories={
+                        this.props.accessFromOutside &&
+                        !this.props.match.params.categoryId
+                          ? this.props.categories.children || []
+                          : this.props.childCategories
+                      }
                       onSelectCategory={this.onSelectCategory}
                     />
                   ) : (
@@ -201,6 +230,7 @@ export default connect(
   {
     onCategoriesList,
     onActiveCategoryChange,
-    onFilterParametersChangeProductsList
+    onFilterParametersChangeProductsList,
+    onFilterParametersClearProductsList
   }
 )(Home);

@@ -26,6 +26,8 @@ class ProductEdit extends Component {
     }
     return (
       <ProductAddEdit
+        loading={this.props.productLoading}
+        error={this.props.productError}
         attributes={this.props.attributes.attributes}
         add={false}
         defaultValue={this.props.productDetail}
@@ -47,9 +49,9 @@ class ProductEdit extends Component {
 export default connect(
   ({
     BusinessContainer: {
-      ecommerce: { attributes, productDetail }
+      ecommerce: { attributes, productDetail, productLoading, productError }
     }
-  }) => ({ attributes, productDetail }),
+  }) => ({ attributes, productDetail, productLoading, productError }),
   {
     onEcommerceProductEachList,
     onUpdateEcommerceProduct

@@ -61,6 +61,7 @@ class ProductList extends Component {
                     name: this.props.priceFilter.name
                   })
                 }
+                unit="Rs"
               />
             )}
           </Col>
@@ -87,6 +88,7 @@ class ProductList extends Component {
         <Row>
           <Col xs="12">
             <Container>
+              {this.props.products.length === 0 && <h4>No Products Found</h4>}
               <Card.Group itemsPerRow={4} stackable>
                 {this.props.products.map(product => (
                   <ProductItem

@@ -17,6 +17,7 @@ import Select from "react-select";
 
 import DateTime from "react-datetime";
 import "react-datetime/css/react-datetime.css";
+import "./productAddEdit.css";
 
 import getBase64 from "../../../../Common/utils/getBase64";
 import { MAIN_URL } from "../../../../Common/utils/API";
@@ -76,13 +77,16 @@ class ProductAddEdit extends Component {
     if (prevState.productSubmit && !this.props.loading) {
       let updates = { productSubmit: false };
       if (!this.props.error) {
+        if (!this.props.add) {
+          this.props.routeToView();
+        }
         const file = document.querySelector(".file-product-add");
         file.value = "";
 
         updates.name = "";
         updates.price = "";
         updates.profilePictureFile = "";
-        updates.pictures = "";
+        updates.pictures = [];
         updates.picturesFile = "";
         updates.discount = 0;
         updates = {
@@ -113,13 +117,21 @@ class ProductAddEdit extends Component {
   getDefaultToState = (attributes, defaultValue) => {
     const extra = {};
     attributes.forEach(attribute => {
-      if (defaultValue[attribute.name] !== undefined) {
+      let selectedKey = "";
+      if (
+        Object.keys(defaultValue).find(key => {
+          const found = key.split("--")[0] === attribute.name;
+          if (found) selectedKey = key;
+          return found;
+        })
+      ) {
         extra[attribute.name] =
           attribute.fieldType === "DateTime"
-            ? new Date(defaultValue[attribute.name])
-            : defaultValue[attribute.name];
+            ? new Date(defaultValue[selectedKey])
+            : defaultValue[selectedKey];
       }
     });
+
     if (defaultValue.name) {
       extra.name = defaultValue.name;
     }
@@ -131,6 +143,9 @@ class ProductAddEdit extends Component {
     }
     if (defaultValue.price) {
       extra.price = defaultValue.price;
+    }
+    if (defaultValue.pictures) {
+      extra.pictures = defaultValue.pictures;
     }
     return extra;
   };
@@ -180,30 +195,33 @@ class ProductAddEdit extends Component {
           ...extra
         };
 
-        this.props.attributes.forEach(({ name, fieldType: attributeType }) => {
-          let value = "";
-          if (attributeType === "DateTime") {
+        this.props.attributes.forEach(
+          ({ name, unit, fieldType: attributeType }) => {
+            let value = "";
+            if (attributeType === "DateTime") {
+              if (rest[name]) {
+                value = rest[name].toISOString();
+              } else {
+                value = rest[name];
+              }
+            } else if (attributeType === "MultipleChoices") {
+              if (rest[name] && rest[name].length) {
+                value = rest[name].map(({ value }) => value);
+              } else {
+                value = rest[name];
+              }
+            } else {
+              value = rest[name];
+            }
             if (rest[name]) {
-              value = rest[name].toISOString();
-            } else {
-              value = rest[name];
+              body[name] = {
+                attributeType,
+                value,
+                unit: unit && unit.length ? unit[0] : undefined
+              };
             }
-          } else if (attributeType === "MultipleChoices") {
-            if (rest[name] && rest[name].length) {
-              value = rest[name].map(({ value }) => value);
-            } else {
-              value = rest[name];
-            }
-          } else {
-            value = rest[name];
           }
-          if (rest[name]) {
-            body[name] = {
-              attributeType,
-              value
-            };
-          }
-        });
+        );
 
         this.setState({ productSubmit: true }, () =>
           this.props.onSubmit({ body })
@@ -213,6 +231,13 @@ class ProductAddEdit extends Component {
       const { defaultValue } = this.props;
 
       const updates = {};
+
+      if (picturesFile.length) {
+        updates.pictures = picturesFile.map(picture => ({
+          name: picture.name,
+          value: picture.base64
+        }));
+      }
 
       if (defaultValue.name && defaultValue.name != name) {
         updates.name = name;
@@ -228,21 +253,28 @@ class ProductAddEdit extends Component {
       }
 
       Object.entries(rest).forEach(([key, value]) => {
+        let selectedKey = "";
+        Object.keys(defaultValue).find(x => {
+          const found = x.split("--")[0] === key;
+          if (found) selectedKey = x;
+          return found;
+        });
         if (
-          (defaultValue[key] !== undefined || value !== "") &&
+          (defaultValue[selectedKey] !== undefined || value !== "") &&
           this.props.attributes.find(x => x.name === key) &&
           (this.props.attributes.find(x => x.name === key).fieldType !==
             "MultipleChoices" ||
             value
               .map(({ value }) => value)
               .sort()
-              .join(",") !== defaultValue[key].sort().join(",")) &&
+              .join(",") !== defaultValue[selectedKey].sort().join(",")) &&
           (value instanceof Date
-            ? defaultValue[key] !== value.toISOString()
-            : defaultValue[key] != value)
+            ? defaultValue[selectedKey] !== value.toISOString()
+            : defaultValue[selectedKey] != value)
         ) {
-          const attributeType = this.props.attributes.find(x => x.name === key)
-            .fieldType;
+          const attribute = this.props.attributes.find(x => x.name === key);
+          const attributeType = attribute.fieldType;
+          const unit = attribute.unit;
           updates[key] = {
             attributeType,
             value:
@@ -250,17 +282,20 @@ class ProductAddEdit extends Component {
                 ? value.toISOString()
                 : attributeType === "MultipleChoices"
                   ? value.map(({ value }) => value)
-                  : value
+                  : value,
+            unit: unit && unit.length ? unit[0] : undefined
           };
         }
       });
 
       if (Object.keys(updates).length) {
-        this.props.onSubmit({
-          body: updates,
-          categoryId: defaultValue.categoryId,
-          uid: defaultValue.uid
-        });
+        this.setState({ productSubmit: true }, () =>
+          this.props.onSubmit({
+            body: updates,
+            categoryId: defaultValue.categoryId,
+            uid: defaultValue.uid
+          })
+        );
       } else {
         console.log("no changes detected");
       }
@@ -278,11 +313,18 @@ class ProductAddEdit extends Component {
               attribute.required ? "*" : ""
             }`}</Label>
             <Col sm={9}>
-              <DateTime
-                inputProps={{ required: attribute.required }}
-                value={this.state[attribute.name]}
-                onChange={value => this.onChange(attribute.name, value)}
-              />
+              <InputGroup className="add-product-ecommerce-biz">
+                <DateTime
+                  inputProps={{ required: attribute.required }}
+                  value={this.state[attribute.name]}
+                  onChange={value => this.onChange(attribute.name, value)}
+                />
+                {attribute.unit && attribute.unit.length ? (
+                  <InputGroupAddon addonType="append">
+                    {attribute.unit[0]}
+                  </InputGroupAddon>
+                ) : null}
+              </InputGroup>
             </Col>
           </FormGroup>
         );
@@ -294,7 +336,7 @@ class ProductAddEdit extends Component {
               attribute.required ? "*" : ""
             }`}</Label>
             <Col sm={9}>
-              <InputGroup>
+              <InputGroup className="add-product-ecommerce-biz">
                 <Input
                   required={attribute.required}
                   type="number"
@@ -305,15 +347,11 @@ class ProductAddEdit extends Component {
                     this.onChange(attribute.name, event.target.value)
                   }
                 />
-                <InputGroupAddon addonType="append">
-                  <Input type="select" name="select" id="exampleSelect">
-                    <option>Rs.</option>
-                    <option>Kg.</option>
-                    <option>m.</option>
-                    <option>KM</option>
-                    <option>ft.</option>
-                  </Input>
-                </InputGroupAddon>
+                {attribute.unit && attribute.unit.length ? (
+                  <InputGroupAddon addonType="append">
+                    {attribute.unit[0]}
+                  </InputGroupAddon>
+                ) : null}
               </InputGroup>
             </Col>
           </FormGroup>
@@ -326,15 +364,22 @@ class ProductAddEdit extends Component {
               attribute.required ? "*" : ""
             }`}</Label>
             <Col sm={9}>
-              <Input
-                required={attribute.required}
-                type="number"
-                placeholder={attribute.name}
-                value={this.state[attribute.name]}
-                onChange={event =>
-                  this.onChange(attribute.name, event.target.value)
-                }
-              />
+              <InputGroup className="add-product-ecommerce-biz">
+                <Input
+                  required={attribute.required}
+                  type="number"
+                  placeholder={attribute.name}
+                  value={this.state[attribute.name]}
+                  onChange={event =>
+                    this.onChange(attribute.name, event.target.value)
+                  }
+                />
+                {attribute.unit && attribute.unit.length ? (
+                  <InputGroupAddon addonType="append">
+                    {attribute.unit[0]}
+                  </InputGroupAddon>
+                ) : null}
+              </InputGroup>
             </Col>
           </FormGroup>
         );
@@ -346,14 +391,48 @@ class ProductAddEdit extends Component {
               attribute.required ? "*" : ""
             }`}</Label>
             <Col sm={9}>
-              <Input
-                required={attribute.required}
-                placeholder={attribute.name}
-                value={this.state[attribute.name]}
-                onChange={event =>
-                  this.onChange(attribute.name, event.target.value)
-                }
-              />
+              <InputGroup className="add-product-ecommerce-biz">
+                <Input
+                  required={attribute.required}
+                  placeholder={attribute.name}
+                  value={this.state[attribute.name]}
+                  onChange={event =>
+                    this.onChange(attribute.name, event.target.value)
+                  }
+                />
+                {attribute.unit && attribute.unit.length ? (
+                  <InputGroupAddon addonType="append">
+                    {attribute.unit[0]}
+                  </InputGroupAddon>
+                ) : null}
+              </InputGroup>
+            </Col>
+          </FormGroup>
+        );
+
+      case "LongString":
+        return (
+          <FormGroup row key={attribute.uid}>
+            <Label sm={3}>{`${attribute.name.split("_").join(" ")} ${
+              attribute.required ? "*" : ""
+            }`}</Label>
+            <Col sm={9}>
+              <InputGroup className="add-product-ecommerce-biz">
+                <Input
+                  type="textarea"
+                  required={attribute.required}
+                  placeholder={attribute.name}
+                  value={this.state[attribute.name]}
+                  onChange={event =>
+                    this.onChange(attribute.name, event.target.value)
+                  }
+                />
+                {attribute.unit && attribute.unit.length ? (
+                  <InputGroupAddon addonType="append">
+                    {attribute.unit[0]}
+                  </InputGroupAddon>
+                ) : null}
+              </InputGroup>
             </Col>
           </FormGroup>
         );
@@ -365,14 +444,21 @@ class ProductAddEdit extends Component {
               attribute.required ? "*" : ""
             }`}</Label>
             <Col sm={9}>
-              <Select
-                options={attribute.options.map(x => ({ value: x, label: x }))}
-                required={attribute.required}
-                onChange={value =>
-                  this.onChange(attribute.name, value ? value.value : "")
-                }
-                value={this.state[attribute.name]}
-              />
+              <InputGroup className="add-product-ecommerce-biz">
+                <Select
+                  options={attribute.options.map(x => ({ value: x, label: x }))}
+                  required={attribute.required}
+                  onChange={value =>
+                    this.onChange(attribute.name, value ? value.value : "")
+                  }
+                  value={this.state[attribute.name]}
+                />
+                {attribute.unit && attribute.unit.length ? (
+                  <InputGroupAddon addonType="append">
+                    {attribute.unit[0]}
+                  </InputGroupAddon>
+                ) : null}
+              </InputGroup>
             </Col>
           </FormGroup>
         );
@@ -384,14 +470,21 @@ class ProductAddEdit extends Component {
               attribute.required ? "*" : ""
             }`}</Label>
             <Col sm={9}>
-              <Select
-                multi
-                tabSelectsValue={false}
-                options={attribute.options.map(x => ({ value: x, label: x }))}
-                required={attribute.required}
-                onChange={value => this.onChange(attribute.name, value)}
-                value={this.state[attribute.name]}
-              />
+              <InputGroup className="add-product-ecommerce-biz">
+                <Select
+                  multi
+                  tabSelectsValue={false}
+                  options={attribute.options.map(x => ({ value: x, label: x }))}
+                  required={attribute.required}
+                  onChange={value => this.onChange(attribute.name, value)}
+                  value={this.state[attribute.name]}
+                />
+                {attribute.unit && attribute.unit.length ? (
+                  <InputGroupAddon addonType="append">
+                    {attribute.unit[0]}
+                  </InputGroupAddon>
+                ) : null}
+              </InputGroup>
             </Col>
           </FormGroup>
         );
@@ -504,6 +597,26 @@ class ProductAddEdit extends Component {
 
               {this.props.attributes.map(attribute =>
                 this.renderField(attribute)
+              )}
+
+              {!this.props.add &&
+              this.state.pictures &&
+              this.state.pictures.length ? (
+                <FormGroup row>
+                  <Label sm={3}>Uploaded Pictures</Label>
+                  <Col sm={9}>
+                    {this.state.pictures.map((picture, i) => (
+                      <img
+                        key={i}
+                        alt="main"
+                        style={{ width: 100, height: 100 }}
+                        src={`${MAIN_URL}${picture.url}`}
+                      />
+                    ))}
+                  </Col>
+                </FormGroup>
+              ) : (
+                ""
               )}
 
               <FormGroup row>

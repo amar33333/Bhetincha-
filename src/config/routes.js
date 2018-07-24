@@ -8,7 +8,6 @@ import {
   Page500,
   Loading,
   MobileVerification,
-  UserRegister,
   IndividualRegister,
   Activate,
   ForgotPassword,
@@ -62,7 +61,6 @@ const AsyncIndividual = props => (
 
 class MainRoute extends Component {
   render() {
-    console.log("mainroute");
     return (
       <BrowserRouter>
         <Switch>

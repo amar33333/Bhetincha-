@@ -3,6 +3,7 @@ import DynamicImport from "../../Common/utils/DynamicImport";
 import { Route, Switch } from "react-router-dom";
 import { Loading } from "../../Common/pages";
 import { Home, BusinessList } from "../Views";
+import Ecommerce from "../Views/Ecommerce";
 import {
   ROUTE_PARAMS_BUSINESS_NAME,
   ROUTE_PARAMS_MINISITE_BUSINESS_ROUTE
@@ -14,11 +15,11 @@ const AsyncMinisite = props => (
   </DynamicImport>
 );
 
-const AsyncEcommerce = props => (
-  <DynamicImport load={() => import("../Views/Ecommerce")}>
-    {Component => (Component === null ? <Loading /> : <Component {...props} />)}
-  </DynamicImport>
-);
+// const AsyncEcommerce = props => (
+//   <DynamicImport load={() => import("../Views/Ecommerce")}>
+//     {Component => (Component === null ? <Loading /> : <Component {...props} />)}
+//   </DynamicImport>
+// );
 
 class WebsiteRoute extends Component {
   render() {
@@ -35,7 +36,8 @@ class WebsiteRoute extends Component {
           )}
         />
 
-        <Route path="/ecommerce" name="Ecommerce" component={AsyncEcommerce} />
+        <Route path="/ecommerce" name="Ecommerce" component={Ecommerce} />
+        {/* <Route path="/ecommerce" name="Ecommerce" component={AsyncEcommerce} /> */}
 
         <Route
           path={`/:${ROUTE_PARAMS_BUSINESS_NAME}/:${ROUTE_PARAMS_MINISITE_BUSINESS_ROUTE}`}

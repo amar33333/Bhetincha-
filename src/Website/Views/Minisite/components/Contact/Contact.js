@@ -213,7 +213,6 @@ class Contact extends Component {
   };
 
   render() {
-    console.log("Contact props:", this.state);
     return (
       <div
         style={{

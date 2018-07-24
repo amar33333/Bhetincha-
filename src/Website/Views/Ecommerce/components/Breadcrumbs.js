@@ -6,10 +6,11 @@ class BreadcrumbNav extends Component {
     return (
       <Breadcrumb className={this.props.className}>
         {this.props.items
-          .slice(0, -1)
+          .slice()
+          // .slice(0, -1)
           .reverse()
           .map((item, index) => {
-            const last = index === this.props.items.length - 2;
+            const last = index === this.props.items.length - 1;
             return (
               <BreadcrumbItem key={item.uid} active={last}>
                 {last ? (
@@ -18,10 +19,13 @@ class BreadcrumbNav extends Component {
                   <span
                     style={{ cursor: "pointer" }}
                     onClick={() => {
-                      this.props.onSelectCategory(item.uid);
+                      this.props.onSelectCategory(
+                        index === 0 ? undefined : item.uid
+                      );
                     }}
                   >
                     {item.name}
+                    {/* {item.name === "Shop" ? "Home" : item.name} */}
                   </span>
                 )}
               </BreadcrumbItem>

@@ -1,7 +1,9 @@
 import {
   FETCH_ECOMMERCE_PRODUCTS_FULFILLED,
   FILTER_PARAMETERS_CHANGE_PRODUCTS_LIST,
-  FETCH_ECOMMERCE_CATEGORY_CONFIG_FULFILLED
+  FETCH_ECOMMERCE_CATEGORY_CONFIG_FULFILLED,
+  FILTER_PARAMETERS_CHANGE_BUSINESS_SLUG_PRODUCTS_LIST,
+  CLEAR_FILTER_PARAMETERS_PRODUCTS_LIST
 } from "../actions/types";
 
 // {
@@ -21,7 +23,8 @@ const INITIAL_STATE = {
   query: "",
   filters: [],
   sortby: null,
-  desc: false
+  desc: false,
+  businessSlug: ""
 };
 
 export default function(state = INITIAL_STATE, action) {
@@ -31,6 +34,13 @@ export default function(state = INITIAL_STATE, action) {
 
     case FETCH_ECOMMERCE_CATEGORY_CONFIG_FULFILLED:
       return { ...state, filters: [] };
+
+    case FILTER_PARAMETERS_CHANGE_BUSINESS_SLUG_PRODUCTS_LIST:
+      return { ...state, businessSlug: action.payload };
+
+    case CLEAR_FILTER_PARAMETERS_PRODUCTS_LIST:
+      return { ...INITIAL_STATE };
+
     // case FETCH_ECOMMERCE_PRODUCTS_FULFILLED:
     //   return {
     //     ...state

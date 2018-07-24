@@ -12,8 +12,8 @@ class Filters extends Component {
               <FilterRange
                 withTitle
                 key={i}
-                value={{ min: data.min, max: data.max }}
-                name="Discount"
+                value={{ min: 0, max: 100 }}
+                name="Discount Percentage"
                 onChangeComplete={({ min, max }) =>
                   this.props.handleFilterChange({
                     lte: max,
@@ -22,6 +22,7 @@ class Filters extends Component {
                     name: data.name
                   })
                 }
+                unit="%"
               />
             );
           } else if (data.name === "price") {
@@ -39,9 +40,12 @@ class Filters extends Component {
                   this.props.handleFilterChange({
                     data: checked,
                     fieldType: data.fieldType,
-                    name: data.name
+                    name: `${data.name}${
+                      data.unit && data.unit.length ? `--${data.unit[0]}` : ""
+                    }`
                   });
                 }}
+                unit={data.unit && data.unit.length ? data.unit[0] : undefined}
               />
             );
           } else if (
@@ -63,9 +67,12 @@ class Filters extends Component {
                     lte: max,
                     gte: min,
                     fieldType: data.fieldType,
-                    name: data.name
+                    name: `${data.name}${
+                      data.unit && data.unit.length ? `--${data.unit[0]}` : ""
+                    }`
                   })
                 }
+                unit={data.unit && data.unit.length ? data.unit[0] : undefined}
               />
             );
           }

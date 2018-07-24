@@ -36,7 +36,6 @@ class Minisite extends Component {
     this.props.clearBusiness();
   }
   render() {
-    console.log("props in minisite:", this.props);
     return (
       <div>
         <MainNavbar extraClassName="small" history={this.props.history} />

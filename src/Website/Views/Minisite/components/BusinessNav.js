@@ -233,6 +233,16 @@ class BusinessNav extends Component {
                     Gallery
                   </Link>
                 </NavItem>
+                <NavItem key="ecommerce">
+                  <Link
+                    onClick={this.onNavClicked}
+                    draggable="false"
+                    to={`/${this.props.businessName}/ecommerce`}
+                    className="nav-link minisite_business__nav__item"
+                  >
+                    Ecommerce
+                  </Link>
+                </NavItem>
                 <NavItem key="contact">
                   <Link
                     onClick={this.onNavClicked}
