@@ -16,7 +16,11 @@ import { connect } from "react-redux";
 import { onSubmit, onCheckUserActivatedSubmit } from "../../../../actions";
 
 class LoginModal extends Component {
-  state = { username: "", password: "", visible: true };
+  state = {
+    username: "",
+    password: ""
+    // visible: true
+  };
 
   onForgotPassBtnClick = () => {
     console.log("Forgot Password Clicked");
@@ -27,9 +31,9 @@ class LoginModal extends Component {
     this.setState({ [key]: event.target.value });
   };
 
-  onDismiss = () => {
-    this.setState({ visible: false });
-  };
+  // onDismiss = () => {
+  //   this.setState({ visible: false });
+  // };
 
   onFormSubmit = event => {
     event.preventDefault();
@@ -87,8 +91,8 @@ class LoginModal extends Component {
               <Col>
                 <Alert
                   color="warning"
-                  isOpen={this.state.visible}
-                  toggle={this.onDismiss}
+                  isOpen={this.props.error}
+                  // toggle={this.onDismiss}
                 >
                   Username or Password you Entered does not match. Please enter
                   Valid Login Credentials.

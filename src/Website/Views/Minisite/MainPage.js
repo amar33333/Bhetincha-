@@ -7,13 +7,13 @@ import Rating from "react-rating";
 import {
   Row,
   Col,
-  Container,
-  Dropdown,
-  DropdownToggle,
-  DropdownMenu,
-  DropdownItem
+  Container
+  // Dropdown,
+  // DropdownToggle,
+  // DropdownMenu,
+  // DropdownItem
 } from "reactstrap";
-import { Card } from "semantic-ui-react";
+import { Card, Dropdown } from "semantic-ui-react";
 
 import moment from "moment";
 import "./minisite.css";
@@ -47,14 +47,24 @@ class MainPage extends Component {
       }
     });
     return (
-      <DropdownMenu>
+      <Dropdown.Menu>
         {remainingcat.map((cat, index) => {
-          return <DropdownItem>{cat.name}</DropdownItem>;
+          return <Dropdown.Item>{cat.name}</Dropdown.Item>;
         })}
-      </DropdownMenu>
+      </Dropdown.Menu>
     );
   };
   render() {
+    const trigger = (
+      <span>
+        <small>
+          +{this.props.categories.length - MAX_CAT} more{" "}
+          {this.props.categories.length - MAX_CAT === 1
+            ? `category`
+            : `categories`}
+        </small>
+      </span>
+    );
     var lastCategory = this.props.categories.slice(-1)[0];
     return (
       <div
@@ -89,20 +99,11 @@ class MainPage extends Component {
                           category.name
                         ) : (
                           <Dropdown
-                            isOpen={this.state.dropdownOpen}
-                            toggle={this.toggle}
-                            tag="span"
                             className="ml-2"
-                            style={{
-                              cursor: "pointer"
-                            }}
+                            trigger={trigger}
+                            pointing="top center"
+                            icon={null}
                           >
-                            <DropdownToggle tag="small">
-                              +{this.props.categories.length - MAX_CAT} more{" "}
-                              {this.props.categories.length - MAX_CAT === 1
-                                ? `category`
-                                : `categories`}
-                            </DropdownToggle>
                             {this.renderRemainingCategories()}
                           </Dropdown>
                         )}
