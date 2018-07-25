@@ -58,7 +58,8 @@ class AddBranch extends Component {
       latitude: 27.7172453,
       longitude: 85.32391758465576,
       contactPerson: [],
-      email_validation_error: false
+      email_validation_error: false,
+      address_title_error: false
     };
 
     this.countries = [];
@@ -68,7 +69,6 @@ class AddBranch extends Component {
     this.areas = [];
 
     this.propsData = {};
-    console.log("add branch props: ", this.props);
   }
 
   componentDidMount() {
@@ -94,14 +94,10 @@ class AddBranch extends Component {
   }
 
   static getDerivedStateFromProps = (nextProps, prevState) => {
-    console.log("add banch props: ", nextProps);
     const { branch } = nextProps;
-    // console.log("branchprops: ", nextProps);
-    // console.log("branch onlytoogle props branch: ", nextProps);
     if (branch && nextProps.EDIT) {
       nextProps.ToogleEDIT(!nextProps.EDIT);
 
-      console.log("branch if run");
       return {
         address_title: branch.address_title ? branch.address_title : "",
         contactPerson: branch.contactPerson ? branch.contactPerson : [],
@@ -140,7 +136,6 @@ class AddBranch extends Component {
         }
       };
     } else {
-      console.log("branchs else run");
       return null;
     }
   };
@@ -171,7 +166,6 @@ class AddBranch extends Component {
   };
 
   onChangeLatLng = ({ latLng }) => {
-    // console.log("latLang: ", this.state.latitude, this.state.longitude);
     this.setState({ latitude: latLng.lat(), longitude: latLng.lng() });
   };
 
@@ -235,7 +229,6 @@ class AddBranch extends Component {
 
   handleAreaSelectChange = value => {
     if (value) {
-      console.log("Value: ", value.name);
       let geocoder = new window.google.maps.Geocoder();
       geocoder.geocode({ address: value.name }, (results, status) => {
         if (status === "OK") {
@@ -250,9 +243,6 @@ class AddBranch extends Component {
             latitude: location.lat(),
             longitude: location.lng()
           });
-          console.log("latLang: ", this.state.latitude, this.state.longitude);
-        } else {
-          console.log("Location not found in map. Select Manually");
         }
       });
     } else {
@@ -301,7 +291,6 @@ class AddBranch extends Component {
   };
 
   onContactSave = (index, data) => {
-    // console.log("herau: ", index, data);
     const newContactPerson = this.state.contactPerson.map(
       (contact, sub_index) => {
         return index !== sub_index ? contact : { ...contact, ...data };
@@ -336,8 +325,6 @@ class AddBranch extends Component {
         area: this.state.area ? this.state.area.id : ""
       };
 
-      console.log("property: ", property, this.state[property]);
-
       reformed =
         temp[property] !== "" &&
         temp[property] !== null &&
@@ -345,13 +332,10 @@ class AddBranch extends Component {
           ? { ...reformed, [property]: temp[property] }
           : reformed;
     }
-    console.log("branch address reformed: ", reformed);
     return reformed;
   };
 
   getRefinedState = () => {
-    console.log("branch props ok: ", this.props);
-
     let contactPerson = this.state.contactPerson.map(eachItem => {
       let contactReformed = {};
       for (var property in eachItem) {
@@ -367,7 +351,6 @@ class AddBranch extends Component {
     });
     contactPerson = contactPerson.length > 0 ? contactPerson : undefined;
 
-    console.log("contectPerson: ", contactPerson);
     return {
       ...this.refineBranchState(),
       contactPerson
@@ -375,7 +358,18 @@ class AddBranch extends Component {
   };
 
   onBranchSave = () => {
-    if (!this.state.email_validation_error)
+    const contactError = this.state.contactPerson.find(
+      eachContact =>
+        eachContact.email_validation_error || eachContact.phone_validation_error
+    )
+      ? true
+      : false;
+
+    if (
+      !this.state.email_validation_error &&
+      !this.state.address_title_error &&
+      !contactError
+    )
       this.props.onBranchAdd({
         body: {
           branchAddress: [this.getRefinedState()]
@@ -385,7 +379,18 @@ class AddBranch extends Component {
   };
 
   onBranchEdit = () => {
-    if (!this.state.email_validation_error)
+    const contactError = this.state.contactPerson.find(
+      eachContact =>
+        eachContact.email_validation_error || eachContact.phone_validation_error
+    )
+      ? true
+      : false;
+
+    if (
+      !this.state.email_validation_error &&
+      !this.state.address_title_error &&
+      !contactError
+    )
       this.props.onBranchEdit({
         body: {
           ...this.getRefinedState()
@@ -396,7 +401,6 @@ class AddBranch extends Component {
   };
 
   render() {
-    console.log("add branch state: ", this.state);
     this.countries = this.props.countries;
 
     try {
@@ -518,6 +522,14 @@ class AddBranch extends Component {
                     onChange={this.onChange.bind(this, "address_title")}
                   />
                 </FormGroup>
+                <ErrorHandling
+                  error={
+                    this.props.branchCreateEditErrors &&
+                    this.props.branchCreateEditErrors.branchAddress &&
+                    this.props.branchCreateEditErrors.branchAddress
+                      .address_title
+                  }
+                />
               </Col>
               <Col xs="12" md="4">
                 <FormGroup>

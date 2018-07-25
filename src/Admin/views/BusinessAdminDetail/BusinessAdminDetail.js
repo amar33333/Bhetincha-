@@ -66,7 +66,6 @@ class BusinessAdminDetail extends Component {
   onFormSubmit = event => {
     event.preventDefault();
 
-    console.log("onformsubmit:", this.subBusinessPrimaryAddressRef.getState());
     this.propsData = {
       ...this.subBusinessAdminDetailRef.getState(),
       ...this.subBusinessAboutRef.getState(),
@@ -77,12 +76,23 @@ class BusinessAdminDetail extends Component {
       ...this.subBusinessWorkingHourRef.getState()
     };
 
+    const contactError = this.subBusinessPrimaryAddressRef
+      .getState()
+      .address.contactPerson.find(
+        eachContact =>
+          eachContact.email_validation_error ||
+          eachContact.phone_validation_error
+      )
+      ? true
+      : false;
+
     if (
       !this.subBusinessAdminDetailRef.getState().phone_validation_error &&
       !this.subBusinessAdminDetailRef.getState().email_validation_error &&
       !this.subBusinessAdminDetailRef.getState().website_validation_error &&
       !this.subBusinessPrimaryAddressRef.getState().address
-        .email_validation_error
+        .email_validation_error &&
+      !contactError
     )
       if (
         !this.props.requiredParams.contactPerson ||
@@ -107,7 +117,6 @@ class BusinessAdminDetail extends Component {
 
   _handleKeyPress = event => {
     this.setState({ event });
-    // // console.log('eventasdsa: ', this.state.event);
 
     const form = event.target.form;
     const index = Array.prototype.indexOf.call(form, event.target);
@@ -116,14 +125,11 @@ class BusinessAdminDetail extends Component {
       (event.keyCode === 13 || event.keyCode === 40) &&
       form.elements[index].type !== "submit"
     ) {
-      // // console.log('enter & down');
-
       form.elements[index + 1].focus();
       event.preventDefault();
     }
 
     if (event.keyCode === 38) {
-      // // console.log('up');
       // const form = event.target.form;
       // const index = Array.prototype.indexOf.call(form, event.target);
       form.elements[index - 1].focus();
@@ -161,7 +167,6 @@ class BusinessAdminDetail extends Component {
   };
 
   render() {
-    // console.log("busines admin props: ", this.props);
     return (
       <div className="animated fadeIn" style={{ marginBottom: "20px" }}>
         {/* {this.renderErrors()} */}

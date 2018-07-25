@@ -59,9 +59,7 @@ class BusinessAssign extends Component {
             });
           });
       });
-      this.setState({ salesUsersLocation }, () =>
-        console.log("buseinss state: ", this.state)
-      );
+      this.setState({ salesUsersLocation });
     });
 
     this.props.onSalesUserList();
@@ -70,10 +68,7 @@ class BusinessAssign extends Component {
   onChange = (key, event) => this.setState({ [key]: event.target.value });
 
   salesUserActivePath = activePath => {
-    console.log("obetained activepath; ", activePath);
-    this.setState({ activePath }, () =>
-      console.log("state active path: ", activePath)
-    );
+    this.setState({ activePath });
   };
 
   setSalesUserFromMapMarker = payload => {
@@ -86,7 +81,6 @@ class BusinessAssign extends Component {
 
   handleSelectChange = sales_username =>
     this.setState({ sales_username }, () => {
-      console.log("sales; ", this.state.sales_username);
       return this.state.sales_username
         ? this.props.onAssignedPathEachList({
             id: this.state.sales_username.mongo_id
@@ -105,7 +99,6 @@ class BusinessAssign extends Component {
     ) : null;
 
   render() {
-    console.log("tab props: ", this.props.assignedPaths);
     return (
       <div className="animated fadeIn">
         <Col>

@@ -69,7 +69,6 @@ class AppBusinessReview extends Component {
   onFormApprove = event => {
     event.preventDefault();
 
-    console.log("onformEDIT");
     this.propsData = {
       ...this.subBusinessAdminDetailRef.getState(),
       ...this.subBusinessAboutRef.getState(),
@@ -79,8 +78,6 @@ class AppBusinessReview extends Component {
       ...this.subBusinessPrimaryAddressRef.getState(),
       ...this.subBusinessWorkingHourRef.getState()
     };
-
-    console.log("this.propsdttaa: ", this.propsData);
 
     this.props.onAppBusinessApproval({
       data: this.propsData,
@@ -113,7 +110,6 @@ class AppBusinessReview extends Component {
 
   render() {
     const data = this.props.appBusinessData;
-    // console.log("app props: ", this.props);
 
     let businessData = null;
     let about = null;

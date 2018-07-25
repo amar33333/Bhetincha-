@@ -154,7 +154,6 @@ class ManageBranchs extends Component {
   };
 
   render() {
-    console.log("manage branchs props: ", this.props);
     return (
       <div className="animated fadeIn">
         <PermissionProvider permission="CAN_ADD_BRANCH">

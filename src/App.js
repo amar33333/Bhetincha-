@@ -24,14 +24,27 @@ import CookiesProvider from "./Common/utils/CookiesProvider";
 import { ToastContainer } from "react-toastify";
 import { NOTIFICATION_TIME } from "./config/CONSTANTS";
 
+import Loading from "./Common/pages/Loading/Loading";
+
 class App extends Component {
-  componentWillMount() {
+  state = { display: false };
+
+  componentDidMount() {
     // this.props.loadCookies();
 
-    if (CookiesProvider.getAccessToken()) this.props.loadPermissions();
+    if (CookiesProvider.getAccessToken()) {
+      console.log("cookies app js: ", CookiesProvider.getAccessToken());
+      this.props.loadPermissions(() => {
+        this.setState({ display: true });
+      });
+    } else {
+      this.setState({ display: true });
+    }
   }
 
   render() {
+    if (!this.state.display) return <Loading />;
+
     return (
       <div>
         <ToastContainer hideProgressBar autoClose={NOTIFICATION_TIME} />

@@ -334,7 +334,9 @@ class SubBusinessPrimaryAddress extends Component {
           designation: "",
           mobileNumber: "",
           department: "",
-          collapsed: false
+          collapsed: false,
+          email_validation_error: false,
+          phone_validation_error: false
         }
       ]
     });

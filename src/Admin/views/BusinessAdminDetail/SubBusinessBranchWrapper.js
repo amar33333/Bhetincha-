@@ -23,20 +23,12 @@ class SubBusinessBranchWrapper extends Component {
   }
 
   static getDerivedStateFromProps = nextProps => {
-    // console.log("branchwrapper props: ", nextProps);
-    // console.log("branch wrapper before toogle recevied: ", nextProps.EDIT);
-
     if (
       !nextProps.businessGet &&
       nextProps.branchAddress &&
       nextProps.branchAddress.length > 0 &&
       nextProps.EDIT
     ) {
-      console.log(
-        // "branchtoogle wrapper inside toogle recevied: ",
-        nextProps.EDIT
-      );
-
       nextProps.onInitialPropsReceived();
 
       return {
@@ -80,7 +72,6 @@ class SubBusinessBranchWrapper extends Component {
   };
 
   onBranchSave = (index, data) => {
-    console.log("branch change: ", index, data);
     const newBranchAddress = this.state.branchAddress.map(
       (branch, sub_index) => {
         return index !== sub_index ? branch : { ...branch, ...data };
@@ -105,7 +96,6 @@ class SubBusinessBranchWrapper extends Component {
 
   getState = () => {
     const branchAddress = this.state.branchAddress.map(eachItem => {
-      console.log("eachItem: ", eachItem);
       let reformed = {};
       for (var property in eachItem) {
         const temp = {
@@ -117,8 +107,6 @@ class SubBusinessBranchWrapper extends Component {
           area: eachItem.area ? eachItem.area.id : ""
         };
 
-        console.log("property: ", property, eachItem[property]);
-
         reformed =
           temp[property] !== "" &&
           temp[property] !== null &&
@@ -126,10 +114,8 @@ class SubBusinessBranchWrapper extends Component {
             ? { ...reformed, [property]: temp[property] }
             : reformed;
       }
-      console.log("branch address reformed: ", reformed);
       return reformed;
     });
-    console.log("branch address reformed array: ", branchAddress);
 
     return {
       branchAddress
@@ -137,9 +123,6 @@ class SubBusinessBranchWrapper extends Component {
   };
 
   render() {
-    // console.log("branchWrapper props:", this.props);
-    // console.log("branchWrapper state:", this.state);
-
     return (
       <div className="animated fadeIn">
         <Card>

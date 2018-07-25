@@ -32,11 +32,7 @@ class SubBusinessAbout extends Component {
   }
 
   static getDerivedStateFromProps = nextProps => {
-    // console.log("about beforetoogle recevied: ", nextProps.EDIT);
-
     if (!nextProps.businessGet && nextProps.about && nextProps.EDIT) {
-      // console.log("about inside toogle recevied: ", nextProps.EDIT);
-
       nextProps.onInitialPropsReceived();
 
       return {
@@ -68,8 +64,6 @@ class SubBusinessAbout extends Component {
   };
 
   onChangeEstablishedYear = year => {
-    console.log("Year: ", year);
-    console.log("Year after moment: ", moment.utc(year).format("YYYY"));
     this.setState({
       establishedYear: moment.utc(year).format("YYYY")
     });
@@ -122,8 +116,6 @@ class SubBusinessAbout extends Component {
     };
   };
   render() {
-    // if (this.props.about) console.log("about props: ", this.props.about);
-    // console.log("about state: ", this.state);
     const companyTypes = this.props.company_types;
 
     let yesterday = Datetime.moment().subtract(1, "day");

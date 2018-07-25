@@ -187,7 +187,6 @@ epics.push((action$, { getState }) =>
       })
       .catch(ajaxError => {
         toast.error("Error Deleting Subcategory");
-        console.log(ajaxError);
         return Observable.of({ type: DELETE_SUB_CATEGORY_REJECTED });
       })
   )

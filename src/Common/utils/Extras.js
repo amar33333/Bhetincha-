@@ -9,13 +9,13 @@ export const validatePhone = phoneNumber => {
 
 export const validateEmail = email => {
   var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-  console.log("email ; ", re.test(String(email).toLowerCase()));
+  // console.log("email ; ", re.test(String(email).toLowerCase()));
   return re.test(String(email).toLowerCase());
 };
 
 export const validateWebsiteURL = websiteURL => {
   var re = /(http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
-  console.log("websiteURL ; ", re.test(websiteURL));
+  // console.log("websiteURL ; ", re.test(websiteURL));
   return re.test(websiteURL);
 };
 
@@ -29,8 +29,8 @@ export const FaIconURLjsx = (
 
 export class ErrorHandling extends Component {
   renderError = () => {
-    if (this.props.error)
-      return <p style={{ color: "red" }}>{this.props.error}</p>;
+    if (this.props.error && this.props.error.length)
+      return <p style={{ color: "red" }}>{this.props.error[0]}</p>;
     else if (this.props.errors) {
       return (
         <p style={{ color: "red" }}>
@@ -42,7 +42,7 @@ export class ErrorHandling extends Component {
   };
 
   render() {
-    console.log("extras error: ", this.props.error);
+    // console.log("extras error: ", this.props.error);
     return <div>{this.renderError()}</div>;
   }
 }

@@ -266,13 +266,11 @@ export default function(state = INITIAL_STATE, action) {
       const countries = state.countries;
       const payload = action.payload;
 
-      // console.log("address payload: ", payload);
       return {
         ...state,
         countries: countries.map(country => {
           // country.states method added ... remove that if error
           if (payload.id === country.id) {
-            // console.log("country satisfied: ", {
             //   ...country,
             //   states: payload.states
             // });
@@ -318,7 +316,6 @@ export default function(state = INITIAL_STATE, action) {
                         })
                       };
                     }
-                    // console.log("staes not satisfied: ", state);
                     return state;
                   }
                 })

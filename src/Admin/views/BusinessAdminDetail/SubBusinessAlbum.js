@@ -19,11 +19,8 @@ class SubBusinessAlbum extends Component {
       nextState.key_press === ON_KEY_PRESS_ENTER &&
       this.props.onValueChange
     ) {
-      console.log("willUpdate called: ", nextState);
       this.props.onValueChange(nextState, this.props.id);
       this.setState({ key_press: null });
-    } else {
-      console.log(" NOO willUpdate: ", nextState);
     }
   }
 
@@ -42,7 +39,6 @@ class SubBusinessAlbum extends Component {
 
   _handleKeyPress = event => {
     if (event.keyCode === ON_KEY_PRESS_ENTER) {
-      console.log("enter entered");
       // form.elements[index + 1].focus();
       event.preventDefault();
       this.setState({ key_press: ON_KEY_PRESS_ENTER });

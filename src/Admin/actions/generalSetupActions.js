@@ -228,7 +228,6 @@ epics.push((action$, { getState }) =>
       })
       .catch(ajaxError => {
         toast.error("Error Deleting Country");
-        console.log(ajaxError);
         return Observable.of({ type: DELETE_COUNTRY_REJECTED });
       })
   )
@@ -385,7 +384,6 @@ epics.push((action$, { getState }) =>
       })
       .catch(ajaxError => {
         toast.error("Error Deleting State");
-        console.log(ajaxError);
         return Observable.of({ type: DELETE_STATE_REJECTED });
       })
   )
@@ -556,7 +554,6 @@ epics.push((action$, { getState }) =>
       })
       .catch(ajaxError => {
         toast.error("Error Deleting State");
-        console.log(ajaxError);
         return Observable.of({ type: DELETE_DISTRICT_REJECTED });
       })
   )
@@ -723,7 +720,6 @@ epics.push((action$, { getState }) =>
       })
       .catch(ajaxError => {
         toast.error("Error Deleting State");
-        console.log(ajaxError);
         return Observable.of({ type: DELETE_CITY_REJECTED });
       })
   )
@@ -899,7 +895,6 @@ epics.push((action$, { getState }) =>
       })
       .catch(ajaxError => {
         toast.error("Error Deleting State");
-        console.log(ajaxError);
         return Observable.of({ type: DELETE_AREA_REJECTED });
       })
   )
@@ -963,7 +958,6 @@ epics.push((action$, { getState }) =>
       if (ADDRESS_KEY === "country") {
         return onCountryEachGetAjax({ id, access_token }).map(
           ({ response }) => {
-            console.log("address tree response: ", response);
             return {
               type: FETCH_ADDRESS_TREE_FULFILLED,
               payload: response
@@ -996,7 +990,6 @@ epics.push((action$, { getState }) =>
       }
     })
     .catch(ajaxError => {
-      console.log("address tree error: ", ajaxError);
       return Observable.of({ type: FETCH_ADDRESS_TREE_REJECTED });
     })
 );
@@ -1031,9 +1024,7 @@ export const toggleAreaEditModal = payload => ({
 //   access_token,
 //   ADDRESS_KEY
 // }) => dispatch => {
-//   console.log("address key: ", ADDRESS_KEY);
 //   if (ADDRESS_KEY === "country") {
-//     console.log("addreskey: ", ADDRESS_KEY);
 //     onCountryEachGet({ id, access_token })
 //       .then(response =>
 //         dispatch({

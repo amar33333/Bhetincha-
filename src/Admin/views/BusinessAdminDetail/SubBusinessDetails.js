@@ -47,11 +47,8 @@ class SubBusinessDetail extends Component {
   static getDerivedStateFromProps = nextProps => {
     const { businessData } = nextProps;
 
-    // console.log("subbusiness detail props: ", nextProps);
     if (!nextProps.businessGet && businessData && nextProps.EDIT) {
-      // console.log("EDIT: ", nextProps.EDIT);
       nextProps.onInitialPropsReceived();
-      // console.log("sbbusines detail: ", businessData);
 
       return {
         business_name: businessData.business_name
@@ -173,16 +170,12 @@ class SubBusinessDetail extends Component {
   };
 
   handleSelectChange = (key, value) => {
-    // console.log("vavas: ", key, value);
     this.setState({ [key]: value });
 
     if (key === "industry") {
       this.setState({ categories: [], sub_categories: [] });
 
-      // console.log("indsustr value: ", value);
       if (value) {
-        console.log("indsutry each Called: ", value);
-
         this.props.onUnmountIndustryData();
         this.props.onUnmountCategoryData();
 
@@ -191,7 +184,6 @@ class SubBusinessDetail extends Component {
           access_token: this.access_token
         });
       } else {
-        // console.log("indsutry each NOT called: ", value);
       }
 
       if (!value) {
@@ -201,9 +193,6 @@ class SubBusinessDetail extends Component {
       // No use
       // this.props.onUnmountSubCategories();
     } else if (key === "categories") {
-      // console.log("categories state: ", this.state.categories);
-      // console.log("detaiL : ", key, value);
-
       // this.setState({ sub_categories: [] });
 
       let diff = {};
@@ -227,16 +216,12 @@ class SubBusinessDetail extends Component {
         }
       }
 
-      // console.log("diff: ", diff);
       if (ADDED) {
-        // console.log("ADDED: ", ADDED);
         this.props.onCategoryEachList({
           id: diff.id,
           access_token: this.access_token
         });
       } else {
-        // console.log("ADDED: ", ADDED);
-
         if (diff) this.props.onRemoveCategoryData({ obj: diff });
       }
     }
@@ -257,7 +242,6 @@ class SubBusinessDetail extends Component {
   };
 
   getState = () => {
-    // console.log("business details: ", this.state);
     const category_list = this.state.categories.map(category => category.id);
 
     const sub_category_list = this.state.sub_categories.map(
@@ -294,9 +278,6 @@ class SubBusinessDetail extends Component {
   };
 
   render() {
-    console.log("props subbusiness: ", this.props);
-    // console.log("state subbusiness: ", this.state);
-
     const industries = this.props.industries;
 
     const categories =
@@ -305,7 +286,6 @@ class SubBusinessDetail extends Component {
         : [];
 
     let subCategories = [];
-    // console.log("categoryData: ", this.props.categoryData);
 
     if (
       this.state.industry &&
@@ -314,12 +294,9 @@ class SubBusinessDetail extends Component {
       this.props.categoryData.length
     ) {
       this.props.categoryData.map(each => {
-        // console.log("subca: ", each.subcategories);
         subCategories = [...subCategories, ...each.subcategories];
       });
     }
-
-    // console.log("subcate: ", subCategories);
 
     const paymentMethods = this.props.payment_methods;
 

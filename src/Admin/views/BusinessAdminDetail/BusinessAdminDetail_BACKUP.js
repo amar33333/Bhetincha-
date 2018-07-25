@@ -97,14 +97,12 @@
 //   // Callback~
 //   getFiles = (key, files) => {
 //     this.setState({ [key]: files }, () => {
-//       console.log("files base64: ", this.state);
 //     });
 //   };
 
 //   onChange = (key, event) => this.setState({ [key]: event.target.value });
 
 //   handleSelectChange = (key, value) => {
-//     console.log("vavas: ", key, value);
 //     this.setState({ [key]: value });
 //     if (key === "industry") {
 //       this.setState({ category: "", sub_category: [] });
@@ -117,7 +115,6 @@
 //     } else if (key === "category") {
 //       this.setState({ sub_category: [] });
 
-//       console.log("detaiL : ", key, value);
 //       this.props.onCategoryEachList({
 //         id: value.value,
 //         access_token: this.access_token
@@ -176,7 +173,6 @@
 
 //   onFormSubmit = event => {
 //     event.preventDefault();
-//     console.log("stte data: ", this.state);
 //     this.props.onBusinessCreate({
 //       data: this.state,
 //       access_token: this.access_token
@@ -224,7 +220,6 @@
 
 //   _handleKeyPress = event => {
 //     this.setState({ event });
-//     // // console.log('eventasdsa: ', this.state.event);
 
 //     const form = event.target.form;
 //     const index = Array.prototype.indexOf.call(form, event.target);
@@ -233,14 +228,12 @@
 //       (event.keyCode === 13 || event.keyCode === 40) &&
 //       form.elements[index].type !== "submit"
 //     ) {
-//       // // console.log('enter & down');
 
 //       form.elements[index + 1].focus();
 //       event.preventDefault();
 //     }
 
 //     if (event.keyCode === 38) {
-//       // // console.log('up');
 //       // const form = event.target.form;
 //       // const index = Array.prototype.indexOf.call(form, event.target);
 //       form.elements[index - 1].focus();

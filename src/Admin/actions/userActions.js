@@ -219,7 +219,6 @@ epics.push((action$, { getState }) =>
       })
       .catch(ajaxError => {
         toast.error("Error Adding group");
-        console.log(ajaxError);
         return Observable.of({ type: CREATE_GROUP_REJECTED });
       })
   )
@@ -263,7 +262,6 @@ epics.push((action$, { getState }) =>
       })
       .catch(ajaxError => {
         toast.error("Error Deleting group");
-        console.log(ajaxError);
         return Observable.of({ type: DELETE_USER_GROUPS_REJECTED });
       })
   )
@@ -286,7 +284,6 @@ epics.push((action$, { getState }) =>
       })
       .catch(ajaxError => {
         toast.error("Error Deleting User");
-        console.log(ajaxError);
         return Observable.of({ type: DELETE_USER_REJECTED });
       })
   )
@@ -338,7 +335,6 @@ epics.push((action$, { getState }) =>
       })
       .catch(ajaxError => {
         toast.error("Error Creating User");
-        console.log(ajaxError);
         return Observable.of({ type: CREATE_USER_REJECTED });
       });
   })

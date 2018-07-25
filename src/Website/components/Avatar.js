@@ -31,11 +31,29 @@ const greetings = [
 class Avatar extends Component {
   state = {};
 
-  static getDerivedStateFromProps = nextProps => ({
-    group: nextProps.cookies.user_data.groups[0].name,
-    username: nextProps.cookies.user_data.username,
-    slug: nextProps.cookies.user_data.slug
-  });
+  componentDidMount() {
+    this.setState({
+      group: this.props.cookies.user_data.groups[0].name,
+      username: this.props.cookies.user_data.username,
+      slug: this.props.cookies.user_data.slug
+    });
+  }
+
+  // static getDerivedStateFromProps = nextProps => ({
+  //   group: nextProps.cookies.user_data.groups[0].name,
+  //   username: nextProps.cookies.user_data.username,
+  //   slug: nextProps.cookies.user_data.slug
+  // });
+
+  componentDidUpdate = prevProps => {
+    if (this.props.cookies !== prevProps.cookies) {
+      this.setState({
+        group: this.props.cookies.user_data.groups[0].name,
+        username: this.props.cookies.user_data.username,
+        slug: this.props.cookies.user_data.slug
+      });
+    }
+  };
 
   render() {
     const trigger = (
@@ -69,30 +87,34 @@ class Avatar extends Component {
             ) {
               if (avatarItem.link) {
                 return (
-                  <Dropdown.Item
-                    key={i}
-                    as="a"
-                    href={
-                      this.state.group === USER_GROUP_BUSINESS
-                        ? avatarItem.link.replace(
-                            ROUTE_PARAMS_BUSINESS_NAME,
-                            this.state.slug
-                          )
-                        : this.state.group === USER_GROUP_INDIVIDUAL
+                  <Dropdown.Item key={i}>
+                    <Link
+                      style={{
+                        color: "inherit",
+                        width: "100%"
+                      }}
+                      to={
+                        this.state.group === USER_GROUP_BUSINESS
                           ? avatarItem.link.replace(
-                              ROUTE_PARAMS_INDIVIDUAL_NAME,
-                              this.props.cookies.user_data.username
+                              ROUTE_PARAMS_BUSINESS_NAME,
+                              this.state.slug
                             )
-                          : avatarItem.link
-                    }
-                  >
-                    <i
-                      className={`${
-                        avatarItem.className
-                      } profile-dropdown__item__icon`}
-                    />
-                    {avatarItem.title}
-                    {avatarItem.badge && <Badge color="warning">4</Badge>}
+                          : this.state.group === USER_GROUP_INDIVIDUAL
+                            ? avatarItem.link.replace(
+                                ROUTE_PARAMS_INDIVIDUAL_NAME,
+                                this.props.cookies.user_data.username
+                              )
+                            : avatarItem.link
+                      }
+                    >
+                      <i
+                        className={`${
+                          avatarItem.className
+                        } profile-dropdown__item__icon`}
+                      />
+                      {avatarItem.title}
+                      {avatarItem.badge && <Badge color="warning">4</Badge>}
+                    </Link>
                   </Dropdown.Item>
                 );
               } else if (

@@ -256,6 +256,7 @@ export default function(state = INITIAL_STATE, action) {
       return { ...state, businessGet: true, loading: true };
 
     case FETCH_WORKING_HOUR_FULFILLED:
+      console.log("working : ", action.payload);
       return {
         ...state,
         businessGet: false,
@@ -316,7 +317,12 @@ export default function(state = INITIAL_STATE, action) {
       return { ...state, fetchLoading: true, businessGet: true };
 
     case EDIT_BUSINESS_REJECTED:
-      return { ...state, fetchLoading: false, businessGet: true };
+      return {
+        ...state,
+        fetchLoading: false,
+        businessGet: true
+        // businessDetailsEditErrors: action.payload
+      };
 
     case EDIT_BUSINESS_FULFILLED:
       return {
@@ -324,6 +330,7 @@ export default function(state = INITIAL_STATE, action) {
         fetchLoading: false,
         businessGet: true,
         editBusinessSuccess: action.payload
+        // businessDetailsEditErrors: null
       };
 
     case FETCH_BUSINESS_EACH_PENDING:
