@@ -70,6 +70,9 @@ class ImproveListingsTables extends Component {
       {
         Header: "Created Date",
         accessor: "creation.created_date",
+        Cell: ({ value }) => (
+          <div>{value.slice(0, 10) + " " + value.slice(11, 19)}</div>
+        ),
         id: "created_date",
         filterable: false
       },
