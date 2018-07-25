@@ -11,7 +11,8 @@ import {
   Input,
   Button,
   InputGroup,
-  InputGroupAddon
+  InputGroupAddon,
+  InputGroupText
 } from "reactstrap";
 import Select from "react-select";
 
@@ -312,14 +313,25 @@ class ProductAddEdit extends Component {
             <Label sm={3}>{`${attribute.name.split("_").join(" ")} ${
               attribute.required ? "*" : ""
             }`}</Label>
-            <Col sm={9}>
+            <Col sm={4}>
               <InputGroup className="add-product-ecommerce-biz">
+                {attribute.unit &&
+                attribute.unit.length &&
+                attribute.unit[0].indexOf("--") !== -1 ? (
+                  <InputGroupAddon addonType="prepend">
+                    <InputGroupText>
+                      {attribute.unit[0].split("--")[0]}
+                    </InputGroupText>
+                  </InputGroupAddon>
+                ) : null}
                 <DateTime
                   inputProps={{ required: attribute.required }}
                   value={this.state[attribute.name]}
                   onChange={value => this.onChange(attribute.name, value)}
                 />
-                {attribute.unit && attribute.unit.length ? (
+                {attribute.unit &&
+                attribute.unit.length &&
+                attribute.unit[0].indexOf("--") === -1 ? (
                   <InputGroupAddon addonType="append">
                     {attribute.unit[0].split("--")[0]}
                   </InputGroupAddon>
@@ -335,8 +347,17 @@ class ProductAddEdit extends Component {
             <Label sm={3}>{`${attribute.name.split("_").join(" ")} ${
               attribute.required ? "*" : ""
             }`}</Label>
-            <Col sm={9}>
-              <InputGroup className="add-product-ecommerce-biz">
+            <Col sm={4}>
+              <InputGroup>
+                {attribute.unit &&
+                attribute.unit.length &&
+                attribute.unit[0].indexOf("--") !== -1 ? (
+                  <InputGroupAddon addonType="prepend">
+                    <InputGroupText>
+                      {attribute.unit[0].split("--")[0]}
+                    </InputGroupText>
+                  </InputGroupAddon>
+                ) : null}
                 <Input
                   required={attribute.required}
                   type="number"
@@ -347,7 +368,9 @@ class ProductAddEdit extends Component {
                     this.onChange(attribute.name, event.target.value)
                   }
                 />
-                {attribute.unit && attribute.unit.length ? (
+                {attribute.unit &&
+                attribute.unit.length &&
+                attribute.unit[0].indexOf("--") === -1 ? (
                   <InputGroupAddon addonType="append">
                     {attribute.unit[0].split("--")[0]}
                   </InputGroupAddon>
@@ -363,8 +386,17 @@ class ProductAddEdit extends Component {
             <Label sm={3}>{`${attribute.name.split("_").join(" ")} ${
               attribute.required ? "*" : ""
             }`}</Label>
-            <Col sm={9}>
-              <InputGroup className="add-product-ecommerce-biz">
+            <Col sm={4}>
+              <InputGroup>
+                {attribute.unit &&
+                attribute.unit.length &&
+                attribute.unit[0].indexOf("--") !== -1 ? (
+                  <InputGroupAddon addonType="prepend">
+                    <InputGroupText>
+                      {attribute.unit[0].split("--")[0]}
+                    </InputGroupText>
+                  </InputGroupAddon>
+                ) : null}
                 <Input
                   required={attribute.required}
                   type="number"
@@ -374,7 +406,9 @@ class ProductAddEdit extends Component {
                     this.onChange(attribute.name, event.target.value)
                   }
                 />
-                {attribute.unit && attribute.unit.length ? (
+                {attribute.unit &&
+                attribute.unit.length &&
+                attribute.unit[0].indexOf("--") === -1 ? (
                   <InputGroupAddon addonType="append">
                     {attribute.unit[0].split("--")[0]}
                   </InputGroupAddon>
@@ -390,8 +424,17 @@ class ProductAddEdit extends Component {
             <Label sm={3}>{`${attribute.name.split("_").join(" ")} ${
               attribute.required ? "*" : ""
             }`}</Label>
-            <Col sm={9}>
-              <InputGroup className="add-product-ecommerce-biz">
+            <Col sm={4}>
+              <InputGroup>
+                {attribute.unit &&
+                attribute.unit.length &&
+                attribute.unit[0].indexOf("--") !== -1 ? (
+                  <InputGroupAddon addonType="prepend">
+                    <InputGroupText>
+                      {attribute.unit[0].split("--")[0]}
+                    </InputGroupText>
+                  </InputGroupAddon>
+                ) : null}
                 <Input
                   required={attribute.required}
                   placeholder={attribute.name}
@@ -400,7 +443,9 @@ class ProductAddEdit extends Component {
                     this.onChange(attribute.name, event.target.value)
                   }
                 />
-                {attribute.unit && attribute.unit.length ? (
+                {attribute.unit &&
+                attribute.unit.length &&
+                attribute.unit[0].indexOf("--") === -1 ? (
                   <InputGroupAddon addonType="append">
                     {attribute.unit[0].split("--")[0]}
                   </InputGroupAddon>
@@ -416,10 +461,20 @@ class ProductAddEdit extends Component {
             <Label sm={3}>{`${attribute.name.split("_").join(" ")} ${
               attribute.required ? "*" : ""
             }`}</Label>
-            <Col sm={9}>
-              <InputGroup className="add-product-ecommerce-biz">
+            <Col sm={4}>
+              <InputGroup>
+                {attribute.unit &&
+                attribute.unit.length &&
+                attribute.unit[0].indexOf("--") !== -1 ? (
+                  <InputGroupAddon addonType="prepend">
+                    <InputGroupText>
+                      {attribute.unit[0].split("--")[0]}
+                    </InputGroupText>
+                  </InputGroupAddon>
+                ) : null}
                 <Input
                   type="textarea"
+                  rows={6}
                   required={attribute.required}
                   placeholder={attribute.name}
                   value={this.state[attribute.name]}
@@ -427,7 +482,9 @@ class ProductAddEdit extends Component {
                     this.onChange(attribute.name, event.target.value)
                   }
                 />
-                {attribute.unit && attribute.unit.length ? (
+                {attribute.unit &&
+                attribute.unit.length &&
+                attribute.unit[0].indexOf("--") === -1 ? (
                   <InputGroupAddon addonType="append">
                     {attribute.unit[0].split("--")[0]}
                   </InputGroupAddon>
@@ -443,8 +500,17 @@ class ProductAddEdit extends Component {
             <Label sm={3}>{`${attribute.name.split("_").join(" ")} ${
               attribute.required ? "*" : ""
             }`}</Label>
-            <Col sm={9}>
+            <Col sm={4}>
               <InputGroup className="add-product-ecommerce-biz">
+                {attribute.unit &&
+                attribute.unit.length &&
+                attribute.unit[0].indexOf("--") !== -1 ? (
+                  <InputGroupAddon addonType="prepend">
+                    <InputGroupText>
+                      {attribute.unit[0].split("--")[0]}
+                    </InputGroupText>
+                  </InputGroupAddon>
+                ) : null}
                 <Select
                   options={attribute.options.map(x => ({ value: x, label: x }))}
                   required={attribute.required}
@@ -453,7 +519,9 @@ class ProductAddEdit extends Component {
                   }
                   value={this.state[attribute.name]}
                 />
-                {attribute.unit && attribute.unit.length ? (
+                {attribute.unit &&
+                attribute.unit.length &&
+                attribute.unit[0].indexOf("--") === -1 ? (
                   <InputGroupAddon addonType="append">
                     {attribute.unit[0].split("--")[0]}
                   </InputGroupAddon>
@@ -469,8 +537,17 @@ class ProductAddEdit extends Component {
             <Label sm={3}>{`${attribute.name.split("_").join(" ")} ${
               attribute.required ? "*" : ""
             }`}</Label>
-            <Col sm={9}>
+            <Col sm={4}>
               <InputGroup className="add-product-ecommerce-biz">
+                {attribute.unit &&
+                attribute.unit.length &&
+                attribute.unit[0].indexOf("--") !== -1 ? (
+                  <InputGroupAddon addonType="prepend">
+                    <InputGroupText>
+                      {attribute.unit[0].split("--")[0]}
+                    </InputGroupText>
+                  </InputGroupAddon>
+                ) : null}
                 <Select
                   multi
                   tabSelectsValue={false}
@@ -479,7 +556,9 @@ class ProductAddEdit extends Component {
                   onChange={value => this.onChange(attribute.name, value)}
                   value={this.state[attribute.name]}
                 />
-                {attribute.unit && attribute.unit.length ? (
+                {attribute.unit &&
+                attribute.unit.length &&
+                attribute.unit[0].indexOf("--") === -1 ? (
                   <InputGroupAddon addonType="append">
                     {attribute.unit[0].split("--")[0]}
                   </InputGroupAddon>

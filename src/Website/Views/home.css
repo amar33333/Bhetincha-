@@ -45,7 +45,7 @@ body {
 }
 
 .main-nav {
-  height: 85px;
+  height: 60px;
 }
 
 .main-nav.small {
@@ -137,6 +137,32 @@ input.main-nav-search::placeholder {
   align-items: center;
   margin-top: 30px;
 }
+
+.autosuggest-search-icon {
+  position: absolute;
+  right: 10px;
+  top: 25%;
+  font-size: 20px;
+  color: grey;
+}
+.in-navbar-autosuggest-search-icon {
+  position: absolute;
+  right: 10px;
+  top: 10%;
+  font-size: 20px;
+  color: grey;
+}
+
+.in-navbar__autosuggest__input {
+  width: 100% !important;
+  height: 30px !important;
+  padding: 10px 20px;
+  font-weight: 300;
+  font-size: 16px;
+  border: 1px solid #aaa;
+  border-radius: 4px;
+}
+
 .react-autosuggest__input {
   width: 100% !important;
   height: 50px !important;
