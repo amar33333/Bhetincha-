@@ -28,10 +28,12 @@ import {
   onUnmountIndustry,
   onIndustryDelete,
   toggleIndustryEditModal,
-  onIndustryEdit
+  onIndustryEdit,
+  resetIndustryErrors
 } from "../../actions";
 
 import PermissionProvider from "../../../Common/utils/PermissionProvider";
+import { ErrorHandling } from "../../../Common/utils/Extras";
 
 class Industry extends Component {
   state = { industry: "", industrySubmit: false };
@@ -95,7 +97,10 @@ class Industry extends Component {
     }
   };
 
-  componentWillUnmount = () => this.props.onUnmountIndustry();
+  componentWillUnmount = () => {
+    this.props.onUnmountIndustry();
+    this.props.resetIndustryErrors();
+  };
 
   onChange = (key, event) =>
     this.setState({
@@ -141,6 +146,12 @@ class Industry extends Component {
                         />
                       </InputGroup>
                     </FormGroup>
+                    <ErrorHandling
+                      error={
+                        this.props.industryErrors &&
+                        this.props.industryErrors.name
+                      }
+                    />
                     <Button color="primary">
                       <span className="fa fa-plus" /> Add
                     </Button>
@@ -181,6 +192,7 @@ export default connect(
     onUnmountIndustry,
     onIndustryDelete,
     onIndustryEdit,
-    toggleIndustryEditModal
+    toggleIndustryEditModal,
+    resetIndustryErrors
   }
 )(Industry);

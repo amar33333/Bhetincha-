@@ -15,13 +15,16 @@ import {
   CardHeader
 } from "reactstrap";
 
+import { ErrorHandling, validateEmail } from "../../../../Common/utils/Extras";
+
 class UserEditModal extends Component {
   state = {
     first_name: "",
     last_name: "",
     username: "",
     email: "",
-    group: ""
+    group: "",
+    email_validation_error: false
   };
 
   componentDidMount() {
@@ -32,28 +35,54 @@ class UserEditModal extends Component {
       first_name,
       last_name,
       username,
-      email
+      email,
+      email_validation_error: email && !validateEmail(email)
     });
   }
 
-  onChange = (key, event) => this.setState({ [key]: event.target.value });
+  onChange = (key, event) => {
+    const val = event.target.value;
+
+    if (key === "email") {
+      this.setState({ [key]: val === "" ? null : val }, () => {
+        if (this.state.email && !validateEmail(this.state.email)) {
+          this.setState({ email_validation_error: true });
+        } else this.setState({ email_validation_error: false });
+      });
+    } else this.setState({ [key]: val });
+  };
 
   handleSelectChange = group => this.setState({ group });
 
   onFormEdit = event => {
     event.preventDefault();
-    const { first_name, last_name, username, group, email } = this.state;
+    const {
+      first_name,
+      last_name,
+      username,
+      group,
+      email,
+      email_validation_error
+    } = this.state;
 
-    this.props.onUserEdit({
-      body: {
-        first_name,
-        last_name,
-        username,
-        email,
-        groups: [group.id]
-      },
-      id: this.props.data.id
-    });
+    if (!email_validation_error)
+      this.props.onUserEdit({
+        body: {
+          first_name,
+          last_name,
+          username,
+          email,
+          groups: [group.id]
+        },
+        id: this.props.data.id
+      });
+  };
+
+  displayEmailValidationInfo = () => {
+    if (this.state.email)
+      if (this.state.email_validation_error)
+        return <p style={{ color: "red" }}>Invalid Email</p>;
+      else return <p style={{ color: "green" }}>Valid Email </p>;
   };
 
   render() {
@@ -87,12 +116,13 @@ class UserEditModal extends Component {
             <FormGroup>
               <Label for="email">Email</Label>
               <Input
-                required
+                //required
                 type="text"
                 value={this.state.email}
                 onChange={this.onChange.bind(this, "email")}
               />
             </FormGroup>
+            {this.displayEmailValidationInfo()}
           </Col>
         </Row>
         <Row>
@@ -100,7 +130,7 @@ class UserEditModal extends Component {
             <FormGroup>
               <Label for="fname">First Name</Label>
               <Input
-                required
+                //required
                 type="text"
                 value={this.state.first_name}
                 onChange={this.onChange.bind(this, "first_name")}
@@ -114,7 +144,7 @@ class UserEditModal extends Component {
             <FormGroup>
               <Label for="lname">Last Name</Label>
               <Input
-                required
+                //required
                 type="text"
                 value={this.state.last_name}
                 onChange={this.onChange.bind(this, "last_name")}

@@ -50,8 +50,10 @@ import {
   onUnmountIndustry,
   onUnmountCategory,
   onUnmountExtraSection,
-  onUnmountSubCategory
+  onUnmountSubCategory,
+  resetSubCategoryErrors
 } from "../../actions";
+import { ErrorHandling } from "../../../Common/utils/Extras";
 
 class SubCategories extends Component {
   state = {
@@ -233,6 +235,7 @@ class SubCategories extends Component {
     this.props.onUnmountCategory();
     this.props.onUnmountSubCategory();
     this.props.onUnmountExtraSection();
+    this.props.resetSubCategoryErrors();
   }
 
   debouncedSearch = debounce(
@@ -369,6 +372,12 @@ class SubCategories extends Component {
                         onChange={this.onChange.bind(this, "subCategory")}
                       />
                     </InputGroup>
+                    <ErrorHandling
+                      error={
+                        this.props.subCategoryErrors &&
+                        this.props.subCategoryErrors.name
+                      }
+                    />
                     <Row>
                       <Col xs="12" md="12">
                         <TagsInput
@@ -491,6 +500,7 @@ export default connect(
     onUnmountIndustry,
     onUnmountCategory,
     onUnmountExtraSection,
-    onUnmountSubCategory
+    onUnmountSubCategory,
+    resetSubCategoryErrors
   }
 )(SubCategories);

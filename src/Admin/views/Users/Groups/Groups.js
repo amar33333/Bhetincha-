@@ -24,8 +24,10 @@ import {
   onGroupsList,
   onGroupDelete,
   toggleGroupEditModal,
-  onGroupEdit
+  onGroupEdit,
+  resetUserGroupErrors
 } from "../../../actions";
+import { ErrorHandling } from "../../../../Common/utils/Extras";
 
 class Groups extends Component {
   constructor(props) {
@@ -38,6 +40,10 @@ class Groups extends Component {
 
   componentDidMount() {
     this.props.onGroupsList();
+  }
+
+  componentWillUnmount() {
+    this.props.resetUserGroupErrors();
   }
 
   onChange = (key, event) =>
@@ -83,6 +89,12 @@ class Groups extends Component {
                         </Button>
                       </InputGroupAddon>
                     </InputGroup>
+                    <ErrorHandling
+                      error={
+                        this.props.userGroupErrors &&
+                        this.props.userGroupErrors.name
+                      }
+                    />
                   </form>
                 </CardBody>
               </Card>
@@ -114,14 +126,15 @@ class Groups extends Component {
 export default connect(
   ({
     AdminContainer: {
-      user_reducer: { groups, groupEditData, groupEditModal }
+      user_reducer: { groups, groupEditData, groupEditModal, userGroupErrors }
     }
-  }) => ({ groups, groupEditData, groupEditModal }),
+  }) => ({ groups, groupEditData, groupEditModal, userGroupErrors }),
   {
     onGroupSubmit,
     onGroupsList,
     onGroupDelete,
     toggleGroupEditModal,
-    onGroupEdit
+    onGroupEdit,
+    resetUserGroupErrors
   }
 )(Groups);

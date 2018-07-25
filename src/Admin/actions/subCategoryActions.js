@@ -22,10 +22,15 @@ import {
   DELETE_SUB_CATEGORY_PENDING,
   DELETE_SUB_CATEGORY_REJECTED,
   TOGGLE_SUB_CATEGORY_EDIT_MODAL,
+  RESET_SUB_CATEGORY_ERRORS,
   UNMOUNT_SUB_CATEGORY
 } from "./types";
 
 const epics = [];
+
+export const resetSubCategoryErrors = () => ({
+  type: RESET_SUB_CATEGORY_ERRORS
+});
 
 export const onSubCategorySubmit = payload => ({
   type: CREATE_SUB_CATEGORY_PENDING,
@@ -52,14 +57,14 @@ epics.push((action$, { getState }) =>
             { type: FETCH_SUB_CATEGORY_PENDING }
           ];
         } else {
-          throw new Error(response.msg[Object.keys(response.msg)[0]][0]);
+          throw new Error(JSON.stringify(response.msg));
         }
       })
       .catch(ajaxError => {
         toast.error(ajaxError.toString());
         return Observable.of({
           type: CREATE_SUB_CATEGORY_REJECTED,
-          payload: ajaxError
+          payload: JSON.parse(ajaxError.message)
         });
       });
   })

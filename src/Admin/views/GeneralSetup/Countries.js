@@ -27,10 +27,12 @@ import {
   onCountryEdit,
   toggleCountryEditModal,
   onCountryDelete,
-  onUnmountCountry
+  onUnmountCountry,
+  resetGeneralSetupErrors
 } from "../../actions";
 
 import PermissionProvider from "../../../Common/utils/PermissionProvider";
+import { ErrorHandling } from "../../../Common/utils/Extras";
 
 class Countries extends Component {
   state = { country: "", countryCode: "", countrySubmit: false };
@@ -99,7 +101,10 @@ class Countries extends Component {
     }
   };
 
-  componentWillUnmount = () => this.props.onUnmountCountry();
+  componentWillUnmount = () => {
+    this.props.onUnmountCountry();
+    this.props.resetGeneralSetupErrors();
+  };
 
   onFormSubmit = event => {
     event.preventDefault();
@@ -144,6 +149,12 @@ class Countries extends Component {
                           onChange={this.onChange.bind(this, "countryCode")}
                         />
                       </InputGroup>
+                      <ErrorHandling
+                        error={
+                          this.props.generalSetupErrors &&
+                          this.props.generalSetupErrors.name
+                        }
+                      />
                       <InputGroup className="mr-3">
                         <InputGroupAddon addonType="prepend">
                           <InputGroupText>Name</InputGroupText>
@@ -157,6 +168,12 @@ class Countries extends Component {
                           onChange={this.onChange.bind(this, "country")}
                         />
                       </InputGroup>
+                      <ErrorHandling
+                        error={
+                          this.props.generalSetupErrors &&
+                          this.props.generalSetupErrors.code
+                        }
+                      />
                     </FormGroup>
                     <Button color="primary">
                       <span className="fa fa-plus" /> Add
@@ -198,7 +215,8 @@ export default connect(
     countryEditData: general_setup.countryEditData,
     fetchLoading: general_setup.countriesFetchLoading,
     loading: general_setup.countryLoading,
-    error: general_setup.countryError
+    error: general_setup.countryError,
+    generalSetupErrors: general_setup.generalSetupErrors
   }),
   {
     onCountrySubmit,
@@ -206,6 +224,7 @@ export default connect(
     onCountryEdit,
     toggleCountryEditModal,
     onCountryDelete,
-    onUnmountCountry
+    onUnmountCountry,
+    resetGeneralSetupErrors
   }
 )(Countries);

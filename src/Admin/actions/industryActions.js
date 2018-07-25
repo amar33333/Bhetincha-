@@ -26,11 +26,16 @@ import {
   EDIT_INDUSTRY_FULFILLED,
   EDIT_INDUSTRY_PENDING,
   EDIT_INDUSTRY_REJECTED,
+  RESET_INDUSTRY_ERRORS,
   UNMOUNT_INDUSTRY_DATA,
   UNMOUNT_INDUSTRY
 } from "./types";
 
 const epics = [];
+
+export const resetIndustryErrors = () => ({
+  type: RESET_INDUSTRY_ERRORS
+});
 
 export const onIndustrySubmit = payload => ({
   type: CREATE_INDUSTRY_PENDING,
@@ -51,14 +56,14 @@ epics.push((action$, { getState }) =>
             { type: FETCH_INDUSTRY_PENDING }
           ];
         } else {
-          throw new Error(response.msg[Object.keys(response.msg)[0]][0]);
+          throw new Error(JSON.stringify(response.msg));
         }
       })
       .catch(ajaxError => {
-        toast.error(ajaxError.toString());
+        toast.error("Error: Adding Industry");
         return Observable.of({
           type: CREATE_INDUSTRY_REJECTED,
-          payload: ajaxError
+          payload: JSON.parse(ajaxError.message)
         });
       });
   })

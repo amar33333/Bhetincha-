@@ -21,7 +21,8 @@ import {
   TOGGLE_USER_EDIT_MODAL,
   FETCH_USERS_NOT_PAGINATED_FULFILLED,
   FETCH_USERS_NOT_PAGINATED_REJECTED,
-  FETCH_USERS_NOT_PAGINATED_PENDING
+  FETCH_USERS_NOT_PAGINATED_PENDING,
+  RESET_USER_GROUP_ERRORS
 } from "../actions/types";
 
 const INITIAL_STATE = {
@@ -38,11 +39,15 @@ const INITIAL_STATE = {
   userEditData: null,
   userEditModal: false,
   permissionsLoading: false,
-  usersNotPaginatedList: []
+  usersNotPaginatedList: [],
+  userGroupErrors: null
 };
 
 export default function(state = INITIAL_STATE, action) {
   switch (action.type) {
+    case RESET_USER_GROUP_ERRORS:
+      return { ...state, userGroupErrors: null };
+
     case TOGGLE_PERMISSION_PENDING:
       return { ...state, loading: true, statusClass: "pending" };
 
@@ -82,11 +87,17 @@ export default function(state = INITIAL_STATE, action) {
         ...state,
         ...action.payload.data,
         loading: false,
-        statusClass: "fulfilled"
+        statusClass: "fulfilled",
+        userGroupErrors: null
       };
 
     case CREATE_GROUP_REJECTED:
-      return { ...state, loading: false, statusClass: "rejected" };
+      return {
+        ...state,
+        loading: false,
+        statusClass: "rejected",
+        userGroupErrors: action.payload
+      };
 
     case CREATE_USER_PENDING:
       return { ...state, loading: true, statusClass: "pending" };
@@ -96,11 +107,17 @@ export default function(state = INITIAL_STATE, action) {
         ...state,
         ...action.payload.data,
         loading: false,
-        statusClass: "fulfilled"
+        statusClass: "fulfilled",
+        userGroupErrors: null
       };
 
     case CREATE_USER_REJECTED:
-      return { ...state, loading: false, statusClass: "rejected" };
+      return {
+        ...state,
+        loading: false,
+        statusClass: "rejected",
+        userGroupErrors: action.payload
+      };
 
     case FETCH_GROUPS_PENDING:
       return { ...state, loading: true, statusClass: "pending" };

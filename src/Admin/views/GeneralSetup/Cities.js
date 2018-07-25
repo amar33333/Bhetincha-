@@ -43,13 +43,15 @@ import {
   toggleCityEditModal,
   onCityEdit,
   onAddressTreeList,
-  onGetAddressTreeList
+  onGetAddressTreeList,
+  resetGeneralSetupErrors
 } from "../../actions";
 
 import CustomModal from "../../../Common/components/CustomModal";
 import CityEditModal from "../../../Common/components/CustomModal/ModalTemplates/CityEditModal";
 
 import PermissionProvider from "../../../Common/utils/PermissionProvider";
+import { ErrorHandling } from "../../../Common/utils/Extras";
 
 class Cities extends Component {
   state = {
@@ -224,6 +226,7 @@ class Cities extends Component {
     this.props.onUnmountState();
     this.props.onUnmountDistrict();
     this.props.onUnmountCity();
+    this.props.resetGeneralSetupErrors();
   }
 
   debouncedSearch = debounce(
@@ -384,6 +387,12 @@ class Cities extends Component {
                             onChange={this.onChange.bind(this, "city")}
                           />
                         </InputGroup>
+                        <ErrorHandling
+                          error={
+                            this.props.generalSetupErrors &&
+                            this.props.generalSetupErrors.name
+                          }
+                        />
                       </Col>
                       <Col xs="2" md="2">
                         <Button color="primary">
@@ -461,7 +470,8 @@ export default connect(
         citiesPages,
         citiesRowCount,
         cityEditModal,
-        cityEditData
+        cityEditData,
+        generalSetupErrors
       },
       filterCity
     }
@@ -481,6 +491,7 @@ export default connect(
     rowCount: citiesRowCount,
     cityEditModal,
     cityEditData,
+    generalSetupErrors,
     access_token,
     ...filterCity
   }),
@@ -504,6 +515,7 @@ export default connect(
     onUnmountState,
     onUnmountDistrict,
     onUnmountCity,
-    toggleCityEditModal
+    toggleCityEditModal,
+    resetGeneralSetupErrors
   }
 )(Cities);

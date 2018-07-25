@@ -49,7 +49,6 @@ class Permissions extends Component {
   }
 
   static getDerivedStateFromProps = (nextProps, prevState) => {
-    console.log("permision props: ", exclude_group_list);
     let temp_excluded_permissions_list = {};
 
     if (nextProps.permissions_list)
@@ -173,14 +172,9 @@ class Permissions extends Component {
         ? this.state.permissions_list
         : this.state.excluded_permissions_list;
 
-    // console.log("checkbox perm list: ", checkbox_perm_list);
-    console.log("permission state: ", this.state);
-
     return (
       checkbox_perm_list &&
       Object.keys(checkbox_perm_list).map((key, i) => {
-        // console.log("key: ", key);
-
         return (
           <ListGroupItem
             key={i}
@@ -290,8 +284,6 @@ class Permissions extends Component {
   }
 
   render() {
-    // console.log("permision props: ", this.props);
-    console.log("permision state: ", this.state);
     return !this.props.permissionsLoading ? (
       <div className="animated fadeIn">
         {/* <ListGroup style={{ "width": "30%" }}> */}

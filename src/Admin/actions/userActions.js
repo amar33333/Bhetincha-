@@ -49,10 +49,15 @@ import {
   EDIT_USER_REJECTED,
   EDIT_GROUP_FULFILLED,
   EDIT_GROUP_PENDING,
-  EDIT_GROUP_REJECTED
+  EDIT_GROUP_REJECTED,
+  RESET_USER_GROUP_ERRORS
 } from "./types";
 
 const epics = [];
+
+export const resetUserGroupErrors = () => ({
+  type: RESET_USER_GROUP_ERRORS
+});
 
 export const toggleGroupEditModal = payload => ({
   type: TOGGLE_GROUP_EDIT_MODAL,
@@ -214,12 +219,15 @@ epics.push((action$, { getState }) =>
           toast.success("Group Created Successfully!");
           return { type: CREATE_GROUP_FULFILLED, payload: response };
         } else {
-          throw new Error(response.msg);
+          throw new Error(JSON.stringify(response.msg));
         }
       })
       .catch(ajaxError => {
         toast.error("Error Adding group");
-        return Observable.of({ type: CREATE_GROUP_REJECTED });
+        return Observable.of({
+          type: CREATE_GROUP_REJECTED,
+          payload: JSON.parse(ajaxError.message)
+        });
       })
   )
 );
@@ -330,12 +338,15 @@ epics.push((action$, { getState }) =>
           toast.success("User Created Successfully!");
           return { type: CREATE_USER_FULFILLED, payload: response };
         } else {
-          throw new Error(response.msg);
+          throw new Error(JSON.stringify(response.msg));
         }
       })
       .catch(ajaxError => {
         toast.error("Error Creating User");
-        return Observable.of({ type: CREATE_USER_REJECTED });
+        return Observable.of({
+          type: CREATE_USER_REJECTED,
+          payload: JSON.parse(ajaxError.message)
+        });
       });
   })
 );

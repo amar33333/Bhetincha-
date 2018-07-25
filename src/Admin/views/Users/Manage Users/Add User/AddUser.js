@@ -15,7 +15,16 @@ import {
   FormGroup
 } from "reactstrap";
 
-import { onUserSubmit, onGroupsList } from "../../../../actions";
+import {
+  onUserSubmit,
+  onGroupsList,
+  resetUserGroupErrors
+} from "../../../../actions";
+
+import {
+  ErrorHandling,
+  validateEmail
+} from "../../../../../Common/utils/Extras";
 
 class AddUser extends Component {
   constructor(props) {
@@ -27,7 +36,8 @@ class AddUser extends Component {
       email: "",
       password: "",
       confirm_password: "",
-      group: ""
+      group: "",
+      email_validation_error: false
     };
   }
 
@@ -35,7 +45,28 @@ class AddUser extends Component {
     this.props.onGroupsList();
   }
 
-  onChange = (key, event) => this.setState({ [key]: event.target.value });
+  componentWillUnmount() {
+    this.props.resetUserGroupErrors();
+  }
+
+  onChange = (key, event) => {
+    const val = event.target.value;
+
+    if (key === "email") {
+      this.setState({ [key]: val === "" ? null : val }, () => {
+        if (this.state.email && !validateEmail(this.state.email)) {
+          this.setState({ email_validation_error: true });
+        } else this.setState({ email_validation_error: false });
+      });
+    } else this.setState({ [key]: val });
+  };
+
+  displayEmailValidationInfo = () => {
+    if (this.state.email)
+      if (this.state.email_validation_error)
+        return <p style={{ color: "red" }}>Invalid Email</p>;
+      else return <p style={{ color: "green" }}>Valid Email </p>;
+  };
 
   handleSelectChange = group => this.setState({ group });
 
@@ -52,19 +83,20 @@ class AddUser extends Component {
       email
     } = this.state;
 
-    if (password === confirm_password) {
-      this.props.onUserSubmit({
-        first_name,
-        last_name,
-        username,
-        email,
-        password,
-        groups: [group.id]
-      });
-      this.clearState();
-    } else {
-      toast.error("Password Mismatch");
-    }
+    if (!this.state.email_validation_error)
+      if (password === confirm_password) {
+        this.props.onUserSubmit({
+          first_name,
+          last_name,
+          username,
+          email,
+          password,
+          groups: [group.id]
+        });
+        this.clearState();
+      } else {
+        toast.error("Password Mismatch");
+      }
   };
 
   clearState = () =>
@@ -150,6 +182,13 @@ class AddUser extends Component {
                         onChange={this.onChange.bind(this, "email")}
                       />
                     </FormGroup>
+                    {this.displayEmailValidationInfo()}
+                    <ErrorHandling
+                      error={
+                        this.props.userGroupErrors &&
+                        this.props.userGroupErrors.email
+                      }
+                    />
                   </Col>
                 </Row>
                 <Row>
@@ -190,6 +229,12 @@ class AddUser extends Component {
                         onChange={this.onChange.bind(this, "username")}
                       />
                     </FormGroup>
+                    <ErrorHandling
+                      error={
+                        this.props.userGroupErrors &&
+                        this.props.userGroupErrors.username
+                      }
+                    />
                   </Col>
                   <Col xs="12" md="6">
                     <FormGroup>
@@ -234,5 +279,5 @@ export default connect(
   ({ AdminContainer: { user_reducer } }) => ({
     ...user_reducer
   }),
-  { onUserSubmit, onGroupsList }
+  { onUserSubmit, onGroupsList, resetUserGroupErrors }
 )(AddUser);

@@ -27,14 +27,10 @@ class SubBusinessContact extends Component {
       department: props.contact.department,
       collapsed: false,
       email_validation_error:
-        this.props.contact.email && !validateEmail(this.props.contact.email)
-          ? true
-          : false,
+        this.props.contact.email && !validateEmail(this.props.contact.email),
       phone_validation_error:
         this.props.contact.mobileNumber &&
         !validatePhone(this.props.contact.mobileNumber)
-          ? true
-          : false
     };
   }
   toggleCollapse = () => {

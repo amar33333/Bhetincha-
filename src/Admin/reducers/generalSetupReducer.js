@@ -48,8 +48,10 @@ import {
   TOGGLE_STATE_EDIT_MODAL,
   TOGGLE_DISTRICT_EDIT_MODAL,
   TOGGLE_CITY_EDIT_MODAL,
-  TOGGLE_AREA_EDIT_MODAL
+  TOGGLE_AREA_EDIT_MODAL,
+  RESET_GENERAL_SETUP_ERRORS
 } from "../actions/types";
+import DeviceSignalCellularNull from "material-ui/SvgIcon";
 
 const INITIAL_STATE = {
   countries: [],
@@ -93,18 +95,31 @@ const INITIAL_STATE = {
   stateEditModal: false,
   districtEditModal: false,
   cityEditModal: false,
-  areaEditModal: false
+  areaEditModal: false,
+  generalSetupErrors: null
 };
 
 export default function(state = INITIAL_STATE, action) {
   switch (action.type) {
-    // COUNTRY
+    case RESET_GENERAL_SETUP_ERRORS:
+      return { ...state, generalSetupErrors: null };
+
     case CREATE_COUNTRY_PENDING:
       return { ...state, countryLoading: true, countryError: false };
     case CREATE_COUNTRY_FULFILLED:
-      return { ...state, countryLoading: false, countryError: false };
+      return {
+        ...state,
+        countryLoading: false,
+        countryError: false,
+        generalSetupErrors: null
+      };
     case CREATE_COUNTRY_REJECTED:
-      return { ...state, countryLoading: false, countryError: true };
+      return {
+        ...state,
+        countryLoading: false,
+        countryError: true,
+        generalSetupErrors: action.payload
+      };
 
     case FETCH_COUNTRY_PENDING:
       return { ...state, countriesFetchLoading: true };
@@ -130,9 +145,19 @@ export default function(state = INITIAL_STATE, action) {
     case CREATE_STATE_PENDING:
       return { ...state, stateLoading: true, stateError: false };
     case CREATE_STATE_FULFILLED:
-      return { ...state, stateLoading: false, stateError: false };
+      return {
+        ...state,
+        stateLoading: false,
+        stateError: false,
+        generalSetupErrors: null
+      };
     case CREATE_STATE_REJECTED:
-      return { ...state, stateLoading: false, stateError: true };
+      return {
+        ...state,
+        stateLoading: false,
+        stateError: true,
+        generalSetupErrors: action.payload
+      };
 
     case FETCH_STATE_PENDING:
       return { ...state, statesFetchLoading: true };
@@ -160,9 +185,19 @@ export default function(state = INITIAL_STATE, action) {
     case CREATE_DISTRICT_PENDING:
       return { ...state, districtLoading: true, districtError: false };
     case CREATE_DISTRICT_FULFILLED:
-      return { ...state, districtLoading: false, districtError: false };
+      return {
+        ...state,
+        districtLoading: false,
+        districtError: false,
+        generalSetupErrors: null
+      };
     case CREATE_DISTRICT_REJECTED:
-      return { ...state, districtLoading: false, districtError: true };
+      return {
+        ...state,
+        districtLoading: false,
+        districtError: true,
+        generalSetupErrors: action.payload
+      };
 
     case FETCH_DISTRICT_PENDING:
       return { ...state, districtsFetchLoading: true };
@@ -190,9 +225,19 @@ export default function(state = INITIAL_STATE, action) {
     case CREATE_CITY_PENDING:
       return { ...state, cityLoading: true, cityError: false };
     case CREATE_CITY_FULFILLED:
-      return { ...state, cityLoading: false, cityError: false };
+      return {
+        ...state,
+        cityLoading: false,
+        cityError: false,
+        generalSetupErrors: null
+      };
     case CREATE_CITY_REJECTED:
-      return { ...state, cityLoading: false, cityError: true };
+      return {
+        ...state,
+        cityLoading: false,
+        cityError: true,
+        generalSetupErrors: action.payload
+      };
 
     case FETCH_CITY_PENDING:
       return { ...state, citiesFetchLoading: true };
@@ -235,9 +280,19 @@ export default function(state = INITIAL_STATE, action) {
     case CREATE_AREA_PENDING:
       return { ...state, areaLoading: true, areaError: false };
     case CREATE_AREA_FULFILLED:
-      return { ...state, areaLoading: false, areaError: false };
+      return {
+        ...state,
+        areaLoading: false,
+        areaError: false,
+        generalSetupErrors: null
+      };
     case CREATE_AREA_REJECTED:
-      return { ...state, areaLoading: false, areaError: true };
+      return {
+        ...state,
+        areaLoading: false,
+        areaError: true,
+        generalSetupErrors: action.payload
+      };
 
     case FETCH_AREA_PENDING:
       return { ...state, areasFetchLoading: true };

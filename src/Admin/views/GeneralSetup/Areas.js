@@ -45,6 +45,7 @@ import {
   onUnmountCity,
   onUnmountArea,
   toggleAreaEditModal,
+  resetGeneralSetupErrors,
   onAreaEdit,
   onAddressTreeList,
   onGetAddressTreeList
@@ -54,6 +55,7 @@ import CustomModal from "../../../Common/components/CustomModal";
 import AreaEditModal from "../../../Common/components/CustomModal/ModalTemplates/AreaEditModal";
 
 import PermissionProvider from "../../../Common/utils/PermissionProvider";
+import { ErrorHandling } from "../../../Common/utils/Extras";
 
 class Areas extends Component {
   state = {
@@ -266,6 +268,7 @@ class Areas extends Component {
     this.props.onUnmountDistrict();
     this.props.onUnmountCity();
     this.props.onUnmountArea();
+    this.props.resetGeneralSetupErrors();
   }
 
   debouncedSearch = debounce(
@@ -461,6 +464,12 @@ class Areas extends Component {
                             onChange={this.onChange.bind(this, "area")}
                           />
                         </InputGroup>
+                        <ErrorHandling
+                          error={
+                            this.props.generalSetupErrors &&
+                            this.props.generalSetupErrors.name
+                          }
+                        />
                       </Col>
                       <Col xs="12" md="4">
                         <Button color="primary">
@@ -542,7 +551,8 @@ export default connect(
         areasPages,
         areasRowCount,
         areaEditModal,
-        areaEditData
+        areaEditData,
+        generalSetupErrors
       },
       filterArea
     }
@@ -565,6 +575,7 @@ export default connect(
     rowCount: areasRowCount,
     areaEditModal,
     areaEditData,
+    generalSetupErrors,
     access_token,
     ...filterArea
   }),
@@ -592,6 +603,7 @@ export default connect(
     onAreaEdit,
     onAddressTreeList,
     onGetAddressTreeList,
-    toggleAreaEditModal
+    toggleAreaEditModal,
+    resetGeneralSetupErrors
   }
 )(Areas);

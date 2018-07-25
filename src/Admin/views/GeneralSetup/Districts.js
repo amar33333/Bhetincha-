@@ -46,8 +46,10 @@ import {
   onUnmountState,
   onUnmountDistrict,
   onAddressTreeList,
-  onGetAddressTreeList
+  onGetAddressTreeList,
+  resetGeneralSetupErrors
 } from "../../actions";
+import { ErrorHandling } from "../../../Common/utils/Extras";
 
 class Districts extends Component {
   state = {
@@ -195,6 +197,7 @@ class Districts extends Component {
     this.props.onUnmountCountry();
     this.props.onUnmountState();
     this.props.onUnmountDistrict();
+    this.props.resetGeneralSetupErrors();
   }
 
   debouncedSearch = debounce(
@@ -329,6 +332,12 @@ class Districts extends Component {
                             onChange={this.onChange.bind(this, "district")}
                           />
                         </InputGroup>
+                        <ErrorHandling
+                          error={
+                            this.props.generalSetupErrors &&
+                            this.props.generalSetupErrors.name
+                          }
+                        />
                       </Col>
                       <Col xs="12" md="5">
                         <InputGroup>
@@ -346,6 +355,12 @@ class Districts extends Component {
                             onChange={this.onChange.bind(this, "districtCode")}
                           />
                         </InputGroup>
+                        <ErrorHandling
+                          error={
+                            this.props.generalSetupErrors &&
+                            this.props.generalSetupErrors.code
+                          }
+                        />
                       </Col>
                       <Col xs="12" md="2">
                         <Button color="primary">
@@ -418,7 +433,8 @@ export default connect(
         districtEditData,
         districtsFetchLoading,
         districtLoading,
-        districtError
+        districtError,
+        generalSetupErrors
       },
       filterDistrict
     }
@@ -435,6 +451,7 @@ export default connect(
     fetchLoading: districtsFetchLoading,
     loading: districtLoading,
     error: districtError,
+    generalSetupErrors,
     access_token,
     ...filterDistrict
   }),
@@ -454,6 +471,7 @@ export default connect(
     onUnmountState,
     onUnmountDistrict,
     onAddressTreeList,
-    onGetAddressTreeList
+    onGetAddressTreeList,
+    resetGeneralSetupErrors
   }
 )(Districts);

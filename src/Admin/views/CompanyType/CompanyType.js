@@ -27,10 +27,12 @@ import {
   onCompanyTypeEdit,
   toggleCompanyTypeEditModal,
   onCompanyTypeDelete,
-  onUnmountCompanyType
+  onUnmountCompanyType,
+  resetPaymentCompanyErrors
 } from "../../actions";
 
 import PermissionProvider from "../../../Common/utils/PermissionProvider";
+import { ErrorHandling } from "../../../Common/utils/Extras";
 
 class CompanyType extends Component {
   state = { company_type: "", companyTypeSubmit: false };
@@ -96,7 +98,10 @@ class CompanyType extends Component {
     }
   };
 
-  componentWillUnmount = () => this.props.onUnmountCompanyType();
+  componentWillUnmount = () => {
+    this.props.onUnmountCompanyType();
+    this.props.resetPaymentCompanyErrors();
+  };
 
   onFormSubmit = event => {
     event.preventDefault();
@@ -142,6 +147,12 @@ class CompanyType extends Component {
                         />
                       </InputGroup>
                     </FormGroup>
+                    <ErrorHandling
+                      error={
+                        this.props.paymentCompanyErrors &&
+                        this.props.paymentCompanyErrors.name
+                      }
+                    />
                     <Button color="primary">
                       <span className="fa fa-plus" /> Add
                     </Button>
@@ -181,7 +192,8 @@ export default connect(
     companyTypeEditData: business_reducer.companyTypeEditData,
     fetchLoading: business_reducer.companyTypesFetchLoading,
     loading: business_reducer.companyTypeLoading,
-    error: business_reducer.companyTypeError
+    error: business_reducer.companyTypeError,
+    paymentCompanyErrors: business_reducer.paymentCompanyErrors
   }),
   {
     onCompanyTypeSubmit,
@@ -189,6 +201,7 @@ export default connect(
     toggleCompanyTypeEditModal,
     onCompanyTypeList,
     onCompanyTypeDelete,
-    onUnmountCompanyType
+    onUnmountCompanyType,
+    resetPaymentCompanyErrors
   }
 )(CompanyType);

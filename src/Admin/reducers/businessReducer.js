@@ -58,7 +58,8 @@ import {
   CREATE_VERIFIED_BUSINESS_REJECTED,
   UNMOUNT_BRANCH,
   UNMOUNT_PAYMENT_METHOD,
-  UNMOUNT_COMPANY_TYPE
+  UNMOUNT_COMPANY_TYPE,
+  RESET_PAYMENT_COMPANY_ERRORS
 } from "../actions/types";
 
 const INITIAL_STATE = {
@@ -105,11 +106,18 @@ const INITIAL_STATE = {
   businessData: null,
   branch: null,
   businessBranchData: [],
-  branchCreateEditErrors: null
+  branchCreateEditErrors: null,
+  paymentCompanyErrors: null
 };
 
 export default function(state = INITIAL_STATE, action) {
   switch (action.type) {
+    case RESET_PAYMENT_COMPANY_ERRORS:
+      return {
+        ...state,
+        paymentCompanyErrors: null
+      };
+
     case EDIT_BRANCH_EACH_PENDING:
       return {
         ...state,
@@ -291,13 +299,15 @@ export default function(state = INITIAL_STATE, action) {
       return {
         ...state,
         paymentMethodLoading: false,
-        paymentMethodError: false
+        paymentMethodError: false,
+        paymentCompanyErrors: null
       };
     case CREATE_PAYMENT_METHODS_REJECTED:
       return {
         ...state,
         paymentMethodLoading: false,
-        paymentMethodError: true
+        paymentMethodError: true,
+        paymentCompanyErrors: action.payload
       };
 
     case FETCH_PAYMENT_METHODS_PENDING:
@@ -327,13 +337,15 @@ export default function(state = INITIAL_STATE, action) {
       return {
         ...state,
         companyTypeLoading: false,
-        companyTypeError: false
+        companyTypeError: false,
+        paymentCompanyErrors: null
       };
     case CREATE_COMPANY_TYPE_REJECTED:
       return {
         ...state,
         companyTypeLoading: false,
-        companyTypeError: true
+        companyTypeError: true,
+        paymentCompanyErrors: action.payload
       };
 
     case FETCH_COMPANY_TYPE_PENDING:

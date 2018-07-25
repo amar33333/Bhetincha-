@@ -151,7 +151,8 @@ import {
   DELETE_BRANCH_REJECTED,
   UNMOUNT_BRANCH,
   UNMOUNT_COMPANY_TYPE,
-  UNMOUNT_PAYMENT_METHOD
+  UNMOUNT_PAYMENT_METHOD,
+  RESET_PAYMENT_COMPANY_ERRORS
 } from "./types";
 
 const epics = [];
@@ -1290,14 +1291,14 @@ epics.push((action$, { getState }) =>
             { type: FETCH_COMPANY_TYPE_PENDING }
           ];
         } else {
-          throw new Error(response.msg[Object.keys(response.msg)[0]][0]);
+          throw new Error(JSON.stringify(response.msg));
         }
       })
       .catch(ajaxError => {
         toast.error(ajaxError.toString());
         return Observable.of({
           type: CREATE_COMPANY_TYPE_REJECTED,
-          payload: ajaxError
+          payload: JSON.parse(ajaxError.message)
         });
       });
   })
@@ -1339,14 +1340,14 @@ epics.push((action$, { getState }) =>
             { type: FETCH_PAYMENT_METHODS_PENDING }
           ];
         } else {
-          throw new Error(response.msg[Object.keys(response.msg)[0]][0]);
+          throw new Error(JSON.stringify(response.msg));
         }
       })
       .catch(ajaxError => {
-        toast.error(ajaxError.toString());
+        toast.error("Error: Creating Payment Method");
         return Observable.of({
           type: CREATE_PAYMENT_METHODS_REJECTED,
-          payload: ajaxError
+          payload: JSON.parse(ajaxError.message)
         });
       });
   })
@@ -1452,6 +1453,10 @@ epics.push((action$, { getState }) =>
       })
   )
 );
+
+export const resetPaymentCompanyErrors = () => ({
+  type: RESET_PAYMENT_COMPANY_ERRORS
+});
 
 export const toggleCompanyTypeEditModal = payload => ({
   type: TOGGLE_COMPANY_TYPE_EDIT_MODAL,

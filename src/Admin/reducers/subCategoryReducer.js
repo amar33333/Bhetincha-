@@ -9,6 +9,7 @@ import {
   FETCH_SUB_CATEGORY_ARRAY_PENDING,
   FETCH_SUB_CATEGORY_ARRAY_FULFILLED,
   FETCH_SUB_CATEGORY_ARRAY_REJECTED,
+  RESET_SUB_CATEGORY_ERRORS,
   UNMOUNT_SUB_CATEGORY
 } from "../actions/types";
 
@@ -20,11 +21,17 @@ const INITIAL_STATE = {
   pages: 1,
   rowCount: 0,
   subCategoryEditModal: false,
-  subCategoryEditData: null
+  subCategoryEditData: null,
+  subCategoryErrors: null
 };
 
 export default function(state = INITIAL_STATE, action) {
   switch (action.type) {
+    case RESET_SUB_CATEGORY_ERRORS:
+      return {
+        ...state,
+        subCategoryErrors: null
+      };
     case UNMOUNT_SUB_CATEGORY:
       return { ...state, subCategories: [] };
 
@@ -32,10 +39,20 @@ export default function(state = INITIAL_STATE, action) {
       return { ...state, loading: true, error: false };
 
     case CREATE_SUB_CATEGORY_REJECTED:
-      return { ...state, loading: false, error: true };
+      return {
+        ...state,
+        loading: false,
+        error: true,
+        subCategoryErrors: action.payload
+      };
 
     case CREATE_SUB_CATEGORY_FULFILLED:
-      return { ...state, loading: false, error: false };
+      return {
+        ...state,
+        loading: false,
+        error: false,
+        subCategoryErrors: null
+      };
 
     case FETCH_SUB_CATEGORY_PENDING:
       return { ...state, fetchLoading: true };

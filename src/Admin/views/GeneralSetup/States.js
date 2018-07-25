@@ -39,8 +39,10 @@ import {
   toggleStateEditModal,
   onStateDelete,
   onUnmountCountry,
-  onUnmountState
+  onUnmountState,
+  resetGeneralSetupErrors
 } from "../../actions";
+import { ErrorHandling } from "../../../Common/utils/Extras";
 
 class States extends Component {
   state = { state: "", country: "", stateSubmit: false };
@@ -136,6 +138,7 @@ class States extends Component {
   componentWillUnmount() {
     this.props.onUnmountCountry();
     this.props.onUnmountState();
+    this.props.resetGeneralSetupErrors();
   }
 
   debouncedSearch = debounce(
@@ -215,6 +218,12 @@ class States extends Component {
                             onChange={this.onChange.bind(this, "state")}
                           />
                         </InputGroup>
+                        <ErrorHandling
+                          error={
+                            this.props.generalSetupErrors &&
+                            this.props.generalSetupErrors.name
+                          }
+                        />
                       </Col>
                       <Col xs="2" md="2">
                         <Button color="primary">
@@ -275,7 +284,8 @@ export default connect(
         stateEditData,
         statesFetchLoading,
         stateLoading,
-        stateError
+        stateError,
+        generalSetupErrors
       },
       filterState
     }
@@ -289,6 +299,8 @@ export default connect(
     fetchLoading: statesFetchLoading,
     loading: stateLoading,
     error: stateError,
+    generalSetupErrors,
+
     ...filterState
   }),
   {
@@ -301,6 +313,7 @@ export default connect(
     handleSortChangeState,
     onStateDelete,
     onUnmountCountry,
-    onUnmountState
+    onUnmountState,
+    resetGeneralSetupErrors
   }
 )(States);

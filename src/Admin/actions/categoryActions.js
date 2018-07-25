@@ -35,10 +35,15 @@ import {
   TOGGLE_CATEGORY_EDIT_MODAL,
   UNMOUNT_CATEGORY_DATA,
   UNMOUNT_SUB_CATEGORY,
-  UNMOUNT_CATEGORY
+  UNMOUNT_CATEGORY,
+  RESET_CATEGORY_ERRORS
 } from "./types";
 
 const epics = [];
+
+export const resetCategoryErrors = () => ({
+  type: RESET_CATEGORY_ERRORS
+});
 
 export const onCategoryArrayList = payload => ({
   type: FETCH_CATEGORY_ARRAY_PENDING,
@@ -86,14 +91,14 @@ epics.push((action$, { getState }) =>
             { type: FETCH_CATEGORY_PENDING }
           ];
         } else {
-          throw new Error(response.msg[Object.keys(response.msg)[0]][0]);
+          throw new Error(JSON.stringify(response.msg));
         }
       })
       .catch(ajaxError => {
-        toast.error(ajaxError.toString());
+        toast.error("Error: Adding Category");
         return Observable.of({
           type: CREATE_CATEGORY_REJECTED,
-          payload: ajaxError
+          payload: JSON.parse(ajaxError.message)
         });
       });
   })

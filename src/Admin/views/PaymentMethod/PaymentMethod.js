@@ -27,10 +27,12 @@ import {
   onPaymentMethodEdit,
   togglePaymentMethodEditModal,
   onPaymentMethodDelete,
-  onUnmountPaymentMethod
+  onUnmountPaymentMethod,
+  resetPaymentCompanyErrors
 } from "../../actions";
 
 import PermissionProvider from "../../../Common/utils/PermissionProvider";
+import { ErrorHandling } from "../../../Common/utils/Extras";
 
 class PaymentMethod extends Component {
   state = { payment_method: "", paymentMethodSubmit: false };
@@ -96,7 +98,10 @@ class PaymentMethod extends Component {
     }
   };
 
-  componentWillUnmount = () => this.props.onUnmountPaymentMethod();
+  componentWillUnmount = () => {
+    this.props.onUnmountPaymentMethod();
+    this.props.resetPaymentCompanyErrors();
+  };
 
   onFormSubmit = event => {
     event.preventDefault();
@@ -141,6 +146,12 @@ class PaymentMethod extends Component {
                           onChange={this.onChange.bind(this, "payment_method")}
                         />
                       </InputGroup>
+                      <ErrorHandling
+                        error={
+                          this.props.paymentCompanyErrors &&
+                          this.props.paymentCompanyErrors.name
+                        }
+                      />
                     </FormGroup>
                     <Button color="primary">
                       <span className="fa fa-plus" /> Add
@@ -181,7 +192,8 @@ export default connect(
     paymentMethodEditModal: business_reducer.paymentMethodEditModal,
     fetchLoading: business_reducer.paymentMethodsFetchLoading,
     loading: business_reducer.paymentMethodLoading,
-    error: business_reducer.paymentMethodError
+    error: business_reducer.paymentMethodError,
+    paymentCompanyErrors: business_reducer.paymentCompanyErrors
   }),
   {
     onPaymentMethodSubmit,
@@ -189,6 +201,7 @@ export default connect(
     onPaymentMethodEdit,
     togglePaymentMethodEditModal,
     onPaymentMethodDelete,
-    onUnmountPaymentMethod
+    onUnmountPaymentMethod,
+    resetPaymentCompanyErrors
   }
 )(PaymentMethod);

@@ -38,10 +38,12 @@ import {
   onUnmountIndustry,
   onUnmountCategory,
   onCategoryDelete,
-  toggleCategoryEditModal
+  toggleCategoryEditModal,
+  resetCategoryErrors
 } from "../../actions";
 
 import PermissionProvider from "../../../Common/utils/PermissionProvider";
+import { ErrorHandling } from "../../../Common/utils/Extras";
 
 class Categories extends Component {
   state = {
@@ -141,6 +143,7 @@ class Categories extends Component {
   componentWillUnmount() {
     this.props.onUnmountIndustry();
     this.props.onUnmountCategory();
+    this.props.resetCategoryErrors();
   }
 
   debouncedSearch = debounce(
@@ -217,6 +220,12 @@ class Categories extends Component {
                             />
                           </InputGroup>
                         </FormGroup>
+                        <ErrorHandling
+                          error={
+                            this.props.categoryErrors &&
+                            this.props.categoryErrors.name
+                          }
+                        />
                       </Col>
                       <Col xs="12" md="2">
                         <Button color="primary">
@@ -287,6 +296,7 @@ export default connect(
     onUnmountIndustry,
     onUnmountCategory,
     onCategoryList,
-    onCategoryDelete
+    onCategoryDelete,
+    resetCategoryErrors
   }
 )(Categories);

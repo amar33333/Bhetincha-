@@ -14,6 +14,7 @@ import {
   FETCH_CATEGORY_ARRAY_PENDING,
   FETCH_CATEGORY_ARRAY_FULFILLED,
   FETCH_CATEGORY_ARRAY_REJECTED,
+  RESET_CATEGORY_ERRORS,
   UNMOUNT_CATEGORY
 } from "../actions/types";
 
@@ -25,11 +26,18 @@ const INITIAL_STATE = {
   rowCount: 0,
   categories: [],
   categoryData: [],
-  categoryEditModal: false
+  categoryEditModal: false,
+  categoryErrors: null
 };
 
 export default function(state = INITIAL_STATE, action) {
   switch (action.type) {
+    case RESET_CATEGORY_ERRORS:
+      return {
+        ...state,
+        categoryErrors: null
+      };
+
     case FETCH_CATEGORY_ARRAY_PENDING:
       return { ...state, fetchLoading: true };
 
@@ -51,10 +59,20 @@ export default function(state = INITIAL_STATE, action) {
       return { ...state, loading: true, error: false };
 
     case CREATE_CATEGORY_REJECTED:
-      return { ...state, loading: false, error: true };
+      return {
+        ...state,
+        loading: false,
+        error: true,
+        categoryErrors: action.payload
+      };
 
     case CREATE_CATEGORY_FULFILLED:
-      return { ...state, loading: false, error: false };
+      return {
+        ...state,
+        loading: false,
+        error: false,
+        categoryErrors: null
+      };
 
     case FETCH_CATEGORY_PENDING:
       return { ...state, fetchLoading: true };

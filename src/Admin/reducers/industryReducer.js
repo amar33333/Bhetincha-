@@ -9,6 +9,7 @@ import {
   FETCH_INDUSTRY_EACH_REJECTED,
   FETCH_INDUSTRY_EACH_PENDING,
   TOGGLE_INDUSTRY_EDIT_MODAL,
+  RESET_INDUSTRY_ERRORS,
   UNMOUNT_INDUSTRY_DATA,
   UNMOUNT_INDUSTRY
 } from "../actions/types";
@@ -22,11 +23,15 @@ const INITIAL_STATE = {
   industries: [],
   industriesData: [],
   industryData: null,
-  industryEditModal: false
+  industryEditModal: false,
+  industryErrors: null
 };
 
 export default function(state = INITIAL_STATE, action) {
   switch (action.type) {
+    case RESET_INDUSTRY_ERRORS:
+      return { ...state, industryErrors: null };
+
     case UNMOUNT_INDUSTRY:
       return { ...state, industries: [] };
 
@@ -34,10 +39,15 @@ export default function(state = INITIAL_STATE, action) {
       return { ...state, loading: true, error: false };
 
     case CREATE_INDUSTRY_REJECTED:
-      return { ...state, loading: false, error: true };
+      return {
+        ...state,
+        loading: false,
+        error: true,
+        industryErrors: action.payload
+      };
 
     case CREATE_INDUSTRY_FULFILLED:
-      return { ...state, loading: false, error: false };
+      return { ...state, loading: false, error: false, industryErrors: null };
 
     case FETCH_INDUSTRY_PENDING:
       return { ...state, fetchLoading: true };

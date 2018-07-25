@@ -123,10 +123,15 @@ import {
   TOGGLE_STATE_EDIT_MODAL,
   TOGGLE_DISTRICT_EDIT_MODAL,
   TOGGLE_CITY_EDIT_MODAL,
-  TOGGLE_AREA_EDIT_MODAL
+  TOGGLE_AREA_EDIT_MODAL,
+  RESET_GENERAL_SETUP_ERRORS
 } from "./types";
 
 const epics = [];
+
+export const resetGeneralSetupErrors = () => ({
+  type: RESET_GENERAL_SETUP_ERRORS
+});
 
 // COUNTRY
 export const onCountrySubmit = payload => ({
@@ -147,14 +152,14 @@ epics.push((action$, { getState }) =>
             { type: FETCH_COUNTRY_PENDING }
           ];
         } else {
-          throw new Error(response.msg[Object.keys(response.msg)[0]][0]);
+          throw new Error(JSON.stringify(response.msg));
         }
       })
       .catch(ajaxError => {
-        toast.error(ajaxError.toString());
+        toast.error("Error: Adding Country");
         return Observable.of({
           type: CREATE_COUNTRY_REJECTED,
-          payload: ajaxError
+          payload: JSON.parse(ajaxError.message)
         });
       });
   })
@@ -274,14 +279,14 @@ epics.push((action$, { getState }) =>
             { type: FETCH_STATE_PENDING }
           ];
         } else {
-          throw new Error(response.msg[Object.keys(response.msg)[0]][0]);
+          throw new Error(JSON.stringify(response.msg));
         }
       })
       .catch(ajaxError => {
-        toast.error(ajaxError.toString());
+        toast.error("Error: Adding State");
         return Observable.of({
           type: CREATE_STATE_REJECTED,
-          payload: ajaxError
+          payload: JSON.parse(ajaxError.message)
         });
       });
   })
@@ -430,14 +435,14 @@ epics.push((action$, { getState }) =>
             { type: FETCH_DISTRICT_PENDING }
           ];
         } else {
-          throw new Error(response.msg[Object.keys(response.msg)[0]][0]);
+          throw new Error(JSON.stringify(response.msg));
         }
       })
       .catch(ajaxError => {
-        toast.error(ajaxError.toString());
+        toast.error("Error: Adding District");
         return Observable.of({
           type: CREATE_DISTRICT_REJECTED,
-          payload: ajaxError
+          payload: JSON.parse(ajaxError.message)
         });
       });
   })
@@ -600,14 +605,14 @@ epics.push((action$, { getState }) =>
             { type: FETCH_CITY_PENDING }
           ];
         } else {
-          throw new Error(response.msg[Object.keys(response.msg)[0]][0]);
+          throw new Error(JSON.stringify(response.msg));
         }
       })
       .catch(ajaxError => {
-        toast.error(ajaxError.toString());
+        toast.error("Error: Adding City");
         return Observable.of({
           type: CREATE_CITY_REJECTED,
-          payload: ajaxError
+          payload: JSON.parse(ajaxError.message)
         });
       });
   })
@@ -768,14 +773,14 @@ epics.push((action$, { getState }) =>
             { type: FETCH_AREA_PENDING }
           ];
         } else {
-          throw new Error(response.msg[Object.keys(response.msg)[0]][0]);
+          throw new Error(JSON.stringify(response.msg));
         }
       })
       .catch(ajaxError => {
-        toast.error(ajaxError.toString());
+        toast.error("Error: Adding Area");
         return Observable.of({
           type: CREATE_AREA_REJECTED,
-          payload: ajaxError
+          payload: JSON.parse(ajaxError.message)
         });
       });
   })
