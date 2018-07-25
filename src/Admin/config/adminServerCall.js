@@ -30,7 +30,8 @@ import {
   TELE_USER_SEARCH_NAME_URL,
   ECOMMERCE_CATEGORY_CONFIG_URL,
   ECOMMERCE_PRODUCT_SEARCH_URL,
-  IMPROVE_LISTING_URL
+  IMPROVE_LISTING_URL,
+  SEARCH_PLACEHOLDER_URL
 } from "./ADMIN_API";
 
 import {
@@ -43,6 +44,48 @@ import axios from "axios";
 
 import { ajax } from "rxjs/observable/dom/ajax";
 import querystring from "querystring";
+
+export const onSearchPlaceholderPut = ({ placeholder, access_token }) =>
+  ajax({
+    method: "PUT",
+    url: `${SEARCH_PLACEHOLDER_URL}${placeholder.id}/`,
+    body: placeholder.body,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
+export const onSearchPlaceholderPost = ({ body, access_token }) =>
+  ajax({
+    method: "post",
+    url: SEARCH_PLACEHOLDER_URL,
+    body,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
+export const onSearchPlaceholderGet = ({ access_token }) =>
+  ajax({
+    method: "get",
+    url: SEARCH_PLACEHOLDER_URL,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
+export const onSearchPlaceholderEachDelete = ({ id, access_token }) =>
+  ajax({
+    method: "delete",
+    url: `${SEARCH_PLACEHOLDER_URL}${id}/`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
 
 export const onSocialLinkPost = ({ body, access_token }) =>
   ajax({

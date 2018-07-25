@@ -1,22 +1,8 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import debounce from "lodash.debounce";
-import {
-  Button,
-  Col,
-  Row,
-  Input,
-  InputGroup,
-  InputGroupAddon,
-  InputGroupText,
-  Label,
-  Form,
-  FormGroup,
-  Card,
-  CardBody,
-  CardHeader
-} from "reactstrap";
 import ReactTable from "react-table";
+import moment from "moment";
 import {
   PopoverDelete,
   Select,
@@ -71,43 +57,43 @@ class ImproveListingsTables extends Component {
         Header: "Created Date",
         accessor: "creation.created_date",
         Cell: ({ value }) => (
-          <div>{value.slice(0, 10) + " " + value.slice(11, 19)}</div>
+          <div>{moment(value).format("YYYY/MM/DD HH:mm:ss")}</div>
         ),
         id: "created_date",
         filterable: false
-      },
-      {
-        Header: "Actions",
-        id: "edit",
-        accessor: "id",
-        filterable: false,
-        sortable: false,
-        width: 145,
-        Cell: ({ value, original: { id } }) => (
-          <div>
-            {/* <PermissionProvider permission="CAN_ADD_STATE">
-              <Button
-                data-tooltip="Edit"
-                data-position="bottom center"
-                color="secondary"
-                className="mr-2"
-                onClick={() =>
-                  this.props.toggleStateEditModal({ id, country, name })
-                }
-              >
-                <i className="fa fa-pencil" />
-              </Button>
-            </PermissionProvider> */}
-            {/* <PermissionProvider permission="CAN_ADD_STATE"> */}
-            <PopoverDelete
-              text={false}
-              id={`delete-${value}`}
-              onClick={() => console.log(id)}
-            />
-            {/* </PermissionProvider> */}
-          </div>
-        )
       }
+      // {
+      //   Header: "Actions",
+      //   id: "edit",
+      //   accessor: "id",
+      //   filterable: false,
+      //   sortable: false,
+      //   width: 145,
+      //   Cell: ({ value, original: { id } }) => (
+      //     <div>
+      //       {/* <PermissionProvider permission="CAN_ADD_STATE">
+      //         <Button
+      //           data-tooltip="Edit"
+      //           data-position="bottom center"
+      //           color="secondary"
+      //           className="mr-2"
+      //           onClick={() =>
+      //             this.props.toggleStateEditModal({ id, country, name })
+      //           }
+      //         >
+      //           <i className="fa fa-pencil" />
+      //         </Button>
+      //       </PermissionProvider> */}
+      //       {/* <PermissionProvider permission="CAN_ADD_STATE"> */}
+      //       <PopoverDelete
+      //         text={false}
+      //         id={`delete-${value}`}
+      //         onClick={() => console.log(id)}
+      //       />
+      //       {/* </PermissionProvider> */}
+      //     </div>
+      //   )
+      // }
     ],
     onFilteredChange: (column, value) => {
       value.id === "business" && this.debouncedBusinessSearch(column);

@@ -5,7 +5,13 @@ import {
   TOGGLE_SOCIAL_LINK_EDIT_MODAL,
   FETCH_IMPROVE_LISTING_FULFILLED,
   FETCH_IMPROVE_LISTING_PENDING,
-  FETCH_IMPROVE_LISTING_REJECTED
+  FETCH_IMPROVE_LISTING_REJECTED,
+  CREATE_SEARCH_PLACEHOLDER_FULFILLED,
+  CREATE_SEARCH_PLACEHOLDER_PENDING,
+  CREATE_SEARCH_PLACEHOLDER_REJECTED,
+  FETCH_SEARCH_PLACEHOLDER_FULFILLED,
+  FETCH_SEARCH_PLACEHOLDER_PENDING,
+  FETCH_SEARCH_PLACEHOLDER_REJECTED
 } from "../actions/types";
 
 const INITIAL_STATE = {
@@ -16,7 +22,12 @@ const INITIAL_STATE = {
   improveListings: [],
   improveListingsPages: 1,
   improveListingsRowCount: 0,
-  improveListingsFetchLoading: false
+  improveListingsFetchLoading: false,
+  placeholders: [],
+  placeholdersFetchLoading: false,
+  placeholderLoading: false,
+  placeholderError: false,
+  placeholderData: []
 };
 
 export default function(state = INITIAL_STATE, action) {
@@ -59,6 +70,28 @@ export default function(state = INITIAL_STATE, action) {
         socialLinkEditModal: !state.socialLinkEditModal,
         socialLinkEditData: action.payload
       };
+
+    // SEARCH_PLACEHOLDER
+    case CREATE_SEARCH_PLACEHOLDER_PENDING:
+      return { ...state, placeholderLoading: true, placeholderError: false };
+    case CREATE_SEARCH_PLACEHOLDER_FULFILLED:
+      return { ...state, placeholderLoading: false, placeholderError: false };
+    case CREATE_SEARCH_PLACEHOLDER_REJECTED:
+      return { ...state, placeholderLoading: false, placeholderError: true };
+
+    case FETCH_SEARCH_PLACEHOLDER_PENDING:
+      return { ...state, placeholdersFetchLoading: true };
+    case FETCH_SEARCH_PLACEHOLDER_FULFILLED:
+      return {
+        ...state,
+        placeholders: action.payload.map((placeholder, i) => ({
+          ...placeholder,
+          s_no: i + 1
+        })),
+        placeholdersFetchLoading: false
+      };
+    case FETCH_SEARCH_PLACEHOLDER_REJECTED:
+      return { ...state, placeholdersFetchLoading: false };
 
     default:
       return state;

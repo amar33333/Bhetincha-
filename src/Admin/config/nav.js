@@ -230,6 +230,26 @@ const items = {
           icon: "icon-user-follow",
           permission: "CAN_VIEW_SOCIAL_LINKS"
         }
+        // {
+        //   name: "Campaign",
+        //   url: "/admin/campaigns",
+        //   icon: "icon-user-follow"
+        //   //permission: "CAN_VIEW_CAMPAIGN"
+        // }
+      ]
+    },
+    {
+      name: "Campaigns",
+      // url: "/admin/settings",
+      icon: "icon-settings",
+      // permission: "CAN_ACCESS_SETTINGS",
+      children: [
+        {
+          name: "Search Placeholder",
+          url: "/admin/campaign-search-placeholder",
+          icon: "icon-user-follow"
+          //permission: "CAN_VIEW_CAMPAIGN"
+        }
       ]
     },
     {
