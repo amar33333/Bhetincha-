@@ -188,11 +188,17 @@ class ProductDetail extends Component {
                                       </span>
                                     );
                                   })
-                                : `${product[selectedKey]} ${
-                                    selectedKey.split("--").length > 1
-                                      ? selectedKey.split("--")[1]
-                                      : ""
-                                  }`}
+                                : selectedKey.split("--").length === 2
+                                  ? `${product[selectedKey]} ${
+                                      selectedKey.split("--").length > 1
+                                        ? selectedKey.split("--")[1]
+                                        : ""
+                                    }`
+                                  : `${
+                                      selectedKey.split("--").length > 1
+                                        ? selectedKey.split("--")[1]
+                                        : ""
+                                    } ${product[selectedKey]}`}
                             </span>
                           </p>
                         );

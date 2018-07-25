@@ -22,6 +22,7 @@ class PropertyItemAddNew extends Component {
     this.state = {
       name: "",
       unit: "",
+      unitLeft: false,
       fieldType: null,
       required: false,
       defaultValueString: "",
@@ -46,6 +47,7 @@ class PropertyItemAddNew extends Component {
       if (!this.props.error) {
         updates.name = "";
         updates.unit = "";
+        updates.unitLeft = false;
         updates.fieldType = null;
         updates.required = false;
         updates.defaultValueString = "";
@@ -76,6 +78,7 @@ class PropertyItemAddNew extends Component {
     const {
       name,
       unit,
+      unitLeft,
       fieldType,
       required,
       defaultValueDateTime,
@@ -92,7 +95,7 @@ class PropertyItemAddNew extends Component {
 
     const body = {
       name: name.split(" ").join("_"),
-      unit: unit ? [unit] : [],
+      unit: unit ? [`${unit}${unitLeft ? "--l" : ""}`] : [],
       attributeTypeId: fieldType.uid,
       categoryId: this.props.activeCategory,
       required,
@@ -193,6 +196,20 @@ class PropertyItemAddNew extends Component {
                       onChange={e => this.setState({ unit: e.target.value })}
                     />
                   </Col>
+                </FormGroup>
+                <FormGroup check>
+                  <Label check>
+                    <Input
+                      type="checkbox"
+                      checked={this.state.unitLeft}
+                      onClick={event => {
+                        this.setState({
+                          unitLeft: event.target.checked
+                        });
+                      }}
+                    />
+                    Position Unit on Left when Displaying
+                  </Label>
                 </FormGroup>
 
                 {this.state.fieldType && (

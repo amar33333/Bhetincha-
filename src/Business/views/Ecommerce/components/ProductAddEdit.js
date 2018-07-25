@@ -321,7 +321,7 @@ class ProductAddEdit extends Component {
                 />
                 {attribute.unit && attribute.unit.length ? (
                   <InputGroupAddon addonType="append">
-                    {attribute.unit[0]}
+                    {attribute.unit[0].split("--")[0]}
                   </InputGroupAddon>
                 ) : null}
               </InputGroup>
@@ -349,7 +349,7 @@ class ProductAddEdit extends Component {
                 />
                 {attribute.unit && attribute.unit.length ? (
                   <InputGroupAddon addonType="append">
-                    {attribute.unit[0]}
+                    {attribute.unit[0].split("--")[0]}
                   </InputGroupAddon>
                 ) : null}
               </InputGroup>
@@ -376,7 +376,7 @@ class ProductAddEdit extends Component {
                 />
                 {attribute.unit && attribute.unit.length ? (
                   <InputGroupAddon addonType="append">
-                    {attribute.unit[0]}
+                    {attribute.unit[0].split("--")[0]}
                   </InputGroupAddon>
                 ) : null}
               </InputGroup>
@@ -402,7 +402,7 @@ class ProductAddEdit extends Component {
                 />
                 {attribute.unit && attribute.unit.length ? (
                   <InputGroupAddon addonType="append">
-                    {attribute.unit[0]}
+                    {attribute.unit[0].split("--")[0]}
                   </InputGroupAddon>
                 ) : null}
               </InputGroup>
@@ -429,7 +429,7 @@ class ProductAddEdit extends Component {
                 />
                 {attribute.unit && attribute.unit.length ? (
                   <InputGroupAddon addonType="append">
-                    {attribute.unit[0]}
+                    {attribute.unit[0].split("--")[0]}
                   </InputGroupAddon>
                 ) : null}
               </InputGroup>
@@ -455,7 +455,7 @@ class ProductAddEdit extends Component {
                 />
                 {attribute.unit && attribute.unit.length ? (
                   <InputGroupAddon addonType="append">
-                    {attribute.unit[0]}
+                    {attribute.unit[0].split("--")[0]}
                   </InputGroupAddon>
                 ) : null}
               </InputGroup>
@@ -481,7 +481,7 @@ class ProductAddEdit extends Component {
                 />
                 {attribute.unit && attribute.unit.length ? (
                   <InputGroupAddon addonType="append">
-                    {attribute.unit[0]}
+                    {attribute.unit[0].split("--")[0]}
                   </InputGroupAddon>
                 ) : null}
               </InputGroup>

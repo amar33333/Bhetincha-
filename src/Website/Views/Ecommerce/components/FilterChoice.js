@@ -34,7 +34,11 @@ class FilterChoice extends Component {
               <Row key={opt}>
                 <Col>
                   <Checkbox
-                    label={`${opt} ${this.props.unit || ""}`}
+                    label={
+                      this.props.unitLeft
+                        ? `${this.props.unit.split("--")[0] || ""} ${opt}`
+                        : `${opt} ${this.props.unit.split("--")[0] || ""}`
+                    }
                     value={opt}
                     checked={this.state.checked.includes(opt)}
                     onChange={(_, { checked, value: label }) =>
