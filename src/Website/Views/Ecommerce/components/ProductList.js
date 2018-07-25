@@ -49,6 +49,7 @@ class ProductList extends Component {
             {this.props.priceFilter && (
               <FilterRange
                 withTitle={false}
+                unitLeft={true}
                 value={{
                   min: this.props.priceFilter.min,
                   max: this.props.priceFilter.max

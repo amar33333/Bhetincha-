@@ -11,6 +11,7 @@ class Filters extends Component {
             return (
               <FilterRange
                 withTitle
+                unitLeft={false}
                 key={i}
                 value={{ min: 0, max: 100 }}
                 name="Discount Percentage"
@@ -34,6 +35,11 @@ class Filters extends Component {
             return (
               <FilterChoice
                 key={i}
+                unitLeft={
+                  data.unit && data.unit.length
+                    ? data.unit[0].indexOf("--") !== -1
+                    : false
+                }
                 options={data.options}
                 name={data.name.split("_").join(" ")}
                 onChange={checked => {
@@ -60,8 +66,16 @@ class Filters extends Component {
               <FilterRange
                 withTitle
                 key={i}
+                unitLeft={
+                  data.unit && data.unit.length
+                    ? data.unit[0].indexOf("--") !== -1
+                    : false
+                }
                 value={{ min: data.min, max: data.max }}
-                name={data.name.split("_").join(" ")}
+                name={data.name
+                  .split("--")[0]
+                  .split("_")
+                  .join(" ")}
                 onChangeComplete={({ min, max }) =>
                   this.props.handleFilterChange({
                     lte: max,

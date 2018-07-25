@@ -45,7 +45,7 @@ class ProductDetail extends Component {
               <Col xs="12" md="8">
                 <p className="product-spec-item">Name: {productDetail.name}</p>
                 <p className="product-spec-item">
-                  Price: {productDetail.price} Rs
+                  Price: Rs {productDetail.price}
                 </p>
                 <p className="product-spec-item">
                   Discount: {productDetail.discount} %
@@ -62,10 +62,17 @@ class ProductDetail extends Component {
                     return (
                       <p key={attribute.uid} className="product-spec-item">
                         {attribute.name.split("_").join(" ")}:{" "}
-                        {productDetail[selectedKey]}{" "}
-                        {selectedKey.split("--").length > 1
-                          ? selectedKey.split("--")[1]
-                          : ""}
+                        {selectedKey.split("--").length === 2
+                          ? `${productDetail[selectedKey]} ${
+                              selectedKey.split("--").length > 1
+                                ? selectedKey.split("--")[1]
+                                : ""
+                            }`
+                          : `${
+                              selectedKey.split("--").length > 1
+                                ? selectedKey.split("--")[1]
+                                : ""
+                            } ${productDetail[selectedKey]}`}
                       </p>
                     );
                   } else {

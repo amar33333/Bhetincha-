@@ -81,7 +81,11 @@ class FilterRange extends Component {
                   //   (this.props.value.max - this.props.value.min) / 100,
                   //   10
                   // )}
-                  formatLabel={value => `${value} ${this.props.unit || ""}`}
+                  formatLabel={value =>
+                    this.props.unitLeft
+                      ? `${this.props.unit.split("--")[0] || ""} ${value}`
+                      : `${value} ${this.props.unit.split("--")[0] || ""}`
+                  }
                   onChange={value => this.handleSetRange(value)}
                   onChangeComplete={value => this.handleSetRangeChange(value)}
                   value={this.state.value}
