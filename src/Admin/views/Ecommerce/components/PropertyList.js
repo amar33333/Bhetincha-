@@ -125,7 +125,7 @@ class PropertyList extends Component {
       {
         Header: "Unit",
         accessor: "unit",
-        Cell: ({ value }) => value.join(", ")
+        Cell: ({ value }) => value.join(", ").split("--")[0]
       },
       {
         Header: "Actions",

@@ -13,7 +13,10 @@ const INITIAL_STATE = {
   social_linksFetchLoading: false,
   socialLinkEditData: null,
   socialLinkEditModal: false,
-  improveListings: []
+  improveListings: [],
+  improveListingsPages: 1,
+  improveListingsRowCount: 0,
+  improveListingsFetchLoading: false
 };
 
 export default function(state = INITIAL_STATE, action) {
@@ -35,16 +38,20 @@ export default function(state = INITIAL_STATE, action) {
       return { ...state, social_linksFetchLoading: false };
 
     case FETCH_IMPROVE_LISTING_PENDING:
-      return { ...state };
-
+      return { ...state, improveListingsFetchLoading: true };
     case FETCH_IMPROVE_LISTING_FULFILLED:
       return {
         ...state,
-        improveListings: action.payload
+        improveListings: action.payload.data.map((listing, i) => ({
+          ...listing,
+          s_no: action.payload.rows * (action.payload.page - 1) + i + 1
+        })),
+        improveListingsPages: action.payload.pages,
+        improveListingsRowCount: action.payload.rowCount,
+        improveListingsFetchLoading: false
       };
-
     case FETCH_IMPROVE_LISTING_REJECTED:
-      return { ...state };
+      return { ...state, improveListingsFetchLoading: false };
 
     case TOGGLE_SOCIAL_LINK_EDIT_MODAL:
       return {

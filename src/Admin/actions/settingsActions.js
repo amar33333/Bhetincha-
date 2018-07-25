@@ -29,14 +29,53 @@ import {
 
 const epics = [];
 
-export const onImproveListingList = () => ({
-  type: FETCH_IMPROVE_LISTING_PENDING
+export const onImproveListingList = payload => ({
+  type: FETCH_IMPROVE_LISTING_PENDING,
+  payload
 });
 
 epics.push((action$, { getState }) =>
-  action$.ofType(FETCH_IMPROVE_LISTING_PENDING).mergeMap(action =>
-    onImproveListingGet({
-      access_token: getState().auth.cookies.token_data.access_token
+  action$.ofType(FETCH_IMPROVE_LISTING_PENDING).switchMap(({ payload }) => {
+    const {
+      rows,
+      page,
+      business,
+      name,
+      sortby,
+      email,
+      filterProblem
+    } = getState().AdminContainer.filterImproveListing;
+    const params = {};
+    params.rows = rows;
+    params.page = page;
+    if (business) {
+      params.business = business.trim();
+    }
+    if (email) {
+      params.email = email.trim();
+    }
+    if (name) {
+      params.name = name.trim();
+    }
+    params.sortby = sortby.map(data => `${data.id}${data.desc ? "-desc" : ""}`);
+    if (filterProblem.length) {
+      params.problem = filterProblem.map(problem => problem.id);
+    }
+    if (payload) {
+      if (payload.rows) {
+        params.rows = payload.rows;
+      }
+      if (payload.page) {
+        params.page = payload.page;
+      }
+      if (payload.filterProblem) {
+        params.filterProblem = payload.filterProblem.map(problem => problem.id);
+      }
+    }
+
+    return onImproveListingGet({
+      access_token: getState().auth.cookies.token_data.access_token,
+      params
     })
       .map(({ response }) => {
         return { type: FETCH_IMPROVE_LISTING_FULFILLED, payload: response };
@@ -45,8 +84,8 @@ epics.push((action$, { getState }) =>
         toast.error("Error Improve Listings !!!");
         console.log("setingactiond: ", ajaxError);
         return Observable.of({ type: FETCH_IMPROVE_LISTING_REJECTED });
-      })
-  )
+      });
+  })
 );
 
 export const onSocialLinkSubmit = payload => ({
