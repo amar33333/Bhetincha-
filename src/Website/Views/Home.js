@@ -15,7 +15,7 @@ import querystring from "querystring";
 import { SINGLE_PLACEHOLDER_URL } from "../../Common/utils/API";
 
 class Home extends Component {
-  state = { query: "", result: "", placeholder: "Search..." };
+  state = { query: "", result: "", placeholder: "Search any business..." };
 
   componentDidMount() {
     fetch(SINGLE_PLACEHOLDER_URL)
@@ -72,14 +72,16 @@ class Home extends Component {
                   suggestions={this.props.search_result.data}
                   onSuggestionsFetchRequested={this.props.onSearchQuerySubmit}
                   onSearchComplete={keyword => {
-                    (keyword || this.state.placeholder !== "Search...") &&
+                    (keyword ||
+                      this.state.placeholder !== "Search any business...") &&
                       this.props.history.push({
                         pathname: "/businesses",
                         search: `?${querystring.stringify({
                           query:
                             keyword ||
                             `${
-                              this.state.placeholder !== "Search..."
+                              this.state.placeholder !==
+                              "Search any business..."
                                 ? this.state.placeholder
                                 : ""
                             }`
