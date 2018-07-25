@@ -66,6 +66,7 @@ class Home extends Component {
               <Col xs="12" md="8" className="home-page__searchbar ">
                 <AutoSuggestion
                   // theme={theme}
+                  from="home"
                   placeholder={placeholder[0]}
                   valueKey="business_name"
                   autoFocus

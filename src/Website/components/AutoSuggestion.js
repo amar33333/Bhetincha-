@@ -42,8 +42,10 @@ class AutoSuggestion extends Component {
   );
 
   render() {
+    console.log("autosuggest props:::", this.props);
     return (
       <Autosuggest
+        from={this.props.from}
         suggestions={this.props.suggestions}
         onSuggestionsFetchRequested={({ value }) => {
           value.length > 0 &&
@@ -72,6 +74,11 @@ class AutoSuggestion extends Component {
               <input
                 {...inputProps}
                 autoFocus={this.props.autoFocus}
+                className={
+                  this.props.from === "navbar"
+                    ? `in-navbar__autosuggest__input`
+                    : `react-autosuggest__input`
+                }
                 style={{
                   border: "none",
                   borderRadius: "0px",
@@ -90,14 +97,11 @@ class AutoSuggestion extends Component {
                 }}
               >
                 <i
-                  className="fa fa-search"
-                  style={{
-                    position: "absolute",
-                    right: "10px",
-                    top: "25%",
-                    fontSize: "20px",
-                    color: "grey"
-                  }}
+                  className={
+                    this.props.from === "navbar"
+                      ? `fa fa-search in-navbar-autosuggest-search-icon`
+                      : `fa fa-search autosuggest-search-icon`
+                  }
                 />
               </button>
             </form>
