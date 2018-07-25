@@ -13,6 +13,9 @@ import {
 } from "reactstrap";
 import { connect } from "react-redux";
 import ReactTable from "react-table";
+import Datetime from "react-datetime";
+import moment from "moment";
+import "react-datetime/css/react-datetime.css";
 import { PopoverDelete, PaginationComponent } from "../../../Common/components";
 import filterCaseInsensitive from "../../../Common/utils/filterCaseInsesitive";
 import "react-table/react-table.css";
@@ -116,8 +119,8 @@ class CampaignSearchPlaceholder extends Component {
     this.setState({ placeholderSubmit: true }, () =>
       this.props.onSearchPlaceholderSubmit({
         name: placeholder,
-        start_date,
-        end_date
+        start_date: moment(start_date).format("YYYY-MM-DDTHH:mmZ"),
+        end_date: moment(end_date).format("YYYY-MM-DDTHH:mmZ")
       })
     );
   };
@@ -137,7 +140,7 @@ class CampaignSearchPlaceholder extends Component {
                     <Row>
                       <Col xs="12">
                         <FormGroup>
-                          <Label>Name</Label>
+                          <Label>Placeholder</Label>
                           <Input
                             required
                             disabled={this.props.loading}
@@ -153,14 +156,17 @@ class CampaignSearchPlaceholder extends Component {
                     <Row>
                       <Col xs="12">
                         <FormGroup>
-                          <Label>Start Date</Label>
-                          <Input
-                            required
+                          <Label>Start Date-Time</Label>
+                          <Datetime
                             disabled={this.props.loading}
-                            type="text"
-                            placeholder="Type Start Date"
                             value={this.state.start_date}
-                            onChange={this.onChange.bind(this, "start_date")}
+                            onChange={time => {
+                              this.setState({
+                                start_date: moment(time)
+                              });
+                            }}
+                            // utc={true}
+                            disableOnClickOutside={false}
                           />
                         </FormGroup>
                       </Col>
@@ -168,14 +174,17 @@ class CampaignSearchPlaceholder extends Component {
                     <Row>
                       <Col xs="12">
                         <FormGroup>
-                          <Label>End Date</Label>
-                          <Input
-                            required
+                          <Label>End Date-Time</Label>
+                          <Datetime
                             disabled={this.props.loading}
-                            type="text"
-                            placeholder="Type End Date"
                             value={this.state.end_date}
-                            onChange={this.onChange.bind(this, "end_date")}
+                            onChange={time => {
+                              this.setState({
+                                end_date: moment(time)
+                              });
+                            }}
+                            // utc={true}
+                            disableOnClickOutside={false}
                           />
                         </FormGroup>
                       </Col>
