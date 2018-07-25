@@ -55,10 +55,10 @@ export const onSocialLinkPost = ({ body, access_token }) =>
     }
   });
 
-export const onImproveListingGet = ({ access_token }) =>
+export const onImproveListingGet = ({ access_token, params }) =>
   ajax({
     method: "GET",
-    url: IMPROVE_LISTING_URL,
+    url: `${IMPROVE_LISTING_URL}?${querystring.stringify(params)}`,
     headers: {
       "Content-Type": "application/json",
       Authorization: "Bearer " + access_token
