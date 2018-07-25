@@ -23,13 +23,6 @@ class AutoSuggestion extends Component {
     return suggestion[this.props.valueKey];
   };
 
-  // renderInputComponent = inputProps => (
-  //   <div className="inputContainer">
-  //     <input {...inputProps} />
-  //     <i className="fa fa-search" />
-  //   </div>
-  // );
-
   renderSuggestion = suggestion => (
     <div
       style={{
@@ -42,7 +35,6 @@ class AutoSuggestion extends Component {
   );
 
   render() {
-    console.log("autosuggest props:::", this.props);
     return (
       <Autosuggest
         from={this.props.from}
@@ -63,6 +55,10 @@ class AutoSuggestion extends Component {
         renderInputComponent={inputProps => (
           <div>
             <form
+              classname="mb-0"
+              style={{
+                height: "50px"
+              }}
               onSubmit={event => {
                 event.preventDefault();
                 // this.state.selected

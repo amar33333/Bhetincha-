@@ -103,7 +103,7 @@
   position: absolute;
   top: -35px;
   width: 120px;
-  z-index: 999;
+  z-index: 1;
   border: 1px solid lightgray;
 }
 .main_nav__brand-logo__routes {
