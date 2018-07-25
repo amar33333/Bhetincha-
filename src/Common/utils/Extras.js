@@ -28,7 +28,21 @@ export const FaIconURLjsx = (
 );
 
 export class ErrorHandling extends Component {
+  renderError = () => {
+    if (this.props.error)
+      return <p style={{ color: "red" }}>{this.props.error}</p>;
+    else if (this.props.errors) {
+      return (
+        <p style={{ color: "red" }}>
+          {Object.keys(this.props.errors).join(" & ")} syntax error occured in
+          one of the above contacts
+        </p>
+      );
+    }
+  };
+
   render() {
-    return <p style={{ color: "red" }}>{this.props.error}</p>;
+    console.log("extras error: ", this.props.error);
+    return <div>{this.renderError()}</div>;
   }
 }

@@ -263,13 +263,13 @@ epics.push((action$, { getState }) =>
           toast.success("Branch Updated Successfully!");
 
           return { type: EDIT_BRANCH_EACH_FULFILLED, payload: response };
-        } else throw new Error(response.msg);
+        } else throw new Error(JSON.stringify(response.msg));
       })
       .catch(ajaxError => {
-        toast.error(ajaxError.toString());
+        toast.error("Error: Updating Branch !!!");
         return Observable.of({
           type: EDIT_BRANCH_EACH_REJECTED,
-          payload: ajaxError
+          payload: JSON.parse(ajaxError.message)
         });
       });
   })
@@ -315,12 +315,15 @@ epics.push((action$, { getState }) =>
           toast.success("Branch Added Successfully!");
           return { type: CREATE_BRANCH_FULFILLED };
         } else {
-          throw new Error(response.msg[Object.keys(response.msg)[0]][0]);
+          throw new Error(JSON.stringify(response.msg));
         }
       })
       .catch(ajaxError => {
-        toast.error(ajaxError.toString());
-        return Observable.of({ type: CREATE_BRANCH_REJECTED });
+        toast.error("Error: Adding Branch !!!");
+        return Observable.of({
+          type: CREATE_BRANCH_REJECTED,
+          payload: JSON.parse(ajaxError.message)
+        });
       });
   })
 );
@@ -798,7 +801,7 @@ epics.push((action$, { getState }) =>
         }
       })
       .catch(ajaxError => {
-        // toast.error(ajaxError.toString());
+        toast.error("Error in Adding Business");
         return Observable.of({
           type: CREATE_BUSINESS_REJECTED,
           payload: JSON.parse(ajaxError.message)
@@ -893,91 +896,95 @@ export const onBusinessEdit = ({
 }) => dispatch => {
   onBusinessPut({ id, data, access_token })
     .then(response => {
-      dispatch({
-        type: TOGGLE_EDIT,
-        payload: !EDIT
-      });
+      if (response.data.msg === "success") {
+        dispatch({
+          type: TOGGLE_EDIT,
+          payload: !EDIT
+        });
 
-      onBusinessEachGet({ username: id, access_token })
-        .then(response => {
-          console.log("asdadsadADasd: ", response.data);
+        onBusinessEachGet({ username: id, access_token })
+          .then(response => {
+            console.log("asdadsadADasd: ", response.data);
 
-          // ToogleEDIT(!EDIT);
+            // ToogleEDIT(!EDIT);
 
-          const industryId = response.data.industry
-            ? response.data.industry.id
-            : "";
-          const countryId = response.data.address.country
-            ? response.data.address.country.id
-            : "";
-          const stateId = response.data.address.state
-            ? response.data.address.state.id
-            : "";
-          const districtId = response.data.address.district
-            ? response.data.address.district.id
-            : "";
-          const cityId = response.data.address.city
-            ? response.data.address.city.id
-            : "";
+            const industryId = response.data.industry
+              ? response.data.industry.id
+              : "";
+            const countryId = response.data.address.country
+              ? response.data.address.country.id
+              : "";
+            const stateId = response.data.address.state
+              ? response.data.address.state.id
+              : "";
+            const districtId = response.data.address.district
+              ? response.data.address.district.id
+              : "";
+            const cityId = response.data.address.city
+              ? response.data.address.city.id
+              : "";
 
-          if (industryId !== "")
-            onIndustryEachGet({ id: industryId, access_token })
-              .then(newResponse =>
-                dispatch({
-                  type: FETCH_INDUSTRY_EACH_FULFILLED,
-                  payload: newResponse.data
-                })
-              )
-              .catch(err =>
-                dispatch({ type: FETCH_INDUSTRY_EACH_REJECTED, payload: err })
-              );
+            if (industryId !== "")
+              onIndustryEachGet({ id: industryId, access_token })
+                .then(newResponse =>
+                  dispatch({
+                    type: FETCH_INDUSTRY_EACH_FULFILLED,
+                    payload: newResponse.data
+                  })
+                )
+                .catch(err =>
+                  dispatch({ type: FETCH_INDUSTRY_EACH_REJECTED, payload: err })
+                );
 
-          //For Primary Address
-          getAddressTree(
-            countryId,
-            stateId,
-            districtId,
-            cityId,
-            access_token,
-            dispatch
-          );
-
-          // For Branch Address
-          response.data.branchAddress.map(each => {
-            const branchcountryId = each.country ? each.country.id : "";
-            const branchstateId = each.state ? each.state.id : "";
-            const branchdistrictId = each.district ? each.district.id : "";
-            const branchcityId = each.city ? each.city.id : "";
-
+            //For Primary Address
             getAddressTree(
-              branchcountryId,
-              branchstateId,
-              branchdistrictId,
-              branchcityId,
+              countryId,
+              stateId,
+              districtId,
+              cityId,
               access_token,
               dispatch
             );
-          });
 
-          // dispatch({ type: FETCH_INDUSTRY_EACH_PENDING });
-          dispatch({ type: FETCH_ADDRESS_TREE_PENDING });
-          dispatch({
-            type: FETCH_BUSINESS_EACH_FULFILLED,
-            payload: response.data
-          });
-        })
-        .catch(error =>
-          dispatch({ type: FETCH_BUSINESS_EACH_REJECTED, payload: error })
-        );
-      dispatch({ type: FETCH_BUSINESS_EACH_PENDING });
+            // For Branch Address
+            response.data.branchAddress.map(each => {
+              const branchcountryId = each.country ? each.country.id : "";
+              const branchstateId = each.state ? each.state.id : "";
+              const branchdistrictId = each.district ? each.district.id : "";
+              const branchcityId = each.city ? each.city.id : "";
 
-      if (response.data.msg === "success") {
+              getAddressTree(
+                branchcountryId,
+                branchstateId,
+                branchdistrictId,
+                branchcityId,
+                access_token,
+                dispatch
+              );
+            });
+
+            // dispatch({ type: FETCH_INDUSTRY_EACH_PENDING });
+            dispatch({ type: FETCH_ADDRESS_TREE_PENDING });
+            dispatch({
+              type: FETCH_BUSINESS_EACH_FULFILLED,
+              payload: response.data
+            });
+          })
+          .catch(error =>
+            dispatch({ type: FETCH_BUSINESS_EACH_REJECTED, payload: error })
+          );
+        dispatch({ type: FETCH_BUSINESS_EACH_PENDING });
+
         toast.success("Business Updated Successfully!");
         console.log("bussiness acction toogle called: ", EDIT);
         dispatch({ type: EDIT_BUSINESS_FULFILLED, payload: response.data });
       } else {
         toast.error("Error in Updating!!!");
-        dispatch({ type: EDIT_BUSINESS_REJECTED, payload: response.data.msg });
+        console.log("edit error form: ", response.data.msg);
+        dispatch({
+          type: EDIT_BUSINESS_REJECTED,
+          payload: response.data.msg
+        });
       }
     })
     .catch(error => {

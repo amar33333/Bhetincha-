@@ -23,6 +23,7 @@ import {
 } from "../../../actions";
 
 import background from "../../../static/img/balloon.JPG";
+import { ErrorHandling } from "../../utils/Extras";
 
 class Activate extends Component {
   state = { mobile_number: "", verificationToken: "" };
@@ -135,6 +136,7 @@ class Activate extends Component {
                       onChange={this.onChange.bind(this, "verificationToken")}
                     />
                   </InputGroup>
+                  <ErrorHandling error={this.props.registerErrors} />
                   <Row>
                     <Col xs="6">
                       <Button color="link" onClick={this.onResendToken}>

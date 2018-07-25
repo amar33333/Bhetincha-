@@ -74,6 +74,7 @@ class BusinessDetails extends Component {
             businessGet={this.props.businessGet}
             onInitialPropsReceived={this.onInitialPropsReceived}
             EDIT={this.props.EDIT}
+            businessDetailsEditErrors={this.props.businessDetailsEditErrors}
           />
           <Row>
             <Col xs="12">
@@ -90,7 +91,13 @@ class BusinessDetails extends Component {
 
 const mapStateToProps = ({
   BusinessContainer: {
-    business_reducer: { businessGet, EDIT, payment_methods, businessDetails },
+    business_reducer: {
+      businessGet,
+      EDIT,
+      payment_methods,
+      businessDetails,
+      businessDetailsEditErrors
+    },
     industries,
     categories
   },
@@ -103,7 +110,8 @@ const mapStateToProps = ({
     payment_methods,
     businessDetails,
     EDIT,
-    cookies
+    cookies,
+    businessDetailsEditErrors
   };
 };
 

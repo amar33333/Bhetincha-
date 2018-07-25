@@ -23,6 +23,8 @@ import {
 // import SubBusinessContactWrapper from "./SubBusinessContactWrapper.js";
 import SubBusinessContact from "./SubBusinessContact";
 
+import { validateEmail, ErrorHandling } from "../../../Common/utils/Extras";
+
 class SubBusinessPrimaryAddress extends Component {
   constructor(props) {
     super(props);
@@ -44,7 +46,8 @@ class SubBusinessPrimaryAddress extends Component {
       tollFreeNumber: "",
       latitude: 27.7172455,
       longitude: 85.32877,
-      contactPerson: []
+      contactPerson: [],
+      email_validation_error: false
     };
 
     this.countries = [];
@@ -60,66 +63,135 @@ class SubBusinessPrimaryAddress extends Component {
     this.setState({ latitude: latLng.lat(), longitude: latLng.lng() });
   };
 
-  static getDerivedStateFromProps = (nextProps, prevState) => {
-    const { address } = nextProps;
+  componentDidUpdate = prevProps => {
+    if (this.props.address !== prevProps.address) {
+      const { address } = this.props;
 
-    // console.log("props addres: ", nextProps);
-    // console.log(" toogle addres : ", nextProps);
-    // console.log("primary toogle before called: ", nextProps.EDIT);
-    if (!nextProps.businessGet && address && nextProps.EDIT) {
-      // console.log("initial state loaded: ", prevState);
-      // console.log("primary toogle  success called: ", nextProps.EDIT);
-      // nextProps.ToogleEDIT(!nextProps.EDIT);
-      // console.log("asddd: ", address);
-      nextProps.onInitialPropsReceived();
+      if (!this.props.businessGet && address && this.props.EDIT) {
+        this.props.onInitialPropsReceived();
 
-      return {
-        contactPerson: address.contactPerson ? address.contactPerson : [],
-        landlineNumber: address.landlineNumber ? address.landlineNumber : "",
-        otherLandlineNumber: address.otherLandlineNumber
-          ? address.otherLandlineNumber
-          : [],
-        house_no: address.house_no ? address.house_no : "",
-        landmark: address.landmark ? address.landmark : "",
-        addressLine1: address.addressLine1 ? address.addressLine1 : "",
-        addressLine2: address.addressLine2 ? address.addressLine2 : "",
-        po_box: address.po_box ? address.po_box : "",
-        tollFreeNumber: address.tollFreeNumber ? address.tollFreeNumber : "",
-        email: address.email ? address.email : "",
-        latitude:
-          address.latitude && !isNaN(address.latitude)
-            ? Number(address.latitude)
-            : 27.7172453,
-        longitude:
-          address.longitude && !isNaN(address.longitude)
-            ? Number(address.longitude)
-            : 85.32391758465576,
-        country: {
-          id: address.country ? address.country.id : "",
-          name: address.country ? address.country.name : ""
-        },
-        state: {
-          id: address.state ? address.state.id : "",
-          name: address.state ? address.state.name : ""
-        },
-        district: {
-          id: address.district ? address.district.id : "",
-          name: address.district ? address.district.name : ""
-        },
-        city: {
-          id: address.city ? address.city.id : "",
-          name: address.city ? address.city.name : ""
-        },
-        area: {
-          id: address.area ? address.area.id : "",
-          name: address.area ? address.area.name : ""
-        }
-      };
-    } else {
-      // console.log("new initial state not loaded");
-      return null;
+        // address.area &&
+        //   this.handleAreaSelectChange({
+        //     area: {
+        //       id: address.area.id,
+        //       name: address.area.name
+        //     }
+        //   });
+
+        this.setState({
+          contactPerson: address.contactPerson ? address.contactPerson : [],
+          landlineNumber: address.landlineNumber ? address.landlineNumber : "",
+          otherLandlineNumber: address.otherLandlineNumber
+            ? address.otherLandlineNumber
+            : [],
+          house_no: address.house_no ? address.house_no : "",
+          landmark: address.landmark ? address.landmark : "",
+          addressLine1: address.addressLine1 ? address.addressLine1 : "",
+          addressLine2: address.addressLine2 ? address.addressLine2 : "",
+          po_box: address.po_box ? address.po_box : "",
+          tollFreeNumber: address.tollFreeNumber ? address.tollFreeNumber : "",
+          email: address.email ? address.email : "",
+          latitude:
+            address.latitude && !isNaN(address.latitude)
+              ? Number(address.latitude)
+              : 27.7172453,
+          longitude:
+            address.longitude && !isNaN(address.longitude)
+              ? Number(address.longitude)
+              : 85.32391758465576,
+          country: {
+            id: address.country ? address.country.id : "",
+            name: address.country ? address.country.name : ""
+          },
+          state: {
+            id: address.state ? address.state.id : "",
+            name: address.state ? address.state.name : ""
+          },
+          district: {
+            id: address.district ? address.district.id : "",
+            name: address.district ? address.district.name : ""
+          },
+          city: {
+            id: address.city ? address.city.id : "",
+            name: address.city ? address.city.name : ""
+          },
+          area: {
+            id: address.area ? address.area.id : "",
+            name: address.area ? address.area.name : ""
+          }
+        });
+      }
     }
   };
+
+  // static getDerivedStateFromProps = (nextProps, prevState) => {
+  //   const { address } = nextProps;
+
+  //   // console.log("props addres: ", nextProps);
+  //   // console.log(" toogle addres : ", nextProps);
+  //   // console.log("primary toogle before called: ", nextProps.EDIT);
+  //   if (!nextProps.businessGet && address && nextProps.EDIT) {
+  //     // console.log("initial state loaded: ", prevState);
+  //     // console.log("primary toogle  success called: ", nextProps.EDIT);
+  //     // nextProps.ToogleEDIT(!nextProps.EDIT);
+  //     // console.log("asddd: ", address);
+  //     nextProps.onInitialPropsReceived();
+
+  //     // address.area &&
+  //     //   this.handleAreaSelectChange({
+  //     //     area: {
+  //     //       id: address.area.id,
+  //     //       name: address.area.name
+  //     //     }
+  //     //   });
+
+  //     return {
+  //       contactPerson: address.contactPerson ? address.contactPerson : [],
+  //       landlineNumber: address.landlineNumber ? address.landlineNumber : "",
+  //       otherLandlineNumber: address.otherLandlineNumber
+  //         ? address.otherLandlineNumber
+  //         : [],
+  //       house_no: address.house_no ? address.house_no : "",
+  //       landmark: address.landmark ? address.landmark : "",
+  //       addressLine1: address.addressLine1 ? address.addressLine1 : "",
+  //       addressLine2: address.addressLine2 ? address.addressLine2 : "",
+  //       po_box: address.po_box ? address.po_box : "",
+  //       tollFreeNumber: address.tollFreeNumber ? address.tollFreeNumber : "",
+  //       email: address.email ? address.email : "",
+  //       latitude:
+  //         address.latitude && !isNaN(address.latitude)
+  //           ? Number(address.latitude)
+  //           : 27.7172453,
+  //       longitude:
+  //         address.longitude && !isNaN(address.longitude)
+  //           ? Number(address.longitude)
+  //           : 85.32391758465576,
+  //       country: {
+  //         id: address.country ? address.country.id : "",
+  //         name: address.country ? address.country.name : ""
+  //       },
+  //       state: {
+  //         id: address.state ? address.state.id : "",
+  //         name: address.state ? address.state.name : ""
+  //       },
+  //       district: {
+  //         id: address.district ? address.district.id : "",
+  //         name: address.district ? address.district.name : ""
+  //       },
+  //       city: {
+  //         id: address.city ? address.city.id : "",
+  //         name: address.city ? address.city.name : ""
+  //       },
+  //       area: {
+  //         id: address.area ? address.area.id : "",
+  //         name: address.area ? address.area.name : ""
+  //       }
+  //     };
+  //   } else {
+  //     // console.log("new initial state not loaded");
+  //     return null;
+  //   }
+  // };
 
   // getContacts = () =>
   //   this.props.address && this.props.edit
@@ -127,13 +199,28 @@ class SubBusinessPrimaryAddress extends Component {
   //     : null;
 
   onChange = (key, event) => {
+    const val = event.target.value;
+
     if (key === "addressLine1" || key === "addressLine2") {
       this.setState({
-        [key]: event.target.value.replace(/\b\w/g, l => l.toUpperCase())
+        [key]: val.replace(/\b\w/g, l => l.toUpperCase())
+      });
+    } else if (key === "email") {
+      this.setState({ [key]: val === "" ? null : val }, () => {
+        if (this.state.email && !validateEmail(this.state.email)) {
+          this.setState({ email_validation_error: true });
+        } else this.setState({ email_validation_error: false });
       });
     } else {
-      this.setState({ [key]: event.target.value });
+      this.setState({ [key]: val });
     }
+  };
+
+  displayEmailValidationInfo = () => {
+    if (this.state.email)
+      if (this.state.email_validation_error)
+        return <p style={{ color: "red" }}>Invalid Email</p>;
+      else return <p style={{ color: "green" }}>Valid Email </p>;
   };
 
   handleAreaSelectChange = value => {
@@ -230,7 +317,8 @@ class SubBusinessPrimaryAddress extends Component {
       addressLine2: "",
       po_box: "",
       tollFreeNumber: "",
-      contactPerson: []
+      contactPerson: [],
+      email_validation_error: false
     });
 
     // this.subBusinessContactWrapperRef.clearState();
@@ -630,6 +718,27 @@ class SubBusinessPrimaryAddress extends Component {
                     onChange={this.onChange.bind(this, "email")}
                   />
                 </FormGroup>
+                {this.displayEmailValidationInfo()}
+                {
+                  // For Admin Dashboard}
+                }
+                <ErrorHandling
+                  error={
+                    this.props.businessCreateErrors &&
+                    this.props.businessCreateErrors.address &&
+                    this.props.businessCreateErrors.address.email
+                  }
+                />
+                {
+                  // For Business Dashboard}
+                }
+                <ErrorHandling
+                  error={
+                    this.props.primaryAddressEditErrors &&
+                    this.props.primaryAddressEditErrors.address &&
+                    this.props.primaryAddressEditErrors.address.email
+                  }
+                />
               </Col>
               <Col xs="12" md="4">
                 <FormGroup>
@@ -753,6 +862,23 @@ class SubBusinessPrimaryAddress extends Component {
                       </Button>
                     </Col>
                   </Row>
+                  <ErrorHandling
+                    errors={
+                      this.props.businessCreateErrors &&
+                      this.props.businessCreateErrors.address &&
+                      this.props.businessCreateErrors.address.contactPerson
+                    }
+                  />
+                  {
+                    // For Business Dashboard}
+                  }
+                  <ErrorHandling
+                    errors={
+                      this.props.primaryAddressEditErrors &&
+                      this.props.primaryAddressEditErrors.address &&
+                      this.props.primaryAddressEditErrors.address.contactPerson
+                    }
+                  />
                 </CardBody>
               </Card>
             </div>

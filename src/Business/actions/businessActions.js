@@ -123,6 +123,7 @@ import {
 } from "../../actions/types";
 
 import CookiesProvider from "../../Common/utils/CookiesProvider";
+import { EmptyObservable } from "rxjs/observable/EmptyObservable";
 
 const epics = [];
 
@@ -297,20 +298,28 @@ epics.push((action$, { getState }) =>
 
         console.log("ids: ", ids);
 
-        return [
-          {
-            type: FETCH_BUSINESS_DETAILS_FULFILLED,
-            payload: response
-          },
-          {
-            type: FETCH_INDUSTRY_EACH_PENDING,
-            payload: { id }
-          },
-          {
-            type: FETCH_CATEGORY_ARRAY_PENDING,
-            payload: { ids }
-          }
-        ];
+        if (id && ids)
+          return [
+            {
+              type: FETCH_BUSINESS_DETAILS_FULFILLED,
+              payload: response
+            },
+            {
+              type: FETCH_INDUSTRY_EACH_PENDING,
+              payload: { id }
+            },
+            {
+              type: FETCH_CATEGORY_ARRAY_PENDING,
+              payload: { ids }
+            }
+          ];
+        else
+          return [
+            {
+              type: FETCH_BUSINESS_DETAILS_FULFILLED,
+              payload: response
+            }
+          ];
       })
       .catch(ajaxError => {
         // toast.error(ajaxError.toString());
@@ -353,13 +362,13 @@ epics.push((action$, { getState }) =>
 
             { type: FETCH_BUSINESS_DETAILS_PENDING, payload: { id } }
           ];
-        } else throw new Error(response.msg);
+        } else throw new Error(JSON.stringify(response.msg));
       })
       .catch(ajaxError => {
-        toast.error(ajaxError.toString());
+        toast.error("Error Updating Business Details !!!");
         return Observable.of({
           type: EDIT_BUSINESS_DETAILS_REJECTED,
-          payload: ajaxError
+          payload: JSON.parse(ajaxError.message)
         });
       });
   })
@@ -414,12 +423,15 @@ epics.push((action$, { getState }) =>
           toast.success("Branch Added Successfully!");
           return { type: CREATE_BRANCH_FULFILLED };
         } else {
-          throw new Error(response.msg[Object.keys(response.msg)[0]][0]);
+          throw new Error(JSON.stringify(response.msg));
         }
       })
       .catch(ajaxError => {
-        toast.error(ajaxError.toString());
-        return Observable.of({ type: CREATE_BRANCH_REJECTED });
+        toast.error("Error: Adding Branch !!!");
+        return Observable.of({
+          type: CREATE_BRANCH_REJECTED,
+          payload: JSON.parse(ajaxError.message)
+        });
       });
   })
 );
@@ -440,13 +452,13 @@ epics.push((action$, { getState }) =>
           toast.success("Branch Updated Successfully!");
 
           return { type: EDIT_BRANCH_EACH_FULFILLED, payload: response };
-        } else throw new Error(response.msg);
+        } else throw new Error(JSON.stringify(response.msg));
       })
       .catch(ajaxError => {
-        toast.error(ajaxError.toString());
+        toast.error("Error: Branch Updating !!!");
         return Observable.of({
           type: EDIT_BRANCH_EACH_REJECTED,
-          payload: ajaxError
+          payload: JSON.parse(ajaxError.message)
         });
       });
   })
@@ -683,52 +695,52 @@ export const onPrimaryAddressEdit = ({
 }) => dispatch => {
   onPrimaryAddressPut({ id, data, access_token })
     .then(response => {
-      dispatch({
-        type: TOGGLE_EDIT,
-        payload: !EDIT
-      });
-
-      onPrimaryAddressGet({ id, access_token })
-        .then(innerResponse => {
-          // ToogleEDIT(!EDIT);
-
-          console.log("EDIT: ", innerResponse);
-
-          const countryId = innerResponse.data.country
-            ? innerResponse.data.country.id
-            : "";
-          const stateId = innerResponse.data.state
-            ? innerResponse.data.state.id
-            : "";
-          const districtId = innerResponse.data.district
-            ? innerResponse.data.district.id
-            : "";
-          const cityId = innerResponse.data.city
-            ? innerResponse.data.city.id
-            : "";
-
-          getAddressTree(
-            countryId,
-            stateId,
-            districtId,
-            cityId,
-            access_token,
-            dispatch
-          );
-
-          // dispatch({ type: FETCH_INDUSTRY_EACH_PENDING });
-          dispatch({ type: FETCH_ADDRESS_TREE_PENDING });
-          dispatch({
-            type: FETCH_PRIMARY_ADDRESS_FULFILLED,
-            payload: innerResponse.data
-          });
-        })
-        .catch(error =>
-          dispatch({ type: EDIT_PRIMARY_ADDRESS_REJECTED, payload: error })
-        );
-      dispatch({ type: FETCH_PRIMARY_ADDRESS_PENDING });
-
       if (response.data.msg === "success") {
+        dispatch({
+          type: TOGGLE_EDIT,
+          payload: !EDIT
+        });
+
+        onPrimaryAddressGet({ id, access_token })
+          .then(innerResponse => {
+            // ToogleEDIT(!EDIT);
+
+            console.log("EDIT: ", innerResponse);
+
+            const countryId = innerResponse.data.country
+              ? innerResponse.data.country.id
+              : "";
+            const stateId = innerResponse.data.state
+              ? innerResponse.data.state.id
+              : "";
+            const districtId = innerResponse.data.district
+              ? innerResponse.data.district.id
+              : "";
+            const cityId = innerResponse.data.city
+              ? innerResponse.data.city.id
+              : "";
+
+            getAddressTree(
+              countryId,
+              stateId,
+              districtId,
+              cityId,
+              access_token,
+              dispatch
+            );
+
+            // dispatch({ type: FETCH_INDUSTRY_EACH_PENDING });
+            dispatch({ type: FETCH_ADDRESS_TREE_PENDING });
+            dispatch({
+              type: FETCH_PRIMARY_ADDRESS_FULFILLED,
+              payload: innerResponse.data
+            });
+          })
+          .catch(error =>
+            dispatch({ type: EDIT_PRIMARY_ADDRESS_REJECTED, payload: error })
+          );
+        dispatch({ type: FETCH_PRIMARY_ADDRESS_PENDING });
+
         toast.success("Primary Address Updated Successfully!");
         // console.log("bussiness acction toogle called: ", EDIT);
         dispatch({

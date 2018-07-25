@@ -25,10 +25,16 @@ import GoogleLogin from "react-google-login";
 
 import background from "../../../static/img/balloon.JPG";
 
-import { validatePhone, validateEmail } from "../../../Common/utils/Extras";
+import {
+  validatePhone,
+  validateEmail,
+  ErrorHandling
+} from "../../../Common/utils/Extras";
+
 import {
   onIndividualRegisterSubmit,
-  onFacebookLoginSubmit
+  onFacebookLoginSubmit,
+  resetErrors
 } from "../../../actions";
 
 class IndividualRegister extends Component {
@@ -44,6 +50,10 @@ class IndividualRegister extends Component {
     phone_validation_error: false,
     email_validation_error: false
   };
+
+  componentWillUnmount() {
+    this.props.resetErrors();
+  }
 
   onChange = (key, event) => {
     const val = event.target.value;
@@ -110,22 +120,22 @@ class IndividualRegister extends Component {
       checked
     } = this.state;
 
-    if (!phone_validation_error && !email_validation_error)
-      if (password === confirm_password) {
-        if (checked) {
-          this.props.onIndividualRegisterSubmit({
-            username,
-            password,
-            email,
-            first_name,
-            last_name,
-            phone_number,
-            history: this.props.history
-          });
-        } else toast.error("You have to agree to our User Agreement Policy");
-      } else {
-        toast.error("Password Mismatch");
-      }
+    // if (!phone_validation_error && !email_validation_error)
+    if (password === confirm_password) {
+      if (checked) {
+        this.props.onIndividualRegisterSubmit({
+          username,
+          password,
+          email,
+          first_name,
+          last_name,
+          phone_number,
+          history: this.props.history
+        });
+      } else toast.error("You have to agree to our User Agreement Policy");
+    } else {
+      toast.error("Password Mismatch");
+    }
   };
 
   render() {
@@ -365,6 +375,7 @@ export default connect(
   mapStateToProps,
   {
     onIndividualRegisterSubmit,
-    onFacebookLoginSubmit
+    onFacebookLoginSubmit,
+    resetErrors
   }
 )(IndividualRegister);

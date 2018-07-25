@@ -55,6 +55,7 @@ import {
   FORGOT_PASSWORD_TOKEN_PENDING,
   FORGOT_PASSWORD_TOKEN_REJECTED,
   RESET_PHONE_VERIFICATION_REQUEST_ERROR,
+  RESET_AUTH_ERRORS,
   LOGOUT_USER
 } from "./types";
 
@@ -91,6 +92,10 @@ import {
 import querystring from "querystring";
 
 const epics = [];
+
+export const resetErrors = () => ({
+  type: RESET_AUTH_ERRORS
+});
 
 export const loadCookies = () => ({
   type: COOKIES_LOAD_FULFILLED,
@@ -518,14 +523,14 @@ epics.push(action$ =>
             { type: TOGGLE_LOGIN_MODAL }
           ];
         } else {
-          throw new Error(response.msg);
+          throw new Error(JSON.stringify(response.msg));
         }
       })
       .catch(ajaxError => {
-        toast.error(ajaxError.toString());
+        toast.error("Error Creating New User");
         return Observable.of({
           type: CREATE_USER_REJECTED,
-          payload: ajaxError
+          payload: JSON.parse(ajaxError.message)
         });
       });
   })
@@ -567,7 +572,7 @@ epics.push(action$ =>
         }
       })
       .catch(ajaxError => {
-        toast.error(ajaxError.toString());
+        // toast.error(ajaxError.toString());
         return Observable.of({
           type: CREATE_BUSINESS_USER_REJECTED,
           payload: JSON.parse(ajaxError.message)
@@ -627,14 +632,14 @@ epics.push(action$ =>
             payload: response
           };
         } else {
-          throw new Error(response.msg);
+          throw new Error(JSON.stringify(response.msg));
         }
       })
       .catch(ajaxError => {
-        toast.error(ajaxError.toString());
+        // toast.error(ajaxError.toString());
         return Observable.of({
           type: INDIVIDUAL_TOKEN_REJECTED,
-          payload: ajaxError
+          payload: JSON.parse(ajaxError.message)
         });
       });
   })
@@ -658,14 +663,13 @@ epics.push(action$ =>
             state: { phone_number }
           });
           return { type: CREATE_INDIVIDUAL_USER_FULFILLED, payload: response };
-        } else throw new Error(response.msg[Object.keys(response.msg)[0]][0]);
+        } else throw new Error(JSON.stringify(response.msg));
       })
       .catch(ajaxError => {
-        toast.error(ajaxError.toString());
-        console.log("error: ", ajaxError.toString());
+        toast.error("Error: Creating New User");
         return Observable.of({
           type: CREATE_INDIVIDUAL_USER_REJECTED,
-          payload: ajaxError
+          payload: JSON.parse(ajaxError.message)
         });
       });
   })

@@ -30,7 +30,7 @@ class SubBusinessDetail extends Component {
       business_email: null,
       business_phone: null,
       website: "",
-      industry: "",
+      industry: null,
       categories: [],
       sub_categories: [],
       paymentMethod: [],
@@ -76,7 +76,7 @@ class SubBusinessDetail extends Component {
           : false,
         industry: businessData.industry
           ? { id: businessData.industry.id, name: businessData.industry.name }
-          : "",
+          : null,
         categories: businessData.categories
           ? businessData.categories.map(each => ({
               id: each.id,
@@ -248,7 +248,7 @@ class SubBusinessDetail extends Component {
       business_phone: null,
       business_email: null,
       website: "",
-      industry: "",
+      industry: null,
       categories: [],
       sub_categories: [],
       paymentMethod: [],
@@ -285,7 +285,7 @@ class SubBusinessDetail extends Component {
 
     return {
       ...this.state,
-      industry: this.state.industry ? this.state.industry.id : "",
+      industry: this.state.industry ? this.state.industry.id : null,
       categories: category_list,
       sub_categories: sub_category_list,
       paymentMethod: payment_methods_list
@@ -380,7 +380,16 @@ class SubBusinessDetail extends Component {
                 <ErrorHandling
                   error={
                     this.props.businessCreateErrors &&
-                    this.props.businessCreateErrors.business_phone
+                    this.props.businessCreateErrors.abusiness_phone
+                  }
+                />
+                {
+                  // For Business Dashboard
+                }
+                <ErrorHandling
+                  error={
+                    this.props.businessDetailsEditErrors &&
+                    this.props.businessDetailsEditErrors.abusiness_phone
                   }
                 />
               </Col>
@@ -402,6 +411,15 @@ class SubBusinessDetail extends Component {
                     this.props.businessCreateErrors.business_email
                   }
                 />
+                {
+                  // For Business Dashboard
+                }
+                <ErrorHandling
+                  error={
+                    this.props.businessDetailsEditErrors &&
+                    this.props.businessDetailsEditErrors.business_email
+                  }
+                />
               </Col>
               <Col xs="12" md="6">
                 <FormGroup>
@@ -421,6 +439,15 @@ class SubBusinessDetail extends Component {
                     this.props.businessCreateErrors.business_website
                   }
                 />
+                {
+                  // For Business Dashboard
+                }
+                <ErrorHandling
+                  error={
+                    this.props.businessDetailsEditErrors &&
+                    this.props.businessDetailsEditErrors.business_website
+                  }
+                />
               </Col>
             </Row>
 
@@ -429,7 +456,7 @@ class SubBusinessDetail extends Component {
                 <FormGroup>
                   <Label for="group">Business Industry</Label>
                   <Select
-                    //required
+                    required
                     name="Industry"
                     placeholder="Select an Industry"
                     noResultsText="No Data Found"
@@ -447,12 +474,21 @@ class SubBusinessDetail extends Component {
                     this.props.businessCreateErrors.industry
                   }
                 />
+                {
+                  // For Business Dashboard
+                }
+                <ErrorHandling
+                  error={
+                    this.props.businessDetailsEditErrors &&
+                    this.props.businessDetailsEditErrors.industry
+                  }
+                />
               </Col>
               <Col xs="12" md="6">
                 <FormGroup>
                   <Label for="group">Business Category</Label>
                   <Select
-                    //required
+                    required
                     name="Category"
                     placeholder="Select Category (Multiple if any)"
                     noResultsText="No Data Found"
@@ -470,6 +506,15 @@ class SubBusinessDetail extends Component {
                   error={
                     this.props.businessCreateErrors &&
                     this.props.businessCreateErrors.categories
+                  }
+                />
+                {
+                  // For Business Dashboard
+                }
+                <ErrorHandling
+                  error={
+                    this.props.businessDetailsEditErrors &&
+                    this.props.businessDetailsEditErrors.categories
                   }
                 />
               </Col>
@@ -502,6 +547,15 @@ class SubBusinessDetail extends Component {
                     this.props.businessCreateErrors.sub_categories
                   }
                 />
+                {
+                  // For Business Dashboard
+                }
+                <ErrorHandling
+                  error={
+                    this.props.businessDetailsEditErrors &&
+                    this.props.businessDetailsEditErrors.sub_categories
+                  }
+                />
               </Col>
               <Col xs="12" md="6">
                 <FormGroup>
@@ -527,6 +581,15 @@ class SubBusinessDetail extends Component {
                   error={
                     this.props.businessCreateErrors &&
                     this.props.businessCreateErrors.paymentMethod
+                  }
+                />
+                {
+                  // For Business Dashboard
+                }
+                <ErrorHandling
+                  error={
+                    this.props.businessDetailsEditErrors &&
+                    this.props.businessDetailsEditErrors.paymentMethod
                   }
                 />
               </Col>

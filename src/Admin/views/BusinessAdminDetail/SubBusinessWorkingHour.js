@@ -73,18 +73,15 @@ class subBusinessWorkingHour extends Component {
     // console.log("woeking howisa;", nextProps);
     // console.log("working hour before toogle recevied: ", nextProps.EDIT);
 
-    if (
-      !nextProps.businessGet &&
-      nextProps.workingHour &&
-      nextProps.workingHour.length &&
-      nextProps.EDIT
-    ) {
-      // console.log("working hourinside toogle recevied: ", nextProps.EDIT);
+    if (!nextProps.businessGet && nextProps.workingHour && nextProps.EDIT) {
+      console.log("working hourinside toogle recevied: ", nextProps.EDIT);
 
       nextProps.onInitialPropsReceived();
 
       return {
-        workingHour: [...nextProps.workingHour.map(each => each)],
+        workingHour: nextProps.workingHour.length
+          ? [...nextProps.workingHour.map(each => each)]
+          : [],
         alwaysOpen: nextProps.alwaysOpen
       };
     }
@@ -174,7 +171,8 @@ class subBusinessWorkingHour extends Component {
       currentDate = moment(currentDate).add(15, "m");
     }
 
-    // console.log("date array: ", dateArray);
+    console.log("working props : ", this.props);
+    console.log("working state : ", this.state);
     return (
       <FormGroup>
         <SemanticCard fluid>
@@ -212,6 +210,7 @@ class subBusinessWorkingHour extends Component {
                   {day.holiday ? null : (
                     <span>
                       <CustomInput
+                        required
                         type="select"
                         name="select"
                         id="start-hour"
@@ -244,6 +243,7 @@ class subBusinessWorkingHour extends Component {
                   {day.holiday ? null : (
                     <span>
                       <CustomInput
+                        required
                         type="select"
                         name="select"
                         id="closing-hour"
