@@ -1,47 +1,21 @@
 import React, { Component } from "react";
-import { connect } from "react-redux";
-import {
-  Card,
-  CardHeader,
-  CardBody,
-  Input,
-  Button,
-  InputGroup,
-  InputGroupAddon,
-  InputGroupText,
-  Row,
-  Col
-} from "reactstrap";
-
-import { onImproveListingList } from "../../actions";
+import ImproveListingsTable from "./ImproveListingsTable";
 
 class ImproveListings extends Component {
-  state = {
-    name: "",
-    className: ""
-  };
+  // state = {
+  //   name: "",
+  //   className: ""
+  // };
 
-  componentDidMount() {
-    this.props.onImproveListingList();
-  }
-
-  onChange = (key, event) => this.setState({ [key]: event.target.value });
+  // onChange = (key, event) => this.setState({ [key]: event.target.value });
 
   render() {
-    console.log("imporopv listgn props: ", this.props);
-    return <div className="animated fadeIn">{/* Add Table Here ... */}</div>;
+    return (
+      <div className="animated fadeIn">
+        <ImproveListingsTable />
+      </div>
+    );
   }
 }
 
-export default connect(
-  ({
-    AdminContainer: {
-      settings: { improveListings }
-    }
-  }) => ({
-    improveListings
-  }),
-  {
-    onImproveListingList
-  }
-)(ImproveListings);
+export default ImproveListings;

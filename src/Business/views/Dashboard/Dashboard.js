@@ -5,7 +5,7 @@ class Dashboard extends Component {
   render() {
     return (
       <div>
-        <div className="animated fadeIn">Hello Dashboard</div>
+        <div className="animated fadeIn joyride-dashboard">Hello Dashboard</div>
       </div>
     );
   }

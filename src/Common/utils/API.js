@@ -52,5 +52,6 @@ export const INDIVIDUAL_LOGIN_CHECK_URL = `${MAIN_URL}/${INDIVIDUAL_LOGIN_CHECK}
 export const FORGOT_PASSWORD_URL = `${MAIN_URL}/${FORGOT_PASSWORD}`;
 export const FORGOT_PASSWORD_TOKEN_URL = `${MAIN_URL}/${FORGOT_PASSWORD_TOKEN}`;
 // export const REGISTER_URL = `${MAIN_URL}/${API}/${ACCOUNTS}/${USER}`;
+export const SINGLE_PLACEHOLDER_URL = `${MAIN_URL}/business/random-placeholder/`;
 
 export const O_TOKEN_URL = `${MAIN_URL}/${O_TOKEN}`;
