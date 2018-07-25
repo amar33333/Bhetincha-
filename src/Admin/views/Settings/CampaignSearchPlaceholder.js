@@ -190,9 +190,11 @@ class CampaignSearchPlaceholder extends Component {
                       </Col>
                     </Row>
                     <Row>
-                      <Button color="primary">
-                        <span className="fa fa-plus" /> Add
-                      </Button>
+                      <Col>
+                        <Button color="primary">
+                          <span className="fa fa-plus" /> Add
+                        </Button>
+                      </Col>
                     </Row>
                   </Form>
                 </CardBody>
