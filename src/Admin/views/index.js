@@ -15,6 +15,7 @@ import ManageBranchs from "./BusinessAdminDetail/ManageBranchs";
 import AddBranch from "./BusinessAdminDetail/AddBranch";
 import ResetPassword from "./Users/ResetPassword";
 import ImproveListings from "./Settings/ImproveListings";
+import CampaignSearchPlaceholder from "./Settings/CampaignSearchPlaceholder";
 
 import {
   Areas,
@@ -59,5 +60,6 @@ export {
   ManageBranchs,
   AddBranch,
   ResetPassword,
-  ImproveListings
+  ImproveListings,
+  CampaignSearchPlaceholder
 };

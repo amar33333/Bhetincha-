@@ -29,7 +29,8 @@ import {
   ManageBranchs,
   AddBranch,
   ResetPassword,
-  ImproveListings
+  ImproveListings,
+  CampaignSearchPlaceholder
 } from "../views";
 
 import { ManageCategories } from "../views/Ecommerce";
@@ -261,6 +262,12 @@ class AdminRoute extends Component {
           name="Improve Listing"
           component={ImproveListings}
           permission="CAN_VIEW_SOCIAL_LINKS"
+        />
+        <Route
+          path="/admin/campaign-search-placeholder"
+          name="Campaign"
+          component={CampaignSearchPlaceholder}
+          permission="CAN_VIEW_CAMPAIGN"
         />
         <Redirect from="/admin" to="/admin/dashboard" />
         {/* <CustomRoute

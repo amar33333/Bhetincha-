@@ -6,7 +6,11 @@ import {
   onSocialLinksGet,
   onSocialLinkEachDelete,
   onSocialLinkPut,
-  onImproveListingGet
+  onImproveListingGet,
+  onSearchPlaceholderGet,
+  onSearchPlaceholderPut,
+  onSearchPlaceholderPost,
+  onSearchPlaceholderEachDelete
 } from "../config/adminServerCall";
 import {
   CREATE_SOCIAL_LINK_FULFILLED,
@@ -24,10 +28,133 @@ import {
   FETCH_IMPROVE_LISTING_FULFILLED,
   FETCH_IMPROVE_LISTING_PENDING,
   FETCH_IMPROVE_LISTING_REJECTED,
-  TOGGLE_SOCIAL_LINK_EDIT_MODAL
+  TOGGLE_SOCIAL_LINK_EDIT_MODAL,
+  // SEARCH_PLACEHOLDER
+  CREATE_SEARCH_PLACEHOLDER_FULFILLED,
+  CREATE_SEARCH_PLACEHOLDER_REJECTED,
+  CREATE_SEARCH_PLACEHOLDER_PENDING,
+  FETCH_SEARCH_PLACEHOLDER_FULFILLED,
+  FETCH_SEARCH_PLACEHOLDER_PENDING,
+  FETCH_SEARCH_PLACEHOLDER_REJECTED,
+  DELETE_SEARCH_PLACEHOLDER_PENDING,
+  DELETE_SEARCH_PLACEHOLDER_FULFILLED,
+  DELETE_SEARCH_PLACEHOLDER_REJECTED,
+  EDIT_SEARCH_PLACEHOLDER_FULFILLED,
+  EDIT_SEARCH_PLACEHOLDER_PENDING,
+  EDIT_SEARCH_PLACEHOLDER_REJECTED
 } from "./types";
 
 const epics = [];
+
+// SEARCH_PLACEHOLDER
+export const onSearchPlaceholderSubmit = payload => ({
+  type: CREATE_SEARCH_PLACEHOLDER_PENDING,
+  payload
+});
+
+epics.push((action$, { getState }) =>
+  action$.ofType(CREATE_SEARCH_PLACEHOLDER_PENDING).mergeMap(({ payload }) => {
+    const access_token = getState().auth.cookies.token_data.access_token;
+
+    return onSearchPlaceholderPost({ body: payload, access_token })
+      .concatMap(({ response }) => {
+        if (response.msg === "success") {
+          toast.success("SearchPlaceholder added successfully!");
+          return [
+            { type: CREATE_SEARCH_PLACEHOLDER_FULFILLED },
+            { type: FETCH_SEARCH_PLACEHOLDER_PENDING }
+          ];
+        } else {
+          throw new Error(response.msg[Object.keys(response.msg)[0]][0]);
+        }
+      })
+      .catch(ajaxError => {
+        toast.error(ajaxError.toString());
+        return Observable.of({
+          type: CREATE_SEARCH_PLACEHOLDER_REJECTED,
+          payload: ajaxError
+        });
+      });
+  })
+);
+
+export const onSearchPlaceholderList = () => ({
+  type: FETCH_SEARCH_PLACEHOLDER_PENDING
+});
+
+epics.push((action$, { getState }) =>
+  action$.ofType(FETCH_SEARCH_PLACEHOLDER_PENDING).mergeMap(action =>
+    onSearchPlaceholderGet({
+      access_token: getState().auth.cookies.token_data.access_token
+    })
+      .map(({ response }) => ({
+        type: FETCH_SEARCH_PLACEHOLDER_FULFILLED,
+        payload: response
+      }))
+      .catch(ajaxError =>
+        Observable.of({ type: FETCH_SEARCH_PLACEHOLDER_REJECTED })
+      )
+  )
+);
+
+export const onSearchPlaceholderEdit = payload => ({
+  type: EDIT_SEARCH_PLACEHOLDER_PENDING,
+  payload
+});
+
+epics.push((action$, { getState }) =>
+  action$.ofType(EDIT_SEARCH_PLACEHOLDER_PENDING).mergeMap(({ payload }) => {
+    const { country } = payload;
+    const access_token = getState().auth.cookies.token_data.access_token;
+
+    return onSearchPlaceholderPut({ country, access_token })
+      .concatMap(({ response }) => {
+        if (response.msg === "success") {
+          toast.success("Search Placeholder Updated Successfully!");
+          return [
+            { type: EDIT_SEARCH_PLACEHOLDER_FULFILLED },
+            { type: FETCH_SEARCH_PLACEHOLDER_PENDING }
+            // { type: TOGGLE_SEARCH_PLACEHOLDER_EDIT_MODAL }
+          ];
+        } else {
+          throw new Error(response.msg[Object.keys(response.msg)[0]][0]);
+        }
+      })
+      .catch(ajaxError => {
+        toast.error(ajaxError.toString());
+        return Observable.of({
+          type: EDIT_SEARCH_PLACEHOLDER_REJECTED,
+          payload: ajaxError
+        });
+      });
+  })
+);
+
+export const onSearchPlaceholderDelete = payload => ({
+  type: DELETE_SEARCH_PLACEHOLDER_PENDING,
+  payload
+});
+
+epics.push((action$, { getState }) =>
+  action$.ofType(DELETE_SEARCH_PLACEHOLDER_PENDING).mergeMap(({ payload }) =>
+    onSearchPlaceholderEachDelete({
+      id: payload.id,
+      access_token: getState().auth.cookies.token_data.access_token
+    })
+      .concatMap(() => {
+        toast.success("Deleted Successfully!");
+        return [
+          { type: FETCH_SEARCH_PLACEHOLDER_PENDING },
+          { type: DELETE_SEARCH_PLACEHOLDER_FULFILLED }
+        ];
+      })
+      .catch(ajaxError => {
+        toast.error("Error Deleting Search Placeholder");
+        // console.log(ajaxError);
+        return Observable.of({ type: DELETE_SEARCH_PLACEHOLDER_REJECTED });
+      })
+  )
+);
 
 export const onImproveListingList = payload => ({
   type: FETCH_IMPROVE_LISTING_PENDING,
