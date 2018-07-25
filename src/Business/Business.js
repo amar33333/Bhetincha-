@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Container } from "reactstrap";
+import { connect } from "react-redux";
 import {
   Header,
   Sidebar,
@@ -32,6 +33,13 @@ class Business extends Component {
   }
 
   componentDidUpdate(prevProps) {
+    if (
+      this.props.cookies.user_data.slug !==
+      this.props.match.params[ROUTE_PARAMS_BUSINESS_NAME]
+    ) {
+      this.props.history.push("/");
+    }
+
     if (
       this.props.match.params[ROUTE_PARAMS_BUSINESS_NAME] !==
       prevProps.match.params[ROUTE_PARAMS_BUSINESS_NAME]
@@ -128,4 +136,4 @@ export default withRepics(
   "BusinessContainer",
   businessReducers,
   combineEpics(...businessEpics)
-)(Business);
+)(connect(({ auth: { cookies } }) => ({ cookies }))(Business));
