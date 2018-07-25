@@ -117,13 +117,16 @@ class BusinessNav extends Component {
             expand="md"
             className="business-navbar"
           >
-            {/* <Link to={`/${this.props.businessName}`} className="navbar-brand">
-              <img
-                src={`${MAIN_URL}${this.props.logo}`}
-                alt="brand-logo"
-                className="main_nav__brand-logo"
-              />
-            </Link> */}
+            {!this.props.isHome && (
+              <Link to={`/${this.props.businessName}`} className="navbar-brand">
+                <img
+                  src={`${MAIN_URL}${this.props.logo}`}
+                  alt="brand-logo"
+                  className="main_nav__brand-logo__routes"
+                />
+              </Link>
+            )}
+
             <NavbarToggler onClick={this.toggle} />
             <Collapse isOpen={this.state.isOpen} navbar>
               <Nav

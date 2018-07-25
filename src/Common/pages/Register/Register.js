@@ -104,7 +104,7 @@ class Register extends Component {
         <div className="app flex-row align-items-center">
           <Container>
             <Row className="justify-content-center">
-              <Col md="6" className="central-dialog-wrapper">
+              <Col xs="10" md="6" className="central-dialog-wrapper">
                 <h1>Register - Business</h1>
                 {/* <p className="text-muted">Create your account</p> */}
                 <Form onSubmit={this.onFormSubmit}>
@@ -134,7 +134,7 @@ class Register extends Component {
                       size="lg"
                       required
                       type="text"
-                      placeholder="Mobile Number Eg. 9843041699, (984)-3041699"
+                      placeholder="Mobile no. Eg. 9843041699, (984)-3041699"
                       value={this.state.mobile_number}
                       onChange={this.onChange.bind(this, "mobile_number")}
                     />

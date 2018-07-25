@@ -106,6 +106,10 @@
   z-index: 999;
   border: 1px solid lightgray;
 }
+.main_nav__brand-logo__routes {
+  margin-left: 70px;
+  max-width: 50px;
+}
 
 img.minisite__album-thumbnail {
   object-fit: cover;

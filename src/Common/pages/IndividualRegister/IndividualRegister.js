@@ -171,7 +171,7 @@ class IndividualRegister extends Component {
         <div className="app flex-row align-items-center">
           <Container>
             <Row className="justify-content-center">
-              <Col md="5" className="central-dialog-wrapper">
+              <Col xs="10" md="5" className="central-dialog-wrapper">
                 <h1>Individual Register</h1>
                 <p className="text-muted">Create your account</p>
                 <Form onSubmit={this.onFormSubmit}>
