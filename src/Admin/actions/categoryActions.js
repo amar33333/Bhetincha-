@@ -50,7 +50,6 @@ epics.push((action$, { getState }) =>
     const { ids } = payload;
     const access_token = getState().auth.cookies.token_data.access_token;
 
-    console.log("industry each actions: ", payload);
     return onCategoryArrayGet({
       params: { ids },
       access_token
@@ -202,7 +201,6 @@ epics.push((action$, { getState }) =>
       })
       .catch(ajaxError => {
         toast.error("Error Deleting Category");
-        console.log(ajaxError);
         return Observable.of({ type: DELETE_CATEGORY_REJECTED });
       })
   )

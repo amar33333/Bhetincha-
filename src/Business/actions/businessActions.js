@@ -705,7 +705,7 @@ export const onPrimaryAddressEdit = ({
           .then(innerResponse => {
             // ToogleEDIT(!EDIT);
 
-            console.log("EDIT: ", innerResponse);
+            // console.log("EDIT: ", innerResponse);
 
             const countryId = innerResponse.data.country
               ? innerResponse.data.country.id

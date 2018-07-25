@@ -67,7 +67,7 @@ export default function(state = INITIAL_STATE, action) {
       return { ...state, registerErrors: null };
 
     case LOGOUT_USER:
-      return { ...state, cookies: action.payload };
+      return { ...state, cookies: null };
 
     case COOKIES_LOAD_FULFILLED:
       return { ...state, ...action.payload };
@@ -94,7 +94,6 @@ export default function(state = INITIAL_STATE, action) {
       return { ...state, loading: true };
 
     case FETCH_USER_FULFILLED:
-      console.log("user: ", action.payload);
       return { ...state, ...action.payload, loading: false, error: false };
 
     case FETCH_USER_REJECTED:
@@ -222,7 +221,6 @@ export default function(state = INITIAL_STATE, action) {
       };
 
     case TOGGLE_PHONE_VERIFICATION_MODAL:
-      console.log("togl phon: ", action.payload);
       return {
         ...state,
         phoneVerificationModal: !state.phoneVerificationModal,

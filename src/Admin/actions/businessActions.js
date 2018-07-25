@@ -187,8 +187,6 @@ export const onBranchAddressList = ({
 }) => dispatch => {
   onBranchGet({ access_token, business_slug, branch_id })
     .then(response => {
-      console.log("asdadsadADasd: ", response.data);
-
       const countryId = response.data.country ? response.data.country.id : "";
       const stateId = response.data.state ? response.data.state.id : "";
       const districtId = response.data.district
@@ -665,8 +663,6 @@ export const onAppBusinessEachList = ({
 }) => dispatch => {
   onAppBusinessEachGet({ username, access_token })
     .then(response => {
-      // console.log("asdadsadADasd: ", response.data);
-
       const industryId = response.data.industry
         ? response.data.industry.id
         : "";
@@ -686,7 +682,6 @@ export const onAppBusinessEachList = ({
       if (industryId !== "")
         onIndustryEachGet({ id: industryId, access_token })
           .then(newResponse => {
-            console.log("industry each: ", newResponse);
             dispatch({
               type: FETCH_INDUSTRY_EACH_FULFILLED,
               payload: newResponse.data
@@ -757,7 +752,6 @@ epics.push((action$, { getState }) =>
         ];
       })
       .catch(ajaxError => {
-        console.log(ajaxError);
         return Observable.of({ type: DELETE_BUSINESS_REJECTED });
       });
   })
@@ -775,7 +769,6 @@ epics.push((action$, { getState }) =>
     return onAppBusinessEachDelete({ id, access_token })
       .mergeMap(({ response }) => console.log(response))
       .catch(ajaxError => {
-        console.log(ajaxError);
         return Observable.of({ type: DELETE_APP_BUSINESS_REJECTED });
       });
   })
@@ -853,7 +846,6 @@ export const onAppBusinessApprovalS = ({
 
       if (response.data.msg === "success") {
         toast.success("App Business Approved Successfully!");
-        console.log("bussiness acction toogle called: ", EDIT);
         dispatch({ type: APPROVE_BUSINESS_FULFILLED, payload: response.data });
       } else {
         toast.error("Error in Updating!!!");
@@ -904,8 +896,6 @@ export const onBusinessEdit = ({
 
         onBusinessEachGet({ username: id, access_token })
           .then(response => {
-            console.log("asdadsadADasd: ", response.data);
-
             // ToogleEDIT(!EDIT);
 
             const industryId = response.data.industry
@@ -976,11 +966,9 @@ export const onBusinessEdit = ({
         dispatch({ type: FETCH_BUSINESS_EACH_PENDING });
 
         toast.success("Business Updated Successfully!");
-        console.log("bussiness acction toogle called: ", EDIT);
         dispatch({ type: EDIT_BUSINESS_FULFILLED, payload: response.data });
       } else {
         toast.error("Error in Updating!!!");
-        console.log("edit error form: ", response.data.msg);
         dispatch({
           type: EDIT_BUSINESS_REJECTED,
           payload: response.data.msg
@@ -995,7 +983,6 @@ export const onBusinessEdit = ({
 };
 
 // const getAddressTree = payload => {
-//   console.log("address tree sss: ", payload);
 
 //   return {
 //     type: FETCH_ADDRESS_TREE_GET_PENDING,
@@ -1005,7 +992,6 @@ export const onBusinessEdit = ({
 
 // epics.push((action$, { getState }) =>
 //   action$.ofType(FETCH_ADDRESS_TREE_GET_PENDING).mergeMap(({ payload }) => {
-//     console.log("address tree: ", payload);
 
 //     const { countryId, stateId, districtId, cityId } = payload;
 //     const access_token = getState().auth.cookies.token_data.access_token;
@@ -1040,7 +1026,6 @@ export const onBusinessEdit = ({
 
 //     return onBusinessEachGetAjax({ slug: username, access_token }).concatMap(
 //       ({ response }) => {
-//         console.log("business each: ", response);
 //         const industryId = response.industry ? response.industry.id : "";
 //         const countryId = response.address.country
 //           ? response.address.country.id
@@ -1067,7 +1052,6 @@ export const onBusinessEdit = ({
 //         ];
 //         //   onIndustryEachGet({ id: industryId, access_token })
 //         //     .map(newResponse => {
-//         //       console.log("industry each: ", newResponse);
 //         //       return ({
 //         //         type: FETCH_INDUSTRY_EACH_FULFILLED,
 //         //         payload: newResponse.data
@@ -1092,8 +1076,6 @@ export const onBusinessEdit = ({
 export const onBusinessEachList = ({ username, access_token }) => dispatch => {
   onBusinessEachGet({ username, access_token })
     .then(response => {
-      console.log("asdadsadADasd: ", response.data);
-
       const industryId = response.data.industry
         ? response.data.industry.id
         : "";
@@ -1116,18 +1098,15 @@ export const onBusinessEachList = ({ username, access_token }) => dispatch => {
             // const ids = newResponse.data.categories.map(
             //   category => category.id
             // );
-            // console.log("industry each: ", ids);
 
             // onSubCategoryGet({ params: { ids }, access_token })
             //   .then(subResponse => {
-            //     console.log("industry each response: ", subResponse);
             //     dispatch({
             //       type: FETCH_SUB_CATEGORY_ARRAY_FULFILLED,
             //       payload: subResponse.data
             //     });
             //   })
             //   .catch(err => {
-            //     console.log("industry each error", err);
             //     dispatch({
             //       type: FETCH_SUB_CATEGORY_ARRAY_REJECTED,
             //       payload: err
@@ -1168,7 +1147,6 @@ export const onBusinessEachList = ({ username, access_token }) => dispatch => {
         access_token,
         dispatch
       );
-      // console.log(
       //   "primary addresss: ",
       //   getAddressTree(
       //     countryId,
@@ -1221,8 +1199,6 @@ export const onBusinessEachList = ({ username, access_token }) => dispatch => {
 export const onGetAddressTreeList = data => dispatch => {
   const { countryId, stateId, districtId, cityId, access_token } = data;
 
-  console.log("addresteslisdf: ", countryId);
-
   getAddressTree(
     countryId,
     stateId,
@@ -1242,9 +1218,7 @@ const getAddressTree = (
   access_token,
   dispatch
 ) => {
-  console.log(countryId, stateId, districtId, cityId, access_token);
   if (countryId !== "" && countryId !== undefined) {
-    console.log("inside coutnryID: ", countryId);
     onCountryEachGet({ id: countryId, access_token })
       .then(countryResponse => {
         dispatch({

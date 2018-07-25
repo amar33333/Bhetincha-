@@ -70,13 +70,7 @@ class CategoryEditView extends Component {
     if (hasProduct !== this.props.category.hasProduct) {
       body.hasProduct = hasProduct;
     }
-    // console.log(
-    //   tagsString,
-    //   this.props.tags,
-    //   (!this.props.tags && tagsString.length) ||
-    //     (this.props.tags &&
-    //       tagsString.sort().join(",") !== this.props.tags.sort().join(","))
-    // );
+
     if (
       (!this.props.category.tags && tagsString.length) ||
       (this.props.category.tags &&

@@ -15,6 +15,7 @@ class Website extends Component {
       <div className="main-wrapper">
         {pathname === "/businesses" && (
           <MainNavbar
+            withTools={true}
             history={this.props.history}
             initialQuery={this.state.initialQuery}
           />

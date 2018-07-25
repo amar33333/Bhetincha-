@@ -31,14 +31,19 @@ class BusinessPrimaryAddress extends Component {
 
   onFormEdit = event => {
     event.preventDefault();
+    const address = this.subBusinessPrimaryAddressRef.getState().address;
 
-    if (
-      !this.subBusinessPrimaryAddressRef.getState().address
-        .email_validation_error
+    const contactError = address.contactPerson.find(
+      eachContact =>
+        eachContact.email_validation_error || eachContact.phone_validation_error
     )
+      ? true
+      : false;
+
+    if (!address.email_validation_error && !contactError)
       this.props.onPrimaryAddressEdit({
         data: {
-          ...this.subBusinessPrimaryAddressRef.getState()
+          address
         },
         id: this.props.cookies.user_data.business_id,
         access_token: this.access_token,

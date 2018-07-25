@@ -23,9 +23,7 @@ class SubBusinessLogo extends Component {
   // };
   // Callback~
   getFiles = (key, files) => {
-    this.setState({ [key]: files }, () => {
-      console.log("files base64: ", this.state);
-    });
+    this.setState({ [key]: files });
   };
 
   clearState = () => {

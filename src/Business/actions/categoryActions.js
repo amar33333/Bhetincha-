@@ -35,7 +35,6 @@ epics.push((action$, { getState }) =>
     const { ids } = payload;
     const access_token = getState().auth.cookies.token_data.access_token;
 
-    console.log("industry each actions: ", payload);
     return onCategoryArrayGet({
       params: { ids },
       access_token

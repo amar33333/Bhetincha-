@@ -417,7 +417,6 @@ export const onIndustryPut = ({ industry, access_token }) =>
   });
 
 export const onIndustryGet = ({ access_token }) => {
-  console.log("sdasd", INDUSTRY_URL);
   return axios({
     method: "get",
     url: INDUSTRY_URL,
@@ -429,7 +428,6 @@ export const onIndustryGet = ({ access_token }) => {
 };
 
 export const onIndustryEachGet = ({ id, access_token }) => {
-  // console.log("access : ", access_token);
   return axios({
     method: "get",
     url: `${INDUSTRY_URL}${id}/`,
@@ -642,7 +640,6 @@ export const onSubCategoryEachGet = ({ id, access_token }) =>
   });
 
 export const onSubCategoryGet = ({ access_token, params }) => {
-  console.log("industry each server: ", params, access_token);
   return axios({
     method: "get",
     url: `${SUB_CATEGORY_URL}?${querystring.stringify(params)}`,
@@ -654,8 +651,6 @@ export const onSubCategoryGet = ({ access_token, params }) => {
 };
 
 export const onSubCategoryGetAjax = ({ access_token, params }) => {
-  console.log("industry each server ajax: ", params, access_token);
-
   return ajax({
     method: "get",
     url: `${SUB_CATEGORY_URL}?${querystring.stringify(params)}`,
@@ -755,7 +750,6 @@ export const onCountryGetAjax = ({ access_token }) =>
   });
 
 export const onCountryEachGet = ({ id, access_token }) => {
-  console.log("countrdch eger");
   return axios({
     method: "get",
     url: `${COUNTRY_URL}${id}/`,

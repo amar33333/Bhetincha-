@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { toast } from "react-toastify";
+import LaddaButton from "react-ladda";
 
 import { Row, Col, Card, CardHeader, CardBody, Button } from "reactstrap";
 
@@ -73,7 +74,6 @@ class BusinessEdit extends Component {
   onEditFormSubmit = event => {
     event.preventDefault();
 
-    console.log("onformEDIT: ", this.subBusinessAdminDetailRef.getState());
     this.propsData = {
       ...this.subBusinessAdminDetailRef.getState(),
       ...this.subBusinessAboutRef.getState(),
@@ -84,14 +84,23 @@ class BusinessEdit extends Component {
       ...this.subBusinessWorkingHourRef.getState()
     };
 
-    console.log("this.propsdttaa: ", this.propsData);
+    const contactError = this.subBusinessPrimaryAddressRef
+      .getState()
+      .address.contactPerson.find(
+        eachContact =>
+          eachContact.email_validation_error ||
+          eachContact.phone_validation_error
+      )
+      ? true
+      : false;
 
     if (
       !this.subBusinessAdminDetailRef.getState().phone_validation_error &&
       !this.subBusinessAdminDetailRef.getState().email_validation_error &&
       !this.subBusinessAdminDetailRef.getState().website_validation_error &&
       !this.subBusinessPrimaryAddressRef.getState().address
-        .email_validation_error
+        .email_validation_error &&
+      !contactError
     )
       this.props.onBusinessEdit({
         id: this.props.businessData.id,
@@ -125,7 +134,6 @@ class BusinessEdit extends Component {
 
   render() {
     const data = this.props.businessData;
-    console.log("new props: ", this.props);
 
     let businessData = null;
     let about = null;
@@ -160,7 +168,7 @@ class BusinessEdit extends Component {
       <div className="animated fadeIn">
         <Row>
           <Col>
-            <form onSubmit={this.onEditFormSubmit}>
+            <form>
               <SubBusinessDetails
                 collapsed={this.state.businessAdminDetailCollapse}
                 toggleCollapse={this.toggleCollapse.bind(
@@ -242,8 +250,8 @@ class BusinessEdit extends Component {
                       this,
                       "businessWorkingHourCollapse"
                     )}
-                    workingHour={workingHour}
-                    alwaysOpen={alwaysOpen}
+                    workingHour={{ workingHour, alwaysOpen }}
+                    //alwaysOpen={alwaysOpen}
                     businessGet={this.props.businessGet}
                     onInitialPropsReceived={this.onInitialPropsReceived}
                     EDIT={this.props.EDIT}
@@ -286,21 +294,23 @@ class BusinessEdit extends Component {
               <Row>
                 <Col xs="12">
                   <PermissionProvider permission="CAN_EDIT_BUSINESS">
-                    <Button
+                    <LaddaButton
+                      loading={this.props.businessGet}
                       color="primary"
                       size="lg"
                       style={{ marginRight: 20 }}
+                      onClick={this.onEditFormSubmit}
                     >
                       SAVE
-                    </Button>
+                    </LaddaButton>
                   </PermissionProvider>
 
                   <PermissionProvider permission="CAN_BUSINESS_VERIFY">
                     <Button
+                      //loading={this.props.businessVerifyLoading}
                       color="success"
                       size="lg"
                       onClick={() => {
-                        console.log("verify button clicked: ", this.props);
                         this.props.onBusinessVerify({
                           id: this.props.businessData.id,
                           body: {
@@ -339,6 +349,7 @@ export default connect(
     industries: industries.industries,
     industryData: industries.industryData,
     businessCreateErrors: business_reducer.businessCreateErrors,
+    businessVerifyLoading: business_reducer.businessVerifyLoading,
     ...auth,
     general_setup
   }),

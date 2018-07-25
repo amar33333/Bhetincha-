@@ -15,7 +15,7 @@ class Logout extends Component {
   logout() {
     CookiesProvider.removeAllCookies();
     this.props.onLogout();
-    console.log("Logout: ", CookiesProvider.getAllCookies());
+    console.log("Logout: ", CookiesProvider.getUserData());
     console.log("Logout2: ", store.getState().auth.cookies);
 
     this.props.history.push("/");

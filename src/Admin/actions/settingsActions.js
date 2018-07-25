@@ -209,7 +209,6 @@ epics.push((action$, { getState }) =>
       })
       .catch(ajaxError => {
         toast.error("Error Improve Listings !!!");
-        console.log("setingactiond: ", ajaxError);
         return Observable.of({ type: FETCH_IMPROVE_LISTING_REJECTED });
       });
   })
@@ -239,7 +238,6 @@ epics.push((action$, { getState }) =>
       })
       .catch(ajaxError => {
         toast.error("Error Creating Social Link !!!");
-        console.log("setingactiond: ", ajaxError);
         return Observable.of({ type: CREATE_SOCIAL_LINK_REJECTED });
       })
   )
@@ -292,7 +290,6 @@ epics.push((action$, { getState }) =>
       })
       .catch(ajaxError => {
         toast.error("Error Fetching Social Link !!!");
-        console.log("setingactiond: ", ajaxError);
         return Observable.of({ type: FETCH_SOCIAL_LINK_REJECTED });
       })
   )
@@ -318,7 +315,6 @@ epics.push((action$, { getState }) =>
       })
       .catch(ajaxError => {
         toast.error("Error Deleting Social Link");
-        console.log(ajaxError);
         return Observable.of({ type: DELETE_SOCIAL_LINK_REJECTED });
       })
   )

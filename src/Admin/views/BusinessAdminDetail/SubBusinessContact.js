@@ -26,8 +26,15 @@ class SubBusinessContact extends Component {
       mobileNumber: props.contact.mobileNumber,
       department: props.contact.department,
       collapsed: false,
-      email_validation_error: false,
-      phone_validation_error: false
+      email_validation_error:
+        this.props.contact.email && !validateEmail(this.props.contact.email)
+          ? true
+          : false,
+      phone_validation_error:
+        this.props.contact.mobileNumber &&
+        !validatePhone(this.props.contact.mobileNumber)
+          ? true
+          : false
     };
   }
   toggleCollapse = () => {
@@ -43,7 +50,16 @@ class SubBusinessContact extends Component {
         email: this.props.contact.email,
         designation: this.props.contact.designation,
         mobileNumber: this.props.contact.mobileNumber,
-        department: this.props.contact.department
+        department: this.props.contact.department,
+        email_validation_error:
+          this.props.contact.email && !validateEmail(this.props.contact.email)
+            ? true
+            : false,
+        phone_validation_error:
+          this.props.contact.mobileNumber &&
+          !validatePhone(this.props.contact.mobileNumber)
+            ? true
+            : false
       };
     }
   }
@@ -75,22 +91,28 @@ class SubBusinessContact extends Component {
       );
     } else if (key === "email") {
       this.setState({ [key]: val === "" ? null : val }, () => {
-        this.props.onContactSave(this.state);
-
         if (this.state.email && !validateEmail(this.state.email)) {
-          this.setState({ email_validation_error: true });
-        } else this.setState({ email_validation_error: false });
+          this.setState({ email_validation_error: true }, () => {
+            this.props.onContactSave(this.state);
+          });
+        } else
+          this.setState({ email_validation_error: false }, () => {
+            this.props.onContactSave(this.state);
+          });
       });
     } else if (key === "mobileNumber") {
       this.setState({ [key]: val === "" ? null : val }, () => {
-        this.props.onContactSave(this.state);
-
         if (
           this.state.mobileNumber &&
           !validatePhone(this.state.mobileNumber)
         ) {
-          this.setState({ phone_validation_error: true });
-        } else this.setState({ phone_validation_error: false });
+          this.setState({ phone_validation_error: true }, () => {
+            this.props.onContactSave(this.state);
+          });
+        } else
+          this.setState({ phone_validation_error: false }, () => {
+            this.props.onContactSave(this.state);
+          });
       });
     } else {
       this.setState({ [key]: val }, () => {

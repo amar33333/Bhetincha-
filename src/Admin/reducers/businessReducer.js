@@ -53,6 +53,9 @@ import {
   EDIT_BRANCH_EACH_FULFILLED,
   EDIT_BRANCH_EACH_PENDING,
   EDIT_BRANCH_EACH_REJECTED,
+  CREATE_VERIFIED_BUSINESS_PENDING,
+  CREATE_VERIFIED_BUSINESS_FULFILLED,
+  CREATE_VERIFIED_BUSINESS_REJECTED,
   UNMOUNT_BRANCH,
   UNMOUNT_PAYMENT_METHOD,
   UNMOUNT_COMPANY_TYPE
@@ -60,6 +63,7 @@ import {
 
 const INITIAL_STATE = {
   loading: false,
+  businessVerifyLoading: false,
   statusClass: "",
   EDIT: false,
 
@@ -224,20 +228,33 @@ export default function(state = INITIAL_STATE, action) {
     case EDIT_BUSINESS_PENDING:
       return { ...state, fetchLoading: true, businessGet: true };
     case EDIT_BUSINESS_REJECTED:
-      console.log("edit error: ", action.payload);
       return {
         ...state,
         fetchLoading: false,
-        businessGet: true
-        // businessCreateErrors: action.payload
+        businessGet: false,
+        businessCreateErrors: action.payload
       };
     case EDIT_BUSINESS_FULFILLED:
       return {
         ...state,
         fetchLoading: false,
         businessGet: true,
-        editBusinessSuccess: action.payload
-        // businessCreateErrors: null
+        editBusinessSuccess: action.payload,
+        businessCreateErrors: null
+      };
+
+    case CREATE_VERIFIED_BUSINESS_PENDING:
+      return { ...state, businessVerifyLoading: true };
+
+    case CREATE_VERIFIED_BUSINESS_REJECTED:
+      return {
+        ...state,
+        businessVerifyLoading: false
+      };
+    case CREATE_VERIFIED_BUSINESS_FULFILLED:
+      return {
+        ...state,
+        businessVerifyLoading: false
       };
 
     case FETCH_BUSINESS_EACH_PENDING:

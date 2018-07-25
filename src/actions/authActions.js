@@ -102,17 +102,18 @@ export const loadCookies = () => ({
   payload: { cookies: CookiesProvider.getAllCookies() }
 });
 
-export const loadPermissions = () => ({
-  type: PERMISSIONS_LOAD_PENDING
+export const loadPermissions = payload => ({
+  type: PERMISSIONS_LOAD_PENDING,
+  payload
 });
 
 epics.push(action$ =>
   action$.ofType(PERMISSIONS_LOAD_PENDING).mergeMap(action => {
-    // console.log("acccc: ", CookiesProvider.getAccessToken());
     const access_token = CookiesProvider.getAccessToken();
     // if (access_token) {
     return onUserGet({ access_token })
       .map(({ response }) => {
+        action.payload();
         return {
           type: PERMISSIONS_LOAD_FULFILLED,
           payload: {
@@ -127,13 +128,6 @@ epics.push(action$ =>
         };
       })
       .catch(ajaxError => Observable.of({ type: PERMISSIONS_LOAD_REJECTED }));
-
-    // } else {
-    //   console.log(
-    //     "no access token: i.e cookies: ",
-    //     CookiesProvider.getAllCookies()
-    //   );
-    // }
   })
 );
 
@@ -147,9 +141,7 @@ epics.push(action$ =>
     const { body, history } = action.payload;
     return onCheckUserActivatedPost({ body })
       .concatMap(({ response }) => {
-        console.log("phone: ", response);
         if (response.phone_activated) {
-          console.log("adasdsddasdadadasdasdasdsd");
           return [
             // { type: TOGGLE_LOGIN_MODAL },
             {
@@ -260,16 +252,13 @@ epics.push(action$ =>
       .mergeMap(({ response }) => {
         CookiesProvider.setCookies("token_data", response, "/", expiryDate);
         CookiesProvider.setCookies("expiry_date", expiryDate, "/", expiryDate);
-        console.log("login expiy Date: ", expiryDate);
 
         // cookies.set("token_data", response, "/", expiryDate);
 
         return onUserGet({ access_token: response.access_token });
       })
       .concatMap(({ response }) => {
-        console.log("user repsose: ", response);
         const { permissions, ...rest } = response;
-        console.log("permis rest: ", permissions, rest);
 
         CookiesProvider.setCookies("user_data", rest, "/", expiryDate);
         return [
@@ -349,7 +338,6 @@ epics.push(action$ =>
         }
       })
       .catch(ajaxError => {
-        // toast.error(ajaxError.toString());
         return Observable.of({
           type: REQUEST_PHONE_VERIFICATION_REJECTED,
           payload: ajaxError
@@ -372,7 +360,6 @@ epics.push(action$ =>
     return onForgotPasswordPost({ ...action.payload })
       .map(({ response }) => {
         if (response.id) {
-          // toast.success("Request Sent Successfully");
           history.push({
             pathname: "/forgot-password-token",
             state: { phone_number }
@@ -406,7 +393,6 @@ epics.push(action$ =>
     return onForgotPasswordTokenPost({ ...action.payload })
       .map(({ response }) => {
         if (response.msg === "success") {
-          // toast.success("Request Sent Successfully");
           history.push({
             pathname: "/login"
           });
@@ -439,7 +425,6 @@ epics.push(action$ =>
     return onPhoneVerificationTokenPost({ ...action.payload })
       .map(({ response }) => {
         if (response.id) {
-          // toast.success("Request Sent Successfully");
           history.push({
             pathname: "/user-register",
             search: `?${querystring.stringify({ id: response.id })}`
@@ -505,11 +490,9 @@ epics.push(action$ =>
       .concatMap(({ response }) => {
         if (response.msg === "success") {
           toast.success("Registered Successfully");
-          console.log("respons: ", response);
           // history.push({
           //   pathname: `/${slug}`
           // });
-          console.log("asdadasdasdasdsadadasd: ", action.payload);
           return [
             { type: CREATE_USER_FULFILLED, payload: response },
             {
@@ -556,7 +539,6 @@ epics.push(action$ =>
     return onBusinessRegister({ ...action.payload })
       .map(({ response }) => {
         if (response.id) {
-          // toast.success("Registered Successfully");
           history.push({
             pathname: "/user-register",
             search: `?${querystring.stringify({ id: response.id })}`,
@@ -572,7 +554,6 @@ epics.push(action$ =>
         }
       })
       .catch(ajaxError => {
-        // toast.error(ajaxError.toString());
         return Observable.of({
           type: CREATE_BUSINESS_USER_REJECTED,
           payload: JSON.parse(ajaxError.message)
@@ -636,7 +617,6 @@ epics.push(action$ =>
         }
       })
       .catch(ajaxError => {
-        // toast.error(ajaxError.toString());
         return Observable.of({
           type: INDIVIDUAL_TOKEN_REJECTED,
           payload: JSON.parse(ajaxError.message)
@@ -656,7 +636,6 @@ epics.push(action$ =>
 
     return onIndividualRegister({ ...action.payload })
       .map(({ response }) => {
-        // toast.success("Registered Successfully");
         if (response.message) {
           history.push({
             pathname: "/activate",
@@ -676,8 +655,7 @@ epics.push(action$ =>
 );
 
 export const onLogout = () => ({
-  type: LOGOUT_USER,
-  payload: null
+  type: LOGOUT_USER
 });
 
 export default epics;

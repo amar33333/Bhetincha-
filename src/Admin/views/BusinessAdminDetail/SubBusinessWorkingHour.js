@@ -70,19 +70,14 @@ class subBusinessWorkingHour extends Component {
   }
 
   static getDerivedStateFromProps = nextProps => {
-    // console.log("woeking howisa;", nextProps);
-    // console.log("working hour before toogle recevied: ", nextProps.EDIT);
-
     if (!nextProps.businessGet && nextProps.workingHour && nextProps.EDIT) {
-      console.log("working hourinside toogle recevied: ", nextProps.EDIT);
-
       nextProps.onInitialPropsReceived();
 
       return {
-        workingHour: nextProps.workingHour.length
-          ? [...nextProps.workingHour.map(each => each)]
+        workingHour: nextProps.workingHour.workingHour.length
+          ? [...nextProps.workingHour.workingHour.map(each => each)]
           : [],
-        alwaysOpen: nextProps.alwaysOpen
+        alwaysOpen: nextProps.workingHour.alwaysOpen
       };
     }
     return null;
@@ -115,13 +110,8 @@ class subBusinessWorkingHour extends Component {
     });
   }
   handleStartHourChange = (e, day) => {
-    console.log(
-      "startHourchange: ",
-      moment(e.target.value).format("YYYY-MM-DDTHH:mmZ")
-    );
     const newWorkingHour = this.state.workingHour.map(each => {
       if (day === "Sunday") {
-        console.log("HIT");
         return {
           ...each,
           start: moment(e.target.value).format("YYYY-MM-DDTHH:mmZ")
@@ -141,10 +131,8 @@ class subBusinessWorkingHour extends Component {
   };
 
   handleClosingHourChange = (e, day) => {
-    console.log("time:", e.target.value);
     const newWorkingHour = this.state.workingHour.map(each => {
       if (day === "Sunday") {
-        console.log("HIT");
         return {
           ...each,
           end: moment(e.target.value).format("YYYY-MM-DDTHH:mmZ")
@@ -171,8 +159,6 @@ class subBusinessWorkingHour extends Component {
       currentDate = moment(currentDate).add(15, "m");
     }
 
-    console.log("working props : ", this.props);
-    console.log("working state : ", this.state);
     return (
       <FormGroup>
         <SemanticCard fluid>

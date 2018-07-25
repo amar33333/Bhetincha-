@@ -32,22 +32,15 @@ class CookiesProvider {
   };
 
   static setCookies = (key, object, path, expires) => {
-    console.log("key: ", key);
-    console.log("object: ", object);
-    console.log("path: ", path);
-    console.log("expires: ", expires);
     cookies.set(key, object, {
       path,
       expires
     });
-    console.log("done: ", cookies.get(key));
   };
 
   static getAllCookies = () => {
     const token_data = cookies.get("token_data");
     const user_data = cookies.get("user_data");
-
-    console.log("cookeis gt: ", cookies.get("user_data"));
 
     if (token_data && user_data)
       return {
