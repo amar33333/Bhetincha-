@@ -20,6 +20,7 @@ const items = {
     // },
     {
       name: "Change Slug",
+      className: "joyride-slug",
       url: `/${ROUTE_PARAMS_BUSINESS_NAME}/dashboard/change-slug`,
       icon: "fa fa-map-o"
       // permission: "CAN_VIEW_USERS"

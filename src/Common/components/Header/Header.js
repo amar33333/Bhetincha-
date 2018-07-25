@@ -26,7 +26,7 @@ class Header extends Component {
 
   render() {
     return (
-      <header className="app-header navbar">
+      <header className="app-header navbar joyride-header">
         <NavbarToggler className="d-lg-none" onClick={this.mobileSidebarToggle}>
           <span className="navbar-toggler-icon" />
         </NavbarToggler>
@@ -57,7 +57,7 @@ class Header extends Component {
             </NavLink>
           </NavItem>
           <HeaderDropdown /> */}
-          <Avatar />
+          <Avatar className="joyride-avatar" />
         </Nav>
         <NavbarToggler className="d-md-down-none" onClick={this.asideToggle}>
           <span className="navbar-toggler-icon" />

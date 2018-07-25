@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Container } from "reactstrap";
 import { connect } from "react-redux";
+import Joyride from "react-joyride";
 import {
   Header,
   Sidebar,
@@ -19,7 +20,75 @@ import businessEpics from "./config/epics";
 import { ROUTE_PARAMS_BUSINESS_NAME } from "../config/CONSTANTS";
 
 class Business extends Component {
-  state = { nav: [], routes: [] };
+  state = {
+    nav: [],
+    routes: [],
+    run: true,
+    steps: [
+      {
+        target: ".joyride-dashboard",
+        disableBeacon: true,
+        styles: {
+          options: {
+            width: 600,
+            overlayColor: "rgba(0, 0, 0, 0.8)"
+          }
+        },
+        content:
+          "Welcome to Bhetincha Quick Tour. Please Take a moment to go through all the guides before diving into the awesome business experience",
+        placement: "center",
+        locale: { skip: "wow!" }
+      },
+      {
+        target: ".joyride-avatar",
+
+        styles: {
+          options: {
+            width: 600,
+            overlayColor: "rgba(0, 0, 0, 0.8)"
+          }
+        },
+        content:
+          "You can get all of your business Navigation from here. You can quickly jump between your dashboard and minisite from here. Try Clicking on the Logo.",
+        placement: "bottom",
+        title: "Your Avatar"
+      },
+      {
+        target: ".joyride-dashboard",
+        styles: {
+          options: {
+            width: 600,
+            overlayColor: "rgba(0, 0, 0, 0.8)"
+          }
+        },
+        content:
+          "This is your Dashboard. You will find relevent information about your business here.",
+        placement: "bottom",
+        title: "Dashboard"
+      },
+      {
+        target: ".joyride-sidebar",
+        styles: {
+          options: {
+            width: 600,
+            overlayColor: "rgba(0, 0, 0, 0.8)"
+          }
+        },
+        content:
+          "You can quickly change your business information from this pane. Try changing your business slug and working hour under General Info.",
+        placement: "right",
+        title: "Side Bar"
+      }
+    ]
+  };
+
+  handleJoyrideCallback = data => {
+    const { type } = data;
+
+    console.group(type);
+    console.log(data); //eslint-disable-line no-console
+    console.groupEnd();
+  };
 
   componentDidMount() {
     document.body.classList.add(
@@ -113,11 +182,25 @@ class Business extends Component {
   }
 
   render() {
+    const { steps, run } = this.state;
     return (
       <div className="app">
-        <Header />
+        <Joyride
+          continuous
+          scrollToFirstStep
+          showProgress
+          showSkipButton={false}
+          steps={steps}
+          run={true}
+          // callback={this.handleJoyrideCallback}
+        />
+        <Header className="joyride-header" />
         <div className="app-body">
-          <Sidebar {...this.props} nav={this.state.nav} />
+          <Sidebar
+            {...this.props}
+            nav={this.state.nav}
+            className="joyride-sidebar"
+          />
           <main className="main">
             <Breadcrumb routes={this.state.routes} />
             <Container fluid>

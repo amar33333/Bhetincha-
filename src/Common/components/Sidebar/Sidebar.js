@@ -132,7 +132,7 @@ class Sidebar extends Component {
           ) : (
             <NavLink
               to={url}
-              className={classes.link}
+              className={classes.link + " " + item.className}
               activeClassName="active"
               onClick={this.hideMobile}
             >
@@ -191,7 +191,7 @@ class Sidebar extends Component {
 
     // sidebar-nav root
     return (
-      <div className="sidebar">
+      <div className={this.props.className + " " + "sidebar"}>
         <SidebarHeader />
         <SidebarForm />
         <nav className="sidebar-nav">
