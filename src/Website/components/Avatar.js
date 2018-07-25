@@ -69,33 +69,30 @@ class Avatar extends Component {
             ) {
               if (avatarItem.link) {
                 return (
-                  <Dropdown.Item key={i}>
-                    <Link
-                      style={{
-                        color: "inherit"
-                      }}
-                      to={
-                        this.state.group === USER_GROUP_BUSINESS
+                  <Dropdown.Item
+                    key={i}
+                    as="a"
+                    href={
+                      this.state.group === USER_GROUP_BUSINESS
+                        ? avatarItem.link.replace(
+                            ROUTE_PARAMS_BUSINESS_NAME,
+                            this.state.slug
+                          )
+                        : this.state.group === USER_GROUP_INDIVIDUAL
                           ? avatarItem.link.replace(
-                              ROUTE_PARAMS_BUSINESS_NAME,
-                              this.state.slug
+                              ROUTE_PARAMS_INDIVIDUAL_NAME,
+                              this.props.cookies.user_data.username
                             )
-                          : this.state.group === USER_GROUP_INDIVIDUAL
-                            ? avatarItem.link.replace(
-                                ROUTE_PARAMS_INDIVIDUAL_NAME,
-                                this.props.cookies.user_data.username
-                              )
-                            : avatarItem.link
-                      }
-                    >
-                      <i
-                        className={`${
-                          avatarItem.className
-                        } profile-dropdown__item__icon`}
-                      />
-                      {avatarItem.title}
-                      {avatarItem.badge && <Badge color="warning">4</Badge>}
-                    </Link>
+                          : avatarItem.link
+                    }
+                  >
+                    <i
+                      className={`${
+                        avatarItem.className
+                      } profile-dropdown__item__icon`}
+                    />
+                    {avatarItem.title}
+                    {avatarItem.badge && <Badge color="warning">4</Badge>}
                   </Dropdown.Item>
                 );
               } else if (

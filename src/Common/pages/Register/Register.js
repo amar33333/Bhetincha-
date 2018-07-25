@@ -160,14 +160,14 @@ class Register extends Component {
                     </Row> */}
                 <Row className="pt-2">
                   <Col>
-                    <a
-                      href="#"
+                    <Button
+                      color="link"
                       onClick={() =>
                         this.props.history.push("/individual-register")
                       }
                     >
-                      Register as Individual{" "}
-                    </a>
+                      Register as Individual
+                    </Button>
                   </Col>
                 </Row>
                 <ErrorHandling
