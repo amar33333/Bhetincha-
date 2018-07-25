@@ -53,7 +53,12 @@ class Avatar extends Component {
     );
     greetings.sort(() => Math.random() - 0.5);
     return (
-      <Dropdown trigger={trigger} pointing="top right" icon={null}>
+      <Dropdown
+        trigger={trigger}
+        pointing="top right"
+        icon={null}
+        className={this.props.className}
+      >
         <Dropdown.Menu>
           <Dropdown.Header
             content={`${greetings[0]}, ${this.state.username}!`}
