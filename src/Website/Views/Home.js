@@ -12,16 +12,16 @@ import { onSearchQuerySubmit, onStoreUserGeoLocation } from "../actions";
 
 import { BottomFooter, LoginRegister } from "../components";
 import querystring from "querystring";
-
-const placeholder = [
-  "Search Anything....",
-  "Thakali Restaurants in Baneshwor",
-  "Hotels in Thamel",
-  "Schools in Lalitpur"
-];
+import { SINGLE_PLACEHOLDER_URL } from "../../Common/utils/API";
 
 class Home extends Component {
-  state = { query: "", result: "" };
+  state = { query: "", result: "", placeholder: "Search..." };
+
+  componentDidMount() {
+    fetch(SINGLE_PLACEHOLDER_URL)
+      .then(response => response.json())
+      .then(data => this.setState({ placeholder: data.name }));
+  }
 
   componentDidUpdate(prevProps) {
     if (prevProps.coords !== this.props.coords) {
@@ -39,7 +39,6 @@ class Home extends Component {
   }
 
   render() {
-    placeholder.sort(() => Math.random() - 0.5);
     return (
       <div className="body-wrapper">
         {!this.props.cookies ? (
@@ -67,24 +66,25 @@ class Home extends Component {
                 <AutoSuggestion
                   // theme={theme}
                   from="home"
-                  placeholder={placeholder[0]}
+                  placeholder={this.state.placeholder}
                   valueKey="business_name"
                   autoFocus
                   suggestions={this.props.search_result.data}
                   onSuggestionsFetchRequested={this.props.onSearchQuerySubmit}
                   onSearchComplete={keyword => {
-                    this.props.history.push({
-                      pathname: "/businesses",
-                      search: `?${querystring.stringify({
-                        query:
-                          keyword ||
-                          `${
-                            placeholder[0] !== "Search Anything...."
-                              ? placeholder[0]
-                              : ""
-                          }`
-                      })}`
-                    });
+                    (keyword || this.state.placeholder !== "Search...") &&
+                      this.props.history.push({
+                        pathname: "/businesses",
+                        search: `?${querystring.stringify({
+                          query:
+                            keyword ||
+                            `${
+                              this.state.placeholder !== "Search..."
+                                ? this.state.placeholder
+                                : ""
+                            }`
+                        })}`
+                      });
                   }}
                 />
               </Col>
