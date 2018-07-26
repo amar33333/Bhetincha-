@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import "../../minisite.css";
 import MapComponent from "../../../../../Common/components/MapComponent";
 import { Col, Row, Container } from "reactstrap";
-import { Card, Button } from "semantic-ui-react";
+import { Card, Button, Input, Icon } from "semantic-ui-react";
 
 import { directionRenderer } from "../../../../../Common/utils/Extras";
 
@@ -284,35 +284,46 @@ class Contact extends Component {
           {this.props.branchAddress &&
             this.props.branchAddress.length > DEFAULT_BRANCH_ADDRESS_COUNT && (
               <Row>
-                <input
-                  placeholder="Search branch Address..."
-                  onChange={e =>
-                    this.setState({
-                      searchKeyword: e.target.value,
-                      branchAddressCount: DEFAULT_BRANCH_ADDRESS_COUNT
-                    })
-                  }
-                  value={this.state.searchKeyword}
-                />
+                <Col md={{ size: 1, offset: 9 }}>
+                  <Input
+                    onChange={e =>
+                      this.setState({
+                        searchKeyword: e.target.value,
+                        branchAddressCount: DEFAULT_BRANCH_ADDRESS_COUNT
+                      })
+                    }
+                    value={this.state.searchKeyword}
+                    icon="search"
+                    placeholder="Search in branch address..."
+                  />
+                </Col>
               </Row>
             )}
           <Row className="mt-5 mb-5">
             {this.props.address && this.renderPrimaryAddress()}
             {this.props.branchAddress && this.renderBranchAddress()}
           </Row>
-          {this.props.branchAddress &&
-            this.props.branchAddress.length > this.state.branchAddressCount && (
-              <button
-                onClick={() =>
-                  this.setState({
-                    branchAddressCount:
-                      this.state.branchAddressCount + BRANCH_ADDRESS_INCREMENT
-                  })
-                }
-              >
-                Load More
-              </button>
-            )}
+          <Row className="mb-4 d-flex justify-content-center">
+            <Col xs="2">
+              {this.props.branchAddress &&
+                this.props.branchAddress.length >
+                  this.state.branchAddressCount && (
+                  <Button
+                    basic
+                    color="green"
+                    content="Load More"
+                    icon="arrow down"
+                    onClick={() =>
+                      this.setState({
+                        branchAddressCount:
+                          this.state.branchAddressCount +
+                          BRANCH_ADDRESS_INCREMENT
+                      })
+                    }
+                  />
+                )}
+            </Col>
+          </Row>
         </Container>
       </div>
     );
