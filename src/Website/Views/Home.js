@@ -14,13 +14,15 @@ import { BottomFooter, LoginRegister } from "../components";
 import querystring from "querystring";
 import { SINGLE_PLACEHOLDER_URL } from "../../Common/utils/API";
 
+const PLACEHOLDER_CONSTANT = "Search any business...";
+
 class Home extends Component {
-  state = { query: "", result: "", placeholder: "Search any business..." };
+  state = { query: "", result: "", placeholder: PLACEHOLDER_CONSTANT };
 
   componentDidMount() {
     fetch(SINGLE_PLACEHOLDER_URL)
       .then(response => response.json())
-      .then(data => this.setState({ placeholder: data.name }));
+      .then(data => data.name && this.setState({ placeholder: data.name }));
   }
 
   componentDidUpdate(prevProps) {
@@ -73,15 +75,14 @@ class Home extends Component {
                   onSuggestionsFetchRequested={this.props.onSearchQuerySubmit}
                   onSearchComplete={keyword => {
                     (keyword ||
-                      this.state.placeholder !== "Search any business...") &&
+                      this.state.placeholder !== PLACEHOLDER_CONSTANT) &&
                       this.props.history.push({
                         pathname: "/businesses",
                         search: `?${querystring.stringify({
                           query:
                             keyword ||
                             `${
-                              this.state.placeholder !==
-                              "Search any business..."
+                              this.state.placeholder !== PLACEHOLDER_CONSTANT
                                 ? this.state.placeholder
                                 : ""
                             }`
