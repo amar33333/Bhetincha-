@@ -107,6 +107,7 @@ class BusinessNav extends Component {
   };
 
   render() {
+    const { url } = this.props;
     return (
       <div>
         <ScrollInNav scrollInHeight={1}>
@@ -131,9 +132,11 @@ class BusinessNav extends Component {
             <Collapse isOpen={this.state.isOpen} navbar>
               <Nav
                 navbar
-                style={{
-                  marginLeft: "300px"
-                }}
+                className={
+                  this.props.isHome
+                    ? `business-nav__wrapper__for-home`
+                    : `business-nav__wrapper`
+                }
               >
                 {/* <ResponsiveGridLayout
                   className="layout"
@@ -169,7 +172,7 @@ class BusinessNav extends Component {
                       onClick={this.onNavClicked}
                       draggable="false"
                       to={`/${this.props.businessName}`}
-                      className="nav-link minisite_business__nav__item"
+                      className=""
                     >
                       Home
                     </Link>
@@ -179,7 +182,7 @@ class BusinessNav extends Component {
                       onClick={this.onNavClicked}
                       draggable="false"
                       to={`/${this.props.businessName}/about`}
-                      className="nav-link minisite_business__nav__item"
+                      className=""
                     >
                       About
                     </Link>
@@ -189,7 +192,7 @@ class BusinessNav extends Component {
                       onClick={this.onNavClicked}
                       draggable="false"
                       to={`/${this.props.businessName}/gallery`}
-                      className="nav-link minisite_business__nav__item"
+                      className=""
                     >
                       Gallery
                     </Link>
@@ -199,19 +202,18 @@ class BusinessNav extends Component {
                       onClick={this.onNavClicked}
                       draggable="false"
                       to={`/${this.props.businessName}/contact`}
-                      className="nav-link minisite_business__nav__item"
+                      className=""
                       // smooth
                     >
                       Contact
                     </Link>
                   </NavItem>
                 </GridLayout> */}
-                <NavItem key="home">
+                <NavItem key="home" className={this.props.isHome && "active"}>
                   <Link
                     onClick={this.onNavClicked}
                     draggable="false"
                     to={`/${this.props.businessName}`}
-                    className="nav-link minisite_business__nav__item"
                   >
                     Home
                   </Link>
@@ -221,37 +223,45 @@ class BusinessNav extends Component {
                       onClick={this.onNavClicked}
                       draggable="false"
                       to={`/${this.props.businessName}/about`}
-                      className="nav-link minisite_business__nav__item"
+                      className=""
                     >
                       About
                     </Link>
                   </NavItem> */}
-                <NavItem key="gallery">
+                <NavItem
+                  key="gallery"
+                  className={url === "gallery" && "active"}
+                >
                   <Link
                     onClick={this.onNavClicked}
                     draggable="false"
                     to={`/${this.props.businessName}/gallery`}
-                    className="nav-link minisite_business__nav__item"
                   >
                     Gallery
                   </Link>
                 </NavItem>
-                <NavItem key="ecommerce">
+                <NavItem
+                  key="ecommerce"
+                  className={url === "ecommerce" && "active"}
+                >
                   <Link
                     onClick={this.onNavClicked}
                     draggable="false"
                     to={`/${this.props.businessName}/ecommerce`}
-                    className="nav-link minisite_business__nav__item"
+                    className=""
                   >
                     Ecommerce
                   </Link>
                 </NavItem>
-                <NavItem key="contact">
+                <NavItem
+                  key="contact"
+                  className={url === "contact" && "active"}
+                >
                   <Link
                     onClick={this.onNavClicked}
                     draggable="false"
                     to={`/${this.props.businessName}/contact`}
-                    className="nav-link minisite_business__nav__item"
+                    className=""
                     // smooth
                   >
                     Contact
@@ -301,7 +311,7 @@ class BusinessNav extends Component {
               </Nav>
             </Collapse>
 
-            {/* <NavItem className="nav-link minisite_business__nav__item">
+            {/* <NavItem className="">
               {this.props.cookies && (
                 <Avatar
                   show={

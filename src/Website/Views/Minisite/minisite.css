@@ -49,10 +49,6 @@
   text-align: center;
 }
 
-.minisite_business__nav__item {
-  text-transform: uppercase;
-  margin-right: 20px;
-}
 .minisite_banner__wrapper {
   position: relative;
 }
@@ -139,12 +135,12 @@ img.minisite__album-thumbnail {
   color: white;
   position: relative;
   top: -15px;
-  background-color: #0a6ac4;
+  background-color: #25c11c;
   /* padding: 20px; */
 }
 
 .business-rating-component {
-  color: rgb(162, 221, 45);
+  color: rgb(210, 235, 161);
 }
 .minisite_content__wrapper {
   padding: 20px;

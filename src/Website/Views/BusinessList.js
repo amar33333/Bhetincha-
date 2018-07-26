@@ -217,7 +217,7 @@ class BusinessList extends Component {
         var today = moment().format("dddd");
 
         return (
-          <Card fluid key={Searchindex}>
+          <Card fluid key={Searchindex} raised className="search-result__card">
             <Card.Content>
               <Media>
                 <Media left href="#">
