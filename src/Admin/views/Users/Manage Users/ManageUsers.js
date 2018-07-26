@@ -22,7 +22,8 @@ import {
   handleOnUsersFilterChange,
   toggleUserEditModal,
   onUserEdit,
-  onUserRemove
+  onUserRemove,
+  resetUserGroupErrors
 } from "../../../actions";
 
 class ManageUsers extends Component {
@@ -154,6 +155,9 @@ class ManageUsers extends Component {
           <UserEditModal
             data={{ ...this.props.userEditData, groups: this.props.groups }}
             onUserEdit={this.props.onUserEdit}
+            userGroupEditErrors={this.props.userGroupEditErrors}
+            loading={this.props.loading}
+            resetUserGroupErrors={this.props.resetUserGroupErrors}
           />
         </CustomModal>
       </div>
@@ -171,7 +175,9 @@ export default connect(
         usersPages: pages,
         usersRowCount: rowCount,
         userEditData,
-        userEditModal
+        userEditModal,
+        userGroupEditErrors,
+        loading
       },
       filterUsers
     }
@@ -183,7 +189,9 @@ export default connect(
     rowCount,
     ...filterUsers,
     userEditData,
-    userEditModal
+    userEditModal,
+    userGroupEditErrors,
+    loading
   }),
   {
     onUsersList,
@@ -192,6 +200,7 @@ export default connect(
     handleOnUsersFilterChange,
     handleSortChangeUsers,
     toggleUserEditModal,
-    onUserRemove
+    onUserRemove,
+    resetUserGroupErrors
   }
 )(ManageUsers);

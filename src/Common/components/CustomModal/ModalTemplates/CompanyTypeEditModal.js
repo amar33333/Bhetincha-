@@ -8,6 +8,7 @@ import {
   Form,
   FormGroup
 } from "reactstrap";
+import { ErrorHandling } from "../../../utils/Extras";
 
 class CompanyTypeEditModal extends Component {
   state = { company_type: "" };
@@ -17,6 +18,10 @@ class CompanyTypeEditModal extends Component {
       company_type: this.props.data ? this.props.data : ""
     });
   }
+
+  componentWillUnmount = () => {
+    this.props.resetPaymentCompanyErrors();
+  };
 
   onChange = (key, event) => {
     this.setState({
@@ -34,7 +39,6 @@ class CompanyTypeEditModal extends Component {
   };
 
   render() {
-    console.log("company_type edit state: ", this.state);
     return (
       <Form onSubmit={this.onFormEdit} inline>
         <FormGroup className="mb-2 mr-sm-2 mb-sm-0">
@@ -47,7 +51,7 @@ class CompanyTypeEditModal extends Component {
             <Input
               autoFocus
               required
-              disabled={this.props.loading}
+              //disabled={this.props.loading}
               type="text"
               placeholder="Type company_type Name"
               value={
@@ -57,7 +61,13 @@ class CompanyTypeEditModal extends Component {
             />
           </InputGroup>
         </FormGroup>
-        <Button color="primary">
+        <ErrorHandling
+          error={
+            this.props.paymentCompanyEditErrors &&
+            this.props.paymentCompanyEditErrors.name
+          }
+        />
+        <Button color="primary" disabled={this.props.companyTypeLoading}>
           <span className="fa fa-check" /> Save
         </Button>
       </Form>

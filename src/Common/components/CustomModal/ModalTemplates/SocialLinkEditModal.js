@@ -10,6 +10,7 @@ import {
   Row,
   FormGroup
 } from "reactstrap";
+import { ErrorHandling } from "../../../utils/Extras";
 
 class SocialLinkEditModal extends Component {
   state = {
@@ -24,10 +25,19 @@ class SocialLinkEditModal extends Component {
     });
   }
 
+  componentWillUnmount() {
+    this.props.resetSettingsErrors();
+  }
+
   onChange = (key, event) => {
-    this.setState({
-      [key]: event.target.value
-    });
+    if (key === "name")
+      this.setState({
+        [key]: event.target.value.replace(/\b\w/g, l => l.toUpperCase())
+      });
+    else
+      this.setState({
+        [key]: event.target.value
+      });
   };
 
   onFormEdit = event => {
@@ -59,6 +69,12 @@ class SocialLinkEditModal extends Component {
                   onChange={this.onChange.bind(this, "name")}
                 />
               </InputGroup>
+              <ErrorHandling
+                error={
+                  this.props.settingsEditErrors &&
+                  this.props.settingsEditErrors.name
+                }
+              />
               <InputGroup className="mb-2">
                 <InputGroupAddon addonType="prepend">
                   <InputGroupText>Social Link Class-Name</InputGroupText>
@@ -72,7 +88,10 @@ class SocialLinkEditModal extends Component {
                 />
               </InputGroup>
             </FormGroup>
-            <Button color="primary">
+            <Button
+              color="primary"
+              disabled={this.props.social_linksFetchLoading}
+            >
               <span className="fa fa-check" /> Save
             </Button>
           </Col>

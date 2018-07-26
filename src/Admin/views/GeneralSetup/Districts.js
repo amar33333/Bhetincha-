@@ -275,7 +275,7 @@ class Districts extends Component {
                             autoFocus
                             autosize
                             clearable
-                            disabled={this.props.loading}
+                            //disabled={this.props.loading}
                             required
                             name="country"
                             className="select-industry"
@@ -296,7 +296,7 @@ class Districts extends Component {
                           <Select
                             autosize
                             clearable
-                            disabled={this.props.loading}
+                            //disabled={this.props.loading}
                             required
                             name="State"
                             className="select-industry"
@@ -324,7 +324,7 @@ class Districts extends Component {
                           </InputGroupAddon>
                           <Input
                             required
-                            disabled={this.props.loading}
+                            //disabled={this.props.loading}
                             type="text"
                             innerRef={ref => (this.focusableInput = ref)}
                             placeholder="Type District Name"
@@ -349,7 +349,7 @@ class Districts extends Component {
                           <Input
                             required
                             type="text"
-                            disabled={this.props.loading}
+                            //disabled={this.props.loading}
                             placeholder="Type District Code"
                             value={this.state.districtCode}
                             onChange={this.onChange.bind(this, "districtCode")}
@@ -406,6 +406,9 @@ class Districts extends Component {
             onAddressTreeList={this.props.onAddressTreeList}
             onGetAddressTreeList={this.props.onGetAddressTreeList}
             access_token={this.props.access_token}
+            generalSetupEditErrors={this.props.generalSetupEditErrors}
+            districtLoading={this.props.stateLoading}
+            resetGeneralSetupErrors={this.props.resetGeneralSetupErrors}
           />
         </CustomModal>
       </div>
@@ -434,7 +437,8 @@ export default connect(
         districtsFetchLoading,
         districtLoading,
         districtError,
-        generalSetupErrors
+        generalSetupErrors,
+        generalSetupEditErrors
       },
       filterDistrict
     }
@@ -452,6 +456,7 @@ export default connect(
     loading: districtLoading,
     error: districtError,
     generalSetupErrors,
+    generalSetupEditErrors,
     access_token,
     ...filterDistrict
   }),

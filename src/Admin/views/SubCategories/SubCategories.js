@@ -296,7 +296,6 @@ class SubCategories extends Component {
   };
 
   render() {
-    console.log("state: ", this.state);
     return (
       <div className="animated fadeIn">
         <Row className="hr-centered">
@@ -317,7 +316,7 @@ class SubCategories extends Component {
                             autoFocus
                             clearable
                             required
-                            disabled={this.props.loading}
+                            //disabled={this.props.loading}
                             name="Industry"
                             className="select-category"
                             value={this.state.industry}
@@ -337,7 +336,7 @@ class SubCategories extends Component {
                           <Select
                             autosize
                             clearable
-                            disabled={this.props.loading}
+                            //disabled={this.props.loading}
                             required
                             name="Category"
                             className="select-category"
@@ -365,7 +364,7 @@ class SubCategories extends Component {
                       <Input
                         required
                         innerRef={ref => (this.focusableInput = ref)}
-                        disabled={this.props.loading}
+                        //disabled={this.props.loading}
                         type="text"
                         placeholder="New Sub Category Name"
                         value={this.state.subCategory}
@@ -394,7 +393,7 @@ class SubCategories extends Component {
                       <Select
                         autosize
                         clearable
-                        disabled={this.props.loading}
+                        //disabled={this.props.loading}
                         required
                         tabSelectsValue={false}
                         multi
@@ -459,6 +458,9 @@ class SubCategories extends Component {
             extra_sections={this.props.extra_sections}
             onIndustryEachList={this.props.onIndustryEachList}
             partialCategories={this.props.partialCategories}
+            subCategoryEditErrors={this.props.subCategoryEditErrors}
+            loading={this.props.loading}
+            resetSubCategoryErrors={this.props.resetSubCategoryErrors}
           />
         </CustomModal>
       </div>

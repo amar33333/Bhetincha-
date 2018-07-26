@@ -28,7 +28,6 @@ class UserEditModal extends Component {
   };
 
   componentDidMount() {
-    console.log("user edit data: ", this.props);
     const { first_name, last_name, username, email, group } = this.props.data;
     this.setState({
       group: this.props.data.groups.find(each => each.name === group),
@@ -38,6 +37,10 @@ class UserEditModal extends Component {
       email,
       email_validation_error: email && !validateEmail(email)
     });
+  }
+
+  componentWillUnmount() {
+    this.props.resetUserGroupErrors();
   }
 
   onChange = (key, event) => {
@@ -89,8 +92,6 @@ class UserEditModal extends Component {
     const { group } = this.state;
     const value = group && group.id;
 
-    console.log("user state: ", this.state);
-
     return (
       <Form onSubmit={this.onFormEdit}>
         <Row>
@@ -123,6 +124,12 @@ class UserEditModal extends Component {
               />
             </FormGroup>
             {this.displayEmailValidationInfo()}
+            <ErrorHandling
+              error={
+                this.props.userGroupEditErrors &&
+                this.props.userGroupEditErrors.email
+              }
+            />
           </Col>
         </Row>
         <Row>
@@ -163,6 +170,12 @@ class UserEditModal extends Component {
                 onChange={this.onChange.bind(this, "username")}
               />
             </FormGroup>
+            <ErrorHandling
+              error={
+                this.props.userGroupEditErrors &&
+                this.props.userGroupEditErrors.username
+              }
+            />
           </Col>
         </Row>
         <Row>

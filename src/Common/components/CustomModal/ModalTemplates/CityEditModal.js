@@ -13,6 +13,7 @@ import {
 } from "reactstrap";
 
 import Select from "react-select";
+import { ErrorHandling } from "../../../utils/Extras";
 
 class CityEditModal extends Component {
   state = { state: "", country: "", district: "", city: "" };
@@ -34,6 +35,10 @@ class CityEditModal extends Component {
       district: this.props.data.district,
       city: this.props.data
     });
+  }
+
+  componentWillUnmount() {
+    this.props.resetGeneralSetupErrors();
   }
 
   onChange = (key, event) => {
@@ -188,9 +193,15 @@ class CityEditModal extends Component {
               />
             </InputGroup>
           </Col>
+          <ErrorHandling
+            error={
+              this.props.generalSetupEditErrors &&
+              this.props.generalSetupEditErrors.name
+            }
+          />
 
           <Col xs="12" md="2">
-            <Button color="primary">
+            <Button color="primary" disabled={this.props.cityLoading}>
               <span className="fa fa-check" /> Save
             </Button>
           </Col>

@@ -8,6 +8,7 @@ import {
   Form,
   FormGroup
 } from "reactstrap";
+import { ErrorHandling } from "../../../utils/Extras";
 
 class GroupEditModal extends Component {
   state = { group: "" };
@@ -18,11 +19,15 @@ class GroupEditModal extends Component {
     });
   }
 
+  componentWillUnmount() {
+    this.props.resetUserGroupErrors();
+  }
+
   onChange = (key, event) => {
     this.setState({
       [key]: {
         ...this.state.group,
-        name: event.target.value.replace(/\b\w/g, l => l.toUpperCase())
+        name: event.target.value.toUpperCase()
       }
     });
   };
@@ -54,7 +59,13 @@ class GroupEditModal extends Component {
             />
           </InputGroup>
         </FormGroup>
-        <Button color="primary">
+        <ErrorHandling
+          error={
+            this.props.userGroupEditErrors &&
+            this.props.userGroupEditErrors.name
+          }
+        />
+        <Button color="primary" disabled={this.props.loading}>
           <span className="fa fa-check" /> Save
         </Button>
       </Form>

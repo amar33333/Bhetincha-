@@ -1295,7 +1295,7 @@ epics.push((action$, { getState }) =>
         }
       })
       .catch(ajaxError => {
-        toast.error(ajaxError.toString());
+        toast.error("Error: Creating Company Type");
         return Observable.of({
           type: CREATE_COMPANY_TYPE_REJECTED,
           payload: JSON.parse(ajaxError.message)
@@ -1416,14 +1416,14 @@ epics.push((action$, { getState }) =>
             { type: TOGGLE_COMPANY_TYPE_EDIT_MODAL }
           ];
         } else {
-          throw new Error(response.msg[Object.keys(response.msg)[0]][0]);
+          throw new Error(JSON.stringify(response.msg));
         }
       })
       .catch(ajaxError => {
-        toast.error(ajaxError.toString());
+        toast.error("Error: Updating Company Type");
         return Observable.of({
           type: EDIT_COMPANY_TYPE_REJECTED,
-          payload: ajaxError
+          payload: JSON.parse(ajaxError.message)
         });
       });
   })
@@ -1528,14 +1528,14 @@ epics.push((action$, { getState }) =>
             { type: TOGGLE_PAYMENT_METHOD_EDIT_MODAL }
           ];
         } else {
-          throw new Error(response.msg[Object.keys(response.msg)[0]][0]);
+          throw new Error(JSON.stringify(response.msg));
         }
       })
       .catch(ajaxError => {
-        toast.error(ajaxError.toString());
+        toast.error("Error: Updating Payment Method");
         return Observable.of({
           type: EDIT_PAYMENT_METHOD_REJECTED,
-          payload: ajaxError
+          payload: JSON.parse(ajaxError.message)
         });
       });
   })

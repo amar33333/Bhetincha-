@@ -20,18 +20,20 @@ import { PopoverDelete, PaginationComponent } from "../../../Common/components";
 import filterCaseInsensitive from "../../../Common/utils/filterCaseInsesitive";
 import "react-table/react-table.css";
 
-// import CustomModal from "../../../Common/components/CustomModal";
-// import IndustryEditModal from "../../../Common/components/CustomModal/ModalTemplates/IndustryEditModal";
+import CustomModal from "../../../Common/components/CustomModal";
+import SearchPlaceholderEditModal from "../../../Common/components/CustomModal/ModalTemplates/SearchPlaceholderEditModal";
 
 import {
   onSearchPlaceholderSubmit,
   onSearchPlaceholderList,
-  onSearchPlaceholderDelete
-  // toggleIndustryEditModal
-  // onSearchPlaceholderEdit
+  onSearchPlaceholderDelete,
+  toggleSearchPlaceholderEditModal,
+  onSearchPlaceholderEdit,
+  resetSettingsErrors
 } from "../../actions";
 
 import PermissionProvider from "../../../Common/utils/PermissionProvider";
+import { ErrorHandling } from "../../../Common/utils/Extras";
 
 class CampaignSearchPlaceholder extends Component {
   state = {
@@ -60,7 +62,7 @@ class CampaignSearchPlaceholder extends Component {
         filterable: false,
         sortable: false,
         width: 145,
-        Cell: ({ value, original: { id, name } }) => (
+        Cell: ({ value, original }) => (
           <div>
             {/* <PermissionProvider permission="CAN_EDIT_INDUSTRY"> */}
             <Button
@@ -69,7 +71,7 @@ class CampaignSearchPlaceholder extends Component {
               color="secondary"
               className="mr-2"
               onClick={() => {
-                // this.props.toggleIndustryEditModal({ id, name });
+                this.props.toggleSearchPlaceholderEditModal({ ...original });
               }}
             >
               <i className="fa fa-pencil" />
@@ -108,6 +110,10 @@ class CampaignSearchPlaceholder extends Component {
     }
   };
 
+  componentWillUnmount() {
+    this.props.resetSettingsErrors();
+  }
+
   onChange = (key, event) =>
     this.setState({
       [key]: event.target.value.replace(/\b\w/g, l => l.toUpperCase())
@@ -143,7 +149,7 @@ class CampaignSearchPlaceholder extends Component {
                           <Label>Placeholder</Label>
                           <Input
                             required
-                            disabled={this.props.loading}
+                            //disabled={this.props.loading}
                             innerRef={ref => (this.focusableInput = ref)}
                             type="text"
                             placeholder="Type Search Placeholder Name"
@@ -151,6 +157,12 @@ class CampaignSearchPlaceholder extends Component {
                             onChange={this.onChange.bind(this, "placeholder")}
                           />
                         </FormGroup>
+                        <ErrorHandling
+                          error={
+                            this.props.settingsErrors &&
+                            this.props.settingsErrors.name
+                          }
+                        />
                       </Col>
                     </Row>
                     <Row>
@@ -158,7 +170,7 @@ class CampaignSearchPlaceholder extends Component {
                         <FormGroup>
                           <Label>Start Date-Time</Label>
                           <Datetime
-                            disabled={this.props.loading}
+                            //disabled={this.props.loading}
                             value={this.state.start_date}
                             onChange={time => {
                               this.setState({
@@ -176,7 +188,7 @@ class CampaignSearchPlaceholder extends Component {
                         <FormGroup>
                           <Label>End Date-Time</Label>
                           <Datetime
-                            disabled={this.props.loading}
+                            //disabled={this.props.loading}
                             value={this.state.end_date}
                             onChange={time => {
                               this.setState({
@@ -191,7 +203,10 @@ class CampaignSearchPlaceholder extends Component {
                     </Row>
                     <Row>
                       <Col>
-                        <Button color="primary">
+                        <Button
+                          color="primary"
+                          disabled={this.props.placeholderLoading}
+                        >
                           <span className="fa fa-plus" /> Add
                         </Button>
                       </Col>
@@ -209,17 +224,20 @@ class CampaignSearchPlaceholder extends Component {
           loading={this.props.fetchLoading}
           defaultFilterMethod={filterCaseInsensitive}
         />
-        {/* <CustomModal
-          title="Edit Industry Data"
-          isOpen={this.props.industryEditModal}
-          toggle={this.props.toggleIndustryEditModal}
+        <CustomModal
+          title="Edit Search Placeholder"
+          isOpen={this.props.searchPlaceholderEditModal}
+          toggle={this.props.toggleSearchPlaceholderEditModal}
           className={"modal-xs" + this.props.className}
         >
-          <IndustryEditModal
-            data={this.props.industryEditData}
+          <SearchPlaceholderEditModal
+            data={this.props.searchPlaceholderEditData}
             onSearchPlaceholderEdit={this.props.onSearchPlaceholderEdit}
+            settingsEditErrors={this.props.settingsEditErrors}
+            placeholderLoading={this.props.placeholderLoading}
+            resetSettingsErrors={this.props.resetSettingsErrors}
           />
-        </CustomModal> */}
+        </CustomModal>
       </div>
     );
   }
@@ -232,21 +250,29 @@ export default connect(
         placeholders,
         placeholdersFetchLoading,
         placeholderLoading,
-        placeholderError
+        placeholderError,
+        searchPlaceholderEditModal,
+        searchPlaceholderEditData,
+        settingsEditErrors,
+        settingsErrors
       }
     }
   }) => ({
     placeholders,
     fetchLoading: placeholdersFetchLoading,
     loading: placeholderLoading,
-    error: placeholderError
+    error: placeholderError,
+    searchPlaceholderEditModal,
+    searchPlaceholderEditData,
+    settingsEditErrors,
+    settingsErrors
   }),
   {
     onSearchPlaceholderSubmit,
     onSearchPlaceholderList,
-    // onUnmountIndustry,
-    onSearchPlaceholderDelete
-    // onSearchPlaceholderEdit,
-    // toggleIndustryEditModal
+    onSearchPlaceholderDelete,
+    onSearchPlaceholderEdit,
+    toggleSearchPlaceholderEditModal,
+    resetSettingsErrors
   }
 )(CampaignSearchPlaceholder);

@@ -18,6 +18,7 @@ import "react-table/react-table.css";
 import "react-tagsinput/react-tagsinput.css";
 
 import Select from "react-select";
+import { ErrorHandling } from "../../../utils/Extras";
 
 class SubCategoryEditModal extends Component {
   state = {
@@ -49,6 +50,10 @@ class SubCategoryEditModal extends Component {
       () => this.props.onIndustryEachList({ id: this.state.industry.id })
     );
   }
+
+  componentWillUnmount = () => {
+    this.props.resetSubCategoryErrors();
+  };
 
   onChange = (key, event) => {
     this.setState({
@@ -82,9 +87,6 @@ class SubCategoryEditModal extends Component {
   };
 
   render() {
-    console.log("sub category edit props: ", this.props);
-    console.log("sub category edit state: ", this.state);
-
     return (
       <Form onSubmit={this.onFormEdit}>
         <Row>
@@ -96,7 +98,7 @@ class SubCategoryEditModal extends Component {
                 autoFocus
                 clearable
                 required
-                disabled={this.props.loading}
+                //disabled={this.props.loading}
                 name="Industry"
                 className="select-category"
                 value={this.state.industry}
@@ -113,7 +115,7 @@ class SubCategoryEditModal extends Component {
               <Select
                 autosize
                 clearable
-                disabled={this.props.loading}
+                //disabled={this.props.loading}
                 required
                 name="Category"
                 className="select-category"
@@ -136,13 +138,19 @@ class SubCategoryEditModal extends Component {
           <Input
             required
             innerRef={ref => (this.focusableInput = ref)}
-            disabled={this.props.loading}
+            //disabled={this.props.loading}
             type="text"
             placeholder="New Sub Category Name"
             value={this.state.subCategory}
             onChange={this.onChange.bind(this, "subCategory")}
           />
         </InputGroup>
+        <ErrorHandling
+          error={
+            this.props.subCategoryEditErrors &&
+            this.props.subCategoryEditErrors.name
+          }
+        />
         <Row>
           <Col xs="12" md="12">
             <TagsInput

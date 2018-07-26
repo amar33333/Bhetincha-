@@ -56,10 +56,17 @@ class BusinessList extends Component {
   };
 
   componentDidMount = () => {
-    window.addEventListener("scroll", this.onScroll, false);
     const parsedUrlStringObject = querystring.parse(
       this.props.location.search.slice(1)
     );
+    console.log("propop: ", this.props, parsedUrlStringObject);
+
+    if (!this.props.location.search) this.props.history.push("/404");
+    else {
+      if (!parsedUrlStringObject["query"]) this.props.history.push("/404");
+    }
+
+    window.addEventListener("scroll", this.onScroll, false);
 
     const { frm, size } = this.state;
 

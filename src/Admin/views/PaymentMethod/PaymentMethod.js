@@ -113,7 +113,7 @@ class PaymentMethod extends Component {
 
   onChange = (key, event) =>
     this.setState({
-      [key]: event.target.value.replace(/\b\w/g, l => l.toUpperCase())
+      [key]: event.target.value.toUpperCase()
     });
 
   render() {
@@ -138,7 +138,7 @@ class PaymentMethod extends Component {
                         <Input
                           autoFocus
                           innerRef={ref => (this.focusableInput = ref)}
-                          disabled={this.props.loading}
+                          //disabled={this.props.loading}
                           required
                           type="text"
                           placeholder="Type Payment Method"
@@ -178,6 +178,9 @@ class PaymentMethod extends Component {
           <PaymentMethodEditModal
             data={this.props.paymentMethodEditData}
             onPaymentMethodEdit={this.props.onPaymentMethodEdit}
+            paymentCompanyEditErrors={this.props.paymentCompanyEditErrors}
+            paymentMethodLoading={this.props.paymentMethodLoading}
+            resetPaymentCompanyErrors={this.props.resetPaymentCompanyErrors}
           />
         </CustomModal>
       </div>
@@ -193,7 +196,8 @@ export default connect(
     fetchLoading: business_reducer.paymentMethodsFetchLoading,
     loading: business_reducer.paymentMethodLoading,
     error: business_reducer.paymentMethodError,
-    paymentCompanyErrors: business_reducer.paymentCompanyErrors
+    paymentCompanyErrors: business_reducer.paymentCompanyErrors,
+    paymentCompanyEditErrors: business_reducer.paymentCompanyEditErrors
   }),
   {
     onPaymentMethodSubmit,

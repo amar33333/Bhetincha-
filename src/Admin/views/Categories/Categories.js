@@ -267,6 +267,9 @@ class Categories extends Component {
             data={this.props.categoryEditData}
             onCategoryEdit={this.props.onCategoryEdit}
             industries={this.props.industries}
+            categoryEditErrors={this.props.categoryEditErrors}
+            loading={this.props.loading}
+            resetCategoryErrors={this.props.resetCategoryErrors}
           />
         </CustomModal>
       </div>

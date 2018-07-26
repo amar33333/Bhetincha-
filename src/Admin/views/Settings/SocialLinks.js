@@ -19,12 +19,13 @@ import {
   onSocialLinksList,
   onSocialLinkRemove,
   onSocialLinkEdit,
-  toggleSocialLinkEditModal
+  toggleSocialLinkEditModal,
+  resetSettingsErrors
 } from "../../actions";
 
 import CustomModal from "../../../Common/components/CustomModal";
 import SocialLinkEditModal from "../../../Common/components/CustomModal/ModalTemplates/SocialLinkEditModal";
-import { FaIconURLjsx } from "../../../Common/utils/Extras";
+import { FaIconURLjsx, ErrorHandling } from "../../../Common/utils/Extras";
 
 import PermissionProvider from "../../../Common/utils/PermissionProvider";
 
@@ -38,7 +39,20 @@ class SocialLinks extends Component {
     this.props.onSocialLinksList();
   }
 
-  onChange = (key, event) => this.setState({ [key]: event.target.value });
+  componentWillUnmount() {
+    this.props.resetSettingsErrors();
+  }
+
+  onChange = (key, event) => {
+    if (key === "name")
+      this.setState({
+        [key]: event.target.value.replace(/\b\w/g, l => l.toUpperCase())
+      });
+    else
+      this.setState({
+        [key]: event.target.value
+      });
+  };
 
   onFormSubmit = event => {
     event.preventDefault();
@@ -76,6 +90,12 @@ class SocialLinks extends Component {
                         onChange={this.onChange.bind(this, "name")}
                       />
                     </InputGroup>
+                    <ErrorHandling
+                      error={
+                        this.props.settingsErrors &&
+                        this.props.settingsErrors.name
+                      }
+                    />
                     <InputGroup className="mb-2">
                       <InputGroupAddon addonType="prepend">
                         <InputGroupText>Social Link Class-Name</InputGroupText>
@@ -89,7 +109,12 @@ class SocialLinks extends Component {
                       />
                     </InputGroup>
                     {FaIconURLjsx}
-                    <Button type="submit" color="primary" value="Add Group">
+                    <Button
+                      type="submit"
+                      color="primary"
+                      value="Add Group"
+                      disabled={this.props.social_linksFetchLoading}
+                    >
                       <i className="fa fa-plus" /> Add Social Link
                     </Button>
                   </form>
@@ -119,6 +144,9 @@ class SocialLinks extends Component {
           <SocialLinkEditModal
             data={this.props.socialLinkEditData}
             onSocialLinkEdit={this.props.onSocialLinkEdit}
+            settingsEditErrors={this.props.settingsEditErrors}
+            social_linksFetchLoading={this.props.social_linksFetchLoading}
+            resetSettingsErrors={this.props.resetSettingsErrors}
           />
         </CustomModal>
       </div>
@@ -133,20 +161,25 @@ export default connect(
         social_links,
         socialLinkEditData,
         socialLinkEditModal,
-        social_linksFetchLoading
+        social_linksFetchLoading,
+        settingsErrors,
+        settingsEditErrors
       }
     }
   }) => ({
     social_links,
     socialLinkEditData,
     socialLinkEditModal,
-    social_linksFetchLoading
+    social_linksFetchLoading,
+    settingsErrors,
+    settingsEditErrors
   }),
   {
     onSocialLinkSubmit,
     onSocialLinksList,
     onSocialLinkRemove,
     onSocialLinkEdit,
-    toggleSocialLinkEditModal
+    toggleSocialLinkEditModal,
+    resetSettingsErrors
   }
 )(SocialLinks);

@@ -140,7 +140,7 @@ class Countries extends Component {
                           autoFocus
                           required
                           innerRef={ref => (this.focusableInput = ref)}
-                          disabled={this.props.loading}
+                          //disabled={this.props.loading}
                           type="number"
                           min="0"
                           step="1"
@@ -161,21 +161,24 @@ class Countries extends Component {
                         </InputGroupAddon>
                         <Input
                           required
-                          disabled={this.props.loading}
+                          //disabled={this.props.loading}
                           type="text"
                           placeholder="Type Country Name"
                           value={this.state.country}
                           onChange={this.onChange.bind(this, "country")}
                         />
                       </InputGroup>
-                      <ErrorHandling
-                        error={
-                          this.props.generalSetupErrors &&
-                          this.props.generalSetupErrors.code
-                        }
-                      />
                     </FormGroup>
-                    <Button color="primary">
+                    <ErrorHandling
+                      error={
+                        this.props.generalSetupErrors &&
+                        this.props.generalSetupErrors.code
+                      }
+                    />
+                    <Button
+                      color="primary"
+                      disabled={this.props.countryLoading}
+                    >
                       <span className="fa fa-plus" /> Add
                     </Button>
                   </Form>
@@ -193,7 +196,7 @@ class Countries extends Component {
           defaultFilterMethod={filterCaseInsensitive}
         />
         <CustomModal
-          title="Edit Industry Data"
+          title="Edit Country Data"
           isOpen={this.props.countryEditModal}
           toggle={this.props.toggleCountryEditModal}
           className={"modal-xs" + this.props.className}
@@ -201,6 +204,9 @@ class Countries extends Component {
           <CountryEditModal
             data={this.props.countryEditData}
             onCountryEdit={this.props.onCountryEdit}
+            generalSetupEditErrors={this.props.generalSetupEditErrors}
+            countryLoading={this.props.countryLoading}
+            resetGeneralSetupErrors={this.props.resetGeneralSetupErrors}
           />
         </CustomModal>
       </div>
@@ -216,7 +222,9 @@ export default connect(
     fetchLoading: general_setup.countriesFetchLoading,
     loading: general_setup.countryLoading,
     error: general_setup.countryError,
-    generalSetupErrors: general_setup.generalSetupErrors
+    generalSetupErrors: general_setup.generalSetupErrors,
+    generalSetupEditErrors: general_setup.generalSetupEditErrors,
+    countryLoading: general_setup.countryLoading
   }),
   {
     onCountrySubmit,

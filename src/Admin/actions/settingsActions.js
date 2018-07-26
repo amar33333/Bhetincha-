@@ -41,10 +41,21 @@ import {
   DELETE_SEARCH_PLACEHOLDER_REJECTED,
   EDIT_SEARCH_PLACEHOLDER_FULFILLED,
   EDIT_SEARCH_PLACEHOLDER_PENDING,
-  EDIT_SEARCH_PLACEHOLDER_REJECTED
+  EDIT_SEARCH_PLACEHOLDER_REJECTED,
+  TOGGLE_SEARCH_PLACEHOLDER_EDIT_MODAL,
+  RESET_SETTINGS_ERRORS
 } from "./types";
 
 const epics = [];
+
+export const resetSettingsErrors = () => ({
+  type: RESET_SETTINGS_ERRORS
+});
+
+export const toggleSearchPlaceholderEditModal = payload => ({
+  type: TOGGLE_SEARCH_PLACEHOLDER_EDIT_MODAL,
+  payload
+});
 
 // SEARCH_PLACEHOLDER
 export const onSearchPlaceholderSubmit = payload => ({
@@ -65,14 +76,14 @@ epics.push((action$, { getState }) =>
             { type: FETCH_SEARCH_PLACEHOLDER_PENDING }
           ];
         } else {
-          throw new Error(response.msg[Object.keys(response.msg)[0]][0]);
+          throw new Error(JSON.stringify(response.msg));
         }
       })
       .catch(ajaxError => {
-        toast.error(ajaxError.toString());
+        toast.error("Error: Creating Search Placeholder");
         return Observable.of({
           type: CREATE_SEARCH_PLACEHOLDER_REJECTED,
-          payload: ajaxError
+          payload: JSON.parse(ajaxError.message)
         });
       });
   })
@@ -83,8 +94,8 @@ export const onSearchPlaceholderList = () => ({
 });
 
 epics.push((action$, { getState }) =>
-  action$.ofType(FETCH_SEARCH_PLACEHOLDER_PENDING).mergeMap(action =>
-    onSearchPlaceholderGet({
+  action$.ofType(FETCH_SEARCH_PLACEHOLDER_PENDING).mergeMap(action => {
+    return onSearchPlaceholderGet({
       access_token: getState().auth.cookies.token_data.access_token
     })
       .map(({ response }) => ({
@@ -93,8 +104,8 @@ epics.push((action$, { getState }) =>
       }))
       .catch(ajaxError =>
         Observable.of({ type: FETCH_SEARCH_PLACEHOLDER_REJECTED })
-      )
-  )
+      );
+  })
 );
 
 export const onSearchPlaceholderEdit = payload => ({
@@ -104,10 +115,14 @@ export const onSearchPlaceholderEdit = payload => ({
 
 epics.push((action$, { getState }) =>
   action$.ofType(EDIT_SEARCH_PLACEHOLDER_PENDING).mergeMap(({ payload }) => {
-    const { country } = payload;
+    const { id, body } = payload;
     const access_token = getState().auth.cookies.token_data.access_token;
 
-    return onSearchPlaceholderPut({ country, access_token })
+    return onSearchPlaceholderPut({
+      id,
+      body,
+      access_token
+    })
       .concatMap(({ response }) => {
         if (response.msg === "success") {
           toast.success("Search Placeholder Updated Successfully!");
@@ -117,14 +132,14 @@ epics.push((action$, { getState }) =>
             // { type: TOGGLE_SEARCH_PLACEHOLDER_EDIT_MODAL }
           ];
         } else {
-          throw new Error(response.msg[Object.keys(response.msg)[0]][0]);
+          throw new Error(JSON.stringify(response.msg));
         }
       })
       .catch(ajaxError => {
-        toast.error(ajaxError.toString());
+        toast.error("Error: Updating Search Placeholder");
         return Observable.of({
           type: EDIT_SEARCH_PLACEHOLDER_REJECTED,
-          payload: ajaxError
+          payload: JSON.parse(ajaxError.message)
         });
       });
   })
@@ -229,16 +244,22 @@ epics.push((action$, { getState }) =>
         if (response.msg === "success") {
           toast.success("Social Link Created Successfully!");
           return [
-            { type: CREATE_SOCIAL_LINK_FULFILLED, payload: response },
+            {
+              type: CREATE_SOCIAL_LINK_FULFILLED,
+              payload: response
+            },
             { type: FETCH_SOCIAL_LINK_PENDING }
           ];
         } else {
-          throw new Error(response.msg);
+          throw new Error(JSON.stringify(response.msg));
         }
       })
       .catch(ajaxError => {
         toast.error("Error Creating Social Link !!!");
-        return Observable.of({ type: CREATE_SOCIAL_LINK_REJECTED });
+        return Observable.of({
+          type: CREATE_SOCIAL_LINK_REJECTED,
+          payload: JSON.parse(ajaxError.message)
+        });
       })
   )
 );
@@ -266,12 +287,15 @@ epics.push((action$, { getState }) =>
             }
           ];
         } else {
-          throw new Error(response.msg);
+          throw new Error(JSON.stringify(response.msg));
         }
       })
       .catch(ajaxError => {
         toast.error("Error Updating Social Link !!!");
-        return Observable.of({ type: EDIT_SOCIAL_LINK_REJECTED });
+        return Observable.of({
+          type: EDIT_SOCIAL_LINK_REJECTED,
+          payload: JSON.parse(ajaxError.message)
+        });
       })
   )
 );

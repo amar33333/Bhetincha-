@@ -6,10 +6,10 @@ import {
   InputGroupAddon,
   InputGroupText,
   Form,
-  FormGroup,
   Row,
   Col
 } from "reactstrap";
+import { ErrorHandling } from "../../../utils/Extras";
 
 class IndustryEditModal extends Component {
   state = { industry: "" };
@@ -19,6 +19,10 @@ class IndustryEditModal extends Component {
       industry: this.props.data ? this.props.data : ""
     });
   }
+
+  componentWillUnmount = () => {
+    this.props.resetIndustryErrors();
+  };
 
   onChange = (key, event) => {
     this.setState({
@@ -36,7 +40,6 @@ class IndustryEditModal extends Component {
   };
 
   render() {
-    console.log("industry edit state: ", this.state);
     return (
       <Form onSubmit={this.onFormEdit}>
         <Row>
@@ -50,7 +53,7 @@ class IndustryEditModal extends Component {
               <Input
                 autoFocus
                 required
-                disabled={this.props.loading}
+                //disabled={this.props.loading}
                 type="text"
                 placeholder="Type Industry Name"
                 value={this.state.industry ? this.state.industry.name : ""}
@@ -58,8 +61,14 @@ class IndustryEditModal extends Component {
               />
             </InputGroup>
           </Col>
+          <ErrorHandling
+            error={
+              this.props.industryEditErrors &&
+              this.props.industryEditErrors.name
+            }
+          />
           <Col xs="12" md="2">
-            <Button color="primary">
+            <Button color="primary" disabled={this.props.loading}>
               <span className="fa fa-check" /> Save
             </Button>
           </Col>

@@ -112,7 +112,6 @@ class AddUser extends Component {
 
   _handleKeyPress = event => {
     this.setState({ event });
-    // // console.log('eventasdsa: ', this.state.event);
 
     const form = event.target.form;
     const index = Array.prototype.indexOf.call(form, event.target);
@@ -121,14 +120,11 @@ class AddUser extends Component {
       (event.keyCode === 13 || event.keyCode === 40) &&
       form.elements[index].type !== "submit"
     ) {
-      // // console.log('enter & down');
-
       form.elements[index + 1].focus();
       event.preventDefault();
     }
 
     if (event.keyCode === 38) {
-      // // console.log('up');
       // const form = event.target.form;
       // const index = Array.prototype.indexOf.call(form, event.target);
       form.elements[index - 1].focus();

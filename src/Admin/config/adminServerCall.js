@@ -45,11 +45,11 @@ import axios from "axios";
 import { ajax } from "rxjs/observable/dom/ajax";
 import querystring from "querystring";
 
-export const onSearchPlaceholderPut = ({ placeholder, access_token }) =>
+export const onSearchPlaceholderPut = ({ id, body, access_token }) =>
   ajax({
     method: "PUT",
-    url: `${SEARCH_PLACEHOLDER_URL}${placeholder.id}/`,
-    body: placeholder.body,
+    url: `${SEARCH_PLACEHOLDER_URL}${id}/`,
+    body,
     headers: {
       "Content-Type": "application/json",
       Authorization: "Bearer " + access_token

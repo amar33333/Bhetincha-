@@ -90,14 +90,14 @@ epics.push((action$, { getState }) =>
             { type: TOGGLE_USER_EDIT_MODAL }
           ];
         } else {
-          throw new Error(response.msg[Object.keys(response.msg)[0]][0]);
+          throw new Error(JSON.stringify(response.msg));
         }
       })
       .catch(ajaxError => {
-        toast.error(ajaxError.toString());
+        toast.error("Error: Updating User");
         return Observable.of({
           type: EDIT_USER_REJECTED,
-          payload: ajaxError
+          payload: JSON.parse(ajaxError.message)
         });
       });
   })
@@ -123,14 +123,14 @@ epics.push((action$, { getState }) =>
             { type: TOGGLE_GROUP_EDIT_MODAL }
           ];
         } else {
-          throw new Error(response.msg[Object.keys(response.msg)[0]][0]);
+          throw new Error(JSON.stringify(response.msg));
         }
       })
       .catch(ajaxError => {
-        toast.error(ajaxError.toString());
+        toast.error("Error: Updating Group");
         return Observable.of({
           type: EDIT_GROUP_REJECTED,
-          payload: ajaxError
+          payload: JSON.parse(ajaxError.message)
         });
       });
   })

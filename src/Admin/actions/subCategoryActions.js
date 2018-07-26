@@ -159,14 +159,14 @@ epics.push((action$, { getState }) =>
             { type: TOGGLE_SUB_CATEGORY_EDIT_MODAL }
           ];
         } else {
-          throw new Error(response.msg[Object.keys(response.msg)[0]][0]);
+          throw new Error(JSON.stringify(response.msg));
         }
       })
       .catch(ajaxError => {
-        toast.error(ajaxError.toString());
+        toast.error("Error: Updating Sub Category");
         return Observable.of({
           type: EDIT_SUB_CATEGORY_REJECTED,
-          payload: ajaxError
+          payload: JSON.parse(ajaxError.message)
         });
       });
   })

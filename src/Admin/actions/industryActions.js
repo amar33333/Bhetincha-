@@ -89,14 +89,14 @@ epics.push((action$, { getState }) =>
             { type: TOGGLE_INDUSTRY_EDIT_MODAL }
           ];
         } else {
-          throw new Error(response.msg[Object.keys(response.msg)[0]][0]);
+          throw new Error(JSON.stringify(response.msg));
         }
       })
       .catch(ajaxError => {
-        toast.error(ajaxError.toString());
+        toast.error("Error: Updating Industry");
         return Observable.of({
           type: EDIT_INDUSTRY_REJECTED,
-          payload: ajaxError
+          payload: JSON.parse(ajaxError.message)
         });
       });
   })

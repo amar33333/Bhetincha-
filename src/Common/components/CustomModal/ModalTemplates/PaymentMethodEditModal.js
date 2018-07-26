@@ -8,6 +8,7 @@ import {
   Form,
   FormGroup
 } from "reactstrap";
+import { ErrorHandling } from "../../../utils/Extras";
 
 class PaymentMethodEditModal extends Component {
   state = { payment_method: "" };
@@ -18,11 +19,15 @@ class PaymentMethodEditModal extends Component {
     });
   }
 
+  componentWillUnmount = () => {
+    this.props.resetPaymentCompanyErrors();
+  };
+
   onChange = (key, event) => {
     this.setState({
       [key]: {
         ...this.state.payment_method,
-        name: event.target.value.replace(/\b\w/g, l => l.toUpperCase())
+        name: event.target.value.toUpperCase()
       }
     });
   };
@@ -34,7 +39,6 @@ class PaymentMethodEditModal extends Component {
   };
 
   render() {
-    console.log("payment_method edit state: ", this.state);
     return (
       <Form onSubmit={this.onFormEdit} inline>
         <FormGroup className="mb-2 mr-sm-2 mb-sm-0">
@@ -47,7 +51,7 @@ class PaymentMethodEditModal extends Component {
             <Input
               autoFocus
               required
-              disabled={this.props.loading}
+              //disabled={this.props.loading}
               type="text"
               placeholder="Type payment_method Name"
               value={
@@ -57,7 +61,13 @@ class PaymentMethodEditModal extends Component {
             />
           </InputGroup>
         </FormGroup>
-        <Button color="primary">
+        <ErrorHandling
+          error={
+            this.props.paymentCompanyEditErrors &&
+            this.props.paymentCompanyEditErrors.name
+          }
+        />
+        <Button color="primary" disabled={this.props.paymentMethodLoading}>
           <span className="fa fa-check" /> Save
         </Button>
       </Form>

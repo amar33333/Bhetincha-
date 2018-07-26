@@ -11,6 +11,8 @@ import {
   FormGroup
 } from "reactstrap";
 
+import { ErrorHandling } from "../../../../Common/utils/Extras";
+
 class CountryEditModal extends Component {
   state = { country: "" };
 
@@ -20,11 +22,15 @@ class CountryEditModal extends Component {
     });
   }
 
+  componentWillUnmount() {
+    this.props.resetGeneralSetupErrors();
+  }
+
   onChange = (key, event) => {
     this.setState({
       country: {
         ...this.state.country,
-        [key]: event.target.value
+        [key]: event.target.value.replace(/\b\w/g, l => l.toUpperCase())
       }
     });
   };
@@ -73,7 +79,13 @@ class CountryEditModal extends Component {
                 />
               </InputGroup>
             </FormGroup>
-            <Button color="primary">
+            <ErrorHandling
+              error={
+                this.props.generalSetupEditErrors &&
+                this.props.generalSetupEditErrors.name
+              }
+            />
+            <Button color="primary" disabled={this.props.countryLoading}>
               <span className="fa fa-check" /> Save
             </Button>
           </Col>

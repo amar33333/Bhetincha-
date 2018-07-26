@@ -1,5 +1,6 @@
 import React, { Component } from "react";
-import { FormText } from "reactstrap";
+import {} from "reactstrap";
+import { Col, Row, FormText, Alert } from "reactstrap";
 
 // This is for mobile number
 export const validatePhone = phoneNumber => {
@@ -30,7 +31,19 @@ export const FaIconURLjsx = (
 export class ErrorHandling extends Component {
   renderError = () => {
     if (this.props.error && this.props.error.length)
-      return <p style={{ color: "red" }}>{this.props.error[0]}</p>;
+      return (
+        <Row>
+          <Col>
+            <Alert
+              color="warning"
+              isOpen={true}
+              // toggle={this.onDismiss}
+            >
+              {this.props.error[0]}
+            </Alert>
+          </Col>
+        </Row>
+      );
     else if (this.props.errors) {
       return (
         <p style={{ color: "red" }}>

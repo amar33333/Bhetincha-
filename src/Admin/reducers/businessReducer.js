@@ -2,9 +2,15 @@ import {
   CREATE_COMPANY_TYPE_FULFILLED,
   CREATE_COMPANY_TYPE_PENDING,
   CREATE_COMPANY_TYPE_REJECTED,
+  EDIT_COMPANY_TYPE_FULFILLED,
+  EDIT_COMPANY_TYPE_PENDING,
+  EDIT_COMPANY_TYPE_REJECTED,
   CREATE_PAYMENT_METHODS_FULFILLED,
   CREATE_PAYMENT_METHODS_PENDING,
   CREATE_PAYMENT_METHODS_REJECTED,
+  EDIT_PAYMENT_METHOD_FULFILLED,
+  EDIT_PAYMENT_METHOD_PENDING,
+  EDIT_PAYMENT_METHOD_REJECTED,
   FETCH_PAYMENT_METHODS_FULFILLED,
   FETCH_PAYMENT_METHODS_REJECTED,
   FETCH_PAYMENT_METHODS_PENDING,
@@ -107,7 +113,8 @@ const INITIAL_STATE = {
   branch: null,
   businessBranchData: [],
   branchCreateEditErrors: null,
-  paymentCompanyErrors: null
+  paymentCompanyErrors: null,
+  paymentCompanyEditErrors: null
 };
 
 export default function(state = INITIAL_STATE, action) {
@@ -115,7 +122,8 @@ export default function(state = INITIAL_STATE, action) {
     case RESET_PAYMENT_COMPANY_ERRORS:
       return {
         ...state,
-        paymentCompanyErrors: null
+        paymentCompanyErrors: null,
+        paymentCompanyEditErrors: null
       };
 
     case EDIT_BRANCH_EACH_PENDING:
@@ -251,6 +259,27 @@ export default function(state = INITIAL_STATE, action) {
         businessCreateErrors: null
       };
 
+    case EDIT_PAYMENT_METHOD_PENDING:
+      return {
+        ...state,
+        paymentMethodLoading: true,
+        paymentMethodError: false
+      };
+    case EDIT_PAYMENT_METHOD_FULFILLED:
+      return {
+        ...state,
+        paymentMethodLoading: false,
+        paymentMethodError: false,
+        paymentCompanyEditErrors: null
+      };
+    case EDIT_PAYMENT_METHOD_REJECTED:
+      return {
+        ...state,
+        paymentMethodLoading: false,
+        paymentMethodError: true,
+        paymentCompanyEditErrors: action.payload
+      };
+
     case CREATE_VERIFIED_BUSINESS_PENDING:
       return { ...state, businessVerifyLoading: true };
 
@@ -346,6 +375,27 @@ export default function(state = INITIAL_STATE, action) {
         companyTypeLoading: false,
         companyTypeError: true,
         paymentCompanyErrors: action.payload
+      };
+
+    case EDIT_COMPANY_TYPE_PENDING:
+      return {
+        ...state,
+        companyTypeLoading: true,
+        companyTypeError: false
+      };
+    case EDIT_COMPANY_TYPE_FULFILLED:
+      return {
+        ...state,
+        companyTypeLoading: false,
+        companyTypeError: false,
+        paymentCompanyEditErrors: null
+      };
+    case EDIT_COMPANY_TYPE_REJECTED:
+      return {
+        ...state,
+        companyTypeLoading: false,
+        companyTypeError: true,
+        paymentCompanyEditErrors: action.payload
       };
 
     case FETCH_COMPANY_TYPE_PENDING:

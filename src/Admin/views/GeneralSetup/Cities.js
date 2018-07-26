@@ -306,7 +306,7 @@ class Cities extends Component {
                             autosize
                             clearable
                             required
-                            disabled={this.props.loading}
+                            //disabled={this.props.loading}
                             name="countries"
                             className="select-industry"
                             value={this.state.country}
@@ -327,7 +327,7 @@ class Cities extends Component {
                             autosize
                             clearable
                             required
-                            disabled={this.props.loading}
+                            //disabled={this.props.loading}
                             name="states"
                             className="select-industry"
                             value={this.state.state}
@@ -350,7 +350,7 @@ class Cities extends Component {
                             autosize
                             clearable
                             required
-                            disabled={this.props.loading}
+                            //disabled={this.props.loading}
                             name="District"
                             className="select-industry"
                             value={this.state.district}
@@ -380,7 +380,7 @@ class Cities extends Component {
                           <Input
                             required
                             type="text"
-                            disabled={this.props.loading}
+                            //disabled={this.props.loading}
                             innerRef={ref => (this.focusableInput = ref)}
                             placeholder="Type City Name"
                             value={this.state.city}
@@ -440,6 +440,9 @@ class Cities extends Component {
             onAddressTreeList={this.props.onAddressTreeList}
             onGetAddressTreeList={this.props.onGetAddressTreeList}
             access_token={this.props.access_token}
+            generalSetupEditErrors={this.props.generalSetupEditErrors}
+            districtLoading={this.props.stateLoading}
+            resetGeneralSetupErrors={this.props.resetGeneralSetupErrors}
           />
         </CustomModal>
       </div>
@@ -471,7 +474,8 @@ export default connect(
         citiesRowCount,
         cityEditModal,
         cityEditData,
-        generalSetupErrors
+        generalSetupErrors,
+        generalSetupEditErrors
       },
       filterCity
     }
@@ -492,6 +496,7 @@ export default connect(
     cityEditModal,
     cityEditData,
     generalSetupErrors,
+    generalSetupEditErrors,
     access_token,
     ...filterCity
   }),

@@ -138,7 +138,7 @@ class CompanyType extends Component {
                         <Input
                           autoFocus
                           innerRef={ref => (this.focusableInput = ref)}
-                          disabled={this.props.loading}
+                          //disabled={this.props.loading}
                           required
                           type="text"
                           placeholder="Enter Company Type"
@@ -153,7 +153,10 @@ class CompanyType extends Component {
                         this.props.paymentCompanyErrors.name
                       }
                     />
-                    <Button color="primary">
+                    <Button
+                      color="primary"
+                      disabled={this.props.companyTypeLoading}
+                    >
                       <span className="fa fa-plus" /> Add
                     </Button>
                   </Form>
@@ -178,6 +181,9 @@ class CompanyType extends Component {
           <CompanyTypeEditModal
             data={this.props.companyTypeEditData}
             onCompanyTypeEdit={this.props.onCompanyTypeEdit}
+            paymentCompanyEditErrors={this.props.paymentCompanyEditErrors}
+            companyTypeLoading={this.props.companyTypeLoading}
+            resetPaymentCompanyErrors={this.props.resetPaymentCompanyErrors}
           />
         </CustomModal>
       </div>
@@ -193,7 +199,9 @@ export default connect(
     fetchLoading: business_reducer.companyTypesFetchLoading,
     loading: business_reducer.companyTypeLoading,
     error: business_reducer.companyTypeError,
-    paymentCompanyErrors: business_reducer.paymentCompanyErrors
+    paymentCompanyErrors: business_reducer.paymentCompanyErrors,
+    paymentCompanyEditErrors: business_reducer.paymentCompanyEditErrors,
+    companyTypeLoading: business_reducer.companyTypeLoading
   }),
   {
     onCompanyTypeSubmit,

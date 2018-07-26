@@ -2,6 +2,12 @@ import {
   CREATE_GROUP_FULFILLED,
   CREATE_GROUP_REJECTED,
   CREATE_GROUP_PENDING,
+  EDIT_GROUP_FULFILLED,
+  EDIT_GROUP_REJECTED,
+  EDIT_GROUP_PENDING,
+  EDIT_USER_FULFILLED,
+  EDIT_USER_REJECTED,
+  EDIT_USER_PENDING,
   CREATE_USER_FULFILLED,
   CREATE_USER_REJECTED,
   CREATE_USER_PENDING,
@@ -40,13 +46,18 @@ const INITIAL_STATE = {
   userEditModal: false,
   permissionsLoading: false,
   usersNotPaginatedList: [],
-  userGroupErrors: null
+  userGroupErrors: null,
+  userGroupEditErrors: null
 };
 
 export default function(state = INITIAL_STATE, action) {
   switch (action.type) {
     case RESET_USER_GROUP_ERRORS:
-      return { ...state, userGroupErrors: null };
+      return {
+        ...state,
+        userGroupErrors: null,
+        userGroupEditErrors: null
+      };
 
     case TOGGLE_PERMISSION_PENDING:
       return { ...state, loading: true, statusClass: "pending" };
@@ -99,6 +110,25 @@ export default function(state = INITIAL_STATE, action) {
         userGroupErrors: action.payload
       };
 
+    case EDIT_GROUP_PENDING:
+      return { ...state, loading: true, statusClass: "pending" };
+
+    case EDIT_GROUP_FULFILLED:
+      return {
+        ...state,
+        loading: false,
+        statusClass: "fulfilled",
+        userGroupEditErrors: null
+      };
+
+    case EDIT_GROUP_REJECTED:
+      return {
+        ...state,
+        loading: false,
+        statusClass: "rejected",
+        userGroupEditErrors: action.payload
+      };
+
     case CREATE_USER_PENDING:
       return { ...state, loading: true, statusClass: "pending" };
 
@@ -117,6 +147,25 @@ export default function(state = INITIAL_STATE, action) {
         loading: false,
         statusClass: "rejected",
         userGroupErrors: action.payload
+      };
+
+    case EDIT_USER_PENDING:
+      return { ...state, loading: true, statusClass: "pending" };
+
+    case EDIT_USER_FULFILLED:
+      return {
+        ...state,
+        loading: false,
+        statusClass: "fulfilled",
+        userGroupEditErrors: null
+      };
+
+    case EDIT_USER_REJECTED:
+      return {
+        ...state,
+        loading: false,
+        statusClass: "rejected",
+        userGroupEditErrors: action.payload
       };
 
     case FETCH_GROUPS_PENDING:

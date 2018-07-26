@@ -11,6 +11,9 @@ import {
   CREATE_CATEGORY_FULFILLED,
   CREATE_CATEGORY_PENDING,
   CREATE_CATEGORY_REJECTED,
+  EDIT_CATEGORY_FULFILLED,
+  EDIT_CATEGORY_PENDING,
+  EDIT_CATEGORY_REJECTED,
   FETCH_CATEGORY_ARRAY_PENDING,
   FETCH_CATEGORY_ARRAY_FULFILLED,
   FETCH_CATEGORY_ARRAY_REJECTED,
@@ -27,7 +30,8 @@ const INITIAL_STATE = {
   categories: [],
   categoryData: [],
   categoryEditModal: false,
-  categoryErrors: null
+  categoryErrors: null,
+  categoryEditErrors: null
 };
 
 export default function(state = INITIAL_STATE, action) {
@@ -35,7 +39,8 @@ export default function(state = INITIAL_STATE, action) {
     case RESET_CATEGORY_ERRORS:
       return {
         ...state,
-        categoryErrors: null
+        categoryErrors: null,
+        categoryEditErrors: null
       };
 
     case FETCH_CATEGORY_ARRAY_PENDING:
@@ -54,6 +59,25 @@ export default function(state = INITIAL_STATE, action) {
 
     case UNMOUNT_CATEGORY:
       return { ...state, categories: [] };
+
+    case EDIT_CATEGORY_PENDING:
+      return { ...state, loading: true, error: false };
+
+    case EDIT_CATEGORY_REJECTED:
+      return {
+        ...state,
+        loading: false,
+        error: true,
+        categoryEditErrors: action.payload
+      };
+
+    case EDIT_CATEGORY_FULFILLED:
+      return {
+        ...state,
+        loading: false,
+        error: false,
+        categoryEditErrors: null
+      };
 
     case CREATE_CATEGORY_PENDING:
       return { ...state, loading: true, error: false };

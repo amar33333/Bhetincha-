@@ -2,6 +2,12 @@ import {
   FETCH_SOCIAL_LINK_FULFILLED,
   FETCH_SOCIAL_LINK_PENDING,
   FETCH_SOCIAL_LINK_REJECTED,
+  EDIT_SOCIAL_LINK_FULFILLED,
+  EDIT_SOCIAL_LINK_PENDING,
+  EDIT_SOCIAL_LINK_REJECTED,
+  CREATE_SOCIAL_LINK_FULFILLED,
+  CREATE_SOCIAL_LINK_PENDING,
+  CREATE_SOCIAL_LINK_REJECTED,
   TOGGLE_SOCIAL_LINK_EDIT_MODAL,
   FETCH_IMPROVE_LISTING_FULFILLED,
   FETCH_IMPROVE_LISTING_PENDING,
@@ -9,9 +15,14 @@ import {
   CREATE_SEARCH_PLACEHOLDER_FULFILLED,
   CREATE_SEARCH_PLACEHOLDER_PENDING,
   CREATE_SEARCH_PLACEHOLDER_REJECTED,
+  EDIT_SEARCH_PLACEHOLDER_FULFILLED,
+  EDIT_SEARCH_PLACEHOLDER_PENDING,
+  EDIT_SEARCH_PLACEHOLDER_REJECTED,
   FETCH_SEARCH_PLACEHOLDER_FULFILLED,
   FETCH_SEARCH_PLACEHOLDER_PENDING,
-  FETCH_SEARCH_PLACEHOLDER_REJECTED
+  FETCH_SEARCH_PLACEHOLDER_REJECTED,
+  TOGGLE_SEARCH_PLACEHOLDER_EDIT_MODAL,
+  RESET_SETTINGS_ERRORS
 } from "../actions/types";
 
 const INITIAL_STATE = {
@@ -27,11 +38,29 @@ const INITIAL_STATE = {
   placeholdersFetchLoading: false,
   placeholderLoading: false,
   placeholderError: false,
-  placeholderData: []
+  placeholderData: [],
+  searchPlaceholderEditModal: false,
+  searchPlaceholderEditData: null,
+  settingsErrors: null,
+  settingsEditErrors: null
 };
 
 export default function(state = INITIAL_STATE, action) {
   switch (action.type) {
+    case RESET_SETTINGS_ERRORS:
+      return {
+        ...state,
+        settingsErrors: null,
+        settingsEditErrors: null
+      };
+
+    case TOGGLE_SEARCH_PLACEHOLDER_EDIT_MODAL:
+      return {
+        ...state,
+        searchPlaceholderEditModal: !state.searchPlaceholderEditModal,
+        searchPlaceholderEditData: action.payload
+      };
+
     case FETCH_SOCIAL_LINK_PENDING:
       return { ...state, social_linksFetchLoading: true };
 
@@ -47,6 +76,40 @@ export default function(state = INITIAL_STATE, action) {
 
     case FETCH_SOCIAL_LINK_REJECTED:
       return { ...state, social_linksFetchLoading: false };
+
+    case CREATE_SOCIAL_LINK_PENDING:
+      return { ...state, social_linksFetchLoading: true };
+
+    case CREATE_SOCIAL_LINK_FULFILLED:
+      return {
+        ...state,
+        social_linksFetchLoading: false,
+        settingsErrors: null
+      };
+
+    case CREATE_SOCIAL_LINK_REJECTED:
+      return {
+        ...state,
+        social_linksFetchLoading: false,
+        settingsErrors: action.payload
+      };
+
+    case EDIT_SOCIAL_LINK_PENDING:
+      return { ...state, social_linksFetchLoading: true };
+
+    case EDIT_SOCIAL_LINK_FULFILLED:
+      return {
+        ...state,
+        social_linksFetchLoading: false,
+        settingsEditErrors: null
+      };
+
+    case EDIT_SOCIAL_LINK_REJECTED:
+      return {
+        ...state,
+        social_linksFetchLoading: false,
+        settingsEditErrors: action.payload
+      };
 
     case FETCH_IMPROVE_LISTING_PENDING:
       return { ...state, improveListingsFetchLoading: true };
@@ -75,10 +138,36 @@ export default function(state = INITIAL_STATE, action) {
     case CREATE_SEARCH_PLACEHOLDER_PENDING:
       return { ...state, placeholderLoading: true, placeholderError: false };
     case CREATE_SEARCH_PLACEHOLDER_FULFILLED:
-      return { ...state, placeholderLoading: false, placeholderError: false };
+      return {
+        ...state,
+        placeholderLoading: false,
+        placeholderError: false,
+        settingsErrors: null
+      };
     case CREATE_SEARCH_PLACEHOLDER_REJECTED:
-      return { ...state, placeholderLoading: false, placeholderError: true };
+      return {
+        ...state,
+        placeholderLoading: false,
+        placeholderError: true,
+        settingsErrors: action.payload
+      };
 
+    case EDIT_SEARCH_PLACEHOLDER_PENDING:
+      return { ...state, placeholderLoading: true, placeholderError: false };
+    case EDIT_SEARCH_PLACEHOLDER_FULFILLED:
+      return {
+        ...state,
+        placeholderLoading: false,
+        placeholderError: false,
+        settingsEditErrors: null
+      };
+    case EDIT_SEARCH_PLACEHOLDER_REJECTED:
+      return {
+        ...state,
+        placeholderLoading: false,
+        placeholderError: true,
+        settingsEditErrors: action.payload
+      };
     case FETCH_SEARCH_PLACEHOLDER_PENDING:
       return { ...state, placeholdersFetchLoading: true };
     case FETCH_SEARCH_PLACEHOLDER_FULFILLED:

@@ -190,7 +190,7 @@ class States extends Component {
                             autosize
                             clearable
                             required
-                            disabled={this.props.loading}
+                            //disabled={this.props.loading}
                             name="Industies"
                             className="select-industry mb-2"
                             value={this.state.country}
@@ -210,7 +210,7 @@ class States extends Component {
                           </InputGroupAddon>
                           <Input
                             required
-                            disabled={this.props.loading}
+                            //disabled={this.props.loading}
                             innerRef={ref => (this.focusableInput = ref)}
                             type="text"
                             placeholder="Type State Name"
@@ -265,6 +265,9 @@ class States extends Component {
             data={this.props.stateEditData}
             onStateEdit={this.props.onStateEdit}
             countries={this.props.countries}
+            generalSetupEditErrors={this.props.generalSetupEditErrors}
+            stateLoading={this.props.stateLoading}
+            resetGeneralSetupErrors={this.props.resetGeneralSetupErrors}
           />
         </CustomModal>
       </div>
@@ -285,7 +288,8 @@ export default connect(
         statesFetchLoading,
         stateLoading,
         stateError,
-        generalSetupErrors
+        generalSetupErrors,
+        generalSetupEditErrors
       },
       filterState
     }
@@ -300,6 +304,7 @@ export default connect(
     loading: stateLoading,
     error: stateError,
     generalSetupErrors,
+    generalSetupEditErrors,
 
     ...filterState
   }),

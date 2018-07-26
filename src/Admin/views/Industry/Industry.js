@@ -137,7 +137,7 @@ class Industry extends Component {
                         <Input
                           autoFocus
                           required
-                          disabled={this.props.loading}
+                          //disabled={this.props.loading}
                           innerRef={ref => (this.focusableInput = ref)}
                           type="text"
                           placeholder="Type Industry Name"
@@ -152,7 +152,7 @@ class Industry extends Component {
                         this.props.industryErrors.name
                       }
                     />
-                    <Button color="primary">
+                    <Button color="primary" disabled={this.props.loading}>
                       <span className="fa fa-plus" /> Add
                     </Button>
                   </Form>
@@ -177,6 +177,9 @@ class Industry extends Component {
           <IndustryEditModal
             data={this.props.industryEditData}
             onIndustryEdit={this.props.onIndustryEdit}
+            industryEditErrors={this.props.industryEditErrors}
+            loading={this.props.loading}
+            resetIndustryErrors={this.props.resetIndustryErrors}
           />
         </CustomModal>
       </div>

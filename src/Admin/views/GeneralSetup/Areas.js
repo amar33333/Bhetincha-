@@ -358,7 +358,7 @@ class Areas extends Component {
                             autosize
                             clearable
                             required
-                            disabled={this.props.loading}
+                            //disabled={this.props.loading}
                             name="Countries"
                             className="select-industry"
                             value={this.state.country}
@@ -379,7 +379,7 @@ class Areas extends Component {
                             autosize
                             clearable
                             required
-                            disabled={this.props.loading}
+                            //disabled={this.props.loading}
                             name="States"
                             className="select-industry"
                             value={this.state.state}
@@ -402,7 +402,7 @@ class Areas extends Component {
                             autosize
                             clearable
                             required
-                            disabled={this.props.loading}
+                            //disabled={this.props.loading}
                             name="Districts"
                             className="select-industry"
                             value={this.state.district}
@@ -427,7 +427,7 @@ class Areas extends Component {
                             autosize
                             clearable
                             required
-                            disabled={this.props.loading}
+                            //disabled={this.props.loading}
                             name="Cities"
                             className="select-industry"
                             value={this.state.city}
@@ -457,7 +457,7 @@ class Areas extends Component {
                           <Input
                             required
                             innerRef={ref => (this.focusableInput = ref)}
-                            disabled={this.props.loading}
+                            //disabled={this.props.loading}
                             type="text"
                             placeholder="Type Area Name"
                             value={this.state.area}
@@ -518,6 +518,9 @@ class Areas extends Component {
             onAddressTreeList={this.props.onAddressTreeList}
             onGetAddressTreeList={this.props.onGetAddressTreeList}
             access_token={this.props.access_token}
+            generalSetupEditErrors={this.props.generalSetupEditErrors}
+            districtLoading={this.props.stateLoading}
+            resetGeneralSetupErrors={this.props.resetGeneralSetupErrors}
           />
         </CustomModal>
       </div>
@@ -552,7 +555,8 @@ export default connect(
         areasRowCount,
         areaEditModal,
         areaEditData,
-        generalSetupErrors
+        generalSetupErrors,
+        generalSetupEditErrors
       },
       filterArea
     }
@@ -577,6 +581,7 @@ export default connect(
     areaEditData,
     generalSetupErrors,
     access_token,
+    generalSetupEditErrors,
     ...filterArea
   }),
   {

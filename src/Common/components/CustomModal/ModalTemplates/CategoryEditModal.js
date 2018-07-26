@@ -13,6 +13,7 @@ import {
 } from "reactstrap";
 
 import Select from "react-select";
+import { ErrorHandling } from "../../../utils/Extras";
 
 class CategoryEditModal extends Component {
   state = { category: "", industry: "" };
@@ -20,11 +21,13 @@ class CategoryEditModal extends Component {
   componentDidMount() {
     this.setState({
       category: this.props.data ? this.props.data : "",
-      industry: this.props.industries.find(
-        each => each.name === this.props.data.industry
-      )
+      industry: this.props.data.industry
     });
   }
+
+  componentWillUnmount = () => {
+    this.props.resetCategoryErrors();
+  };
 
   onChange = (key, event) => {
     this.setState({
@@ -49,9 +52,6 @@ class CategoryEditModal extends Component {
   };
 
   render() {
-    console.log("category edit state: ", this.state);
-    console.log("category edit props: ", this.props);
-
     const { industry } = this.state;
     const value = industry && industry.id;
 
@@ -87,7 +87,7 @@ class CategoryEditModal extends Component {
                 <Input
                   autoFocus
                   required
-                  disabled={this.props.loading}
+                  //disabled={this.props.loading}
                   type="text"
                   placeholder="Type Category Name"
                   value={this.state.category ? this.state.category.name : ""}
@@ -95,9 +95,15 @@ class CategoryEditModal extends Component {
                 />
               </InputGroup>
             </FormGroup>
+            <ErrorHandling
+              error={
+                this.props.categoryEditErrors &&
+                this.props.categoryEditErrors.name
+              }
+            />
           </Col>
           <Col xs="12" md="2">
-            <Button color="primary">
+            <Button color="primary" disabled={this.props.loading}>
               <span className="fa fa-check" /> Save
             </Button>
           </Col>

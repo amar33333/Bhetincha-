@@ -49,7 +49,22 @@ import {
   TOGGLE_DISTRICT_EDIT_MODAL,
   TOGGLE_CITY_EDIT_MODAL,
   TOGGLE_AREA_EDIT_MODAL,
-  RESET_GENERAL_SETUP_ERRORS
+  RESET_GENERAL_SETUP_ERRORS,
+  EDIT_AREA_FULFILLED,
+  EDIT_AREA_PENDING,
+  EDIT_AREA_REJECTED,
+  EDIT_COUNTRY_FULFILLED,
+  EDIT_COUNTRY_PENDING,
+  EDIT_COUNTRY_REJECTED,
+  EDIT_STATE_FULFILLED,
+  EDIT_STATE_PENDING,
+  EDIT_STATE_REJECTED,
+  EDIT_DISTRICT_FULFILLED,
+  EDIT_DISTRICT_PENDING,
+  EDIT_DISTRICT_REJECTED,
+  EDIT_CITY_PENDING,
+  EDIT_CITY_FULFILLED,
+  EDIT_CITY_REJECTED
 } from "../actions/types";
 import DeviceSignalCellularNull from "material-ui/SvgIcon";
 
@@ -96,13 +111,108 @@ const INITIAL_STATE = {
   districtEditModal: false,
   cityEditModal: false,
   areaEditModal: false,
-  generalSetupErrors: null
+  generalSetupErrors: null,
+  generalSetupEditErrors: null
 };
 
 export default function(state = INITIAL_STATE, action) {
   switch (action.type) {
     case RESET_GENERAL_SETUP_ERRORS:
-      return { ...state, generalSetupErrors: null };
+      return {
+        ...state,
+        generalSetupErrors: null,
+        generalSetupEditErrors: null
+      };
+
+    case EDIT_COUNTRY_PENDING:
+      return { ...state, countryLoading: true, countryError: false };
+    case EDIT_COUNTRY_FULFILLED:
+      return {
+        ...state,
+        countryLoading: false,
+        countryError: false,
+        generalSetupEditErrors: null
+      };
+
+    case EDIT_COUNTRY_REJECTED:
+      return {
+        ...state,
+        countryLoading: false,
+        countryError: true,
+        generalSetupEditErrors: action.payload
+      };
+
+    case EDIT_STATE_PENDING:
+      return { ...state, stateLoading: true, stateError: false };
+    case EDIT_STATE_FULFILLED:
+      return {
+        ...state,
+        stateLoading: false,
+        stateError: false,
+        generalSetupEditErrors: null
+      };
+
+    case EDIT_STATE_REJECTED:
+      return {
+        ...state,
+        stateLoading: false,
+        stateError: true,
+        generalSetupEditErrors: action.payload
+      };
+
+    case EDIT_DISTRICT_PENDING:
+      return { ...state, districtLoading: true, districtError: false };
+    case EDIT_DISTRICT_FULFILLED:
+      return {
+        ...state,
+        districtLoading: false,
+        districtError: false,
+        generalSetupEditErrors: null
+      };
+
+    case EDIT_DISTRICT_REJECTED:
+      return {
+        ...state,
+        districtLoading: false,
+        districtError: true,
+        generalSetupEditErrors: action.payload
+      };
+
+    case EDIT_CITY_PENDING:
+      return { ...state, cityLoading: true, cityError: false };
+    case EDIT_CITY_FULFILLED:
+      return {
+        ...state,
+        cityLoading: false,
+        cityError: false,
+        generalSetupEditErrors: null
+      };
+
+    case EDIT_CITY_REJECTED:
+      return {
+        ...state,
+        cityLoading: false,
+        cityError: true,
+        generalSetupEditErrors: action.payload
+      };
+
+    case EDIT_AREA_PENDING:
+      return { ...state, areaLoading: true, areaError: false };
+    case EDIT_AREA_FULFILLED:
+      return {
+        ...state,
+        areaLoading: false,
+        areaError: false,
+        generalSetupEditErrors: null
+      };
+
+    case EDIT_AREA_REJECTED:
+      return {
+        ...state,
+        areaLoading: false,
+        areaError: true,
+        generalSetupEditErrors: action.payload
+      };
 
     case CREATE_COUNTRY_PENDING:
       return { ...state, countryLoading: true, countryError: false };

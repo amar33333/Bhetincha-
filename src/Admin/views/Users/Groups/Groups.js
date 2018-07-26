@@ -116,6 +116,9 @@ class Groups extends Component {
           <GroupEditModal
             data={this.props.groupEditData}
             onGroupEdit={this.props.onGroupEdit}
+            userGroupEditErrors={this.props.userGroupEditErrors}
+            loading={this.props.loading}
+            resetUserGroupErrors={this.props.resetUserGroupErrors}
           />
         </CustomModal>
       </div>
@@ -126,9 +129,23 @@ class Groups extends Component {
 export default connect(
   ({
     AdminContainer: {
-      user_reducer: { groups, groupEditData, groupEditModal, userGroupErrors }
+      user_reducer: {
+        groups,
+        groupEditData,
+        groupEditModal,
+        userGroupErrors,
+        userGroupEditErrors,
+        loading
+      }
     }
-  }) => ({ groups, groupEditData, groupEditModal, userGroupErrors }),
+  }) => ({
+    groups,
+    groupEditData,
+    groupEditModal,
+    userGroupErrors,
+    userGroupEditErrors,
+    loading
+  }),
   {
     onGroupSubmit,
     onGroupsList,

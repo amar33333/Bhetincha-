@@ -5,6 +5,9 @@ import {
   CREATE_INDUSTRY_PENDING,
   CREATE_INDUSTRY_FULFILLED,
   CREATE_INDUSTRY_REJECTED,
+  EDIT_INDUSTRY_PENDING,
+  EDIT_INDUSTRY_FULFILLED,
+  EDIT_INDUSTRY_REJECTED,
   FETCH_INDUSTRY_EACH_FULFILLED,
   FETCH_INDUSTRY_EACH_REJECTED,
   FETCH_INDUSTRY_EACH_PENDING,
@@ -24,16 +27,40 @@ const INITIAL_STATE = {
   industriesData: [],
   industryData: null,
   industryEditModal: false,
-  industryErrors: null
+  industryErrors: null,
+  industryEditErrors: null
 };
 
 export default function(state = INITIAL_STATE, action) {
   switch (action.type) {
     case RESET_INDUSTRY_ERRORS:
-      return { ...state, industryErrors: null };
+      return {
+        ...state,
+        industryErrors: null,
+        industryEditErrors: null
+      };
 
     case UNMOUNT_INDUSTRY:
       return { ...state, industries: [] };
+
+    case EDIT_INDUSTRY_PENDING:
+      return { ...state, loading: true, error: false };
+
+    case EDIT_INDUSTRY_REJECTED:
+      return {
+        ...state,
+        loading: false,
+        error: true,
+        industryEditErrors: action.payload
+      };
+
+    case EDIT_INDUSTRY_FULFILLED:
+      return {
+        ...state,
+        loading: false,
+        error: false,
+        industryEditErrors: null
+      };
 
     case CREATE_INDUSTRY_PENDING:
       return { ...state, loading: true, error: false };
