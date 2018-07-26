@@ -7,13 +7,18 @@ import { Card, Button } from "semantic-ui-react";
 
 import { directionRenderer } from "../../../../../Common/utils/Extras";
 
+const DEFAULT_BRANCH_ADDRESS_COUNT = 3;
+const BRANCH_ADDRESS_INCREMENT = 3;
+
 class Contact extends Component {
   constructor(props) {
     super(props);
     this.state = {
       position: { lat: 27.7172453, lng: 85.32391758465576 },
       source: null,
-      destination: null
+      destination: null,
+      branchAddressCount: DEFAULT_BRANCH_ADDRESS_COUNT,
+      searchKeyword: ""
     };
   }
 
@@ -140,75 +145,116 @@ class Contact extends Component {
   };
 
   renderBranchAddress = () => {
+    let displayCount = 0;
+    const searchKeyword = this.state.searchKeyword.toLowerCase();
+
     return (
       this.props.branchAddress &&
-      this.props.branchAddress.map(branch => (
-        <Col sm="3">
-          <Card className="mb-3">
-            <Card.Content
-              // header={branch.area ? `${branch.area.name} Branch` : "New Branch"}
-              onClick={this.drawPath(branch)}
-            >
-              <Card.Header>
-                <div
-                  className="address-card-header"
-                  data-tooltip={`Get Direction to this Address`}
-                  data-position="bottom center"
+      this.props.branchAddress.map((branch, i) => {
+        if (
+          (!searchKeyword && true) ||
+          (branch.address_title &&
+            branch.address_title.toLowerCase().indexOf(searchKeyword) !== -1) ||
+          (branch.area &&
+            branch.area.name &&
+            branch.area.name.toLowerCase().indexOf(searchKeyword) !== -1) ||
+          (branch.city &&
+            branch.city.name &&
+            branch.city.name.toLowerCase().indexOf(searchKeyword) !== -1) ||
+          (branch.district &&
+            branch.district.name &&
+            branch.district.name.toLowerCase().indexOf(searchKeyword) !== -1) ||
+          (branch.state &&
+            branch.state.name &&
+            branch.state.name.toLowerCase().indexOf(searchKeyword) !== -1) ||
+          (branch.country &&
+            branch.country.name &&
+            branch.country.name.toLowerCase().indexOf(searchKeyword) !== -1) ||
+          (branch.landmark &&
+            branch.landmark.toLowerCase().indexOf(searchKeyword) !== -1) ||
+          (branch.contactPerson &&
+            branch.contactPerson.length &&
+            branch.contactPerson.find(
+              person =>
+                person.name &&
+                person.name.toLowerCase().indexOf(searchKeyword) !== -1
+            ))
+        ) {
+          displayCount += 1;
+          return displayCount <= this.state.branchAddressCount ? (
+            <Col sm="3" key={i}>
+              <Card className="mb-3">
+                <Card.Content
+                  // header={branch.area ? `${branch.area.name} Branch` : "New Branch"}
+                  onClick={this.drawPath(branch)}
                 >
-                  {branch.address_title}
-                  <i className="fa fa-location-arrow" />
-                </div>
-              </Card.Header>
-            </Card.Content>
-            <Card.Content>
-              <p>
-                {branch.area
-                  ? `${branch.area.name}, ${branch.city.name}, ${
-                      branch.district.name
-                    }`
-                  : null}
-              </p>
-              <p>{branch.landmark}</p>
-              {branch.landlineNumber ? (
-                <a href={`tel: ${branch.landlineNumber}`}>
-                  <i className="fa fa-phone" /> {branch.landlineNumber}
-                </a>
-              ) : null}
+                  <Card.Header>
+                    <div
+                      className="address-card-header"
+                      data-tooltip={`Get Direction to this Address`}
+                      data-position="bottom center"
+                    >
+                      {branch.address_title}
+                      <i className="fa fa-location-arrow" />
+                    </div>
+                  </Card.Header>
+                </Card.Content>
+                <Card.Content>
+                  <p>
+                    {branch.area
+                      ? `${branch.area.name}, ${branch.city.name}, ${
+                          branch.district.name
+                        }`
+                      : null}
+                  </p>
+                  <p>{branch.landmark}</p>
+                  {branch.landlineNumber ? (
+                    <a href={`tel: ${branch.landlineNumber}`}>
+                      <i className="fa fa-phone" /> {branch.landlineNumber}
+                    </a>
+                  ) : null}
 
-              {branch.contactPerson &&
-                branch.contactPerson.map(person => (
-                  <div>
-                    <p className="mt-3">
-                      <i className="fa fa-user" />{" "}
-                      <strong>{person.name}</strong>
-                      <small>
-                        {person.department && ` (${person.department})`}
-                      </small>
-                    </p>
-                    {person.mobileNumber ? (
-                      <a href={`tel: ${person.mobileNumber}`}>
-                        <i className="fa fa-mobile"> {person.mobileNumber}</i>
-                      </a>
-                    ) : null}
-                  </div>
-                ))}
-              {/* <a
-                href={`tel:${branch.contactPerson &&
-                  // branch.contactPerson[0].mobileNumber &&
-                  branch.contactPerson[0].mobileNumber}`}
-              >
-                <Button primary className="mt-2">
-                  Contact Now
-                </Button>
-              </a> */}
-            </Card.Content>
-            {/* <Card.Content extra>
-                  <Icon name="user" />
-                  4 Friends
-                </Card.Content> */}
-          </Card>
-        </Col>
-      ))
+                  {branch.contactPerson &&
+                    branch.contactPerson.map(person => (
+                      <div>
+                        <p className="mt-3">
+                          <i className="fa fa-user" />{" "}
+                          <strong>{person.name}</strong>
+                          <small>
+                            {person.department && ` (${person.department})`}
+                          </small>
+                        </p>
+                        {person.mobileNumber ? (
+                          <a href={`tel: ${person.mobileNumber}`}>
+                            <i className="fa fa-mobile">
+                              {" "}
+                              {person.mobileNumber}
+                            </i>
+                          </a>
+                        ) : null}
+                      </div>
+                    ))}
+                  {/* <a
+                  href={`tel:${branch.contactPerson &&
+                    // branch.contactPerson[0].mobileNumber &&
+                    branch.contactPerson[0].mobileNumber}`}
+                >
+                  <Button primary className="mt-2">
+                    Contact Now
+                  </Button>
+                </a> */}
+                </Card.Content>
+                {/* <Card.Content extra>
+                    <Icon name="user" />
+                    4 Friends
+                  </Card.Content> */}
+              </Card>
+            </Col>
+          ) : null;
+        } else {
+          return null;
+        }
+      })
     );
   };
 
@@ -235,10 +281,38 @@ class Contact extends Component {
               </h2>
             </Col>
           </Row>
+          {this.props.branchAddress &&
+            this.props.branchAddress.length > DEFAULT_BRANCH_ADDRESS_COUNT && (
+              <Row>
+                <input
+                  placeholder="Search branch Address..."
+                  onChange={e =>
+                    this.setState({
+                      searchKeyword: e.target.value,
+                      branchAddressCount: DEFAULT_BRANCH_ADDRESS_COUNT
+                    })
+                  }
+                  value={this.state.searchKeyword}
+                />
+              </Row>
+            )}
           <Row className="mt-5 mb-5">
             {this.props.address && this.renderPrimaryAddress()}
             {this.props.branchAddress && this.renderBranchAddress()}
           </Row>
+          {this.props.branchAddress &&
+            this.props.branchAddress.length > this.state.branchAddressCount && (
+              <button
+                onClick={() =>
+                  this.setState({
+                    branchAddressCount:
+                      this.state.branchAddressCount + BRANCH_ADDRESS_INCREMENT
+                  })
+                }
+              >
+                Load More
+              </button>
+            )}
         </Container>
       </div>
     );
