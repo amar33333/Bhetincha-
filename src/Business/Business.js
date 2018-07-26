@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Container } from "reactstrap";
 import { connect } from "react-redux";
 import Joyride from "react-joyride";
+import { ACTIONS, EVENTS } from "react-joyride/es/constants";
 import {
   Header,
   Sidebar,
@@ -23,7 +24,8 @@ class Business extends Component {
   state = {
     nav: [],
     routes: [],
-    run: true,
+    run: false,
+    stepIndex: 0,
     steps: [
       {
         target: ".joyride-dashboard",
@@ -83,11 +85,30 @@ class Business extends Component {
   };
 
   handleJoyrideCallback = data => {
-    const { type } = data;
+    const { action, index, type } = data;
 
-    console.group(type);
-    console.log(data); //eslint-disable-line no-console
-    console.groupEnd();
+    //if (status === STATUS.RUNNING) {
+    if (type === EVENTS.TOUR_END && this.state.run) {
+      // Need to set our running state to false, so we can restart if we click start again.
+      this.setState({ run: false, stepIndex: 0 });
+    } else if (type === EVENTS.STEP_AFTER && index === 0) {
+      this.setState({
+        run: true,
+        stepIndex: index + (action === ACTIONS.PREV ? -1 : 1)
+      });
+    } else if (type === EVENTS.STEP_AFTER || type === EVENTS.TARGET_NOT_FOUND) {
+      // Update state to advance the tour
+      this.setState({ stepIndex: index + (action === ACTIONS.PREV ? -1 : 1) });
+    } else if (type === EVENTS.TOOLTIP_CLOSE) {
+      this.setState({ stepIndex: index + 1 });
+    }
+    //}
+  };
+
+  handleTakeTour = () => {
+    this.setState({
+      run: true
+    });
   };
 
   componentDidMount() {
@@ -182,17 +203,18 @@ class Business extends Component {
   }
 
   render() {
-    const { steps, run } = this.state;
+    const { steps, run, stepIndex } = this.state;
     return (
       <div className="app">
         <Joyride
           continuous
           scrollToFirstStep
           showProgress
-          showSkipButton={false}
+          showSkipButton={true}
           steps={steps}
-          run={true}
-          // callback={this.handleJoyrideCallback}
+          stepIndex={stepIndex}
+          run={run}
+          callback={this.handleJoyrideCallback}
         />
         <Header className="joyride-header" />
         <div className="app-body">
@@ -204,7 +226,10 @@ class Business extends Component {
           <main className="main">
             <Breadcrumb routes={this.state.routes} />
             <Container fluid>
-              <BusinessRoute params={this.props.match.params} />
+              <BusinessRoute
+                handleTakeTour={this.handleTakeTour}
+                params={this.props.match.params}
+              />
             </Container>
           </main>
           <Aside />

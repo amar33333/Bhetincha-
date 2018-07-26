@@ -29,7 +29,12 @@ class BusinessRoute extends Component {
           exact
           path={`/:${ROUTE_PARAMS_BUSINESS_NAME}/dashboard/home`}
           name="Dashboard"
-          component={Dashboard}
+          component={props => (
+            <Dashboard
+              {...this.props}
+              handleTakeTour={this.props.handleTakeTour}
+            />
+          )}
         />
         {/* <Route
           path={`/:${ROUTE_PARAMS_BUSINESS_NAME}/dashboard/business-detail`}

@@ -41,6 +41,7 @@ class Minisite extends Component {
         <MainNavbar history={this.props.history} />
         <BusinessNav
           isHome={this.props.match.path.indexOf(":minisiteRoute") === -1}
+          url={this.props.match.params["minisiteRoute"]}
           history={this.props.history}
           businessName={this.props.match.params[ROUTE_PARAMS_BUSINESS_NAME]}
         />

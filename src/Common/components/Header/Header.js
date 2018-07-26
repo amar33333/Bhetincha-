@@ -57,11 +57,11 @@ class Header extends Component {
             </NavLink>
           </NavItem>
           <HeaderDropdown /> */}
-          <Avatar className="joyride-avatar" />
+          <Avatar className="joyride-avatar mr-2" />
         </Nav>
-        <NavbarToggler className="d-md-down-none" onClick={this.asideToggle}>
+        {/* <NavbarToggler className="d-md-down-none" onClick={this.asideToggle}>
           <span className="navbar-toggler-icon" />
-        </NavbarToggler>
+        </NavbarToggler> */}
       </header>
     );
   }

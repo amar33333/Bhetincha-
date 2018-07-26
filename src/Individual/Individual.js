@@ -1,12 +1,6 @@
 import React, { Component } from "react";
 import { Container } from "reactstrap";
-import {
-  Header,
-  Sidebar,
-  Breadcrumb,
-  Aside,
-  Footer
-} from "../Common/components";
+import { Header, Sidebar, Breadcrumb, Footer } from "../Common/components";
 import nav from "./config/nav";
 
 import { combineEpics } from "redux-observable";
@@ -116,7 +110,7 @@ class Individual extends Component {
               <IndividualRoute params={this.props.match.params} />
             </Container>
           </main>
-          <Aside />
+          {/* <Aside /> */}
         </div>
         <Footer />
       </div>
