@@ -52,7 +52,11 @@ class GoogleMapComponent extends Component {
         ref={ref => (this.gEl = ref)}
         defaultZoom={15}
         defaultCenter={{ lat: 27.7172453, lng: 85.32391758465576 }}
-        onClick={({ latLng }) => this.props.onClick({ latLng })}
+        onClick={
+          this.props.onClick
+            ? ({ latLng }) => this.props.onClick({ latLng })
+            : () => {}
+        }
       >
         {/* <Marker
           position={this.props.position}
