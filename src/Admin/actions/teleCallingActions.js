@@ -46,7 +46,7 @@ epics.push((action$, { getState }) =>
     })
       .map(({ response }) => ({
         type: FETCH_BUSINESS_TELE_CALLING_FULFILLED,
-        payload: response.hits.hits
+        payload: response.hits
       }))
       .catch(ajaxError =>
         Observable.of({ type: FETCH_BUSINESS_TELE_CALLING_REJECTED })
