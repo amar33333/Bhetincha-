@@ -8,14 +8,10 @@ class BottomFooter extends Component {
   render() {
     return (
       <div
-        className={` footer-${this.props.theme} ${this.props.extraClass} p-3`}
+        className={`footer-${this.props.theme} ${this.props.extraClass} p-3`}
       >
         <Container className="bottom-footer pt-1">
-          <Row
-            style={{
-              marginBottom: "-10px"
-            }}
-          >
+          <Row>
             <Col xs="12">
               <ul
                 style={{
