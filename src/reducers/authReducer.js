@@ -73,10 +73,10 @@ export default function(state = INITIAL_STATE, action) {
       return { ...state, ...action.payload };
 
     case PERMISSIONS_LOAD_PENDING:
-      return { ...state, ...action.payload, permissions_loading: true };
+      return { ...state, permissions_loading: true };
 
     case PERMISSIONS_LOAD_REJECTED:
-      return { ...state, ...action.payload, permissions_loading: false };
+      return { ...state, permissions_loading: false };
 
     case PERMISSIONS_LOAD_FULFILLED:
       return { ...state, ...action.payload, permissions_loading: false };

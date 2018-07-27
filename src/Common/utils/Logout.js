@@ -9,6 +9,7 @@ import store from "../../config/store";
 class Logout extends Component {
   constructor(props) {
     super(props);
+    console.log("sdjiosdjioahdionsiohdnios");
     this.logout();
   }
 

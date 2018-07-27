@@ -1,5 +1,6 @@
 import { Observable } from "rxjs/Observable";
 import { toast } from "react-toastify";
+// import { BrowserRouter } from "react-router-dom";
 
 import Cookies from "universal-cookie";
 
@@ -127,7 +128,14 @@ epics.push(action$ =>
           }
         };
       })
-      .catch(ajaxError => Observable.of({ type: PERMISSIONS_LOAD_REJECTED }));
+      .catch(ajaxError => {
+        console.log("ajax errro: ", ajaxError);
+        action.payload();
+        CookiesProvider.removeAllCookies();
+
+        // new BrowserRouter().history.push("/logout");
+        return Observable.of({ type: PERMISSIONS_LOAD_REJECTED });
+      });
   })
 );
 

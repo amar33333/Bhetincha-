@@ -47,7 +47,7 @@ class App extends Component {
     return (
       <div>
         <ToastContainer hideProgressBar autoClose={NOTIFICATION_TIME} />
-        <MainRoute />
+        <MainRoute ref={ref => (this.routeRef = ref)} />
       </div>
     );
   }
