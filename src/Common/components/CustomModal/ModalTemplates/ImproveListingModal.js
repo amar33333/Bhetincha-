@@ -119,21 +119,23 @@ class ImproveListingModal extends Component {
                 labelKey="name"
               />
             </FormGroup>
-            <FormGroup>
-              <InputGroup>
-                <InputGroupAddon addonType="prepend">
-                  <InputGroupText>New Problem Type</InputGroupText>
-                </InputGroupAddon>
-                <Input
-                  disabled={!this.state.new_problem_type_visible}
-                  required
-                  type="text"
-                  placeholder="Type a new problem type ..."
-                  value={this.state.new_problem_type}
-                  onChange={this.onChange.bind(this, "new_problem_type")}
-                />
-              </InputGroup>
-            </FormGroup>
+            {this.state.new_problem_type_visible && (
+              <FormGroup>
+                <InputGroup>
+                  <InputGroupAddon addonType="prepend">
+                    <InputGroupText>New Problem Type</InputGroupText>
+                  </InputGroupAddon>
+                  <Input
+                    // disabled={!this.state.new_problem_type_visible}
+                    required
+                    type="text"
+                    placeholder="Type a new problem type ..."
+                    value={this.state.new_problem_type}
+                    onChange={this.onChange.bind(this, "new_problem_type")}
+                  />
+                </InputGroup>
+              </FormGroup>
+            )}
           </Col>
         </Row>
         <Row>

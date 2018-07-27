@@ -110,7 +110,7 @@ class SearchPlaceholderEditModal extends Component {
         <Row>
           <Col>
             <Button color="primary" disabled={this.props.placeholderLoading}>
-              <span className="fa fa-plus" /> Edit
+              <span className="fa fa-check" /> Save
             </Button>
           </Col>
         </Row>

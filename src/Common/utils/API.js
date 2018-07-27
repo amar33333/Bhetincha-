@@ -6,7 +6,7 @@ const ELASTIC_PORT = "9200";
 export const MAIN_URL = `${HOST}:${MONGO_PORT}`;
 export const ELASTIC_URL = `${HOST}:${MONGO_PORT}`;
 
-const MAPS_API_KEY = "AIzaSyDuyvcH5Rr55zHXmJFjuQ30jd_edLi1HbQ";
+const MAPS_API_KEY = "AIzaSyC5jpMbvHuSQVcVdUN_hYD-XWRxJT6az_g";
 export const GOOGLE_MAPS_URL = `https://maps.googleapis.com/maps/api/js?key=${MAPS_API_KEY}`;
 
 const GET_USER_INFO = "api/accounts/getuserinfo/";

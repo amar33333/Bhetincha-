@@ -55,7 +55,7 @@ class AutoSuggestion extends Component {
         renderInputComponent={inputProps => (
           <div>
             <form
-              classname="mb-0"
+              className="mb-0"
               style={{
                 height: "50px"
               }}
