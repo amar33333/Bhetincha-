@@ -33,7 +33,6 @@ class App extends Component {
     // this.props.loadCookies();
 
     if (CookiesProvider.getAccessToken()) {
-      console.log("cookies app js: ", CookiesProvider.getAccessToken());
       this.props.loadPermissions(() => {
         this.setState({ display: true });
       });
