@@ -697,6 +697,7 @@ class SubBusinessPrimaryAddress extends Component {
                       Select your Business Location from the map displayed below
                     </strong>
                     <MapComponent
+                      enableMarker={true}
                       ref={ref => (this.mapComponentEl = ref)}
                       position={{
                         lat: this.state.latitude,

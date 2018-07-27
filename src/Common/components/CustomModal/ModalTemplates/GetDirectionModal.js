@@ -88,6 +88,7 @@ class GetDirectionModal extends Component {
         labelKey="address_title"
       />
       <MapComponent
+        enableMarker={false}
         position={this.state.position}
         source={this.state.source}
         destination={this.state.destination}
