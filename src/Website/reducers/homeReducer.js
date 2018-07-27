@@ -30,8 +30,6 @@ export default function(state = INITIAL_STATE, action) {
       return { ...state, registerModal: !state.registerModal };
 
     case TOGGLE_GET_DIRECTION_MODAL:
-      console.log("ascasc: ", action);
-
       return {
         ...state,
         getDirectionModal: !state.getDirectionModal,
