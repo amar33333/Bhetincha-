@@ -20,8 +20,6 @@ class subBusinessWorkingHour extends Component {
     super(props);
     this.state = {
       alwaysOpen: false,
-      selectedStart: moment("2018-05-01T10:00").format("YYYY-MM-DDTHH:mmZ"),
-      selectedClosing: moment("2018-05-01T17:00").format("YYYY-MM-DDTHH:mmZ"),
       workingHour: [
         {
           day: "Sunday",
@@ -69,23 +67,28 @@ class subBusinessWorkingHour extends Component {
     };
   }
 
-  static getDerivedStateFromProps = nextProps => {
+  static getDerivedStateFromProps = (nextProps, prevState) => {
+    console.log("prevstate:::::::::::", prevState);
     if (!nextProps.businessGet && nextProps.workingHour && nextProps.EDIT) {
       nextProps.onInitialPropsReceived();
 
       return {
-        workingHour: nextProps.workingHour.workingHour.length
-          ? [...nextProps.workingHour.workingHour.map(each => each)]
-          : [],
+        workingHour: !nextProps.workingHour.alwaysOpen
+          ? nextProps.workingHour.workingHour.length
+            ? [...nextProps.workingHour.workingHour.map(each => each)]
+            : prevState.workingHour
+          : prevState.workingHour,
         alwaysOpen: nextProps.workingHour.alwaysOpen
       };
     }
     return null;
   };
 
-  getState = () =>
-    this.state.alwaysOpen ? { alwaysOpen: this.state.alwaysOpen } : this.state;
-
+  getState = () => {
+    return this.state.alwaysOpen
+      ? { alwaysOpen: this.state.alwaysOpen }
+      : this.state;
+  };
   toggleHoliday = day => {
     const newWorkingHour = this.state.workingHour.map(each => {
       if (each.day === day) {

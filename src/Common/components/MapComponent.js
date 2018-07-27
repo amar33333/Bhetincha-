@@ -58,11 +58,11 @@ class GoogleMapComponent extends Component {
             : () => {}
         }
       >
-        {/* <Marker
+        <Marker
           position={this.props.position}
           draggable
           onDragEnd={this.props.onDragEnd}
-        /> */}
+        />
         {this.directionRenderer({
           source: this.props.source,
           destination: this.props.destination
