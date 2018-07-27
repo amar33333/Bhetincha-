@@ -178,6 +178,7 @@ class BusinessNav extends Component {
                     </Link>
                   </NavItem>
                    <NavItem key="about">
+
                     <Link
                       onClick={this.onNavClicked}
                       draggable="false"
@@ -209,7 +210,10 @@ class BusinessNav extends Component {
                     </Link>
                   </NavItem>
                 </GridLayout> */}
-                <NavItem key="home" className={this.props.isHome && "active"}>
+                <NavItem
+                  key="home"
+                  className={this.props.isHome ? "active" : ""}
+                >
                   <Link
                     onClick={this.onNavClicked}
                     draggable="false"
@@ -230,7 +234,7 @@ class BusinessNav extends Component {
                   </NavItem> */}
                 <NavItem
                   key="gallery"
-                  className={url === "gallery" && "active"}
+                  className={url === "gallery" ? "active" : ""}
                 >
                   <Link
                     onClick={this.onNavClicked}
@@ -242,7 +246,7 @@ class BusinessNav extends Component {
                 </NavItem>
                 <NavItem
                   key="ecommerce"
-                  className={url === "ecommerce" && "active"}
+                  className={url === "ecommerce" ? "active" : ""}
                 >
                   <Link
                     onClick={this.onNavClicked}
@@ -255,7 +259,7 @@ class BusinessNav extends Component {
                 </NavItem>
                 <NavItem
                   key="contact"
-                  className={url === "contact" && "active"}
+                  className={url === "contact" ? "active" : ""}
                 >
                   <Link
                     onClick={this.onNavClicked}
@@ -318,6 +322,7 @@ class BusinessNav extends Component {
                     this.props.businessName === this.props.cookies.user_data.slug
                   }
                   nonLink={USER_GROUP_BUSINESS}
+
                   titleIndex={this.props.mainEdit}
                   onClick={this.props.onEditMainClicked}
                 />
