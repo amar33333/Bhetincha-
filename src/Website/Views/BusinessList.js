@@ -59,7 +59,7 @@ class BusinessList extends Component {
     const parsedUrlStringObject = querystring.parse(
       this.props.location.search.slice(1)
     );
-    console.log("propop: ", this.props, parsedUrlStringObject);
+    // console.log("propop: ", this.props, parsedUrlStringObject);
 
     if (!this.props.location.search) this.props.history.push("/404");
     else {
