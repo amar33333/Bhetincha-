@@ -462,36 +462,47 @@ class TeleCalling extends Component {
               </CardBody>
               <CardFooter>
                 <Form inline>
-                  <FormGroup check className="mb-2 mr-sm-2 mb-sm-0">
-                    <Label check>
-                      <Input
-                        type="checkbox"
-                        checked={this.state.searchForBusinessNameOnly}
-                        onChange={e =>
-                          this.setState(
-                            { searchForBusinessNameOnly: e.target.checked },
-                            this.onFormSubmit
-                          )
-                        }
-                      />{" "}
-                      Name Only
-                    </Label>
-                  </FormGroup>
-                  <FormGroup className="mb-2 mr-sm-2 mb-sm-0">
-                    <Label>Industry</Label>
-                    <Select
-                      style={{ minWidth: 200 }}
-                      clearable
-                      tabSelectsValue={false}
-                      value={this.state.industry}
-                      onChange={industry =>
-                        this.setState({ industry }, this.onFormSubmit)
-                      }
-                      valueKey="id"
-                      labelKey="name"
-                      options={this.props.industries}
-                    />
-                  </FormGroup>
+                  <Row
+                    className="d-flex align-items-center"
+                    style={{
+                      width: "100%"
+                    }}
+                  >
+                    <Col xs="12" md="3">
+                      <FormGroup check>
+                        <Label check>
+                          <Input
+                            type="checkbox"
+                            checked={this.state.searchForBusinessNameOnly}
+                            onChange={e =>
+                              this.setState(
+                                { searchForBusinessNameOnly: e.target.checked },
+                                this.onFormSubmit
+                              )
+                            }
+                          />{" "}
+                          Name Only
+                        </Label>
+                      </FormGroup>
+                    </Col>
+                    <Col xs="12" md="9">
+                      <FormGroup>
+                        <Label className="mr-2">Select Industry:</Label>
+                        <Select
+                          style={{ minWidth: "200px" }}
+                          clearable
+                          tabSelectsValue={false}
+                          value={this.state.industry}
+                          onChange={industry =>
+                            this.setState({ industry }, this.onFormSubmit)
+                          }
+                          valueKey="id"
+                          labelKey="name"
+                          options={this.props.industries}
+                        />
+                      </FormGroup>
+                    </Col>
+                  </Row>
                 </Form>
               </CardFooter>
             </Card>
