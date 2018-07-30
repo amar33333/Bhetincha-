@@ -17,6 +17,7 @@ class BusinessLogoCoverImage extends Component {
   }
 
   render() {
+    if (!(this.props.logo && this.props.cover_image)) return null;
     return (
       <div className="animated fadeIn">
         {/* <Button
@@ -55,10 +56,11 @@ class BusinessLogoCoverImage extends Component {
           </CardHeader>
           <CardBody>
             <PhotoEditorComponent
+              key="logo"
               active="logo"
               hideSidebar
               logo={`${MAIN_URL}${this.props.logo}`}
-              cover={`${MAIN_URL}${this.props.cover_image}`}
+              // cover={`${MAIN_URL}${this.props.cover_image}`}
               loading={this.props.fetchLoading}
               onUpload={(key, file) => {
                 this.props.onBusinessLogoCoverImageEdit({
@@ -76,9 +78,10 @@ class BusinessLogoCoverImage extends Component {
           </CardHeader>
           <CardBody>
             <PhotoEditorComponent
+              key="cover"
               active="cover"
               hideSidebar
-              logo={`${MAIN_URL}${this.props.logo}`}
+              // logo={`${MAIN_URL}${this.props.logo}`}
               cover={`${MAIN_URL}${this.props.cover_image}`}
               loading={this.props.fetchLoading}
               onUpload={(key, file) => {
