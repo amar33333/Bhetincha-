@@ -129,7 +129,7 @@ epics.push(action$ =>
         };
       })
       .catch(ajaxError => {
-        console.log("ajax errro: ", ajaxError);
+        // console.log("ajax errro: ", ajaxError);
         action.payload();
         CookiesProvider.removeAllCookies();
 

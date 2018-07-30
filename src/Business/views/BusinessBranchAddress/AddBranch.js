@@ -638,6 +638,7 @@ class AddBranch extends Component {
                     Select your Branch Location from the map displayed below
                   </strong>
                   <MapComponent
+                    enableMarker={true}
                     ref={ref => (this.mapComponentEl = ref)}
                     position={{
                       lat: this.state.latitude,

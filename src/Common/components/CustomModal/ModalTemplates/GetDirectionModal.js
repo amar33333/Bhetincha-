@@ -87,11 +87,14 @@ class GetDirectionModal extends Component {
         valueKey="addressID"
         labelKey="address_title"
       />
-      <MapComponent
-        position={this.state.position}
-        source={this.state.source}
-        destination={this.state.destination}
-      />
+      {this.state.destination && (
+        <MapComponent
+          enableMarker={true}
+          position={this.state.position}
+          source={this.state.source}
+          destination={this.state.destination}
+        />
+      )}
     </div>
   );
 

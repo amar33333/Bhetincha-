@@ -58,11 +58,14 @@ class GoogleMapComponent extends Component {
             : () => {}
         }
       >
-        <Marker
-          position={this.props.position}
-          draggable
-          onDragEnd={this.props.onDragEnd}
-        />
+        {this.props.enableMarker && (
+          <Marker
+            position={this.props.position}
+            draggable
+            onDragEnd={this.props.onDragEnd}
+          />
+        )}
+
         {this.directionRenderer({
           source: this.props.source,
           destination: this.props.destination
@@ -85,6 +88,7 @@ class MapComponent extends Component {
       <div>
         {MyMapComponent && (
           <MyMapComponent
+            enableMarker={this.props.enableMarker}
             setRef={ref => (this.googleMapEl = ref)}
             source={this.props.source}
             destination={this.props.destination}
