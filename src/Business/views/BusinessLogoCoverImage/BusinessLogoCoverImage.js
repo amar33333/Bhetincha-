@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Button, Card, CardBody, CardHeader, Col } from "reactstrap";
+import { Button, Card, CardBody, CardHeader, Row, Col } from "reactstrap";
 
 import { MAIN_URL } from "../../config/BUSINESS_API";
 import {
@@ -19,77 +19,53 @@ class BusinessLogoCoverImage extends Component {
   render() {
     return (
       <div className="animated fadeIn">
-        {/* <Button
-          // className="pull-right"
-          color="primary"
-          onClick={() => this.setState({ isOpen: true })}
-        >
-          <i className="fa fa-camera" /> Upload New Image
-        </Button>
+        <Row>
+          <Col xs="12" md="4">
+            <Card>
+              <CardHeader>
+                <strong>Logo</strong>
+              </CardHeader>
+              <CardBody>
+                <PhotoEditorComponent
+                  active="logo"
+                  hideSidebar
+                  logo={`${MAIN_URL}${this.props.logo}`}
+                  cover={`${MAIN_URL}${this.props.cover_image}`}
+                  loading={this.props.fetchLoading}
+                  onUpload={(key, file) => {
+                    this.props.onBusinessLogoCoverImageEdit({
+                      body: { [key === "cover" ? "cover_photo" : "logo"]: file }
+                      // id:
+                    });
+                  }}
+                />
+              </CardBody>
+            </Card>
+          </Col>
 
-        <CustomModal
-          isOpen={this.state.isOpen}
-          toggle={() => this.setState({ isOpen: !this.state.isOpen })}
-          className="modal-lg"
-          title="Image Editor"
-        >
-          <PhotoEditorComponent
-            active="cover"
-            logo={`${MAIN_URL}${this.props.logo}`}
-            cover={`${MAIN_URL}${this.props.cover_image}`}
-            loading={this.props.fetchLoading}
-            onUpload={(key, file) => {
-              this.props.onBusinessLogoCoverImageEdit({
-                body: { [key === "cover" ? "cover_photo" : "logo"]: file }
-                // id:
-              });
-            }}
-          />
-        </CustomModal>
-        <br />
-        <br /> */}
-
-        <Card>
-          <CardHeader>
-            <strong>Logo</strong>
-          </CardHeader>
-          <CardBody>
-            <PhotoEditorComponent
-              active="logo"
-              hideSidebar
-              logo={`${MAIN_URL}${this.props.logo}`}
-              cover={`${MAIN_URL}${this.props.cover_image}`}
-              loading={this.props.fetchLoading}
-              onUpload={(key, file) => {
-                this.props.onBusinessLogoCoverImageEdit({
-                  body: { [key === "cover" ? "cover_photo" : "logo"]: file }
-                  // id:
-                });
-              }}
-            />
-          </CardBody>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <strong>Cover Image</strong>
-          </CardHeader>
-          <CardBody>
-            <PhotoEditorComponent
-              active="cover"
-              hideSidebar
-              logo={`${MAIN_URL}${this.props.logo}`}
-              cover={`${MAIN_URL}${this.props.cover_image}`}
-              loading={this.props.fetchLoading}
-              onUpload={(key, file) => {
-                this.props.onBusinessLogoCoverImageEdit({
-                  body: { [key === "cover" ? "cover_photo" : "logo"]: file }
-                  // id:
-                });
-              }}
-            />
-          </CardBody>
-        </Card>
+          <Col xs="12" md="8">
+            <Card>
+              <CardHeader>
+                <strong>Cover Image</strong>
+              </CardHeader>
+              <CardBody>
+                <PhotoEditorComponent
+                  active="cover"
+                  hideSidebar
+                  logo={`${MAIN_URL}${this.props.logo}`}
+                  cover={`${MAIN_URL}${this.props.cover_image}`}
+                  loading={this.props.fetchLoading}
+                  onUpload={(key, file) => {
+                    this.props.onBusinessLogoCoverImageEdit({
+                      body: { [key === "cover" ? "cover_photo" : "logo"]: file }
+                      // id:
+                    });
+                  }}
+                />
+              </CardBody>
+            </Card>
+          </Col>
+        </Row>
       </div>
     );
   }
