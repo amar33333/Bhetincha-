@@ -76,6 +76,12 @@ const items = {
         }
       ]
     },
+    {
+      name: "Gallery",
+      url: `/${ROUTE_PARAMS_BUSINESS_NAME}/dashboard/gallery`,
+      icon: "fa fa-users"
+      // permission: "CAN_VIEW_USER",
+    },
 
     {
       name: "Ecommerce",

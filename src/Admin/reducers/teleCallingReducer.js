@@ -14,6 +14,7 @@ import {
 const INITIAL_STATE = {
   businessFetchLoading: false,
   business: [],
+  businessRowCount: 0,
   userLoading: false,
   userError: false,
   fetchTeleUserLoading: false,
@@ -27,7 +28,12 @@ export default function(state = INITIAL_STATE, action) {
       return { ...state, businessFetchLoading: false };
 
     case FETCH_BUSINESS_TELE_CALLING_FULFILLED:
-      return { ...state, business: action.payload, businessFetchLoading: true };
+      return {
+        ...state,
+        business: action.payload.hits,
+        businessRowCount: action.payload.total,
+        businessFetchLoading: true
+      };
 
     case FETCH_TELE_USER_FULFILLED:
       return {
