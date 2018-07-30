@@ -92,9 +92,11 @@ class PhotoEditor extends Component {
     return (
       <div>
         <Row>
-          <Col xs="12" md="3">
-            {this.renderListGroupItem()}
-          </Col>
+          {!this.props.hideSidebar && (
+            <Col xs="12" md="3">
+              {this.renderListGroupItem()}
+            </Col>
+          )}
           <Col xs="12" md="9">
             <div ref={ref => (this.editorBody = ref)}>
               <Row>
@@ -104,7 +106,7 @@ class PhotoEditor extends Component {
                     data-tooltip="Add new photo to edit"
                     onClick={() => this[`${this.state.active}UploadEl`].click()}
                   >
-                    Add New Photo
+                    Upload New Photo
                   </Button>
                 </FormGroup>
                 <FormGroup>
