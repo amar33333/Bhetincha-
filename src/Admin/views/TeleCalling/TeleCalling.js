@@ -124,30 +124,60 @@ class TeleCalling extends Component {
       checkedBusinesses: [],
       composeSMSText: "",
       industry: "",
-      searchForBusinessNameOnly: false
+      searchForBusinessNameOnly: false,
+      frm: 0,
+      size: 20
     };
 
     this.panes = [
       {
         menuItem: "Open",
         render: () => (
-          <TabPane
-            businesses={this.state.businesses}
-            show={!this.state.activeIndex}
-            checkedBusinesses={this.state.checkedBusinesses}
-            updateChecked={this.updateChecked}
-          />
+          <div>
+            <TabPane
+              businesses={this.state.businesses}
+              show={!this.state.activeIndex}
+              checkedBusinesses={this.state.checkedBusinesses}
+              updateChecked={this.updateChecked}
+            />
+            {this.props.businessRowCount > this.state.businesses.length && (
+              <button
+                onClick={() => {
+                  this.setState(
+                    { size: this.state.size + 20 },
+                    this.onFormSubmit
+                  );
+                }}
+              >
+                Load More
+              </button>
+            )}
+          </div>
         )
       },
       {
         menuItem: "Closed",
         render: () => (
-          <TabPane
-            businesses={this.state.businesses}
-            show={this.state.activeIndex}
-            checkedBusinesses={this.state.checkedBusinesses}
-            updateChecked={this.updateChecked}
-          />
+          <div>
+            <TabPane
+              businesses={this.state.businesses}
+              show={this.state.activeIndex}
+              checkedBusinesses={this.state.checkedBusinesses}
+              updateChecked={this.updateChecked}
+            />
+            {this.props.businessRowCount > this.state.businesses.length && (
+              <button
+                onClick={() => {
+                  this.setState(
+                    { size: this.state.size + 20 },
+                    this.onFormSubmit
+                  );
+                }}
+              >
+                Load More
+              </button>
+            )}
+          </div>
         )
       }
     ];
@@ -291,7 +321,10 @@ class TeleCalling extends Component {
   };
 
   onTabChange = (_, data) => {
-    this.setState({ activeIndex: data.activeIndex }, this.onFormSubmit);
+    this.setState(
+      { activeIndex: data.activeIndex, size: 20 },
+      this.onFormSubmit
+    );
   };
 
   onFormSubmit = event => {
@@ -302,7 +335,9 @@ class TeleCalling extends Component {
       query,
       activeIndex,
       industry,
-      searchForBusinessNameOnly
+      searchForBusinessNameOnly,
+      frm,
+      size
     } = this.state;
     const now = new Date();
     if (query) {
@@ -316,7 +351,9 @@ class TeleCalling extends Component {
         thisIs: location ? location.type.toLowerCase() : undefined,
         location: location ? location.name : undefined,
         industry: industry ? industry.name : undefined,
-        searchForBusinessNameOnly
+        searchForBusinessNameOnly,
+        frm,
+        size
       };
 
       this.props.onBusinessTeleCallingList({

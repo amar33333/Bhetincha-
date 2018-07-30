@@ -13,7 +13,8 @@ import {
   ProductEdit,
   ProductView,
   AddBranch,
-  ChangeSlug
+  ChangeSlug,
+  Gallery
 } from "../views";
 
 import {
@@ -77,6 +78,11 @@ class BusinessRoute extends Component {
           path={`/:${ROUTE_PARAMS_BUSINESS_NAME}/dashboard/business-primary-address`}
           name="BusinessPrimaryAddress"
           component={BusinessPrimaryAddress}
+        />{" "}
+        <Route
+          path={`/:${ROUTE_PARAMS_BUSINESS_NAME}/dashboard/gallery`}
+          name="Gallery"
+          component={Gallery}
         />{" "}
         <Route
           path={`/:${ROUTE_PARAMS_BUSINESS_NAME}/dashboard/business-branch-address`}
