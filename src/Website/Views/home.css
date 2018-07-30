@@ -263,13 +263,15 @@ body {
 
 /* =======Footer========= */
 .footer {
-  position: relative;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
   min-height: 80px;
   /* border-bottom: 1px rgb(146, 144, 144) solid; */
 }
 
 .footer-dark {
-  position: absolute;
+  /* position: absolute; */
   width: 100%;
   bottom: 0;
 }
@@ -303,13 +305,13 @@ body {
   z-index: 150;
   width: 100%;
   font-size: 0.7rem;
-  _position: absolute;
+  /* _position: absolute;
   _top: expression(
     eval(
       document.documentElement.scrollTop +
         (document.documentElement.clientHeight-this.offsetHeight)
     )
-  );
+  ); */
 }
 
 .footer-dark {

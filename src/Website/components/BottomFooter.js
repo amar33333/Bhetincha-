@@ -17,7 +17,7 @@ class BottomFooter extends Component {
                 style={{
                   paddingLeft: "0px"
                 }}
-                className="text-center"
+                className="text-center mb-0"
               >
                 <li className="bottom-footer__nav__item">
                   <Link to="/ecommerce">Shop</Link>

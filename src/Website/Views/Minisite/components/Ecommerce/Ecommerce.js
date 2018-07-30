@@ -5,6 +5,7 @@ class Ecommerce extends Component {
   render() {
     return (
       <div
+        className="minisite_content__wrapper"
         style={{
           paddingTop: "60px"
         }}
