@@ -9,8 +9,9 @@ import {
 } from "../../actions";
 import { CustomModal } from "../../../Common/components";
 import PhotoEditorComponent from "../../../Website/Views/Minisite/components/CoverPhoto/PhotoEditor";
+
 class BusinessLogoCoverImage extends Component {
-  state = { isOpen: false };
+  // state = { isOpen: false };
   componentDidMount() {
     this.props.onBusinessLogoCoverImageList();
   }
@@ -18,7 +19,7 @@ class BusinessLogoCoverImage extends Component {
   render() {
     return (
       <div className="animated fadeIn">
-        <Button
+        {/* <Button
           // className="pull-right"
           color="primary"
           onClick={() => this.setState({ isOpen: true })}
@@ -46,24 +47,26 @@ class BusinessLogoCoverImage extends Component {
           />
         </CustomModal>
         <br />
-        <br />
+        <br /> */}
 
         <Card>
           <CardHeader>
             <strong>Logo</strong>
           </CardHeader>
           <CardBody>
-            <Col xs={12} sm={3}>
-              {this.props.logo ? (
-                <img
-                  style={{ width: "100%" }}
-                  alt="logo"
-                  src={`${MAIN_URL}${this.props.logo}`}
-                />
-              ) : (
-                "No Logo Found"
-              )}
-            </Col>
+            <PhotoEditorComponent
+              active="logo"
+              hideSidebar
+              logo={`${MAIN_URL}${this.props.logo}`}
+              cover={`${MAIN_URL}${this.props.cover_image}`}
+              loading={this.props.fetchLoading}
+              onUpload={(key, file) => {
+                this.props.onBusinessLogoCoverImageEdit({
+                  body: { [key === "cover" ? "cover_photo" : "logo"]: file }
+                  // id:
+                });
+              }}
+            />
           </CardBody>
         </Card>
 
@@ -72,15 +75,19 @@ class BusinessLogoCoverImage extends Component {
             <strong>Cover Image</strong>
           </CardHeader>
           <CardBody>
-            {this.props.cover_image ? (
-              <img
-                style={{ width: "100%" }}
-                alt="cover"
-                src={`${MAIN_URL}${this.props.cover_image}`}
-              />
-            ) : (
-              "No Cover Found"
-            )}
+            <PhotoEditorComponent
+              active="cover"
+              hideSidebar
+              logo={`${MAIN_URL}${this.props.logo}`}
+              cover={`${MAIN_URL}${this.props.cover_image}`}
+              loading={this.props.fetchLoading}
+              onUpload={(key, file) => {
+                this.props.onBusinessLogoCoverImageEdit({
+                  body: { [key === "cover" ? "cover_photo" : "logo"]: file }
+                  // id:
+                });
+              }}
+            />
           </CardBody>
         </Card>
       </div>
