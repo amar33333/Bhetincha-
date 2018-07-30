@@ -37,7 +37,9 @@ import {
 import {
   PAYMENT_METHOD_URL,
   COMPANY_TYPE_URL,
-  BUSINESS_PUT_URL
+  BUSINESS_PUT_URL,
+  BUSINESS_URL,
+  SOCIAL_URL_LINK_GET_URL
 } from "../../Business/config/BUSINESS_API";
 
 import axios from "axios";
@@ -87,6 +89,30 @@ export const onSearchPlaceholderEachDelete = ({ id, access_token }) =>
     }
   });
 
+export const onSocialLinkUrlPost = ({ body, id, access_token }) => {
+  console.log("bodu: ", body, "accesstos: ", access_token);
+  return ajax({
+    method: "PUT",
+    url: `${BUSINESS_URL}${id}/`,
+    body,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+};
+
+export const onSocialLinkUrlGet = ({ id, access_token }) => {
+  return ajax({
+    method: "GET",
+    url: `${SOCIAL_URL_LINK_GET_URL}${id}/`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+};
+
 export const onSocialLinkPost = ({ body, access_token }) =>
   ajax({
     method: "POST",
@@ -98,20 +124,20 @@ export const onSocialLinkPost = ({ body, access_token }) =>
     }
   });
 
-export const onImproveListingGet = ({ access_token, params }) =>
+export const onSocialLinksGet = ({ access_token }) =>
   ajax({
     method: "GET",
-    url: `${IMPROVE_LISTING_URL}?${querystring.stringify(params)}`,
+    url: SOCIAL_LINK_URL,
     headers: {
       "Content-Type": "application/json",
       Authorization: "Bearer " + access_token
     }
   });
 
-export const onSocialLinksGet = ({ access_token }) =>
+export const onImproveListingGet = ({ access_token, params }) =>
   ajax({
     method: "GET",
-    url: SOCIAL_LINK_URL,
+    url: `${IMPROVE_LISTING_URL}?${querystring.stringify(params)}`,
     headers: {
       "Content-Type": "application/json",
       Authorization: "Bearer " + access_token

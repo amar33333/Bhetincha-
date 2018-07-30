@@ -31,7 +31,10 @@ import {
   onCountryEachGet,
   onStateEachGet,
   onDistrictEachGet,
-  onCityEachGet
+  onCityEachGet,
+  onSocialLinksGet,
+  onSocialLinkUrlPost,
+  onSocialLinkUrlGet
 } from "../../Admin/config/adminServerCall";
 
 import { onUserGet } from "../../Common/utils/serverCall";
@@ -107,6 +110,15 @@ import {
   FETCH_CATEGORY_ARRAY_FULFILLED,
   FETCH_CATEGORY_ARRAY_REJECTED,
   EDIT_SLUG_FULFILLED,
+  FETCH_SOCIAL_LINK_FULFILLED,
+  FETCH_SOCIAL_LINK_PENDING,
+  FETCH_SOCIAL_LINK_REJECTED,
+  CREATE_SOCIAL_LINK_URL_FULFILLED,
+  CREATE_SOCIAL_LINK_URL_PENDING,
+  CREATE_SOCIAL_LINK_URL_REJECTED,
+  FETCH_SOCIAL_LINK_URL_FULFILLED,
+  FETCH_SOCIAL_LINK_URL_PENDING,
+  FETCH_SOCIAL_LINK_URL_REJECTED,
   EDIT_SLUG_PENDING,
   EDIT_SLUG_REJECTED,
   CHECK_SLUG_FULFILLED,
@@ -128,6 +140,94 @@ import { EmptyObservable } from "rxjs/observable/EmptyObservable";
 const epics = [];
 
 export const onUnmountBranch = () => ({ type: UNMOUNT_BRANCH });
+
+export const onSocialLinkUrlList = payload => ({
+  type: FETCH_SOCIAL_LINK_URL_PENDING,
+  payload
+});
+
+epics.push((action$, { getState }) =>
+  action$.ofType(FETCH_SOCIAL_LINK_URL_PENDING).mergeMap(({ payload }) =>
+    onSocialLinkUrlGet({
+      access_token: getState().auth.cookies.token_data.access_token,
+      ...payload
+    })
+      .map(({ response }) => {
+        return {
+          type: FETCH_SOCIAL_LINK_URL_FULFILLED,
+          payload: response
+        };
+      })
+      .catch(ajaxError => {
+        // toast.error("Error Adding Social Link !!!");
+        return Observable.of({
+          type: FETCH_SOCIAL_LINK_URL_REJECTED,
+          payload: JSON.parse(ajaxError.message)
+        });
+      })
+  )
+);
+
+export const onSocialLinkUrlSubmit = payload => ({
+  type: CREATE_SOCIAL_LINK_URL_PENDING,
+  payload
+});
+
+epics.push((action$, { getState }) =>
+  action$.ofType(CREATE_SOCIAL_LINK_URL_PENDING).mergeMap(({ payload }) =>
+    onSocialLinkUrlPost({
+      access_token: getState().auth.cookies.token_data.access_token,
+      ...payload
+    })
+      .concatMap(({ response }) => {
+        if (response.msg === "success") {
+          toast.success("Social Link Created Successfully!");
+
+          return [
+            {
+              type: CREATE_SOCIAL_LINK_URL_FULFILLED,
+              payload: response
+            }
+          ];
+        } else throw new Error(JSON.stringify(response.msg));
+      })
+      .catch(ajaxError => {
+        toast.error("Error Adding Social Link !!!");
+        return Observable.of({
+          type: CREATE_SOCIAL_LINK_URL_REJECTED,
+          payload: JSON.parse(ajaxError.message)
+        });
+      })
+  )
+);
+
+export const onSocialLinksList = () => ({
+  type: FETCH_SOCIAL_LINK_PENDING
+});
+
+epics.push((action$, { getState }) =>
+  action$.ofType(FETCH_SOCIAL_LINK_PENDING).mergeMap(({ payload }) =>
+    onSocialLinksGet({
+      access_token: getState().auth.cookies.token_data.access_token
+    })
+      .concatMap(({ response }) => {
+        // toast.success("Social Link Created Successfully!");
+        return [
+          {
+            type: FETCH_SOCIAL_LINK_FULFILLED,
+            payload: response
+          }
+        ];
+      })
+      .catch(ajaxError => {
+        // toast.error("Error Creating Social Link !!!");
+        return Observable.of({
+          type: FETCH_SOCIAL_LINK_REJECTED,
+          payload: JSON.parse(ajaxError.message)
+        });
+      })
+  )
+);
 
 export const onSlugCheckSubmit = payload => ({
   type: CHECK_SLUG_PENDING,

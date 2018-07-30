@@ -13,6 +13,7 @@ import BusinessWorkingHour from "./BusinessWorkingHour/BusinessWorkingHour";
 import BusinessAbout from "./BusinessAbout/BusinessAbout";
 import ChangeSlug from "./ChangeSlug/ChangeSlug";
 import Gallery from "./Gallery/Gallery";
+import SocialLinks from "./SocialLinks/SocialLinks";
 
 export {
   Dashboard,
@@ -28,5 +29,6 @@ export {
   BusinessWorkingHour,
   AddBranch,
   ChangeSlug,
-  Gallery
+  Gallery,
+  SocialLinks
 };

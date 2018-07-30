@@ -14,6 +14,7 @@ const BUSINESS_BRANCH_GET = "business/business-each-section/branchAddress/";
 const PRIMARY_ADDRESS = "business/business-each-section/address/";
 const ABOUT = "business/business-each-section/about/";
 const WORKING_HOUR = "business/business-each-section/workingHour/";
+const SOCIAL_URL_LINK_GET = "business/business-each-section/social-links/";
 const BUSINESS_DETAILS = "business/business-each-section/basics/";
 const LOGO_COVER_IMAGE = "business/business-each-section/logo-cover/";
 const CHECK_SLUG = "slug/checkuniqueslug/";
@@ -36,5 +37,6 @@ export const BUSINESS_DETAILS_GET_URL = `${MAIN_URL}/${BUSINESS_DETAILS}`;
 export const LOGO_COVER_IMAGE_GET_URL = `${MAIN_URL}/${LOGO_COVER_IMAGE}`;
 export const CHANGE_SLUG_URL = `${MAIN_URL}/${BUSINESS}`;
 export const CHECK_SLUG_URL = `${MAIN_URL}/${CHECK_SLUG}`;
+export const SOCIAL_URL_LINK_GET_URL = `${MAIN_URL}/${SOCIAL_URL_LINK_GET}`;
 
 export { MAIN_URL };

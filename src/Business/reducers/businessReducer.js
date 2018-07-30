@@ -59,6 +59,15 @@ import {
   EDIT_BRANCH_EACH_FULFILLED,
   EDIT_BRANCH_EACH_PENDING,
   EDIT_BRANCH_EACH_REJECTED,
+  FETCH_SOCIAL_LINK_FULFILLED,
+  FETCH_SOCIAL_LINK_PENDING,
+  FETCH_SOCIAL_LINK_REJECTED,
+  CREATE_SOCIAL_LINK_URL_FULFILLED,
+  CREATE_SOCIAL_LINK_URL_PENDING,
+  CREATE_SOCIAL_LINK_URL_REJECTED,
+  FETCH_SOCIAL_LINK_URL_FULFILLED,
+  FETCH_SOCIAL_LINK_URL_PENDING,
+  FETCH_SOCIAL_LINK_URL_REJECTED,
   UNMOUNT_BRANCH,
   TOGGLE_EDIT
 } from "../actions/types";
@@ -83,11 +92,67 @@ const INITIAL_STATE = {
   slugAvailable: true,
   primaryAddressEditErrors: null,
   branchCreateEditErrors: null,
-  businessDetailsEditErrors: null
+  businessDetailsEditErrors: null,
+  social_links: [],
+  social_link_error: null,
+  social_url_links: []
 };
 
 export default function(state = INITIAL_STATE, action) {
   switch (action.type) {
+    case FETCH_SOCIAL_LINK_URL_PENDING:
+      return {
+        ...state,
+        fetchLoading: true
+      };
+    case FETCH_SOCIAL_LINK_URL_REJECTED:
+      return {
+        ...state,
+        fetchLoading: false
+      };
+    case FETCH_SOCIAL_LINK_URL_FULFILLED:
+      return {
+        ...state,
+        fetchLoading: false,
+        social_url_links: action.payload
+      };
+
+    case CREATE_SOCIAL_LINK_URL_PENDING:
+      return {
+        ...state,
+        fetchLoading: true
+      };
+    case CREATE_SOCIAL_LINK_URL_REJECTED:
+      return {
+        ...state,
+        fetchLoading: false,
+        social_link_error: action.payload
+      };
+    case CREATE_SOCIAL_LINK_URL_FULFILLED:
+      return {
+        ...state,
+        fetchLoading: false,
+        social_links: action.payload,
+        social_link_error: null
+      };
+
+    case FETCH_SOCIAL_LINK_PENDING:
+      return {
+        ...state,
+        fetchLoading: true
+      };
+    case FETCH_SOCIAL_LINK_REJECTED:
+      return {
+        ...state,
+        fetchLoading: false
+      };
+    case FETCH_SOCIAL_LINK_FULFILLED:
+      return {
+        ...state,
+        fetchLoading: false,
+        social_links: action.payload
+      };
+
     case CREATE_BRANCH_PENDING:
       return {
         ...state,

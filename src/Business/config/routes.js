@@ -14,7 +14,8 @@ import {
   ProductView,
   AddBranch,
   ChangeSlug,
-  Gallery
+  Gallery,
+  SocialLinks
 } from "../views";
 
 import {
@@ -83,6 +84,11 @@ class BusinessRoute extends Component {
           path={`/:${ROUTE_PARAMS_BUSINESS_NAME}/dashboard/gallery`}
           name="Gallery"
           component={Gallery}
+        />{" "}
+        <Route
+          path={`/:${ROUTE_PARAMS_BUSINESS_NAME}/dashboard/social-links`}
+          name="Gallery"
+          component={SocialLinks}
         />{" "}
         <Route
           path={`/:${ROUTE_PARAMS_BUSINESS_NAME}/dashboard/business-branch-address`}

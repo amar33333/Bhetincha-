@@ -82,6 +82,12 @@ const items = {
       icon: "fa fa-users"
       // permission: "CAN_VIEW_USER",
     },
+    {
+      name: "Social Links",
+      url: `/${ROUTE_PARAMS_BUSINESS_NAME}/dashboard/social-links`,
+      icon: "fa fa-users"
+      // permission: "CAN_VIEW_USER",
+    },
 
     {
       name: "Ecommerce",
