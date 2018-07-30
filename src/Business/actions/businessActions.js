@@ -23,7 +23,8 @@ import {
   onBusinessLogoCoverImageGet,
   onBusinessLogoCoverImagePut,
   onSlugPut,
-  onSlugCheckPost
+  onSlugCheckPost,
+  onGalleryGet
 } from "../config/businessServerCall";
 
 import {
@@ -76,6 +77,9 @@ import {
   EDIT_WORKING_HOUR_FULFILLED,
   EDIT_WORKING_HOUR_PENDING,
   EDIT_WORKING_HOUR_REJECTED,
+  FETCH_GALLERY_FULFILLED,
+  FETCH_GALLERY_PENDING,
+  FETCH_GALLERY_REJECTED,
   FETCH_BUSINESS_BRANCH_FULFILLED,
   FETCH_BUSINESS_BRANCH_PENDING,
   FETCH_BUSINESS_BRANCH_REJECTED,
@@ -585,6 +589,32 @@ epics.push((action$, { getState }) =>
         toast.error(ajaxError.toString());
         return Observable.of({
           type: EDIT_WORKING_HOUR_REJECTED,
+          payload: ajaxError
+        });
+      });
+  })
+);
+
+export const onGalleryList = () => ({
+  type: FETCH_GALLERY_PENDING
+});
+
+epics.push((action$, { getState }) =>
+  action$.ofType(FETCH_GALLERY_PENDING).mergeMap(({ payload }) => {
+    const access_token = getState().auth.cookies.token_data.access_token;
+    const id = getState().auth.cookies.user_data.business_id;
+
+    return onGalleryGet({ id, access_token })
+      .map(({ response }) => {
+        return {
+          type: FETCH_GALLERY_FULFILLED,
+          payload: response
+        };
+      })
+      .catch(ajaxError => {
+        toast.error(ajaxError.toString());
+        return Observable.of({
+          type: FETCH_GALLERY_REJECTED,
           payload: ajaxError
         });
       });

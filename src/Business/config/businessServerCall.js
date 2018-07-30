@@ -11,6 +11,7 @@ import {
   BUSINESS_BRANCH_GET_URL,
   PRIMARY_ADDRESS_URL_GET_URL,
   WORKING_HOUR_GET_URL,
+  GALLERY_URL,
   BUSINESS_DETAILS_GET_URL,
   LOGO_COVER_IMAGE_GET_URL,
   ABOUT_GET_URL,
@@ -100,6 +101,27 @@ export const onWorkingHourGet = ({ access_token, id }) =>
   });
 
 export const onWorkingHourPut = ({ access_token, body, id }) =>
+  ajax({
+    method: "PUT",
+    url: `${BUSINESS_PUT_URL}${id}/`,
+    body,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
+export const onGalleryGet = ({ access_token, id }) =>
+  ajax({
+    method: "GET",
+    url: `${GALLERY_URL}${id}/`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
+export const onGalleryPut = ({ access_token, body, id }) =>
   ajax({
     method: "PUT",
     url: `${BUSINESS_PUT_URL}${id}/`,
