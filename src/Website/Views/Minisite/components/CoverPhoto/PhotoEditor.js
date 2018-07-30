@@ -100,66 +100,76 @@ class PhotoEditor extends Component {
           <Col xs="12" md="9">
             <div ref={ref => (this.editorBody = ref)}>
               <Row>
-                <FormGroup>
-                  <Button
-                    color="primary"
-                    data-tooltip="Add new photo to edit"
-                    onClick={() => this[`${this.state.active}UploadEl`].click()}
-                  >
-                    Upload New Photo
-                  </Button>
-                </FormGroup>
-                <FormGroup>
-                  <input
-                    style={{ display: "none" }}
-                    ref={ref => (this.logoUploadEl = ref)}
-                    type="file"
-                    onChange={this.handleUploadPhoto}
-                  />
-                  <input
-                    style={{ display: "none" }}
-                    ref={ref => (this.coverUploadEl = ref)}
-                    type="file"
-                    onChange={this.handleUploadPhoto}
-                  />
-                </FormGroup>
-              </Row>
-              <div>
-                <AvatarEditor
-                  ref={ref => (this[`imageEditorEl`] = ref)}
-                  width={this.state[this.state.active].WIDTH}
-                  height={this.state[this.state.active].HEIGHT}
-                  scale={this.state[this.state.active].zoomSlider / 100}
-                  image={
-                    this.state[this.state.active].files.length === 0
-                      ? this.props[this.state.active]
-                      : this.state[this.state.active].files[0]
-                  }
-                  //crossOrigin="anonymous"
-                />
-                {this.state[this.state.active].files.length !== 0 && (
-                  <div style={{ margin: "20px", width: "160px" }}>
-                    <span>Zoom</span>
-                    <Slider
-                      min={80}
-                      max={300}
-                      value={this.state[this.state.active].zoomSlider}
-                      onChange={this.handleSliderChange}
+                <Col>
+                  <FormGroup>
+                    <Button
+                      color="primary"
+                      data-tooltip="Add new photo to edit"
+                      onClick={() =>
+                        this[`${this.state.active}UploadEl`].click()
+                      }
+                    >
+                      Upload New Photo
+                    </Button>
+                  </FormGroup>
+                  <FormGroup>
+                    <input
+                      style={{ display: "none" }}
+                      ref={ref => (this.logoUploadEl = ref)}
+                      type="file"
+                      onChange={this.handleUploadPhoto}
                     />
-                  </div>
-                )}
-              </div>
+                    <input
+                      style={{ display: "none" }}
+                      ref={ref => (this.coverUploadEl = ref)}
+                      type="file"
+                      onChange={this.handleUploadPhoto}
+                    />
+                  </FormGroup>
+                </Col>
+              </Row>
+              <Row>
+                <Col>
+                  <AvatarEditor
+                    ref={ref => (this[`imageEditorEl`] = ref)}
+                    width={this.state[this.state.active].WIDTH}
+                    height={this.state[this.state.active].HEIGHT}
+                    scale={this.state[this.state.active].zoomSlider / 100}
+                    image={
+                      this.state[this.state.active].files.length === 0
+                        ? this.props[this.state.active]
+                        : this.state[this.state.active].files[0]
+                    }
+                    //crossOrigin="anonymous"
+                  />
+                  {this.state[this.state.active].files.length !== 0 && (
+                    <div style={{ margin: "20px", width: "160px" }}>
+                      <span>Zoom</span>
+                      <Slider
+                        min={80}
+                        max={300}
+                        value={this.state[this.state.active].zoomSlider}
+                        onChange={this.handleSliderChange}
+                      />
+                    </div>
+                  )}
+                </Col>
+              </Row>
             </div>
-            <Button
-              color="success"
-              disabled={
-                this.props.loading ||
-                this.state[this.state.active].files.length === 0
-              }
-              onClick={this.onImageSave}
-            >
-              Upload
-            </Button>
+            <Row className="mt-2">
+              <Col>
+                <Button
+                  color="primary"
+                  disabled={
+                    this.props.loading ||
+                    this.state[this.state.active].files.length === 0
+                  }
+                  onClick={this.onImageSave}
+                >
+                  <i className="fa fa-check" /> Done
+                </Button>
+              </Col>
+            </Row>
           </Col>
         </Row>
       </div>

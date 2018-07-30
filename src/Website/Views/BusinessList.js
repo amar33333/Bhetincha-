@@ -466,7 +466,12 @@ class BusinessList extends Component {
 
   render() {
     const loader = (
-      <div className="loader">
+      <div
+        className="loader"
+        style={{
+          marginBottom: "30px"
+        }}
+      >
         <Loader active inline="centered">
           Loading
         </Loader>

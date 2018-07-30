@@ -8,16 +8,18 @@ class BottomFooter extends Component {
   render() {
     return (
       <div
-        className={`footer-${this.props.theme} ${this.props.extraClass} p-3`}
+        className={`bottom-footer footer-${this.props.theme} ${
+          this.props.extraClass
+        } p-3`}
       >
-        <Container className="bottom-footer pt-1">
+        <Container className="pt-1">
           <Row>
             <Col xs="12">
               <ul
                 style={{
                   paddingLeft: "0px"
                 }}
-                className="text-center"
+                className="text-center mb-0"
               >
                 <li className="bottom-footer__nav__item">
                   <Link to="/ecommerce">Shop</Link>

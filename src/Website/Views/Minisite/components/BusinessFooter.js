@@ -5,10 +5,7 @@ import { Container, Row, Col } from "reactstrap";
 class BusinessFooter extends Component {
   render() {
     return (
-      <div
-        id="contact-us"
-        className={`footer footer-${this.props.theme} pt-3 `}
-      >
+      <div className={`business-footer footer-${this.props.theme} pt-3 `}>
         <Container>
           <Row>
             <Col xs="12" md="3">
@@ -41,7 +38,16 @@ class BusinessFooter extends Component {
                   }}
                 >
                   <div className="toll-free">
-                    <h4 className="mb-0">Call us Now!</h4>
+                    {(this.props.address &&
+                      this.props.address.tollFreeNumber) ||
+                      (this.props.address && this.props.landLineNumber) ||
+                      (this.props.address &&
+                        this.props.address.contactPerson[0] &&
+                        this.props.address.contactPerson[0].visibleToPublic &&
+                        this.props.address.contactPerson[0].mobileNumber && (
+                          <h4 className="mb-0">Call us Now!</h4>
+                        ))}
+
                     <h1 className="mt-0">
                       <a
                         href={`tel:${(this.props.address &&

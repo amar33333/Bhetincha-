@@ -261,11 +261,13 @@ class Contact extends Component {
   render() {
     return (
       <div
+        className="minisite_content__wrapper"
         style={{
           paddingTop: "60px"
         }}
       >
         <MapComponent
+          enableMarker={true}
           ref={ref => (this.mapEl = ref)}
           position={this.state.position}
           source={this.state.source}

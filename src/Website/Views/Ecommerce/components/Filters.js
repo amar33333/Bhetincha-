@@ -9,22 +9,24 @@ class Filters extends Component {
         {this.props.filters.map((data, i) => {
           if (data.name === "discount") {
             return (
-              <FilterRange
-                withTitle
-                unitLeft={false}
-                key={i}
-                value={{ min: 0, max: 100 }}
-                name="Discount Percentage"
-                onChangeComplete={({ min, max }) =>
-                  this.props.handleFilterChange({
-                    lte: max,
-                    gte: min,
-                    fieldType: data.fieldType,
-                    name: data.name
-                  })
-                }
-                unit="%"
-              />
+              <div className="filter-each__wrapper">
+                <FilterRange
+                  withTitle
+                  unitLeft={false}
+                  key={i}
+                  value={{ min: 0, max: 100 }}
+                  name="Discount Percentage"
+                  onChangeComplete={({ min, max }) =>
+                    this.props.handleFilterChange({
+                      lte: max,
+                      gte: min,
+                      fieldType: data.fieldType,
+                      name: data.name
+                    })
+                  }
+                  unit="%"
+                />
+              </div>
             );
           } else if (data.name === "price") {
             return null;
@@ -33,26 +35,30 @@ class Filters extends Component {
             ["Choices", "MultipleChoices"].includes(data.fieldType)
           ) {
             return (
-              <FilterChoice
-                key={i}
-                unitLeft={
-                  data.unit && data.unit.length
-                    ? data.unit[0].indexOf("--") !== -1
-                    : false
-                }
-                options={data.options}
-                name={data.name.split("_").join(" ")}
-                onChange={checked => {
-                  this.props.handleFilterChange({
-                    data: checked,
-                    fieldType: data.fieldType,
-                    name: `${data.name}${
-                      data.unit && data.unit.length ? `--${data.unit[0]}` : ""
-                    }`
-                  });
-                }}
-                unit={data.unit && data.unit.length ? data.unit[0] : undefined}
-              />
+              <div className="filter-each__wrapper">
+                <FilterChoice
+                  key={i}
+                  unitLeft={
+                    data.unit && data.unit.length
+                      ? data.unit[0].indexOf("--") !== -1
+                      : false
+                  }
+                  options={data.options}
+                  name={data.name.split("_").join(" ")}
+                  onChange={checked => {
+                    this.props.handleFilterChange({
+                      data: checked,
+                      fieldType: data.fieldType,
+                      name: `${data.name}${
+                        data.unit && data.unit.length ? `--${data.unit[0]}` : ""
+                      }`
+                    });
+                  }}
+                  unit={
+                    data.unit && data.unit.length ? data.unit[0] : undefined
+                  }
+                />
+              </div>
             );
           } else if (
             data.fieldType &&
@@ -63,31 +69,35 @@ class Filters extends Component {
             ].includes(data.fieldType)
           ) {
             return (
-              <FilterRange
-                withTitle
-                key={i}
-                unitLeft={
-                  data.unit && data.unit.length
-                    ? data.unit[0].indexOf("--") !== -1
-                    : false
-                }
-                value={{ min: data.min, max: data.max }}
-                name={data.name
-                  .split("--")[0]
-                  .split("_")
-                  .join(" ")}
-                onChangeComplete={({ min, max }) =>
-                  this.props.handleFilterChange({
-                    lte: max,
-                    gte: min,
-                    fieldType: data.fieldType,
-                    name: `${data.name}${
-                      data.unit && data.unit.length ? `--${data.unit[0]}` : ""
-                    }`
-                  })
-                }
-                unit={data.unit && data.unit.length ? data.unit[0] : undefined}
-              />
+              <div className="filter-each__wrapper">
+                <FilterRange
+                  withTitle
+                  key={i}
+                  unitLeft={
+                    data.unit && data.unit.length
+                      ? data.unit[0].indexOf("--") !== -1
+                      : false
+                  }
+                  value={{ min: data.min, max: data.max }}
+                  name={data.name
+                    .split("--")[0]
+                    .split("_")
+                    .join(" ")}
+                  onChangeComplete={({ min, max }) =>
+                    this.props.handleFilterChange({
+                      lte: max,
+                      gte: min,
+                      fieldType: data.fieldType,
+                      name: `${data.name}${
+                        data.unit && data.unit.length ? `--${data.unit[0]}` : ""
+                      }`
+                    })
+                  }
+                  unit={
+                    data.unit && data.unit.length ? data.unit[0] : undefined
+                  }
+                />
+              </div>
             );
           }
           return null;
