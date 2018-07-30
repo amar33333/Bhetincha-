@@ -7,7 +7,8 @@ export const MAIN_URL = `${HOST}:${MONGO_PORT}`;
 export const ELASTIC_URL = `${HOST}:${MONGO_PORT}`;
 
 // const MAPS_API_KEY = "AIzaSyC5jpMbvHuSQVcVdUN_hYD-XWRxJT6az_g";
-const MAPS_API_KEY = "AIzaSyDhwdTQSE86U4GFQDhZZZvtgxKxtj78TOI";
+// const MAPS_API_KEY = "AIzaSyDhwdTQSE86U4GFQDhZZZvtgxKxtj78TOI";
+const MAPS_API_KEY = "AIzaSyCrFkQNEVe8APwyvTLa-0bSMvr3B-mzBFg";
 export const GOOGLE_MAPS_URL = `https://maps.googleapis.com/maps/api/js?key=${MAPS_API_KEY}`;
 
 const GET_USER_INFO = "api/accounts/getuserinfo/";

@@ -476,6 +476,7 @@ class BusinessList extends Component {
       <div
         className="mb-5"
         style={{
+          minHeight: "85vh",
           backgroundColor: "#f3f3f3"
         }}
       >
