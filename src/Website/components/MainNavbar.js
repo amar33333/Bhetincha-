@@ -13,6 +13,11 @@ import {
   onStoreUserGeoLocation
 } from "../actions";
 import querystring from "querystring";
+
+import { onEditMainClicked } from "../Views/Minisite/actions";
+
+import { USER_GROUP_BUSINESS } from "../../config/CONSTANTS";
+
 // import theme from "./theme-small.css";
 
 class MainNavbar extends Component {
@@ -81,7 +86,15 @@ class MainNavbar extends Component {
               {/* <div className="pull-right">{this.props.cookies && <Avatar />}</div> */}
               <NavItem className="ml-auto">
                 {this.props.cookies ? (
-                  <Avatar />
+                  <Avatar
+                    show={
+                      this.props.match.params.businessName ===
+                      this.props.cookies.user_data.slug
+                    }
+                    nonLink={USER_GROUP_BUSINESS}
+                    titleIndex={this.props.mainEdit}
+                    onClick={this.props.onEditMainClicked}
+                  />
                 ) : (
                   <LoginRegister history={this.props.history} />
                 )}
@@ -100,14 +113,22 @@ class MainNavbar extends Component {
 }
 
 export default connect(
-  ({ auth: { cookies }, search_result }) => ({
+  ({
+    auth: { cookies },
+    search_result,
+    MinisiteContainer: {
+      edit: { main: mainEdit }
+    }
+  }) => ({
     cookies,
-    search_result
+    search_result,
+    mainEdit
   }),
   {
     onSearchQuerySubmit,
     onSearchResultsList,
-    onStoreUserGeoLocation
+    onStoreUserGeoLocation,
+    onEditMainClicked
   }
 )(
   geolocated({

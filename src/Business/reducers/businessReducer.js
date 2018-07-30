@@ -32,6 +32,9 @@ import {
   EDIT_WORKING_HOUR_FULFILLED,
   EDIT_WORKING_HOUR_PENDING,
   EDIT_WORKING_HOUR_REJECTED,
+  FETCH_GALLERY_FULFILLED,
+  FETCH_GALLERY_PENDING,
+  FETCH_GALLERY_REJECTED,
   FETCH_BUSINESS_BRANCH_FULFILLED,
   FETCH_BUSINESS_BRANCH_PENDING,
   FETCH_BUSINESS_BRANCH_REJECTED,
@@ -79,6 +82,7 @@ const INITIAL_STATE = {
 
   company_types: [],
 
+  albums: [],
   fetchLoading: false,
   businessGet: false,
   primary_address_details: null,
@@ -344,6 +348,21 @@ export default function(state = INITIAL_STATE, action) {
 
     case EDIT_WORKING_HOUR_REJECTED:
       return { ...state, loading: false, businessGet: true };
+
+    case FETCH_GALLERY_PENDING:
+      return { ...state, businessGet: true, fetchLoading: true };
+
+    case FETCH_GALLERY_FULFILLED:
+      console.log("working : ", action.payload);
+      return {
+        ...state,
+        businessGet: false,
+        albums: action.payload,
+        fetchLoading: false
+      };
+
+    case FETCH_GALLERY_REJECTED:
+      return { ...state, businessGet: false, fetchLoading: false };
 
     case FETCH_PRIMARY_ADDRESS_PENDING:
       return { ...state, businessGet: true, loading: true };

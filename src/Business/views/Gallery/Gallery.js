@@ -1,43 +1,37 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Row, Col, Button } from "reactstrap";
+import GalleryView from "./GalleryView";
+import GalleryList from "./GalleryList";
 
-import {
-  ToogleEDIT,
-  onAboutEdit,
-  onAboutList,
-  onCompanyTypeList
-} from "../../actions";
+import { onGalleryList } from "../../actions";
 
 class Gallery extends Component {
+  componentDidMount() {
+    this.props.onGalleryList();
+  }
+
   render() {
     return (
-      <div className="animated fadeIn">{/* Place your code here ... */}</div>
+      <div className="animated fadeIn">
+        Create new album
+        {!this.props.fetchLoading && this.props.match.params.albumID ? (
+          <GalleryView />
+        ) : (
+          <GalleryList />
+        )}
+      </div>
     );
   }
 }
 
-const mapStateToProps = ({
-  BusinessContainer: {
-    business_reducer: { businessGet, EDIT, company_types, about }
-  },
-  auth: { cookies }
-}) => {
-  return {
-    businessGet,
-    company_types,
-    about,
-    EDIT,
-    cookies
-  };
-};
-
 export default connect(
-  mapStateToProps,
+  ({
+    BusinessContainer: {
+      business_reducer: { albums, fetchLoading }
+    }
+  }) => ({ albums, fetchLoading }),
   {
-    ToogleEDIT,
-    onAboutEdit,
-    onAboutList,
-    onCompanyTypeList
+    onGalleryList
   }
 )(Gallery);

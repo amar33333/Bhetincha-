@@ -202,30 +202,30 @@ class GalleryView extends Component {
   };
 
   renderEachGallery = () => {
-    console.log("album::::::", this.state.album);
-
     return (
       <div>
         <div className="album-title">
           <p className="album-title">
             {this.state.album && this.state.album.name}
           </p>
-          {this.props.isEdit && (
-            <PopoverDelete
-              customStyle={{
-                position: "absolute",
-                top: "10px",
-                right: "10px"
-              }}
-              id={this.state.album.albumID}
-              onClick={() =>
-                this.props.handleAlbumDelete({
-                  album_id: this.state.album.albumID
-                })
-              }
-              subtitle="This will delete all the photos inside album"
-            />
-          )}
+          {this.props.isEdit &&
+            this.state.album &&
+            this.state.album.albumID && (
+              <PopoverDelete
+                customStyle={{
+                  position: "absolute",
+                  top: "10px",
+                  right: "10px"
+                }}
+                id={this.state.album.albumID}
+                onClick={() =>
+                  this.props.handleAlbumDelete({
+                    album_id: this.state.album.albumID
+                  })
+                }
+                subtitle="This will delete all the photos inside album"
+              />
+            )}
           <small className="mr-3">
             {this.state.album
               ? this.state.album.photos.length === 0
@@ -284,7 +284,7 @@ export default connect(
       edit
     }
   }) => ({
-    mainEdit: edit.main,
+    isEdit: edit.main,
     galleryLoading: edit.galleryLoading,
     albums
   }),

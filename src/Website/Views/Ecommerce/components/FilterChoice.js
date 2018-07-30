@@ -19,13 +19,13 @@ class FilterChoice extends Component {
 
   render() {
     return (
-      <div className="mb-3">
+      <div>
         <div className="filter-header-wrapper" onClick={this.togglecollapsed}>
-          <h4 className="filter-title mt-2">{this.props.name}</h4>
+          <h4 className="filter-title ">{this.props.name}</h4>
           {this.state.collapsed ? (
-            <i className="fa fa-plus mt-2 pt-3 collapse-icon" />
+            <i className="fa fa-plus collapse-icon" />
           ) : (
-            <i className="fa fa-minus mt-2 pt-3 collapse-icon" />
+            <i className="fa fa-minus collapse-icon" />
           )}
         </div>
         <Collapse isOpen={!this.state.collapsed}>

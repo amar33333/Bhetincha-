@@ -143,6 +143,9 @@ img.minisite__album-thumbnail {
   color: rgb(210, 235, 161);
 }
 .minisite_content__wrapper {
+  /* display: flex;
+  flex: 1; */
+  min-height: 100vh;
   padding: 20px;
   padding-top: 5rem;
   /* background-color: rgb(145, 68, 218); */
@@ -153,7 +156,7 @@ img.minisite__album-thumbnail {
 
 .gallery-wrapper {
   position: relative;
-  min-height: 80vh !important;
+  min-height: 100vh !important;
   padding: 80px 20px;
 }
 

@@ -118,7 +118,9 @@ class Avatar extends Component {
                         } profile-dropdown__item__icon`}
                       />
                       {avatarItem.title}
-                      {avatarItem.badge && <Badge color="warning">4</Badge>}
+                      {avatarItem.badge && (
+                        <Badge color="warning">{avatarItem.badge}</Badge>
+                      )}
                     </Link>
                   </Dropdown.Item>
                 );
@@ -127,14 +129,11 @@ class Avatar extends Component {
                 avatarItem.group === this.props.nonLink
               ) {
                 return (
-                  <div key={i}>
-                    <Dropdown.Divider />
+                  <Dropdown.Item key={i}>
                     <div
                       onClick={() => {
-                        this.profileDropdowntoggle();
                         this.props.onClick();
                       }}
-                      className="profile-dropdown__item"
                     >
                       <i
                         className={`${
@@ -142,9 +141,11 @@ class Avatar extends Component {
                         } profile-dropdown__item__icon`}
                       />
                       {avatarItem.title[Number(this.props.titleIndex)]}
-                      {avatarItem.badge && <Badge color="warning">4</Badge>}
+                      {avatarItem.badge && (
+                        <Badge color="warning">{avatarItem.badge}</Badge>
+                      )}
                     </div>
-                  </div>
+                  </Dropdown.Item>
                 );
               }
               return null;

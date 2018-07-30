@@ -81,6 +81,11 @@ class BusinessRoute extends Component {
           component={BusinessPrimaryAddress}
         />{" "}
         <Route
+          path={`/:${ROUTE_PARAMS_BUSINESS_NAME}/dashboard/gallery/:albumID`}
+          name="Gallery"
+          component={Gallery}
+        />{" "}
+        <Route
           path={`/:${ROUTE_PARAMS_BUSINESS_NAME}/dashboard/gallery`}
           name="Gallery"
           component={Gallery}

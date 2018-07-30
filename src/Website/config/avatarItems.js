@@ -24,10 +24,18 @@ export default [
   },
   {
     className: "fa fa-dashboard",
+    title: "Dashboard",
+    id: "userDashboard",
+    badge: false,
+    link: `/${ROUTE_PARAMS_INDIVIDUAL_NAME}/userdashboard`,
+    group: USER_GROUP_INDIVIDUAL
+  },
+  {
+    className: "fa fa-dashboard",
     title: "Profile",
     id: "profile",
     badge: false,
-    link: `/${ROUTE_PARAMS_INDIVIDUAL_NAME}/userdashboard`,
+    link: "/",
     group: USER_GROUP_INDIVIDUAL
   },
   {
