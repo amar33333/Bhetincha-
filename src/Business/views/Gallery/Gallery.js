@@ -5,7 +5,7 @@ import GalleryView from "./GalleryView";
 import GalleryList from "./GalleryList";
 
 import { ROUTE_PARAMS_BUSINESS_NAME } from "../../../config/CONSTANTS";
-import { onGalleryList } from "../../actions";
+import { onGalleryList, onGalleryEdit } from "../../actions";
 
 class Gallery extends Component {
   state = { newAlbumName: "" };
@@ -15,7 +15,7 @@ class Gallery extends Component {
   }
 
   handleCreateAlbum = name =>
-    this.props.onBusinessUpdate({
+    this.props.onGalleryEdit({
       body: { albums: { name } }
     });
 
@@ -72,6 +72,7 @@ export default connect(
     }
   }) => ({ albums, fetchLoading }),
   {
-    onGalleryList
+    onGalleryList,
+    onGalleryEdit
   }
 )(Gallery);

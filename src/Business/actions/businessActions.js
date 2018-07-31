@@ -24,7 +24,11 @@ import {
   onBusinessLogoCoverImagePut,
   onSlugPut,
   onSlugCheckPost,
-  onGalleryGet
+  onGalleryGet,
+  onGalleryPut,
+  onBusinessEachAlbumEachPhotosAjax,
+  onBusinessEachAlbumDeleteAjax,
+  onBusinessEachAlbumEachPhotosDelete
 } from "../config/businessServerCall";
 
 import {
@@ -129,7 +133,22 @@ import {
   CHECK_SLUG_PENDING,
   CHECK_SLUG_REJECTED,
   UNMOUNT_BRANCH,
-  TOGGLE_EDIT
+  TOGGLE_EDIT,
+  EDIT_GALLERY_FULFILLED,
+  EDIT_GALLERY_PENDING,
+  EDIT_GALLERY_REJECTED,
+  UPDATE_LOGO_COVER_PHOTO_PENDING,
+  UPDATE_LOGO_COVER_PHOTO_FULFILLED,
+  UPDATE_LOGO_COVER_PHOTO_REJECTED,
+  UPLOAD_GALLERY_PHOTO_FULFILLED,
+  UPLOAD_GALLERY_PHOTO_PENDING,
+  UPLOAD_GALLERY_PHOTO_REJECTED,
+  DELETE_GALLERY_PHOTO_FULFILLED,
+  DELETE_GALLERY_PHOTO_PENDING,
+  DELETE_GALLERY_PHOTO_REJECTED,
+  DELETE_GALLERY_ALBUM_FULFILLED,
+  DELETE_GALLERY_ALBUM_PENDING,
+  DELETE_GALLERY_ALBUM_REJECTED
 } from "./types";
 
 import {
@@ -719,6 +738,135 @@ epics.push((action$, { getState }) =>
         });
       });
   })
+);
+
+export const onGalleryEdit = payload => ({
+  type: EDIT_GALLERY_PENDING,
+  payload
+});
+
+epics.push((action$, { getState }) =>
+  action$.ofType(EDIT_GALLERY_PENDING).mergeMap(({ payload }) => {
+    const access_token = getState().auth.cookies.token_data.access_token;
+    const id = getState().auth.cookies.user_data.business_id;
+
+    const { body } = payload;
+
+    return onGalleryPut({ id, body, access_token })
+      .concatMap(({ response }) => {
+        if (response.msg === "success") {
+          toast.success("Album added Successfully!");
+          return [
+            {
+              type: EDIT_GALLERY_FULFILLED,
+              payload: response
+            },
+            {
+              type: FETCH_GALLERY_PENDING
+            }
+          ];
+        } else throw new Error(response.msg);
+      })
+      .catch(ajaxError => {
+        toast.error(ajaxError.toString());
+        return Observable.of({
+          type: EDIT_GALLERY_REJECTED,
+          payload: ajaxError
+        });
+      });
+  })
+);
+
+export const handleGalleryPhotoUpload = payload => ({
+  type: UPLOAD_GALLERY_PHOTO_PENDING,
+  payload
+});
+
+epics.push((action$, { getState }) =>
+  action$.ofType(UPLOAD_GALLERY_PHOTO_PENDING).mergeMap(({ payload }) =>
+    onBusinessEachAlbumEachPhotosAjax({
+      body: payload.body,
+      album_id: payload.album_id,
+      access_token: getState().auth.cookies.token_data.access_token,
+      business_id: getState().auth.cookies.user_data.business_id
+    })
+      .map(({ response }) => {
+        if (response.msg === "success") {
+          return [
+            { type: FETCH_GALLERY_PENDING },
+            { type: UPLOAD_GALLERY_PHOTO_FULFILLED }
+          ];
+        } else throw new Error(response.msg);
+      })
+      .catch(ajaxError => {
+        toast.error(ajaxError.toString());
+        return Observable.of({
+          type: UPLOAD_GALLERY_PHOTO_REJECTED,
+          payload: ajaxError
+        });
+      })
+  )
+);
+
+export const handleGalleryAlbumDelete = payload => ({
+  type: DELETE_GALLERY_ALBUM_PENDING,
+  payload
+});
+
+epics.push((action$, { getState }) =>
+  action$.ofType(DELETE_GALLERY_ALBUM_PENDING).mergeMap(({ payload }) =>
+    onBusinessEachAlbumDeleteAjax({
+      album_id: payload.album_id,
+      access_token: getState().auth.cookies.token_data.access_token,
+      business_id: getState().auth.cookies.user_data.business_id
+    })
+      .map(({ response }) => {
+        if (response.msg === "success") {
+          return [
+            { type: FETCH_GALLERY_PENDING },
+            { type: DELETE_GALLERY_ALBUM_FULFILLED }
+          ];
+        } else throw new Error(response.msg);
+      })
+      .catch(ajaxError => {
+        toast.error(ajaxError.toString());
+        return Observable.of({
+          type: DELETE_GALLERY_ALBUM_REJECTED,
+          payload: ajaxError
+        });
+      })
+  )
+);
+
+export const handleGalleryPhotoDelete = payload => ({
+  type: DELETE_GALLERY_PHOTO_PENDING,
+  payload
+});
+
+epics.push((action$, { getState }) =>
+  action$.ofType(DELETE_GALLERY_PHOTO_PENDING).mergeMap(({ payload }) =>
+    onBusinessEachAlbumEachPhotosDelete({
+      body: payload.body,
+      album_id: payload.album_id,
+      access_token: getState().auth.cookies.token_data.access_token,
+      business_id: getState().auth.cookies.user_data.business_id
+    })
+      .map(({ response }) => {
+        if (response.msg === "success") {
+          return [
+            { type: FETCH_GALLERY_PENDING },
+            { type: DELETE_GALLERY_PHOTO_FULFILLED }
+          ];
+        } else throw new Error(response.msg);
+      })
+      .catch(ajaxError => {
+        toast.error(ajaxError.toString());
+        return Observable.of({
+          type: DELETE_GALLERY_PHOTO_REJECTED,
+          payload: ajaxError
+        });
+      })
+  )
 );
 
 export const onAboutList = payload => ({

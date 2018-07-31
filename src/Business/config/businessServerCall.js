@@ -124,7 +124,7 @@ export const onGalleryGet = ({ access_token, id }) =>
 export const onGalleryPut = ({ access_token, body, id }) =>
   ajax({
     method: "PUT",
-    url: `${BUSINESS_PUT_URL}${id}/`,
+    url: `${BUSINESS_URL}${id}/`,
     body,
     headers: {
       "Content-Type": "application/json",
