@@ -88,14 +88,16 @@ class MainNavbar extends Component {
                 {this.props.cookies ? (
                   <Avatar
                     {...(this.props.MinisiteContainer &&
-                    this.props.MinisiteContainer.main &&
-                    this.props.MinisiteContainer.main.edit !== undefined
+                    this.props.MinisiteContainer.edit &&
+                    this.props.MinisiteContainer.edit.main !== undefined &&
+                    this.props.match &&
+                    this.props.match.params
                       ? {
                           show:
                             this.props.match.params.businessName ===
                             this.props.cookies.user_data.slug,
                           nonLink: USER_GROUP_BUSINESS,
-                          titleIndex: this.props.MinisiteContainer.main.edit,
+                          titleIndex: this.props.MinisiteContainer.edit.main,
                           onClick: this.props.onEditMainClicked
                         }
                       : {})}
