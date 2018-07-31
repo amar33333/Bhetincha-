@@ -87,13 +87,18 @@ class MainNavbar extends Component {
               <NavItem className="ml-auto">
                 {this.props.cookies ? (
                   <Avatar
-                    show={
-                      this.props.match.params.businessName ===
-                      this.props.cookies.user_data.slug
-                    }
-                    nonLink={USER_GROUP_BUSINESS}
-                    titleIndex={this.props.mainEdit}
-                    onClick={this.props.onEditMainClicked}
+                    {...(this.props.MinisiteContainer &&
+                    this.props.MinisiteContainer.main &&
+                    this.props.MinisiteContainer.main.edit !== undefined
+                      ? {
+                          show:
+                            this.props.match.params.businessName ===
+                            this.props.cookies.user_data.slug,
+                          nonLink: USER_GROUP_BUSINESS,
+                          titleIndex: this.props.MinisiteContainer.main.edit,
+                          onClick: this.props.onEditMainClicked
+                        }
+                      : {})}
                   />
                 ) : (
                   <LoginRegister history={this.props.history} />
@@ -113,16 +118,10 @@ class MainNavbar extends Component {
 }
 
 export default connect(
-  ({
-    auth: { cookies },
-    search_result,
-    MinisiteContainer: {
-      edit: { main: mainEdit }
-    }
-  }) => ({
+  ({ auth: { cookies }, search_result, MinisiteContainer }) => ({
     cookies,
     search_result,
-    mainEdit
+    MinisiteContainer
   }),
   {
     onSearchQuerySubmit,
