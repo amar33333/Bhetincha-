@@ -790,7 +790,7 @@ epics.push((action$, { getState }) =>
       access_token: getState().auth.cookies.token_data.access_token,
       business_id: getState().auth.cookies.user_data.business_id
     })
-      .map(({ response }) => {
+      .concatMap(({ response }) => {
         if (response.msg === "success") {
           return [
             { type: FETCH_GALLERY_PENDING },
@@ -820,8 +820,9 @@ epics.push((action$, { getState }) =>
       access_token: getState().auth.cookies.token_data.access_token,
       business_id: getState().auth.cookies.user_data.business_id
     })
-      .map(({ response }) => {
+      .concatMap(({ response }) => {
         if (response.msg === "success") {
+          payload.history.replace(payload.url);
           return [
             { type: FETCH_GALLERY_PENDING },
             { type: DELETE_GALLERY_ALBUM_FULFILLED }
@@ -851,7 +852,7 @@ epics.push((action$, { getState }) =>
       access_token: getState().auth.cookies.token_data.access_token,
       business_id: getState().auth.cookies.user_data.business_id
     })
-      .map(({ response }) => {
+      .concatMap(({ response }) => {
         if (response.msg === "success") {
           return [
             { type: FETCH_GALLERY_PENDING },

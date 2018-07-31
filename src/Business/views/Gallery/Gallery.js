@@ -5,7 +5,13 @@ import GalleryView from "./GalleryView";
 import GalleryList from "./GalleryList";
 
 import { ROUTE_PARAMS_BUSINESS_NAME } from "../../../config/CONSTANTS";
-import { onGalleryList, onGalleryEdit } from "../../actions";
+import {
+  onGalleryList,
+  onGalleryEdit,
+  handleGalleryPhotoUpload,
+  handleGalleryPhotoDelete,
+  handleGalleryAlbumDelete
+} from "../../actions";
 
 class Gallery extends Component {
   state = { newAlbumName: "" };
@@ -51,7 +57,23 @@ class Gallery extends Component {
           </Container>
         </div>
         {!this.props.fetchLoading && this.props.match.params.albumID ? (
-          <GalleryView />
+          this.props.albums.find(
+            album => album.albumID === Number(this.props.match.params.albumID)
+          ) ? (
+            <GalleryView
+              album={this.props.albums.find(
+                album =>
+                  album.albumID === Number(this.props.match.params.albumID)
+              )}
+              match={this.props.match}
+              history={this.props.history}
+              handleGalleryPhotoUpload={this.props.handleGalleryPhotoUpload}
+              handleGalleryPhotoDelete={this.props.handleGalleryPhotoDelete}
+              handleGalleryAlbumDelete={this.props.handleGalleryAlbumDelete}
+            />
+          ) : (
+            <div>Not Found</div>
+          )
         ) : (
           <GalleryList
             albums={this.props.albums}
@@ -73,6 +95,9 @@ export default connect(
   }) => ({ albums, fetchLoading }),
   {
     onGalleryList,
-    onGalleryEdit
+    onGalleryEdit,
+    handleGalleryPhotoUpload,
+    handleGalleryPhotoDelete,
+    handleGalleryAlbumDelete
   }
 )(Gallery);

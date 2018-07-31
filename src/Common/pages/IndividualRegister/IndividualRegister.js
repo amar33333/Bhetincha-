@@ -15,7 +15,7 @@ import {
   FormGroup,
   Label
 } from "reactstrap";
-
+import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 
 import { toast } from "react-toastify";
@@ -157,15 +157,15 @@ class IndividualRegister extends Component {
           }}
         >
           <Container>
-            <a
-              href="/"
+            <Link
+              to="/"
               style={{
                 color: "inherit"
               }}
             >
               <i className="fa fa-angle-left" />
               <span className="ml-2"> Back to home </span>
-            </a>
+            </Link>
           </Container>
         </div>
         <div className="app flex-row align-items-center">

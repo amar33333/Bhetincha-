@@ -10,6 +10,7 @@ import {
   Row,
   Form
 } from "reactstrap";
+import { Link } from "react-router-dom";
 
 import { connect } from "react-redux";
 import { validatePhone, ErrorHandling } from "../../utils/Extras";
@@ -90,15 +91,15 @@ class Register extends Component {
           }}
         >
           <Container>
-            <a
-              href="/"
+            <Link
+              to="/"
               style={{
                 color: "inherit"
               }}
             >
               <i className="fa fa-angle-left" />
               <span className="ml-2"> Back to home </span>
-            </a>
+            </Link>
           </Container>
         </div>
         <div className="app flex-row align-items-center">

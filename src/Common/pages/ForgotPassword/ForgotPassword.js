@@ -5,7 +5,7 @@ import { Button, Col, Row, Input, Form, Container } from "reactstrap";
 import { connect } from "react-redux";
 import { onForgotPasswordSubmit } from "../../../actions";
 import background from "../../../static/img/forget.jpeg";
-
+import { Link } from "react-router-dom";
 class ForgotPassword extends Component {
   state = { username_mobile: "" };
 
@@ -49,15 +49,15 @@ class ForgotPassword extends Component {
           }}
         >
           <Container>
-            <a
-              href="/"
+            <Link
+              to="/"
               style={{
                 color: "inherit"
               }}
             >
               <i className="fa fa-angle-left" />
               <span className="ml-2"> Back to home </span>
-            </a>
+            </Link>
           </Container>
         </div>
         <div className="app flex-row align-items-center">

@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import LaddaButton, { S, EXPAND_RIGHT } from "react-ladda";
 import { toast } from "react-toastify";
 import { Alert } from "reactstrap";
-
+import { Link } from "react-router-dom";
 import {
   Button,
   Col,
@@ -167,15 +167,15 @@ class MobileVerification extends Component {
           }}
         >
           <Container>
-            <a
-              href="/"
+            <Link
+              to="/"
               style={{
                 color: "inherit"
               }}
             >
               <i className="fa fa-angle-left" />
               <span className="ml-2"> Back to home </span>
-            </a>
+            </Link>
           </Container>
         </div>
         <div className="app flex-row align-items-center">
