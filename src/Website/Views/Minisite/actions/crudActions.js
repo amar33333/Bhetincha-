@@ -179,21 +179,21 @@ epics.push((action$, { getState }) =>
       album_id: payload.album_id,
       access_token: getState().auth.cookies.token_data.access_token,
       business_id: getState().MinisiteContainer.crud.id
-    }).map(
-      ({ response }) =>
-        response.msg === "success"
-          ? {
-              type: FETCH_PART_BUSINESS,
-              updates: ["albums"],
-              onSuccess: payload => [
-                { type: DELETE_GALLERY_ALBUM_FULFILLED, payload }
-              ],
-              successToasts: ["Album Deleted Successfully"],
-              FAILED: DELETE_GALLERY_ALBUM_REJECTED,
-              slug: getState().auth.cookies.user_data.slug
-            }
-          : { type: DELETE_GALLERY_ALBUM_REJECTED }
-    )
+    }).map(({ response }) => {
+      if (response.msg === "success") {
+        payload.history.push(payload.url);
+        return {
+          type: FETCH_PART_BUSINESS,
+          updates: ["albums"],
+          onSuccess: payload => [
+            { type: DELETE_GALLERY_ALBUM_FULFILLED, payload }
+          ],
+          successToasts: ["Album Deleted Successfully"],
+          FAILED: DELETE_GALLERY_ALBUM_REJECTED,
+          slug: getState().auth.cookies.user_data.slug
+        };
+      } else return { type: DELETE_GALLERY_ALBUM_REJECTED };
+    })
   )
 );
 
