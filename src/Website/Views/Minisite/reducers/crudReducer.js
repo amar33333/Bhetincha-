@@ -45,7 +45,8 @@ const INITIAL_STATE = {
     landLineNumber: "",
     latitude: "",
     longitude: ""
-  }
+  },
+  links: []
 
   // nav_layout: [
   //   {

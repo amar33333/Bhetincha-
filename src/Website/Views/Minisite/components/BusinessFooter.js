@@ -34,6 +34,7 @@ class BusinessFooter extends Component {
               {this.props.business_email && (
                 <span className="fa fa-envelope">
                   <a href={`mailto:${this.props.business_email}`}>
+                    {" "}
                     {this.props.business_email}
                   </a>
                 </span>
@@ -89,25 +90,30 @@ class BusinessFooter extends Component {
               )}
             </Col>
 
-            <Col xs="12" md={{ size: 3 }}>
-              <Row className="mb-1">
-                <h3>Follow us on:</h3>
-              </Row>
-              <Row>
-                <span className="fa-stack fa-lg footer_social__icon">
-                  <i className="fa fa-circle-thin fa-stack-2x" />
-                  <i className="fa fa-facebook fa-stack-1x" />
-                </span>
-                <span className="fa-stack fa-lg footer_social__icon">
-                  <i className="fa fa-circle-thin fa-stack-2x" />
-                  <i className="fa fa-twitter fa-stack-1x" />
-                </span>
-                <span className="fa-stack fa-lg footer_social__icon">
-                  <i className="fa fa-circle-thin fa-stack-2x" />
-                  <i className="fa fa-google-plus fa-stack-1x" />
-                </span>
-              </Row>
-            </Col>
+            {this.props.links &&
+              this.props.links.length !== 0 && (
+                <Col xs="12" md={{ size: 3 }}>
+                  <Row className="mb-1">
+                    <h3>Follow us on:</h3>
+                  </Row>
+                  <Row>
+                    {this.props.links.map(link => {
+                      return (
+                        <a href={link.link} target="_blank">
+                          <span className="fa-stack fa-lg footer_social__icon">
+                            <i className="fa fa-circle-thin fa-stack-2x" />
+                            <i
+                              className={`${
+                                link.social_nw.className
+                              } fa-stack-1x`}
+                            />
+                          </span>
+                        </a>
+                      );
+                    })}
+                  </Row>
+                </Col>
+              )}
           </Row>
         </Container>
       </div>
@@ -118,13 +124,21 @@ class BusinessFooter extends Component {
 export default connect(
   ({
     MinisiteContainer: {
-      crud: { logo, business_name, business_email, business_phone, address }
+      crud: {
+        logo,
+        business_name,
+        business_email,
+        business_phone,
+        address,
+        links
+      }
     }
   }) => ({
     logo,
     business_name,
     business_email,
     business_phone,
-    address
+    address,
+    links
   })
 )(BusinessFooter);

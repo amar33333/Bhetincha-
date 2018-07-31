@@ -11,8 +11,10 @@ import { MAIN_URL } from "../../config/MINISITE_API";
 
 import {
   handleGalleryPhotoUpload,
-  handleGalleryPhotoDelete
+  handleGalleryPhotoDelete,
+  handleGalleryAlbumDelete
 } from "../../actions";
+import { ROUTE_PARAMS_BUSINESS_NAME } from "../../../../../config/CONSTANTS";
 
 class GalleryView extends Component {
   constructor(props) {
@@ -37,20 +39,28 @@ class GalleryView extends Component {
       this.props.albums &&
       this.props.albums.find(album => album.albumID === this.state.albumKoId);
 
-    var newThisAlbum = {
-      ...Thisalbum,
-      photos: Thisalbum.photos.map(photo => ({
-        src: `${MAIN_URL}${photo.photoURL}`,
-        thumbnail: `${MAIN_URL}${photo.photoURL}`,
-        thumbnailWidth: 320,
-        thumbnailHeight: 174,
-        caption: photo.name,
-        showLightboxThumbnails: true,
-        photoID: photo.photoID,
-        isSelected: false
-      }))
-    };
-    return newThisAlbum;
+    if (
+      this.props.albums &&
+      !this.props.albums.find(album => album.albumID === this.state.albumKoId)
+    ) {
+      this.props.history.replace("/404");
+      return null;
+    } else {
+      var newThisAlbum = {
+        ...Thisalbum,
+        photos: Thisalbum.photos.map(photo => ({
+          src: `${MAIN_URL}${photo.photoURL}`,
+          thumbnail: `${MAIN_URL}${photo.photoURL}`,
+          thumbnailWidth: 320,
+          thumbnailHeight: 174,
+          caption: photo.name,
+          showLightboxThumbnails: true,
+          photoID: photo.photoID,
+          isSelected: false
+        }))
+      };
+      return newThisAlbum;
+    }
   };
 
   componentDidMount = () => {
@@ -214,13 +224,17 @@ class GalleryView extends Component {
               <PopoverDelete
                 customStyle={{
                   position: "absolute",
-                  top: "10px",
+                  top: "80px",
                   right: "10px"
                 }}
                 id={this.state.album.albumID}
                 onClick={() =>
-                  this.props.handleAlbumDelete({
-                    album_id: this.state.album.albumID
+                  this.props.handleGalleryAlbumDelete({
+                    album_id: this.state.album.albumID,
+                    history: this.props.history,
+                    url: `/${
+                      this.props.match.params[ROUTE_PARAMS_BUSINESS_NAME]
+                    }/gallery`
                   })
                 }
                 subtitle="This will delete all the photos inside album"
@@ -268,7 +282,7 @@ class GalleryView extends Component {
         <Container>
           {this.renderEachGallery()}
           {this.state.album &&
-            this.props.mainEdit &&
+            this.props.isEdit &&
             this.renderGalleryUpload(this.state.album.albumID)}
         </Container>
         {/* {this.renderGalleryUpload()} */}
@@ -288,5 +302,9 @@ export default connect(
     galleryLoading: edit.galleryLoading,
     albums
   }),
-  { handleGalleryPhotoUpload, handleGalleryPhotoDelete }
+  {
+    handleGalleryPhotoUpload,
+    handleGalleryPhotoDelete,
+    handleGalleryAlbumDelete
+  }
 )(GalleryView);
