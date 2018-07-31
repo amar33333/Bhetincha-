@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { toast } from "react-toastify";
-import LaddaButton from "react-ladda";
+import LaddaButton, { S, EXPAND_RIGHT } from "react-ladda";
 
 import { Row, Col, Card, CardHeader, CardBody, Button } from "reactstrap";
 
@@ -296,12 +296,13 @@ class BusinessEdit extends Component {
                   <PermissionProvider permission="CAN_EDIT_BUSINESS">
                     <LaddaButton
                       loading={this.props.businessGet}
+                      data-size={S}
+                      data-style={EXPAND_RIGHT}
                       color="primary"
-                      size="lg"
                       style={{ marginRight: 20 }}
                       onClick={this.onEditFormSubmit}
                     >
-                      SAVE
+                      Save
                     </LaddaButton>
                   </PermissionProvider>
 
@@ -319,7 +320,7 @@ class BusinessEdit extends Component {
                         });
                       }}
                     >
-                      VERIFY
+                      Verify
                     </Button>
                   </PermissionProvider>
                 </Col>
