@@ -214,7 +214,7 @@ class GalleryView extends Component {
               <PopoverDelete
                 customStyle={{
                   position: "absolute",
-                  top: "10px",
+                  top: "80px",
                   right: "10px"
                 }}
                 id={this.state.album.albumID}

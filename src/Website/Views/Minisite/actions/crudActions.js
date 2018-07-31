@@ -271,6 +271,7 @@ epics.push(action$ =>
         payload.alwaysOpen = response.alwaysOpen;
         payload.industry = response.industry;
         payload.categories = response.categories;
+        payload.links = response.links;
 
         if (response.about) payload.about = response.about;
         if (response.nav_layout) payload.nav_layout = response.nav_layout;
