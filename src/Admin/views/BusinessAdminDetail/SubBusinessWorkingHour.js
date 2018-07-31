@@ -61,14 +61,13 @@ class subBusinessWorkingHour extends Component {
           day: "Saturday",
           start: undefined,
           end: undefined,
-          holiday: true
+          holiday: false
         }
       ]
     };
   }
 
   static getDerivedStateFromProps = (nextProps, prevState) => {
-    console.log("prevstate:::::::::::", prevState);
     if (!nextProps.businessGet && nextProps.workingHour && nextProps.EDIT) {
       nextProps.onInitialPropsReceived();
 

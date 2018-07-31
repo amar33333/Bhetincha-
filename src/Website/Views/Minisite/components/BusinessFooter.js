@@ -14,15 +14,30 @@ class BusinessFooter extends Component {
                 <p className="m-0">
                   <strong>{this.props.business_name}</strong>
                 </p>
-                <p>{this.props.address && this.props.address.addressLine1}</p>
+                <p>
+                  <span>
+                    {this.props.address &&
+                      `${this.props.address.addressLine1}, `}
+                  </span>
+                  <span>
+                    {this.props.address &&
+                      this.props.address.area &&
+                      `${this.props.address.area.name}, `}
+                  </span>
+                  <span>
+                    {this.props.address &&
+                      this.props.address.city &&
+                      this.props.address.city.name}
+                  </span>
+                </p>
               </div>
-              <p>{""}</p>
-              <span className="fa fa-envelope">
-                <a href={`mailto:${this.props.business_email}`}>
-                  {" "}
-                  {this.props.business_email}{" "}
-                </a>
-              </span>
+              {this.props.business_email && (
+                <span className="fa fa-envelope">
+                  <a href={`mailto:${this.props.business_email}`}>
+                    {this.props.business_email}
+                  </a>
+                </span>
+              )}
             </Col>
 
             <Col xs="12" md={{ size: 6 }}>
