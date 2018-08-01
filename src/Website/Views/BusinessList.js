@@ -61,9 +61,9 @@ class BusinessList extends Component {
     );
     // console.log("propop: ", this.props, parsedUrlStringObject);
 
-    if (!this.props.location.search) this.props.history.push("/404");
+    if (!this.props.location.search) this.props.history.replace("/404");
     else {
-      if (!parsedUrlStringObject["query"]) this.props.history.push("/404");
+      if (!parsedUrlStringObject["query"]) this.props.history.replace("/404");
     }
 
     window.addEventListener("scroll", this.onScroll, false);
