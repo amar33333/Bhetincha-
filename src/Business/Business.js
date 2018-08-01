@@ -176,7 +176,7 @@ class Business extends Component {
         );
       }
       if (item.children) {
-        item.children = item.children.map(child => {
+        temp.children = item.children.map(child => {
           const childTemp = {};
           if (child.name) {
             childTemp.name = child.name.replace(

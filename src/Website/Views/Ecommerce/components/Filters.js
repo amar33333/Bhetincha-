@@ -9,11 +9,10 @@ class Filters extends Component {
         {this.props.filters.map((data, i) => {
           if (data.name === "discount") {
             return (
-              <div className="filter-each__wrapper">
+              <div className="filter-each__wrapper" key={i}>
                 <FilterRange
                   withTitle
                   unitLeft={false}
-                  key={i}
                   value={{ min: 0, max: 100 }}
                   name="Discount Percentage"
                   onChangeComplete={({ min, max }) =>
@@ -35,9 +34,8 @@ class Filters extends Component {
             ["Choices", "MultipleChoices"].includes(data.fieldType)
           ) {
             return (
-              <div className="filter-each__wrapper">
+              <div className="filter-each__wrapper" key={i}>
                 <FilterChoice
-                  key={i}
                   unitLeft={
                     data.unit && data.unit.length
                       ? data.unit[0].indexOf("--") !== -1
@@ -69,10 +67,9 @@ class Filters extends Component {
             ].includes(data.fieldType)
           ) {
             return (
-              <div className="filter-each__wrapper">
+              <div className="filter-each__wrapper" key={i}>
                 <FilterRange
                   withTitle
-                  key={i}
                   unitLeft={
                     data.unit && data.unit.length
                       ? data.unit[0].indexOf("--") !== -1
