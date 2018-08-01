@@ -71,6 +71,10 @@ import {
   FETCH_SOCIAL_LINK_URL_FULFILLED,
   FETCH_SOCIAL_LINK_URL_PENDING,
   FETCH_SOCIAL_LINK_URL_REJECTED,
+  EDIT_SOCIAL_LINK_URL_FULFILLED,
+  EDIT_SOCIAL_LINK_URL_PENDING,
+  EDIT_SOCIAL_LINK_URL_REJECTED,
+  TOGGLE_SOCIAL_LINK_URL_EDIT_MODAL,
   UNMOUNT_BRANCH,
   TOGGLE_EDIT
 } from "../actions/types";
@@ -100,11 +104,20 @@ const INITIAL_STATE = {
   social_links: [],
   social_link_error: null,
   social_url_links: [],
-  socialLinksFetchLoading: false
+  socialLinksFetchLoading: false,
+  socialLinkUrlEditModal: false,
+  socialLinkUrlEditData: null
 };
 
 export default function(state = INITIAL_STATE, action) {
   switch (action.type) {
+    case TOGGLE_SOCIAL_LINK_URL_EDIT_MODAL:
+      return {
+        ...state,
+        socialLinkUrlEditModal: !state.socialLinkUrlEditModal,
+        socialLinkUrlEditData: action.payload
+      };
+
     case FETCH_SOCIAL_LINK_URL_PENDING:
       return {
         ...state,
@@ -123,6 +136,22 @@ export default function(state = INITIAL_STATE, action) {
           ...url,
           s_no: i + 1
         }))
+      };
+
+    case EDIT_SOCIAL_LINK_URL_PENDING:
+      return {
+        ...state,
+        socialLinksFetchLoading: true
+      };
+    case EDIT_SOCIAL_LINK_URL_REJECTED:
+      return {
+        ...state,
+        socialLinksFetchLoading: false
+      };
+    case EDIT_SOCIAL_LINK_URL_FULFILLED:
+      return {
+        ...state,
+        socialLinksFetchLoading: false
       };
 
     case CREATE_SOCIAL_LINK_URL_PENDING:

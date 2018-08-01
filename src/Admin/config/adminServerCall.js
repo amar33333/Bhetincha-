@@ -39,7 +39,8 @@ import {
   COMPANY_TYPE_URL,
   BUSINESS_PUT_URL,
   BUSINESS_URL,
-  SOCIAL_URL_LINK_GET_URL
+  SOCIAL_URL_LINK_GET_URL,
+  SOCIAL_URL_LINK_EDIT_URL
 } from "../../Business/config/BUSINESS_API";
 
 import axios from "axios";
@@ -90,11 +91,38 @@ export const onSearchPlaceholderEachDelete = ({ id, access_token }) =>
   });
 
 export const onSocialLinkUrlPost = ({ body, id, access_token }) => {
-  console.log("bodu: ", body, "accesstos: ", access_token);
   return ajax({
     method: "PUT",
     url: `${BUSINESS_URL}${id}/`,
     body,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+};
+
+export const onSocialLinkUrlPut = ({
+  body,
+  id,
+  social_link_id,
+  access_token
+}) => {
+  return ajax({
+    method: "PUT",
+    url: `${SOCIAL_URL_LINK_EDIT_URL}${id}/${social_link_id}/`,
+    body,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+};
+
+export const onSocialLinkUrlDelete = ({ id, social_link_id, access_token }) => {
+  return ajax({
+    method: "DELETE",
+    url: `${SOCIAL_URL_LINK_EDIT_URL}${id}/${social_link_id}/`,
     headers: {
       "Content-Type": "application/json",
       Authorization: "Bearer " + access_token

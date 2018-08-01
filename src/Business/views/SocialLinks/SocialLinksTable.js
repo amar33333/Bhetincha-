@@ -6,8 +6,6 @@ import filterCaseInsensitive from "../../../Common/utils/filterCaseInsesitive";
 
 import CustomModal from "../../../Common/components/CustomModal";
 
-import PermissionProvider from "../../../Common/utils/PermissionProvider";
-
 class SocialLinksTable extends Component {
   tableProps = {
     columns: [
@@ -50,24 +48,24 @@ class SocialLinksTable extends Component {
         width: 145,
         Cell: ({ value, original }) => (
           <div>
-            <PermissionProvider permission="CAN_EDIT_SOCIAL_LINKS">
-              <Button
-                data-tooltip="Edit"
-                data-position="bottom center"
-                color="secondary"
-                className="mr-2"
-                onClick={() => this.props.onEdit({ original })}
-              >
-                <i className="fa fa-pencil" />
-              </Button>
-            </PermissionProvider>
+            <Button
+              data-tooltip="Edit"
+              data-position="bottom center"
+              color="secondary"
+              className="mr-2"
+              onClick={() => this.props.onEdit({ original })}
+            >
+              <i className="fa fa-pencil" />
+            </Button>
 
-            <PermissionProvider permission="CAN_DELETE_SOCIAL_LINKS">
-              <PopoverDelete
-                id={`delete-${value}`}
-                onClick={() => this.props.onDelete({ id: value })}
-              />
-            </PermissionProvider>
+            <PopoverDelete
+              id={`delete-${original.social_nw.id}`}
+              onClick={() => {
+                this.props.onDelete({
+                  social_link_id: original.social_nw.id
+                });
+              }}
+            />
           </div>
         )
       }

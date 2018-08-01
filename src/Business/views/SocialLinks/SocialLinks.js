@@ -20,10 +20,16 @@ import Select from "react-select";
 import {
   onSocialLinksList,
   onSocialLinkUrlSubmit,
-  onSocialLinkUrlList
+  onSocialLinkUrlList,
+  onSocialLinkUrlEdit,
+  toggleSocialLinkUrlEditModal,
+  onSocialLinkUrlRemove
 } from "../../actions";
 
 import SocialLinksTable from "./SocialLinksTable";
+
+import SocialLinkUrlEditModal from "../../../Common/components/CustomModal/ModalTemplates/SocialLinkUrlEditModal";
+import CustomModal from "../../../Common/components/CustomModal/CustomModal";
 
 import { ErrorHandling } from "../../../Common/utils/Extras";
 
@@ -41,14 +47,9 @@ class SocialLinks extends Component {
   }
 
   onChange = (key, event) => {
-    if (key === "url")
-      this.setState({
-        [key]: event.target.value
-      });
-    else
-      this.setState({
-        [key]: event.target.value
-      });
+    this.setState({
+      [key]: event.target.value
+    });
   };
 
   onFormSubmit = event => {
@@ -71,8 +72,6 @@ class SocialLinks extends Component {
   clearState = () => this.setState({ url: "", social_link: "" });
 
   render() {
-    console.log("social links: ", this.props);
-    console.log("social links stteate: ", this.state);
     return (
       <div className="animated fadeIn">
         <Card>
@@ -133,7 +132,29 @@ class SocialLinks extends Component {
         <SocialLinksTable
           data={this.props.social_url_links}
           fetchLoading={this.props.fetchLoading}
+          onDelete={({ social_link_id }) => {
+            this.props.onSocialLinkUrlRemove({
+              social_link_id,
+              id: this.props.cookies.user_data.business_id
+            });
+          }}
+          onEdit={({ original }) => {
+            this.props.toggleSocialLinkUrlEditModal({ ...original });
+          }}
         />
+        <CustomModal
+          title="Edit Social Link"
+          isOpen={this.props.socialLinkUrlEditModal}
+          toggle={this.props.toggleSocialLinkUrlEditModal}
+          className={"modal-xs" + this.props.className}
+        >
+          <SocialLinkUrlEditModal
+            data={this.props.socialLinkUrlEditData}
+            onSocialLinkUrlEdit={this.props.onSocialLinkUrlEdit}
+            cookies={this.props.cookies}
+            socialLinksFetchLoading={this.props.socialLinksFetchLoading}
+          />
+        </CustomModal>
       </div>
     );
   }
@@ -146,7 +167,9 @@ const mapStateToProps = ({
       social_links,
       social_link_error,
       social_url_links,
-      socialLinksFetchLoading
+      socialLinksFetchLoading,
+      socialLinkUrlEditModal,
+      socialLinkUrlEditData
     }
   }
 }) => {
@@ -155,7 +178,9 @@ const mapStateToProps = ({
     social_link_error,
     social_url_links,
     cookies,
-    fetchLoading: socialLinksFetchLoading
+    fetchLoading: socialLinksFetchLoading,
+    socialLinkUrlEditModal,
+    socialLinkUrlEditData
   };
 };
 
@@ -164,6 +189,9 @@ export default connect(
   {
     onSocialLinksList,
     onSocialLinkUrlSubmit,
-    onSocialLinkUrlList
+    onSocialLinkUrlEdit,
+    onSocialLinkUrlList,
+    toggleSocialLinkUrlEditModal,
+    onSocialLinkUrlRemove
   }
 )(SocialLinks);

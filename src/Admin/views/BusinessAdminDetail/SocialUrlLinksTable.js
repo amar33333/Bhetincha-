@@ -50,7 +50,7 @@ class SocialUrlLinksTable extends Component {
         width: 145,
         Cell: ({ value, original }) => (
           <div>
-            <PermissionProvider permission="CAN_EDIT_SOCIAL_LINKS">
+            <PermissionProvider permission="CAN_EDIT_SOCIAL_URL_LINKS">
               <Button
                 data-tooltip="Edit"
                 data-position="bottom center"
@@ -62,10 +62,14 @@ class SocialUrlLinksTable extends Component {
               </Button>
             </PermissionProvider>
 
-            <PermissionProvider permission="CAN_DELETE_SOCIAL_LINKS">
+            <PermissionProvider permission="CAN_DELETE_SOCIAL_URL_LINKS">
               <PopoverDelete
                 id={`delete-${value}`}
-                onClick={() => this.props.onDelete({ id: value })}
+                onClick={() => {
+                  this.props.onDelete({
+                    social_link_id: original.social_nw.id
+                  });
+                }}
               />
             </PermissionProvider>
           </div>

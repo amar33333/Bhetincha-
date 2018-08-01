@@ -15,6 +15,7 @@ const PRIMARY_ADDRESS = "business/business-each-section/address/";
 const ABOUT = "business/business-each-section/about/";
 const WORKING_HOUR = "business/business-each-section/workingHour/";
 const SOCIAL_URL_LINK_GET = "business/business-each-section/social-links/";
+const SOCIAL_URL_LINK_EDIT = "business/business-social-link/";
 const GALLERY = "business/business-each-section/albums/";
 const BUSINESS_DETAILS = "business/business-each-section/basics/";
 const LOGO_COVER_IMAGE = "business/business-each-section/logo-cover/";
@@ -40,5 +41,6 @@ export const LOGO_COVER_IMAGE_GET_URL = `${MAIN_URL}/${LOGO_COVER_IMAGE}`;
 export const CHANGE_SLUG_URL = `${MAIN_URL}/${BUSINESS}`;
 export const CHECK_SLUG_URL = `${MAIN_URL}/${CHECK_SLUG}`;
 export const SOCIAL_URL_LINK_GET_URL = `${MAIN_URL}/${SOCIAL_URL_LINK_GET}`;
+export const SOCIAL_URL_LINK_EDIT_URL = `${MAIN_URL}/${SOCIAL_URL_LINK_EDIT}`;
 
 export { MAIN_URL };

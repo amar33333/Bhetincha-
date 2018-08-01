@@ -22,8 +22,14 @@ import SocialUrlLinksTable from "./SocialUrlLinksTable";
 import {
   onSocialLinksList,
   onSocialLinkUrlSubmit,
-  onSocialLinkUrlList
+  onSocialLinkUrlList,
+  onSocialLinkUrlEdit,
+  toggleSocialLinkUrlEditModal,
+  onSocialLinkUrlRemove
 } from "../../actions";
+
+import SocialLinkUrlEditModal from "../../../Common/components/CustomModal/ModalTemplates/SocialLinkUrlEditModal";
+import CustomModal from "../../../Common/components/CustomModal/CustomModal";
 
 import { ErrorHandling } from "../../../Common/utils/Extras";
 
@@ -131,7 +137,29 @@ class SocialUrlLinks extends Component {
         <SocialUrlLinksTable
           data={this.props.social_url_links}
           fetchLoading={this.props.fetchLoading}
+          onDelete={({ social_link_id }) =>
+            this.props.onSocialLinkUrlRemove({
+              social_link_id,
+              id: this.props.match.params.businessSlug
+            })
+          }
+          onEdit={({ original }) => {
+            this.props.toggleSocialLinkUrlEditModal({ ...original });
+          }}
         />
+        <CustomModal
+          title="Edit Social Link"
+          isOpen={this.props.socialLinkUrlEditModal}
+          toggle={this.props.toggleSocialLinkUrlEditModal}
+          className={"modal-xs" + this.props.className}
+        >
+          <SocialLinkUrlEditModal
+            data={this.props.socialLinkUrlEditData}
+            onSocialLinkUrlEdit={this.props.onSocialLinkUrlEdit}
+            socialLinksFetchLoading={this.props.socialLinksFetchLoading}
+            match={this.props.match}
+          />
+        </CustomModal>
       </div>
     );
   }
@@ -143,7 +171,9 @@ const mapStateToProps = ({
     business_reducer: {
       social_link_error,
       social_url_links,
-      socialUrlFetchLoading
+      socialUrlFetchLoading,
+      socialLinkUrlEditModal,
+      socialLinkUrlEditData
     },
     settings: { social_links }
   }
@@ -153,7 +183,9 @@ const mapStateToProps = ({
     social_link_error,
     social_url_links,
     cookies,
-    fetchLoading: socialUrlFetchLoading
+    fetchLoading: socialUrlFetchLoading,
+    socialLinkUrlEditModal,
+    socialLinkUrlEditData
   };
 };
 
@@ -162,6 +194,9 @@ export default connect(
   {
     onSocialLinksList,
     onSocialLinkUrlSubmit,
-    onSocialLinkUrlList
+    onSocialLinkUrlList,
+    onSocialLinkUrlEdit,
+    toggleSocialLinkUrlEditModal,
+    onSocialLinkUrlRemove
   }
 )(SocialUrlLinks);
