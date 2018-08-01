@@ -23,6 +23,8 @@ import {
   onSocialLinkUrlList
 } from "../../actions";
 
+import SocialLinksTable from "./SocialLinksTable";
+
 import { ErrorHandling } from "../../../Common/utils/Extras";
 
 class SocialLinks extends Component {
@@ -61,7 +63,7 @@ class SocialLinks extends Component {
       body: { links: { link, social_nw } },
       id: this.props.cookies.user_data.business_id
     });
-    // this.clearState();
+    this.clearState();
   };
 
   handleSelectChange = social_link => this.setState({ social_link });
@@ -128,6 +130,10 @@ class SocialLinks extends Component {
             </form>
           </CardBody>
         </Card>
+        <SocialLinksTable
+          data={this.props.social_url_links}
+          fetchLoading={this.props.fetchLoading}
+        />
       </div>
     );
   }
@@ -136,14 +142,20 @@ class SocialLinks extends Component {
 const mapStateToProps = ({
   auth: { cookies },
   BusinessContainer: {
-    business_reducer: { social_links, social_link_error, social_url_links }
+    business_reducer: {
+      social_links,
+      social_link_error,
+      social_url_links,
+      socialLinksFetchLoading
+    }
   }
 }) => {
   return {
     social_links,
     social_link_error,
     social_url_links,
-    cookies
+    cookies,
+    fetchLoading: socialLinksFetchLoading
   };
 };
 

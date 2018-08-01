@@ -99,7 +99,8 @@ const INITIAL_STATE = {
   businessDetailsEditErrors: null,
   social_links: [],
   social_link_error: null,
-  social_url_links: []
+  social_url_links: [],
+  socialLinksFetchLoading: false
 };
 
 export default function(state = INITIAL_STATE, action) {
@@ -107,18 +108,21 @@ export default function(state = INITIAL_STATE, action) {
     case FETCH_SOCIAL_LINK_URL_PENDING:
       return {
         ...state,
-        fetchLoading: true
+        socialLinksFetchLoading: true
       };
     case FETCH_SOCIAL_LINK_URL_REJECTED:
       return {
         ...state,
-        fetchLoading: false
+        socialLinksFetchLoading: false
       };
     case FETCH_SOCIAL_LINK_URL_FULFILLED:
       return {
         ...state,
-        fetchLoading: false,
-        social_url_links: action.payload
+        socialLinksFetchLoading: false,
+        social_url_links: action.payload.map((url, i) => ({
+          ...url,
+          s_no: i + 1
+        }))
       };
 
     case CREATE_SOCIAL_LINK_URL_PENDING:
