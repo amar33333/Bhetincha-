@@ -56,7 +56,7 @@ class Gallery extends Component {
             </Card>
           </Container>
         </div>
-        {!this.props.fetchLoading && this.props.match.params.albumID ? (
+        {this.props.match.params.albumID ? (
           this.props.albums.find(
             album => album.albumID === Number(this.props.match.params.albumID)
           ) ? (
