@@ -122,7 +122,11 @@ const INITIAL_STATE = {
   paymentCompanyErrors: null,
   paymentCompanyEditErrors: null,
   social_link_error: null,
-  social_url_links: []
+
+  social_url_links: [],
+  socialUrlFetchLoading: false,
+  socialUrlLoading: false,
+  socialUrlError: false
 };
 
 export default function(state = INITIAL_STATE, action) {
@@ -130,35 +134,41 @@ export default function(state = INITIAL_STATE, action) {
     case FETCH_SOCIAL_LINK_URL_PENDING:
       return {
         ...state,
-        fetchLoading: true
+        socialUrlFetchLoading: true
       };
     case FETCH_SOCIAL_LINK_URL_REJECTED:
       return {
         ...state,
-        fetchLoading: false
+        socialUrlFetchLoading: false
       };
     case FETCH_SOCIAL_LINK_URL_FULFILLED:
       return {
         ...state,
-        fetchLoading: false,
-        social_url_links: action.payload
+        socialUrlFetchLoading: false,
+        social_url_links: action.payload.map((url, i) => ({
+          ...url,
+          s_no: i + 1
+        }))
       };
 
     case CREATE_SOCIAL_LINK_URL_PENDING:
       return {
         ...state,
-        fetchLoading: true
+        socialUrlLoading: true,
+        socialUrlError: false
       };
     case CREATE_SOCIAL_LINK_URL_REJECTED:
       return {
         ...state,
-        fetchLoading: false,
+        socialUrlLoading: false,
+        socialUrlError: true,
         social_link_error: action.payload
       };
     case CREATE_SOCIAL_LINK_URL_FULFILLED:
       return {
         ...state,
-        fetchLoading: false,
+        socialUrlLoading: false,
+        socialUrlError: false,
         social_link_error: null
       };
 

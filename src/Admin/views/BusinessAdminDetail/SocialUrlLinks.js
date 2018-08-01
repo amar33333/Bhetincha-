@@ -17,6 +17,8 @@ import {
 
 import Select from "react-select";
 
+import SocialUrlLinksTable from "./SocialUrlLinksTable";
+
 import {
   onSocialLinksList,
   onSocialLinkUrlSubmit,
@@ -61,7 +63,7 @@ class SocialUrlLinks extends Component {
       body: { links: { link, social_nw } },
       id: this.props.match.params.businessSlug
     });
-    // this.clearState();
+    this.clearState();
   };
 
   handleSelectChange = social_link => this.setState({ social_link });
@@ -69,8 +71,6 @@ class SocialUrlLinks extends Component {
   clearState = () => this.setState({ url: "", social_link: "" });
 
   render() {
-    console.log("social links: ", this.props);
-    console.log("social links stteate: ", this.state);
     return (
       <div className="animated fadeIn">
         <Card>
@@ -128,6 +128,10 @@ class SocialUrlLinks extends Component {
             </form>
           </CardBody>
         </Card>
+        <SocialUrlLinksTable
+          data={this.props.social_url_links}
+          fetchLoading={this.props.fetchLoading}
+        />
       </div>
     );
   }
@@ -136,7 +140,11 @@ class SocialUrlLinks extends Component {
 const mapStateToProps = ({
   auth: { cookies },
   AdminContainer: {
-    business_reducer: { social_link_error, social_url_links },
+    business_reducer: {
+      social_link_error,
+      social_url_links,
+      socialUrlFetchLoading
+    },
     settings: { social_links }
   }
 }) => {
@@ -144,7 +152,8 @@ const mapStateToProps = ({
     social_links,
     social_link_error,
     social_url_links,
-    cookies
+    cookies,
+    fetchLoading: socialUrlFetchLoading
   };
 };
 

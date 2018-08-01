@@ -210,7 +210,8 @@ epics.push((action$, { getState }) =>
             {
               type: CREATE_SOCIAL_LINK_URL_FULFILLED,
               payload: response
-            }
+            },
+            { type: FETCH_SOCIAL_LINK_URL_PENDING, payload: { id: payload.id } }
           ];
         } else throw new Error(JSON.stringify(response.msg));
       })
