@@ -136,7 +136,6 @@ export default function(state = INITIAL_STATE, action) {
       return {
         ...state,
         fetchLoading: false,
-        social_links: action.payload,
         social_link_error: null
       };
 

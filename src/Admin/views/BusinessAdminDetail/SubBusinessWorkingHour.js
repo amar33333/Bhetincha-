@@ -160,7 +160,9 @@ class subBusinessWorkingHour extends Component {
       dateArray.push(moment(currentDate).format("YYYY-MM-DDTHH:mmZ"));
       currentDate = moment(currentDate).add(15, "m");
     }
+    console.log("props: ", this.props);
 
+    console.log("state: ", this.state);
     return (
       <FormGroup>
         <SemanticCard fluid>

@@ -65,7 +65,13 @@ import {
   UNMOUNT_BRANCH,
   UNMOUNT_PAYMENT_METHOD,
   UNMOUNT_COMPANY_TYPE,
-  RESET_PAYMENT_COMPANY_ERRORS
+  RESET_PAYMENT_COMPANY_ERRORS,
+  CREATE_SOCIAL_LINK_URL_FULFILLED,
+  CREATE_SOCIAL_LINK_URL_PENDING,
+  CREATE_SOCIAL_LINK_URL_REJECTED,
+  FETCH_SOCIAL_LINK_URL_FULFILLED,
+  FETCH_SOCIAL_LINK_URL_PENDING,
+  FETCH_SOCIAL_LINK_URL_REJECTED
 } from "../actions/types";
 
 const INITIAL_STATE = {
@@ -114,11 +120,48 @@ const INITIAL_STATE = {
   businessBranchData: [],
   branchCreateEditErrors: null,
   paymentCompanyErrors: null,
-  paymentCompanyEditErrors: null
+  paymentCompanyEditErrors: null,
+  social_link_error: null,
+  social_url_links: []
 };
 
 export default function(state = INITIAL_STATE, action) {
   switch (action.type) {
+    case FETCH_SOCIAL_LINK_URL_PENDING:
+      return {
+        ...state,
+        fetchLoading: true
+      };
+    case FETCH_SOCIAL_LINK_URL_REJECTED:
+      return {
+        ...state,
+        fetchLoading: false
+      };
+    case FETCH_SOCIAL_LINK_URL_FULFILLED:
+      return {
+        ...state,
+        fetchLoading: false,
+        social_url_links: action.payload
+      };
+
+    case CREATE_SOCIAL_LINK_URL_PENDING:
+      return {
+        ...state,
+        fetchLoading: true
+      };
+    case CREATE_SOCIAL_LINK_URL_REJECTED:
+      return {
+        ...state,
+        fetchLoading: false,
+        social_link_error: action.payload
+      };
+    case CREATE_SOCIAL_LINK_URL_FULFILLED:
+      return {
+        ...state,
+        fetchLoading: false,
+        social_link_error: null
+      };
+
     case RESET_PAYMENT_COMPANY_ERRORS:
       return {
         ...state,

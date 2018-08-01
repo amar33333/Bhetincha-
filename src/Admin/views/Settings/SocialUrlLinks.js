@@ -25,7 +25,7 @@ import {
 
 import { ErrorHandling } from "../../../Common/utils/Extras";
 
-class SocialLinks extends Component {
+class SocialUrlLinks extends Component {
   state = {
     url: "",
     social_link: ""
@@ -34,7 +34,7 @@ class SocialLinks extends Component {
   componentDidMount() {
     this.props.onSocialLinksList();
     this.props.onSocialLinkUrlList({
-      id: this.props.cookies.user_data.business_id
+      id: this.props.match.params.businessSlug
     });
   }
 
@@ -59,7 +59,7 @@ class SocialLinks extends Component {
 
     this.props.onSocialLinkUrlSubmit({
       body: { links: { link, social_nw } },
-      id: this.props.cookies.user_data.business_id
+      id: this.props.match.params.businessSlug
     });
     // this.clearState();
   };
@@ -89,7 +89,7 @@ class SocialLinks extends Component {
                       required
                       placeholder="Select a Social Link"
                       //disabled={this.props.loading}
-                      name="SocialLinks"
+                      name="SocialUrlLinks"
                       value={this.state.social_link}
                       onChange={this.handleSelectChange}
                       options={this.props.social_links}
@@ -135,8 +135,9 @@ class SocialLinks extends Component {
 
 const mapStateToProps = ({
   auth: { cookies },
-  BusinessContainer: {
-    business_reducer: { social_links, social_link_error, social_url_links }
+  AdminContainer: {
+    business_reducer: { social_link_error, social_url_links },
+    settings: { social_links }
   }
 }) => {
   return {
@@ -154,4 +155,4 @@ export default connect(
     onSocialLinkUrlSubmit,
     onSocialLinkUrlList
   }
-)(SocialLinks);
+)(SocialUrlLinks);

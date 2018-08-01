@@ -18,7 +18,9 @@ import {
   onAssignedPathEachGet,
   onAssignedBusinessAllGetAjax,
   onBusinessVerifyPost,
-  onSubCategoryGet
+  onSubCategoryGet,
+  onSocialLinkUrlPost,
+  onSocialLinkUrlGet
 } from "../config/adminServerCall";
 
 import {
@@ -149,6 +151,12 @@ import {
   DELETE_BRANCH_FULFILLED,
   DELETE_BRANCH_PENDING,
   DELETE_BRANCH_REJECTED,
+  CREATE_SOCIAL_LINK_URL_FULFILLED,
+  CREATE_SOCIAL_LINK_URL_PENDING,
+  CREATE_SOCIAL_LINK_URL_REJECTED,
+  FETCH_SOCIAL_LINK_URL_FULFILLED,
+  FETCH_SOCIAL_LINK_URL_PENDING,
+  FETCH_SOCIAL_LINK_URL_REJECTED,
   UNMOUNT_BRANCH,
   UNMOUNT_COMPANY_TYPE,
   UNMOUNT_PAYMENT_METHOD,
@@ -156,6 +164,66 @@ import {
 } from "./types";
 
 const epics = [];
+
+export const onSocialLinkUrlList = payload => ({
+  type: FETCH_SOCIAL_LINK_URL_PENDING,
+  payload
+});
+
+epics.push((action$, { getState }) =>
+  action$.ofType(FETCH_SOCIAL_LINK_URL_PENDING).mergeMap(({ payload }) =>
+    onSocialLinkUrlGet({
+      access_token: getState().auth.cookies.token_data.access_token,
+      ...payload
+    })
+      .map(({ response }) => {
+        return {
+          type: FETCH_SOCIAL_LINK_URL_FULFILLED,
+          payload: response
+        };
+      })
+      .catch(ajaxError => {
+        // toast.error("Error Adding Social Link !!!");
+        return Observable.of({
+          type: FETCH_SOCIAL_LINK_URL_REJECTED,
+          payload: JSON.parse(ajaxError.message)
+        });
+      })
+  )
+);
+
+export const onSocialLinkUrlSubmit = payload => ({
+  type: CREATE_SOCIAL_LINK_URL_PENDING,
+  payload
+});
+
+epics.push((action$, { getState }) =>
+  action$.ofType(CREATE_SOCIAL_LINK_URL_PENDING).mergeMap(({ payload }) =>
+    onSocialLinkUrlPost({
+      access_token: getState().auth.cookies.token_data.access_token,
+      ...payload
+    })
+      .concatMap(({ response }) => {
+        if (response.msg === "success") {
+          toast.success("Social Link Created Successfully!");
+
+          return [
+            {
+              type: CREATE_SOCIAL_LINK_URL_FULFILLED,
+              payload: response
+            }
+          ];
+        } else throw new Error(JSON.stringify(response.msg));
+      })
+      .catch(ajaxError => {
+        toast.error("Error Adding Social Link !!!");
+        return Observable.of({
+          type: CREATE_SOCIAL_LINK_URL_REJECTED,
+          payload: JSON.parse(ajaxError.message)
+        });
+      })
+  )
+);
 
 export const onBusinessBranchList = payload => ({
   type: FETCH_BUSINESS_BRANCH_PENDING,

@@ -150,15 +150,29 @@ class BusinessList extends Component {
                   this.props.history.push({
                     pathname: `${this.props.match.path}/${
                       props.value
-                    }/manage-branchs`,
-                    state: {
-                      id: props.original.id,
-                      slug: props.original.slug
-                    }
+                    }/manage-branchs`
                   })
                 }
               >
                 <i className="fa fa-code-fork" />
+              </Button>
+            </PermissionProvider>
+
+            <PermissionProvider permission="CAN_VIEW_SOCIAL_URL_LINKS">
+              <Button
+                data-tooltip="Manage Social Links"
+                data-position="bottom center"
+                color="primary"
+                className="mr-2"
+                onClick={() =>
+                  this.props.history.push({
+                    pathname: `${this.props.match.path}/${
+                      props.value
+                    }/social-url-links`
+                  })
+                }
+              >
+                <i className="fa fa-facebook" />
               </Button>
             </PermissionProvider>
 

@@ -30,7 +30,8 @@ import {
   AddBranch,
   ResetPassword,
   ImproveListings,
-  CampaignSearchPlaceholder
+  CampaignSearchPlaceholder,
+  SocialUrlLinks
 } from "../views";
 
 import { ManageCategories } from "../views/Ecommerce";
@@ -147,6 +148,12 @@ class AdminRoute extends Component {
           permission="CAN_VIEW_BRANCH"
         />
         <CustomRoute
+          path="/admin/list-business/:businessSlug/social-url-links"
+          name="Social Url Links"
+          component={SocialUrlLinks}
+          permission="CAN_VIEW_SOCIAL_URL_LINKS"
+        />
+        <CustomRoute
           path="/admin/approve-app-business"
           name="List App Business"
           component={AppBusinessList}
@@ -261,8 +268,9 @@ class AdminRoute extends Component {
           path="/admin/improve-listing"
           name="Improve Listing"
           component={ImproveListings}
-          permission="CAN_VIEW_SOCIAL_LINKS"
+          permission="CAN_VIEW_IMPROVE_LISTING"
         />
+
         <Route
           path="/admin/campaign-search-placeholder"
           name="Campaign"

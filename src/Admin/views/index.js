@@ -16,6 +16,7 @@ import AddBranch from "./BusinessAdminDetail/AddBranch";
 import ResetPassword from "./Users/ResetPassword";
 import ImproveListings from "./Settings/ImproveListings";
 import CampaignSearchPlaceholder from "./Settings/CampaignSearchPlaceholder";
+import SocialUrlLinks from "./Settings/SocialUrlLinks";
 
 import {
   Areas,
@@ -61,5 +62,6 @@ export {
   AddBranch,
   ResetPassword,
   ImproveListings,
-  CampaignSearchPlaceholder
+  CampaignSearchPlaceholder,
+  SocialUrlLinks
 };

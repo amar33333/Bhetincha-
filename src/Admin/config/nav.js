@@ -228,8 +228,9 @@ const items = {
           name: "Improve Listing",
           url: "/admin/improve-listing",
           icon: "icon-user-follow",
-          permission: "CAN_VIEW_SOCIAL_LINKS"
+          permission: "CAN_VIEW_IMPROVE_LISTING"
         }
+
         // {
         //   name: "Campaign",
         //   url: "/admin/campaigns",
@@ -242,13 +243,13 @@ const items = {
       name: "Campaigns",
       // url: "/admin/settings",
       icon: "icon-settings",
-      // permission: "CAN_ACCESS_SETTINGS",
+      permission: "CAN_VIEW_CAMPAIGN",
       children: [
         {
           name: "Search Placeholder",
           url: "/admin/campaign-search-placeholder",
-          icon: "icon-user-follow"
-          //permission: "CAN_VIEW_CAMPAIGN"
+          icon: "icon-user-follow",
+          permission: "CAN_VIEW_SEARCH_PLACEHOLDER"
         }
       ]
     },
