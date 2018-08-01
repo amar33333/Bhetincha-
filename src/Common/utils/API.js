@@ -32,9 +32,9 @@ const FORGOT_PASSWORD = "api/accounts/send-reset-token/";
 const FORGOT_PASSWORD_TOKEN = "api/accounts/change-password/";
 
 const O_TOKEN = "o/token/";
-export const CLIENT_ID = "I0YbarncrOus1PQgQLFx6nhkMqsLSRms4ak31YHg";
+export const CLIENT_ID = "p8m5Ofq9gFYrYRxAEsPYToVOe8PDQGsp7HbwOvPc";
 export const CLIENT_SECRET =
-  "1swCCJT6QAeARSCLVGNJNpExbmU1DfQUlJUIZxxnkMtHXD9iY4DaJPeQpXRilBAP6LTFp9Kgkcs8CIGo4V7bOoOhzJajS1JPAob3wVxbNhKuy9L0weuxtvsmB7v8jAkF";
+  "DcCBtSJXToZZ0DhvWtCrLb3cbI5w8BWtFz05hnJETo7HNx99048dSqZifTl80stqCW1SYxdveYVIdG4jtHqh3NsB8JS77ILKu5mNAIWVoDZStRkTs00kAHARKwiBakQt";
 
 export const GET_USER_INFO_URL = `${MAIN_URL}/${GET_USER_INFO}`;
 export const BUSINESS_INFO_URL = `${MAIN_URL}/${BUSINESS_INFO}`;
