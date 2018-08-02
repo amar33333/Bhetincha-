@@ -53,8 +53,16 @@ class CampaignSearchPlaceholder extends Component {
         width: 70
       },
       { Header: "Placeholder", accessor: "name" },
-      { Header: "Start Date", accessor: "start_date" },
-      { Header: "End Date", accessor: "end_date" },
+      {
+        Header: "Start Date",
+        accessor: "start_date",
+        Cell: ({ value }) => new Date(value).toString()
+      },
+      {
+        Header: "End Date",
+        accessor: "end_date",
+        Cell: ({ value }) => new Date(value).toString()
+      },
       {
         Header: "Actions",
         id: "edit",
