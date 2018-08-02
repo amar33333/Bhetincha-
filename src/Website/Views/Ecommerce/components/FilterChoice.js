@@ -35,9 +35,11 @@ class FilterChoice extends Component {
                 <Col>
                   <Checkbox
                     label={
-                      this.props.unitLeft
-                        ? `${this.props.unit.split("--")[0] || ""} ${opt}`
-                        : `${opt} ${this.props.unit.split("--")[0] || ""}`
+                      this.props.unit
+                        ? this.props.unitLeft
+                          ? `${this.props.unit.split("--")[0] || ""} ${opt}`
+                          : `${opt} ${this.props.unit.split("--")[0] || ""}`
+                        : opt
                     }
                     value={opt}
                     checked={this.state.checked.includes(opt)}
