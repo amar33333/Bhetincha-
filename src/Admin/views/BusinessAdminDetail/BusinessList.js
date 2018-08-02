@@ -77,8 +77,8 @@ class BusinessList extends Component {
               <Link to={`/${business.slug}`}>
                 <strong>{props.value}</strong>
               </Link>
-              <div>Email: {business.business_email}</div>
-              <div>Mobile: {business.phone_number}</div>
+              <div>Email: {business.business_email || "n/a"}</div>
+              <div>Mobile: {business.business_phone || "n/a"}</div>
               {business.creation && (
                 <Tooltip
                   content={business.creation.created_date.slice(0, 10)}
@@ -686,7 +686,7 @@ class BusinessList extends Component {
                 <InputGroup>
                   <Input
                     size="lg"
-                    placeholder="Search for Business Name"
+                    placeholder="Search for Business Name, email or number"
                     onChange={this.handleChange.bind(null, "q")}
                     value={this.state.q}
                   />

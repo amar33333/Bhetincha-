@@ -76,6 +76,7 @@ class CoverPhoto extends Component {
           >
             {PhotoEditorComponent && (
               <PhotoEditorComponent
+                key="cover"
                 active="cover"
                 logo={`${MAIN_URL}${this.props.logo}`}
                 cover={`${MAIN_URL}${this.props.cover_photo}`}
