@@ -22,6 +22,21 @@ import {
   FETCH_SEARCH_PLACEHOLDER_PENDING,
   FETCH_SEARCH_PLACEHOLDER_REJECTED,
   TOGGLE_SEARCH_PLACEHOLDER_EDIT_MODAL,
+  FETCH_SUBSCRIPTION_PACKAGE_PERMISSIONS_FULFILLED,
+  FETCH_SUBSCRIPTION_PACKAGE_PERMISSIONS_PENDING,
+  FETCH_SUBSCRIPTION_PACKAGE_PERMISSIONS_REJECTED,
+  CREATE_SUBSCRIPTION_PACKAGE_FULFILLED,
+  CREATE_SUBSCRIPTION_PACKAGE_PENDING,
+  CREATE_SUBSCRIPTION_PACKAGE_REJECTED,
+  FETCH_SUBSCRIPTION_PACKAGE_FULFILLED,
+  FETCH_SUBSCRIPTION_PACKAGE_PENDING,
+  FETCH_SUBSCRIPTION_PACKAGE_REJECTED,
+  EDIT_SUBSCRIPTION_PACKAGE_FULFILLED,
+  EDIT_SUBSCRIPTION_PACKAGE_PENDING,
+  EDIT_SUBSCRIPTION_PACKAGE_REJECTED,
+  DELETE_SUBSCRIPTION_PACKAGE_FULFILLED,
+  DELETE_SUBSCRIPTION_PACKAGE_PENDING,
+  DELETE_SUBSCRIPTION_PACKAGE_REJECTED,
   RESET_SETTINGS_ERRORS
 } from "../actions/types";
 
@@ -42,7 +57,13 @@ const INITIAL_STATE = {
   searchPlaceholderEditModal: false,
   searchPlaceholderEditData: null,
   settingsErrors: null,
-  settingsEditErrors: null
+  settingsEditErrors: null,
+  subscriptionPackageLoading: false,
+  subscriptionPackagePermissionsLoading: false,
+  subscriptionPackagePermissionsList: [],
+  subscriptionPackageList: [],
+  subscriptionPackageError: null,
+  subscriptionPackageEditError: null
 };
 
 export default function(state = INITIAL_STATE, action) {
@@ -59,6 +80,87 @@ export default function(state = INITIAL_STATE, action) {
         ...state,
         searchPlaceholderEditModal: !state.searchPlaceholderEditModal,
         searchPlaceholderEditData: action.payload
+      };
+
+    case FETCH_SUBSCRIPTION_PACKAGE_PERMISSIONS_PENDING:
+      return { ...state, subscriptionPackagePermissionsLoading: true };
+
+    case FETCH_SUBSCRIPTION_PACKAGE_PERMISSIONS_FULFILLED:
+      return {
+        ...state,
+        subscriptionPackagePermissionsList: action.payload.map(each => ({
+          name: each,
+          id: each
+        })),
+        subscriptionPackagePermissionsLoading: false
+      };
+
+    case FETCH_SUBSCRIPTION_PACKAGE_PERMISSIONS_REJECTED:
+      return { ...state, subscriptionPackagePermissionsLoading: false };
+
+    case CREATE_SUBSCRIPTION_PACKAGE_PENDING:
+      return { ...state, subscriptionPackageLoading: true };
+
+    case CREATE_SUBSCRIPTION_PACKAGE_FULFILLED:
+      return {
+        ...state,
+        subscriptionPackageLoading: false,
+        subscriptionPackageError: null
+      };
+
+    case CREATE_SUBSCRIPTION_PACKAGE_REJECTED:
+      return {
+        ...state,
+        subscriptionPackageLoading: false,
+        subscriptionPackageError: action.payload
+      };
+
+    case FETCH_SUBSCRIPTION_PACKAGE_PENDING:
+      return { ...state, subscriptionPackageLoading: true };
+
+    case FETCH_SUBSCRIPTION_PACKAGE_FULFILLED:
+      return {
+        ...state,
+        subscriptionPackageLoading: false,
+        subscriptionPackageList: action.payload
+      };
+
+    case FETCH_SUBSCRIPTION_PACKAGE_REJECTED:
+      return {
+        ...state,
+        subscriptionPackageLoading: false
+      };
+
+    case EDIT_SUBSCRIPTION_PACKAGE_PENDING:
+      return { ...state, subscriptionPackageLoading: true };
+
+    case EDIT_SUBSCRIPTION_PACKAGE_FULFILLED:
+      return {
+        ...state,
+        subscriptionPackageLoading: false,
+        subscriptionPackageEditError: null
+      };
+
+    case EDIT_SUBSCRIPTION_PACKAGE_REJECTED:
+      return {
+        ...state,
+        subscriptionPackageLoading: false,
+        subscriptionPackageEditError: action.payload
+      };
+
+    case DELETE_SUBSCRIPTION_PACKAGE_PENDING:
+      return { ...state, subscriptionPackageLoading: true };
+
+    case DELETE_SUBSCRIPTION_PACKAGE_FULFILLED:
+      return {
+        ...state,
+        subscriptionPackageLoading: false
+      };
+
+    case DELETE_SUBSCRIPTION_PACKAGE_REJECTED:
+      return {
+        ...state,
+        subscriptionPackageLoading: false
       };
 
     case FETCH_SOCIAL_LINK_PENDING:

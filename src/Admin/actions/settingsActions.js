@@ -10,7 +10,12 @@ import {
   onSearchPlaceholderGet,
   onSearchPlaceholderPut,
   onSearchPlaceholderPost,
-  onSearchPlaceholderEachDelete
+  onSearchPlaceholderEachDelete,
+  onSubscriptionPackagePermissionsGet,
+  onSubscriptionPackagePost,
+  onSubscriptionPackageGet,
+  onSubscriptionPackagePut,
+  onSubscriptionPackageDelete
 } from "../config/adminServerCall";
 import {
   CREATE_SOCIAL_LINK_FULFILLED,
@@ -43,6 +48,21 @@ import {
   EDIT_SEARCH_PLACEHOLDER_PENDING,
   EDIT_SEARCH_PLACEHOLDER_REJECTED,
   TOGGLE_SEARCH_PLACEHOLDER_EDIT_MODAL,
+  FETCH_SUBSCRIPTION_PACKAGE_PERMISSIONS_FULFILLED,
+  FETCH_SUBSCRIPTION_PACKAGE_PERMISSIONS_PENDING,
+  FETCH_SUBSCRIPTION_PACKAGE_PERMISSIONS_REJECTED,
+  CREATE_SUBSCRIPTION_PACKAGE_FULFILLED,
+  CREATE_SUBSCRIPTION_PACKAGE_PENDING,
+  CREATE_SUBSCRIPTION_PACKAGE_REJECTED,
+  FETCH_SUBSCRIPTION_PACKAGE_FULFILLED,
+  FETCH_SUBSCRIPTION_PACKAGE_PENDING,
+  FETCH_SUBSCRIPTION_PACKAGE_REJECTED,
+  EDIT_SUBSCRIPTION_PACKAGE_FULFILLED,
+  EDIT_SUBSCRIPTION_PACKAGE_PENDING,
+  EDIT_SUBSCRIPTION_PACKAGE_REJECTED,
+  DELETE_SUBSCRIPTION_PACKAGE_FULFILLED,
+  DELETE_SUBSCRIPTION_PACKAGE_PENDING,
+  DELETE_SUBSCRIPTION_PACKAGE_REJECTED,
   RESET_SETTINGS_ERRORS
 } from "./types";
 
@@ -56,6 +76,146 @@ export const toggleSearchPlaceholderEditModal = payload => ({
   type: TOGGLE_SEARCH_PLACEHOLDER_EDIT_MODAL,
   payload
 });
+
+export const onSubscriptionPackagePermissionsList = () => ({
+  type: FETCH_SUBSCRIPTION_PACKAGE_PERMISSIONS_PENDING
+});
+
+epics.push((action$, { getState }) =>
+  action$
+    .ofType(FETCH_SUBSCRIPTION_PACKAGE_PERMISSIONS_PENDING)
+    .mergeMap(action => {
+      return onSubscriptionPackagePermissionsGet({
+        access_token: getState().auth.cookies.token_data.access_token
+      })
+        .map(({ response }) => ({
+          type: FETCH_SUBSCRIPTION_PACKAGE_PERMISSIONS_FULFILLED,
+          payload: response
+        }))
+        .catch(ajaxError =>
+          Observable.of({
+            type: FETCH_SUBSCRIPTION_PACKAGE_PERMISSIONS_REJECTED
+          })
+        );
+    })
+);
+
+export const onSubscriptionPackageList = () => ({
+  type: FETCH_SUBSCRIPTION_PACKAGE_PENDING
+});
+
+epics.push((action$, { getState }) =>
+  action$.ofType(FETCH_SUBSCRIPTION_PACKAGE_PENDING).mergeMap(action => {
+    return onSubscriptionPackageGet({
+      access_token: getState().auth.cookies.token_data.access_token
+    })
+      .map(({ response }) => ({
+        type: FETCH_SUBSCRIPTION_PACKAGE_FULFILLED,
+        payload: response
+      }))
+      .catch(ajaxError =>
+        Observable.of({
+          type: FETCH_SUBSCRIPTION_PACKAGE_REJECTED
+        })
+      );
+  })
+);
+
+export const onSubscriptionPackageSubmit = payload => ({
+  type: CREATE_SUBSCRIPTION_PACKAGE_PENDING,
+  payload
+});
+
+epics.push((action$, { getState }) =>
+  action$.ofType(CREATE_SUBSCRIPTION_PACKAGE_PENDING).mergeMap(action => {
+    const access_token = getState().auth.cookies.token_data.access_token;
+
+    return onSubscriptionPackagePost({ ...action.payload, access_token })
+      .concatMap(({ response }) => {
+        if (response.msg === "success") {
+          toast.success("Subscription Package created successfully!");
+          return [
+            { type: CREATE_SUBSCRIPTION_PACKAGE_FULFILLED },
+            { type: FETCH_SUBSCRIPTION_PACKAGE_PENDING }
+          ];
+        } else {
+          throw new Error(JSON.stringify(response.msg));
+        }
+      })
+      .catch(ajaxError => {
+        toast.error("Error: Creating Subscription Package");
+        console.log("error: ", ajaxError);
+        return Observable.of({
+          type: CREATE_SUBSCRIPTION_PACKAGE_REJECTED,
+          payload: JSON.parse(ajaxError.message)
+        });
+      });
+  })
+);
+
+export const onSubscriptionPackageEdit = payload => ({
+  type: EDIT_SUBSCRIPTION_PACKAGE_PENDING,
+  payload
+});
+
+epics.push((action$, { getState }) =>
+  action$.ofType(EDIT_SUBSCRIPTION_PACKAGE_PENDING).mergeMap(({ payload }) => {
+    const access_token = getState().auth.cookies.token_data.access_token;
+
+    return onSubscriptionPackagePut({ ...payload, access_token })
+      .concatMap(({ response }) => {
+        if (response.msg === "success") {
+          // toast.success("Subscription Package created successfully!");
+          return [
+            { type: EDIT_SUBSCRIPTION_PACKAGE_FULFILLED },
+            { type: FETCH_SUBSCRIPTION_PACKAGE_PENDING }
+          ];
+        } else {
+          throw new Error(JSON.stringify(response.msg));
+        }
+      })
+      .catch(ajaxError => {
+        toast.error("Error: Updating Subscription Package");
+        return Observable.of({
+          type: EDIT_SUBSCRIPTION_PACKAGE_REJECTED,
+          payload: JSON.parse(ajaxError.message)
+        });
+      });
+  })
+);
+
+export const onSubscriptionPackageRemove = payload => ({
+  type: DELETE_SUBSCRIPTION_PACKAGE_PENDING,
+  payload
+});
+
+epics.push((action$, { getState }) =>
+  action$
+    .ofType(DELETE_SUBSCRIPTION_PACKAGE_PENDING)
+    .mergeMap(({ payload }) => {
+      const access_token = getState().auth.cookies.token_data.access_token;
+
+      return onSubscriptionPackageDelete({ payload, access_token })
+        .concatMap(({ response }) => {
+          if (response.msg === "success") {
+            // toast.success("Subscription Package Deleted successfully!");
+            return [
+              { type: DELETE_SUBSCRIPTION_PACKAGE_FULFILLED },
+              { type: FETCH_SUBSCRIPTION_PACKAGE_PENDING }
+            ];
+          } else {
+            throw new Error(JSON.stringify(response.msg));
+          }
+        })
+        .catch(ajaxError => {
+          toast.error("Error: Deleting Subscription Package");
+          return Observable.of({
+            type: DELETE_SUBSCRIPTION_PACKAGE_REJECTED,
+            payload: JSON.parse(ajaxError.message)
+          });
+        });
+    })
+);
 
 // SEARCH_PLACEHOLDER
 export const onSearchPlaceholderSubmit = payload => ({

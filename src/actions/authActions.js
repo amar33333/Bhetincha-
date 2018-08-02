@@ -62,7 +62,8 @@ import {
 
 import {
   TOGGLE_LOGIN_MODAL,
-  TOGGLE_REGISTER_MODAL
+  TOGGLE_REGISTER_MODAL,
+  TOGGLE_IMPROVE_LISTING_MODAL
 } from "../Website/actions/types";
 
 import {
@@ -320,9 +321,10 @@ export const onPhoneVerificationRequest = payload => ({
 
 epics.push(action$ =>
   action$.ofType(REQUEST_PHONE_VERIFICATION_PENDING).mergeMap(action => {
-    const { history } = action.payload;
+    const { history, id, phone, data } = action.payload;
+    console.log("paylaod: ", action.payload);
 
-    return onPhoneVerificationRequestPost({ ...action.payload })
+    return onPhoneVerificationRequestPost({ id, phone })
       .concatMap(({ response }) => {
         if (response.id) {
           toast.success("Request Sent Successfully");
@@ -342,7 +344,24 @@ epics.push(action$ =>
             }
           ];
         } else {
-          throw new Error(response.msg);
+          console.log("phone mismatch");
+          // throw new Error(response.msg);
+
+          return [
+            {
+              type: REQUEST_PHONE_VERIFICATION_REJECTED,
+              payload: true
+            },
+            {
+              type: TOGGLE_PHONE_VERIFICATION_MODAL,
+              payload: null
+            },
+
+            {
+              type: TOGGLE_IMPROVE_LISTING_MODAL,
+              payload: { ...data, phone_number: phone }
+            }
+          ];
         }
       })
       .catch(ajaxError => {

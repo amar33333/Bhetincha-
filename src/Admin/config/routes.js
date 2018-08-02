@@ -31,7 +31,8 @@ import {
   ResetPassword,
   ImproveListings,
   CampaignSearchPlaceholder,
-  SocialUrlLinks
+  SocialUrlLinks,
+  SubscriptionPackage
 } from "../views";
 
 import { ManageCategories } from "../views/Ecommerce";
@@ -256,6 +257,12 @@ class AdminRoute extends Component {
           path="/admin/settings"
           name="Settings"
           component={Settings}
+          permission="CAN_ACCESS_SETTINGS"
+        />
+        <CustomRoute
+          path="/admin/subscription-package"
+          name="Subscription Package"
+          component={SubscriptionPackage}
           permission="CAN_ACCESS_SETTINGS"
         />
         <CustomRoute

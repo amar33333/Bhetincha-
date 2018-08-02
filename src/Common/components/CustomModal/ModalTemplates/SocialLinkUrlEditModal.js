@@ -1,12 +1,8 @@
 import React, { Component } from "react";
-import { connect } from "react-redux";
 import {
   Row,
   Col,
   Button,
-  Card,
-  CardHeader,
-  CardBody,
   InputGroup,
   InputGroupAddon,
   Input,
@@ -55,7 +51,7 @@ class SocialLinkUrlEditModal extends Component {
     return (
       <div className="animated fadeIn">
         <form onSubmit={this.onFormEdit}>
-          {/* <Row>
+          <Row>
             <Col xs="12">
               <FormGroup>
                 <Label for="Social Links">Social Links</Label>
@@ -73,7 +69,7 @@ class SocialLinkUrlEditModal extends Component {
                 />
               </FormGroup>
             </Col>
-          </Row> */}
+          </Row>
 
           <InputGroup className="mb-2">
             <InputGroupAddon addonType="prepend">

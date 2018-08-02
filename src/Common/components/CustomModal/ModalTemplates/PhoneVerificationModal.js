@@ -11,30 +11,54 @@ import {
   Form
 } from "reactstrap";
 
+import { validatePhone } from "../../../../Common/utils/Extras";
+
 class PhoneVerificationModal extends Component {
-  state = { phone: "" };
+  state = {
+    phone: "",
+    phone_validation_error: false
+  };
 
   componentWillUnmount() {
     // this.props.onResetPhoneVerificationRequestError();
   }
 
   onChange = (key, event) => {
-    this.setState({ [key]: event.target.value });
+    const val = event.target.value;
+
+    if (key === "phone") {
+      this.setState({ [key]: val === "" ? null : val }, () => {
+        if (this.state.phone && !validatePhone(this.state.phone)) {
+          this.setState({ phone_validation_error: true });
+        } else this.setState({ phone_validation_error: false });
+      });
+    } else {
+      this.setState({ [key]: val });
+    }
+  };
+
+  displayPhoneValidationInfo = () => {
+    if (this.state.phone)
+      if (this.state.phone_validation_error)
+        return <p style={{ color: "red" }}>Invalid Phone Number</p>;
+      else return <p style={{ color: "green" }}>Phone Number Valid</p>;
   };
 
   onFormSubmit = event => {
     event.preventDefault();
-    const { phone } = this.state;
+    const { phone, phone_validation_error } = this.state;
 
-    this.props.onPhoneVerificationRequest({
-      id: this.props.search_selected_business_id.id,
-      phone,
-      history: this.props.history
-    });
+    if (!phone_validation_error)
+      this.props.onPhoneVerificationRequest({
+        data: this.props.search_selected_business,
+        id: this.props.search_selected_business.id,
+        phone,
+        history: this.props.history
+      });
   };
 
   render() {
-    console.log("phonde model: ", this.props);
+    console.log("phone: ", this.props);
     return (
       <Form onSubmit={this.onFormSubmit}>
         <div>
@@ -58,6 +82,7 @@ class PhoneVerificationModal extends Component {
               onChange={this.onChange.bind(this, "phone")}
             />
           </InputGroup>
+          {this.displayPhoneValidationInfo()}
           <p className="text-danger text-center">
             {this.props.phone_verification_request_error &&
               this.props.phone_verification_request_error.message}

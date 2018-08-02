@@ -131,9 +131,9 @@ class BusinessList extends Component {
     }
   }
 
-  onClaimed = id => () => {
-    console.log("claim id: ", id);
-    this.props.togglePhoneVerificationModal({ id });
+  onClaimed = data => () => {
+    console.log("claim data: ", data);
+    this.props.togglePhoneVerificationModal({ ...data });
   };
 
   onImproveListingClicked = data => () => {
@@ -338,7 +338,7 @@ class BusinessList extends Component {
                     xs="2"
                     sm="2"
                     style={{ cursor: "pointer" }}
-                    onClick={this.onClaimed(each_search_result.id)}
+                    onClick={this.onClaimed(each_search_result)}
                   >
                     <Button circular basic>
                       <i className="fa fa-unlock" />{" "}
@@ -574,7 +574,7 @@ class BusinessList extends Component {
           className={"modal-xs" + this.props.className}
         >
           <PhoneVerificationModal
-            search_selected_business_id={this.props.search_selected_business_id}
+            search_selected_business={this.props.search_selected_business}
             onPhoneVerificationRequest={this.props.onPhoneVerificationRequest}
             phone_verification_request_error={
               this.props.phone_verification_request_error
@@ -617,7 +617,7 @@ export default connect(
     auth: {
       cookies,
       phoneVerificationModal,
-      search_selected_business_id,
+      search_selected_business,
       phone_verification_request_error
     },
     home,
@@ -627,7 +627,7 @@ export default connect(
     ...home,
     phoneVerificationModal,
     ...search_result,
-    search_selected_business_id,
+    search_selected_business,
     phone_verification_request_error
   }),
   {

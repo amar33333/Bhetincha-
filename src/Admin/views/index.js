@@ -16,6 +16,7 @@ import AddBranch from "./BusinessAdminDetail/AddBranch";
 import ResetPassword from "./Users/ResetPassword";
 import ImproveListings from "./Settings/ImproveListings";
 import CampaignSearchPlaceholder from "./Settings/CampaignSearchPlaceholder";
+import SubscriptionPackage from "./Settings/SubscriptionPackage";
 import SocialUrlLinks from "./BusinessAdminDetail/SocialUrlLinks";
 
 import {
@@ -63,5 +64,6 @@ export {
   ResetPassword,
   ImproveListings,
   CampaignSearchPlaceholder,
-  SocialUrlLinks
+  SocialUrlLinks,
+  SubscriptionPackage
 };

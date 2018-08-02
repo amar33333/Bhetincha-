@@ -14,6 +14,8 @@ import {
 
 import Select from "react-select";
 
+import { validateEmail } from "../../../../Common/utils/Extras";
+
 const TYPE_A_NEW_ONE = "Type a new one";
 
 class ImproveListingModal extends Component {
@@ -24,17 +26,50 @@ class ImproveListingModal extends Component {
     email: "",
     about_you: "",
     new_problem_type_visible: false,
-    new_problem_type: ""
+    new_problem_type: "",
+    email_validation_error: false
   };
 
   componentDidMount() {
     this.props.onProblemTypesList();
+
+    this.props.data.phone_number &&
+      this.setState({
+        about_you: "BUSINESS_OWNER"
+      });
   }
 
+  componentDidUpdate = prevProps => {
+    if (this.props.problem_types !== prevProps.problem_types) {
+      this.setState({
+        problem_type: this.props.problem_types.find(
+          each => each.name === "CLAIM_UNSUCCESSFUL"
+        )
+      });
+    }
+  };
+
   onChange = (key, event) => {
-    this.setState({
-      [key]: event.target.value
-    });
+    const val = event.target.value;
+
+    if (key === "email") {
+      this.setState({ [key]: val === "" ? null : val }, () => {
+        if (this.state.email && !validateEmail(this.state.email)) {
+          this.setState({ email_validation_error: true });
+        } else this.setState({ email_validation_error: false });
+      });
+    } else {
+      this.setState({
+        [key]: val
+      });
+    }
+  };
+
+  displayEmailValidationInfo = () => {
+    if (this.state.email)
+      if (this.state.email_validation_error)
+        return <p style={{ color: "red" }}>Invalid Email</p>;
+      else return <p style={{ color: "green" }}>Valid Email </p>;
   };
 
   handleSelectChange = value => {
@@ -60,22 +95,27 @@ class ImproveListingModal extends Component {
       email,
       about_you,
       new_problem_type,
-      new_problem_type_visible
+      new_problem_type_visible,
+      email_validation_error
     } = this.state;
 
-    this.props.onImproveListing({
-      id: this.props.data.id,
-      body: {
-        problem_type: problem_type.id,
-        new_problem_type: new_problem_type_visible
-          ? new_problem_type
-          : undefined,
-        more_information,
-        name,
-        email,
-        about_you
-      }
-    });
+    if (!email_validation_error)
+      this.props.onImproveListing({
+        id: this.props.data.id,
+        body: {
+          problem_type: problem_type.id,
+          new_problem_type: new_problem_type_visible
+            ? new_problem_type
+            : undefined,
+          more_information,
+          name,
+          email,
+          about_you,
+          phone_number: this.props.data.phone_number
+            ? this.props.data.phone_number
+            : undefined
+        }
+      });
   };
 
   onRadioButtonChanged = event => {
@@ -97,6 +137,18 @@ class ImproveListingModal extends Component {
             <span> {this.props.data && this.props.data.business_name}</span>
           </Col>
         </Row>
+        {this.props.data &&
+          this.props.data.phone_number && (
+            <Row>
+              <Col xs="12" md="12">
+                <Label for="Mobile Number">
+                  <strong>Mobile Number: </strong>
+                </Label>
+
+                <span> {this.props.data.phone_number}</span>
+              </Col>
+            </Row>
+          )}
         <Row>
           <Col xs="12" md="12">
             <FormGroup>
@@ -105,6 +157,7 @@ class ImproveListingModal extends Component {
                 autoFocus
                 autosize
                 clearable
+                disabled={this.props.data && this.props.data.phone_number}
                 //required
                 name="ProblemTypes"
                 placeholder="Select Your Problem Type"
@@ -182,6 +235,8 @@ class ImproveListingModal extends Component {
                 />
               </InputGroup>
             </FormGroup>
+            {this.displayEmailValidationInfo()}
+
             <Label for="About You">About You: </Label>
 
             <FormGroup check>
@@ -191,6 +246,8 @@ class ImproveListingModal extends Component {
                   type="radio"
                   name="radio1"
                   value="BUSINESS_OWNER"
+                  disabled={this.props.data && this.props.data.phone_number}
+                  checked={this.props.data && this.props.data.phone_number}
                   onChange={this.onRadioButtonChanged}
                 />{" "}
                 I am a Business Owner.
@@ -203,6 +260,7 @@ class ImproveListingModal extends Component {
                   type="radio"
                   name="radio1"
                   value="USER"
+                  disabled={this.props.data && this.props.data.phone_number}
                   onChange={this.onRadioButtonChanged}
                 />{" "}
                 I am a User.

@@ -229,6 +229,12 @@ const items = {
           url: "/admin/improve-listing",
           icon: "icon-user-follow",
           permission: "CAN_VIEW_IMPROVE_LISTING"
+        },
+        {
+          name: "Subscription",
+          url: "/admin/subscription-package",
+          icon: "icon-user-follow",
+          permission: "CAN_VIEW_IMPROVE_LISTING"
         }
 
         // {

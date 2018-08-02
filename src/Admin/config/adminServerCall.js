@@ -31,7 +31,9 @@ import {
   ECOMMERCE_CATEGORY_CONFIG_URL,
   ECOMMERCE_PRODUCT_SEARCH_URL,
   IMPROVE_LISTING_URL,
-  SEARCH_PLACEHOLDER_URL
+  SEARCH_PLACEHOLDER_URL,
+  SUBSCRIPTION_PACKAGE_PERMISSIONS_URL,
+  SUBSCRIPTION_PACKAGE_URL
 } from "./ADMIN_API";
 
 import {
@@ -47,6 +49,58 @@ import axios from "axios";
 
 import { ajax } from "rxjs/observable/dom/ajax";
 import querystring from "querystring";
+
+export const onSubscriptionPackagePermissionsGet = ({ access_token }) =>
+  ajax({
+    method: "GET",
+    url: SUBSCRIPTION_PACKAGE_PERMISSIONS_URL,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
+export const onSubscriptionPackagePost = ({ body, access_token }) =>
+  ajax({
+    method: "POST",
+    url: SUBSCRIPTION_PACKAGE_URL,
+    body,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
+export const onSubscriptionPackageDelete = ({ id, access_token }) =>
+  ajax({
+    method: "DELETE",
+    url: `${SUBSCRIPTION_PACKAGE_URL}${id}/`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
+export const onSubscriptionPackagePut = ({ id, body, access_token }) =>
+  ajax({
+    method: "PUT",
+    url: `${SUBSCRIPTION_PACKAGE_URL}${id}/`,
+    body,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
+export const onSubscriptionPackageGet = ({ access_token }) =>
+  ajax({
+    method: "GET",
+    url: SUBSCRIPTION_PACKAGE_URL,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
 
 export const onSearchPlaceholderPut = ({ id, body, access_token }) =>
   ajax({
