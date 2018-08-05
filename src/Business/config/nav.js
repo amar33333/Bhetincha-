@@ -80,11 +80,21 @@ const items = {
       icon: "fa fa-users",
       // permission: "CAN_VIEW_USER",
       children: [
+        // {
+        //   name: "Manage Sections",
+        //   url: `/${ROUTE_PARAMS_BUSINESS_NAME}/dashboard/section/manage-sections`,
+        //   icon: "icon-user-follow"
+        //   // permission: "CAN_VIEW_USER"
+        // },
         {
-          name: "Manage Sections",
-          url: `/${ROUTE_PARAMS_BUSINESS_NAME}/dashboard/section/manage-sections`,
-          icon: "icon-user-follow"
-          // permission: "CAN_VIEW_USER"
+          name: "Core Member",
+          url: `/${ROUTE_PARAMS_BUSINESS_NAME}/dashboard/section/manage-core-member`,
+          icon: "fa fa-users"
+        },
+        {
+          name: "Menu",
+          url: `/${ROUTE_PARAMS_BUSINESS_NAME}/dashboard/section/manage-section-menu`,
+          icon: "fa fa-cutlery"
         }
       ]
     }

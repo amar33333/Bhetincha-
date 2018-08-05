@@ -4,6 +4,10 @@ import businessActions from "./businessActions";
 import primaryAddress from "./primaryAddressActions";
 import industryEpics from "./industryActions";
 import categoryEpics from "./categoryActions";
+//Core Member
+import coreMemberEpics from "./coreMemberActions";
+//Food Group
+import foodGroupEpics from "./foodGroupActions";
 
 export * from "./businessActions";
 export * from "./industryActions";
@@ -12,6 +16,10 @@ export * from "./primaryAddressActions";
 export * from "./ecommerceActions";
 export * from "./exsectionActions";
 export * from "./industryActions";
+//Core Member
+export * from "./coreMemberActions";
+//Food Group
+export * from "./foodGroupActions";
 
 export default [
   ...ecommerceEpics,
@@ -19,5 +27,7 @@ export default [
   ...businessActions,
   ...primaryAddress,
   ...industryEpics,
-  ...categoryEpics
+  ...categoryEpics,
+  ...coreMemberEpics,
+  ...foodGroupEpics
 ];

@@ -12,7 +12,8 @@ import {
   PRIMARY_ADDRESS_URL_GET_URL,
   WORKING_HOUR_GET_URL,
   BUSINESS_DETAILS_GET_URL,
-  ABOUT_GET_URL
+  ABOUT_GET_URL,
+  CORE_MEMBER_URL
 } from "./BUSINESS_API";
 import axios from "axios";
 import { ajax } from "rxjs/observable/dom/ajax";
@@ -433,6 +434,143 @@ export const onCompanyTypeGet = ({ access_token }) =>
   ajax({
     method: "get",
     url: `${COMPANY_TYPE_URL}`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
+//Core Member
+export const onCoreMemberAddNewPost = ({ business_id, access_token, body }) =>
+  ajax({
+    method: "POST",
+    url: `${CORE_MEMBER_URL}${business_id}/section/core-member/`,
+    body,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
+//Menu Name Create
+export const onExsectionMenuNamePost = ({ business_id, access_token, body }) =>
+  ajax({
+    method: "POST",
+    url: `${CORE_MEMBER_URL}${business_id}/section/menu/`,
+    body,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
+//Menu Detail
+export const onExsectionMenuNameGet = ({ business_id, access_token }) =>
+  ajax({
+    method: "GET",
+    url: `${CORE_MEMBER_URL}${business_id}/section/menu/menu-rud/`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
+//Menu Name Update
+export const onExsectionMenuNamePut = ({ business_id, access_token, body }) =>
+  ajax({
+    method: "PUT",
+    url: `${CORE_MEMBER_URL}${business_id}/section/menu/menu-rud/`,
+    body,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
+//Food Group : Add New
+export const onFoodGroupAddNewPost = ({ business_id, access_token, body }) =>
+  ajax({
+    method: "POST",
+    url: `${CORE_MEMBER_URL}${business_id}/section/menu/menu-food-category/`,
+    body,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
+//Food Group Update
+export const onFoodGroupEditPut = ({ business_id, access_token, body, fgid }) =>
+  ajax({
+    method: "PUT",
+    url: `${CORE_MEMBER_URL}${business_id}/section/menu/menu-food-category/${fgid}/`,
+    body,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
+//Food Group List
+export const onFoodGroupListGet = ({ business_id, access_token }) =>
+  ajax({
+    method: "GET",
+    url: `${CORE_MEMBER_URL}${business_id}/section/menu/menu-rud/`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
+//Food Group Delete
+export const onFoodGroupDeleteSelf = ({ business_id, access_token, uid }) =>
+  ajax({
+    method: "DELETE",
+    url: `${CORE_MEMBER_URL}${business_id}/section/menu/menu-food-category/${uid}/`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
+//Selected Food Group Items List
+export const onFoodGroupItemListGet = ({ business_id, access_token, uid }) =>
+  ajax({
+    method: "GET",
+    url: `${CORE_MEMBER_URL}${business_id}/section/menu/menu-food-category/${uid}/`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
+//Food Group Item Add New
+export const onFoodGroupItemAddNewPost = ({
+  business_id,
+  access_token,
+  body,
+  uid
+}) =>
+  ajax({
+    method: "POST",
+    url: `${CORE_MEMBER_URL}${business_id}/section/menu/${uid}/menu-food-items/`,
+    body,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
+//Food Group Item Delete
+export const onFoodGroupItemRemoveEcommerce = ({
+  business_id,
+  access_token,
+  uid,
+  fgitemid
+}) =>
+  ajax({
+    method: "DELETE",
+    url: `${CORE_MEMBER_URL}${business_id}/section/menu/${uid}/menu-food-items/${fgitemid}/`,
     headers: {
       "Content-Type": "application/json",
       Authorization: "Bearer " + access_token

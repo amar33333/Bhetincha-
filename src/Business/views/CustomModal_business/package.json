@@ -1,0 +1,6 @@
+{
+  "name": "CustomModal_business",
+  "version": "0.0.0",
+  "private": true,
+  "main": "./CustomModal_business.js"
+}

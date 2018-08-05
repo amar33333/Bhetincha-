@@ -11,7 +11,9 @@ import {
   BusinessLogo,
   BusinessWorkingHour,
   ManageProducts,
-  ManageSections,
+  ManageCoreMember,
+  //ManageSections,
+  ManageSectionMenu,
   ProductEdit,
   ProductView,
   AddBranch
@@ -98,10 +100,20 @@ class BusinessRoute extends Component {
           name="manage-ecommerce-products"
           component={ManageProducts}
         />
-        <Route
+        {/* <Route
           path={`/:${ROUTE_PARAMS_BUSINESS_NAME}/dashboard/section/manage-sections`}
-          name="manage-exsection-sections"
+          name="manage-exsection-sections" 
           component={ManageSections}
+        /> */}
+        <Route
+          path={`/:${ROUTE_PARAMS_BUSINESS_NAME}/dashboard/section/manage-core-member`}
+          name="manage-exsection-section-core-member"
+          component={ManageCoreMember}
+        />
+        <Route
+          path={`/:${ROUTE_PARAMS_BUSINESS_NAME}/dashboard/section/manage-section-menu`}
+          name="manage-exsection-section-menu"
+          component={ManageSectionMenu}
         />
         <Route
           path={`/:${ROUTE_PARAMS_BUSINESS_NAME}/dashboard`}

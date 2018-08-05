@@ -1,7 +1,13 @@
-import Dashboard from "./Dashboard/";
+import Dashboard from "./Dashboard";
 import BusinessDetail from "./BusinessDetail";
 import ManageProducts from "./Ecommerce/ManageProducts";
 import ManageSections from "./Exsection/ManageSections";
+//Section:Core Member
+import ManageCoreMember from "./Exsection/ManageCoreMember";
+
+import ManageSectionMenu from "./Exsection/ManageSectionMenu";
+//import CustomModal from "../../Common/components/CustomModal";
+
 import ProductEdit from "./Ecommerce/ProductEdit";
 import ProductView from "./Ecommerce/ProductView";
 
@@ -19,6 +25,8 @@ export {
   BusinessDetail,
   ManageProducts,
   ManageSections,
+  ManageCoreMember,
+  ManageSectionMenu,
   ProductEdit,
   ProductView,
   BusinessDetails,
@@ -29,4 +37,5 @@ export {
   BusinessCoverImage,
   BusinessWorkingHour,
   AddBranch
+  //CustomModal
 };

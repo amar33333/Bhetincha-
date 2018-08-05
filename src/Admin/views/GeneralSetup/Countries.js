@@ -14,7 +14,7 @@ import {
   CardBody,
   CardHeader
 } from "reactstrap";
-import ReactTable from "react-table";
+//import ReactTable from "react-table";
 import { PopoverDelete, PaginationComponent } from "../../../Common/components";
 import filterCaseInsensitive from "../../../Common/utils/filterCaseInsesitive";
 
@@ -30,11 +30,49 @@ import {
   onUnmountCountry
 } from "../../actions";
 
+import DraggableTable from "./DraggableTable";
+
 class Countries extends Component {
   state = { country: "", countryCode: "", countrySubmit: false };
 
-  tableProps = {
-    columns: [
+  componentDidMount = () => this.props.onCountryList();
+
+  componentDidUpdate = (prevProps, prevState) => {
+    if (prevState.countrySubmit && !this.props.loading) {
+      const updates = { countrySubmit: false };
+      if (!this.props.error) {
+        updates.country = "";
+        updates.countryCode = "";
+      }
+      this.setState(updates, () => this.focusableInput.focus());
+    }
+  };
+
+  componentWillUnmount = () => this.props.onUnmountCountry();
+
+  onFormSubmit = event => {
+    event.preventDefault();
+    const { country, countryCode } = this.state;
+    this.setState({ countrySubmit: true }, () =>
+      this.props.onCountrySubmit({ body: { name: country, countryCode } })
+    );
+  };
+
+  onChange = (key, event) =>
+    this.setState({
+      [key]: event.target.value.replace(/\b\w/g, l => l.toUpperCase())
+    });
+
+  render() {
+    console.log("....Countries List ... ||\n" + this.props.countries);
+    // const { data } = this.props.countries;
+
+    // const rows={data};
+
+    const fieldMap = ["s_no", "name", "countryCode", "id"];
+
+    const heads = ["SN", "Country", "Country Code", "Actions"];
+    const columns = [
       {
         Header: "SN",
         accessor: "s_no",
@@ -72,43 +110,8 @@ class Countries extends Component {
           </div>
         )
       }
-    ],
-    minRows: 5,
-    defaultPageSize: 20,
-    className: "-striped -highlight",
-    filterable: true,
-    PaginationComponent
-  };
+    ];
 
-  componentDidMount = () => this.props.onCountryList();
-
-  componentDidUpdate = (prevProps, prevState) => {
-    if (prevState.countrySubmit && !this.props.loading) {
-      const updates = { countrySubmit: false };
-      if (!this.props.error) {
-        updates.country = "";
-        updates.countryCode = "";
-      }
-      this.setState(updates, () => this.focusableInput.focus());
-    }
-  };
-
-  componentWillUnmount = () => this.props.onUnmountCountry();
-
-  onFormSubmit = event => {
-    event.preventDefault();
-    const { country, countryCode } = this.state;
-    this.setState({ countrySubmit: true }, () =>
-      this.props.onCountrySubmit({ body: { name: country, countryCode } })
-    );
-  };
-
-  onChange = (key, event) =>
-    this.setState({
-      [key]: event.target.value.replace(/\b\w/g, l => l.toUpperCase())
-    });
-
-  render() {
     return (
       <div className="animated fadeIn">
         <Row className="hr-centered">
@@ -160,13 +163,19 @@ class Countries extends Component {
           </Col>
         </Row>
 
-        <ReactTable
-          {...this.tableProps}
-          style={{ background: "white" }}
+        <DraggableTable
+          rows={this.props.countries}
+          //rows={rows}
+          columns={columns}
+          minRows={5}
+          defaultPageSize={20}
+          className="-striped -highlight"
+          filterable={true}
           data={this.props.countries}
           loading={this.props.fetchLoading}
           defaultFilterMethod={filterCaseInsensitive}
         />
+
         <CustomModal
           title="Edit Industry Data"
           isOpen={this.props.countryEditModal}
