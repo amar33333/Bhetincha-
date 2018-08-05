@@ -64,7 +64,9 @@ epics.push((action$, { getState }) =>
         toast.error(ajaxError.toString());
         return Observable.of({
           type: CREATE_SUB_CATEGORY_REJECTED,
-          payload: JSON.parse(ajaxError.message)
+          payload: ajaxError.status
+            ? ajaxError.message
+            : JSON.parse(ajaxError.message)
         });
       });
   })
@@ -166,7 +168,9 @@ epics.push((action$, { getState }) =>
         toast.error("Error: Updating Sub Category");
         return Observable.of({
           type: EDIT_SUB_CATEGORY_REJECTED,
-          payload: JSON.parse(ajaxError.message)
+          payload: ajaxError.status
+            ? ajaxError.message
+            : JSON.parse(ajaxError.message)
         });
       });
   })

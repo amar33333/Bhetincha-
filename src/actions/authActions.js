@@ -294,14 +294,14 @@ epics.push((action$, { getState }) =>
     .do(action => {
       const history = action.history;
       // const { groups, username } = getState().auth.cookies.user_data;
-      const { groups, slug } = action.payload.cookies.user_data;
+      const { groups, slug, username } = action.payload.cookies.user_data;
 
       switch (groups[0].name) {
         case USER_GROUP_BUSINESS:
           history.push(`/${slug}/dashboard`);
           break;
         case USER_GROUP_INDIVIDUAL:
-          // history.push("/");
+          history.push(`/${username}/userdashboard`);
           break;
         default:
           history.push("/admin");
@@ -540,7 +540,9 @@ epics.push(action$ =>
         toast.error("Error Creating New User");
         return Observable.of({
           type: CREATE_USER_REJECTED,
-          payload: JSON.parse(ajaxError.message)
+          payload: ajaxError.status
+            ? ajaxError.message
+            : JSON.parse(ajaxError.message)
         });
       });
   })
@@ -583,7 +585,9 @@ epics.push(action$ =>
       .catch(ajaxError => {
         return Observable.of({
           type: CREATE_BUSINESS_USER_REJECTED,
-          payload: JSON.parse(ajaxError.message)
+          payload: ajaxError.status
+            ? ajaxError.message
+            : JSON.parse(ajaxError.message)
         });
       });
   })
@@ -646,7 +650,9 @@ epics.push(action$ =>
       .catch(ajaxError => {
         return Observable.of({
           type: INDIVIDUAL_TOKEN_REJECTED,
-          payload: JSON.parse(ajaxError.message)
+          payload: ajaxError.status
+            ? ajaxError.message
+            : JSON.parse(ajaxError.message)
         });
       });
   })
@@ -659,9 +665,9 @@ export const onIndividualRegisterSubmit = payload => ({
 
 epics.push(action$ =>
   action$.ofType(CREATE_INDIVIDUAL_USER_PENDING).mergeMap(action => {
-    const { history, phone_number } = action.payload;
+    const { history, phone_number, body } = action.payload;
 
-    return onIndividualRegister({ ...action.payload })
+    return onIndividualRegister({ body })
       .map(({ response }) => {
         if (response.message) {
           history.push({
@@ -669,13 +675,17 @@ epics.push(action$ =>
             state: { phone_number }
           });
           return { type: CREATE_INDIVIDUAL_USER_FULFILLED, payload: response };
-        } else throw new Error(JSON.stringify(response.msg));
+        } else {
+          throw new Error(JSON.stringify(response.msg));
+        }
       })
       .catch(ajaxError => {
         toast.error("Error: Creating New User");
         return Observable.of({
           type: CREATE_INDIVIDUAL_USER_REJECTED,
-          payload: JSON.parse(ajaxError.message)
+          payload: ajaxError.status
+            ? ajaxError.message
+            : JSON.parse(ajaxError.message)
         });
       });
   })

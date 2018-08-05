@@ -98,7 +98,9 @@ epics.push((action$, { getState }) =>
         toast.error("Error: Adding Category");
         return Observable.of({
           type: CREATE_CATEGORY_REJECTED,
-          payload: JSON.parse(ajaxError.message)
+          payload: ajaxError.status
+            ? ajaxError.message
+            : JSON.parse(ajaxError.message)
         });
       });
   })
@@ -131,7 +133,9 @@ epics.push((action$, { getState }) =>
         toast.error("Error: Updating Category");
         return Observable.of({
           type: EDIT_CATEGORY_REJECTED,
-          payload: JSON.parse(ajaxError.message)
+          payload: ajaxError.status
+            ? ajaxError.message
+            : JSON.parse(ajaxError.message)
         });
       });
   })

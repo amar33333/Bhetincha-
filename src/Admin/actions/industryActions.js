@@ -63,7 +63,9 @@ epics.push((action$, { getState }) =>
         toast.error("Error: Adding Industry");
         return Observable.of({
           type: CREATE_INDUSTRY_REJECTED,
-          payload: JSON.parse(ajaxError.message)
+          payload: ajaxError.status
+            ? ajaxError.message
+            : JSON.parse(ajaxError.message)
         });
       });
   })
@@ -96,7 +98,9 @@ epics.push((action$, { getState }) =>
         toast.error("Error: Updating Industry");
         return Observable.of({
           type: EDIT_INDUSTRY_REJECTED,
-          payload: JSON.parse(ajaxError.message)
+          payload: ajaxError.status
+            ? ajaxError.message
+            : JSON.parse(ajaxError.message)
         });
       });
   })

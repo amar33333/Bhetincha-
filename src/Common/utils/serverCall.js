@@ -185,25 +185,11 @@ export const onResendTokenPost = ({ id }) =>
     url: `${RESEND_TOKEN_URL}${id}/`
   });
 
-export const onIndividualRegister = ({
-  username,
-  password,
-  email,
-  first_name,
-  last_name,
-  phone_number
-}) =>
+export const onIndividualRegister = ({ body }) =>
   ajax({
     method: "post",
     url: INDIVIDUAL_REGISTER_URL,
-    body: {
-      username,
-      password,
-      email,
-      first_name,
-      last_name,
-      phone_number
-    },
+    body,
     headers: {
       "Content-Type": "application/json"
     }

@@ -332,7 +332,6 @@ class SubBusinessDetail extends Component {
                     type="text"
                     value={this.state.business_name}
                     onChange={this.onChange.bind(this, "business_name")}
-                    onKeyDown={this._handleKeyPress}
                   />
                 </FormGroup>
                 <ErrorHandling
@@ -350,7 +349,6 @@ class SubBusinessDetail extends Component {
                     placeholder="Mobile Number Eg. 9843041699, (984)-3041699"
                     value={this.state.business_phone}
                     onChange={this.onChange.bind(this, "business_phone")}
-                    onKeyDown={this._handleKeyPress}
                   />
                 </FormGroup>
                 {this.displayPhoneValidationInfo()}
@@ -377,7 +375,6 @@ class SubBusinessDetail extends Component {
                     //required
                     type="text"
                     value={this.state.business_email}
-                    onKeyDown={this._handleKeyPress}
                     onChange={this.onChange.bind(this, "business_email")}
                   />
                 </FormGroup>
@@ -405,7 +402,6 @@ class SubBusinessDetail extends Component {
                     //required
                     type="text"
                     value={this.state.website}
-                    onKeyDown={this._handleKeyPress}
                     onChange={this.onChange.bind(this, "website")}
                   />
                 </FormGroup>

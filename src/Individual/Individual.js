@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Container } from "reactstrap";
+import { connect } from "react-redux";
 import { Header, Sidebar, Breadcrumb, Footer } from "../Common/components";
 import nav from "./config/nav";
 
@@ -26,6 +27,13 @@ class Individual extends Component {
   }
 
   componentDidUpdate(prevProps) {
+    if (
+      this.props.cookies.user_data.username !==
+      this.props.match.params[ROUTE_PARAMS_INDIVIDUAL_NAME]
+    ) {
+      this.props.history.push("/");
+    }
+
     if (
       this.props.match.params[ROUTE_PARAMS_INDIVIDUAL_NAME] !==
       prevProps.match.params[ROUTE_PARAMS_INDIVIDUAL_NAME]
@@ -122,4 +130,4 @@ export default withRepics(
   "IndividualContainer",
   individualReducers,
   combineEpics(...individualEpics)
-)(Individual);
+)(connect(({ auth: { cookies } }) => ({ cookies }))(Individual));
