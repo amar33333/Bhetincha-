@@ -38,6 +38,7 @@ const IMPROVE_LISTING = "business/improve-listing/";
 const SEARCH_PLACEHOLDER = "business/placeholder/";
 const SUBSCRIPTION_PACKAGE_PERMISSIONS = "business/package-permission/";
 const SUBSCRIPTION_PACKAGE = "business/subscription-package/";
+const SUBSCRIPTION_PACKAGE_ASSIGN = "business/business-subscription-package/";
 
 const ECOMMERCE = "ecommerce";
 
@@ -89,3 +90,4 @@ export const ECOMMERCE_PRODUCT_SEARCH_URL = `${MAIN_URL}/search/product/`;
 // Subscription Permissions
 export const SUBSCRIPTION_PACKAGE_PERMISSIONS_URL = `${MAIN_URL}/${SUBSCRIPTION_PACKAGE_PERMISSIONS}`;
 export const SUBSCRIPTION_PACKAGE_URL = `${MAIN_URL}/${SUBSCRIPTION_PACKAGE}`;
+export const SUBSCRIPTION_PACKAGE_ASSIGN_URL = `${MAIN_URL}/${SUBSCRIPTION_PACKAGE_ASSIGN}`;

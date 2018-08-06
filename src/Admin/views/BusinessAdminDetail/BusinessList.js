@@ -176,6 +176,24 @@ class BusinessList extends Component {
               </Button>
             </PermissionProvider>
 
+            <PermissionProvider permission="CAN_EDIT_BUSINESS">
+              <Button
+                data-tooltip="Manage Subscription"
+                data-position="bottom center"
+                color="primary"
+                className="mr-2"
+                onClick={() =>
+                  this.props.history.push({
+                    pathname: `${this.props.match.path}/${
+                      props.value
+                    }/manage-subscription`
+                  })
+                }
+              >
+                <i className="fa fa-code-fork" />
+              </Button>
+            </PermissionProvider>
+
             <PermissionProvider permission="CAN_BUSINESS_VERIFY">
               <Button
                 data-tooltip="Verify"

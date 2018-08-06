@@ -15,7 +15,10 @@ import {
   onSubscriptionPackagePost,
   onSubscriptionPackageGet,
   onSubscriptionPackagePut,
-  onSubscriptionPackageDelete
+  onSubscriptionPackageDelete,
+  onSubscriptionPackageAssignPost,
+  onSubscriptionPackageAssignGet,
+  onSubscriptionPackageAssignDelete
 } from "../config/adminServerCall";
 import {
   CREATE_SOCIAL_LINK_FULFILLED,
@@ -63,6 +66,15 @@ import {
   DELETE_SUBSCRIPTION_PACKAGE_FULFILLED,
   DELETE_SUBSCRIPTION_PACKAGE_PENDING,
   DELETE_SUBSCRIPTION_PACKAGE_REJECTED,
+  CREATE_SUBSCRIPTION_PACKAGE_ASSIGN_PENDING,
+  CREATE_SUBSCRIPTION_PACKAGE_ASSIGN_FULFILLED,
+  CREATE_SUBSCRIPTION_PACKAGE_ASSIGN_REJECTED,
+  FETCH_SUBSCRIPTION_PACKAGE_ASSIGN_PENDING,
+  FETCH_SUBSCRIPTION_PACKAGE_ASSIGN_FULFILLED,
+  FETCH_SUBSCRIPTION_PACKAGE_ASSIGN_REJECTED,
+  DELETE_SUBSCRIPTION_PACKAGE_ASSIGN_PENDING,
+  DELETE_SUBSCRIPTION_PACKAGE_ASSIGN_FULFILLED,
+  DELETE_SUBSCRIPTION_PACKAGE_ASSIGN_REJECTED,
   RESET_SETTINGS_ERRORS
 } from "./types";
 
@@ -97,6 +109,111 @@ epics.push((action$, { getState }) =>
             type: FETCH_SUBSCRIPTION_PACKAGE_PERMISSIONS_REJECTED
           })
         );
+    })
+);
+
+export const onSubscriptionPackageAssignList = payload => ({
+  type: FETCH_SUBSCRIPTION_PACKAGE_ASSIGN_PENDING,
+  payload
+});
+
+epics.push((action$, { getState }) =>
+  action$.ofType(FETCH_SUBSCRIPTION_PACKAGE_ASSIGN_PENDING).mergeMap(action => {
+    return onSubscriptionPackageAssignGet({
+      access_token: getState().auth.cookies.token_data.access_token,
+      ...action.payload
+    })
+      .map(({ response }) => ({
+        type: FETCH_SUBSCRIPTION_PACKAGE_ASSIGN_FULFILLED,
+        payload: response
+      }))
+      .catch(ajaxError =>
+        Observable.of({
+          type: FETCH_SUBSCRIPTION_PACKAGE_ASSIGN_REJECTED
+        })
+      );
+  })
+);
+
+export const onSubscriptionPackageAssignSubmit = payload => ({
+  type: CREATE_SUBSCRIPTION_PACKAGE_ASSIGN_PENDING,
+  payload
+});
+
+epics.push((action$, { getState }) =>
+  action$
+    .ofType(CREATE_SUBSCRIPTION_PACKAGE_ASSIGN_PENDING)
+    .mergeMap(action => {
+      const access_token = getState().auth.cookies.token_data.access_token;
+
+      return onSubscriptionPackageAssignPost({
+        ...action.payload,
+        access_token
+      })
+        .concatMap(({ response }) => {
+          if (response.msg === "success") {
+            toast.success("Subscription Package Assigned successfully!");
+            return [
+              { type: CREATE_SUBSCRIPTION_PACKAGE_ASSIGN_FULFILLED },
+              {
+                type: FETCH_SUBSCRIPTION_PACKAGE_ASSIGN_PENDING,
+                payload: { id: action.payload.id }
+              }
+            ];
+          } else {
+            throw new Error(JSON.stringify(response.msg));
+          }
+        })
+        .catch(ajaxError => {
+          // toast.error("Error: Assigning Subscription Package");
+          return Observable.of({
+            type: CREATE_SUBSCRIPTION_PACKAGE_ASSIGN_REJECTED,
+            payload: ajaxError.status
+              ? ajaxError.message
+              : JSON.parse(ajaxError.message)
+          });
+        });
+    })
+);
+
+export const onSubscriptionPackageAssignRemove = payload => ({
+  type: DELETE_SUBSCRIPTION_PACKAGE_ASSIGN_PENDING,
+  payload
+});
+
+epics.push((action$, { getState }) =>
+  action$
+    .ofType(DELETE_SUBSCRIPTION_PACKAGE_ASSIGN_PENDING)
+    .mergeMap(action => {
+      const access_token = getState().auth.cookies.token_data.access_token;
+
+      return onSubscriptionPackageAssignDelete({
+        ...action.payload,
+        access_token
+      })
+        .concatMap(({ response }) => {
+          if (response.msg === "success") {
+            toast.success("Subscription Package Assigned successfully!");
+            return [
+              { type: DELETE_SUBSCRIPTION_PACKAGE_ASSIGN_FULFILLED },
+              {
+                type: FETCH_SUBSCRIPTION_PACKAGE_ASSIGN_PENDING,
+                payload: { id: action.payload.id }
+              }
+            ];
+          } else {
+            throw new Error(JSON.stringify(response.msg));
+          }
+        })
+        .catch(ajaxError => {
+          toast.error("Error: Deleting Subscription Package");
+          return Observable.of({
+            type: DELETE_SUBSCRIPTION_PACKAGE_ASSIGN_REJECTED,
+            payload: ajaxError.status
+              ? ajaxError.message
+              : JSON.parse(ajaxError.message)
+          });
+        });
     })
 );
 

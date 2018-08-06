@@ -32,7 +32,8 @@ import {
   ImproveListings,
   CampaignSearchPlaceholder,
   SocialUrlLinks,
-  SubscriptionPackage
+  SubscriptionPackage,
+  ManageSubscription
 } from "../views";
 
 import { ManageCategories } from "../views/Ecommerce";
@@ -79,9 +80,9 @@ class AdminRoute extends Component {
         <CustomRoute
           path="/admin/list-business/add-business"
           name="Add Business"
-          component={props => (
+          component={routeProps => (
             <BusinessAdminDetail
-              {...this.props}
+              {...routeProps}
               requiredParams={{
                 country: true,
                 state: true,
@@ -97,9 +98,9 @@ class AdminRoute extends Component {
         <CustomRoute
           path="/admin/list-business/add-free-business"
           name="Add Free Business"
-          component={props => (
+          component={routeProps => (
             <BusinessAdminDetail
-              {...this.props}
+              {...routeProps}
               requiredParams={{
                 country: false,
                 state: false,
@@ -146,6 +147,12 @@ class AdminRoute extends Component {
           path="/admin/list-business/:businessSlug/manage-branchs"
           name="Manage Branch Address"
           component={ManageBranchs}
+          permission="CAN_VIEW_BRANCH"
+        />
+        <CustomRoute
+          path="/admin/list-business/:businessSlug/manage-subscription"
+          name="Manage Subscriptions"
+          component={ManageSubscription}
           permission="CAN_VIEW_BRANCH"
         />
         <CustomRoute
@@ -207,7 +214,7 @@ class AdminRoute extends Component {
           path="/admin/tele-calling"
           name="Tele-Calling"
           component={TeleCalling}
-          permission="CAN_VIEW_TELE_CALLING"
+          permission="CAN_ACCESS_TELE_CALLING"
         />
         <CustomRoute
           exact

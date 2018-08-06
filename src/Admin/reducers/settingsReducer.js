@@ -37,6 +37,12 @@ import {
   DELETE_SUBSCRIPTION_PACKAGE_FULFILLED,
   DELETE_SUBSCRIPTION_PACKAGE_PENDING,
   DELETE_SUBSCRIPTION_PACKAGE_REJECTED,
+  CREATE_SUBSCRIPTION_PACKAGE_ASSIGN_PENDING,
+  CREATE_SUBSCRIPTION_PACKAGE_ASSIGN_FULFILLED,
+  CREATE_SUBSCRIPTION_PACKAGE_ASSIGN_REJECTED,
+  FETCH_SUBSCRIPTION_PACKAGE_ASSIGN_PENDING,
+  FETCH_SUBSCRIPTION_PACKAGE_ASSIGN_FULFILLED,
+  FETCH_SUBSCRIPTION_PACKAGE_ASSIGN_REJECTED,
   RESET_SETTINGS_ERRORS
 } from "../actions/types";
 
@@ -59,6 +65,9 @@ const INITIAL_STATE = {
   settingsErrors: null,
   settingsEditErrors: null,
   subscriptionPackageLoading: false,
+  subscriptionPackageAssignList: [],
+  subscriptionPackageAssignLoading: false,
+  subscriptionPackageAssignError: null,
   subscriptionPackagePermissionsLoading: false,
   subscriptionPackagePermissionsList: [],
   subscriptionPackageList: [],
@@ -81,6 +90,36 @@ export default function(state = INITIAL_STATE, action) {
         searchPlaceholderEditModal: !state.searchPlaceholderEditModal,
         searchPlaceholderEditData: action.payload
       };
+
+    case CREATE_SUBSCRIPTION_PACKAGE_ASSIGN_PENDING:
+      return { ...state, subscriptionPackageAssignLoading: true };
+
+    case CREATE_SUBSCRIPTION_PACKAGE_ASSIGN_FULFILLED:
+      return {
+        ...state,
+        subscriptionPackageAssignLoading: false,
+        subscriptionPackageAssignError: null
+      };
+
+    case CREATE_SUBSCRIPTION_PACKAGE_ASSIGN_REJECTED:
+      return {
+        ...state,
+        subscriptionPackageAssignLoading: false,
+        subscriptionPackageAssignError: action.payload
+      };
+
+    case FETCH_SUBSCRIPTION_PACKAGE_ASSIGN_PENDING:
+      return { ...state, subscriptionPackageAssignLoading: true };
+
+    case FETCH_SUBSCRIPTION_PACKAGE_ASSIGN_FULFILLED:
+      return {
+        ...state,
+        subscriptionPackageAssignList: action.payload,
+        subscriptionPackageAssignLoading: false
+      };
+
+    case FETCH_SUBSCRIPTION_PACKAGE_ASSIGN_REJECTED:
+      return { ...state, subscriptionPackageAssignLoading: false };
 
     case FETCH_SUBSCRIPTION_PACKAGE_PERMISSIONS_PENDING:
       return { ...state, subscriptionPackagePermissionsLoading: true };

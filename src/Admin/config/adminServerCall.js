@@ -33,7 +33,8 @@ import {
   IMPROVE_LISTING_URL,
   SEARCH_PLACEHOLDER_URL,
   SUBSCRIPTION_PACKAGE_PERMISSIONS_URL,
-  SUBSCRIPTION_PACKAGE_URL
+  SUBSCRIPTION_PACKAGE_URL,
+  SUBSCRIPTION_PACKAGE_ASSIGN_URL
 } from "./ADMIN_API";
 
 import {
@@ -49,6 +50,37 @@ import axios from "axios";
 
 import { ajax } from "rxjs/observable/dom/ajax";
 import querystring from "querystring";
+
+export const onSubscriptionPackageAssignPost = ({ id, body, access_token }) =>
+  ajax({
+    method: "PUT",
+    url: `${SUBSCRIPTION_PACKAGE_ASSIGN_URL}${id}/`,
+    body,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
+export const onSubscriptionPackageAssignGet = ({ id, access_token }) =>
+  ajax({
+    method: "GET",
+    url: `${SUBSCRIPTION_PACKAGE_ASSIGN_URL}${id}/`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
+export const onSubscriptionPackageAssignDelete = ({ id, access_token }) =>
+  ajax({
+    method: "DELETE",
+    url: `${SUBSCRIPTION_PACKAGE_ASSIGN_URL}${id}/`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
 
 export const onSubscriptionPackagePermissionsGet = ({ access_token }) =>
   ajax({
