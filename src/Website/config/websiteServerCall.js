@@ -27,7 +27,7 @@ export const onSearch = ({ query }) =>
     method: "POST",
     url: AUTO_COMPLETE_SEARCH_URL,
     body: {
-      search: query
+      query
     },
     headers: {
       "Content-Type": "application/json"

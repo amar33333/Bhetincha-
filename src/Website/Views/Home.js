@@ -70,6 +70,7 @@ class Home extends Component {
                   from="home"
                   placeholder={this.state.placeholder}
                   valueKey="business_name"
+                  valueKey2="name"
                   autoFocus
                   suggestions={this.props.search_result.data}
                   onSuggestionsFetchRequested={this.props.onSearchQuerySubmit}
