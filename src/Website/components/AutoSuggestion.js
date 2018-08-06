@@ -20,7 +20,7 @@ class AutoSuggestion extends Component {
 
   getSuggestionValue = suggestion => {
     // this.setState({ selected: true });
-    return suggestion[this.props.valueKey];
+    return suggestion[this.props.valueKey] || suggestion[this.props.valueKey2];
   };
 
   renderSuggestion = suggestion => (
@@ -30,7 +30,7 @@ class AutoSuggestion extends Component {
         marginBottom: "0px"
       }}
     >
-      {suggestion[this.props.valueKey]}
+      {suggestion[this.props.valueKey] || suggestion[this.props.valueKey2]}
     </div>
   );
 
@@ -49,7 +49,10 @@ class AutoSuggestion extends Component {
         onSuggestionSelected={(event, { suggestion }) => {
           event.type === "click" &&
             //  || this.state.selected
-            this.props.onSearchComplete(suggestion[this.props.valueKey]);
+            this.props.onSearchComplete(
+              suggestion[this.props.valueKey] ||
+                suggestion[this.props.valueKey2]
+            );
           // this.props.onSearchItemSelected(suggestion);
         }}
         renderInputComponent={inputProps => (

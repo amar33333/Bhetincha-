@@ -60,6 +60,7 @@ class MainNavbar extends Component {
                   initialQuery={this.props.initialQuery}
                   placeholder="Search anything..."
                   valueKey="business_name"
+                  valueKey2="name"
                   suggestions={this.props.search_result.data}
                   onSuggestionsFetchRequested={this.props.onSearchQuerySubmit}
                   onSearchItemSelected={business => {
