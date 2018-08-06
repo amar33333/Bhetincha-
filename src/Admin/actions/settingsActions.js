@@ -147,7 +147,9 @@ epics.push((action$, { getState }) =>
         console.log("error: ", ajaxError);
         return Observable.of({
           type: CREATE_SUBSCRIPTION_PACKAGE_REJECTED,
-          payload: JSON.parse(ajaxError.message)
+          payload: ajaxError.status
+            ? ajaxError.message
+            : JSON.parse(ajaxError.message)
         });
       });
   })
@@ -178,7 +180,9 @@ epics.push((action$, { getState }) =>
         toast.error("Error: Updating Subscription Package");
         return Observable.of({
           type: EDIT_SUBSCRIPTION_PACKAGE_REJECTED,
-          payload: JSON.parse(ajaxError.message)
+          payload: ajaxError.status
+            ? ajaxError.message
+            : JSON.parse(ajaxError.message)
         });
       });
   })
@@ -211,7 +215,9 @@ epics.push((action$, { getState }) =>
           toast.error("Error: Deleting Subscription Package");
           return Observable.of({
             type: DELETE_SUBSCRIPTION_PACKAGE_REJECTED,
-            payload: JSON.parse(ajaxError.message)
+            payload: ajaxError.status
+              ? ajaxError.message
+              : JSON.parse(ajaxError.message)
           });
         });
     })
@@ -243,7 +249,9 @@ epics.push((action$, { getState }) =>
         toast.error("Error: Creating Search Placeholder");
         return Observable.of({
           type: CREATE_SEARCH_PLACEHOLDER_REJECTED,
-          payload: JSON.parse(ajaxError.message)
+          payload: ajaxError.status
+            ? ajaxError.message
+            : JSON.parse(ajaxError.message)
         });
       });
   })
@@ -299,7 +307,9 @@ epics.push((action$, { getState }) =>
         toast.error("Error: Updating Search Placeholder");
         return Observable.of({
           type: EDIT_SEARCH_PLACEHOLDER_REJECTED,
-          payload: JSON.parse(ajaxError.message)
+          payload: ajaxError.status
+            ? ajaxError.message
+            : JSON.parse(ajaxError.message)
         });
       });
   })
@@ -418,7 +428,9 @@ epics.push((action$, { getState }) =>
         toast.error("Error Creating Social Link !!!");
         return Observable.of({
           type: CREATE_SOCIAL_LINK_REJECTED,
-          payload: JSON.parse(ajaxError.message)
+          payload: ajaxError.status
+            ? ajaxError.message
+            : JSON.parse(ajaxError.message)
         });
       })
   )
@@ -454,7 +466,9 @@ epics.push((action$, { getState }) =>
         toast.error("Error Updating Social Link !!!");
         return Observable.of({
           type: EDIT_SOCIAL_LINK_REJECTED,
-          payload: JSON.parse(ajaxError.message)
+          payload: ajaxError.status
+            ? ajaxError.message
+            : JSON.parse(ajaxError.message)
         });
       })
   )

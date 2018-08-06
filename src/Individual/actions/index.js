@@ -1,3 +1,6 @@
 import testEpics from "./testActions";
+import personalDetailsEpics from "./personalDetailsActions";
 
-export default [...testEpics];
+export * from "./personalDetailsActions";
+
+export default [...testEpics, ...personalDetailsEpics];

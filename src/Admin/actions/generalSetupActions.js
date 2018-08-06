@@ -159,7 +159,9 @@ epics.push((action$, { getState }) =>
         toast.error("Error: Adding Country");
         return Observable.of({
           type: CREATE_COUNTRY_REJECTED,
-          payload: JSON.parse(ajaxError.message)
+          payload: ajaxError.status
+            ? ajaxError.message
+            : JSON.parse(ajaxError.message)
         });
       });
   })
@@ -207,7 +209,9 @@ epics.push((action$, { getState }) =>
         toast.error("Error: Updating Country");
         return Observable.of({
           type: EDIT_COUNTRY_REJECTED,
-          payload: JSON.parse(ajaxError.message)
+          payload: ajaxError.status
+            ? ajaxError.message
+            : JSON.parse(ajaxError.message)
         });
       });
   })
@@ -286,7 +290,9 @@ epics.push((action$, { getState }) =>
         toast.error("Error: Adding State");
         return Observable.of({
           type: CREATE_STATE_REJECTED,
-          payload: JSON.parse(ajaxError.message)
+          payload: ajaxError.status
+            ? ajaxError.message
+            : JSON.parse(ajaxError.message)
         });
       });
   })
@@ -363,7 +369,9 @@ epics.push((action$, { getState }) =>
         toast.error("Error: Updating State");
         return Observable.of({
           type: EDIT_STATE_REJECTED,
-          payload: JSON.parse(ajaxError.message)
+          payload: ajaxError.status
+            ? ajaxError.message
+            : JSON.parse(ajaxError.message)
         });
       });
   })
@@ -442,7 +450,9 @@ epics.push((action$, { getState }) =>
         toast.error("Error: Adding District");
         return Observable.of({
           type: CREATE_DISTRICT_REJECTED,
-          payload: JSON.parse(ajaxError.message)
+          payload: ajaxError.status
+            ? ajaxError.message
+            : JSON.parse(ajaxError.message)
         });
       });
   })
@@ -533,7 +543,9 @@ epics.push((action$, { getState }) =>
         toast.error("Error: Updating District");
         return Observable.of({
           type: EDIT_DISTRICT_REJECTED,
-          payload: JSON.parse(ajaxError.message)
+          payload: ajaxError.status
+            ? ajaxError.message
+            : JSON.parse(ajaxError.message)
         });
       });
   })
@@ -612,7 +624,9 @@ epics.push((action$, { getState }) =>
         toast.error("Error: Adding City");
         return Observable.of({
           type: CREATE_CITY_REJECTED,
-          payload: JSON.parse(ajaxError.message)
+          payload: ajaxError.status
+            ? ajaxError.message
+            : JSON.parse(ajaxError.message)
         });
       });
   })
@@ -645,7 +659,9 @@ epics.push((action$, { getState }) =>
         toast.error("Error: Updating City");
         return Observable.of({
           type: EDIT_CITY_REJECTED,
-          payload: JSON.parse(ajaxError.message)
+          payload: ajaxError.status
+            ? ajaxError.message
+            : JSON.parse(ajaxError.message)
         });
       });
   })
@@ -780,7 +796,9 @@ epics.push((action$, { getState }) =>
         toast.error("Error: Adding Area");
         return Observable.of({
           type: CREATE_AREA_REJECTED,
-          payload: JSON.parse(ajaxError.message)
+          payload: ajaxError.status
+            ? ajaxError.message
+            : JSON.parse(ajaxError.message)
         });
       });
   })
@@ -813,7 +831,9 @@ epics.push((action$, { getState }) =>
         toast.error("Error: Updating Area");
         return Observable.of({
           type: EDIT_AREA_REJECTED,
-          payload: JSON.parse(ajaxError.message)
+          payload: ajaxError.status
+            ? ajaxError.message
+            : JSON.parse(ajaxError.message)
         });
       });
   })

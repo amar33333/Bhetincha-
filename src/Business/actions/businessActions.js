@@ -199,7 +199,9 @@ epics.push((action$, { getState }) =>
         // toast.error("Error Adding Social Link !!!");
         return Observable.of({
           type: FETCH_SOCIAL_LINK_URL_REJECTED,
-          payload: JSON.parse(ajaxError.message)
+          payload: ajaxError.status
+            ? ajaxError.message
+            : JSON.parse(ajaxError.message)
         });
       })
   )
@@ -232,7 +234,9 @@ epics.push((action$, { getState }) =>
         toast.error("Error Adding Social Link !!!");
         return Observable.of({
           type: CREATE_SOCIAL_LINK_URL_REJECTED,
-          payload: JSON.parse(ajaxError.message)
+          payload: ajaxError.status
+            ? ajaxError.message
+            : JSON.parse(ajaxError.message)
         });
       })
   )
@@ -273,7 +277,9 @@ epics.push((action$, { getState }) =>
         toast.error("Error Updating Social Link !!!");
         return Observable.of({
           type: EDIT_SOCIAL_LINK_URL_REJECTED,
-          payload: JSON.parse(ajaxError.message)
+          payload: ajaxError.status
+            ? ajaxError.message
+            : JSON.parse(ajaxError.message)
         });
       })
   )
@@ -307,7 +313,9 @@ epics.push((action$, { getState }) =>
         toast.error("Error Deleting Social Link !!!");
         return Observable.of({
           type: DELETE_SOCIAL_LINK_URL_REJECTED,
-          payload: JSON.parse(ajaxError.message)
+          payload: ajaxError.status
+            ? ajaxError.message
+            : JSON.parse(ajaxError.message)
         });
       });
   })
@@ -335,7 +343,9 @@ epics.push((action$, { getState }) =>
         // toast.error("Error Creating Social Link !!!");
         return Observable.of({
           type: FETCH_SOCIAL_LINK_REJECTED,
-          payload: JSON.parse(ajaxError.message)
+          payload: ajaxError.status
+            ? ajaxError.message
+            : JSON.parse(ajaxError.message)
         });
       })
   )
@@ -580,7 +590,9 @@ epics.push((action$, { getState }) =>
         toast.error("Error Updating Business Details !!!");
         return Observable.of({
           type: EDIT_BUSINESS_DETAILS_REJECTED,
-          payload: JSON.parse(ajaxError.message)
+          payload: ajaxError.status
+            ? ajaxError.message
+            : JSON.parse(ajaxError.message)
         });
       });
   })
@@ -642,7 +654,9 @@ epics.push((action$, { getState }) =>
         toast.error("Error: Adding Branch !!!");
         return Observable.of({
           type: CREATE_BRANCH_REJECTED,
-          payload: JSON.parse(ajaxError.message)
+          payload: ajaxError.status
+            ? ajaxError.message
+            : JSON.parse(ajaxError.message)
         });
       });
   })
@@ -670,7 +684,9 @@ epics.push((action$, { getState }) =>
         toast.error("Error: Branch Updating !!!");
         return Observable.of({
           type: EDIT_BRANCH_EACH_REJECTED,
-          payload: JSON.parse(ajaxError.message)
+          payload: ajaxError.status
+            ? ajaxError.message
+            : JSON.parse(ajaxError.message)
         });
       });
   })

@@ -7,6 +7,12 @@ const items = {
       url: `/${ROUTE_PARAMS_INDIVIDUAL_NAME}/userdashboard/home`,
       icon: "icon-speedometer"
       // permission: "CAN_VIEW_DASHBOARD"
+    },
+    {
+      name: "Personal Details",
+      url: `/${ROUTE_PARAMS_INDIVIDUAL_NAME}/userdashboard/personal-details`,
+      icon: "icon-speedometer"
+      // permission: "CAN_VIEW_DASHBOARD"
     }
   ]
 };

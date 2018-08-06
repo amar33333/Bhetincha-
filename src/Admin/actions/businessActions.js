@@ -200,7 +200,9 @@ epics.push((action$, { getState }) =>
         // toast.error("Error Adding Social Link !!!");
         return Observable.of({
           type: FETCH_SOCIAL_LINK_URL_REJECTED,
-          payload: JSON.parse(ajaxError.message)
+          payload: ajaxError.status
+            ? ajaxError.message
+            : JSON.parse(ajaxError.message)
         });
       })
   )
@@ -240,7 +242,9 @@ epics.push((action$, { getState }) =>
         toast.error("Error Updating Social Link !!!");
         return Observable.of({
           type: EDIT_SOCIAL_LINK_URL_REJECTED,
-          payload: JSON.parse(ajaxError.message)
+          payload: ajaxError.status
+            ? ajaxError.message
+            : JSON.parse(ajaxError.message)
         });
       })
   )
@@ -274,7 +278,9 @@ epics.push((action$, { getState }) =>
         toast.error("Error Deleting Social Link !!!");
         return Observable.of({
           type: DELETE_SOCIAL_LINK_URL_REJECTED,
-          payload: JSON.parse(ajaxError.message)
+          payload: ajaxError.status
+            ? ajaxError.message
+            : JSON.parse(ajaxError.message)
         });
       });
   })
@@ -308,7 +314,9 @@ epics.push((action$, { getState }) =>
         toast.error("Error Adding Social Link !!!");
         return Observable.of({
           type: CREATE_SOCIAL_LINK_URL_REJECTED,
-          payload: JSON.parse(ajaxError.message)
+          payload: ajaxError.status
+            ? ajaxError.message
+            : JSON.parse(ajaxError.message)
         });
       })
   )
@@ -425,7 +433,9 @@ epics.push((action$, { getState }) =>
         toast.error("Error: Updating Branch !!!");
         return Observable.of({
           type: EDIT_BRANCH_EACH_REJECTED,
-          payload: JSON.parse(ajaxError.message)
+          payload: ajaxError.status
+            ? ajaxError.message
+            : JSON.parse(ajaxError.message)
         });
       });
   })
@@ -478,7 +488,9 @@ epics.push((action$, { getState }) =>
         toast.error("Error: Adding Branch !!!");
         return Observable.of({
           type: CREATE_BRANCH_REJECTED,
-          payload: JSON.parse(ajaxError.message)
+          payload: ajaxError.status
+            ? ajaxError.message
+            : JSON.parse(ajaxError.message)
         });
       });
   })
@@ -955,7 +967,9 @@ epics.push((action$, { getState }) =>
         toast.error("Error in Adding Business");
         return Observable.of({
           type: CREATE_BUSINESS_REJECTED,
-          payload: JSON.parse(ajaxError.message)
+          payload: ajaxError.status
+            ? ajaxError.message
+            : JSON.parse(ajaxError.message)
         });
       });
   })
@@ -1455,7 +1469,9 @@ epics.push((action$, { getState }) =>
         toast.error("Error: Creating Company Type");
         return Observable.of({
           type: CREATE_COMPANY_TYPE_REJECTED,
-          payload: JSON.parse(ajaxError.message)
+          payload: ajaxError.status
+            ? ajaxError.message
+            : JSON.parse(ajaxError.message)
         });
       });
   })
@@ -1504,7 +1520,9 @@ epics.push((action$, { getState }) =>
         toast.error("Error: Creating Payment Method");
         return Observable.of({
           type: CREATE_PAYMENT_METHODS_REJECTED,
-          payload: JSON.parse(ajaxError.message)
+          payload: ajaxError.status
+            ? ajaxError.message
+            : JSON.parse(ajaxError.message)
         });
       });
   })
@@ -1580,7 +1598,9 @@ epics.push((action$, { getState }) =>
         toast.error("Error: Updating Company Type");
         return Observable.of({
           type: EDIT_COMPANY_TYPE_REJECTED,
-          payload: JSON.parse(ajaxError.message)
+          payload: ajaxError.status
+            ? ajaxError.message
+            : JSON.parse(ajaxError.message)
         });
       });
   })
@@ -1692,7 +1712,9 @@ epics.push((action$, { getState }) =>
         toast.error("Error: Updating Payment Method");
         return Observable.of({
           type: EDIT_PAYMENT_METHOD_REJECTED,
-          payload: JSON.parse(ajaxError.message)
+          payload: ajaxError.status
+            ? ajaxError.message
+            : JSON.parse(ajaxError.message)
         });
       });
   })

@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Route, Switch, Redirect } from "react-router-dom";
 
-import { Dashboard } from "../views";
+import { Dashboard, PersonalDetails } from "../views";
 
 import {
   ROUTE_PARAMS_INDIVIDUAL_NAME,
@@ -18,6 +18,13 @@ class IndividualRoute extends Component {
           name="Dashboard"
           component={Dashboard}
         />
+        <Route
+          exact
+          path={`/:${ROUTE_PARAMS_INDIVIDUAL_NAME}/userdashboard/personal-details`}
+          name="PersonalDetails"
+          component={PersonalDetails}
+        />
+
         <Route
           path={`/:${ROUTE_PARAMS_INDIVIDUAL_NAME}/userdashboard`}
           render={props => {

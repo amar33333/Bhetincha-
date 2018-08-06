@@ -20,6 +20,10 @@ import { connect } from "react-redux";
 
 import { toast } from "react-toastify";
 
+import Datetime from "react-datetime";
+import moment from "moment";
+import "react-datetime/css/react-datetime.css";
+
 import FacebookLogin from "react-facebook-login";
 import GoogleLogin from "react-google-login";
 
@@ -46,6 +50,8 @@ class IndividualRegister extends Component {
     first_name: "",
     last_name: "",
     phone_number: "",
+    gender: "Male",
+    date_of_birth: "",
     checked: false,
     phone_validation_error: false,
     email_validation_error: false
@@ -115,30 +121,37 @@ class IndividualRegister extends Component {
       first_name,
       last_name,
       phone_number,
+      gender,
+      date_of_birth,
       phone_validation_error,
       email_validation_error,
       checked
     } = this.state;
 
-    // if (!phone_validation_error && !email_validation_error)
-    if (password === confirm_password) {
-      if (checked) {
-        this.props.onIndividualRegisterSubmit({
-          username,
-          password,
-          email,
-          first_name,
-          last_name,
-          phone_number,
-          history: this.props.history
-        });
-      } else toast.error("You have to agree to our User Agreement Policy");
-    } else {
-      toast.error("Password Mismatch");
-    }
+    if (!phone_validation_error && !email_validation_error)
+      if (password === confirm_password) {
+        if (checked) {
+          this.props.onIndividualRegisterSubmit({
+            body: {
+              username,
+              password,
+              email,
+              first_name,
+              gender,
+              date_of_birth: moment(date_of_birth).format("YYYY-MM-DDTHH:mmZ"),
+              last_name,
+              phone_number
+            },
+            history: this.props.history
+          });
+        } else toast.error("You have to agree to our User Agreement Policy");
+      } else {
+        toast.error("Password Mismatch");
+      }
   };
 
   render() {
+    console.log(this.props);
     return (
       <div
         style={{
@@ -182,6 +195,7 @@ class IndividualRegister extends Component {
                       </InputGroupText>
                     </InputGroupAddon>
                     <Input
+                      autoCapitalize
                       autoFocus
                       required
                       type="text"
@@ -197,6 +211,7 @@ class IndividualRegister extends Component {
                       </InputGroupText>
                     </InputGroupAddon>
                     <Input
+                      autoCapitalize
                       required
                       type="text"
                       placeholder="Last Name"
@@ -219,6 +234,59 @@ class IndividualRegister extends Component {
                     />
                   </InputGroup>
                   {this.displayPhoneValidationInfo()}
+                  <ErrorHandling
+                    error={
+                      this.props.registerErrors &&
+                      this.props.registerErrors.aphone_number
+                    }
+                  />
+                  <FormGroup>
+                    <Label for="gender">Gender </Label>
+                    <div>
+                      <input
+                        type="radio"
+                        name="gender"
+                        className="radio"
+                        value="Male"
+                        onChange={this.onChange.bind(this, "gender")}
+                        checked={this.state.gender === "Male"}
+                      />{" "}
+                      Male
+                      <input
+                        type="radio"
+                        className="radio"
+                        name="gender"
+                        value="Female"
+                        onChange={this.onChange.bind(this, "gender")}
+                        checked={this.state.gender === "Female"}
+                      />{" "}
+                      Female
+                      <input
+                        type="radio"
+                        className="radio"
+                        name="gender"
+                        value="Other"
+                        onChange={this.onChange.bind(this, "gender")}
+                        checked={this.state.gender === "Other"}
+                      />{" "}
+                      Other
+                    </div>
+                  </FormGroup>
+                  <FormGroup>
+                    <Label>Date of Birth</Label>
+                    <Datetime
+                      //disabled={this.props.loading}
+                      value={this.state.date_of_birth}
+                      onChange={time => {
+                        this.setState({
+                          date_of_birth: moment(time)
+                        });
+                      }}
+                      timeFormat={false}
+                      // utc={true}
+                      disableOnClickOutside={false}
+                    />
+                  </FormGroup>
 
                   <InputGroup className="mb-3">
                     <InputGroupAddon addonType="prepend">
@@ -234,6 +302,12 @@ class IndividualRegister extends Component {
                       onChange={this.onChange.bind(this, "username")}
                     />
                   </InputGroup>
+                  <ErrorHandling
+                    error={
+                      this.props.registerErrors &&
+                      this.props.registerErrors.username
+                    }
+                  />
                   <InputGroup className="mb-3">
                     <InputGroupAddon addonType="prepend">
                       <InputGroupText>@</InputGroupText>
@@ -246,8 +320,13 @@ class IndividualRegister extends Component {
                       onChange={this.onChange.bind(this, "email")}
                     />
                   </InputGroup>
-
                   {this.displayEmailValidationInfo()}
+                  <ErrorHandling
+                    error={
+                      this.props.registerErrors &&
+                      this.props.registerErrors.email
+                    }
+                  />
                   <InputGroup className="mb-3">
                     <InputGroupAddon addonType="prepend">
                       <InputGroupText>

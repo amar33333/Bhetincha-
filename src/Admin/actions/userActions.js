@@ -97,7 +97,9 @@ epics.push((action$, { getState }) =>
         toast.error("Error: Updating User");
         return Observable.of({
           type: EDIT_USER_REJECTED,
-          payload: JSON.parse(ajaxError.message)
+          payload: ajaxError.status
+            ? ajaxError.message
+            : JSON.parse(ajaxError.message)
         });
       });
   })
@@ -130,7 +132,9 @@ epics.push((action$, { getState }) =>
         toast.error("Error: Updating Group");
         return Observable.of({
           type: EDIT_GROUP_REJECTED,
-          payload: JSON.parse(ajaxError.message)
+          payload: ajaxError.status
+            ? ajaxError.message
+            : JSON.parse(ajaxError.message)
         });
       });
   })
@@ -226,7 +230,9 @@ epics.push((action$, { getState }) =>
         toast.error("Error Adding group");
         return Observable.of({
           type: CREATE_GROUP_REJECTED,
-          payload: JSON.parse(ajaxError.message)
+          payload: ajaxError.status
+            ? ajaxError.message
+            : JSON.parse(ajaxError.message)
         });
       })
   )
@@ -345,7 +351,9 @@ epics.push((action$, { getState }) =>
         toast.error("Error Creating User");
         return Observable.of({
           type: CREATE_USER_REJECTED,
-          payload: JSON.parse(ajaxError.message)
+          payload: ajaxError.status
+            ? ajaxError.message
+            : JSON.parse(ajaxError.message)
         });
       });
   })
