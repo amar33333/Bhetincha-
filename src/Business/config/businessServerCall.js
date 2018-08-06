@@ -576,3 +576,21 @@ export const onFoodGroupItemRemoveEcommerce = ({
       Authorization: "Bearer " + access_token
     }
   });
+
+//Food Group Item Update
+export const onFoodGroupItemEditPut = ({
+  business_id,
+  body,
+  access_token,
+  uid,
+  fgitemid
+}) =>
+  ajax({
+    method: "PUT",
+    url: `${CORE_MEMBER_URL}${business_id}/section/menu/${uid}/menu-food-items/${fgitemid}/`,
+    body,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });

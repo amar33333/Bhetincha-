@@ -3,42 +3,88 @@ import { connect } from "react-redux";
 
 import ReactTable from "react-table";
 import "react-table/react-table.css";
-
+import {
+  Row,
+  Col,
+  Form,
+  FormGroup,
+  Input,
+  Label,
+  CardHeader,
+  CardBody,
+  Button,
+  Modal,
+  ModalBody,
+  ModalFooter,
+  ModalHeader,
+  Card
+} from "reactstrap";
 import {
   PaginationComponent,
   PopoverDelete
 } from "../../../../Common/components";
 import filterCaseInsesitive from "../../../../Common/utils/filterCaseInsesitive";
-import { onFoodGroupItemRemove } from "../../../actions";
+import { onFoodGroupItemRemove, onFoodGroupItemEdit } from "../../../actions";
 
 class FoodGroupItemList extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      selectedFoodGroupItems: []
-      //data: this.props.selectedFoodGroupItems
+      selectedFoodGroupItems: [],
+      iditem: "",
+      name: "",
+      price: "",
+      fgidSelected: "",
+      modal: false
     };
-    this.renderEditable = this.renderEditable.bind(this);
+    this.toggle = this.toggle.bind(this);
   }
 
-  renderEditable(cellInfo) {
-    return (
-      <div
-        style={{ backgroundColor: "#fafafa" }}
-        contentEditable
-        suppressContentEditableWarning
-        onBlur={e => {
-          // const data = [...this.state.data];
-          // data[cellInfo.index][cellInfo.column.id] = e.target.innerHTML;
-          // this.setState({ data });
-          console.log("asd");
-        }}
-        // dangerouslySetInnerHTML={{
-        //   __html: this.state.data[cellInfo.index][cellInfo.column.id]
-        // }}
-      />
-    );
-  }
+  toggle = event => {
+    var fgitemid = event.target.getAttribute("dataid");
+    var fgitemname = event.target.getAttribute("dataname");
+    var fgitemprice = event.target.getAttribute("dataprice");
+    var fgitemfgid = event.target.getAttribute("datafgid");
+    this.setState({
+      modal: !this.state.modal,
+      iditem: fgitemid,
+      name: fgitemname,
+      price: fgitemprice,
+      fgidSelected: fgitemfgid
+    });
+  };
+
+  toggleUpdate = event => {
+    this.setState({
+      modal: !this.state.modal
+    });
+  };
+
+  onChange = (key, event) => this.setState({ [key]: event.target.value });
+
+  handleSubmit = event => {
+    event.preventDefault();
+    // console.log("Posted Data = Item Id : " + this.state.iditem +
+    // "\n Name : " + this.state.name +
+    // "\n Price : " + this.state.price +
+    // "\n Food Group Id : " + this.state.fgidSelected
+    // );
+    this.props.onFoodGroupItemEdit({
+      body: {
+        name: this.state.name,
+        price: this.state.price
+      },
+      uid: this.state.fgidSelected,
+      fgitemid: this.state.iditem
+    });
+    this.setState({
+      iditem: "",
+      name: "",
+      price: "",
+      fgidSelected: "",
+      modal: !this.state.modal
+    });
+  };
 
   tableProps = {
     columns: [
@@ -51,17 +97,40 @@ class FoodGroupItemList extends Component {
         filterable: false,
         sortable: false,
         width: 100,
-        Cell: ({ value }) => (
-          <PopoverDelete
-            id={`delete-item-${value}`}
-            onClick={() =>
-              //console.log("fgid = "+this.props.selectedFoodGroupId+"\n fgitemid = "+value)
-              this.props.onFoodGroupItemRemove({
-                uid: this.props.selectedFoodGroupId,
-                fgitemid: value
-              })
-            }
-          />
+        Cell: ({ value, original: { foodID, name, price } }) => (
+          <span>
+            <span
+              className="fa fa-edit"
+              style={{
+                color: "green",
+                fontSize: "20px",
+                position: "relative",
+                top: "4px"
+              }}
+              onClick={this.toggle}
+              dataid={foodID}
+              dataname={name}
+              dataprice={price}
+              datafgid={this.props.selectedFoodGroupId}
+            />
+            <PopoverDelete
+              id={`delete-item-${value}`}
+              customStyle={{
+                border: "none",
+                color: "red",
+                background: "none",
+                outline: "none",
+                fontSize: "24px",
+                padding: "0 10px"
+              }}
+              onClick={() =>
+                this.props.onFoodGroupItemRemove({
+                  uid: this.props.selectedFoodGroupId,
+                  fgitemid: value
+                })
+              }
+            />
+          </span>
         )
       }
     ],
@@ -71,13 +140,11 @@ class FoodGroupItemList extends Component {
     filterable: true,
     style: { background: "white" },
     defaultFilterMethod: filterCaseInsesitive,
-    noDataText: "No Attributes assigned",
+    noDataText: "No Food Item Available",
     PaginationComponent
   };
 
   render() {
-    //, console.log("FoodGroupItem = "+this.props.selectedFoodGroupItems);
-    //const { data } = this.state;
     return (
       <div>
         {!this.props.selectedFoodGroupItems.length && (
@@ -92,6 +159,69 @@ class FoodGroupItemList extends Component {
             data={this.props.selectedFoodGroupItems}
           />
         )}
+
+        <Modal
+          isOpen={this.state.modal}
+          toggle={this.toggle}
+          className={this.props.className}
+        >
+          <ModalHeader
+            toggle={this.toggleUpdate}
+            style={{ backgroundColor: "#c2cfd6" }}
+          >
+            {" "}
+            Update Food Item{" "}
+          </ModalHeader>
+          <ModalBody>
+            <Form onSubmit={this.handleSubmit}>
+              <Row>
+                <Col>
+                  <FormGroup>
+                    <Label for="name">Food Item Name</Label>
+                    <Input
+                      required
+                      type="text"
+                      value={this.state.name}
+                      onChange={this.onChange.bind(this, "name")}
+                    />
+                  </FormGroup>
+                </Col>
+              </Row>
+              <Row>
+                <Col>
+                  <FormGroup>
+                    <Label for="price">Price</Label>
+                    <Input
+                      required
+                      type="number"
+                      value={this.state.price}
+                      onChange={this.onChange.bind(this, "price")}
+                    />
+                  </FormGroup>
+                </Col>
+              </Row>
+            </Form>
+          </ModalBody>
+          <ModalFooter style={{ backgroundColor: "#c2cfd6" }}>
+            <Button
+              className="float-right mb-3"
+              variant="raised"
+              color="primary"
+              margin-left="50%"
+              onClick={this.handleSubmit}
+            >
+              <span className="fa fa-check" /> Update
+            </Button>
+            <Button
+              className="float-right mb-3"
+              margin-left="50%"
+              color="danger"
+              onClick={this.toggleUpdate}
+            >
+              <span className="fa fa-close" /> Cancel
+            </Button>
+          </ModalFooter>
+        </Modal>
       </div>
     );
   }
@@ -111,6 +241,7 @@ export default connect(
     selectedFoodGroupId
   }),
   {
-    onFoodGroupItemRemove
+    onFoodGroupItemRemove,
+    onFoodGroupItemEdit
   }
 )(FoodGroupItemList);

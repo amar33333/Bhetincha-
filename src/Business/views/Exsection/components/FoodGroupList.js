@@ -11,7 +11,6 @@ import {
   CardBody,
   Button
 } from "reactstrap";
-import { Select } from "../../../../Common/components";
 import FoodGroupAddNew from "./FoodGroupAddNew";
 import FoodGroupItemList from "./FoodGroupItemList";
 import FoodGroupItemAddNew from "./FoodGroupItemAddNew";
@@ -32,7 +31,6 @@ class FoodGroupList extends Component {
       fgItemFetchId: "",
       isFoodGroupAddNewHidden: true,
       isFoodGroupAddNewItemHidden: true,
-      //foodGroups: [],
       selectedFoodGroupItems: [],
       selectedFoodGroupName: "",
       foodGroup: null
@@ -52,7 +50,6 @@ class FoodGroupList extends Component {
   }
 
   componentDidMount() {
-    //this.props.onFoodGroupFetchList();
     this.setState({
       selectedFoodGroupItems: this.props.selectedFoodGroupItems
     });
@@ -60,7 +57,7 @@ class FoodGroupList extends Component {
 
   onChange = event => {
     var selectId = event.target.value;
-    console.log("Select id : " + selectId);
+    //console.log("Select id : " + selectId);
     this.props.onFoodGroupFetchList({
       uid: selectId
     });
@@ -71,7 +68,7 @@ class FoodGroupList extends Component {
       name: event.target.value.replace(/\b\w/g, l => l.toUpperCase())
     });
     var inputIdTag = event.target.getAttribute("id");
-    document.getElementById("fgEditSaveBtn" + inputIdTag).style.display =
+    document.getElementById("fgEditSubmitBtn" + inputIdTag).style.display =
       "inline-block";
   };
 
@@ -85,6 +82,10 @@ class FoodGroupList extends Component {
     });
     document.getElementById(
       "fgEditSaveBtn" + this.state.defaultInputId
+    ).style.display =
+      "none";
+    document.getElementById(
+      "fgEditSubmitBtn" + this.state.defaultInputId
     ).style.display =
       "none";
     document
@@ -102,6 +103,10 @@ class FoodGroupList extends Component {
       "fgEditSaveBtn" + this.state.defaultInputId
     ).style.display =
       "none";
+    document.getElementById(
+      "fgEditSubmitBtn" + this.state.defaultInputId
+    ).style.display =
+      "none";
     document
       .getElementById(this.state.defaultInputId)
       .setAttribute("disabled", "disabled");
@@ -112,7 +117,8 @@ class FoodGroupList extends Component {
     var inputOriginalValue = event.target.getAttribute("dataname");
     this.setState({
       defaultInputValue: inputOriginalValue,
-      defaultInputId: inputId
+      defaultInputId: inputId,
+      name: inputOriginalValue.replace(/\b\w/g, l => l.toUpperCase())
     });
     document.getElementById(inputId).removeAttribute("disabled");
     document.getElementById(inputId).focus();
@@ -121,7 +127,8 @@ class FoodGroupList extends Component {
         <span
           className="fa fa-check"
           onClick={this.onInputSubmit}
-          style={{ marginRight: "5px", color: "green" }}
+          id={"fgEditSubmitBtn" + inputId}
+          style={{ marginRight: "5px", color: "green", display: "none" }}
         />
         <span
           className="fa fa-close"
@@ -134,6 +141,8 @@ class FoodGroupList extends Component {
       element,
       document.getElementById("fgEditSaveBtn" + inputId)
     );
+    document.getElementById("fgEditSaveBtn" + inputId).style.display =
+      "inline-block";
   };
 
   render() {
@@ -151,7 +160,6 @@ class FoodGroupList extends Component {
                 }}
               >
                 <strong>Food Group List</strong>
-
                 <Button
                   data-tooltip="Add New Food Group"
                   data-position="bottom center"
@@ -178,16 +186,7 @@ class FoodGroupList extends Component {
                       }}
                     >
                       <Row>
-                        <Col
-                          xs="9"
-                          md="9"
-                          onClick={() =>
-                            this.props.onFoodGroupFetchList({
-                              uid: fg.foodCategoryID,
-                              fgname: fg.name
-                            })
-                          }
-                        >
+                        <Col xs="9" md="9">
                           <Input
                             required
                             type="text"
@@ -213,7 +212,8 @@ class FoodGroupList extends Component {
                             style={{
                               position: "absolute",
                               display: "none",
-                              right: "25px"
+                              right: "25px",
+                              fontSize: "15px"
                             }}
                           />
                         </Col>
@@ -221,38 +221,29 @@ class FoodGroupList extends Component {
                         <Col xs="3" md="3">
                           <span
                             className="fa fa-edit"
-                            style={{ color: "green" }}
+                            style={{
+                              color: "green",
+                              fontSize: "20px",
+                              position: "relative",
+                              top: "4px"
+                            }}
                             onClick={this.focusInput}
                             dataid={fg.foodCategoryID}
                             dataname={fg.name}
-                            title="Edit"
                           />
                           <PopoverDelete
                             customStyle={{
-                              verticalAlign: "middle",
-                              margin: "5px 0",
-                              padding: "5px",
                               border: "none",
                               color: "red",
                               background: "none",
-                              outline: "none"
+                              outline: "none",
+                              fontSize: "24px",
+                              padding: "0 10px"
                             }}
                             id={`delete-${fg.foodCategoryID}`}
-                            //disabled={uidPage !== uidCategory}
                             onClick={() =>
                               this.props.onFoodGroupDelete({
                                 uid: fg.foodCategoryID
-                              })
-                            }
-                          />
-                          <span
-                            className="fa fa-list"
-                            style={{ color: "blue" }}
-                            title="List"
-                            onClick={() =>
-                              this.props.onFoodGroupFetchList({
-                                uid: fg.foodCategoryID,
-                                fgname: fg.name
                               })
                             }
                           />
@@ -265,76 +256,76 @@ class FoodGroupList extends Component {
             </CardBody>
           </Card>
         </Col>
-        <Col xs="12" md="7">
-          <Card>
-            <CardHeader>
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  justifyContent: "space-between",
-                  alignItems: "center"
-                }}
-              >
-                {!this.props.foodGroups.length && <p>No Food Group</p>}
-                <select
+        {!this.props.foodGroups.length ? (
+          ""
+        ) : (
+          <Col xs="12" md="7">
+            <Card>
+              <CardHeader>
+                <div
                   style={{
-                    backgroundColor: "#c2cfd6",
-                    padding: "3px 10px",
-                    width: "auto",
-                    border: "none",
-                    outline: "0",
-                    borderRadius: "4px"
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                    alignItems: "center"
                   }}
-                  // autosize
-                  // clearable
-                  // name="foodGroup"
-                  //value={this.state.foodGroup}
-                  onChange={this.onChange}
                 >
-                  <option value="">Select Food Group</option>
-                  {this.props.foodGroups.map(fgselect => (
-                    <option
-                      key={fgselect.foodCategoryID}
-                      value={fgselect.foodCategoryID}
-                    >
-                      {fgselect.name}
-                    </option>
-                  ))}
-                </select>
+                  {!this.props.foodGroups.length && <p>No Food Group</p>}
 
-                {this.props.selectedFoodGroupName === "" ? (
-                  ""
-                ) : (
-                  <Button
-                    color="primary"
-                    onClick={this.toggleHiddenFGItemAddNew.bind(this)}
+                  <select
+                    style={{
+                      backgroundColor: "#c2cfd6",
+                      padding: "3px 10px",
+                      width: "auto",
+                      border: "none",
+                      outline: 0,
+                      fontSize: "0.875rem"
+                    }}
+                    onChange={this.onChange}
                   >
-                    <span className="fa fa-plus" />
-                  </Button>
-                )}
-              </div>
-            </CardHeader>
-            {this.props.selectedFoodGroupName === "" ? (
-              ""
-            ) : (
-              <CardBody>
-                {!this.state.isFoodGroupAddNewItemHidden && (
-                  <FoodGroupItemAddNew />
-                )}
-                <FoodGroupItemList
-                  selectedFoodGroupItems={this.props.selectedFoodGroupItems}
-                />
-              </CardBody>
-            )}
-          </Card>
-        </Col>
+                    <option value="">Select Food Group</option>
+                    {this.props.foodGroups.map(fgselect => (
+                      <option
+                        key={fgselect.foodCategoryID}
+                        value={fgselect.foodCategoryID}
+                      >
+                        {fgselect.name}
+                      </option>
+                    ))}
+                  </select>
+
+                  {this.props.selectedFoodGroupName === "" ? (
+                    ""
+                  ) : (
+                    <Button
+                      color="primary"
+                      onClick={this.toggleHiddenFGItemAddNew.bind(this)}
+                    >
+                      <span className="fa fa-plus" />
+                    </Button>
+                  )}
+                </div>
+              </CardHeader>
+              {this.props.selectedFoodGroupName === "" ? (
+                ""
+              ) : (
+                <CardBody>
+                  {!this.state.isFoodGroupAddNewItemHidden && (
+                    <FoodGroupItemAddNew />
+                  )}
+                  <FoodGroupItemList
+                    selectedFoodGroupItems={this.props.selectedFoodGroupItems}
+                  />
+                </CardBody>
+              )}
+            </Card>
+          </Col>
+        )}
       </Row>
     );
   }
 }
 
-//export default FoodGroupList;
 export default connect(
   ({
     auth: { cookies },

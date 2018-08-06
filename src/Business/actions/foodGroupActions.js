@@ -11,7 +11,8 @@ import {
   onFoodGroupEditPut,
   onFoodGroupItemListGet,
   onFoodGroupItemAddNewPost,
-  onFoodGroupItemRemoveEcommerce
+  onFoodGroupItemRemoveEcommerce,
+  onFoodGroupItemEditPut
 } from "../config/businessServerCall";
 
 import {
@@ -44,7 +45,10 @@ import {
   CREATE_FOODGROUP_ITEM_REJECTED,
   DELETE_FOODGROUP_ITEM_FULFILLED,
   DELETE_FOODGROUP_ITEM_PENDING,
-  DELETE_FOODGROUP_ITEM_REJECTED
+  DELETE_FOODGROUP_ITEM_REJECTED,
+  UPDATE_FOODGROUP_ITEM_FULFILLED,
+  UPDATE_FOODGROUP_ITEM_PENDING,
+  UPDATE_FOODGROUP_ITEM_REJECTED
 } from "./types";
 
 const epics = [];
@@ -243,6 +247,7 @@ epics.push((action$, { getState }) =>
           return [
             { type: DELETE_FOODGROUP_FULFILLED },
             { type: FETCH_FOODGROUP_PENDING }
+            // { type: FETCH_FOODGROUP_ITEM_PENDING, payload: { uid } }
           ];
         } else {
           throw new Error(response.msg);
@@ -343,6 +348,42 @@ epics.push((action$, { getState }) =>
       .catch(ajaxError => {
         toast.error(ajaxError.toString());
         return Observable.of({ type: DELETE_FOODGROUP_ITEM_REJECTED });
+      });
+  })
+);
+
+// Update Food Item
+export const onFoodGroupItemEdit = payload => ({
+  type: UPDATE_FOODGROUP_ITEM_PENDING,
+  payload
+});
+epics.push((action$, { getState }) =>
+  action$.ofType(UPDATE_FOODGROUP_ITEM_PENDING).mergeMap(action => {
+    const access_token = getState().auth.cookies.token_data.access_token;
+    const business_id = getState().auth.cookies.user_data.business_id;
+    const { body, uid, fgitemid } = action.payload;
+
+    return onFoodGroupItemEditPut({
+      business_id,
+      body,
+      access_token,
+      uid,
+      fgitemid
+    })
+      .concatMap(({ response }) => {
+        if (response.msg === "success") {
+          toast.success("Food Item updated successfully");
+          return [
+            { type: UPDATE_FOODGROUP_ITEM_FULFILLED },
+            { type: FETCH_FOODGROUP_ITEM_PENDING, payload: { uid } }
+          ];
+        } else {
+          toast.error(response.msg);
+        }
+      })
+      .catch(ajaxError => {
+        toast.error(ajaxError.toString());
+        return Observable.of({ type: UPDATE_FOODGROUP_ITEM_REJECTED });
       });
   })
 );

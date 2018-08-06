@@ -4,7 +4,6 @@ import { Form, Input, Button, Col, Row } from "reactstrap";
 class MenuNameAdd extends Component {
   constructor(props) {
     super(props);
-    //const { name } = props.menudata;
     this.state = {
       name: ""
     };
