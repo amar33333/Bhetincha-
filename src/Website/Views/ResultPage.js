@@ -586,41 +586,45 @@ class ResultPage extends Component {
               <span className="mr-2">
                 <Button
                   basic
+                  compact
                   color={this.state.activeArea === "area" ? "blue" : "grey"}
                   size="mini"
                   onClick={() => this.setState({ activeArea: "area" })}
                 >
-                  Kathmandu
+                  Area: Kathmandu
                 </Button>
               </span>
               <span className="mr-2">
                 <Button
+                  compact
                   basic
                   color={this.state.activeArea === "city" ? "blue" : "grey"}
                   size="mini"
                   onClick={() => this.setState({ activeArea: "city" })}
                 >
-                  Kathmandu
+                  City: Kathmandu
                 </Button>
               </span>
               <span className="mr-2">
                 <Button
+                  compact
                   basic
                   color={this.state.activeArea === "district" ? "blue" : "grey"}
                   size="mini"
                   onClick={() => this.setState({ activeArea: "district" })}
                 >
-                  Kathmandu
+                  District: Kathmandu
                 </Button>
               </span>
               <span className="mr-2">
                 <Button
+                  compact
                   basic
                   color={this.state.activeArea === "state" ? "blue" : "grey"}
                   size="mini"
                   onClick={() => this.setState({ activeArea: "state" })}
                 >
-                  State 3
+                  State: State 3
                 </Button>
               </span>
               {this.renderSimilarResults()}
