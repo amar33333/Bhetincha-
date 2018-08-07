@@ -1,10 +1,13 @@
-const HOST = "https://bhetincha.app";
+//const HOST = "https://bhetincha.app";
+const HOST = "http://52.78.51.237";
 // const HOST = "http://202.51.75.111";
-const MONGO_PORT = "8025";
+//const MONGO_PORT = "8025";
 // const MONGO_PORT = "8000";
 const ELASTIC_PORT = "9200";
-export const MAIN_URL = `${HOST}:${MONGO_PORT}`;
-export const ELASTIC_URL = `${HOST}:${MONGO_PORT}`;
+//export const MAIN_URL = `${HOST}:${MONGO_PORT}`;
+export const MAIN_URL = `${HOST}`;
+//export const ELASTIC_URL = `${HOST}:${MONGO_PORT}`;
+export const ELASTIC_URL = `${HOST}`;
 
 // const MAPS_API_KEY = "AIzaSyC5jpMbvHuSQVcVdUN_hYD-XWRxJT6az_g";
 // const MAPS_API_KEY = "AIzaSyDhwdTQSE86U4GFQDhZZZvtgxKxtj78TOI";
@@ -32,9 +35,11 @@ const FORGOT_PASSWORD = "api/accounts/send-reset-token/";
 const FORGOT_PASSWORD_TOKEN = "api/accounts/change-password/";
 
 const O_TOKEN = "o/token/";
-export const CLIENT_ID = "gbDlrzHDWV0In05ycj9pRn5ijzQkWVcQ7Grc7g9J";
-export const CLIENT_SECRET =
-  "hbWICg1DDWk1AUmnAU4QBekfWbTrpoQmy2JVKkHVAICEOniLB6Mtd4BlXadJ3JnmLhQI1APlJuBP5qWKFKqbGVWYImZeEAAWMWJFayyFfLXKPIksrTNAh5YiE2amc0HH";
+//export const CLIENT_ID = "z5LMYuXtl4eFF7iyMIKA0LzZSu4awMBGg8hUsXH4";
+export const CLIENT_ID = "abcd";
+//export const CLIENT_SECRET =
+// "RHIlaZJMAFOeFFCnSTT7v5oLNJxH04dti5VUEe5i7CUAbnJk3EAWILaIE7kjYWnx18DoONY5xq3J1fKNx0zBKjWxVDzgQYcuxAO8U6eiHmOJ35Z21tadgW1oIUAtE8Jj";
+export const CLIENT_SECRET = "abcd";
 
 export const GET_USER_INFO_URL = `${MAIN_URL}/${GET_USER_INFO}`;
 export const BUSINESS_INFO_URL = `${MAIN_URL}/${BUSINESS_INFO}`;

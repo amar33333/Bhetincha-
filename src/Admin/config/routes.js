@@ -37,6 +37,8 @@ import {
 
 import { ManageCategories } from "../views/Ecommerce";
 
+import { ManageSections } from "../views/Exsection";
+
 import CustomRoute from "../../Common/utils/CustomRoute";
 
 class AdminRoute extends Component {
@@ -214,6 +216,13 @@ class AdminRoute extends Component {
           path="/admin/ecommerce/categories"
           name="Ecommerce-categories"
           component={ManageCategories}
+          permission="CAN_VIEW_ECOMMERCE_CATEGORIES"
+        />
+        <CustomRoute
+          exact
+          path="/admin/exsection/section-manage"
+          name="Manage-sections"
+          component={ManageSections}
           permission="CAN_VIEW_ECOMMERCE_CATEGORIES"
         />
         <CustomRoute

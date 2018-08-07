@@ -16,7 +16,9 @@ import {
   LOGO_COVER_IMAGE_GET_URL,
   ABOUT_GET_URL,
   CHANGE_SLUG_URL,
-  CHECK_SLUG_URL
+  CHECK_SLUG_URL,
+  EXSECTION_SECTION_BUSINESS_URL,
+  EXSECTION_SECTION_BUSINESS_LIST_URL
 } from "./BUSINESS_API";
 import axios from "axios";
 import { ajax } from "rxjs/observable/dom/ajax";
@@ -520,5 +522,31 @@ export const onCompanyTypeGet = ({ access_token }) =>
     headers: {
       "Content-Type": "application/json",
       Authorization: "Bearer " + access_token
+    }
+  });
+
+// Exsection Goes Here
+
+// onSectionBusinessPost //post data about each section from business dash
+
+export const onSectionBusinessPost = ({ body }) =>
+  ajax({
+    method: "POST",
+    url: EXSECTION_SECTION_BUSINESS_URL,
+    body,
+    headers: {
+      "Content-Type": "application/json"
+    }
+  });
+
+//onParentSectionBusinessGet // get me the parent section info for a particular child section
+export const onParentSectionBusinessGet = ({ body }) =>
+  ajax({
+    method: "GET",
+    url: `${EXSECTION_SECTION_BUSINESS_LIST_URL}/?businessIdd=${
+      body.businessIdd
+    }&admin_sectionId=${body.asid}`,
+    headers: {
+      "Content-Type": "application/json"
     }
   });

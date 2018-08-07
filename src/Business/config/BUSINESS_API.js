@@ -44,3 +44,10 @@ export const SOCIAL_URL_LINK_GET_URL = `${MAIN_URL}/${SOCIAL_URL_LINK_GET}`;
 export const SOCIAL_URL_LINK_EDIT_URL = `${MAIN_URL}/${SOCIAL_URL_LINK_EDIT}`;
 
 export { MAIN_URL };
+
+const EXSECTION = "sections";
+
+//EXSECTION
+
+export const EXSECTION_SECTION_BUSINESS_URL = `${MAIN_URL}/${EXSECTION}/bizsec/`;
+export const EXSECTION_SECTION_BUSINESS_LIST_URL = `${MAIN_URL}/${EXSECTION}/biz/seclist`;

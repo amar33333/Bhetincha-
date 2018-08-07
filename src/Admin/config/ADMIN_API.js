@@ -41,6 +41,8 @@ const SUBSCRIPTION_PACKAGE = "business/subscription-package/";
 
 const ECOMMERCE = "ecommerce";
 
+const EXSECTION = "sections";
+
 export { MAIN_URL };
 
 export const COUNTRY_URL = `${MAIN_URL}/${ADDRESS}/${COUNTRY}`;
@@ -89,3 +91,10 @@ export const ECOMMERCE_PRODUCT_SEARCH_URL = `${MAIN_URL}/search/product/`;
 // Subscription Permissions
 export const SUBSCRIPTION_PACKAGE_PERMISSIONS_URL = `${MAIN_URL}/${SUBSCRIPTION_PACKAGE_PERMISSIONS}`;
 export const SUBSCRIPTION_PACKAGE_URL = `${MAIN_URL}/${SUBSCRIPTION_PACKAGE}`;
+
+// section
+export const EXSECTION_PROPERTY_URL = `${MAIN_URL}/${EXSECTION}/prop/`;
+export const EXSECTION_SECTION_URL = `${MAIN_URL}/${EXSECTION}/sections/`;
+export const EXSECTION_ATTRIBUTE_URL = `${MAIN_URL}/${EXSECTION}/attribute/`;
+
+export const EXSECTION_SUBSECTION_ATTRIBUTE_URL = `${MAIN_URL}/${EXSECTION}/prop/attrone/`;

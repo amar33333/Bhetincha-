@@ -21,6 +21,7 @@ import location from "./locationReducer";
 import ecommerce from "./ecommerceReducer";
 import settings from "./settingsReducer";
 import filterImproveListing from "./filterImproveListingReducer";
+import exsection from "./exsectionReducer";
 
 const createReducer = combineReducers({
   industries: IndustryReducer,
@@ -44,7 +45,8 @@ const createReducer = combineReducers({
   tele_calling,
   location,
   ecommerce,
-  filterImproveListing
+  filterImproveListing,
+  exsection
 });
 
 export default createReducer;

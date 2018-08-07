@@ -33,7 +33,11 @@ import {
   IMPROVE_LISTING_URL,
   SEARCH_PLACEHOLDER_URL,
   SUBSCRIPTION_PACKAGE_PERMISSIONS_URL,
-  SUBSCRIPTION_PACKAGE_URL
+  SUBSCRIPTION_PACKAGE_URL,
+  EXSECTION_SECTION_URL,
+  EXSECTION_ATTRIBUTE_URL,
+  EXSECTION_PROPERTY_URL,
+  EXSECTION_SUBSECTION_ATTRIBUTE_URL
 } from "./ADMIN_API";
 
 import {
@@ -1530,3 +1534,264 @@ export const onEcommerceProductsGet = ({ body }) =>
       "Content-Type": "application/json"
     }
   });
+
+//////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////
+//Admin Area
+// section
+// attribute
+//EXSECTION_ATTRIBUTE_URL:`${MAIN_URL}/${EXSECTION}/attribute/`;
+//json response: [
+//     {
+//       "uid": "99a631a6389246268f13570e6b484528",
+//       "name": "String",
+//       "fieldType": "String"
+//   },
+//   {
+//       "uid": "2678c0dde63c4401ad8c436ff28c4d81",
+//       "name": "Integer",
+//       "fieldType": "Integer"
+//   }
+// ]
+export const onExsectionAttributesGetAdmin = () =>
+  ajax({
+    method: "GET",
+    url: EXSECTION_ATTRIBUTE_URL,
+    headers: {
+      "Content-Type": "application/json"
+    }
+  });
+
+////EXSECTION_ATTRIBUTE_URL:`${MAIN_URL}/${EXSECTION}/attribute/`;
+// payload :
+//attributeTypeId
+// :
+// "99a631a6389246268f13570e6b484528"
+// filterAble
+// :
+// false
+// name
+// :
+// "Menu Name"
+// required
+// :
+// false
+// sectionId
+// :
+// "fdcde3ca3f3e4b249a9db0d7982d57b5"
+export const onExsectionAttributesPostAdmin = ({ body }) =>
+  ajax({
+    method: "POST",
+    url: EXSECTION_ATTRIBUTE_URL,
+    body,
+    headers: {
+      "Content-Type": "application/json"
+    }
+  });
+
+//EXSECTION_SECTION_URL = `${MAIN_URL}/${EXSECTION}/sections/`
+//example json response
+//{
+//   "uid": "9b4623c4d6c24531a8f64e9673397cf1",
+//   "name": "section",
+//   "children": [
+//       {
+//           "uid": "c7084516d6f24afba0e16e5102a3e59f",
+//           "name": "Menu",
+//           "children": [
+//               {
+//                   "uid": "5bdfd169cade444e8d59abfbaab4b0f5",
+//                   "name": "Food Category",
+//                   "children": [
+//                       {
+//                           "uid": "5f96da7e41164df49b1fa50c8c9db1db",
+//                           "name": "Food Item",
+//                           "children": [],
+//                           "hasAttr": true,
+//                           "hasSec": true
+//                       }
+//                   ],
+//                   "hasAttr": true,
+//                   "hasSec": true
+//               }
+//           ],
+//           "hasAttr": true,
+//           "hasSec": true
+//       }
+//   ],
+//   "hasAttr": false,
+//   "hasSec": true
+// }
+export const onExsectionSectionsGetAdmin = () =>
+  ajax({
+    method: "GET",
+    url: EXSECTION_SECTION_URL,
+    headers: {
+      "Content-Type": "application/json"
+    }
+  });
+
+//sections/sections/c7084516d6f24afba0e16e5102a3e59f/
+//will get each section for eg menu section in admin
+//example json resp
+// {
+//   "uid": "c7084516d6f24afba0e16e5102a3e59f",
+//   "breadCrumbs": [
+//       {
+//           "uid": "c7084516d6f24afba0e16e5102a3e59f",
+//           "name": "Menu",
+//           "properties": []
+//       },
+//       {
+//           "uid": "9b4623c4d6c24531a8f64e9673397cf1",
+//           "name": "section",
+//           "properties": []
+//       }
+//   ],
+//   "name": "Menu",
+//   "hasAttr": true,
+//   "hasSec": true
+// }
+export const onExsectionSectionDetailGetAdmin = ({ uid }) =>
+  ajax({
+    method: "GET",
+    url: `${EXSECTION_SECTION_URL}${uid}/`,
+    headers: {
+      "Content-Type": "application/json"
+    }
+  });
+
+//EXSECTION_SECTION_URL :`${MAIN_URL}/${EXSECTION}/sections/`
+//will create new section for eg menu section in admin
+//while creating FoodCategory
+//req payload {name: "Food Category", hasAttr: true, parent: "fdcde3ca3f3e4b249a9db0d7982d57b5"}
+export const onExsectionSectionPostAdmin = ({ name, hasAttr, parent }) =>
+  ajax({
+    method: "POST",
+    url: EXSECTION_SECTION_URL,
+    body: { name, hasAttr, parent },
+    headers: {
+      "Content-Type": "application/json"
+    }
+  });
+//////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////
+//Business Area
+//businessId for AMT business is:5b596acd8ffa850603eea61a
+
+export const onExsectionSectionsGet = () =>
+  ajax({
+    method: "GET",
+    url: EXSECTION_SECTION_URL,
+    headers: {
+      "Content-Type": "application/json"
+    }
+  });
+
+export const onExsectionAttributesPost = ({ body }) =>
+  ajax({
+    method: "POST",
+    url: EXSECTION_PROPERTY_URL,
+    body,
+    headers: {
+      "Content-Type": "application/json"
+    }
+  });
+//EXSECTION_SUBSECTION_ATTRIBUTE_URL, //`${MAIN_URL}/${EXSECTION}/prop/attrutd/`
+/// recently changed to sections/prop/attr/
+//recently changed to sections/attrone/ -- currrently active
+//req payload {sectionId: "9b4623c4d6c24531a8f64e9673397cf1"}
+//sample response
+// {
+//   "msg": "success",
+//   "sections": "Food Category",
+//   "attributes": [
+//       {
+//           "required": false,
+//           "fieldType": "String",
+//           "uid": "275fa1f40ac845baba56c564522734a5",
+//           "name": "Food Category Name",
+//           "filterAble": false,
+//           "order": 0
+//       }
+//   ],
+//   "breadCrumbs": [
+//       {
+//           "uid": "5bdfd169cade444e8d59abfbaab4b0f5",
+//           "name": "Food Category"
+//       },
+//       {
+//           "uid": "c7084516d6f24afba0e16e5102a3e59f",
+//           "name": "Menu"
+//       },
+//       {
+//           "uid": "9b4623c4d6c24531a8f64e9673397cf1",
+//           "name": "section"
+//       }
+//   ]
+// }
+export const onExsectionSectionAttributesGet = ({ body }) =>
+  ajax({
+    method: "POST",
+    url: EXSECTION_SUBSECTION_ATTRIBUTE_URL,
+    body,
+    headers: {
+      "Content-Type": "application/json"
+    }
+  });
+
+//Adding a new section data
+////`${MAIN_URL}/${EXSECTION}/bizsec`
+//OR http://52.78.51.237/sections/bizsec/
+//sample json payload
+//{
+// "asid":"c7084516d6f24afba0e16e5102a3e59f",
+// "businessIdd":"5b596acd8ffa850603eea61a",
+// "name":"Dwarika Hotel Menu"
+
+// }
+//OR
+//{
+//  "asid":"5bdfd169cade444e8d59abfbaab4b0f5",
+//  "businessIdd":"5b596acd8ffa850603eea61a",
+//  "parentsectionId": "f231cc24c974459c96983e66bd99bc2f",
+//  "name":"NOn veg"
+
+//  }
+//where asid is admin section id
+
+//
+//
+//
+
+//
+//Getting all data for a section and its childs given a business id and admin section id
+//http://52.78.51.237/sections/
+// bizsec/?businessIdd=5b596acd8ffa850603eea61a&admin_sectionId=c7084516d6f24afba0e16e5102a3e59f
+//sample json output
+//{
+//   "sections": [
+//     {
+//         "children": [],
+//         "attributes": {
+//             "uid": "f231cc24c974459c96983e66bd99bc2f",
+//             "name": "Dwarika Hotel Menu"
+//         }
+//     }
+// ]
+// }
+
+//Getting data for a section given its business id and admin section id
+//http://52.78.51.237/sections/
+//biz/seclist/?businessIdd=5b596acd8ffa850603eea61a&admin_sectionId=c7084516d6f24afba0e16e5102a3e59f
+//use this to get for eg list of FoodCatgory for Menu Section
+//sample json output
+// {
+//   "msg": "success",
+//   "sections": [
+//       {
+//           "id": "f231cc24c974459c96983e66bd99bc2f",
+//           "name": "Dwarika Hotel Menu"
+//       }
+//   ]
+// }
