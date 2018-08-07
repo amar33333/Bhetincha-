@@ -92,7 +92,7 @@ class BusinessRoute extends Component {
         />{" "}
         <Route
           path={`/:${ROUTE_PARAMS_BUSINESS_NAME}/dashboard/social-links`}
-          name="Gallery"
+          name="SocialLinks"
           component={SocialLinks}
         />{" "}
         <Route

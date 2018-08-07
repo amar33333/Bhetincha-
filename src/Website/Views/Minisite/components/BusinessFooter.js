@@ -17,6 +17,7 @@ class BusinessFooter extends Component {
                 <p>
                   <span>
                     {this.props.address &&
+                      this.props.address.addressLine1 &&
                       `${this.props.address.addressLine1}, `}
                   </span>
                   <span>
@@ -99,7 +100,7 @@ class BusinessFooter extends Component {
                   <Row>
                     {this.props.links.map(link => {
                       return (
-                        <a href={link.link} target="_blank">
+                        <a href={link.link} target="_blank" key={link.link}>
                           <span className="fa-stack fa-lg footer_social__icon">
                             <i className="fa fa-circle-thin fa-stack-2x" />
                             <i

@@ -178,6 +178,7 @@ img.minisite__album-thumbnail {
 }
 
 .album-title {
+  position: relative;
   margin-bottom: 15px;
 }
 .album-title p {
@@ -193,6 +194,12 @@ img.minisite__album-thumbnail {
   margin-left: 5px;
   margin-bottom: 0.3rem;
   border-bottom: 2px solid #000;
+}
+
+.gallery-delete-wrapper {
+  position: absolute;
+  top: 0;
+  right: 20px;
 }
 
 #ReactGridGallery img {

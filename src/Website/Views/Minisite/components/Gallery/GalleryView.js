@@ -215,30 +215,25 @@ class GalleryView extends Component {
     return (
       <div>
         <div className="album-title">
-          <p className="album-title">
-            {this.state.album && this.state.album.name}
-          </p>
+          <p>{this.state.album && this.state.album.name}</p>
           {this.props.isEdit &&
             this.state.album &&
             this.state.album.albumID && (
-              <PopoverDelete
-                customStyle={{
-                  position: "absolute",
-                  top: "80px",
-                  right: "10px"
-                }}
-                id={this.state.album.albumID}
-                onClick={() =>
-                  this.props.handleGalleryAlbumDelete({
-                    album_id: this.state.album.albumID,
-                    history: this.props.history,
-                    url: `/${
-                      this.props.match.params[ROUTE_PARAMS_BUSINESS_NAME]
-                    }/gallery`
-                  })
-                }
-                subtitle="This will delete all the photos inside album"
-              />
+              <div className="gallery-delete-wrapper">
+                <PopoverDelete
+                  id={this.state.album.albumID}
+                  onClick={() =>
+                    this.props.handleGalleryAlbumDelete({
+                      album_id: this.state.album.albumID,
+                      history: this.props.history,
+                      url: `/${
+                        this.props.match.params[ROUTE_PARAMS_BUSINESS_NAME]
+                      }/gallery`
+                    })
+                  }
+                  subtitle="This will delete all the photos inside album"
+                />
+              </div>
             )}
           <small className="mr-3">
             {this.state.album
