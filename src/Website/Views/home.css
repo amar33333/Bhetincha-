@@ -87,8 +87,8 @@ body {
 /*=============== Home page css ================= */
 .home-page__header {
   position: absolute;
-  right: 80px;
-  padding: 2rem 2rem 0 0;
+  right: 1%;
+  padding: 2rem 0 0 0;
 }
 
 .home-page__header .login-btn {

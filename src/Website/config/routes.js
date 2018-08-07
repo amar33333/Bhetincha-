@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import DynamicImport from "../../Common/utils/DynamicImport";
 import { Route, Switch } from "react-router-dom";
 import { Loading } from "../../Common/pages";
-import { Home, BusinessList } from "../Views";
+import { Home, BusinessList, ResultPage } from "../Views";
 import Ecommerce from "../Views/Ecommerce";
 import {
   ROUTE_PARAMS_BUSINESS_NAME,
@@ -27,6 +27,16 @@ class WebsiteRoute extends Component {
       <Switch>
         <Route
           path="/businesses"
+          name="Result Page"
+          render={props => (
+            <ResultPage
+              {...props}
+              setInitialQuery={this.props.setInitialQuery}
+            />
+          )}
+        />
+        {/* <Route
+          path="/businesses"
           name="Business List"
           render={props => (
             <BusinessList
@@ -34,7 +44,7 @@ class WebsiteRoute extends Component {
               setInitialQuery={this.props.setInitialQuery}
             />
           )}
-        />
+        /> */}
 
         <Route path="/ecommerce" name="Ecommerce" component={Ecommerce} />
         {/* <Route path="/ecommerce" name="Ecommerce" component={AsyncEcommerce} /> */}
