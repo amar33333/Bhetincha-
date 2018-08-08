@@ -166,11 +166,14 @@ epics.push((action$, { getState }) =>
         })
         .catch(ajaxError => {
           // toast.error("Error: Assigning Subscription Package");
+          console.log("erro: ", ajaxError);
+
           return Observable.of({
             type: CREATE_SUBSCRIPTION_PACKAGE_ASSIGN_REJECTED,
-            payload: ajaxError.status
-              ? ajaxError.message
-              : JSON.parse(ajaxError.message)
+            payload:
+              ajaxError.status || ajaxError.TypeError
+                ? ajaxError.message
+                : JSON.parse(ajaxError.message)
           });
         });
     })

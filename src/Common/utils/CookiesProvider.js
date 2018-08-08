@@ -53,8 +53,9 @@ class CookiesProvider {
   };
 
   static removeAllCookies = () => {
-    cookies.remove("token_data");
-    cookies.remove("user_data");
+    cookies.remove("token_data", { path: "/" });
+    cookies.remove("user_data", { path: "/" });
+    cookies.remove("expiry_date", { path: "/" });
   };
 }
 

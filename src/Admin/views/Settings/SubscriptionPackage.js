@@ -20,6 +20,7 @@ import Select from "react-select";
 
 import {
   onSubscriptionPackagePermissionsList,
+  onSubscriptionPackageList,
   onSubscriptionPackageSubmit
 } from "../../actions";
 
@@ -35,6 +36,7 @@ class SubscriptionPackage extends Component {
 
   componentDidMount() {
     this.props.onSubscriptionPackagePermissionsList();
+    this.props.onSubscriptionPackageList();
   }
 
   componentDidUpdate = (prevProps, prevState) => {
@@ -189,5 +191,9 @@ const mapStateToProps = ({
 
 export default connect(
   mapStateToProps,
-  { onSubscriptionPackagePermissionsList, onSubscriptionPackageSubmit }
+  {
+    onSubscriptionPackagePermissionsList,
+    onSubscriptionPackageSubmit,
+    onSubscriptionPackageList
+  }
 )(SubscriptionPackage);

@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import {} from "reactstrap";
 import { Col, Row, FormText, Alert } from "reactstrap";
 
 // This is for mobile number
