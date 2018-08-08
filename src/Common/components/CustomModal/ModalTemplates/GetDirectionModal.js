@@ -90,7 +90,7 @@ class GetDirectionModal extends Component {
       {this.state.destination && (
         <MapComponent
           enableMarker={true}
-          position={this.state.position}
+          //position={this.state.position}
           source={this.state.source}
           destination={this.state.destination}
         />

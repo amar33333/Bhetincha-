@@ -41,11 +41,12 @@ class ImproveListingModal extends Component {
 
   componentDidUpdate = prevProps => {
     if (this.props.problem_types !== prevProps.problem_types) {
-      this.setState({
-        problem_type: this.props.problem_types.find(
-          each => each.name === "CLAIM_UNSUCCESSFUL"
-        )
-      });
+      this.props.data.phone_number &&
+        this.setState({
+          problem_type: this.props.problem_types.find(
+            each => each.name === "CLAIM_UNSUCCESSFUL"
+          )
+        });
     }
   };
 
@@ -271,7 +272,7 @@ class ImproveListingModal extends Component {
         <Row className="mt-2">
           <Col xs="12" md="12">
             <FormGroup>
-              <Button fluid color="primary">
+              <Button color="primary">
                 <span className="fa fa-check" /> Submit
               </Button>
             </FormGroup>

@@ -11,7 +11,7 @@ class CustomModal extends Component {
         size={this.props.size}
       >
         {this.props.title ? (
-          <ModalHeader toggle={this.props.toggleModal}>
+          <ModalHeader toggle={this.props.toggle}>
             {this.props.title}
           </ModalHeader>
         ) : null}

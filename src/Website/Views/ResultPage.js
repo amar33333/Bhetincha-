@@ -44,11 +44,13 @@ import PhoneVerificationModal from "../../Common/components/CustomModal/ModalTem
 import ImproveListingModal from "../../Common/components/CustomModal/ModalTemplates/ImproveListingModal";
 import GetDirectionModal from "../../Common/components/CustomModal/ModalTemplates/GetDirectionModal";
 
+import { SearchCard } from "./Components";
+
 class ResultPage extends Component {
   state = {
     frm: 0,
     size: 5,
-    searchResults: [],
+    searchResults: null,
     search_results_count: 0,
     hasMoreItems: true,
     verifiedTooltipOpen: false,
@@ -89,10 +91,6 @@ class ResultPage extends Component {
     this.props.setInitialQuery(parsedUrlStringObject.query);
   };
 
-  componentWillUnmount() {
-    window.removeEventListener("scroll", this.onScroll, false);
-  }
-
   componentDidUpdate(prevProps, prevState) {
     const parsedUrlStringObject = querystring.parse(
       this.props.location.search.slice(1)
@@ -116,20 +114,30 @@ class ResultPage extends Component {
             : undefined,
           distance: this.state.distance
         });
-        this.setState({ searchResults: [], frm: frm + size });
+        this.setState({ frm: frm + size });
       });
     }
 
     if (
       this.props.search_results_page_data !== prevProps.search_results_page_data
     ) {
+      const hits = this.state.searchResults
+        ? this.state.searchResults.hits.hits
+        : [];
+
       this.setState({
-        searchResults: [
-          ...this.state.searchResults,
-          ...this.props.search_results_page_data
-        ]
+        searchResults: {
+          ...this.props.search_results_page_data,
+          hits: {
+            hits: [...hits, ...this.props.search_results_page_data.hits.hits]
+          }
+        }
       });
     }
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener("scroll", this.onScroll, false);
   }
 
   onClaimed = data => () => {
@@ -163,7 +171,8 @@ class ResultPage extends Component {
     const windowBottom = windowHeight + window.pageYOffset;
     if (
       windowBottom >= docHeight &&
-      this.props.search_results_page_data.length &&
+      this.props.search_results_page_data &&
+      this.props.search_results_page_data.hits.hits.length &&
       !this.props.search_results_page_loading
     ) {
       const { frm, size } = this.state;
@@ -211,265 +220,80 @@ class ResultPage extends Component {
     });
   };
 
-  renderSearchResults = () => {
+  renderBusinessMatch = () =>
+    this.state.searchResults &&
+    this.state.searchResults.hit &&
+    this.state.searchResults.hit._source && (
+      <SearchCard
+        searchResult={this.state.searchResults.hit._source}
+        onClaimed={this.onClaimed}
+        onImproveListingClicked={this.onImproveListingClicked}
+        onGetDirectionClicked={this.onGetDirectionClicked}
+      />
+    );
+
+  renderSimilarSearchResults = () => {
     const parsedUrlStringObject = querystring.parse(
       this.props.location.search.slice(1)
     );
-    // console.log("search results: ", this.props);
-    // if (!this.props.search_results_page_loading)
-    if (
-      !this.props.search_results_page_loading &&
-      !this.state.searchResults.length
-    )
+
+    if (this.state.searchResults) {
+      const hits = this.state.searchResults.hits.hits;
+
+      return (
+        hits.length &&
+        hits.map((searchResult, searchIndex) => {
+          return (
+            <SearchCard
+              key={searchIndex}
+              searchResult={searchResult._source}
+              onClaimed={this.onClaimed}
+              onImproveListingClicked={this.onImproveListingClicked}
+              onGetDirectionClicked={this.onGetDirectionClicked}
+            />
+          );
+        })
+      );
+    } else {
       return (
         <div>
           No Results for <strong>{parsedUrlStringObject["query"]}</strong>
         </div>
       );
-    else
-      return this.state.searchResults.map((each_search_result, Searchindex) => {
-        var momentNow = moment().format("hh:mm A");
-        var today = moment().format("dddd");
+    }
 
-        return (
-          <Card fluid key={Searchindex} raised className="search-result__card">
-            <Card.Content>
-              <Media>
-                <Media left href="#">
-                  <Media
-                    object
-                    // data-src={avatar}
-                    src={
-                      each_search_result.logo
-                        ? `${MAIN_URL}${each_search_result.logo}`
-                        : `${MAIN_URL}/media/default_logo.png`
-                    }
-                    className="result-page__thumbnail"
-                    alt="Generic placeholder image"
-                  />
-                </Media>
-                <Media body className="ml-3">
-                  <small>Business</small>
-                  <Media className="result-header__text">
-                    <Link to={each_search_result.slug}>
-                      {each_search_result.business_name}{" "}
-                      {each_search_result.verified && (
-                        <span data-tooltip="Verified">
-                          <i
-                            className="fa fa-check-circle"
-                            style={{ color: "green", fontSize: "1.2rem" }}
-                            // data-tooltip="Add users to your feed"
-                          />
-                        </span>
-                      )}
-                    </Link>
-                  </Media>
-                  <div className="mb-1">
-                    <Badge color="warning" pill className="mr-1">
-                      {each_search_result.industry}
-                    </Badge>
-                    {each_search_result.categories &&
-                      each_search_result.categories.map((category, index) => (
-                        <Badge
-                          key={index}
-                          color="info"
-                          pill
-                          className="mr-1"
-                          style={{ color: "white" }}
-                        >
-                          {category}
-                        </Badge>
-                      ))}
-                  </div>
-                  {each_search_result.address ? (
-                    <span
-                      // data-tooltip="Get Direction"
-                      // data-position="right center"
-                      style={{ fontSize: "1.2rem" }}
-                    >
-                      {/* <i className="fa fa-map-marker" />{" "} */}
-                      {each_search_result.address &&
-                        each_search_result.address.area &&
-                        `${each_search_result.address.area.area},`}{" "}
-                      {each_search_result.address &&
-                        each_search_result.address.area &&
-                        each_search_result.address.area.city}{" "}
-                      <br />
-                    </span>
-                  ) : null}
+    // if (!this.state.searchResults) {
+    //   console.log("no search resuls");
+    //   return (
+    //     <div>
+    //       No Results for <strong>{parsedUrlStringObject["query"]}</strong>
+    //     </div>
+    //   );
+    // } else {
+    //   console.log("SEARCH resuls: ", this.state.searchResults);
 
-                  {each_search_result.business_phone ? (
-                    <div style={{ color: "rgb(35, 35, 34)" }}>
-                      <i className="fa fa-phone" />{" "}
-                      {each_search_result.business_phone}
-                    </div>
-                  ) : null}
-                  {each_search_result.business_email ? (
-                    <div style={{ color: "rgb(35, 35, 34)" }}>
-                      <i className="fa fa-envelope-o" />{" "}
-                      {each_search_result.business_email}
-                    </div>
-                  ) : null}
+    //   return (
+    //     this.state.searchResults.businessMatch.hits.length &&
+    //     this.state.searchResults.businessMatch.hits.map(
+    //       (searchResult, searchIndex) => {
+    //         var momentNow = moment().format("hh:mm A");
+    //         var today = moment().format("dddd");
 
-                  {/* <div
-                      className="fa-stack fa-sm"
-                      style={{ color: "rgb(35, 35, 34)" }}
-                    >
-                      <i className="fa fa-circle-thin fa-stack-2x" />
-                      <i className="fa fa-globe fa-stack-1x" />
-                    </div> */}
-                </Media>
-              </Media>
-              <Divider />
-              <Row>
-                {/* <Col sm="2">
-                    <i className="fa fa-thumbs-up" />
-                    <Badge color="warning" pill>
-                      23
-                    </Badge>
-                  </Col> */}
-
-                {each_search_result.claimed ? (
-                  <Col
-                    xs="2"
-                    sm="2"
-                    style={{ cursor: "pointer" }}
-                    // onClick={this.onClaimed(each_search_result.id)}
-                  >
-                    <Button circular basic>
-                      <i className="fa fa-lock" />{" "}
-                      <span className="d-none d-md-inline">Claimed</span>
-                    </Button>
-                  </Col>
-                ) : (
-                  <Col
-                    xs="2"
-                    sm="2"
-                    style={{ cursor: "pointer" }}
-                    onClick={this.onClaimed(each_search_result)}
-                  >
-                    <Button circular basic>
-                      <i className="fa fa-unlock" />{" "}
-                      <span className="d-none d-md-inline">Claim</span>
-                    </Button>
-                  </Col>
-                )}
-
-                <Col
-                  xs="2"
-                  sm="3"
-                  style={{ cursor: "pointer" }}
-                  onClick={this.onImproveListingClicked(each_search_result)}
-                >
-                  <Button circular basic>
-                    <i className="fa fa-list" />{" "}
-                    <span className="d-none d-md-inline">Improve Listing</span>
-                  </Button>
-                </Col>
-                {/* <Col sm="2">
-                  <i className="fa fa-envelope-o" /> Email
-                </Col>
-                <Col sm="2">
-                  <i className="fa fa-phone" /> Call
-                </Col> */}
-                <Col sm="3" xs="2">
-                  <Button
-                    circular
-                    basic
-                    onClick={this.onGetDirectionClicked({
-                      primary_address: each_search_result.address,
-                      branchAddress: each_search_result.branchAddress
-                    })}
-                  >
-                    <i className="fa fa-location-arrow" />{" "}
-                    <span className="d-none d-md-inline">Get Direction</span>
-                  </Button>
-                </Col>
-                {each_search_result.industry === "Restaurants" ? (
-                  <Col sm="3">
-                    <Button circular basic>
-                      <i className="fa fa-cutlery" aria-hidden="true" />{" "}
-                      <span className="d-none d-md-inline">View </span>
-                      Menu
-                    </Button>
-                  </Col>
-                ) : null}
-              </Row>
-            </Card.Content>
-            <div
-              style={{
-                position: "absolute",
-                // backgroundColor: "#0719ece0",
-                // opacity: 0.5,
-                padding: 10,
-                color: "inherit",
-                top: "0px",
-                right: "10px"
-              }}
-            >
-              {each_search_result.workingHour &&
-                each_search_result.workingHour.map((day, index) => {
-                  let newStart = day.start + "Z";
-                  newStart = moment(newStart).format("hh:mm A");
-                  let newEnd = day.end + "Z";
-                  newEnd = moment(newEnd).format("hh:mm A");
-                  if (day.day === today && each_search_result.alwaysOpen) {
-                    return (
-                      <small
-                        key={index}
-                        data-tooltip={`Always Open`}
-                        data-position="bottom center"
-                      >
-                        <i className="fa fa-clock-o" /> Open Now
-                      </small>
-                    );
-                  } else if (day.day === today && !day.holiday) {
-                    if (
-                      moment(momentNow, "hh:mm A").isBetween(
-                        moment(newStart, "hh:mm A"),
-                        moment(newEnd, "hh:mm A")
-                      )
-                    ) {
-                      return (
-                        <small
-                          key={index}
-                          data-tooltip={`${newStart} - ${newEnd}`}
-                          data-position="bottom center"
-                        >
-                          <i className="fa fa-clock-o" /> Open Now
-                        </small>
-                      );
-                    } else if (day.day === today && day.holiday) {
-                      return (
-                        <small
-                          key={index}
-                          data-tooltip={`${newStart} - ${newEnd}`}
-                          data-position="bottom center"
-                          style={{ color: "red" }}
-                        >
-                          Holiday
-                        </small>
-                      );
-                    } else {
-                      return (
-                        <small
-                          key={index}
-                          data-tooltip={`${newStart} - ${newEnd}`}
-                          data-position="bottom center"
-                          style={{ color: "red" }}
-                        >
-                          Closed
-                        </small>
-                      );
-                    }
-                  } else {
-                    return null;
-                  }
-                })}
-            </div>
-          </Card>
-        );
-      });
+    //         return (
+    //           <SearchCard
+    //             searchResult={searchResult}
+    //             searchIndex={searchIndex}
+    //             momentNow={momentNow}
+    //             today={today}
+    //             onClaimed={this.onClaimed}
+    //             onImproveListingClicked={this.onImproveListingClicked}
+    //             onGetDirectionClicked={this.onGetDirectionClicked}
+    //           />
+    //         );
+    //       }
+    //     )
+    //   );
+    // }
   };
 
   renderSimilarResults = () => {
@@ -500,6 +324,9 @@ class ResultPage extends Component {
         </Loader>
       </div>
     );
+    // console.log("props: ", this.props);
+
+    // console.log("state: ", this.state);
     return (
       <div
         className="pb-5"
@@ -572,12 +399,7 @@ class ResultPage extends Component {
           </Row> */}
           <Row style={{ paddingTop: "20px" }}>
             <Col xs="12" md="8">
-              {this.renderSearchResults()}
-              {this.props.search_results_count > this.state.size &&
-              this.props.search_results_page_loading &&
-              this.props.search_results_page_data.length
-                ? loader
-                : null}
+              {this.renderBusinessMatch()}
             </Col>
           </Row>
           <Row style={{ paddingTop: "20px" }}>
@@ -627,7 +449,12 @@ class ResultPage extends Component {
                   State: State 3
                 </Button>
               </span>
-              {this.renderSimilarResults()}
+              {this.renderSimilarSearchResults()}
+              {this.props.search_results_count > this.state.size &&
+              this.props.search_results_page_loading &&
+              this.props.search_results_page_data.hits.hits.length
+                ? loader
+                : null}
             </Col>
           </Row>
         </Container>

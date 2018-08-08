@@ -37,6 +37,7 @@ export default function(state = INITIAL_STATE, action) {
       };
 
     case TOGGLE_IMPROVE_LISTING_MODAL:
+      console.log("improve: ", action.payload);
       return {
         ...state,
         improveListingModal: !state.improveListingModal,
