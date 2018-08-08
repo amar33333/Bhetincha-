@@ -83,10 +83,10 @@ class Contact extends Component {
               <p>
                 {this.props.address &&
                   this.props.address.area &&
-                  `${this.props.address.area.name},`}
+                  `${this.props.address.area.name}, `}
                 {this.props.address &&
                   this.props.address.city &&
-                  `${this.props.address.city.name},`}
+                  `${this.props.address.city.name}, `}
 
                 {this.props.address &&
                   this.props.address.district &&

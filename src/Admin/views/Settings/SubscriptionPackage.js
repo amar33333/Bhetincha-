@@ -98,7 +98,7 @@ class SubscriptionPackage extends Component {
                 <form onSubmit={this.onFormSubmit}>
                   <InputGroup className="mb-2">
                     <InputGroupAddon addonType="prepend">
-                      <InputGroupText>Social Link Url</InputGroupText>
+                      <InputGroupText>Package Name</InputGroupText>
                     </InputGroupAddon>
                     <Input
                       autoFocus

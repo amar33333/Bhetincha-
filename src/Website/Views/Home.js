@@ -59,7 +59,7 @@ class Home extends Component {
             }}
           >
             <Row className="justify-content-center">
-              <Col xs="12" md="5" className="justify-content-center">
+              <Col xs="8" md="5" className="justify-content-center">
                 <img alt="logo" src={logo} className="img-fluid" />
               </Col>
             </Row>
