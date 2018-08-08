@@ -1,9 +1,10 @@
 //const HOST = "https://bhetincha.app";
 const HOST = "http://52.78.51.237";
+//const HOST = "http://127.0.0.1";
 // const HOST = "http://202.51.75.111";
 //const MONGO_PORT = "8025";
-// const MONGO_PORT = "8000";
-const ELASTIC_PORT = "9200";
+//const MONGO_PORT = "8000";
+//const ELASTIC_PORT = "9200";
 //export const MAIN_URL = `${HOST}:${MONGO_PORT}`;
 export const MAIN_URL = `${HOST}`;
 //export const ELASTIC_URL = `${HOST}:${MONGO_PORT}`;

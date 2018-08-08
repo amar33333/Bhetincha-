@@ -1,16 +1,12 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Container, Row, Col } from "reactstrap";
-
 import { SideTreeView } from "./components";
-
 import { RecordAddNew } from "./components";
 
 import {
   onSectionsListExsection,
   onChangeActiveSectionBusiness,
-  addSectionChild,
-  onChangeActiveSectionByButton,
   onCreateSectionBusiness
 } from "../../actions";
 
@@ -26,7 +22,6 @@ class ManageSections extends Component {
     //console.log("check Did Update", this.props);
   }
   render() {
-    //console.log("check Did Render");
     //console.log("INITIAL RENDER", this.props);
     return (
       <div className="animated fadeIn">
@@ -46,11 +41,14 @@ class ManageSections extends Component {
                 this.props.attributes.attributes.length !== 0 && (
                   <RecordAddNew
                     activeSection={this.props.activeSection}
+                    activeChildren={this.props.activeChildren}
+                    // activeParentAdminId={this.props.activeParentAdminId}
+                    selectedSectionDetail={this.props.selectedSectionDetail}
+                    sections={this.props.sections}
                     onChangeActiveSectionByButton={
-                      this.props.onChangeActiveSectionByButton
+                      this.props.onChangeActiveSectionBusiness
                     }
                     attributes={this.props.attributes.attributes}
-                    addSectionChild={this.props.addSectionChild}
                     onSubmit={this.props.onCreateSectionBusiness}
                     parentSection={this.props.parentSection}
                   />
@@ -69,6 +67,8 @@ export default connect(
       exsection: {
         sections,
         activeSection,
+        activeChildren,
+        activeParentAdminId,
         isOpenSections,
         selectedSectionDetail,
         attributes,
@@ -78,6 +78,8 @@ export default connect(
   }) => ({
     sections,
     activeSection,
+    activeChildren,
+    activeParentAdminId,
     isOpenSections,
     selectedSectionDetail,
     attributes,
@@ -86,8 +88,6 @@ export default connect(
   {
     onSectionsListExsection,
     onChangeActiveSectionBusiness,
-    addSectionChild,
-    onChangeActiveSectionByButton,
     onCreateSectionBusiness
   }
 )(ManageSections);

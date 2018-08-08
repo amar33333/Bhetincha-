@@ -2,7 +2,10 @@ import {
   FETCH_EXSECTION_SECTIONS_FULFILLED,
   CHANGE_ACTIVE_EXSECTION_SECTION,
   FETCH_EXSECTION_SECTION_ATTRIBUTES_FULFILLED,
-  FETCH_PARENT_SECTION_LIST_BUSINESS_FULFILLED
+  FETCH_PARENT_SECTION_LIST_BUSINESS_FULFILLED,
+  CHANGE_ACTIVE_CHILD_EXSECTION,
+  CHANGE_SELETED_SECTION_DETAILS_BUSINESS,
+  CHANGE_ACTIVE_PARENT_ADMIN_ID_EXSECTION_FULFILLED
 } from "../actions/types";
 
 import update from "immutability-helper";
@@ -10,11 +13,12 @@ import update from "immutability-helper";
 const INITIAL_STATE = {
   sections: {},
   activeSection: "",
-  isOpenSections: [],
+  isOpenSections: ["9b4623c4d6c24531a8f64e9673397cf1"],
   selectedSectionDetail: null,
   attributes: [],
-  showButton: true,
-  parentSection: {}
+  parentSection: {},
+  activeChildren: {}
+  // activeParentAdminId: {}
 };
 
 export default function(state = INITIAL_STATE, action) {
@@ -27,49 +31,24 @@ export default function(state = INITIAL_STATE, action) {
         sections: action.payload
       };
 
-    case "ADD_SECTION_CHILD":
-      console.log("FRIDAYYYYYYYYy");
-      console.log({
-        ...state
-      });
-
-      return update(state, {
-        attributes: {
-          attributes: { $set: action.payload }
-        }
-      });
-
     case CHANGE_ACTIVE_EXSECTION_SECTION:
+      //console.log("whats in the state", state);
       const extra = {};
       const uid = action.payload;
       isOpenSections = state.isOpenSections;
 
       let { activeSection } = state;
-      if (isOpenSections.includes(uid)) {
-        isOpenSections = isOpenSections.filter(data => data !== uid);
-      } else {
-        isOpenSections = [...isOpenSections, uid];
-      }
+      // if (isOpenSections.includes(uid)) {
+      //   isOpenSections = isOpenSections.filter(data => data !== uid);
+      // } else {
+      //   isOpenSections = [...isOpenSections, uid];
+      // }
       if (activeSection !== uid) {
         extra.activeSection = uid;
       }
+      //console.log(isOpenSections);
 
       return { ...state, isOpenSections, ...extra };
-
-    // case FETCH_EXSECTION_SECTION_FULFILLED:
-    //   return { ...state, selectedSectionDetail: action.payload };
-
-    case "CHANGE_ACTIVE_EXSECTION_SECTION_TEST":
-      return state;
-
-    case "CHANGE_ACTIVE_SECTION_BY_BUTTON":
-      return { ...state };
-
-    case "FETCH_EXSECTION_SECTION_P_FULFILLED_TEST":
-      return {
-        ...state
-        //selectedSectionDetail: action.payload
-      };
 
     case FETCH_EXSECTION_SECTION_ATTRIBUTES_FULFILLED:
       return {
@@ -83,11 +62,23 @@ export default function(state = INITIAL_STATE, action) {
         parentSection: action.payload
       };
 
-    case "FETCH_EXSECTION_SECTION_ATTRIBUTES_FULFILLED_TEST_TWO":
+    case CHANGE_ACTIVE_CHILD_EXSECTION:
+      //console.log("REducer reached", action.payload);
       return {
         ...state,
-        attributes: action.payload
-        //secondLevel: true
+        activeChildren: action.payload
+      };
+
+    // case CHANGE_ACTIVE_PARENT_ADMIN_ID_EXSECTION_FULFILLED:
+    //   return {
+    //     ...state,
+    //     activeParentAdminId: action.payload
+    //   };
+
+    case CHANGE_SELETED_SECTION_DETAILS_BUSINESS:
+      return {
+        ...state,
+        selectedSectionDetail: action.payload
       };
 
     default:

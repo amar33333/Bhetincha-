@@ -17,6 +17,7 @@ class SideTreeView extends Component {
         this.updateSections(subSection)
       );
     }
+
     return {
       ...rest,
       toggled: this.props.isOpen.includes(section.uid),
@@ -24,11 +25,6 @@ class SideTreeView extends Component {
       ...extra
     };
   };
-
-  componentDidMount() {
-    //console.log("FROM SIDE TREE componentDidMount");
-    //console.log(this.state.sections); //ok
-  }
 
   componentDidUpdate(prevProps) {
     if (
@@ -40,28 +36,21 @@ class SideTreeView extends Component {
         sections: this.updateSections(this.props.sections)
       });
     }
-    //console.log("FROM SIDE TREE componentDidUpdate");
-    //console.log(this.state.sections); //ok
   }
 
   onToggle = ({ uid, children }) => {
-    console.log("toggle clicked"); //ok
-    console.log(uid); //ok
-    console.log(this.props.activeSection);
-    //console.log(children); //ok
-    //console.log(this.state.sections);
+    // console.log(this.props);
+    //console.log("toggle clicked"); //ok
 
-    //console.log(this.props.activeSection); //ok
     this.props.onChangeActiveSection(
       uid,
       this.props.activeSection,
-      this.props.leafDetect ? !(children && children.length) : false
+      this.props.leafDetect ? !(children && children.length) : false,
+      children[0]
     );
   };
 
   render() {
-    //console.log("Sections render");
-    //console.log(this.state.sections);
     return (
       <div>
         <Treebeard data={this.state.sections} onToggle={this.onToggle} />

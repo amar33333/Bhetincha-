@@ -31,25 +31,26 @@ class RecordAddEdit extends Component {
       ...extra,
       documents: [DocumentInput],
       inputValues: [],
-      selectedOption: ""
-      // parentSectionId: null
+      selectedOption: null,
+      parentSectionId: null
     };
     this.renderField = this.renderField.bind(this);
     this.onChange = this.onChange.bind(this);
-    // this.saveClick = this.saveClick.bind(this);
+    this.getFirstChildUid = this.getFirstChildUid.bind(this);
+    this.handleNextSectionClick = this.handleNextSectionClick.bind(this);
   }
 
   componentDidUpdate(prevProps, prevState) {
     //console.log("THIS OLD PROPS", prevProps);
-    console.log("componentDidUpdate", this.props);
+    //console.log("componentDidUpdate");
 
     // var parentSaved;
     // if (this.props.activeSection !== prevProps.activeSection) {
     //   //console.log("Reached inside iff");
-    //   //parentSaved = prevProps.activeSection;
+    //   parentSaved = prevProps.activeSection;
     //   this.setState({
-    //     // parentSectionId: parentSaved
-    //     selectedOption: ""
+    //     parentSectionId: parentSaved
+    //     //selectedOption: ""
     //   });
     //   //   //console.log("Parent Saved", prevProps.activeSection);
     // }
@@ -91,6 +92,7 @@ class RecordAddEdit extends Component {
   }
 
   handleChange = selectedOption => {
+    console.log("Handle change", selectedOption);
     this.setState({ selectedOption });
   };
 
@@ -109,18 +111,68 @@ class RecordAddEdit extends Component {
 
   saveClick(event) {
     event.preventDefault();
+    const { inputValues } = this.state;
 
-    const { inputValues, parentSectionId } = this.state;
+    const parentSectionId = this.state.selectedOption
+      ? this.state.selectedOption.value
+      : null || this.props.parentSection.sections
+        ? this.props.parentSection.sections[0].id
+        : null || 0;
+    this.setState({ parentsectionId: parentSectionId });
 
-    inputValues.forEach(value => {
-      //console.log("forEach:", value);
-      const body = {
-        asid: this.props.activeSection,
-        parentsectionId: parentSectionId,
-        name: value
-      };
-      this.props.onSubmit({ body });
-    });
+    if (parentSectionId !== 0) {
+      inputValues.forEach(value => {
+        //console.log("forEach:", value);
+        const body = {
+          asid: this.props.activeSection,
+          parentsectionId: parentSectionId,
+          name: value
+        };
+        this.props.onSubmit({ body });
+      });
+    } else {
+      inputValues.forEach(value => {
+        //console.log("forEach:", value);
+        const body = {
+          asid: this.props.activeSection,
+          name: value
+        };
+        this.props.onSubmit({ body });
+      });
+    }
+  }
+
+  getFirstChildUid() {
+    //console.log("laptop", this.props);
+    return this.props.activeChildren.uid;
+  }
+
+  handleNextSectionClick() {
+    const uid = this.getFirstChildUid();
+
+    var children;
+    if (this.props.activeChildren.children) {
+      children = this.props.activeChildren.children[0];
+    } else children = {};
+
+    if (uid) {
+      // console.log("Went here");
+      this.props.onChangeActiveSectionByButton(
+        uid,
+        this.props.activeSection,
+        false,
+        children
+      );
+    } else {
+      console.log("Went here second");
+
+      this.props.onChangeActiveSectionByButton(
+        uid,
+        this.props.activeSection,
+        false,
+        {}
+      );
+    }
   }
 
   renderField(attribute, mykey) {
@@ -155,9 +207,9 @@ class RecordAddEdit extends Component {
                 type="number"
                 step="0.01"
                 placeholder={attribute.name}
-                value={this.state[attribute.name]}
+                // value={this.state[attribute.name]}
                 onChange={event =>
-                  this.onChange(attribute.name, event.target.value)
+                  this.onChange(attribute.name, event.target.value, mykey)
                 }
               />
             </Col>
@@ -249,6 +301,8 @@ class RecordAddEdit extends Component {
 
   render() {
     //console.log("Rendering TEST");
+    //console.log(this.props);
+    //console.log(this.props.parentSection.sections[0]);
 
     const { selectedOption } = this.state;
     const documents = this.state.documents.map((Element, index) => {
@@ -271,13 +325,15 @@ class RecordAddEdit extends Component {
           <Form onSubmit={this.onFormSubmit}>
             {/* {this.createUI()} */}
             <FormGroup row>
-              <Label sm={3}>Select</Label>
+              {Object.keys(this.props.parentSection).length !== 0 && (
+                <Label sm={3}>Select</Label>
+              )}
 
               <Col sm={9}>
                 {this.props.parentSection.sections && (
                   <Select
                     value={
-                      selectedOption === ""
+                      selectedOption === null
                         ? this.props.parentSection.sections[0].id
                         : selectedOption
                     }
@@ -295,11 +351,22 @@ class RecordAddEdit extends Component {
 
             <FormGroup>
               <Button sm={2} onClick={this.addClick.bind(this)}>
-                +
-              </Button>
+                + &nbsp;
+                {this.props.selectedSectionDetail.name
+                  ? this.props.selectedSectionDetail.name
+                  : ""}
+              </Button>&nbsp;
+              {this.props.activeChildren &&
+                Object.keys(this.props.activeChildren).length !== 0 && (
+                  <Button sm={2} onClick={this.handleNextSectionClick}>
+                    {this.props.activeChildren.name}&nbsp;>>
+                  </Button>
+                )}
             </FormGroup>
             <FormGroup>
-              <Button onClick={this.saveClick.bind(this)}>Save</Button>&nbsp;
+              <Button sm={2} onClick={this.saveClick.bind(this)}>
+                Save
+              </Button>&nbsp;
             </FormGroup>
           </Form>
         </CardBody>
