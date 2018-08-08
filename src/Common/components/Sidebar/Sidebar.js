@@ -162,7 +162,9 @@ class Sidebar extends Component {
               <i className={item.icon} />
               {item.name}
             </a>
-            <ul className="nav-dropdown-items">{navList(item.children)}</ul>
+            <ul className="nav-dropdown-items ml-2">
+              {navList(item.children)}
+            </ul>
           </li>
         );
     };
@@ -194,7 +196,12 @@ class Sidebar extends Component {
       <div className={this.props.className + " " + "sidebar"}>
         <SidebarHeader />
         <SidebarForm />
-        <nav className="sidebar-nav">
+        <nav
+          className="sidebar-nav"
+          style={{
+            fontSize: "13px"
+          }}
+        >
           <Nav>{navList(this.props.nav)}</Nav>
         </nav>
         <SidebarFooter />
