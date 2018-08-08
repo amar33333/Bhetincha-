@@ -78,7 +78,9 @@ epics.push((action$, { getState }) =>
           fulfilled: UPDATE_ABOUT_FULFILLED,
           rejected: UPDATE_ABOUT_REJECTED
         };
-        extraDispatch.push({ type: TOGGLE_EDIT_ABOUT_US });
+        extraDispatch.push({
+          type: TOGGLE_EDIT_ABOUT_US
+        });
         successToasts.push("About info updated Successfully!");
         break;
 
@@ -101,7 +103,9 @@ epics.push((action$, { getState }) =>
         break;
 
       default:
-        return Observable.of({ type: UPDATE_BUSINESS_REJECTED });
+        return Observable.of({
+          type: UPDATE_BUSINESS_REJECTED
+        });
     }
 
     return onBusinessEachPutAjax({
@@ -115,7 +119,10 @@ epics.push((action$, { getState }) =>
             type: FETCH_PART_BUSINESS,
             updates,
             onSuccess: payload => [
-              { type: TYPE.fulfilled, payload },
+              {
+                type: TYPE.fulfilled,
+                payload
+              },
               ...extraDispatch
             ],
             successToasts,
@@ -132,9 +139,13 @@ epics.push((action$, { getState }) =>
       })
       .catch(ajaxError => {
         toast.error(ajaxError.toString());
-        return Observable.of({ type: TYPE.rejected });
+        return Observable.of({
+          type: TYPE.rejected
+        });
       })
-      .startWith({ type: TYPE.pending });
+      .startWith({
+        type: TYPE.pending
+      });
   })
 );
 
@@ -157,13 +168,18 @@ epics.push((action$, { getState }) =>
               type: FETCH_PART_BUSINESS,
               updates: ["albums"],
               onSuccess: payload => [
-                { type: UPLOAD_GALLERY_PHOTO_FULFILLED, payload }
+                {
+                  type: UPLOAD_GALLERY_PHOTO_FULFILLED,
+                  payload
+                }
               ],
               successToasts: ["Photo Uploaded Successfully"],
               FAILED: UPLOAD_GALLERY_PHOTO_REJECTED,
               slug: getState().auth.cookies.user_data.slug
             }
-          : { type: UPLOAD_GALLERY_PHOTO_REJECTED }
+          : {
+              type: UPLOAD_GALLERY_PHOTO_REJECTED
+            }
     )
   )
 );
@@ -186,13 +202,19 @@ epics.push((action$, { getState }) =>
           type: FETCH_PART_BUSINESS,
           updates: ["albums"],
           onSuccess: payload => [
-            { type: DELETE_GALLERY_ALBUM_FULFILLED, payload }
+            {
+              type: DELETE_GALLERY_ALBUM_FULFILLED,
+              payload
+            }
           ],
           successToasts: ["Album Deleted Successfully"],
           FAILED: DELETE_GALLERY_ALBUM_REJECTED,
           slug: getState().auth.cookies.user_data.slug
         };
-      } else return { type: DELETE_GALLERY_ALBUM_REJECTED };
+      } else
+        return {
+          type: DELETE_GALLERY_ALBUM_REJECTED
+        };
     })
   )
 );
@@ -216,13 +238,18 @@ epics.push((action$, { getState }) =>
               type: FETCH_PART_BUSINESS,
               updates: ["albums"],
               onSuccess: payload => [
-                { type: DELETE_GALLERY_PHOTO_FULFILLED, payload }
+                {
+                  type: DELETE_GALLERY_PHOTO_FULFILLED,
+                  payload
+                }
               ],
               successToasts: ["Photo Deleted Successfully"],
               FAILED: DELETE_GALLERY_PHOTO_REJECTED,
               slug: getState().auth.cookies.user_data.slug
             }
-          : { type: DELETE_GALLERY_PHOTO_REJECTED }
+          : {
+              type: DELETE_GALLERY_PHOTO_REJECTED
+            }
     )
   )
 );
@@ -230,7 +257,9 @@ epics.push((action$, { getState }) =>
 epics.push(action$ =>
   action$.ofType(FETCH_PART_BUSINESS).mergeMap(action => {
     const { slug, updates, onSuccess, successToasts, FAILED } = action;
-    return onBusinessEachGetAjax({ slug })
+    return onBusinessEachGetAjax({
+      slug
+    })
       .concatMap(({ response }) => {
         const payload = {};
         updates.forEach(key => {
@@ -240,7 +269,11 @@ epics.push(action$ =>
           successToasts.forEach(message => toast.success(message));
         return onSuccess(payload);
       })
-      .catch(ajaxError => Observable.of({ type: FAILED }));
+      .catch(ajaxError =>
+        Observable.of({
+          type: FAILED
+        })
+      );
   })
 );
 
@@ -252,7 +285,9 @@ export const onBusinessGet = payload => ({
 epics.push(action$ =>
   action$.ofType(FETCH_BUSINESS_PENDING).mergeMap(action => {
     const { slug, history } = action.payload;
-    return onBusinessEachGetAjax({ slug })
+    return onBusinessEachGetAjax({
+      slug
+    })
       .map(({ response }) => {
         const payload = {};
         payload.business_name = response.business_name;
@@ -272,20 +307,30 @@ epics.push(action$ =>
         payload.industry = response.industry;
         payload.categories = response.categories;
         payload.links = response.links;
+        payload.coreMember = response.coreMember;
 
         if (response.about) payload.about = response.about;
         if (response.nav_layout) payload.nav_layout = response.nav_layout;
 
-        return { type: FETCH_BUSINESS_FULFILLED, payload };
+        return {
+          type: FETCH_BUSINESS_FULFILLED,
+          payload
+        };
       })
       .catch(ajaxError => {
         history.replace("/404");
-        return Observable.of({ type: FETCH_BUSINESS_REJECTED });
+        return Observable.of({
+          type: FETCH_BUSINESS_REJECTED
+        });
       })
-      .startWith({ type: CLEAR_MINISITE_DATA });
+      .startWith({
+        type: CLEAR_MINISITE_DATA
+      });
   })
 );
 
-export const clearBusiness = () => ({ type: CLEAR_MINISITE_DATA });
+export const clearBusiness = () => ({
+  type: CLEAR_MINISITE_DATA
+});
 
 export default epics;

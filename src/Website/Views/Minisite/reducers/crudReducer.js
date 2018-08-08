@@ -87,7 +87,10 @@ const INITIAL_STATE = {
 export default function(state = INITIAL_STATE, action) {
   switch (action.type) {
     case FETCH_BUSINESS_FULFILLED:
-      return { ...INITIAL_STATE, ...action.payload };
+      return {
+        ...INITIAL_STATE,
+        ...action.payload
+      };
 
     case UPDATE_NAV_LAYOUT_FULFILLED:
     case UPDATE_ABOUT_FULFILLED:
@@ -97,10 +100,15 @@ export default function(state = INITIAL_STATE, action) {
     case UPLOAD_GALLERY_PHOTO_FULFILLED:
     case CREATE_NEW_ALBUM_FULFILLED:
     case UPDATE_BUSINESS_FULFILLED:
-      return { ...state, ...action.payload };
+      return {
+        ...state,
+        ...action.payload
+      };
 
     case CLEAR_MINISITE_DATA:
-      return { ...INITIAL_STATE };
+      return {
+        ...INITIAL_STATE
+      };
 
     default:
       return state;

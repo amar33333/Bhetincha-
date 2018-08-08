@@ -6,7 +6,8 @@ import {
   AboutUs,
   Contact,
   Ecommerce,
-  EcommerceProduct
+  EcommerceProduct,
+  CoreMember
 } from "../components";
 
 import {
@@ -34,43 +35,46 @@ class MinisiteRoute extends Component {
           path={`/:${ROUTE_PARAMS_BUSINESS_NAME}/gallery`}
           name="Minisite-Gallery"
           component={Gallery}
-        />
+        />{" "}
         <Route
           path={`/:${ROUTE_PARAMS_BUSINESS_NAME}/theme`}
           name="theme"
           component={ThemeLight}
-        />
+        />{" "}
         <Route
           path={`/:${ROUTE_PARAMS_BUSINESS_NAME}/about`}
           name="about-us"
           component={AboutUs}
-        />
+        />{" "}
         <Route
           path={`/:${ROUTE_PARAMS_BUSINESS_NAME}/ecommerce/product/:productId`}
           name="ecommerce"
           component={EcommerceProduct}
-        />
+        />{" "}
         <Route
           path={`/:${ROUTE_PARAMS_BUSINESS_NAME}/ecommerce/:categoryId`}
           name="ecommerce"
           component={Ecommerce}
-        />
+        />{" "}
         <Route
           path={`/:${ROUTE_PARAMS_BUSINESS_NAME}/ecommerce`}
           name="ecommerce"
           component={Ecommerce}
-        />
+        />{" "}
         <Route
           path={`/:${ROUTE_PARAMS_BUSINESS_NAME}/contact`}
           name="contact"
           component={Contact}
+        />{" "}
+        <Route
+          path={`/:${ROUTE_PARAMS_BUSINESS_NAME}/coremember`}
+          name="coremember"
+          component={CoreMember}
         />
-
         <Redirect
           from={`/${businessName}/${minisiteBusinessRoute}`}
           to={`/${businessName}`}
         />
-
         <Route
           path={`/:${ROUTE_PARAMS_BUSINESS_NAME}`}
           name="Minisite-MainPage"

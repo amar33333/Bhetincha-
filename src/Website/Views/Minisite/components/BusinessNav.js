@@ -22,8 +22,11 @@ class BusinessNav extends Component {
     isOpen: false
   };
 
-  toggle = () => this.setState({ isOpen: !this.state.isOpen });
-
+  toggle = () =>
+    this.setState({
+      isOpen: !this.state.isOpen
+    });
+  props;
   render() {
     const { url } = this.props;
     return (
@@ -44,9 +47,8 @@ class BusinessNav extends Component {
                   className="main_nav__brand-logo__routes"
                 />
               </Link>
-            )}
-
-            <NavbarToggler onClick={this.toggle} />
+            )}{" "}
+            <NavbarToggler onClick={this.toggle} />{" "}
             <Collapse isOpen={this.state.isOpen} navbar>
               <Nav
                 navbar
@@ -60,16 +62,16 @@ class BusinessNav extends Component {
                   key="home"
                   className={this.props.isHome ? "active" : ""}
                 >
-                  <Link to={`/${this.props.businessName}`}>Home</Link>
-                </NavItem>
+                  <Link to={`/${this.props.businessName}`}> Home </Link>{" "}
+                </NavItem>{" "}
                 <NavItem
                   key="gallery"
                   className={url === "gallery" ? "active" : ""}
                 >
                   <Link to={`/${this.props.businessName}/gallery`}>
-                    Gallery
-                  </Link>
-                </NavItem>
+                    Gallery{" "}
+                  </Link>{" "}
+                </NavItem>{" "}
                 <NavItem
                   key="ecommerce"
                   className={url === "ecommerce" ? "active" : ""}
@@ -78,21 +80,36 @@ class BusinessNav extends Component {
                     to={`/${this.props.businessName}/ecommerce`}
                     className=""
                   >
-                    Ecommerce
-                  </Link>
-                </NavItem>
+                    Ecommerce{" "}
+                  </Link>{" "}
+                </NavItem>{" "}
+                {this.props.coreMember ? (
+                  <NavItem
+                    key="coremember"
+                    className={url === "coremember" ? "active" : ""}
+                  >
+                    <Link
+                      to={`/${this.props.businessName}/coremember`}
+                      className=""
+                    >
+                      {this.props.coreMember.name}
+                    </Link>{" "}
+                  </NavItem>
+                ) : (
+                  ""
+                )}
                 <NavItem
                   key="contact"
                   className={url === "contact" ? "active" : ""}
                 >
                   <Link to={`/${this.props.businessName}/contact`} className="">
-                    Contact
-                  </Link>
-                </NavItem>
-              </Nav>
-            </Collapse>
-          </Navbar>
-        </ScrollInNav>
+                    Contact{" "}
+                  </Link>{" "}
+                </NavItem>{" "}
+              </Nav>{" "}
+            </Collapse>{" "}
+          </Navbar>{" "}
+        </ScrollInNav>{" "}
       </div>
     );
   }
@@ -102,7 +119,7 @@ export default connect(
   ({
     MinisiteContainer: {
       edit,
-      crud: { logo }
+      crud: { logo, coreMember }
     },
     auth: { cookies },
     search_result
@@ -110,7 +127,8 @@ export default connect(
     cookies,
     mainEdit: edit.main,
     logo,
-    search_result
+    search_result,
+    coreMember
   }),
   {
     onEditMainClicked,
