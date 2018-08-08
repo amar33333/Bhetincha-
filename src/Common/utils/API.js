@@ -1,4 +1,4 @@
-const HOST = "http://13.250.104.102";
+const HOST = "https://bhetincha.app";
 const MONGO_PORT = "8025";
 
 export const CLIENT_ID = "e6dysH1DbOAvh4BHfHIen647yB5Z0XRbYYoCMYfR";
