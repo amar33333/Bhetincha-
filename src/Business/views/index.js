@@ -15,6 +15,7 @@ import ChangeSlug from "./ChangeSlug/ChangeSlug";
 import Gallery from "./Gallery/Gallery";
 import SocialLinks from "./SocialLinks/SocialLinks";
 import ManageSections from "./Exsection/ManageSections";
+import ManageCoreMember from "./CoreMember/ManageCoreMember";
 
 export {
   Dashboard,
@@ -32,5 +33,6 @@ export {
   ChangeSlug,
   Gallery,
   SocialLinks,
-  ManageSections
+  ManageSections,
+  ManageCoreMember
 };

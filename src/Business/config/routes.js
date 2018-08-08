@@ -16,7 +16,8 @@ import {
   ChangeSlug,
   Gallery,
   SocialLinks,
-  ManageSections
+  ManageSections,
+  ManageCoreMember
 } from "../views";
 
 import {
@@ -38,22 +39,22 @@ class BusinessRoute extends Component {
               handleTakeTour={this.props.handleTakeTour}
             />
           )}
-        />
+        />{" "}
         {/* <Route
-          path={`/:${ROUTE_PARAMS_BUSINESS_NAME}/dashboard/business-detail`}
-          name="Business Detail"
-          component={BusinessDetail}
-        /> */}
+                  path={`/:${ROUTE_PARAMS_BUSINESS_NAME}/dashboard/business-detail`}
+                  name="Business Detail"
+                  component={BusinessDetail}
+                /> */}{" "}
         <Route
           path={`/:${ROUTE_PARAMS_BUSINESS_NAME}/dashboard/change-slug`}
           name="Change Slug"
           component={ChangeSlug}
-        />
+        />{" "}
         <Route
           path={`/:${ROUTE_PARAMS_BUSINESS_NAME}/dashboard/business-details`}
           name="Business Details"
           component={BusinessDetails}
-        />
+        />{" "}
         <Route
           path={`/:${ROUTE_PARAMS_BUSINESS_NAME}/dashboard/business-working-hour`}
           name="BusinessWorkingHour"
@@ -64,13 +65,13 @@ class BusinessRoute extends Component {
           name="Add Branch Address"
           component={AddBranch}
           //permission="CAN_VIEW_DASHBOARD"
-        />
+        />{" "}
         <Route
           path={`/:${ROUTE_PARAMS_BUSINESS_NAME}/dashboard/business-branch-address/:id/edit-branch`}
           name="Edit Branch Address"
           component={AddBranch}
           //permission="CAN_VIEW_DASHBOARD"
-        />
+        />{" "}
         <Route
           path={`/:${ROUTE_PARAMS_BUSINESS_NAME}/dashboard/business-about`}
           name="BusinessAbout"
@@ -110,22 +111,27 @@ class BusinessRoute extends Component {
           path={`/:${ROUTE_PARAMS_BUSINESS_NAME}/dashboard/ecommerce/manage-products/:productId/edit`}
           name="edit-ecommerce-product"
           component={ProductEdit}
-        />
+        />{" "}
         <Route
           path={`/:${ROUTE_PARAMS_BUSINESS_NAME}/dashboard/ecommerce/manage-products/:productId`}
           name="view-ecommerce-product"
           component={ProductView}
-        />
+        />{" "}
         <Route
           path={`/:${ROUTE_PARAMS_BUSINESS_NAME}/dashboard/ecommerce/manage-products`}
           name="manage-ecommerce-products"
           component={ManageProducts}
-        />
+        />{" "}
         <Route
           path={`/:${ROUTE_PARAMS_BUSINESS_NAME}/dashboard/section/manage-sections`}
           name="manage-exsection-sections"
           component={ManageSections}
-        />
+        />{" "}
+        <Route
+          path={`/:${ROUTE_PARAMS_BUSINESS_NAME}/dashboard/coremember`}
+          name="core-member"
+          component={ManageCoreMember}
+        />{" "}
         <Route
           path={`/:${ROUTE_PARAMS_BUSINESS_NAME}/dashboard`}
           render={props => {
@@ -137,15 +143,15 @@ class BusinessRoute extends Component {
               />
             );
           }}
-        />
+        />{" "}
         {/* <Redirect
-          from={`/:${ROUTE_PARAMS_BUSINESS_NAME}/dashboard/:${ROUTE_PARAMS_BUSINESS_ROUTE}`}
-          to={`/:${ROUTE_PARAMS_BUSINESS_NAME}/dashboard/home`}
-        /> */}
+                  from={`/:${ROUTE_PARAMS_BUSINESS_NAME}/dashboard/:${ROUTE_PARAMS_BUSINESS_ROUTE}`}
+                  to={`/:${ROUTE_PARAMS_BUSINESS_NAME}/dashboard/home`}
+                /> */}{" "}
         {/* <Redirect
-          from={`/:${ROUTE_PARAMS_BUSINESS_ROUTE}/dashboard`}
-          to={`/:${ROUTE_PARAMS_BUSINESS_ROUTE}/dashboard/home`}
-        /> */}
+                  from={`/:${ROUTE_PARAMS_BUSINESS_ROUTE}/dashboard`}
+                  to={`/:${ROUTE_PARAMS_BUSINESS_ROUTE}/dashboard/home`}
+                /> */}{" "}
       </Switch>
     );
   }

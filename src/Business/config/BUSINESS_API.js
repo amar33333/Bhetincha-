@@ -20,6 +20,9 @@ const GALLERY = "business/business-each-section/albums/";
 const BUSINESS_DETAILS = "business/business-each-section/basics/";
 const LOGO_COVER_IMAGE = "business/business-each-section/logo-cover/";
 const CHECK_SLUG = "slug/checkuniqueslug/";
+const CORE_MEMBER = "business/";
+
+export const CORE_MEMBER_URL = `${MAIN_URL}/${CORE_MEMBER}`;
 
 export const BUSINESS_URL = `${MAIN_URL}/${BUSINESS}`;
 export const ALBUM_URL = `${MAIN_URL}/${ALBUM}`;
@@ -51,3 +54,11 @@ const EXSECTION = "sections";
 
 export const EXSECTION_SECTION_BUSINESS_URL = `${MAIN_URL}/${EXSECTION}/bizsec/`;
 export const EXSECTION_SECTION_BUSINESS_LIST_URL = `${MAIN_URL}/${EXSECTION}/biz/seclist`;
+
+// core member
+
+export const CREATE_CORE_MEMBER_URL = "/section/core-member/";
+export const CORE_MEMBER_RUD_URL = "/section/core-member/core-member-rud/";
+export const CREATE_MEMBERS_URL = "/section/core-member/member/";
+export const MEMBERS_RUD_URL = "/section/core-member/member/";
+export const Social_LINK_URL = "/social-link/";

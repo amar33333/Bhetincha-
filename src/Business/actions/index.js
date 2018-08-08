@@ -4,7 +4,9 @@ import primaryAddress from "./primaryAddressActions";
 import industryEpics from "./industryActions";
 import categoryEpics from "./categoryActions";
 import exsectionEpics from "./exsectionActions";
+import corememberAction from "./corememberAction";
 
+export * from "./corememberAction";
 export * from "./businessActions";
 export * from "./industryActions";
 export * from "./categoryActions";
@@ -19,5 +21,6 @@ export default [
   ...businessActions,
   ...primaryAddress,
   ...industryEpics,
-  ...categoryEpics
+  ...categoryEpics,
+  ...corememberAction
 ];

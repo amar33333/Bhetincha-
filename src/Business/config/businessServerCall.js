@@ -18,11 +18,150 @@ import {
   CHANGE_SLUG_URL,
   CHECK_SLUG_URL,
   EXSECTION_SECTION_BUSINESS_URL,
-  EXSECTION_SECTION_BUSINESS_LIST_URL
+  EXSECTION_SECTION_BUSINESS_LIST_URL,
+  CREATE_CORE_MEMBER_URL,
+  CORE_MEMBER_URL,
+  CORE_MEMBER_RUD_URL,
+  CREATE_MEMBERS_URL,
+  MEMBERS_RUD_URL,
+  Social_LINK_URL
 } from "./BUSINESS_API";
 import axios from "axios";
 import { ajax } from "rxjs/observable/dom/ajax";
 import querystring from "querystring";
+
+// Add social for  Member
+export const OnSocialLinkPost = ({ id, body, access_token, businessId }) =>
+  ajax({
+    method: "POST",
+    url:
+      CORE_MEMBER_URL +
+      businessId +
+      CREATE_CORE_MEMBER_URL +
+      id +
+      Social_LINK_URL,
+    body,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+// update social links for  Member
+export const onSocialLinkPut = ({
+  id,
+  body,
+  access_token,
+  businessId,
+  link_id
+}) =>
+  ajax({
+    method: "PUT",
+    url:
+      CORE_MEMBER_URL +
+      businessId +
+      CREATE_CORE_MEMBER_URL +
+      id +
+      Social_LINK_URL +
+      link_id +
+      "/",
+    body,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
+// Delete social for  Member
+export const OnSocialLinkDelete = ({ id, access_token, businessId, link_id }) =>
+  ajax({
+    method: "DELETE",
+    url:
+      CORE_MEMBER_URL +
+      businessId +
+      CREATE_CORE_MEMBER_URL +
+      id +
+      Social_LINK_URL +
+      link_id,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+//core member create
+export const OnCoreMemberPost = ({ body, access_token, businessId }) =>
+  ajax({
+    method: "POST",
+    url: CORE_MEMBER_URL + businessId + CREATE_CORE_MEMBER_URL,
+    body,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+//core member update
+export const OnCoreMemberPut = ({ body, access_token, businessId }) =>
+  ajax({
+    method: "PUT",
+    url: CORE_MEMBER_URL + businessId + CORE_MEMBER_RUD_URL,
+    body,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+//fetching  core memeber
+export const OnCoreMemberGetList = ({ access_token, businessId }) =>
+  ajax({
+    method: "GET",
+    url: CORE_MEMBER_URL + businessId + CORE_MEMBER_RUD_URL,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+// Deleting Core memeber
+export const OnCoreMemberDelete = ({ access_token, businessId }) =>
+  ajax({
+    method: "DELETE",
+    url: CORE_MEMBER_URL + businessId + CORE_MEMBER_RUD_URL,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
+// Create Members for Core Member
+export const OnMemberPost = ({ body, access_token, businessId }) =>
+  ajax({
+    method: "POST",
+    url: CORE_MEMBER_URL + businessId + CREATE_MEMBERS_URL,
+    body,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+// Delete member of Core Memeber by ID
+export const OnMemberDelete = ({ access_token, businessId, id }) =>
+  ajax({
+    method: "DELETE",
+    url: CORE_MEMBER_URL + businessId + MEMBERS_RUD_URL + `${id}/`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+// Update member of Core Memeber by ID
+export const OnMemberUpdate = ({ body, access_token, businessId, id }) =>
+  ajax({
+    method: "PUT",
+    url: CORE_MEMBER_URL + businessId + MEMBERS_RUD_URL + `${id}/`,
+    body,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
 
 export const onBusinessLogoCoverImageGet = ({ access_token, id }) =>
   ajax({

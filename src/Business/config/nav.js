@@ -116,6 +116,11 @@ const items = {
           // permission: "CAN_VIEW_USER"
         }
       ]
+    },
+    {
+      name: "CoreMember",
+      url: `/${ROUTE_PARAMS_BUSINESS_NAME}/dashboard/coremember`,
+      icon: "fa fa-map-o"
     }
   ]
 };

@@ -6,6 +6,7 @@ import Category from "./categoryReducer";
 import PrimaryAddress from "./primaryAddressReducer";
 import ecommerce from "./ecommerceReducer";
 import exsection from "./exsectionReducer";
+import coremember from "./coreMemeberReducer";
 
 const createReducer = combineReducers({
   business_reducer: BusinessReducer,
@@ -13,7 +14,8 @@ const createReducer = combineReducers({
   categories: Category,
   primary_address: PrimaryAddress,
   ecommerce,
-  exsection
+  exsection,
+  coremember
 });
 
 export default createReducer;
