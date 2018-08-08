@@ -141,7 +141,7 @@ class ResultPage extends Component {
   }
 
   onClaimed = data => () => {
-    console.log("claim data: ", data);
+    // console.log("claim data: ", data);
     this.props.togglePhoneVerificationModal({ ...data });
   };
 
@@ -225,7 +225,10 @@ class ResultPage extends Component {
     this.state.searchResults.hit &&
     this.state.searchResults.hit._source && (
       <SearchCard
-        searchResult={this.state.searchResults.hit._source}
+        searchResult={{
+          ...this.state.searchResults.hit._source,
+          id: this.state.searchResults.hit._id
+        }}
         onClaimed={this.onClaimed}
         onImproveListingClicked={this.onImproveListingClicked}
         onGetDirectionClicked={this.onGetDirectionClicked}
@@ -246,7 +249,7 @@ class ResultPage extends Component {
           return (
             <SearchCard
               key={searchIndex}
-              searchResult={searchResult._source}
+              searchResult={{ ...searchResult._source, id: searchResult._id }}
               onClaimed={this.onClaimed}
               onImproveListingClicked={this.onImproveListingClicked}
               onGetDirectionClicked={this.onGetDirectionClicked}

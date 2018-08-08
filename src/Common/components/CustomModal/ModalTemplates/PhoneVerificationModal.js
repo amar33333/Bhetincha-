@@ -58,7 +58,6 @@ class PhoneVerificationModal extends Component {
   };
 
   render() {
-    console.log("phone: ", this.props);
     return (
       <Form onSubmit={this.onFormSubmit}>
         <div>

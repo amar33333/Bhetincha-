@@ -124,8 +124,8 @@ class ImproveListingModal extends Component {
   };
 
   render() {
-    console.log("imporve listng props: ", this.props);
-    console.log("imporve listng state: ", this.state);
+    // console.log("imporve listng props: ", this.props);
+    // console.log("imporve listng state: ", this.state);
 
     return (
       <Form onSubmit={this.onFormSubmit}>
