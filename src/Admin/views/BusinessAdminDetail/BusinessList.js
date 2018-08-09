@@ -190,7 +190,7 @@ class BusinessList extends Component {
                   })
                 }
               >
-                <i className="fa fa-code-fork" />
+                <i className="fa fa-briefcase" />
               </Button>
             </PermissionProvider>
 

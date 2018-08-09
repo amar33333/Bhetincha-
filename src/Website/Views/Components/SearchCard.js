@@ -56,7 +56,7 @@ class SearchCard extends Component {
                 </Link>
               </Media>
               <div className="mb-1">
-                <Badge color="warning" pill className="mr-1">
+                <Badge color="success" pill className="mr-1">
                   {searchResult.industry}
                 </Badge>
                 {searchResult.categories &&
