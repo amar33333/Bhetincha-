@@ -25,6 +25,7 @@ class SubBusinessContact extends Component {
       designation: props.contact.designation,
       mobileNumber: props.contact.mobileNumber,
       department: props.contact.department,
+      visibleToPublic: props.contact.visibleToPublic,
       collapsed: false,
       email_validation_error:
         this.props.contact.email && !validateEmail(this.props.contact.email),
@@ -47,6 +48,7 @@ class SubBusinessContact extends Component {
         designation: this.props.contact.designation,
         mobileNumber: this.props.contact.mobileNumber,
         department: this.props.contact.department,
+        visibleToPublic: this.props.contact.visibleToPublic,
         email_validation_error:
           this.props.contact.email && !validateEmail(this.props.contact.email)
             ? true
@@ -143,6 +145,7 @@ class SubBusinessContact extends Component {
       designation: "",
       mobileNumber: "",
       department: "",
+      visibleToPublic: false,
       email_validation_error: false,
       phone_validation_error: false
     });
@@ -244,6 +247,21 @@ class SubBusinessContact extends Component {
                 </FormGroup>
                 {this.displayPhoneValidationInfo()}
               </Col>
+              <Label check style={{ marginLeft: "30px", marginBottom: "20px" }}>
+                <Input
+                  type="checkbox"
+                  checked={this.state.visibleToPublic}
+                  onChange={() =>
+                    this.setState(
+                      {
+                        visibleToPublic: !this.state.visibleToPublic
+                      },
+                      () => this.props.onContactSave(this.state)
+                    )
+                  }
+                />
+                Visible To Public
+              </Label>
             </Row>
             <Row style={{ marginBottom: 15 }}>
               {/* <Col xs="6" md="6">

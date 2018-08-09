@@ -72,26 +72,26 @@ class ResultPage extends Component {
 
     window.addEventListener("scroll", this.onScroll, false);
 
-    const { frm, size } = this.state;
+    // const { frm, size } = this.state;
 
-    this.props.onSearchResultsList({
-      body: {
-        query: parsedUrlStringObject["query"],
-        frm,
-        size,
-        lat: this.props.user_geo_coords
-          ? this.props.user_geo_coords.latitude
-          : undefined,
-        lon: this.props.user_geo_coords
-          ? this.props.user_geo_coords.longitude
-          : undefined,
-        distance: this.state.distance,
-        typeOfArea: this.state.areaName ? this.state.activeArea : undefined,
-        areaName: this.state.areaName ? this.state.areaName : undefined
-      }
-    });
+    // this.props.onSearchResultsList({
+    //   body: {
+    //     query: parsedUrlStringObject["query"],
+    //     frm,
+    //     size,
+    //     lat: this.props.user_geo_coords
+    //       ? this.props.user_geo_coords.latitude
+    //       : undefined,
+    //     lon: this.props.user_geo_coords
+    //       ? this.props.user_geo_coords.longitude
+    //       : undefined,
+    //     distance: this.state.distance,
+    //     typeOfArea: this.state.areaName ? this.state.activeArea : undefined,
+    //     areaName: this.state.areaName ? this.state.areaName : undefined
+    //   }
+    // });
 
-    this.setState({ frm: frm + size });
+    // this.setState({ frm: frm + size });
 
     this.props.setInitialQuery(parsedUrlStringObject.query);
   };
@@ -103,7 +103,10 @@ class ResultPage extends Component {
 
     // console.log("pasdara: ", parsedUrlStringObject);
 
-    if (this.props.location.search !== prevProps.location.search) {
+    if (
+      this.props.location.search !== prevProps.location.search ||
+      this.props.user_geo_coords !== prevProps.user_geo_coords
+    ) {
       this.setState({ frm: 0, areaName: "", activeArea: "Area" }, () => {
         const { frm, size } = this.state;
 
@@ -261,7 +264,6 @@ class ResultPage extends Component {
         hits.map((searchResult, searchIndex) => {
           return (
             <SearchCard
-              key={searchIndex}
               searchResult={{ ...searchResult._source, id: searchResult._id }}
               onClaimed={this.onClaimed}
               onImproveListingClicked={this.onImproveListingClicked}
@@ -277,21 +279,6 @@ class ResultPage extends Component {
         </div>
       );
     }
-  };
-
-  renderSimilarResults = () => {
-    return (
-      <Card fluid raised className="search-result__card">
-        <Card.Content>
-          <Media>
-            <Media object src="" />
-            <Media body>
-              <p>Similar</p>
-            </Media>
-          </Media>
-        </Card.Content>
-      </Card>
-    );
   };
 
   renderAddressSelectionButton = (key, val, index) =>
@@ -364,7 +351,8 @@ class ResultPage extends Component {
 
   renderAddressSelectionForSimilarSearchBusiness = () => {
     return (
-      this.state.searchResults && (
+      this.state.searchResults &&
+      !this.state.searchResults.freeSearch && (
         <Row style={{ paddingTop: "20px" }}>
           <Col xs="12" md="8">
             <span className="mr-3">Similar Business in </span>
@@ -556,9 +544,29 @@ class ResultPage extends Component {
               {this.renderBusinessMatch()}
             </Col>
           </Row>
+          {this.state.searchResults &&
+            !this.state.searchResults.freeSearch &&
+            this.state.searchResults.cat && (
+              <span className="mr-3">
+                Showing Results For{" "}
+                <strong>{this.state.searchResults.cat._source.name} </strong>
+              </span>
+            )}
+
+          {/* {this.state.searchResults &&
+            this.state.searchResults.subCategoryName && (
+              <span className="mr-3">
+                Showing Results For{" "}
+                <strong>{this.state.searchResults.subCategoryName} </strong>
+              </span>
+            )} */}
           {this.renderAddressSelectionForSimilarSearchBusiness()}
 
-          {this.renderSimilarSearchResults()}
+          <Row style={{ paddingTop: "20px" }}>
+            <Col xs="12" md="8">
+              {this.renderSimilarSearchResults()}
+            </Col>
+          </Row>
           {this.props.search_results_count > this.state.size &&
           this.props.search_results_page_loading &&
           this.props.search_results_page_data.hits.hits.length

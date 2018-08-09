@@ -53,6 +53,59 @@ export default function(state = INITIAL_STATE, action) {
 
     case SEARCH_RESULTS_PAGE_FULFILLED:
       const { businessMatch, subCategoryMatch, otherMatch } = action.payload;
+      const address = {};
+
+      if (!isEmpty(otherMatch)) {
+        console.log("enterererrerererrerer");
+        if (
+          otherMatch.findings.area._source.Kind === "Country" ||
+          otherMatch.findings.area._source.kind === "Country"
+        ) {
+          address.country = otherMatch.findings.area._source.name;
+          address.state = undefined;
+          address.district = undefined;
+          address.city = undefined;
+          address.area = undefined;
+        } else if (
+          otherMatch.findings.area._source.Kind === "State" ||
+          otherMatch.findings.area._source.kind === "State"
+        ) {
+          address.country = otherMatch.findings.area._source.country;
+          address.state = otherMatch.findings.area._source.name;
+          address.district = undefined;
+          address.city = undefined;
+          address.area = undefined;
+        } else if (
+          otherMatch.findings.area._source.Kind === "District" ||
+          otherMatch.findings.area._source.kind === "District"
+        ) {
+          address.country = otherMatch.findings.area._source.country;
+          address.state = otherMatch.findings.area._source.state;
+          address.district = otherMatch.findings.area._source.name;
+          address.city = undefined;
+          address.area = undefined;
+        } else if (
+          otherMatch.findings.area._source.Kind === "City" ||
+          otherMatch.findings.area._source.kind === "City"
+        ) {
+          address.country = otherMatch.findings.area._source.country;
+          address.state = otherMatch.findings.area._source.state;
+          address.district = otherMatch.findings.area._source.district;
+          address.city = otherMatch.findings.area._source.name;
+          address.area = undefined;
+        } else if (
+          otherMatch.findings.area._source.Kind === "Area" ||
+          otherMatch.findings.area._source.kind === "Area"
+        ) {
+          address.country = otherMatch.findings.area._source.country;
+          address.state = otherMatch.findings.area._source.state;
+          address.district = otherMatch.findings.area._source.district;
+          address.city = otherMatch.findings.area._source.city;
+          address.area = otherMatch.findings.area._source.name;
+        }
+      }
+      console.log("asdasd: ", address);
+
       const hitMatch =
         (!isEmpty(businessMatch) && {
           ...businessMatch.hit._source.address.area,
@@ -61,7 +114,11 @@ export default function(state = INITIAL_STATE, action) {
           hits: businessMatch.otherSimiliar
         }) ||
         (!isEmpty(subCategoryMatch) && subCategoryMatch) ||
-        (!isEmpty(otherMatch) && otherMatch);
+        (!isEmpty(otherMatch) && {
+          hits: otherMatch.hits,
+          ...otherMatch.findings,
+          ...address
+        });
 
       return {
         ...state,
