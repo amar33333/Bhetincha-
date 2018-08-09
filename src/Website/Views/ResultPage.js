@@ -55,7 +55,8 @@ class ResultPage extends Component {
     hasMoreItems: true,
     verifiedTooltipOpen: false,
     distance: 0,
-    activeArea: "area"
+    activeArea: "Area",
+    areaName: ""
   };
 
   componentDidMount = () => {
@@ -74,16 +75,20 @@ class ResultPage extends Component {
     const { frm, size } = this.state;
 
     this.props.onSearchResultsList({
-      query: parsedUrlStringObject["query"],
-      frm,
-      size,
-      lat: this.props.user_geo_coords
-        ? this.props.user_geo_coords.latitude
-        : undefined,
-      lon: this.props.user_geo_coords
-        ? this.props.user_geo_coords.longitude
-        : undefined,
-      distance: this.state.distance
+      body: {
+        query: parsedUrlStringObject["query"],
+        frm,
+        size,
+        lat: this.props.user_geo_coords
+          ? this.props.user_geo_coords.latitude
+          : undefined,
+        lon: this.props.user_geo_coords
+          ? this.props.user_geo_coords.longitude
+          : undefined,
+        distance: this.state.distance,
+        typeOfArea: this.state.areaName ? this.state.activeArea : undefined,
+        areaName: this.state.areaName ? this.state.areaName : undefined
+      }
     });
 
     this.setState({ frm: frm + size });
@@ -99,22 +104,26 @@ class ResultPage extends Component {
     // console.log("pasdara: ", parsedUrlStringObject);
 
     if (this.props.location.search !== prevProps.location.search) {
-      this.setState({ frm: 0 }, () => {
+      this.setState({ frm: 0, areaName: "", activeArea: "Area" }, () => {
         const { frm, size } = this.state;
 
         this.props.onSearchResultsList({
-          query: parsedUrlStringObject["query"],
-          frm,
-          size,
-          lat: this.props.user_geo_coords
-            ? this.props.user_geo_coords.latitude
-            : undefined,
-          lon: this.props.user_geo_coords
-            ? this.props.user_geo_coords.longitude
-            : undefined,
-          distance: this.state.distance
+          body: {
+            query: parsedUrlStringObject["query"],
+            frm,
+            size,
+            lat: this.props.user_geo_coords
+              ? this.props.user_geo_coords.latitude
+              : undefined,
+            lon: this.props.user_geo_coords
+              ? this.props.user_geo_coords.longitude
+              : undefined,
+            distance: this.state.distance,
+            typeOfArea: this.state.areaName ? this.state.activeArea : undefined,
+            areaName: this.state.areaName ? this.state.areaName : undefined
+          }
         });
-        this.setState({ frm: frm + size });
+        this.setState({ searchResults: null, frm: frm + size });
       });
     }
 
@@ -178,16 +187,20 @@ class ResultPage extends Component {
       const { frm, size } = this.state;
 
       this.props.onSearchResultsList({
-        query: parsedUrlStringObject["query"],
-        frm,
-        size,
-        lat: this.props.user_geo_coords
-          ? this.props.user_geo_coords.latitude
-          : undefined,
-        lon: this.props.user_geo_coords
-          ? this.props.user_geo_coords.longitude
-          : undefined,
-        distance: this.state.distance
+        body: {
+          query: parsedUrlStringObject["query"],
+          frm,
+          size,
+          lat: this.props.user_geo_coords
+            ? this.props.user_geo_coords.latitude
+            : undefined,
+          lon: this.props.user_geo_coords
+            ? this.props.user_geo_coords.longitude
+            : undefined,
+          distance: this.state.distance,
+          typeOfArea: this.state.areaName ? this.state.activeArea : undefined,
+          areaName: this.state.areaName ? this.state.areaName : undefined
+        }
       });
       this.setState({ frm: frm + size });
     }
@@ -264,39 +277,6 @@ class ResultPage extends Component {
         </div>
       );
     }
-
-    // if (!this.state.searchResults) {
-    //   console.log("no search resuls");
-    //   return (
-    //     <div>
-    //       No Results for <strong>{parsedUrlStringObject["query"]}</strong>
-    //     </div>
-    //   );
-    // } else {
-    //   console.log("SEARCH resuls: ", this.state.searchResults);
-
-    //   return (
-    //     this.state.searchResults.businessMatch.hits.length &&
-    //     this.state.searchResults.businessMatch.hits.map(
-    //       (searchResult, searchIndex) => {
-    //         var momentNow = moment().format("hh:mm A");
-    //         var today = moment().format("dddd");
-
-    //         return (
-    //           <SearchCard
-    //             searchResult={searchResult}
-    //             searchIndex={searchIndex}
-    //             momentNow={momentNow}
-    //             today={today}
-    //             onClaimed={this.onClaimed}
-    //             onImproveListingClicked={this.onImproveListingClicked}
-    //             onGetDirectionClicked={this.onGetDirectionClicked}
-    //           />
-    //         );
-    //       }
-    //     )
-    //   );
-    // }
   };
 
   renderSimilarResults = () => {
@@ -311,6 +291,177 @@ class ResultPage extends Component {
           </Media>
         </Card.Content>
       </Card>
+    );
+  };
+
+  renderAddressSelectionButton = (key, val, index) =>
+    key &&
+    val && (
+      <span className="mr-2" key={index}>
+        <Button
+          basic
+          compact
+          color={this.state.activeArea === key ? "blue" : "grey"}
+          size="mini"
+          onClick={() =>
+            this.setState({ activeArea: key, areaName: val, frm: 0 }, () => {
+              const parsedUrlStringObject = querystring.parse(
+                this.props.location.search.slice(1)
+              );
+              const { frm, size } = this.state;
+
+              this.props.onSearchResultsList({
+                body: {
+                  query: parsedUrlStringObject["query"],
+                  frm,
+                  size,
+                  lat: this.props.user_geo_coords
+                    ? this.props.user_geo_coords.latitude
+                    : undefined,
+                  lon: this.props.user_geo_coords
+                    ? this.props.user_geo_coords.longitude
+                    : undefined,
+                  distance: this.state.distance,
+                  typeOfArea: key,
+                  areaName: val
+                }
+              });
+              this.setState({ searchResults: null, frm: frm + size });
+            })
+          }
+        >
+          {`${key}: ${val}`}
+        </Button>
+      </span>
+    );
+
+  renderAddressSelectionButtonOnClicked = (key, val) => () => {
+    this.setState({ activeArea: key, areaName: val, frm: 0 }, () => {
+      const parsedUrlStringObject = querystring.parse(
+        this.props.location.search.slice(1)
+      );
+      const { frm, size } = this.state;
+
+      this.props.onSearchResultsList({
+        body: {
+          query: parsedUrlStringObject["query"],
+          frm,
+          size,
+          lat: this.props.user_geo_coords
+            ? this.props.user_geo_coords.latitude
+            : undefined,
+          lon: this.props.user_geo_coords
+            ? this.props.user_geo_coords.longitude
+            : undefined,
+          distance: this.state.distance,
+          typeOfArea: key,
+          areaName: val
+        }
+      });
+      this.setState({ searchResults: null, frm: frm + size });
+    });
+  };
+
+  renderAddressSelectionForSimilarSearchBusiness = () => {
+    return (
+      this.state.searchResults && (
+        <Row style={{ paddingTop: "20px" }}>
+          <Col xs="12" md="8">
+            <span className="mr-3">Similar Business in </span>
+            {this.state.searchResults.area && (
+              <span className="mr-2">
+                <Button
+                  basic
+                  compact
+                  color={this.state.activeArea === "Area" ? "blue" : "grey"}
+                  size="mini"
+                  onClick={this.renderAddressSelectionButtonOnClicked(
+                    "Area",
+                    this.state.searchResults.area
+                  )}
+                >
+                  Area: {this.state.searchResults.area}
+                </Button>
+              </span>
+            )}
+            {this.state.searchResults.city && (
+              <span className="mr-2">
+                <Button
+                  compact
+                  basic
+                  color={this.state.activeArea === "City" ? "blue" : "grey"}
+                  size="mini"
+                  onClick={this.renderAddressSelectionButtonOnClicked(
+                    "City",
+                    this.state.searchResults.city
+                  )}
+                >
+                  City: {this.state.searchResults.city}
+                </Button>
+              </span>
+            )}
+            {this.state.searchResults.district && (
+              <span className="mr-2">
+                <Button
+                  compact
+                  basic
+                  color={this.state.activeArea === "District" ? "blue" : "grey"}
+                  size="mini"
+                  onClick={this.renderAddressSelectionButtonOnClicked(
+                    "District",
+                    this.state.searchResults.district
+                  )}
+                >
+                  District: {this.state.searchResults.district}
+                </Button>
+              </span>
+            )}
+            {this.state.searchResults.state && (
+              <span className="mr-2">
+                <Button
+                  compact
+                  basic
+                  color={this.state.activeArea === "State" ? "blue" : "grey"}
+                  size="mini"
+                  onClick={this.renderAddressSelectionButtonOnClicked(
+                    "State",
+                    this.state.searchResults.state
+                  )}
+                >
+                  State:{this.state.searchResults.state}
+                </Button>
+              </span>
+            )}
+            {this.state.searchResults.country && (
+              <span className="mr-2">
+                <Button
+                  compact
+                  basic
+                  color={this.state.activeArea === "Country" ? "blue" : "grey"}
+                  size="mini"
+                  onClick={this.renderAddressSelectionButtonOnClicked(
+                    "Country",
+                    this.state.searchResults.country
+                  )}
+                >
+                  Country: {this.state.searchResults.country}
+                </Button>
+              </span>
+            )}
+
+            {/* {this.state.searchResults &&
+              Object.keys(this.state.searchResults.similarSearchBusinessAddress)
+                .reverse()
+                .map((each, index) => {
+                  return this.renderAddressSelectionButton(
+                    each.replace(/\b\w/g, l => l.toUpperCase()),
+                    this.state.searchResults.similarSearchBusinessAddress[each],
+                    index
+                  );
+                })} */}
+          </Col>
+        </Row>
+      )
     );
   };
 
@@ -329,7 +480,7 @@ class ResultPage extends Component {
     );
     // console.log("props: ", this.props);
 
-    // console.log("state: ", this.state);
+    console.log("state: ", this.state);
     return (
       <div
         className="pb-5"
@@ -405,61 +556,14 @@ class ResultPage extends Component {
               {this.renderBusinessMatch()}
             </Col>
           </Row>
-          <Row style={{ paddingTop: "20px" }}>
-            <Col xs="12" md="8">
-              <span className="mr-3">Similar Business in </span>
-              <span className="mr-2">
-                <Button
-                  basic
-                  compact
-                  color={this.state.activeArea === "area" ? "blue" : "grey"}
-                  size="mini"
-                  onClick={() => this.setState({ activeArea: "area" })}
-                >
-                  Area: Kathmandu
-                </Button>
-              </span>
-              <span className="mr-2">
-                <Button
-                  compact
-                  basic
-                  color={this.state.activeArea === "city" ? "blue" : "grey"}
-                  size="mini"
-                  onClick={() => this.setState({ activeArea: "city" })}
-                >
-                  City: Kathmandu
-                </Button>
-              </span>
-              <span className="mr-2">
-                <Button
-                  compact
-                  basic
-                  color={this.state.activeArea === "district" ? "blue" : "grey"}
-                  size="mini"
-                  onClick={() => this.setState({ activeArea: "district" })}
-                >
-                  District: Kathmandu
-                </Button>
-              </span>
-              <span className="mr-2">
-                <Button
-                  compact
-                  basic
-                  color={this.state.activeArea === "state" ? "blue" : "grey"}
-                  size="mini"
-                  onClick={() => this.setState({ activeArea: "state" })}
-                >
-                  State: State 3
-                </Button>
-              </span>
-              {this.renderSimilarSearchResults()}
-              {this.props.search_results_count > this.state.size &&
-              this.props.search_results_page_loading &&
-              this.props.search_results_page_data.hits.hits.length
-                ? loader
-                : null}
-            </Col>
-          </Row>
+          {this.renderAddressSelectionForSimilarSearchBusiness()}
+
+          {this.renderSimilarSearchResults()}
+          {this.props.search_results_count > this.state.size &&
+          this.props.search_results_page_loading &&
+          this.props.search_results_page_data.hits.hits.length
+            ? loader
+            : null}
         </Container>
         <CustomModal
           title="Verification: Mobile Number"

@@ -55,6 +55,8 @@ export default function(state = INITIAL_STATE, action) {
       const { businessMatch, subCategoryMatch, otherMatch } = action.payload;
       const hitMatch =
         (!isEmpty(businessMatch) && {
+          ...businessMatch.hit._source.address.area,
+
           hit: businessMatch.hit,
           hits: businessMatch.otherSimiliar
         }) ||

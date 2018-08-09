@@ -1,6 +1,9 @@
 const HOST = "https://bhetincha.app";
 const MONGO_PORT = "8025";
 
+// const HOST = "http://13.250.104.102";
+// const MONGO_PORT = "8050";
+
 export const CLIENT_ID = "e6dysH1DbOAvh4BHfHIen647yB5Z0XRbYYoCMYfR";
 export const CLIENT_SECRET =
   "6XfWulrr1jG4SWVxVLm217l9rQPrcZHjRoBwtYTi30bjIBGmJXfCGf08zFYPRW1qk6AlZRF85zCeUbeJizDp9jQ8R91XS0SiUPQxmTcLPqDWDMyAIydZSeiL2AL3X0HW";

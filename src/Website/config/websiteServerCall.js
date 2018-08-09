@@ -52,28 +52,16 @@ export const onImproveListingPost = ({ body, id }) =>
       "Content-Type": "application/json"
     }
   });
-export const onSearchResultsGet = ({
-  query,
-  frm,
-  size,
-  lat,
-  lon,
-  distance
-}) => {
+export const onSearchResultsGet = ({ body }) => {
   const currentDateTime = new Date();
 
   return ajax({
     method: "POST",
     url: `${SEARCH_URL}`,
     body: {
-      query,
+      ...body,
       time: getISOStringStrippedSecMilliSec(currentDateTime.toISOString()),
-      day: weekday[currentDateTime.getDay()],
-      frm,
-      size,
-      lat,
-      lon,
-      distance
+      day: weekday[currentDateTime.getDay()]
     },
     headers: {
       "Content-Type": "application/json"
