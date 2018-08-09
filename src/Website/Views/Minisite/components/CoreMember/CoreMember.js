@@ -1,25 +1,13 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import {
-  Card,
-  CardImg,
-  CardText,
-  CardBody,
-  CardLink,
-  CardTitle,
-  CardSubtitle,
-  Row,
-  Col,
-  CardDeck
-} from "reactstrap";
-import { MAIN_URL } from "../../../../../Common/utils/API";
+import { Row, Col, Container } from "reactstrap";
 import Member from "./member";
 class CoreMember extends Component {
   render() {
     let memberlist = this.props.coreMember.members.map(member => {
       return (
-        <Col sm="3">
-          <Member member={member} />
+        <Col sm="2" xs="6">
+          <Member member={member} slug={this.props.slug} />{" "}
         </Col>
       );
     });
@@ -27,10 +15,10 @@ class CoreMember extends Component {
       <div
         className="minisite_content__wrapper"
         style={{
-          paddingTop: "60px"
+          paddingTop: "70px"
         }}
       >
-        <Row>{memberlist}</Row>
+        <Row> {memberlist} </Row>{" "}
       </div>
     );
   }
@@ -39,11 +27,12 @@ class CoreMember extends Component {
 export default connect(
   ({
     MinisiteContainer: {
-      crud: { coreMember }
+      crud: { coreMember, slug }
     },
     auth: { cookies }
   }) => ({
     cookies,
-    coreMember
+    coreMember,
+    slug
   })
 )(CoreMember);

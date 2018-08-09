@@ -16,6 +16,7 @@ import CoreMemberAddEdit from "./components/CoreMemberAddEdit";
 class ManageCoreMember extends Component {
   componentDidMount() {
     this.props.OnCoreMemberGet();
+    // console.log("this is form link===  " + this.props.params.memberid)
   }
   render() {
     console.log("my data to props is=" + this.props.coremember);

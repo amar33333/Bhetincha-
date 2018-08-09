@@ -41,6 +41,7 @@ class CreateMember extends Component {
     this.toggle = this.toggle.bind(this);
     this.addSocialLinks = this.addSocialLinks.bind(this);
     this.toggleUpdateMember = this.toggleUpdateMember.bind(this);
+    this.getdata = this.getdata.bind(this);
   }
   componentDidUpdate(previousporps) {
     if (previousporps != this.props) {
@@ -125,7 +126,30 @@ class CreateMember extends Component {
       this.setState({ [key]: value });
     }
   };
-  // testInput(event) {
+  getdata() {
+    var data = {};
+    if (this.state.image !== "") {
+      return (data = {
+        body: {
+          name: this.state.name,
+          designation: this.state.designation,
+          image: this.state.image.base64,
+          socialProfile_links: this.state.socialProfile_links
+        },
+        id: this.state.id
+      });
+    } else {
+      return (data = {
+        body: {
+          name: this.state.name,
+          designation: this.state.designation,
+          image: this.state.image.base64,
+          socialProfile_links: this.state.socialProfile_links
+        },
+        id: this.state.id
+      });
+    }
+  }
   //   var value = String.fromCharCode(event.which);
   //   var pattern = new RegExp(/[a-zåäö ]/i);
   //   console.log(pattern.test(value));
@@ -134,30 +158,33 @@ class CreateMember extends Component {
   handleSubmit = event => {
     event.preventDefault();
     console.log("Props insiede add member=" + this.props);
-    const data = {
-      body: {
-        name: this.state.name,
-        designation: this.state.designation,
-        image: this.state.image.base64,
-        socialProfile_links: this.state.socialProfile_links
-      },
-      id: this.state.id
-    };
-    console.log("Props insiede add member=" + data);
+    // const data = {
+    //   body: {
+    //     name: this.state.name,
+    //     designation: this.state.designation,
+    //     image: this.state.image.base64,
+    //     socialProfile_links: this.state.socialProfile_links
+    //   },
+    //   id: this.state.id
+    // };
+    // if (this.state.image !== "")
+    // console.log("Props insiede add member=" + data);
+
+    console.log("data from core memeber after no image =" + this.getdata());
 
     console.log("Props insiede add member=" + this.state.social_Links);
     if (this.state.edit) {
       console.log("edit=" + this.state.edit);
       console.log("id=" + this.state.id);
 
-      this.props.onUpdateMember(data);
+      this.props.onUpdateMember(this.getdata());
       this.setState({
         name: "",
         designation: "",
         image: ""
       });
     } else {
-      this.props.onAddMember(data);
+      this.props.onAddMember(this.getdata());
       this.setState({
         name: "",
         designation: "",
@@ -277,11 +304,11 @@ class CreateMember extends Component {
                       <ReactTable
                         data={this.state.socialProfile_links}
                         columns={[
-                          {
-                            Header: "Social Link ID",
-                            accessor: "SocialProfileLinkID",
-                            width: 70
-                          },
+                          // {
+                          //   Header: "Social Link ID",
+                          //   accessor: "SocialProfileLinkID",
+                          //   width: 70
+                          // },
                           {
                             Header: "URL",
                             accessor: "address"
