@@ -65,8 +65,10 @@ const INITIAL_STATE = {
   settingsErrors: null,
   settingsEditErrors: null,
   subscriptionPackageLoading: false,
+  subscriptionPackageFetchLoading: false,
   subscriptionPackageAssignList: [],
   subscriptionPackageAssignLoading: false,
+  subscriptionPackageAssignFetchLoading: false,
   subscriptionPackageAssignError: null,
   subscriptionPackagePermissionsLoading: false,
   subscriptionPackagePermissionsList: [],
@@ -109,17 +111,20 @@ export default function(state = INITIAL_STATE, action) {
       };
 
     case FETCH_SUBSCRIPTION_PACKAGE_ASSIGN_PENDING:
-      return { ...state, subscriptionPackageAssignLoading: true };
+      return { ...state, subscriptionPackageAssignFetchLoading: true };
 
     case FETCH_SUBSCRIPTION_PACKAGE_ASSIGN_FULFILLED:
       return {
         ...state,
-        subscriptionPackageAssignList: action.payload,
-        subscriptionPackageAssignLoading: false
+        subscriptionPackageAssignList: action.payload.map((subPackage, i) => ({
+          ...subPackage,
+          s_no: i + 1
+        })),
+        subscriptionPackageAssignFetchLoading: false
       };
 
     case FETCH_SUBSCRIPTION_PACKAGE_ASSIGN_REJECTED:
-      return { ...state, subscriptionPackageAssignLoading: false };
+      return { ...state, subscriptionPackageAssignFetchLoading: false };
 
     case FETCH_SUBSCRIPTION_PACKAGE_PERMISSIONS_PENDING:
       return { ...state, subscriptionPackagePermissionsLoading: true };
@@ -155,19 +160,22 @@ export default function(state = INITIAL_STATE, action) {
       };
 
     case FETCH_SUBSCRIPTION_PACKAGE_PENDING:
-      return { ...state, subscriptionPackageLoading: true };
+      return { ...state, subscriptionPackageFetchLoading: true };
 
     case FETCH_SUBSCRIPTION_PACKAGE_FULFILLED:
       return {
         ...state,
-        subscriptionPackageLoading: false,
-        subscriptionPackageList: action.payload
+        subscriptionPackageFetchLoading: false,
+        subscriptionPackageList: action.payload.map((subPackage, i) => ({
+          ...subPackage,
+          s_no: i + 1
+        }))
       };
 
     case FETCH_SUBSCRIPTION_PACKAGE_REJECTED:
       return {
         ...state,
-        subscriptionPackageLoading: false
+        subscriptionPackageFetchLoading: false
       };
 
     case EDIT_SUBSCRIPTION_PACKAGE_PENDING:

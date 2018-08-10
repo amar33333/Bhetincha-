@@ -20,6 +20,7 @@ import {
 } from "../../actions";
 
 import { ErrorHandling } from "../../../Common/utils/Extras";
+import ManageSubscriptionTable from "./ManageSubscriptionTable";
 
 class ManageSubscription extends Component {
   state = {
@@ -105,6 +106,10 @@ class ManageSubscription extends Component {
             </form>
           </CardBody>
         </Card>
+        <ManageSubscriptionTable
+          data={this.props.subscriptionPackageAssignList}
+          fetchLoading={this.props.subscriptionPackageAssignFetchLoading}
+        />
       </div>
     );
   }
@@ -117,6 +122,7 @@ const mapStateToProps = ({
       subscriptionPackageList,
       subscriptionPackageAssignError,
       subscriptionPackageAssignList,
+      subscriptionPackageAssignFetchLoading,
       subscriptionPackageAssignLoading
     }
   }
@@ -125,6 +131,7 @@ const mapStateToProps = ({
     cookies,
     subscriptionPackageAssignError,
     subscriptionPackageAssignList,
+    subscriptionPackageAssignFetchLoading,
     subscriptionPackageList,
     subscriptionPackageAssignLoading
   };
