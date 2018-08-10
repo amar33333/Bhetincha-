@@ -65,6 +65,7 @@ const INITIAL_STATE = {
   settingsErrors: null,
   settingsEditErrors: null,
   subscriptionPackageLoading: false,
+  subscriptionPackageFetchLoading: false,
   subscriptionPackageAssignList: [],
   subscriptionPackageAssignLoading: false,
   subscriptionPackageAssignError: null,
@@ -155,19 +156,22 @@ export default function(state = INITIAL_STATE, action) {
       };
 
     case FETCH_SUBSCRIPTION_PACKAGE_PENDING:
-      return { ...state, subscriptionPackageLoading: true };
+      return { ...state, subscriptionPackageFetchLoading: true };
 
     case FETCH_SUBSCRIPTION_PACKAGE_FULFILLED:
       return {
         ...state,
-        subscriptionPackageLoading: false,
-        subscriptionPackageList: action.payload
+        subscriptionPackageFetchLoading: false,
+        subscriptionPackageList: action.payload.map((subPackage, i) => ({
+          ...subPackage,
+          s_no: i + 1
+        }))
       };
 
     case FETCH_SUBSCRIPTION_PACKAGE_REJECTED:
       return {
         ...state,
-        subscriptionPackageLoading: false
+        subscriptionPackageFetchLoading: false
       };
 
     case EDIT_SUBSCRIPTION_PACKAGE_PENDING:

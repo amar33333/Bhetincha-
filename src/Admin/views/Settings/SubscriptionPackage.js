@@ -25,6 +25,7 @@ import {
 } from "../../actions";
 
 import { ErrorHandling } from "../../../Common/utils/Extras";
+import SubscriptionPackageTable from "./SubscriptionPackageTable";
 
 class SubscriptionPackage extends Component {
   state = {
@@ -166,6 +167,10 @@ class SubscriptionPackage extends Component {
             {/* </PermissionProvider> */}
           </Col>
         </Row>
+        <SubscriptionPackageTable
+          data={this.props.subscriptionPackageList}
+          fetchLoading={this.props.subscriptionPackageFetchLoading}
+        />
       </div>
     );
   }
@@ -176,6 +181,7 @@ const mapStateToProps = ({
     settings: {
       subscriptionPackagePermissionsList,
       subscriptionPackageLoading,
+      subscriptionPackageFetchLoading,
       subscriptionPackageList,
       subscriptionPackageEditError,
       subscriptionPackageError
@@ -184,6 +190,7 @@ const mapStateToProps = ({
 }) => ({
   subscriptionPackagePermissionsList,
   subscriptionPackageLoading,
+  subscriptionPackageFetchLoading,
   subscriptionPackageList,
   subscriptionPackageEditError,
   subscriptionPackageError
