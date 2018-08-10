@@ -68,6 +68,7 @@ const INITIAL_STATE = {
   subscriptionPackageFetchLoading: false,
   subscriptionPackageAssignList: [],
   subscriptionPackageAssignLoading: false,
+  subscriptionPackageAssignFetchLoading: false,
   subscriptionPackageAssignError: null,
   subscriptionPackagePermissionsLoading: false,
   subscriptionPackagePermissionsList: [],
@@ -110,17 +111,20 @@ export default function(state = INITIAL_STATE, action) {
       };
 
     case FETCH_SUBSCRIPTION_PACKAGE_ASSIGN_PENDING:
-      return { ...state, subscriptionPackageAssignLoading: true };
+      return { ...state, subscriptionPackageAssignFetchLoading: true };
 
     case FETCH_SUBSCRIPTION_PACKAGE_ASSIGN_FULFILLED:
       return {
         ...state,
-        subscriptionPackageAssignList: action.payload,
-        subscriptionPackageAssignLoading: false
+        subscriptionPackageAssignList: action.payload.map((subPackage, i) => ({
+          ...subPackage,
+          s_no: i + 1
+        })),
+        subscriptionPackageAssignFetchLoading: false
       };
 
     case FETCH_SUBSCRIPTION_PACKAGE_ASSIGN_REJECTED:
-      return { ...state, subscriptionPackageAssignLoading: false };
+      return { ...state, subscriptionPackageAssignFetchLoading: false };
 
     case FETCH_SUBSCRIPTION_PACKAGE_PERMISSIONS_PENDING:
       return { ...state, subscriptionPackagePermissionsLoading: true };
