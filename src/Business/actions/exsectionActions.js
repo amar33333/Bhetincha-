@@ -17,8 +17,12 @@ import {
   FETCH_PARENT_SECTION_LIST_BUSINESS_REJECTED,
   CHANGE_ACTIVE_CHILD_EXSECTION,
   CHANGE_SELETED_SECTION_DETAILS_BUSINESS,
-  CHANGE_ACTIVE_PARENT_ADMIN_ID_EXSECTION,
-  CHANGE_ACTIVE_PARENT_ADMIN_ID_EXSECTION_FULFILLED
+  //CHANGE_ACTIVE_PARENT_ADMIN_ID_EXSECTION,
+  // CHANGE_ACTIVE_PARENT_ADMIN_ID_EXSECTION_FULFILLED,
+  RESET_SECTION_STATE,
+  CHANGE_SELETED_SECTION_DETAILS_BUSINESS_DATA_PENDING,
+  CHANGE_SELETED_SECTION_DETAILS_BUSINESS_DATA_FULFILLED,
+  CHANGE_SELETED_SECTION_DETAILS_BUSINESS_DATA_REJECTED
 } from "./types";
 
 import {
@@ -29,7 +33,8 @@ import {
 
 import {
   onSectionBusinessPost,
-  onParentSectionBusinessGet
+  onParentSectionBusinessGet,
+  onSectionsListExsectionBusinessData
 } from "../config/businessServerCall";
 
 const epics = [];
@@ -51,7 +56,8 @@ epics.push((action$, { getState }) =>
             type: CHANGE_ACTIVE_EXSECTION_SECTION,
             payload: response.uid,
             first: first,
-            oldSection: "9b4623c4d6c24531a8f64e9673397cf1"
+            // oldSection: "9b4623c4d6c24531a8f64e9673397cf1"
+            oldSection: response.uid
           });
         }
 
@@ -86,20 +92,18 @@ export const onChangeActiveSectionBusiness = (
 
 epics.push((action$, { getState }) =>
   action$.ofType(CHANGE_ACTIVE_EXSECTION_SECTION).mergeMap(action => {
-    //console.log("consoling action", action);
     const {
       payload: newSection,
       oldSection,
       leafDetected,
       activeChildren
     } = action;
-    //console.log("Consoling actions", action);
+
     const businessId = getState().auth.cookies.user_data.business_id;
+
     return onExsectionSectionDetailGetAdmin({ uid: newSection }).concatMap(
       ({ response }) => {
-        // console.log("Logging RESO", oldSection);
         const stuffs = [];
-
         stuffs.push({
           type: CHANGE_SELETED_SECTION_DETAILS_BUSINESS,
           payload: response
@@ -125,6 +129,15 @@ epics.push((action$, { getState }) =>
         });
 
         if (!action.first) {
+          stuffs.push({
+            type: CHANGE_SELETED_SECTION_DETAILS_BUSINESS_DATA_PENDING,
+            payload: {
+              body: { sectionId: newSection }
+            }
+          });
+        }
+
+        if (!action.first) {
           if (action.oldSection !== "9b4623c4d6c24531a8f64e9673397cf1") {
             stuffs.push({
               type: FETCH_PARENT_SECTION_LIST_BUSINESS_PENDING,
@@ -144,32 +157,29 @@ epics.push((action$, { getState }) =>
   })
 );
 
-// epics.push(action$ =>
-//   action$
-//     .ofType(CHANGE_ACTIVE_PARENT_ADMIN_ID_EXSECTION)
-//     .mergeMap(({ payload: { body } }) => {
-//       console.log("Consoling body", body);
-//       const oldSection = body.sectionId;
-//       return onExsectionSectionDetailGetAdmin({ uid: oldSection })
-//         .map(({ response }) => {
-//           if (response.msg === "success") {
-//             console.log("CHANGE_ACTIVE_PARENT_ADMIN_ID_EXSECTION", response);
-//             return {
-//               type: CHANGE_ACTIVE_PARENT_ADMIN_ID_EXSECTION_FULFILLED,
-//               payload: response
-//             };
-//           } else {
-//             throw new Error(response.msg);
-//           }
-//         })
-//         .catch(ajaxError => {
-//           toast.error(ajaxError.toString());
-//           return Observable.of({
-//             type: "CHANGE_ACTIVE_PARENT_ADMIN_ID_EXSECTION_REJECTED"
-//           });
-//         });
-//     })
-// );
+epics.push((action$, { getState }) =>
+  action$
+    .ofType(CHANGE_SELETED_SECTION_DETAILS_BUSINESS_DATA_PENDING)
+    .mergeMap(({ payload: { body } }) => {
+      const globalState = getState();
+      const businessIdd = globalState.auth.cookies.user_data.business_id;
+      return onSectionsListExsectionBusinessData({ body, businessIdd })
+        .map(data => {
+          if (data.status === 200) {
+            return {
+              type: CHANGE_SELETED_SECTION_DETAILS_BUSINESS_DATA_FULFILLED,
+              payload: data.response
+            };
+          }
+        })
+        .catch(ajaxError => {
+          toast.error(ajaxError.toString());
+          return Observable.of({
+            type: CHANGE_SELETED_SECTION_DETAILS_BUSINESS_DATA_REJECTED
+          });
+        });
+    })
+);
 
 epics.push(action$ =>
   action$
@@ -240,7 +250,7 @@ epics.push((action$, { getState }) =>
       //   activeCategory: sectionId
       // } = globalState.BusinessContainer.exsection;
       const businessIdd = globalState.auth.cookies.user_data.business_id;
-
+      console.log("consoling payload", payload);
       return onSectionBusinessPost({
         body: { ...payload.body, businessIdd }
       })
@@ -260,5 +270,15 @@ epics.push((action$, { getState }) =>
         });
     })
 );
+
+//resetState
+
+export const resetState = () => ({
+  type: RESET_SECTION_STATE
+});
+
+export const onSectionUpdateBusinessExsection = () => {
+  return "hello";
+};
 
 export default epics;

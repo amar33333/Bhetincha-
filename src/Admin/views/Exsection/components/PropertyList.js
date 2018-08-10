@@ -12,25 +12,22 @@ import filterCaseInsesitive from "../../../../Common/utils/filterCaseInsesitive"
 class PropertyList extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
 
-    // this.state = {
-    //   properties: props.section.breadCrumbs
-    //     ? this.mapProperties(props.section)
-    //     : []
-    // };
+    this.state = {
+      properties: props.section.breadCrumbs
+        ? this.mapProperties(props.section)
+        : []
+    };
   }
 
   componentDidUpdate(prevProps) {
-    console.log("VAR");
-    console.log(this.props.section);
-    // if (this.props.section !== prevProps.section) {
-    //   this.setState({
-    //     properties: this.props.section.breadCrumbs
-    //       ? this.mapProperties(this.props.section)
-    //       : []
-    //   });
-    // }
+    if (this.props.section !== prevProps.section) {
+      this.setState({
+        properties: this.props.section.breadCrumbs
+          ? this.mapProperties(this.props.section)
+          : []
+      });
+    }
   }
 
   mapProperties = section => {
@@ -87,13 +84,13 @@ class PropertyList extends Component {
           <PopoverDelete
             id={`delete-${value}`}
             disabled={uidPage !== uidSection}
-            onClick={() =>
+            onClick={() => {
               this.props.onPropertyRemove({
                 sectionId: uidSection,
                 attributeTypeId: uidAttributeType,
                 relationshipId: value
-              })
-            }
+              });
+            }}
           />
         )
       }

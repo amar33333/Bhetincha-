@@ -1740,58 +1740,24 @@ export const onExsectionSectionAttributesGet = ({ body }) =>
     }
   });
 
-//Adding a new section data
-////`${MAIN_URL}/${EXSECTION}/bizsec`
-//OR http://52.78.51.237/sections/bizsec/
-//sample json payload
-//{
-// "asid":"c7084516d6f24afba0e16e5102a3e59f",
-// "businessIdd":"5b596acd8ffa850603eea61a",
-// "name":"Dwarika Hotel Menu"
+//onExsectionPropertiesDelete
+export const onExsectionPropertiesDelete = ({ body }) =>
+  ajax({
+    method: "DELETE",
+    url: EXSECTION_ATTRIBUTE_URL,
+    body,
+    headers: {
+      "Content-Type": "application/json"
+    }
+  });
 
-// }
-//OR
-//{
-//  "asid":"5bdfd169cade444e8d59abfbaab4b0f5",
-//  "businessIdd":"5b596acd8ffa850603eea61a",
-//  "parentsectionId": "f231cc24c974459c96983e66bd99bc2f",
-//  "name":"NOn veg"
-
-//  }
-//where asid is admin section id
-
-//
-//
-//
-
-//
-//Getting all data for a section and its childs given a business id and admin section id
-//http://52.78.51.237/sections/
-// bizsec/?businessIdd=5b596acd8ffa850603eea61a&admin_sectionId=c7084516d6f24afba0e16e5102a3e59f
-//sample json output
-//{
-//   "sections": [
-//     {
-//         "children": [],
-//         "attributes": {
-//             "uid": "f231cc24c974459c96983e66bd99bc2f",
-//             "name": "Dwarika Hotel Menu"
-//         }
-//     }
-// ]
-// }
-
-//Getting data for a section given its business id and admin section id
-//http://52.78.51.237/sections/
-//biz/seclist/?businessIdd=5b596acd8ffa850603eea61a&admin_sectionId=c7084516d6f24afba0e16e5102a3e59f
-//use this to get for eg list of FoodCatgory for Menu Section
-//sample json output
-// {
-//   "msg": "success",
-//   "sections": [
-//       {
-//           "id": "f231cc24c974459c96983e66bd99bc2f",
-//           "name": "Dwarika Hotel Menu"
-//       }
-//   ]
-// }
+//onExsectionSectionDetailPost
+export const onExsectionSectionDetailPost = ({ uid, body }) =>
+  ajax({
+    method: "POST",
+    url: `${EXSECTION_SECTION_URL}${uid}/`,
+    body,
+    headers: {
+      "Content-Type": "application/json"
+    }
+  });

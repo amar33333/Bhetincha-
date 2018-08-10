@@ -551,4 +551,15 @@ export const onParentSectionBusinessGet = ({ body }) =>
     }
   });
 
-//  onExsectionSectionDetailGetBusiness
+//onSectionsListExsectionBusinessData
+
+export const onSectionsListExsectionBusinessData = ({ body, businessIdd }) =>
+  ajax({
+    method: "GET",
+    url: `${EXSECTION_SECTION_BUSINESS_URL}?businessIdd=${businessIdd}&admin_sectionId=${
+      body.sectionId
+    }`,
+    headers: {
+      "Content-Type": "application/json"
+    }
+  });

@@ -4,25 +4,23 @@ import { Container, Row, Col } from "reactstrap";
 import { SideTreeView } from "./components";
 import { RecordAddNew } from "./components";
 
+import { SectionEditViewBusiness } from "./components";
+
 import {
   onSectionsListExsection,
   onChangeActiveSectionBusiness,
-  onCreateSectionBusiness
+  onCreateSectionBusiness,
+  resetState,
+  onSectionUpdateBusinessExsection
 } from "../../actions";
 
 class ManageSections extends Component {
   componentDidMount() {
-    //console.log("check Did Mount", this.props);
-
+    this.props.resetState();
     this.props.onSectionsListExsection();
   }
 
-  componentDidUpdate() {
-    //console.log("Com Did Upd", this.props);
-    //console.log("check Did Update", this.props);
-  }
   render() {
-    //console.log("INITIAL RENDER", this.props);
     return (
       <div className="animated fadeIn">
         <Container fluid>
@@ -36,6 +34,22 @@ class ManageSections extends Component {
               />
             </Col>
             <Col xs="12" md="9">
+              {/* Start here */}
+              {/* {console.log("Logging props", this.props)} */}
+              {this.props.activeSection &&
+                this.props.sections &&
+                this.props.sections.uid !== this.props.activeSection && (
+                  <div>
+                    <SectionEditViewBusiness
+                      onSectionUpdateBusiness={
+                        this.props.onSectionUpdateBusinessExsection
+                      }
+                      section={this.props.selectedSectionDetail}
+                    />
+                  </div>
+                )}
+
+              {/* End here */}
               {this.props.attributes &&
                 this.props.attributes.attributes &&
                 this.props.attributes.attributes.length !== 0 && (
@@ -71,6 +85,7 @@ export default connect(
         activeParentAdminId,
         isOpenSections,
         selectedSectionDetail,
+        selectedSectionDetailBusiness,
         attributes,
         parentSection
       }
@@ -82,12 +97,15 @@ export default connect(
     activeParentAdminId,
     isOpenSections,
     selectedSectionDetail,
+    selectedSectionDetailBusiness,
     attributes,
     parentSection
   }),
   {
     onSectionsListExsection,
     onChangeActiveSectionBusiness,
-    onCreateSectionBusiness
+    onCreateSectionBusiness,
+    resetState,
+    onSectionUpdateBusinessExsection
   }
 )(ManageSections);

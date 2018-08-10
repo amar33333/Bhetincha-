@@ -1,5 +1,6 @@
 import SideTreeView from "./SideTreeView";
 import RecordAddNew from "./RecordAddNew";
-//import IfApp from "./IfApp";
 
-export { SideTreeView, RecordAddNew };
+import SectionEditViewBusiness from "./SectionEditViewBusiness";
+
+export { SideTreeView, RecordAddNew, SectionEditViewBusiness };

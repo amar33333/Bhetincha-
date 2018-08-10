@@ -96,11 +96,20 @@ class RecordAddEdit extends Component {
     this.setState({ selectedOption });
   };
 
+  // onChange = (key, value, mykey) => {
+  //   let inputValues = [...this.state.inputValues];
+  //   inputValues[mykey] = value;
+  //   this.setState({ inputValues });
+  //   console.log("FROM ONCHANGE", this.state);
+  // };
+
   onChange = (key, value, mykey) => {
-    let inputValues = [...this.state.inputValues];
-    inputValues[mykey] = value;
-    this.setState({ inputValues });
-    //console.log("FROM ONCHANGE", this.state);
+    const newArray = Array.from(this.state.inputValues);
+    newArray[mykey] = { ...newArray[mykey], ...{ [key]: value } };
+
+    this.setState({ inputValues: newArray });
+
+    console.log("state", this.state);
   };
 
   addClick() {
@@ -111,6 +120,8 @@ class RecordAddEdit extends Component {
 
   saveClick(event) {
     event.preventDefault();
+
+    console.log("this.props", this.props);
     const { inputValues } = this.state;
 
     const parentSectionId = this.state.selectedOption
@@ -122,22 +133,48 @@ class RecordAddEdit extends Component {
 
     if (parentSectionId !== 0) {
       inputValues.forEach(value => {
-        //console.log("forEach:", value);
+        const obj = value;
         const body = {
           asid: this.props.activeSection,
-          parentsectionId: parentSectionId,
-          name: value
+          parentsectionId: parentSectionId
         };
-        this.props.onSubmit({ body });
+        //string.charAt(0).toUpperCase()
+        for (var property in obj) {
+          if (obj.hasOwnProperty(property)) {
+            const prevProperty = property;
+            property = property.charAt(0).toLowerCase() + property.slice(1);
+
+            //{start here}
+            // this.props.attributes.forEach(
+            //   ({ name, fieldType: attributeType }) => {
+            //     let value = "";
+            //     body[name] = {
+            //       attributeType,
+            //       value
+            //     };
+            //   }
+            // );
+            //{end here}
+
+            body[property] = obj[prevProperty];
+          }
+        }
+        // this.props.onSubmit({ body });
       });
     } else {
       inputValues.forEach(value => {
-        //console.log("forEach:", value);
+        const obj = value;
+        console.log("forEach:", value);
         const body = {
-          asid: this.props.activeSection,
-          name: value
+          asid: this.props.activeSection
         };
-        this.props.onSubmit({ body });
+        for (var property in obj) {
+          if (obj.hasOwnProperty(property)) {
+            body.name = obj[property];
+          }
+        }
+
+        // this.props.onSubmit({ body });
       });
     }
   }

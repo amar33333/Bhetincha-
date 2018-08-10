@@ -32,9 +32,11 @@ export default function(state = INITIAL_STATE, action) {
       return { ...state, propertyLoading: false, propertyError: true };
 
     case FETCH_EXSECTION_ATTRIBUTES_FULFILLED:
+      // console.log("consoling attributes array", action.payload);
       return { ...state, attributes: action.payload };
 
     case FETCH_EXSECTION_SECTIONS_FULFILLED:
+      //console.log("consoling sections object", action.payload);
       return {
         ...state,
         sections: action.payload

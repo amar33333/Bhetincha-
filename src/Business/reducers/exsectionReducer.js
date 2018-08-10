@@ -5,7 +5,9 @@ import {
   FETCH_PARENT_SECTION_LIST_BUSINESS_FULFILLED,
   CHANGE_ACTIVE_CHILD_EXSECTION,
   CHANGE_SELETED_SECTION_DETAILS_BUSINESS,
-  CHANGE_ACTIVE_PARENT_ADMIN_ID_EXSECTION_FULFILLED
+  //CHANGE_ACTIVE_PARENT_ADMIN_ID_EXSECTION_FULFILLED,
+  RESET_SECTION_STATE,
+  CHANGE_SELETED_SECTION_DETAILS_BUSINESS_DATA_FULFILLED
 } from "../actions/types";
 
 import update from "immutability-helper";
@@ -15,6 +17,7 @@ const INITIAL_STATE = {
   activeSection: "",
   isOpenSections: ["9b4623c4d6c24531a8f64e9673397cf1"],
   selectedSectionDetail: null,
+  selectedSectionDetailBusiness: null,
   attributes: [],
   parentSection: {},
   activeChildren: {}
@@ -79,6 +82,18 @@ export default function(state = INITIAL_STATE, action) {
       return {
         ...state,
         selectedSectionDetail: action.payload
+      };
+
+    case RESET_SECTION_STATE:
+      return {
+        ...state,
+        parentSection: {}
+      };
+
+    case CHANGE_SELETED_SECTION_DETAILS_BUSINESS_DATA_FULFILLED:
+      return {
+        ...state,
+        selectedSectionDetailBusiness: action.payload
       };
 
     default:

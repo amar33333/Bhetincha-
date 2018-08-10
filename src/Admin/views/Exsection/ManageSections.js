@@ -6,18 +6,19 @@ import {
   SideTreeView,
   BreadcrumbNav,
   SectionDetailView,
+  SectionEditView,
   PropertyItemAddNew,
   PropertyList
 } from "./components";
 
-import { PopoverDelete } from "../../../Common/components";
-
 import {
   onSectionsListExsection,
   onSectionSubmitExsection,
+  onSectionUpdateExsection,
   onChangeActiveSectionExsection,
   onAttributesListExsection,
-  onPropertySubmitExsection
+  onPropertySubmitExsection,
+  onPropertyRemoveExsection
 } from "../../actions";
 
 class ManageSections extends Component {
@@ -27,20 +28,18 @@ class ManageSections extends Component {
   }
 
   render() {
-    //console.log("Loading Section.....");
-    //console.log(this.props);
     return (
       <div className="animated fadeIn">
         <Container fluid>
           <Row>
             <Col xs="12" md="3">
               <SideTreeView
-                sections={this.props.sections} //categories
-                activeSection={this.props.activeSection} //activeCategory
+                sections={this.props.sections}
+                activeSection={this.props.activeSection}
                 onChangeActiveSection={
                   this.props.onChangeActiveSectionExsection
                 }
-                isOpen={this.props.isOpenSections} //isOpenCategories
+                isOpen={this.props.isOpenSections}
               />
             </Col>
             <Col xs="12" md="9">
@@ -52,6 +51,19 @@ class ManageSections extends Component {
                       this.props.onChangeActiveSectionExsection
                     }
                   />
+                  {/* Start here */}
+                  {this.props.activeSection &&
+                    this.props.sections &&
+                    this.props.sections.uid !== this.props.activeSection && (
+                      <div>
+                        <SectionEditView
+                          onSectionUpdate={this.props.onSectionUpdateExsection}
+                          section={this.props.selectedSectionDetail}
+                        />
+                      </div>
+                    )}
+
+                  {/* End here */}
                   {this.props.selectedSectionDetail.hasSec && (
                     <SectionDetailView
                       name={this.props.selectedSectionDetail.name}
@@ -60,15 +72,17 @@ class ManageSections extends Component {
                   )}
 
                   <PropertyItemAddNew
-                    loading={this.props.propertyLoading} //
-                    error={this.props.propertyError} //
-                    activeSection={this.props.activeSection} //
+                    loading={this.props.propertyLoading}
+                    error={this.props.propertyError}
+                    activeSection={this.props.activeSection}
                     attributes={this.props.attributes}
-                    onPropertySubmit={this.props.onPropertySubmitExsection} //
+                    onPropertySubmit={this.props.onPropertySubmitExsection}
                   />
+
                   <PropertyList
-                  //category={this.props.selectedSectionDetail}
-                  //onPropertyRemove={this.props.onPropertyRemoveExsection}
+                    section={this.props.selectedSectionDetail}
+                    activeSection={this.props.activeSection}
+                    onPropertyRemove={this.props.onPropertyRemoveExsection}
                   />
                 </div>
               )}
@@ -106,7 +120,9 @@ export default connect(
     onSectionsListExsection,
     onAttributesListExsection,
     onSectionSubmitExsection,
+    onSectionUpdateExsection,
     onChangeActiveSectionExsection,
-    onPropertySubmitExsection
+    onPropertySubmitExsection,
+    onPropertyRemoveExsection
   }
 )(ManageSections);

@@ -20,7 +20,13 @@ import {
   FETCH_EXSECTION_ATTRIBUTES_REJECTED,
   CREATE_EXSECTION_PROPERTY_SECTION_FULFILLED,
   CREATE_EXSECTION_PROPERTY_SECTION_PENDING,
-  CREATE_EXSECTION_PROPERTY_SECTION_REJECTED
+  CREATE_EXSECTION_PROPERTY_SECTION_REJECTED,
+  DELETE_EXSECTION_PROPERTY_SECTION_PENDING,
+  DELETE_EXSECTION_PROPERTY_SECTION_FULFILLED,
+  DELETE_EXSECTION_PROPERTY_SECTION_REJECTED,
+  UPDATE_EXSECTION_SECTION_PENDING,
+  UPDATE_EXSECTION_SECTION_FULFILLED,
+  UPDATE_EXSECTION_SECTION_REJECTED
 } from "./types";
 
 //import { onEcommerceCategoriesGet } from "../config/adminServerCall";
@@ -31,7 +37,9 @@ import {
   onExsectionSectionDetailGetAdmin,
   onExsectionSectionPostAdmin,
   //onExsectionPropertiesPost,
-  onExsectionAttributesPostAdmin
+  onExsectionAttributesPostAdmin,
+  onExsectionPropertiesDelete,
+  onExsectionSectionDetailPost
 } from "../config/adminServerCall";
 
 const epics = [];
@@ -53,8 +61,8 @@ epics.push((action$, { getState }) =>
             payload: response.uid
           });
         }
-        console.log("GIVE ME THE THING");
-        console.log(response);
+        //console.log("GIVE ME THE THING");
+        //console.log(response);
         return [
           {
             type: FETCH_EXSECTION_SECTIONS_FULFILLED,
@@ -196,4 +204,69 @@ epics.push((action$, { getState }) =>
   })
 );
 
+//onPropertyRemoveExsection
+
+export const onPropertyRemoveExsection = payload => ({
+  type: DELETE_EXSECTION_PROPERTY_SECTION_PENDING,
+  payload
+});
+
+epics.push((action$, { getState }) =>
+  action$.ofType(DELETE_EXSECTION_PROPERTY_SECTION_PENDING).mergeMap(action => {
+    const payload = getState().AdminContainer.exsection.activeSection;
+    const body = action.payload;
+
+    return onExsectionPropertiesDelete({ body })
+      .concatMap(({ response }) => {
+        if (response.msg === "success") {
+          toast.success("Attribute Deleted Successfully");
+          return [
+            { type: DELETE_EXSECTION_PROPERTY_SECTION_FULFILLED },
+            { type: CHANGE_ACTIVE_EXSECTION_SECTION, payload }
+          ];
+        } else {
+          throw new Error(response.msg);
+        }
+      })
+      .catch(ajaxError => {
+        toast.error(ajaxError.toString());
+        return Observable.of({
+          type: DELETE_EXSECTION_PROPERTY_SECTION_REJECTED
+        });
+      });
+  })
+);
 export default epics;
+
+//onSectionUpdateExsection
+
+export const onSectionUpdateExsection = payload => ({
+  type: UPDATE_EXSECTION_SECTION_PENDING,
+  payload
+});
+
+epics.push((action$, { getState }) =>
+  action$.ofType(UPDATE_EXSECTION_SECTION_PENDING).mergeMap(action => {
+    const uid = getState().AdminContainer.exsection.activeSection;
+    const { body } = action.payload;
+
+    return onExsectionSectionDetailPost({ body, uid })
+      .concatMap(({ response }) => {
+        if (response.msg === "success") {
+          toast.success("Category updated successfully");
+          return [
+            { type: UPDATE_EXSECTION_SECTION_FULFILLED },
+            { type: FETCH_EXSECTION_SECTIONS_PENDING },
+            { type: CHANGE_ACTIVE_EXSECTION_SECTION, payload: uid }
+          ];
+        } else {
+          toast.error(response.msg);
+          return [{ type: CHANGE_ACTIVE_EXSECTION_SECTION, payload: uid }];
+        }
+      })
+      .catch(ajaxError => {
+        toast.error(ajaxError.toString());
+        return Observable.of({ type: UPDATE_EXSECTION_SECTION_REJECTED });
+      });
+  })
+);
