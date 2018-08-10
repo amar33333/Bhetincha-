@@ -24,49 +24,45 @@ class Member extends Component {
   }
   render() {
     return (
-      <div>
-        <Card className="content-center">
-          <CardHeader>
-            {this.props.member.name}
-            <Link
-              to={`/${this.props.slug}/dashboard/coremember?memberid=${
-                this.props.member.memberID
-              }`}
-              params={this.props.member.memberID}
-            >
-              <span
-                data-tooltip="EDIT"
-                // color="success"
-                // id={"Popover-" + this.props.id}
-                // onClick={this.toggle}
-                // disabled={this.props.disabled}
-                style={{ float: "right" }}
-              >
-                <i className="fa fa-edit" />{" "}
-              </span>{" "}
-            </Link>{" "}
-          </CardHeader>
-          <CardBody>
-            <img
-              src={`${MAIN_URL}${this.props.member.image}`}
-              alt={this.props.member.name}
-              height="128"
-              width="150"
-            />
-            <CardTitle>
-              {" "}
-              Designation: {this.props.member.designation}{" "}
-            </CardTitle>{" "}
-            <CardText> </CardText>{" "}
-            {this.props.member.socialProfile_links.map(links => {
-              return (
-                <CardLink href={links.address}>
-                  <i className="fa fa-facebook-square" />
-                </CardLink>
-              );
-            })}{" "}
-          </CardBody>{" "}
-        </Card>{" "}
+      <div style={{ paddingBottom: "15%" }}>
+        <Link
+          to={`/${this.props.slug}/dashboard/coremember?memberid=${
+            this.props.member.memberID
+          }`}
+          params={this.props.member.memberID}
+        >
+          <span data-tooltip="EDIT" style={{ float: "45" }}>
+            <i className="fa fa-edit" />{" "}
+          </span>{" "}
+        </Link>{" "}
+        <div
+          style={{
+            height: "128px",
+            width: "150px",
+            overflow: "hidden"
+          }}
+        >
+          <img
+            src={`${MAIN_URL}${this.props.member.image}`}
+            alt={this.props.member.name}
+            style={{
+              width: "125px",
+              height: "120px",
+              borderRadius: "50%",
+              color: "green"
+            }}
+            className="img-fluid"
+          />
+        </div>
+        <strong> {this.props.member.name}</strong>
+        <br /> {this.props.member.designation} <br />
+        {this.props.member.socialProfile_links.map(links => {
+          return (
+            <CardLink href={links.address}>
+              <i className="fa fa-facebook-square" />
+            </CardLink>
+          );
+        })}{" "}
       </div>
     );
   }

@@ -13,12 +13,13 @@ class CoreMember extends Component {
     });
     return (
       <div
-        className="minisite_content__wrapper"
+        className="minisite_content__wrapper "
         style={{
-          paddingTop: "70px"
+          paddingTop: "70px",
+          paddingLeft: "50px"
         }}
       >
-        <Row> {memberlist} </Row>{" "}
+        <Row> {memberlist}</Row>
       </div>
     );
   }

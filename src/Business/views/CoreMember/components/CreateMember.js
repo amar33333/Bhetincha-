@@ -143,7 +143,7 @@ class CreateMember extends Component {
         body: {
           name: this.state.name,
           designation: this.state.designation,
-          image: this.state.image.base64,
+          // image: this.state.image.base64,
           socialProfile_links: this.state.socialProfile_links
         },
         id: this.state.id
