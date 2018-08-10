@@ -42,7 +42,7 @@ class SubBusinessContact extends Component {
 
   componentDidUpdate(prevProps) {
     if (prevProps.contact !== this.props.contact) {
-      return {
+      this.setState({
         name: this.props.contact.name,
         email: this.props.contact.email,
         designation: this.props.contact.designation,
@@ -58,7 +58,7 @@ class SubBusinessContact extends Component {
           !validatePhone(this.props.contact.mobileNumber)
             ? true
             : false
-      };
+      });
     }
   }
 

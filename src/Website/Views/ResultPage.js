@@ -1,29 +1,9 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import {
-  Container,
-  Row,
-  Col,
-  Media,
-  // Card,
-  // CardBody,
-  // CardFooter,
-  Badge
-} from "reactstrap";
-// import { geolocated } from "react-geolocated";
-import InputRange from "react-input-range";
-
+import { Container, Row, Col } from "reactstrap";
 import "react-input-range/lib/css/index.css";
-
-import { MAIN_URL } from "../../Common/utils/API";
-
-import { Card, Divider, Button, Loader } from "semantic-ui-react";
-import moment from "moment";
-// import avatar from "../../static/img/avatar.jpg";
-// import avatar from "../../static/img/avatar.jpg";
+import { Button, Loader } from "semantic-ui-react";
 import querystring from "querystring";
-
-import { Link } from "react-router-dom";
 
 import {
   togglePhoneVerificationModal,
@@ -45,6 +25,20 @@ import ImproveListingModal from "../../Common/components/CustomModal/ModalTempla
 import GetDirectionModal from "../../Common/components/CustomModal/ModalTemplates/GetDirectionModal";
 
 import { SearchCard } from "./Components";
+import Loading from "../../Common/pages/Loading";
+
+const loader = (
+  <div
+    className="loader"
+    style={{
+      marginBottom: "30px"
+    }}
+  >
+    <Loader active inline="centered">
+      Loading
+    </Loader>
+  </div>
+);
 
 class ResultPage extends Component {
   state = {
@@ -107,27 +101,36 @@ class ResultPage extends Component {
       this.props.location.search !== prevProps.location.search ||
       this.props.user_geo_coords !== prevProps.user_geo_coords
     ) {
-      this.setState({ frm: 0, areaName: "", activeArea: "Area" }, () => {
-        const { frm, size } = this.state;
+      this.setState(
+        {
+          frm: 0,
+          areaName: "",
+          activeArea: "Area"
+        },
+        () => {
+          const { frm, size } = this.state;
 
-        this.props.onSearchResultsList({
-          body: {
-            query: parsedUrlStringObject["query"],
-            frm,
-            size,
-            lat: this.props.user_geo_coords
-              ? this.props.user_geo_coords.latitude
-              : undefined,
-            lon: this.props.user_geo_coords
-              ? this.props.user_geo_coords.longitude
-              : undefined,
-            distance: this.state.distance,
-            typeOfArea: this.state.areaName ? this.state.activeArea : undefined,
-            areaName: this.state.areaName ? this.state.areaName : undefined
-          }
-        });
-        this.setState({ searchResults: null, frm: frm + size });
-      });
+          this.props.onSearchResultsList({
+            body: {
+              query: parsedUrlStringObject["query"],
+              frm,
+              size,
+              lat: this.props.user_geo_coords
+                ? this.props.user_geo_coords.latitude
+                : undefined,
+              lon: this.props.user_geo_coords
+                ? this.props.user_geo_coords.longitude
+                : undefined,
+              distance: this.state.distance,
+              typeOfArea: this.state.areaName
+                ? this.state.activeArea
+                : undefined,
+              areaName: this.state.areaName ? this.state.areaName : undefined
+            }
+          });
+          this.setState({ searchResults: null, frm: frm + size });
+        }
+      );
     }
 
     if (
@@ -255,15 +258,14 @@ class ResultPage extends Component {
     const parsedUrlStringObject = querystring.parse(
       this.props.location.search.slice(1)
     );
-
     if (this.state.searchResults) {
       const hits = this.state.searchResults.hits.hits;
 
-      return (
-        hits.length &&
+      return hits.length ? (
         hits.map((searchResult, searchIndex) => {
           return (
             <SearchCard
+              key={searchIndex}
               searchResult={{ ...searchResult._source, id: searchResult._id }}
               onClaimed={this.onClaimed}
               onImproveListingClicked={this.onImproveListingClicked}
@@ -271,13 +273,19 @@ class ResultPage extends Component {
             />
           );
         })
-      );
-    } else {
-      return (
+      ) : (
         <div>
           No Results for <strong>{parsedUrlStringObject["query"]}</strong>
         </div>
       );
+    } else {
+      if (!this.props.search_results_page_loading)
+        return (
+          <div>
+            No Results for <strong>{parsedUrlStringObject["query"]}</strong>
+          </div>
+        );
+      else return <Loading />;
     }
   };
 
@@ -313,7 +321,10 @@ class ResultPage extends Component {
                   areaName: val
                 }
               });
-              this.setState({ searchResults: null, frm: frm + size });
+              this.setState({
+                searchResults: null,
+                frm: frm + size
+              });
             })
           }
         >
@@ -454,18 +465,6 @@ class ResultPage extends Component {
   };
 
   render() {
-    const loader = (
-      <div
-        className="loader"
-        style={{
-          marginBottom: "30px"
-        }}
-      >
-        <Loader active inline="centered">
-          Loading
-        </Loader>
-      </div>
-    );
     // console.log("props: ", this.props);
 
     console.log("state: ", this.state);
@@ -545,13 +544,15 @@ class ResultPage extends Component {
             </Col>
           </Row>
           {this.state.searchResults &&
-            !this.state.searchResults.freeSearch &&
-            this.state.searchResults.cat && (
-              <span className="mr-3">
-                Showing Results For{" "}
-                <strong>{this.state.searchResults.cat._source.name} </strong>
-              </span>
-            )}
+          !this.state.searchResults.freeSearch &&
+          this.state.searchResults.hits.hits.length
+            ? this.state.searchResults.cat && (
+                <span className="mr-3">
+                  Showing Results For{" "}
+                  <strong>{this.state.searchResults.cat._source.name} </strong>
+                </span>
+              )
+            : null}
 
           {/* {this.state.searchResults &&
             this.state.searchResults.subCategoryName && (

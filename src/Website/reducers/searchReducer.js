@@ -10,8 +10,8 @@ import {
 } from "../actions/types";
 
 const INITIAL_STATE = {
-  loading: false,
-  search_results_page_loading: false,
+  loading: true,
+  search_results_page_loading: true,
   data: [],
   search_results_page_data: null,
   search_results_count: 0,
