@@ -15,6 +15,9 @@ class RecordAddNew extends Component {
           activeChildren={this.props.activeChildren}
           //activeParentAdminId={this.props.activeParentAdminId}
           selectedSectionDetail={this.props.selectedSectionDetail}
+          selectedSectionDetailBusiness={
+            this.props.selectedSectionDetailBusiness
+          }
           onChangeActiveSectionByButton={
             this.props.onChangeActiveSectionByButton
           }

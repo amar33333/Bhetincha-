@@ -46,7 +46,7 @@ class SideTreeView extends Component {
       uid,
       this.props.activeSection,
       this.props.leafDetect ? !(children && children.length) : false,
-      children[0]
+      children ? children[0] : null
     );
   };
 

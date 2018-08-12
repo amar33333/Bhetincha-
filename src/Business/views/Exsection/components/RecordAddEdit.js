@@ -42,7 +42,8 @@ class RecordAddEdit extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     //console.log("THIS OLD PROPS", prevProps);
-    //console.log("componentDidUpdate");
+    console.log("componentDidUpdate");
+    console.log("state log", this.state);
 
     // var parentSaved;
     // if (this.props.activeSection !== prevProps.activeSection) {
@@ -54,6 +55,7 @@ class RecordAddEdit extends Component {
     //   });
     //   //   //console.log("Parent Saved", prevProps.activeSection);
     // }
+
     if (
       this.props.attributes &&
       prevProps.attributes !== this.props.attributes
@@ -139,27 +141,32 @@ class RecordAddEdit extends Component {
           parentsectionId: parentSectionId
         };
         //string.charAt(0).toUpperCase()
-        for (var property in obj) {
-          if (obj.hasOwnProperty(property)) {
-            const prevProperty = property;
-            property = property.charAt(0).toLowerCase() + property.slice(1);
 
-            //{start here}
-            // this.props.attributes.forEach(
-            //   ({ name, fieldType: attributeType }) => {
-            //     let value = "";
-            //     body[name] = {
-            //       attributeType,
-            //       value
-            //     };
-            //   }
-            // );
-            //{end here}
-
-            body[property] = obj[prevProperty];
+        //{start here}
+        this.props.attributes.forEach(({ name, fieldType: attributeType }) => {
+          for (var property in obj) {
+            if (obj.hasOwnProperty(property)) {
+              const prevProperty = property;
+              property = property.charAt(0).toLowerCase() + property.slice(1);
+              let value = obj[prevProperty];
+              let propV = property;
+              if (property === "name") {
+                body[property] = obj[prevProperty];
+              } else if (name === prevProperty) {
+                body[propV] = {
+                  attributeType,
+                  value
+                };
+              }
+            }
           }
-        }
-        // this.props.onSubmit({ body });
+        });
+        //{end here}
+
+        //body[property] = obj[prevProperty];
+
+        //console.log(body);
+        this.props.onSubmit({ body });
       });
     } else {
       inputValues.forEach(value => {
@@ -174,7 +181,7 @@ class RecordAddEdit extends Component {
           }
         }
 
-        // this.props.onSubmit({ body });
+        this.props.onSubmit({ body });
       });
     }
   }
@@ -356,7 +363,12 @@ class RecordAddEdit extends Component {
     return (
       <Card>
         <CardHeader>
-          <strong>{"Add New"}</strong>
+          <strong>
+            Add New &nbsp;
+            {this.props.selectedSectionDetail.name
+              ? this.props.selectedSectionDetail.name
+              : ""}
+          </strong>
         </CardHeader>
         <CardBody>
           <Form onSubmit={this.onFormSubmit}>
@@ -387,6 +399,7 @@ class RecordAddEdit extends Component {
             {documents}
 
             <FormGroup>
+              {/* {console.log("Proppping", this.props)} */}
               <Button sm={2} onClick={this.addClick.bind(this)}>
                 + &nbsp;
                 {this.props.selectedSectionDetail.name
@@ -395,14 +408,33 @@ class RecordAddEdit extends Component {
               </Button>&nbsp;
               {this.props.activeChildren &&
                 Object.keys(this.props.activeChildren).length !== 0 && (
-                  <Button sm={2} onClick={this.handleNextSectionClick}>
+                  <Button
+                    sm={2}
+                    onClick={this.handleNextSectionClick}
+                    disabled={
+                      this.props.selectedSectionDetailBusiness &&
+                      this.props.selectedSectionDetailBusiness.sections
+                        .length === 0
+                    }
+                    title={
+                      this.props.selectedSectionDetailBusiness &&
+                      this.props.selectedSectionDetailBusiness.sections
+                        .length === 0
+                        ? "First add " + this.props.selectedSectionDetail.name
+                        : ""
+                    }
+                  >
                     {this.props.activeChildren.name}&nbsp;>>
                   </Button>
                 )}
             </FormGroup>
             <FormGroup>
-              <Button sm={2} onClick={this.saveClick.bind(this)}>
-                Save
+              <Button
+                sm={2}
+                color="primary"
+                onClick={this.saveClick.bind(this)}
+              >
+                <span className="fa fa-check" /> Save
               </Button>&nbsp;
             </FormGroup>
           </Form>

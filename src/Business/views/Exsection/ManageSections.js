@@ -4,7 +4,7 @@ import { Container, Row, Col } from "reactstrap";
 import { SideTreeView } from "./components";
 import { RecordAddNew } from "./components";
 
-import { SectionEditViewBusiness } from "./components";
+import { SectionEntityList } from "./components";
 
 import {
   onSectionsListExsection,
@@ -34,22 +34,17 @@ class ManageSections extends Component {
               />
             </Col>
             <Col xs="12" md="9">
-              {/* Start here */}
-              {/* {console.log("Logging props", this.props)} */}
-              {this.props.activeSection &&
-                this.props.sections &&
-                this.props.sections.uid !== this.props.activeSection && (
-                  <div>
-                    <SectionEditViewBusiness
-                      onSectionUpdateBusiness={
-                        this.props.onSectionUpdateBusinessExsection
-                      }
-                      section={this.props.selectedSectionDetail}
-                    />
-                  </div>
+              {console.log("Proppppp", this.props)}
+              {this.props.selectedSectionDetailBusiness &&
+                this.props.selectedSectionDetailBusiness.sections && (
+                  <SectionEntityList
+                    sections={this.props.selectedSectionDetailBusiness.sections}
+                    selectedSectionDetail={this.props.selectedSectionDetail}
+                    // URL={`/${
+                    //   this.props.match.params.businessName
+                    // }/dashboard/exsection/manage-sections`}
+                  />
                 )}
-
-              {/* End here */}
               {this.props.attributes &&
                 this.props.attributes.attributes &&
                 this.props.attributes.attributes.length !== 0 && (
@@ -58,6 +53,9 @@ class ManageSections extends Component {
                     activeChildren={this.props.activeChildren}
                     // activeParentAdminId={this.props.activeParentAdminId}
                     selectedSectionDetail={this.props.selectedSectionDetail}
+                    selectedSectionDetailBusiness={
+                      this.props.selectedSectionDetailBusiness
+                    }
                     sections={this.props.sections}
                     onChangeActiveSectionByButton={
                       this.props.onChangeActiveSectionBusiness
