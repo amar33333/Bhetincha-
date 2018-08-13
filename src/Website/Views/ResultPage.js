@@ -361,12 +361,58 @@ class ResultPage extends Component {
   };
 
   renderAddressSelectionForSimilarSearchBusiness = () => {
+    const parsedUrlStringObject = querystring.parse(
+      this.props.location.search.slice(1)
+    );
+
+    let name = "";
+
+    // const name =
+    //   this.state.searchResults && this.state.searchResults.hits.hits.length
+    //     ? this.state.searchResults.subCategoryName
+    //       ? this.state.searchResults.subCategoryName
+    //       : !this.state.searchResults.freeSearch && this.state.searchResults.cat
+    //         ? this.state.searchResults.cat._source.name
+    //         : parsedUrlStringObject["query"]
+    //     : null;
+
+    if (this.state.searchResults && this.state.searchResults.hits.hits.length) {
+      if (this.state.searchResults.subCategoryName) {
+        name = this.state.searchResults.subCategoryName;
+      } else {
+        if (
+          this.state.searchResults.freeSearch &&
+          this.state.searchResults.cat
+        ) {
+          name = this.state.searchResults.cat._source.name;
+        } else {
+          name = parsedUrlStringObject["query"];
+        }
+      }
+    }
+    // const name =
+    //   (this.state.searchResults &&
+    //     this.state.searchResults.hits.hits.length &&
+    //     this.state.searchResults.subCategoryName) ||
+    //   (this.state.searchResults &&
+    //   !this.state.searchResults.freeSearch &&
+    //   this.state.searchResults.hits.hits.length &&
+    //   this.state.searchResults.cat
+    //     ? this.state.searchResults.cat._source.name
+    //     : parsedUrlStringObject["query"]);
+
+    console.log("name: ", name);
+
     return (
       this.state.searchResults &&
-      !this.state.searchResults.freeSearch && (
+      !this.state.searchResults.freeSearch &&
+      name && (
         <Row style={{ paddingTop: "20px" }}>
           <Col xs="12" md="8">
-            <span className="mr-3">Similar Business in </span>
+            <span className="mr-3">
+              Showing Results for <strong>{name}</strong> in{" "}
+            </span>
+
             {this.state.searchResults.area && (
               <span className="mr-2">
                 <Button
@@ -543,16 +589,6 @@ class ResultPage extends Component {
               {this.renderBusinessMatch()}
             </Col>
           </Row>
-          {this.state.searchResults &&
-          !this.state.searchResults.freeSearch &&
-          this.state.searchResults.hits.hits.length
-            ? this.state.searchResults.cat && (
-                <span className="mr-3">
-                  Showing Results For{" "}
-                  <strong>{this.state.searchResults.cat._source.name} </strong>
-                </span>
-              )
-            : null}
 
           {/* {this.state.searchResults &&
             this.state.searchResults.subCategoryName && (
