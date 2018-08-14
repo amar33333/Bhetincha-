@@ -42,13 +42,10 @@ class SectionEditView extends Component {
 
   onFormSubmit = event => {
     event.preventDefault();
-    const { name, className } = this.state;
+    const { name } = this.state;
     let body = {};
     if (name !== this.props.section.name) {
       body.name = name;
-    }
-    if (className && className !== this.props.section.className) {
-      body.className = className;
     }
 
     if (Object.keys(body).length) {
@@ -76,25 +73,6 @@ class SectionEditView extends Component {
               </Col>
             </FormGroup>
 
-            <FormGroup row>
-              <Label sm={2}>Class Name</Label>
-              <Col sm={10}>
-                <Input
-                  required
-                  type="text"
-                  placeholder="Eg. fa fa-industry"
-                  value={this.state.className}
-                  onChange={e => this.setState({ className: e.target.value })}
-                />
-                {this.props.section.className && (
-                  <FormText color="muted">
-                    Current Selection:{" "}
-                    <span className={this.props.section.className} />
-                  </FormText>
-                )}
-                {FaIconURLjsx}
-              </Col>
-            </FormGroup>
             <Button color="primary">
               <span className="fa fa-check" /> Update
             </Button>

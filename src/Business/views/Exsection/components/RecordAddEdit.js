@@ -38,12 +38,16 @@ class RecordAddEdit extends Component {
     this.onChange = this.onChange.bind(this);
     this.getFirstChildUid = this.getFirstChildUid.bind(this);
     this.handleNextSectionClick = this.handleNextSectionClick.bind(this);
+    this.checkTopSectionAlreadyExists = this.checkTopSectionAlreadyExists.bind(
+      this
+    );
+    this.checkSectionIsTop = this.checkSectionIsTop.bind(this);
   }
 
   componentDidUpdate(prevProps, prevState) {
     //console.log("THIS OLD PROPS", prevProps);
-    console.log("componentDidUpdate");
-    console.log("state log", this.state);
+    // console.log("componentDidUpdate");
+    // console.log("state log", this.state);
 
     // var parentSaved;
     // if (this.props.activeSection !== prevProps.activeSection) {
@@ -69,6 +73,26 @@ class RecordAddEdit extends Component {
         inputValues: []
       });
     }
+  }
+
+  //check if top section has a initial entry for a particular business
+
+  checkSectionIsTop() {
+    if (Object.keys(this.props.parentSection).length === 0) {
+      return true;
+    }
+  }
+  checkTopSectionAlreadyExists() {
+    if (Object.keys(this.props.parentSection).length !== 0) {
+      return false;
+    } else if (
+      Object.keys(this.props.parentSection).length === 0 &&
+      this.props.selectedSectionDetailBusiness
+        ? this.props.selectedSectionDetailBusiness.sections.length === 0
+        : ""
+    ) {
+      return false;
+    } else return true;
   }
 
   // prepopulate states
@@ -175,7 +199,7 @@ class RecordAddEdit extends Component {
         const body = {
           asid: this.props.activeSection
         };
-        for (var property in obj) {
+        for (let property in obj) {
           if (obj.hasOwnProperty(property)) {
             body.name = obj[property];
           }
@@ -271,9 +295,9 @@ class RecordAddEdit extends Component {
                 required={attribute.required}
                 type="number"
                 placeholder={attribute.name}
-                value={this.state[attribute.name]}
+                // value={this.state[attribute.name]}
                 onChange={event =>
-                  this.onChange(attribute.name, event.target.value)
+                  this.onChange(attribute.name, event.target.value, mykey)
                 }
               />
             </Col>
@@ -400,12 +424,14 @@ class RecordAddEdit extends Component {
 
             <FormGroup>
               {/* {console.log("Proppping", this.props)} */}
-              <Button sm={2} onClick={this.addClick.bind(this)}>
-                + &nbsp;
-                {this.props.selectedSectionDetail.name
-                  ? this.props.selectedSectionDetail.name
-                  : ""}
-              </Button>&nbsp;
+              {!this.checkSectionIsTop() && (
+                <Button sm={2} onClick={this.addClick.bind(this)}>
+                  + &nbsp;
+                  {this.props.selectedSectionDetail.name
+                    ? this.props.selectedSectionDetail.name
+                    : ""}
+                </Button>
+              )}&nbsp;
               {this.props.activeChildren &&
                 Object.keys(this.props.activeChildren).length !== 0 && (
                   <Button
@@ -429,10 +455,13 @@ class RecordAddEdit extends Component {
                 )}
             </FormGroup>
             <FormGroup>
+              {/* {console.log("Lets log props", this.props)}
+              {console.log("Lets log state", this.state)} */}
               <Button
                 sm={2}
-                color="primary"
+                //color="primary"
                 onClick={this.saveClick.bind(this)}
+                disabled={this.checkTopSectionAlreadyExists()}
               >
                 <span className="fa fa-check" /> Save
               </Button>&nbsp;

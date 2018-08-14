@@ -16,7 +16,8 @@ import {
   ChangeSlug,
   Gallery,
   SocialLinks,
-  ManageSections
+  ManageSections,
+  SectionEntityView
 } from "../views";
 
 import {
@@ -125,6 +126,11 @@ class BusinessRoute extends Component {
           path={`/:${ROUTE_PARAMS_BUSINESS_NAME}/dashboard/section/manage-sections`}
           name="manage-exsection-sections"
           component={ManageSections}
+        />
+        <Route
+          path={`/:${ROUTE_PARAMS_BUSINESS_NAME}/dashboard/exsection/manage-sections/:sectionEntityId`}
+          name="view-exsection-entity"
+          component={SectionEntityView}
         />
         <Route
           path={`/:${ROUTE_PARAMS_BUSINESS_NAME}/dashboard`}

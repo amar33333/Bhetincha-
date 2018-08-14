@@ -34,15 +34,15 @@ class ManageSections extends Component {
               />
             </Col>
             <Col xs="12" md="9">
-              {console.log("Proppppp", this.props)}
+              {/* {console.log("Proppppp", this.props)} */}
               {this.props.selectedSectionDetailBusiness &&
                 this.props.selectedSectionDetailBusiness.sections && (
                   <SectionEntityList
                     sections={this.props.selectedSectionDetailBusiness.sections}
                     selectedSectionDetail={this.props.selectedSectionDetail}
-                    // URL={`/${
-                    //   this.props.match.params.businessName
-                    // }/dashboard/exsection/manage-sections`}
+                    URL={`/${
+                      this.props.match.params.businessName
+                    }/dashboard/exsection/manage-sections`}
                   />
                 )}
               {this.props.attributes &&

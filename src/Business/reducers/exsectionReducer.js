@@ -7,7 +7,10 @@ import {
   CHANGE_SELETED_SECTION_DETAILS_BUSINESS,
   //CHANGE_ACTIVE_PARENT_ADMIN_ID_EXSECTION_FULFILLED,
   RESET_SECTION_STATE,
-  CHANGE_SELETED_SECTION_DETAILS_BUSINESS_DATA_FULFILLED
+  CHANGE_SELETED_SECTION_DETAILS_BUSINESS_DATA_FULFILLED,
+  FETCH_EXSECTION_SECTION_ENTITY_EACH_PENDING,
+  FETCH_EXSECTION_SECTION_ENTITY_EACH_FULFILLED,
+  CHANGE_ACTIVE_PARENT_ASID_EXSECTION
 } from "../actions/types";
 
 import update from "immutability-helper";
@@ -20,8 +23,9 @@ const INITIAL_STATE = {
   selectedSectionDetailBusiness: null,
   attributes: [],
   parentSection: {},
-  activeChildren: {}
-  // activeParentAdminId: {}
+  activeChildren: {},
+  sectionEntityDetail: null,
+  activeParentASID: ""
 };
 
 export default function(state = INITIAL_STATE, action) {
@@ -72,11 +76,12 @@ export default function(state = INITIAL_STATE, action) {
         activeChildren: action.payload
       };
 
-    // case CHANGE_ACTIVE_PARENT_ADMIN_ID_EXSECTION_FULFILLED:
-    //   return {
-    //     ...state,
-    //     activeParentAdminId: action.payload
-    //   };
+    case CHANGE_ACTIVE_PARENT_ASID_EXSECTION:
+      //console.log("Breached", action.payload);
+      return {
+        ...state,
+        activeParentASID: action.payload
+      };
 
     case CHANGE_SELETED_SECTION_DETAILS_BUSINESS:
       return {
@@ -95,6 +100,12 @@ export default function(state = INITIAL_STATE, action) {
         ...state,
         selectedSectionDetailBusiness: action.payload
       };
+
+    case FETCH_EXSECTION_SECTION_ENTITY_EACH_FULFILLED:
+      return { ...state, sectionEntityDetail: action.payload };
+
+    case FETCH_EXSECTION_SECTION_ENTITY_EACH_PENDING:
+      return { ...state, sectionEntityDetail: null };
 
     default:
       return state;

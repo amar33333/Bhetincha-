@@ -18,7 +18,9 @@ import {
   CHANGE_SLUG_URL,
   CHECK_SLUG_URL,
   EXSECTION_SECTION_BUSINESS_URL,
-  EXSECTION_SECTION_BUSINESS_LIST_URL
+  EXSECTION_SECTION_BUSINESS_LIST_URL,
+  //for implementing update
+  EXSECTION_SECTION_ENTITY_URL
 } from "./BUSINESS_API";
 import axios from "axios";
 import { ajax } from "rxjs/observable/dom/ajax";
@@ -559,6 +561,27 @@ export const onSectionsListExsectionBusinessData = ({ body, businessIdd }) =>
     url: `${EXSECTION_SECTION_BUSINESS_URL}?businessIdd=${businessIdd}&admin_sectionId=${
       body.sectionId
     }`,
+    headers: {
+      "Content-Type": "application/json"
+    }
+  });
+
+// calls for implementing updating Section Entity for bhetincha
+
+//onExsectionEntityEachGet
+//EXSECTION_SECTION_ENTITY_URL/uid
+//sample output
+//{
+//   "properties": {
+//     "price": 55,
+//     "name": "Wicked wings",
+//     "uid": "54dc195fdf4c40f7afff3e67e9899c16"
+// }
+// }
+export const onExsectionEntityEachGet = ({ uid }) =>
+  ajax({
+    method: "GET",
+    url: `${EXSECTION_SECTION_ENTITY_URL}${uid}/`,
     headers: {
       "Content-Type": "application/json"
     }

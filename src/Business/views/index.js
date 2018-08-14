@@ -15,7 +15,7 @@ import ChangeSlug from "./ChangeSlug/ChangeSlug";
 import Gallery from "./Gallery/Gallery";
 import SocialLinks from "./SocialLinks/SocialLinks";
 import ManageSections from "./Exsection/ManageSections";
-
+import SectionEntityView from "./Exsection/SectionEntityView";
 export {
   Dashboard,
   BusinessDetail,
@@ -32,5 +32,6 @@ export {
   ChangeSlug,
   Gallery,
   SocialLinks,
-  ManageSections
+  ManageSections,
+  SectionEntityView
 };

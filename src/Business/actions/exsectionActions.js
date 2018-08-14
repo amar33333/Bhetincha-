@@ -22,7 +22,12 @@ import {
   RESET_SECTION_STATE,
   CHANGE_SELETED_SECTION_DETAILS_BUSINESS_DATA_PENDING,
   CHANGE_SELETED_SECTION_DETAILS_BUSINESS_DATA_FULFILLED,
-  CHANGE_SELETED_SECTION_DETAILS_BUSINESS_DATA_REJECTED
+  CHANGE_SELETED_SECTION_DETAILS_BUSINESS_DATA_REJECTED,
+  //entity update
+  FETCH_EXSECTION_SECTION_ENTITY_EACH_PENDING,
+  FETCH_EXSECTION_SECTION_ENTITY_EACH_FULFILLED,
+  FETCH_EXSECTION_SECTION_ENTITY_EACH_REJECTED,
+  CHANGE_ACTIVE_PARENT_ASID_EXSECTION
 } from "./types";
 
 import {
@@ -34,7 +39,8 @@ import {
 import {
   onSectionBusinessPost,
   onParentSectionBusinessGet,
-  onSectionsListExsectionBusinessData
+  onSectionsListExsectionBusinessData,
+  onExsectionEntityEachGet
 } from "../config/businessServerCall";
 
 const epics = [];
@@ -57,7 +63,7 @@ epics.push((action$, { getState }) =>
             payload: response.uid,
             first: first,
             // oldSection: "9b4623c4d6c24531a8f64e9673397cf1"
-            oldSection: response.uid
+            oldSectionASID: response.uid
           });
         }
 
@@ -78,30 +84,34 @@ epics.push((action$, { getState }) =>
 
 //onChangeActiveSectionBusiness
 export const onChangeActiveSectionBusiness = (
-  newSection,
-  oldSection,
+  newSectionASID,
+  oldSectionASID,
   leafDetected = false,
-  activeChildren
-) => ({
-  type: CHANGE_ACTIVE_EXSECTION_SECTION,
-  payload: newSection,
-  oldSection,
-  leafDetected,
-  activeChildren
-});
+  activeChildrenAS
+) => {
+  // console.log("new section asid", newSectionASID);
+  // console.log("old section asid", oldSectionASID);
+  return {
+    type: CHANGE_ACTIVE_EXSECTION_SECTION,
+    payload: newSectionASID,
+    oldSectionASID,
+    leafDetected,
+    activeChildrenAS
+  };
+};
 
 epics.push((action$, { getState }) =>
   action$.ofType(CHANGE_ACTIVE_EXSECTION_SECTION).mergeMap(action => {
     const {
-      payload: newSection,
-      oldSection,
+      payload: newSectionASID,
+      oldSectionASID,
       leafDetected,
-      activeChildren
+      activeChildrenAS
     } = action;
 
     const businessId = getState().auth.cookies.user_data.business_id;
 
-    return onExsectionSectionDetailGetAdmin({ uid: newSection }).concatMap(
+    return onExsectionSectionDetailGetAdmin({ uid: newSectionASID }).concatMap(
       ({ response }) => {
         const stuffs = [];
         stuffs.push({
@@ -111,20 +121,18 @@ epics.push((action$, { getState }) =>
 
         stuffs.push({
           type: CHANGE_ACTIVE_CHILD_EXSECTION,
-          payload: activeChildren
+          payload: activeChildrenAS
         });
 
-        // stuffs.push({
-        //   type: CHANGE_ACTIVE_PARENT_ADMIN_ID_EXSECTION,
-        //   payload: {
-        //     body: { sectionId: oldSection }
-        //   }
-        // });
+        stuffs.push({
+          type: CHANGE_ACTIVE_PARENT_ASID_EXSECTION,
+          payload: oldSectionASID
+        });
 
         stuffs.push({
           type: FETCH_EXSECTION_SECTION_ATTRIBUTES_PENDING,
           payload: {
-            body: { sectionId: newSection }
+            body: { sectionId: newSectionASID }
           }
         });
 
@@ -132,19 +140,19 @@ epics.push((action$, { getState }) =>
           stuffs.push({
             type: CHANGE_SELETED_SECTION_DETAILS_BUSINESS_DATA_PENDING,
             payload: {
-              body: { sectionId: newSection }
+              body: { sectionId: newSectionASID }
             }
           });
         }
 
         if (!action.first) {
-          if (action.oldSection !== "9b4623c4d6c24531a8f64e9673397cf1") {
+          if (action.oldSectionASID !== "9b4623c4d6c24531a8f64e9673397cf1") {
             stuffs.push({
               type: FETCH_PARENT_SECTION_LIST_BUSINESS_PENDING,
               payload: {
                 body: {
                   businessIdd: businessId,
-                  asid: oldSection
+                  asid: oldSectionASID
                 }
               }
             });
@@ -246,18 +254,38 @@ epics.push((action$, { getState }) =>
     .ofType(CREATE_EXSECTION_BUSINESS_SECTION_PENDING)
     .mergeMap(({ payload }) => {
       const globalState = getState();
+      console.log("log global state", globalState);
       // const {
       //   activeCategory: sectionId
       // } = globalState.BusinessContainer.exsection;
+
+      const { activeSection } = globalState.BusinessContainer.exsection;
+      const newSectionASID = activeSection;
+      const { activeParentASID } = globalState.BusinessContainer.exsection;
+      const oldSectionASID = activeParentASID;
+      const { activeChildren } = globalState.BusinessContainer.exsection;
+      const activeChildrenAS = activeChildren;
       const businessIdd = globalState.auth.cookies.user_data.business_id;
-      console.log("consoling payload", payload);
+      const leafDetected = false;
+      //console.log("consoling payload", payload);
       return onSectionBusinessPost({
         body: { ...payload.body, businessIdd }
       })
         .concatMap(({ response }) => {
           if (response.msg === "success") {
             toast.success("added successfully!");
-            return [{ type: CREATE_EXSECTION_BUSINESS_SECTION_FULFILLED }];
+
+            return [
+              { type: CREATE_EXSECTION_BUSINESS_SECTION_FULFILLED },
+              { type: FETCH_EXSECTION_SECTIONS_PENDING },
+              {
+                type: CHANGE_ACTIVE_EXSECTION_SECTION,
+                payload: newSectionASID,
+                oldSectionASID,
+                leafDetected,
+                activeChildrenAS
+              }
+            ];
           } else {
             throw new Error("Error Creating section");
           }
@@ -281,4 +309,44 @@ export const onSectionUpdateBusinessExsection = () => {
   return "hello";
 };
 
+///////Actions for implementing Section Entity Update in Bhetincha////
+
+//onExsectionSectionEachList
+
+export const onExsectionSectionEachList = payload => ({
+  type: FETCH_EXSECTION_SECTION_ENTITY_EACH_PENDING,
+  payload
+});
+
+epics.push((action$, { getState }) =>
+  action$
+    .ofType(FETCH_EXSECTION_SECTION_ENTITY_EACH_PENDING)
+    .mergeMap(action => {
+      const { uid } = action.payload;
+
+      return onExsectionEntityEachGet({ uid })
+        .concatMap(({ response }) => {
+          return [
+            {
+              type: FETCH_EXSECTION_SECTION_ENTITY_EACH_FULFILLED,
+              payload: response
+            }
+            // {
+            //   type: FETCH_ECOMMERCE_CATEGORY_ATTRIBUTES_PENDING,
+            //   payload: {
+            //     body: {
+            //       categoryId: response.categoryId
+            //     }
+            //   }
+            // }
+          ];
+        })
+        .catch(ajaxError => {
+          toast.error(ajaxError.toString());
+          return Observable.of({
+            type: FETCH_EXSECTION_SECTION_ENTITY_EACH_REJECTED
+          });
+        });
+    })
+);
 export default epics;

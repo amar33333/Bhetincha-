@@ -4,12 +4,13 @@ import { Link } from "react-router-dom";
 import { PopoverDelete } from "../../../../Common/components";
 import { Row, Col, Button } from "reactstrap";
 
-class ProductDetail extends Component {
+class SectionEntityDetail extends Component {
   render() {
-    const { productDetail } = this.props;
+    //console.log("this props ", this.props);
+    const { sectionEntityDetail } = this.props;
     return (
       <div>
-        {productDetail && (
+        {sectionEntityDetail && (
           <div>
             <Row className="mb-4">
               <Col
@@ -21,51 +22,53 @@ class ProductDetail extends Component {
                 }}
               >
                 <h3 className="mb-0">
-                  Product Information of {productDetail.name}
+                  Entity Information of {sectionEntityDetail.properties.name}
+                  {/* {console.log("sectionEntityDetail", sectionEntityDetail)}
+                  {console.log("attributes", this.props.attributes)} */}
                 </h3>
-                <Link to={this.props.editURL} className="ml-2">
-                  <Button color="primary">
-                    <i className="fa fa-pencil" /> Edit
-                  </Button>
-                </Link>
+                {/* <Link to={this.props.editURL} className="ml-2"> */}
+                <Button color="primary">
+                  <i className="fa fa-pencil" /> Edit
+                </Button>
+                {/* </Link> */}
                 <div className="ml-2">
-                  <PopoverDelete
+                  {/* <PopoverDelete
                     text="Delete"
                     onClick={() =>
                       this.props.onRemoveEcommerceProduct({
-                        uid: productDetail.uid,
+                        uid: sectionEntityDetail.uid,
                         routeToManageProducts: this.props.routeToManageProducts
                       })
                     }
-                  />
+                  /> */}
                 </div>
               </Col>
             </Row>
             <Row>
               <Col xs="12" md="8">
-                <p className="product-spec-item">Name: {productDetail.name}</p>
-                <p className="product-spec-item">
-                  Price: Rs {productDetail.price}
-                </p>
-                <p className="product-spec-item">
-                  Discount: {productDetail.discount} %
-                </p>
-                {console.log("Product detail", productDetail)}
+                {/* <p className="product-spec-item">
+                  Name: {sectionEntityDetail.properties.name}
+                </p> */}
+                {/* Here goes code  */}
+                {/* {console.log("entity detail", sectionEntityDetail)} */}
                 {this.props.attributes.map(attribute => {
                   let selectedKey = "";
                   if (
-                    Object.keys(productDetail).find(key => {
-                      console.log("key", key);
-                      const found = key.split("--")[0] === attribute.name;
+                    Object.keys(sectionEntityDetail.properties).find(key => {
+                      let attributeNameUpper = attribute.name;
+                      let attributeNameLower =
+                        attributeNameUpper.charAt(0).toLowerCase() +
+                        attributeNameUpper.slice(1);
+                      const found = key.split("--")[0] === attributeNameLower;
                       if (found) selectedKey = key;
                       return found;
                     })
                   ) {
                     return (
-                      <p key={attribute.uid} className="product-spec-item">
+                      <p key={attribute.uid}>
                         {attribute.name.split("_").join(" ")}:{" "}
                         {selectedKey.split("--").length === 2
-                          ? `${productDetail[selectedKey]} ${
+                          ? `${sectionEntityDetail.properties[selectedKey]} ${
                               selectedKey.split("--").length > 1
                                 ? selectedKey.split("--")[1]
                                 : ""
@@ -74,7 +77,7 @@ class ProductDetail extends Component {
                               selectedKey.split("--").length > 1
                                 ? selectedKey.split("--")[1]
                                 : ""
-                            } ${productDetail[selectedKey]}`}
+                            } ${sectionEntityDetail.properties[selectedKey]}`}
                       </p>
                     );
                   } else {
@@ -90,4 +93,4 @@ class ProductDetail extends Component {
   }
 }
 
-export default ProductDetail;
+export default SectionEntityDetail;
