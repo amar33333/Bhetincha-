@@ -524,6 +524,10 @@ body {
   display: none !important;
 }
 
+.search-result__area__button button {
+  font-size: 9px !important;
+}
+
 /* ========== Ecommerce ============= */
 
 .ecommerce-range-filter .input-range__track--active {
