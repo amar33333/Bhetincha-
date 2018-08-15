@@ -214,7 +214,7 @@ class AdminRoute extends Component {
           path="/admin/tele-calling"
           name="Tele-Calling"
           component={TeleCalling}
-          permission="CAN_ACCESS_TELE_CALLING"
+          permission="CAN_ACCESS_TELECALLING"
         />
         <CustomRoute
           exact

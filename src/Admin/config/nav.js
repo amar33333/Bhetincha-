@@ -152,7 +152,7 @@ const items = {
       name: "Tele-Calling",
       url: "/admin/tele-calling",
       icon: "fa fa-headphones",
-      permission: "CAN_ACCESS_TELE_CALLING"
+      permission: "CAN_ACCESS_TELECALLING"
     },
     {
       title: true,
