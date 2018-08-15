@@ -1,10 +1,17 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+
 import { Row, Col, Container } from "reactstrap";
+import { combineEpics } from "redux-observable";
+import withRepics from "../../../../../config/withRepics";
+import { eachSectionGet } from "./actions/sectionActions";
+import sectionReducer from "./reducer";
+import sectionEpics from "./actions";
 class Sections extends Component {
   componentDidMount() {
     const { sectionId } = this.props.match.params;
     console.log(sectionId);
+    this.props.eachSectionGet({ sectionId });
   }
   render() {
     return (
@@ -21,14 +28,17 @@ class Sections extends Component {
   }
 }
 
-export default connect(
-  ({
-    MinisiteContainer: {
-      crud: { slug }
-    },
-    auth: { cookies }
-  }) => ({
-    cookies,
-    slug
-  })
-)(Sections);
+export default withRepics(
+  "SectionContainer",
+  sectionReducer,
+  combineEpics(...sectionEpics)
+)(
+  connect(
+    ({ SectionContainer: { auth } }) => ({
+      ...auth
+    }),
+    {
+      eachSectionGet
+    }
+  )(Sections)
+);
