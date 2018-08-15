@@ -4,6 +4,7 @@ import { Container, Row, Col } from "reactstrap";
 import "react-input-range/lib/css/index.css";
 import { Button, Loader } from "semantic-ui-react";
 import querystring from "querystring";
+import { isEmpty } from "lodash";
 
 import {
   togglePhoneVerificationModal,
@@ -242,17 +243,35 @@ class ResultPage extends Component {
   renderBusinessMatch = () =>
     this.state.searchResults &&
     this.state.searchResults.hit &&
-    this.state.searchResults.hit._source && (
-      <SearchCard
-        searchResult={{
-          ...this.state.searchResults.hit._source,
-          id: this.state.searchResults.hit._id
-        }}
-        onClaimed={this.onClaimed}
-        onImproveListingClicked={this.onImproveListingClicked}
-        onGetDirectionClicked={this.onGetDirectionClicked}
-      />
-    );
+    this.state.searchResults.hit.length
+      ? this.state.searchResults.hit.map((each, index) => (
+          <SearchCard
+            key={index}
+            searchResult={{
+              ...each._source,
+              id: each._id
+            }}
+            onClaimed={this.onClaimed}
+            onImproveListingClicked={this.onImproveListingClicked}
+            onGetDirectionClicked={this.onGetDirectionClicked}
+          />
+        ))
+      : null;
+
+  // renderBusinessMatch = () =>
+  //   this.state.searchResults &&
+  //   this.state.searchResults.hit &&
+  //   this.state.searchResults.hit._source && (
+  //     <SearchCard
+  //       searchResult={{
+  //         ...this.state.searchResults.hit._source,
+  //         id: this.state.searchResults.hit._id
+  //       }}
+  //       onClaimed={this.onClaimed}
+  //       onImproveListingClicked={this.onImproveListingClicked}
+  //       onGetDirectionClicked={this.onGetDirectionClicked}
+  //     />
+  //   );
 
   renderSimilarSearchResults = () => {
     const parsedUrlStringObject = querystring.parse(
@@ -275,14 +294,15 @@ class ResultPage extends Component {
         })
       ) : (
         <div>
-          No Results for <strong>{parsedUrlStringObject["query"]}</strong>
+          No Other Results for <strong>{parsedUrlStringObject["query"]}</strong>
         </div>
       );
     } else {
       if (!this.props.search_results_page_loading)
         return (
           <div>
-            No Results for <strong>{parsedUrlStringObject["query"]}</strong>
+            No Other Results for{" "}
+            <strong>{parsedUrlStringObject["query"]}</strong>
           </div>
         );
       else return <Loading />;
@@ -382,7 +402,7 @@ class ResultPage extends Component {
       } else {
         if (
           this.state.searchResults.freeSearch &&
-          this.state.searchResults.cat
+          !isEmpty(this.state.searchResults.cat)
         ) {
           name = this.state.searchResults.cat._source.name;
         } else {

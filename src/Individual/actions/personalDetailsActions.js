@@ -160,14 +160,14 @@ epics.push((action$, { getState }) =>
           ];
         else throw new Error(JSON.stringify(response.msg));
       })
-      .catch(ajaxError =>
+      .catch(ajaxError => {
         Observable.of({
           type: EDIT_PERSONAL_DETAILS_REJECTED,
           payload: ajaxError.status
             ? ajaxError.message
             : JSON.parse(ajaxError.message)
-        })
-      )
+        });
+      })
   )
 );
 
@@ -186,22 +186,22 @@ epics.push((action$, { getState }) =>
         const returnEpicsArray = [];
         if (response.address) {
           const { country, state, district, city } = response.address;
-          if (country.id) {
+          if (country && country.id) {
             returnEpicsArray.push({
               type: FETCH_COUNTRY_EACH_PENDING,
               payload: { id: country.id }
             });
-            if (state.id) {
+            if (state && state.id) {
               returnEpicsArray.push({
                 type: FETCH_STATE_EACH_PENDING,
                 payload: { id: state.id }
               });
-              if (district.id) {
+              if (district && district.id) {
                 returnEpicsArray.push({
                   type: FETCH_DISTRICT_EACH_PENDING,
                   payload: { id: district.id }
                 });
-                if (city.id)
+                if (city && city.id)
                   returnEpicsArray.push({
                     type: FETCH_CITY_EACH_PENDING,
                     payload: { id: city.id }
@@ -218,9 +218,14 @@ epics.push((action$, { getState }) =>
           ...returnEpicsArray
         ];
       })
-      .catch(ajaxError =>
-        Observable.of({ type: FETCH_PERSONAL_DETAILS_REJECTED })
-      )
+      .catch(ajaxError => {
+        console.log("person errore: ", ajaxError);
+
+        Observable.of({
+          type: FETCH_PERSONAL_DETAILS_REJECTED,
+          payload: ajaxError
+        });
+      })
   )
 );
 
