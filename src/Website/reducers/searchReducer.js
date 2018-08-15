@@ -127,7 +127,6 @@ export default function(state = INITIAL_STATE, action) {
         (!isEmpty(otherMatch) && {
           hits: otherMatch.hits,
           ...otherMatch.findings,
-          freeSearch: false,
           ...address
         });
 

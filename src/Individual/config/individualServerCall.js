@@ -1,4 +1,4 @@
-import { PERSONAL_DETAILS_URL } from "./INDIVIDUAL_API";
+import { PERSONAL_DETAILS_URL, SKILLS_ADD_URL } from "./INDIVIDUAL_API";
 import { ajax } from "rxjs/observable/dom/ajax";
 import querystring from "querystring";
 
@@ -16,6 +16,17 @@ export const onIndividualPersonalDetailsPut = ({ id, body, access_token }) =>
   ajax({
     method: "PUT",
     url: `${PERSONAL_DETAILS_URL}${id}/`,
+    body,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
+export const onSkillsPost = ({ id, body, access_token }) =>
+  ajax({
+    method: "PUT",
+    url: `${SKILLS_ADD_URL}${id}/`,
     body,
     headers: {
       "Content-Type": "application/json",

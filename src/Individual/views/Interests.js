@@ -1,21 +1,33 @@
 import React, { Component } from "react";
+import { Redirect } from "react-router-dom";
+import { connect } from "react-redux";
 import { Col, Row, Form, Card, CardBody, CardHeader, Button } from "reactstrap";
 
 import TagsInput from "react-tagsinput";
 import "react-tagsinput/react-tagsinput.css";
+
+import { onSkillsSubmit } from "../actions";
 
 class Interests extends Component {
   state = { skills: [] };
 
   handleTagsChange = skills => this.setState({ skills });
 
+  isParamsUserSameAsLoggedUser = () =>
+    this.props.username === this.props.match.params.individualName;
+
   onFormSubmit = event => {
     event.preventDefault();
-    console.log("hukahsdujkahdasjkdas");
+
+    this.isParamsUserSameAsLoggedUser() &&
+      this.props.onSkillsSubmit({
+        id: this.props.match.params.individualName,
+        body: { skills: this.state.skills }
+      });
   };
 
   render() {
-    return (
+    return this.isParamsUserSameAsLoggedUser() ? (
       <div className="animated fadeIn">
         <Row className="hr-centered">
           <Col xs="12" md="6">
@@ -43,8 +55,25 @@ class Interests extends Component {
           </Col>
         </Row>
       </div>
+    ) : (
+      <Redirect to="/404" />
     );
   }
 }
 
-export default Interests;
+const mapStateToProps = ({
+  auth: {
+    cookies: {
+      user_data: { username }
+    }
+  },
+  IndividualContainer
+}) => ({
+  ...IndividualContainer,
+  username
+});
+
+export default connect(
+  mapStateToProps,
+  { onSkillsSubmit }
+)(Interests);
