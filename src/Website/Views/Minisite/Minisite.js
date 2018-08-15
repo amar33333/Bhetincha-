@@ -10,7 +10,12 @@ import withRepics from "../../../config/withRepics";
 import reducers from "./reducers";
 import { ROUTE_PARAMS_BUSINESS_NAME } from "../../../config/CONSTANTS";
 
-import minisiteEpics, { onBusinessGet, clearBusiness } from "./actions";
+import sectionEpics from "./actions/editActions";
+import minisiteEpics, {
+  onBusinessGet,
+  clearBusiness,
+  OnSectionListGet
+} from "./actions";
 import { MainNavbar } from "../../components";
 
 class Minisite extends Component {
@@ -22,6 +27,10 @@ class Minisite extends Component {
   };
   componentDidMount() {
     this.getBusiness();
+    this.props.OnSectionListGet();
+    // if (this.props.section.length > 0) {
+    //   console.log(this.props.section);
+    // }
   }
 
   componentDidUpdate(prevProps) {
@@ -36,19 +45,30 @@ class Minisite extends Component {
     this.props.clearBusiness();
   }
   render() {
+    if (this.props.section) {
+      console.log(this.props.section);
+    }
     return (
       <div>
         <MainNavbar history={this.props.history} match={this.props.match} />{" "}
-        <BusinessNav
-          isHome={this.props.match.path.indexOf(":minisiteRoute") === -1}
-          url={this.props.match.params["minisiteRoute"]}
-          history={this.props.history}
-          businessName={this.props.match.params[ROUTE_PARAMS_BUSINESS_NAME]}
-        />{" "}
-        {this.props.mainLoading ? (
+        {this.props.section ? (
+          <BusinessNav
+            sections={this.props.section}
+            isHome={this.props.match.path.indexOf(":minisiteRoute") === -1}
+            url={this.props.match.params["minisiteRoute"]}
+            history={this.props.history}
+            businessName={this.props.match.params[ROUTE_PARAMS_BUSINESS_NAME]}
+          />
+        ) : (
+          ""
+        )}
+        {this.props.mainLoading && !this.props.section ? (
           <Loading />
         ) : (
-          <MinisiteRoutes params={this.props.match.params} />
+          <MinisiteRoutes
+            params={this.props.match.params}
+            sections={this.props.section}
+          />
         )}{" "}
         <BusinessFooter
           businessName={this.props.match.params[ROUTE_PARAMS_BUSINESS_NAME]}
@@ -63,15 +83,17 @@ class Minisite extends Component {
 export default withRepics(
   "MinisiteContainer",
   reducers,
-  combineEpics(...minisiteEpics)
+  combineEpics(...minisiteEpics, ...sectionEpics)
 )(
   connect(
     ({ MinisiteContainer: { edit } }) => ({
-      mainLoading: edit.mainLoading
+      mainLoading: edit.mainLoading,
+      section: edit.sections.sections
     }),
     {
       onBusinessGet,
-      clearBusiness
+      clearBusiness,
+      OnSectionListGet
     }
   )(Minisite)
 );

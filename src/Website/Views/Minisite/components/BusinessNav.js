@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import { MAIN_URL } from "../config/MINISITE_API";
 import "../minisite.css";
+import slugify from "slugify";
 
 import { ScrollInNav } from "../../../components";
 // import onClickOutside from "react-onclickoutside";
@@ -29,6 +30,25 @@ class BusinessNav extends Component {
   props;
   render() {
     const { url } = this.props;
+    console.log(this.props.sections);
+    let sectionlist = this.props.sections.map(section => {
+      let sectionID = section.uid;
+      let name = slugify(section.name);
+      return (
+        <NavItem
+          key={section.name}
+          className={url === section.name ? "active" : ""}
+        >
+          <Link
+            to={`/${this.props.businessName}/${name}/${sectionID}`}
+            className=""
+          >
+            {section.name}
+          </Link>{" "}
+        </NavItem>
+      );
+    });
+
     return (
       <div>
         <ScrollInNav scrollInHeight={1}>
@@ -98,6 +118,7 @@ class BusinessNav extends Component {
                 ) : (
                   ""
                 )}
+                {sectionlist}
                 <NavItem
                   key="contact"
                   className={url === "contact" ? "active" : ""}

@@ -6,7 +6,7 @@ import CoverPhoto from "./CoverPhoto/CoverPhoto";
 import Contact from "./Contact/Contact";
 import Ecommerce from "./Ecommerce/Ecommerce";
 import CoreMember from "./CoreMember/CoreMember";
-
+import Sections from "./Sections/Sections";
 import EcommerceProduct from "./Ecommerce/EcommerceProduct";
 // import MainPage from "./MainPage";
 
@@ -19,5 +19,6 @@ export {
   Contact,
   Ecommerce,
   EcommerceProduct,
-  CoreMember
+  CoreMember,
+  Sections
 };

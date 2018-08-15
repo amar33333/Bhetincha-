@@ -16,18 +16,36 @@ import {
   UPDATE_LOGO_COVER_PHOTO_FULFILLED,
   UPDATE_LOGO_COVER_PHOTO_REJECTED
 } from "../actions/types";
-
+import {
+  FETCH_SECTIONS_PENDING,
+  FETCH_SECTIONS_FULLFILLED,
+  FETCH_SECTIONS_REJECTED
+} from "../components/Sections/actions/types";
 const INITIAL_STATE = {
   main: false,
   mainLoading: true,
   aboutUs: false,
   aboutUsLoading: false,
   imageEditorLoading: false,
-  galleryLoading: []
+  galleryLoading: [],
+  sections: []
 };
 
 export default function(state = INITIAL_STATE, action) {
   switch (action.type) {
+    case FETCH_SECTIONS_PENDING:
+      return {
+        ...state
+      };
+    case FETCH_SECTIONS_FULLFILLED:
+      return {
+        ...state,
+        sections: action.payload
+      };
+    case FETCH_SECTIONS_REJECTED:
+      return {
+        ...state
+      };
     case TOGGLE_EDIT_MAIN:
       return { ...state, main: !state.main };
     case TOGGLE_EDIT_ABOUT_US:

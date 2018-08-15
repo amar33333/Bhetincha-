@@ -7,9 +7,10 @@ import {
   Contact,
   Ecommerce,
   EcommerceProduct,
-  CoreMember
+  CoreMember,
+  Sections
 } from "../components";
-
+import slugify from "slugify";
 import {
   ROUTE_PARAMS_BUSINESS_NAME,
   ROUTE_PARAMS_MINISITE_BUSINESS_ROUTE
@@ -23,6 +24,18 @@ class MinisiteRoute extends Component {
     const minisiteBusinessRoute = this.props.params[
       ROUTE_PARAMS_MINISITE_BUSINESS_ROUTE
     ];
+
+    let sectionroute = this.props.sections.map(section => {
+      let name = slugify(section.name);
+      return (
+        <Route
+          path={`/:${ROUTE_PARAMS_BUSINESS_NAME}/${name}/:sectionId`}
+          name="sections"
+          component={Sections}
+        />
+      );
+    });
+    console.log(this.props.sections);
     return (
       <Switch>
         <Route
@@ -51,6 +64,7 @@ class MinisiteRoute extends Component {
           name="ecommerce"
           component={EcommerceProduct}
         />{" "}
+        {sectionroute}
         <Route
           path={`/:${ROUTE_PARAMS_BUSINESS_NAME}/ecommerce/:categoryId`}
           name="ecommerce"
