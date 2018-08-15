@@ -44,7 +44,8 @@ const INITIAL_STATE = {
   cities: [],
   areas: [],
   personal_details: null,
-  personal_details_error: null
+  personal_details_error: null,
+  personal_details_fetch_error: null
 };
 
 export default function(state = INITIAL_STATE, action) {
@@ -64,14 +65,16 @@ export default function(state = INITIAL_STATE, action) {
         ...state,
         personalDetailsFetchLoading: false,
         personal_details_get: false,
-        personal_details: action.payload
+        personal_details: action.payload,
+        personal_details_fetch_error: null
       };
 
     case FETCH_PERSONAL_DETAILS_REJECTED:
       return {
         ...state,
         personalDetailsFetchLoading: false,
-        personal_details_get: false
+        personal_details_get: false,
+        personal_details_fetch_error: action.payload
       };
 
     case EDIT_PERSONAL_DETAILS_PENDING:

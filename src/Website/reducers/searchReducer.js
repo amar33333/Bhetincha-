@@ -54,69 +54,80 @@ export default function(state = INITIAL_STATE, action) {
     case SEARCH_RESULTS_PAGE_FULFILLED:
       const { businessMatch, subCategoryMatch, otherMatch } = action.payload;
       const address = {};
+      console.log("action : ", action.payload);
 
-      if (!isEmpty(otherMatch)) {
+      const temp =
+        (!isEmpty(otherMatch) && otherMatch) ||
+        (!isEmpty(subCategoryMatch) && subCategoryMatch);
+      console.log("temp :", temp);
+
+      if (temp) {
         console.log("enterererrerererrerer");
         if (
-          otherMatch.findings.area._source.Kind === "Country" ||
-          otherMatch.findings.area._source.kind === "Country"
+          temp.findings.area._source.Kind === "country" ||
+          temp.findings.area._source.kind === "country"
         ) {
-          address.country = otherMatch.findings.area._source.name;
+          address.country = temp.findings.area._source.name;
           address.state = undefined;
           address.district = undefined;
           address.city = undefined;
           address.area = undefined;
         } else if (
-          otherMatch.findings.area._source.Kind === "State" ||
-          otherMatch.findings.area._source.kind === "State"
+          temp.findings.area._source.Kind === "state" ||
+          temp.findings.area._source.kind === "state"
         ) {
-          address.country = otherMatch.findings.area._source.country;
-          address.state = otherMatch.findings.area._source.name;
+          address.country = temp.findings.area._source.country;
+          address.state = temp.findings.area._source.name;
           address.district = undefined;
           address.city = undefined;
           address.area = undefined;
         } else if (
-          otherMatch.findings.area._source.Kind === "District" ||
-          otherMatch.findings.area._source.kind === "District"
+          temp.findings.area._source.Kind === "district" ||
+          temp.findings.area._source.kind === "district"
         ) {
-          address.country = otherMatch.findings.area._source.country;
-          address.state = otherMatch.findings.area._source.state;
-          address.district = otherMatch.findings.area._source.name;
+          address.country = temp.findings.area._source.country;
+          address.state = temp.findings.area._source.state;
+          address.district = temp.findings.area._source.name;
           address.city = undefined;
           address.area = undefined;
         } else if (
-          otherMatch.findings.area._source.Kind === "City" ||
-          otherMatch.findings.area._source.kind === "City"
+          temp.findings.area._source.Kind === "city" ||
+          temp.findings.area._source.kind === "city"
         ) {
-          address.country = otherMatch.findings.area._source.country;
-          address.state = otherMatch.findings.area._source.state;
-          address.district = otherMatch.findings.area._source.district;
-          address.city = otherMatch.findings.area._source.name;
+          address.country = temp.findings.area._source.country;
+          address.state = temp.findings.area._source.state;
+          address.district = temp.findings.area._source.district;
+          address.city = temp.findings.area._source.name;
           address.area = undefined;
         } else if (
-          otherMatch.findings.area._source.Kind === "Area" ||
-          otherMatch.findings.area._source.kind === "Area"
+          temp.findings.area._source.Kind === "area" ||
+          temp.findings.area._source.kind === "area"
         ) {
-          address.country = otherMatch.findings.area._source.country;
-          address.state = otherMatch.findings.area._source.state;
-          address.district = otherMatch.findings.area._source.district;
-          address.city = otherMatch.findings.area._source.city;
-          address.area = otherMatch.findings.area._source.name;
+          address.country = temp.findings.area._source.country;
+          address.state = temp.findings.area._source.state;
+          address.district = temp.findings.area._source.district;
+          address.city = temp.findings.area._source.city;
+          address.area = temp.findings.area._source.name;
         }
       }
       console.log("asdasd: ", address);
 
       const hitMatch =
-        (!isEmpty(businessMatch) && {
-          ...businessMatch.hit._source.address.area,
+        (!isEmpty(businessMatch) &&
+          businessMatch.hit.length && {
+            ...businessMatch.hit[0]._source.address.area,
 
-          hit: businessMatch.hit,
-          hits: businessMatch.otherSimiliar
+            hit: businessMatch.hit,
+            hits: businessMatch.otherSimiliar
+          }) ||
+        (!isEmpty(subCategoryMatch) && {
+          ...subCategoryMatch,
+          ...address
         }) ||
-        (!isEmpty(subCategoryMatch) && subCategoryMatch) ||
         (!isEmpty(otherMatch) && {
           hits: otherMatch.hits,
           ...otherMatch.findings,
+          freeSearch: false,
           ...address
         });
 

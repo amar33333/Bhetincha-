@@ -13,6 +13,24 @@ const items = {
       url: `/${ROUTE_PARAMS_INDIVIDUAL_NAME}/userdashboard/personal-details`,
       icon: "icon-speedometer"
       // permission: "CAN_VIEW_DASHBOARD"
+    },
+    {
+      name: "Education",
+      url: `/${ROUTE_PARAMS_INDIVIDUAL_NAME}/userdashboard/education-details`,
+      icon: "icon-speedometer"
+      // permission: "CAN_VIEW_DASHBOARD"
+    },
+    {
+      name: "Experience Details",
+      url: `/${ROUTE_PARAMS_INDIVIDUAL_NAME}/userdashboard/experience-details`,
+      icon: "icon-speedometer"
+      // permission: "CAN_VIEW_DASHBOARD"
+    },
+    {
+      name: "Interests",
+      url: `/${ROUTE_PARAMS_INDIVIDUAL_NAME}/userdashboard/interests`,
+      icon: "icon-speedometer"
+      // permission: "CAN_VIEW_DASHBOARD"
     }
   ]
 };
