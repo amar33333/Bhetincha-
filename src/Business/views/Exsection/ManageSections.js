@@ -5,6 +5,7 @@ import { SideTreeView } from "./components";
 import { RecordAddNew } from "./components";
 
 import { SectionEntityList } from "./components";
+import { SectionListAdmin } from "./components";
 
 import {
   onSectionsListExsection,
@@ -27,19 +28,29 @@ class ManageSections extends Component {
           <Row>
             <Col xs="12" md="3">
               <SideTreeView
-                sections={this.props.sections}
-                activeSection={this.props.activeSection}
+                sectionsAdmin={this.props.sectionsAdmin}
+                activeSectionAdminId={this.props.activeSectionAdminId}
                 onChangeActiveSection={this.props.onChangeActiveSectionBusiness}
                 isOpen={this.props.isOpenSections}
               />
             </Col>
             <Col xs="12" md="9">
-              {/* {console.log("Proppppp", this.props)} */}
-              {this.props.selectedSectionDetailBusiness &&
-                this.props.selectedSectionDetailBusiness.sections && (
+              {console.log("Proppppp", this.props)}
+
+              {/* {this.props.activeChildrenAdmin && (
+                <SectionListAdmin
+                  rootSectionAdmin={this.props.rootSectionAdmin}
+                  activeChildrenAdmin={this.props.activeChildrenAdmin}
+                />
+              )} */}
+
+              {this.props.selectedSectionDetailBiz &&
+                this.props.selectedSectionDetailBiz.sections && (
                   <SectionEntityList
-                    sections={this.props.selectedSectionDetailBusiness.sections}
-                    selectedSectionDetail={this.props.selectedSectionDetail}
+                    sections={this.props.selectedSectionDetailBiz.sections}
+                    selectedSectionDetailAdmin={
+                      this.props.selectedSectionDetailAdmin
+                    }
                     URL={`/${
                       this.props.match.params.businessName
                     }/dashboard/exsection/manage-sections`}
@@ -49,20 +60,22 @@ class ManageSections extends Component {
                 this.props.attributes.attributes &&
                 this.props.attributes.attributes.length !== 0 && (
                   <RecordAddNew
-                    activeSection={this.props.activeSection}
-                    activeChildren={this.props.activeChildren}
+                    activeSectionAdminId={this.props.activeSectionAdminId}
+                    activeChildrenAdmin={this.props.activeChildrenAdmin}
                     // activeParentAdminId={this.props.activeParentAdminId}
-                    selectedSectionDetail={this.props.selectedSectionDetail}
-                    selectedSectionDetailBusiness={
-                      this.props.selectedSectionDetailBusiness
+                    selectedSectionDetailAdmin={
+                      this.props.selectedSectionDetailAdmin
                     }
-                    sections={this.props.sections}
+                    selectedSectionDetailBiz={
+                      this.props.selectedSectionDetailBiz
+                    }
+                    sectionsAdmin={this.props.sectionsAdmin}
                     onChangeActiveSectionByButton={
                       this.props.onChangeActiveSectionBusiness
                     }
                     attributes={this.props.attributes.attributes}
                     onSubmit={this.props.onCreateSectionBusiness}
-                    parentSection={this.props.parentSection}
+                    parentSectionBiz={this.props.parentSectionBiz}
                   />
                 )}
             </Col>
@@ -77,27 +90,29 @@ export default connect(
   ({
     BusinessContainer: {
       exsection: {
-        sections,
-        activeSection,
-        activeChildren,
+        sectionsAdmin,
+        activeSectionAdminId,
+        activeChildrenAdmin,
         activeParentAdminId,
         isOpenSections,
-        selectedSectionDetail,
-        selectedSectionDetailBusiness,
+        selectedSectionDetailAdmin,
+        selectedSectionDetailBiz,
         attributes,
-        parentSection
+        parentSectionBiz,
+        rootSectionAdmin
       }
     }
   }) => ({
-    sections,
-    activeSection,
-    activeChildren,
+    sectionsAdmin,
+    activeSectionAdminId,
+    activeChildrenAdmin,
     activeParentAdminId,
     isOpenSections,
-    selectedSectionDetail,
-    selectedSectionDetailBusiness,
+    selectedSectionDetailAdmin,
+    selectedSectionDetailBiz,
     attributes,
-    parentSection
+    parentSectionBiz,
+    rootSectionAdmin
   }),
   {
     onSectionsListExsection,

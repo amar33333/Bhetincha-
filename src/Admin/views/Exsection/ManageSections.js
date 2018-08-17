@@ -18,7 +18,8 @@ import {
   onChangeActiveSectionExsection,
   onAttributesListExsection,
   onPropertySubmitExsection,
-  onPropertyRemoveExsection
+  onPropertyRemoveExsection,
+  onPropertyUpdateExsection
 } from "../../actions";
 
 class ManageSections extends Component {
@@ -83,6 +84,7 @@ class ManageSections extends Component {
                     section={this.props.selectedSectionDetail}
                     activeSection={this.props.activeSection}
                     onPropertyRemove={this.props.onPropertyRemoveExsection}
+                    onPropertyUpdate={this.props.onPropertyUpdateExsection}
                   />
                 </div>
               )}
@@ -123,6 +125,7 @@ export default connect(
     onSectionUpdateExsection,
     onChangeActiveSectionExsection,
     onPropertySubmitExsection,
-    onPropertyRemoveExsection
+    onPropertyRemoveExsection,
+    onPropertyUpdateExsection
   }
 )(ManageSections);

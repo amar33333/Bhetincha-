@@ -3,11 +3,6 @@ import { connect } from "react-redux";
 
 import { SectionEntityDetail } from "./components";
 
-// import {
-//   onEcommerceProductEachList,
-//   onRemoveEcommerceProduct
-// } from "../../actions";
-
 import {
   onExsectionSectionEachList
   // onRemoveExsectionSection
@@ -30,11 +25,12 @@ class SectionEntityView extends Component {
 
   render() {
     // console.log("Props", this.props);
-    const { sectionEntityDetail } = this.props;
+    const { sectionEntityDetailBiz } = this.props;
 
     return (
       <div>
-        {sectionEntityDetail &&
+        {console.log("propppp", this.props)}
+        {sectionEntityDetailBiz &&
           this.props.attributes &&
           this.props.attributes.attributes && (
             <SectionEntityDetail
@@ -44,7 +40,7 @@ class SectionEntityView extends Component {
               //   this.props.match.params.sectionEntityId
               // }/edit`}
               // onRemoveEcommerceProduct={this.props.onRemoveEcommerceProduct}
-              sectionEntityDetail={this.props.sectionEntityDetail}
+              sectionEntityDetailBiz={this.props.sectionEntityDetailBiz}
               //routeToManageProducts={this.routeToManageProducts}
               attributes={this.props.attributes.attributes}
             />
@@ -57,9 +53,9 @@ class SectionEntityView extends Component {
 export default connect(
   ({
     BusinessContainer: {
-      exsection: { sectionEntityDetail, attributes }
+      exsection: { sectionEntityDetailBiz, attributes }
     }
-  }) => ({ sectionEntityDetail, attributes }),
+  }) => ({ sectionEntityDetailBiz, attributes }),
   {
     //onEcommerceProductEachList,
     onExsectionSectionEachList

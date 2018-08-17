@@ -17,8 +17,6 @@ import {
   FETCH_PARENT_SECTION_LIST_BUSINESS_REJECTED,
   CHANGE_ACTIVE_CHILD_EXSECTION,
   CHANGE_SELETED_SECTION_DETAILS_BUSINESS,
-  //CHANGE_ACTIVE_PARENT_ADMIN_ID_EXSECTION,
-  // CHANGE_ACTIVE_PARENT_ADMIN_ID_EXSECTION_FULFILLED,
   RESET_SECTION_STATE,
   CHANGE_SELETED_SECTION_DETAILS_BUSINESS_DATA_PENDING,
   CHANGE_SELETED_SECTION_DETAILS_BUSINESS_DATA_FULFILLED,
@@ -27,7 +25,8 @@ import {
   FETCH_EXSECTION_SECTION_ENTITY_EACH_PENDING,
   FETCH_EXSECTION_SECTION_ENTITY_EACH_FULFILLED,
   FETCH_EXSECTION_SECTION_ENTITY_EACH_REJECTED,
-  CHANGE_ACTIVE_PARENT_ASID_EXSECTION
+  CHANGE_ACTIVE_PARENT_ADMIN_EXSECTION,
+  CHANGE_ROOT_SECTION_ADMIN
 } from "./types";
 
 import {
@@ -63,7 +62,7 @@ epics.push((action$, { getState }) =>
             payload: response.uid,
             first: first,
             // oldSection: "9b4623c4d6c24531a8f64e9673397cf1"
-            oldSectionASID: response.uid
+            oldSectionAdminId: response.uid
           });
         }
 
@@ -84,84 +83,91 @@ epics.push((action$, { getState }) =>
 
 //onChangeActiveSectionBusiness
 export const onChangeActiveSectionBusiness = (
-  newSectionASID,
-  oldSectionASID,
+  newSectionAdminId,
+  oldSectionAdminId,
   leafDetected = false,
-  activeChildrenAS
+  activeChildrenAdmin = null,
+  rootSectionAdmin = null
 ) => {
-  // console.log("new section asid", newSectionASID);
-  // console.log("old section asid", oldSectionASID);
   return {
     type: CHANGE_ACTIVE_EXSECTION_SECTION,
-    payload: newSectionASID,
-    oldSectionASID,
+    payload: newSectionAdminId,
+    oldSectionAdminId,
     leafDetected,
-    activeChildrenAS
+    activeChildrenAdmin,
+    rootSectionAdmin
   };
 };
 
 epics.push((action$, { getState }) =>
   action$.ofType(CHANGE_ACTIVE_EXSECTION_SECTION).mergeMap(action => {
+    // console.log("action", action);
     const {
-      payload: newSectionASID,
-      oldSectionASID,
+      payload: newSectionAdminId,
+      oldSectionAdminId,
       leafDetected,
-      activeChildrenAS
+      activeChildrenAdmin,
+      rootSectionAdmin
     } = action;
-
+    // console.log("activeChildrenAdmin", activeChildrenAdmin);
     const businessId = getState().auth.cookies.user_data.business_id;
 
-    return onExsectionSectionDetailGetAdmin({ uid: newSectionASID }).concatMap(
-      ({ response }) => {
-        const stuffs = [];
-        stuffs.push({
-          type: CHANGE_SELETED_SECTION_DETAILS_BUSINESS,
-          payload: response
-        });
+    return onExsectionSectionDetailGetAdmin({
+      uid: newSectionAdminId
+    }).concatMap(({ response }) => {
+      const stuffs = [];
+      stuffs.push({
+        type: CHANGE_SELETED_SECTION_DETAILS_BUSINESS,
+        payload: response
+      });
 
-        stuffs.push({
-          type: CHANGE_ACTIVE_CHILD_EXSECTION,
-          payload: activeChildrenAS
-        });
+      stuffs.push({
+        type: CHANGE_ACTIVE_CHILD_EXSECTION,
+        payload: activeChildrenAdmin
+      });
 
-        stuffs.push({
-          type: CHANGE_ACTIVE_PARENT_ASID_EXSECTION,
-          payload: oldSectionASID
-        });
+      stuffs.push({
+        type: CHANGE_ROOT_SECTION_ADMIN,
+        payload: rootSectionAdmin
+      });
 
+      stuffs.push({
+        type: CHANGE_ACTIVE_PARENT_ADMIN_EXSECTION,
+        payload: oldSectionAdminId
+      });
+
+      stuffs.push({
+        type: FETCH_EXSECTION_SECTION_ATTRIBUTES_PENDING,
+        payload: {
+          body: { sectionId: newSectionAdminId }
+        }
+      });
+
+      if (!action.first) {
         stuffs.push({
-          type: FETCH_EXSECTION_SECTION_ATTRIBUTES_PENDING,
+          type: CHANGE_SELETED_SECTION_DETAILS_BUSINESS_DATA_PENDING,
           payload: {
-            body: { sectionId: newSectionASID }
+            body: { sectionId: newSectionAdminId }
           }
         });
+      }
 
-        if (!action.first) {
+      if (!action.first) {
+        if (action.oldSectionAdminId !== "9b4623c4d6c24531a8f64e9673397cf1") {
           stuffs.push({
-            type: CHANGE_SELETED_SECTION_DETAILS_BUSINESS_DATA_PENDING,
+            type: FETCH_PARENT_SECTION_LIST_BUSINESS_PENDING,
             payload: {
-              body: { sectionId: newSectionASID }
+              body: {
+                businessIdd: businessId,
+                asid: oldSectionAdminId
+              }
             }
           });
         }
-
-        if (!action.first) {
-          if (action.oldSectionASID !== "9b4623c4d6c24531a8f64e9673397cf1") {
-            stuffs.push({
-              type: FETCH_PARENT_SECTION_LIST_BUSINESS_PENDING,
-              payload: {
-                body: {
-                  businessIdd: businessId,
-                  asid: oldSectionASID
-                }
-              }
-            });
-          }
-        }
-
-        return stuffs;
       }
-    );
+
+      return stuffs;
+    });
   })
 );
 
@@ -196,7 +202,6 @@ epics.push(action$ =>
       return onExsectionSectionAttributesGet({ body })
         .map(({ response }) => {
           if (response.msg === "success") {
-            //console.log("On active change", response);
             return {
               type: FETCH_EXSECTION_SECTION_ATTRIBUTES_FULFILLED,
               payload: response
@@ -218,18 +223,14 @@ epics.push(action$ =>
   action$
     .ofType(FETCH_PARENT_SECTION_LIST_BUSINESS_PENDING)
     .mergeMap(({ payload: { body } }) => {
-      // console.log("CXonsong body", body);
-
       return onParentSectionBusinessGet({ body })
         .map(({ response }) => {
           if (response.msg === "success") {
-            //console.log("On active change", response);
             return {
               type: FETCH_PARENT_SECTION_LIST_BUSINESS_FULFILLED,
               payload: response
             };
           } else {
-            //console.log("ERROR logged");
             throw new Error(response.msg);
           }
         })
@@ -241,9 +242,9 @@ epics.push(action$ =>
         });
     })
 );
+
 //onCreateSectionBusiness as an Exsection Action
 //onSectionBusinessPost as a serverCall
-
 export const onCreateSectionBusiness = payload => ({
   type: CREATE_EXSECTION_BUSINESS_SECTION_PENDING,
   payload
@@ -254,20 +255,14 @@ epics.push((action$, { getState }) =>
     .ofType(CREATE_EXSECTION_BUSINESS_SECTION_PENDING)
     .mergeMap(({ payload }) => {
       const globalState = getState();
-      console.log("log global state", globalState);
-      // const {
-      //   activeCategory: sectionId
-      // } = globalState.BusinessContainer.exsection;
-
-      const { activeSection } = globalState.BusinessContainer.exsection;
-      const newSectionASID = activeSection;
-      const { activeParentASID } = globalState.BusinessContainer.exsection;
-      const oldSectionASID = activeParentASID;
-      const { activeChildren } = globalState.BusinessContainer.exsection;
-      const activeChildrenAS = activeChildren;
+      // console.log("log global state", globalState);
+      const { activeSectionAdminId } = globalState.BusinessContainer.exsection;
+      const newSectionAdminId = activeSectionAdminId;
+      const { activeParentAdminId } = globalState.BusinessContainer.exsection;
+      const oldSectionAdminId = activeParentAdminId;
+      const { activeChildrenAdmin } = globalState.BusinessContainer.exsection;
       const businessIdd = globalState.auth.cookies.user_data.business_id;
       const leafDetected = false;
-      //console.log("consoling payload", payload);
       return onSectionBusinessPost({
         body: { ...payload.body, businessIdd }
       })
@@ -280,10 +275,10 @@ epics.push((action$, { getState }) =>
               { type: FETCH_EXSECTION_SECTIONS_PENDING },
               {
                 type: CHANGE_ACTIVE_EXSECTION_SECTION,
-                payload: newSectionASID,
-                oldSectionASID,
+                payload: newSectionAdminId,
+                oldSectionAdminId,
                 leafDetected,
-                activeChildrenAS
+                activeChildrenAdmin
               }
             ];
           } else {
@@ -300,7 +295,6 @@ epics.push((action$, { getState }) =>
 );
 
 //resetState
-
 export const resetState = () => ({
   type: RESET_SECTION_STATE
 });
@@ -331,14 +325,6 @@ epics.push((action$, { getState }) =>
               type: FETCH_EXSECTION_SECTION_ENTITY_EACH_FULFILLED,
               payload: response
             }
-            // {
-            //   type: FETCH_ECOMMERCE_CATEGORY_ATTRIBUTES_PENDING,
-            //   payload: {
-            //     body: {
-            //       categoryId: response.categoryId
-            //     }
-            //   }
-            // }
           ];
         })
         .catch(ajaxError => {

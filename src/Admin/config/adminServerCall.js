@@ -1740,6 +1740,18 @@ export const onExsectionSectionAttributesGet = ({ body }) =>
     }
   });
 
+//  onExsectionPropertiesPut
+//EXSECTION_ATTRIBUTE_URL = `${MAIN_URL}/${EXSECTION}/attribute/`
+export const onExsectionPropertiesPut = ({ body }) =>
+  ajax({
+    method: "PUT",
+    url: EXSECTION_ATTRIBUTE_URL,
+    body,
+    headers: {
+      "Content-Type": "application/json"
+    }
+  });
+
 //onExsectionPropertiesDelete
 export const onExsectionPropertiesDelete = ({ body }) =>
   ajax({

@@ -112,6 +112,7 @@ class Business extends Component {
   };
 
   componentDidMount() {
+    //console.log("this.props", this.props);
     document.body.classList.add(
       "app",
       "header-fixed",

@@ -26,7 +26,10 @@ import {
   DELETE_EXSECTION_PROPERTY_SECTION_REJECTED,
   UPDATE_EXSECTION_SECTION_PENDING,
   UPDATE_EXSECTION_SECTION_FULFILLED,
-  UPDATE_EXSECTION_SECTION_REJECTED
+  UPDATE_EXSECTION_SECTION_REJECTED,
+  UPDATE_EXSECTION_PROPERTY_SECTION_PENDING,
+  UPDATE_EXSECTION_PROPERTY_SECTION_FULFILLED,
+  UPDATE_EXSECTION_PROPERTY_SECTION_REJECTED
 } from "./types";
 
 //import { onEcommerceCategoriesGet } from "../config/adminServerCall";
@@ -39,8 +42,10 @@ import {
   //onExsectionPropertiesPost,
   onExsectionAttributesPostAdmin,
   onExsectionPropertiesDelete,
-  onExsectionSectionDetailPost
+  onExsectionSectionDetailPost,
+  onExsectionPropertiesPut
 } from "../config/adminServerCall";
+import { EXSECTION_ATTRIBUTE_URL } from "../config/ADMIN_API";
 
 const epics = [];
 
@@ -204,6 +209,39 @@ epics.push((action$, { getState }) =>
   })
 );
 
+//onPropertyUpdateExsection
+
+export const onPropertyUpdateExsection = payload => ({
+  type: UPDATE_EXSECTION_PROPERTY_SECTION_PENDING,
+  payload
+});
+
+epics.push((action$, { getState }) =>
+  action$.ofType(UPDATE_EXSECTION_PROPERTY_SECTION_PENDING).mergeMap(action => {
+    const payload = getState().AdminContainer.ecommerce.activeCategory;
+    const { body } = action.payload;
+
+    return onExsectionPropertiesPut({ body })
+      .concatMap(({ response }) => {
+        if (response.msg === "success") {
+          toast.success("Attribute updated successfully");
+          return [
+            { type: UPDATE_EXSECTION_PROPERTY_SECTION_FULFILLED },
+            { type: CHANGE_ACTIVE_EXSECTION_SECTION, payload }
+          ];
+        } else {
+          throw new Error(response.msg);
+        }
+      })
+      .catch(ajaxError => {
+        toast.error(ajaxError.toString());
+        return Observable.of({
+          type: UPDATE_EXSECTION_PROPERTY_SECTION_REJECTED
+        });
+      });
+  })
+);
+
 //onPropertyRemoveExsection
 
 export const onPropertyRemoveExsection = payload => ({
@@ -236,7 +274,6 @@ epics.push((action$, { getState }) =>
       });
   })
 );
-export default epics;
 
 //onSectionUpdateExsection
 
@@ -270,3 +307,5 @@ epics.push((action$, { getState }) =>
       });
   })
 );
+
+export default epics;

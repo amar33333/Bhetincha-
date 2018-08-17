@@ -21,32 +21,35 @@ class SideTreeView extends Component {
     return {
       ...rest,
       toggled: this.props.isOpen.includes(section.uid),
-      active: this.props.activeSection === section.uid,
+      active: this.props.activeSectionAdminId === section.uid,
       ...extra
     };
   };
 
   componentDidUpdate(prevProps) {
     if (
-      prevProps.sections !== this.props.sections ||
-      (!prevProps.activeSection && this.props.activeSection) ||
+      prevProps.sectionsAdmin !== this.props.sectionsAdmin ||
+      (!prevProps.activeSectionAdminId && this.props.activeSectionAdminId) ||
       prevProps.isOpen !== this.props.isOpen
     ) {
       this.setState({
-        sections: this.updateSections(this.props.sections)
+        sections: this.updateSections(this.props.sectionsAdmin)
       });
     }
   }
 
-  onToggle = ({ uid, children }) => {
-    // console.log(this.props);
-    //console.log("toggle clicked"); //ok
+  onToggle = ({ uid, name, children }) => {
+    const rootSectionAdmin = {};
+    rootSectionAdmin.name = name;
+    rootSectionAdmin.uid = uid;
+    //console.log("onToggle rootLevelData", rootSectionDataAdmin);
 
     this.props.onChangeActiveSection(
       uid,
-      this.props.activeSection,
+      this.props.activeSectionAdminId,
       this.props.leafDetect ? !(children && children.length) : false,
-      children ? children[0] : null
+      children ? children[0] : null,
+      rootSectionAdmin
     );
   };
 

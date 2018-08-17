@@ -10,8 +10,8 @@ class SectionEntityList extends Component {
           <CardHeader>
             <strong>
               Existing &nbsp;
-              {this.props.selectedSectionDetail.name
-                ? this.props.selectedSectionDetail.name
+              {this.props.selectedSectionDetailAdmin.name
+                ? this.props.selectedSectionDetailAdmin.name
                 : ""}&nbsp;(Click to Update)
             </strong>
           </CardHeader>
@@ -22,9 +22,6 @@ class SectionEntityList extends Component {
                 <Link to={`${this.props.URL}/${section.attributes.uid}`}>
                   {section.attributes.name}
                 </Link>
-                {/* <Link to={`${section.attributes.uid}`}>
-                  {section.attributes.name}
-                </Link> */}
               </div>
             ))}
           </CardBody>
