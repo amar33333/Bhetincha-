@@ -6,40 +6,27 @@ class SectionListAdmin extends Component {
   constructor(props) {
     super(props);
 
-    this.getAllChild = this.getAllChild.bind(this);
-    this.getAllChild2 = this.getAllChild2.bind(this);
+    this.renderSubSection = this.renderSubSection.bind(this);
   }
 
-  getAllChild() {
-    const nestedChild = this.props.activeChildrenAdmin;
-    let arr = [];
-    let obj = {};
-
-    if (nestedChild) {
-      obj.name = nestedChild ? nestedChild.name : "";
-      arr.push(obj);
-
-      if (nestedChild.children) {
-        for (let child of nestedChild.children) {
-          console.log(child);
-        }
+  renderSubSection(options) {
+    console.log(options);
+    const menuOptions = options.map(option => {
+      let subMenu;
+      if (option.children && option.children.length > 0) {
+        subMenu = this.renderSubSection(option.children);
       }
-    }
-
-    return arr;
+      return (
+        <div key={option.uid}>
+          {option.name && <li> {option.name} </li>}
+          {subMenu && <li> {subMenu}</li>}
+        </div>
+      );
+    });
+    console.log("DUHHH", menuOptions);
+    return menuOptions;
   }
 
-  getAllChild2(arg1, array1 = []) {
-    const obj1 = {};
-    const nestedChild = arg1;
-    obj1.name = nestedChild.name;
-    array1.push(obj1);
-    if (nestedChild.children === null) {
-      return array1;
-    }
-    const array2 = array1;
-    return this.getAllChild2(nestedChild.children, array2);
-  }
   render() {
     return (
       <div>
@@ -48,14 +35,15 @@ class SectionListAdmin extends Component {
             <strong>"Placeholder" Section</strong>
           </CardHeader>
           <CardBody>
-            {this.props.rootSectionAdmin
-              ? this.props.rootSectionAdmin.name
-              : ""}
-            {this.props.activeChildrenAdmin
-              ? this.getAllChild2(this.props.activeChildrenAdmin).map(data => {
-                  return data.name;
-                })
-              : ""}
+            <ul>
+              <li>
+                {this.props.rootSectionAdmin
+                  ? this.props.rootSectionAdmin.name
+                  : ""}
+              </li>
+              <li>{this.props.activeChildrenAdmin.name}</li>
+              {this.renderSubSection(this.props.activeChildrenAdmin.children)}
+            </ul>
           </CardBody>
         </Card>
       </div>

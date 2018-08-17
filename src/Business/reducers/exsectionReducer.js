@@ -25,7 +25,7 @@ const INITIAL_STATE = {
   selectedSectionDetailBiz: null,
   attributes: [],
   parentSectionBiz: {},
-  activeChildrenAdmin: {},
+  activeChildrenAdmin: null,
   sectionEntityDetailBiz: null,
   activeParentAdminId: ""
 };
@@ -59,6 +59,16 @@ export default function(state = INITIAL_STATE, action) {
       };
 
     case FETCH_PARENT_SECTION_LIST_BUSINESS_FULFILLED:
+      // if (
+      //   state.rootSectionAdmin !== null &&
+      //   state.activeSectionAdminId !== null
+      // ) {
+      //   console.log("state.rootSectionAdmin", state.rootSectionAdmin);
+      //   console.log("state.activeSectionAdminId", state.activeSectionAdminId);
+      //   if (state.rootSectionAdmin[uid] === activeSectionAdminId) {
+      //     console.log("true");
+      //   }
+      // }
       return {
         ...state,
         parentSectionBiz: action.payload
@@ -89,6 +99,8 @@ export default function(state = INITIAL_STATE, action) {
       };
 
     case RESET_SECTION_STATE:
+      console.log({ ...state });
+
       return {
         ...state,
         parentSectionBiz: {}

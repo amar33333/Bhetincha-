@@ -61,6 +61,7 @@ epics.push((action$, { getState }) =>
             type: CHANGE_ACTIVE_EXSECTION_SECTION,
             payload: response.uid,
             first: first,
+            activeChildrenAdmin: null,
             // oldSection: "9b4623c4d6c24531a8f64e9673397cf1"
             oldSectionAdminId: response.uid
           });
@@ -219,13 +220,32 @@ epics.push(action$ =>
     })
 );
 
-epics.push(action$ =>
+epics.push((action$, { getState }) =>
   action$
     .ofType(FETCH_PARENT_SECTION_LIST_BUSINESS_PENDING)
     .mergeMap(({ payload: { body } }) => {
+      const globalState = getState();
+      let rootSectionAdminIdd;
+      let activeSectionAdminIdd;
+      if (globalState.BusinessContainer.exsection.rootSectionAdmin !== null) {
+        rootSectionAdminIdd =
+          globalState.BusinessContainer.exsection.rootSectionAdmin.uid;
+        activeSectionAdminIdd =
+          globalState.BusinessContainer.exsection.activeSectionAdminId;
+      }
       return onParentSectionBusinessGet({ body })
         .map(({ response }) => {
           if (response.msg === "success") {
+            if (
+              rootSectionAdminIdd &&
+              activeSectionAdminIdd &&
+              rootSectionAdminIdd === activeSectionAdminIdd
+            ) {
+              return {
+                type: FETCH_PARENT_SECTION_LIST_BUSINESS_FULFILLED,
+                payload: {}
+              };
+            }
             return {
               type: FETCH_PARENT_SECTION_LIST_BUSINESS_FULFILLED,
               payload: response

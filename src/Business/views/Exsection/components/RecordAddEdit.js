@@ -45,28 +45,11 @@ class RecordAddEdit extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    //console.log("THIS OLD PROPS", prevProps);
-    // console.log("componentDidUpdate");
-    // console.log("state log", this.state);
-
-    // var parentSaved;
-    // if (this.props.activeSection !== prevProps.activeSection) {
-    //   //console.log("Reached inside iff");
-    //   parentSaved = prevProps.activeSection;
-    //   this.setState({
-    //     parentSectionId: parentSaved
-    //     //selectedOption: ""
-    //   });
-    //   //   //console.log("Parent Saved", prevProps.activeSection);
-    // }
-
     if (
       this.props.attributes &&
       prevProps.attributes !== this.props.attributes
     ) {
       let testextra = this.getAttributesToState(this.props.attributes);
-      //console.log("prevProps consoling", prevProps);
-      //console.log("prevState consoling", prevState);
       this.setState({
         ...testextra,
         documents: [DocumentInput],
@@ -174,9 +157,6 @@ class RecordAddEdit extends Component {
                 attributeType === "DateTime" &&
                 name === upperCaseProperty
               ) {
-                // console.log("consolilng porperty", property);
-                // console.log("consoling name", name);
-                // console.log("consoling value", value);
                 value = value.toISOString();
                 body[upperCaseProperty] = {
                   attributeType,

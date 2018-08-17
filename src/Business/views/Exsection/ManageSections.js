@@ -17,7 +17,7 @@ import {
 
 class ManageSections extends Component {
   componentDidMount() {
-    this.props.resetState();
+    //this.props.resetState();
     this.props.onSectionsListExsection();
   }
 
@@ -32,17 +32,18 @@ class ManageSections extends Component {
                 activeSectionAdminId={this.props.activeSectionAdminId}
                 onChangeActiveSection={this.props.onChangeActiveSectionBusiness}
                 isOpen={this.props.isOpenSections}
+                resetState={this.props.resetState}
               />
             </Col>
             <Col xs="12" md="9">
               {console.log("Proppppp", this.props)}
-
-              {/* {this.props.activeChildrenAdmin && (
+              {/* //Object.keys(this.props.activeChildrenAdmin).length !== 0 */}
+              {this.props.activeChildrenAdmin !== null && (
                 <SectionListAdmin
                   rootSectionAdmin={this.props.rootSectionAdmin}
                   activeChildrenAdmin={this.props.activeChildrenAdmin}
                 />
-              )} */}
+              )}
 
               {this.props.selectedSectionDetailBiz &&
                 this.props.selectedSectionDetailBiz.sections && (
