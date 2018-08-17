@@ -1,5 +1,5 @@
 import { combineReducers } from "redux";
 
-import SectionReducer from "./sectionReducer";
+import Section from "./sectionReducer";
 
-export default combineReducers({ SectionReducer });
+export default combineReducers({ Section });

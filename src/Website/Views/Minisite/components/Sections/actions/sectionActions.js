@@ -21,16 +21,17 @@ epics.push((action$, { getState }) =>
     console.log("sectionId id=" + sectionId);
 
     return OnEachSectionGet(sectionId, business_id)
-      .concatMap(({ response }) => {
-        if (response.msg === "success") {
+      .concatMap(data => {
+        console.log(data);
+        if (data.status === 200) {
           return [
             {
               type: FETCH_EACHSECTION_FULLFILLED,
-              payload: response
+              payload: data.response
             }
           ];
         } else {
-          throw new Error(" each section fetching error " + response.msg);
+          throw new Error(" each section fetching error " + data.response.msg);
         }
       })
       .catch(ajaxError => {

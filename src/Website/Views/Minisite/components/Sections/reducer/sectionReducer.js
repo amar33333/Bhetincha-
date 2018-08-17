@@ -20,7 +20,7 @@ export default function(state = INITIAL_STATE, action) {
 
       return {
         ...state,
-        sections: action.payload.sections
+        sections: action.payload.sections[0].children
       };
     case FETCH_EACHSECTION_REJECTED:
       console.log("fetch each section== rejected /n");
