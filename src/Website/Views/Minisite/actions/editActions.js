@@ -23,16 +23,14 @@ epics.push((action$, { getState }) =>
   action$.ofType(FETCH_SECTIONS_PENDING).mergeMap(payload => {
     const bussinessid = getState().auth.cookies.user_data.business_id;
     return OnSectionsGet(bussinessid)
-      .concatMap(({ response }) => {
-        if (response.msg === "success") {
+      .concatMap(data => {
+        if (data.status === 200) {
           return [
             {
               type: FETCH_SECTIONS_FULLFILLED,
-              payload: response
+              payload: data.response.sections
             }
           ];
-        } else {
-          throw new Error(" Core fetching Sections list ");
         }
       })
       .catch(ajaxError => {

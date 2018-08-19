@@ -24,17 +24,21 @@ class MinisiteRoute extends Component {
     const minisiteBusinessRoute = this.props.params[
       ROUTE_PARAMS_MINISITE_BUSINESS_ROUTE
     ];
+    console.log(this.props.sections);
 
-    let sectionroute = this.props.sections.map(section => {
-      let name = slugify(section.name);
-      return (
-        <Route
-          path={`/:${ROUTE_PARAMS_BUSINESS_NAME}/${name}/:sectionId`}
-          name="sections"
-          component={Sections}
-        />
-      );
-    });
+    var sectionroute;
+    if (this.props.sections !== undefined) {
+      sectionroute = this.props.sections.map(section => {
+        let name = slugify(section.name);
+        return (
+          <Route
+            path={`/:${ROUTE_PARAMS_BUSINESS_NAME}/${name}/:sectionId`}
+            name="sections"
+            component={Sections}
+          />
+        );
+      });
+    }
     console.log(this.props.sections);
     return (
       <Switch>
@@ -64,7 +68,7 @@ class MinisiteRoute extends Component {
           name="ecommerce"
           component={EcommerceProduct}
         />{" "}
-        {sectionroute}
+        {this.props.sections ? sectionroute : ""}
         <Route
           path={`/:${ROUTE_PARAMS_BUSINESS_NAME}/ecommerce/:categoryId`}
           name="ecommerce"

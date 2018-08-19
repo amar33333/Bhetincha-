@@ -31,24 +31,26 @@ class BusinessNav extends Component {
   render() {
     const { url } = this.props;
     console.log(this.props.sections);
-    let sectionlist = this.props.sections.map(section => {
-      let sectionID = section.uid;
-      let name = slugify(section.name);
-      return (
-        <NavItem
-          key={section.name}
-          className={url === section.name ? "active" : ""}
-        >
-          <Link
-            to={`/${this.props.businessName}/${name}/${sectionID}`}
-            className=""
+    var sectionlist;
+    if (this.props.sections !== undefined) {
+      sectionlist = this.props.sections.map(section => {
+        let sectionID = section.uid;
+        let name = slugify(section.name);
+        return (
+          <NavItem
+            key={section.name}
+            className={url === section.name ? "active" : ""}
           >
-            {section.name}
-          </Link>{" "}
-        </NavItem>
-      );
-    });
-
+            <Link
+              to={`/${this.props.businessName}/${name}/${sectionID}`}
+              className=""
+            >
+              {section.name}
+            </Link>{" "}
+          </NavItem>
+        );
+      });
+    }
     return (
       <div>
         <ScrollInNav scrollInHeight={1}>

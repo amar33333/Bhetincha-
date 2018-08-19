@@ -13,7 +13,8 @@ import {
   CardDeck,
   Button,
   CardFooter,
-  CardHeader
+  CardHeader,
+  Container
 } from "reactstrap";
 import { combineEpics } from "redux-observable";
 import withRepics from "../../../../../config/withRepics";
@@ -33,6 +34,12 @@ class Sections extends Component {
     const { sectionId } = this.props.match.params;
     console.log(sectionId);
     this.props.eachSectionGet({ sectionId });
+  }
+  componentDidUpdate(prevpreops) {
+    if (prevpreops.match.params !== this.props.match.params) {
+      this.forceUpdate();
+      this.props.eachSectionGet(this.props.match.params);
+    }
   }
   handleSelectedId = (selected, depthLevel) => {
     return () => {
@@ -56,9 +63,18 @@ class Sections extends Component {
   renderSubMenu(options, depthLevel = 0) {
     var display = [];
     var menuOptions = Object.entries(options.attributes).forEach(element => {
-      display.push(element[0] + ":- " + element[1]);
+      if (element[0] != "uid") {
+        display.push(element[0] + ": " + element[1]);
+      }
     });
-    console.log(menuOptions);
+    // console.log("lets see value of dusplay", Object.keys(options.attributes));
+    // var display = Object.keys(options.attributes).map((key) => {
+    //   if (key !== "uid") {
+    //     console.log("wht is value of key= " + options.attributes[key])
+    //     return <td className="whiteSpaceNoWrap">{key}: {options.attributes[key]}</td>
+    //   }
+    // })
+    console.log(display);
     let subMenu;
     if (options.children && options.children.length > 0) {
       var newDepthLevel = depthLevel + 1;
@@ -78,14 +94,16 @@ class Sections extends Component {
         </li>
       );
     }
+    console.log(display);
     return (
-      <div>
+      <Col sm="auto" xs="auto">
         <ul>
           {display.map(data => {
             return <li>{data}</li>;
           })}
+          {/* {display} */}
         </ul>
-      </div>
+      </Col>
     );
   }
 
@@ -106,13 +124,20 @@ class Sections extends Component {
           paddingLeft: "50px"
         }}
       >
-        <p> hello sections!!!</p>
-        {this.props.Section.sections.map(options => {
-          console.log("beforre calling subsection  " + options);
-          var data = this.renderSubMenu(options);
-          console.log(data);
-          return data;
-        })}
+        <p> hello sections!!! </p>
+
+        <Row>
+          {this.props.Section.sections.map(options => {
+            console.log("beforre calling subsection  " + options);
+            var data = this.renderSubMenu(options);
+            console.log(data);
+            return (
+              <Col xs="3">
+                <Card>{data}</Card>
+              </Col>
+            );
+          })}
+        </Row>
       </div>
     );
   }

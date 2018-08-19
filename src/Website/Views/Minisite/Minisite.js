@@ -45,8 +45,8 @@ class Minisite extends Component {
     this.props.clearBusiness();
   }
   render() {
+    console.log(this.props.section);
     if (this.props.section) {
-      console.log(this.props.section);
     }
     return (
       <div>
@@ -88,7 +88,7 @@ export default withRepics(
   connect(
     ({ MinisiteContainer: { edit } }) => ({
       mainLoading: edit.mainLoading,
-      section: edit.sections.sections
+      section: edit.sections
     }),
     {
       onBusinessGet,

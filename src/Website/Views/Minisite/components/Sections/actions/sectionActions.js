@@ -30,8 +30,6 @@ epics.push((action$, { getState }) =>
               payload: data.response
             }
           ];
-        } else {
-          throw new Error(" each section fetching error " + data.response.msg);
         }
       })
       .catch(ajaxError => {
