@@ -227,7 +227,10 @@ epics.push((action$, { getState }) =>
       const globalState = getState();
       let rootSectionAdminIdd;
       let activeSectionAdminIdd;
-      if (globalState.BusinessContainer.exsection.rootSectionAdmin !== null) {
+      if (
+        globalState.BusinessContainer.exsection.rootSectionAdmin !== null &&
+        globalState.BusinessContainer.exsection.rootSectionAdmin !== undefined
+      ) {
         rootSectionAdminIdd =
           globalState.BusinessContainer.exsection.rootSectionAdmin.uid;
         activeSectionAdminIdd =
@@ -241,11 +244,14 @@ epics.push((action$, { getState }) =>
               activeSectionAdminIdd &&
               rootSectionAdminIdd === activeSectionAdminIdd
             ) {
+              console.log("breached please", rootSectionAdminIdd);
+              console.log("breached please", activeSectionAdminIdd);
               return {
                 type: FETCH_PARENT_SECTION_LIST_BUSINESS_FULFILLED,
                 payload: {}
               };
             }
+            // console.log("breached please");
             return {
               type: FETCH_PARENT_SECTION_LIST_BUSINESS_FULFILLED,
               payload: response
@@ -355,4 +361,59 @@ epics.push((action$, { getState }) =>
         });
     })
 );
+
+//onChangeActiveSectionBusinessByClick,
+export const onChangeActiveSectionBusinessByClick = uid => {
+  //console.log("Breached");
+  return {
+    type: "CHANGE_ACTIVE_EXSECTION_SECTION_BY_CLICK",
+    payload: uid
+  };
+};
+
+epics.push((action$, { getState }) =>
+  action$
+    .ofType("CHANGE_ACTIVE_EXSECTION_SECTION_BY_CLICK")
+    .mergeMap(action => {
+      const { payload: uid } = action;
+      const businessId = getState().auth.cookies.user_data.business_id;
+      return onExsectionSectionDetailGetAdmin({
+        uid: uid
+      }).concatMap(({ response }) => {
+        // console.log("breached with response", response);
+        // console.log("parent id", response.breadCrumbs[1].uid);
+        const parentSectionAdminId = response.breadCrumbs[1].uid;
+        const stuffs = [];
+        stuffs.push({
+          type: CHANGE_SELETED_SECTION_DETAILS_BUSINESS,
+          payload: response
+        });
+        stuffs.push({
+          type: FETCH_EXSECTION_SECTION_ATTRIBUTES_PENDING,
+          payload: {
+            body: { sectionId: uid }
+          }
+        });
+
+        stuffs.push({
+          type: CHANGE_SELETED_SECTION_DETAILS_BUSINESS_DATA_PENDING,
+          payload: {
+            body: { sectionId: uid }
+          }
+        });
+        stuffs.push({
+          type: FETCH_PARENT_SECTION_LIST_BUSINESS_PENDING,
+          payload: {
+            body: {
+              businessIdd: businessId,
+              asid: parentSectionAdminId
+            }
+          }
+        });
+
+        return stuffs;
+      });
+    })
+);
+
 export default epics;

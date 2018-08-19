@@ -61,6 +61,7 @@ class RecordAddEdit extends Component {
   //check if top section has a initial entry for a particular business
 
   checkSectionIsTop() {
+    console.log("breached", this.props);
     if (Object.keys(this.props.parentSectionBiz).length === 0) {
       return true;
     }
@@ -101,7 +102,7 @@ class RecordAddEdit extends Component {
   }
 
   handleChange = selectedOption => {
-    console.log("Handle change", selectedOption);
+    // console.log("Handle change", selectedOption);
     this.setState({ selectedOption });
   };
 
@@ -401,15 +402,21 @@ class RecordAddEdit extends Component {
 
             <FormGroup>
               {/* {console.log("Proppping", this.props)} */}
-              {!this.checkSectionIsTop() && (
+              {/* {!this.checkSectionIsTop() && (
                 <Button sm={2} onClick={this.addClick.bind(this)}>
                   + &nbsp;
                   {this.props.selectedSectionDetailAdmin.name
                     ? this.props.selectedSectionDetailAdmin.name
                     : ""}
                 </Button>
-              )}&nbsp;
-              {this.props.activeChildrenAdmin &&
+              )}&nbsp; */}
+              <Button sm={2} onClick={this.addClick.bind(this)}>
+                + &nbsp;
+                {this.props.selectedSectionDetailAdmin.name
+                  ? this.props.selectedSectionDetailAdmin.name
+                  : ""}
+              </Button>
+              {/* {this.props.activeChildrenAdmin &&
                 Object.keys(this.props.activeChildrenAdmin).length !== 0 && (
                   <Button
                     sm={2}
@@ -428,7 +435,7 @@ class RecordAddEdit extends Component {
                   >
                     {this.props.activeChildrenAdmin.name}&nbsp;>>
                   </Button>
-                )}
+                )} */}
             </FormGroup>
             <FormGroup>
               <Button

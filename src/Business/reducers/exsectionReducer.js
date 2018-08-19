@@ -52,6 +52,18 @@ export default function(state = INITIAL_STATE, action) {
       }
       return { ...state, isOpenSections, ...extra };
 
+    case "CHANGE_ACTIVE_EXSECTION_SECTION_BY_CLICK":
+      const extra2 = {};
+      const uid2 = action.payload;
+      isOpenSections = state.isOpenSections;
+
+      let activeSectionAdminIId = state.activeSectionAdminId;
+
+      if (activeSectionAdminIId !== uid2) {
+        extra2.activeSectionAdminId = uid2;
+      }
+      return { ...state, isOpenSections, ...extra2 };
+
     case FETCH_EXSECTION_SECTION_ATTRIBUTES_FULFILLED:
       return {
         ...state,
@@ -99,7 +111,7 @@ export default function(state = INITIAL_STATE, action) {
       };
 
     case RESET_SECTION_STATE:
-      console.log({ ...state });
+      //  console.log({ ...state });
 
       return {
         ...state,

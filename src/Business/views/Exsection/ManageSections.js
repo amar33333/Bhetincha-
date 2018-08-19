@@ -10,6 +10,7 @@ import { SectionListAdmin } from "./components";
 import {
   onSectionsListExsection,
   onChangeActiveSectionBusiness,
+  onChangeActiveSectionBusinessByClick,
   onCreateSectionBusiness,
   resetState,
   onSectionUpdateBusinessExsection
@@ -34,16 +35,21 @@ class ManageSections extends Component {
                 isOpen={this.props.isOpenSections}
                 resetState={this.props.resetState}
               />
-            </Col>
-            <Col xs="12" md="9">
-              {console.log("Proppppp", this.props)}
-              {/* //Object.keys(this.props.activeChildrenAdmin).length !== 0 */}
+              <br />
+              <br />
               {this.props.activeChildrenAdmin !== null && (
                 <SectionListAdmin
                   rootSectionAdmin={this.props.rootSectionAdmin}
                   activeChildrenAdmin={this.props.activeChildrenAdmin}
+                  onChangeActiveSectionByClick={
+                    this.props.onChangeActiveSectionBusinessByClick
+                  }
                 />
               )}
+            </Col>
+            <Col xs="12" md="9">
+              {/* {console.log("Proppppp", this.props)} */}
+              {/* //Object.keys(this.props.activeChildrenAdmin).length !== 0 */}
 
               {this.props.selectedSectionDetailBiz &&
                 this.props.selectedSectionDetailBiz.sections && (
@@ -120,6 +126,7 @@ export default connect(
     onChangeActiveSectionBusiness,
     onCreateSectionBusiness,
     resetState,
-    onSectionUpdateBusinessExsection
+    onSectionUpdateBusinessExsection,
+    onChangeActiveSectionBusinessByClick
   }
 )(ManageSections);
