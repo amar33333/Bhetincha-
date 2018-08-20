@@ -7,6 +7,26 @@ import {
 import { ajax } from "rxjs/observable/dom/ajax";
 import querystring from "querystring";
 
+export const onExperienceDetailDelete = ({ id, itemId, access_token }) =>
+  ajax({
+    method: "DELETE",
+    url: `${EXPERIENCE_URL}${id}/${itemId}/`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
+export const onExperienceDetailGet = ({ id, itemId, access_token }) =>
+  ajax({
+    method: "GET",
+    url: `${EXPERIENCE_URL}${id}/${itemId}/`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
 export const onEducationDetailGet = ({ id, itemId, access_token }) =>
   ajax({
     method: "GET",

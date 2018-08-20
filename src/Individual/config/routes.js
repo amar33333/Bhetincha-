@@ -14,6 +14,7 @@ import {
   ROUTE_PARAMS_INDIVIDUAL_ROUTE
 } from "../../config/CONSTANTS";
 import EducationDetailsEdit from "../views/EducationDetailsEdit";
+import ExperienceDetailsEdit from "../views/ExperienceDetailsEdit";
 
 class IndividualRoute extends Component {
   render() {
@@ -49,6 +50,12 @@ class IndividualRoute extends Component {
           path={`/:${ROUTE_PARAMS_INDIVIDUAL_NAME}/userdashboard/experience-details`}
           name="ExperienceDetails"
           component={ExperienceDetails}
+        />
+        <Route
+          exact
+          path={`/:${ROUTE_PARAMS_INDIVIDUAL_NAME}/userdashboard/experience-details/:id/edit`}
+          name="ExperienceDetailsEdit"
+          component={ExperienceDetailsEdit}
         />
         <Route
           exact

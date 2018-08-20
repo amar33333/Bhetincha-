@@ -10,7 +10,10 @@ import {
   ADD_EXPERIENCE_REJECTED,
   FETCH_EXPERIENCE_FULFILLED,
   FETCH_EXPERIENCE_PENDING,
-  FETCH_EXPERIENCE_REJECTED
+  FETCH_EXPERIENCE_REJECTED,
+  FETCH_EXPERIENCE_EACH_FULFILLED,
+  FETCH_EXPERIENCE_EACH_PENDING,
+  FETCH_EXPERIENCE_EACH_REJECTED
 } from "../actions/types";
 
 const INITIAL_STATE = {
@@ -21,7 +24,9 @@ const INITIAL_STATE = {
   industries: [],
   industryLoading: false,
   experienceDetailsLoading: false,
-  experienceDetails: []
+  experienceDetailsEachLoading: false,
+  experienceDetails: [],
+  experienceEachDetail: null
 };
 
 export default function(state = INITIAL_STATE, action) {
@@ -68,6 +73,17 @@ export default function(state = INITIAL_STATE, action) {
         ...state,
         experienceDetailsLoading: false,
         experienceDetails: action.payload
+      };
+
+    case FETCH_EXPERIENCE_EACH_PENDING:
+      return { ...state, experienceDetailsEachLoading: true };
+    case FETCH_EXPERIENCE_EACH_REJECTED:
+      return { ...state, experienceDetailsEachLoading: false };
+    case FETCH_EXPERIENCE_EACH_FULFILLED:
+      return {
+        ...state,
+        experienceDetailsEachLoading: false,
+        experienceEachDetail: action.payload
       };
 
     default:

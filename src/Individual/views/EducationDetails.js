@@ -5,13 +5,13 @@ import { Redirect } from "react-router-dom";
 import { Card, Button } from "reactstrap";
 
 import { isParamsUserSameAsLoggedUser } from "../../Common/utils/Extras";
+import EducationDetailsComponent from "../components/EducationDetailsComponent";
 
 import {
   onEducationDetailsSubmit,
   onEducationDetailsList,
   onEducationDetailRemove
 } from "../actions";
-import EducationDetailsComponent from "../components/EducationDetailsComponent";
 
 class EducationDetails extends Component {
   componentDidMount() {
@@ -56,7 +56,6 @@ class EducationDetails extends Component {
   }
 
   render() {
-    console.log(this.props);
     return isParamsUserSameAsLoggedUser(
       this.props.username,
       this.props.match.params.individualName

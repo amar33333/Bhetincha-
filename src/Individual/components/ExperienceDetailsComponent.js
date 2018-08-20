@@ -4,19 +4,13 @@ import Select from "react-select";
 import moment from "moment";
 import Datetime from "react-datetime";
 import { Redirect } from "react-router-dom";
+import debounce from "lodash.debounce";
 
-const EducationLevelVars = [
-  { value: "SLC", label: "SLC" },
-  { value: "SEE", label: "SEE" },
-  { value: "HSEB", label: "HSEB" },
-  { value: "BACHELORS", label: "BACHELORS" }
-];
-
-class EducationDetailsComponent extends Component {
+class ExperienceDetailsComponent extends Component {
   state = {
-    level_of_education: "",
-    name_of_college: "",
-    show: false,
+    company: "",
+    designation: "",
+    industry: "",
     start_date: "",
     end_date: ""
   };
@@ -25,22 +19,34 @@ class EducationDetailsComponent extends Component {
   componentDidMount() {
     this.props.data &&
       this.setState({
-        level_of_education: this.props.data.level_of_education,
-        name_of_college: this.props.data.name_of_college,
-        show: this.props.data.show,
+        company: {
+          id: this.props.data.company,
+          business_name: this.props.data.company
+        },
+        industry: {
+          id: this.props.data.industry,
+          name: this.props.data.industry
+        },
+        designation: this.props.data.designation,
         start_date: this.props.data.start_date,
         end_date: this.props.data.end_date
       });
   }
 
-  // Used when data is updated within page without refresh
+  // // Used when data is updated within page without refresh
   componentDidUpdate = prevProps => {
     if (this.props.data !== prevProps.data) {
       this.props.data &&
         this.setState({
-          level_of_education: this.props.data.level_of_education,
-          name_of_college: this.props.data.name_of_college,
-          show: this.props.data.show,
+          company: {
+            id: this.props.data.company,
+            business_name: this.props.data.company_name
+          },
+          industry: {
+            id: this.props.data.industry,
+            name: this.props.data.industry
+          },
+          designation: this.props.data.designation,
           start_date: this.props.data.start_date,
           end_date: this.props.data.end_date
         });
@@ -52,8 +58,17 @@ class EducationDetailsComponent extends Component {
       [key]: event.target.value
     });
 
-  handleSelectChange = level_of_education =>
-    this.setState({ level_of_education });
+  handleSelectChange = newValue => {
+    this.setState({
+      company: newValue
+    });
+  };
+
+  debouncedAutocomplete = debounce(q => {
+    this.props.handleOnBusinessFilterChange({
+      q
+    });
+  });
 
   onFormSubmit = event => {
     event.preventDefault();
@@ -61,41 +76,39 @@ class EducationDetailsComponent extends Component {
     this.props.isParamsUserSameAsLoggedUser(
       this.props.username,
       this.props.individualName
-    ) && this.props.onEducationDetailsSubmit
-      ? this.props.onEducationDetailsSubmit({
+    ) && this.props.onExperienceDetailsSubmit
+      ? this.props.onExperienceDetailsSubmit({
           id: this.props.individual_id,
           body: {
-            level_of_education: this.state.level_of_education
-              ? this.state.level_of_education.label
-              : null,
+            designation: this.state.designation,
+            industry: this.state.industry ? this.state.industry.id : null,
             start_date: moment(this.state.start_date).format(
               "YYYY-MM-DDTHH:mmZ"
             ),
             end_date: moment(this.state.end_date).format("YYYY-MM-DDTHH:mmZ"),
-            name_of_college: this.state.name_of_college,
-            show: this.state.show
+            company: this.state.company ? this.state.company.id : null
           }
         })
-      : this.props.onEducationDetailEdit({
+      : this.props.onExperienceDetailEdit({
           id: this.props.individual_id,
           username: this.props.username,
           history: this.props.history,
-          itemId: this.props.data && this.props.data.educationID,
+          itemId: this.props.data && this.props.data.professionalID,
           body: {
-            level_of_education: this.state.level_of_education
-              ? this.state.level_of_education.label
-              : null,
+            designation: this.state.designation,
+            industry: this.state.industry ? this.state.industry.id : null,
             start_date: moment(this.state.start_date).format(
               "YYYY-MM-DDTHH:mmZ"
             ),
             end_date: moment(this.state.end_date).format("YYYY-MM-DDTHH:mmZ"),
-            name_of_college: this.state.name_of_college,
-            show: this.state.show
+            company: this.state.company ? this.state.company.id : null
           }
         });
   };
 
   render() {
+    console.log("exper compo: ", this.props);
+
     return this.props.isParamsUserSameAsLoggedUser(
       this.props.username,
       this.props.individualName
@@ -103,19 +116,37 @@ class EducationDetailsComponent extends Component {
       <div>
         <Form onSubmit={this.onFormSubmit}>
           <Select
+            isClearable
             tabSelectsValue={false}
-            value={this.state.level_of_education}
+            isLoading={this.props.fetchLoading}
+            onInputChange={this.debouncedAutocomplete}
+            onFocus={() => this.debouncedAutocomplete(" ")}
+            value={this.state.company}
             onChange={this.handleSelectChange}
-            valueKey="value"
-            labelKey="label"
-            options={EducationLevelVars}
+            valueKey="id"
+            labelKey="business_name"
+            filterOptions={options => options}
+            options={!this.props.fetchLoading ? this.props.businesses : []}
+            noResultsText={
+              !this.props.fetchLoading ? "No Results Found" : "Loading..."
+            }
+          />
+          <Select
+            value={this.state.industry}
+            onChange={industry => this.setState({ industry })}
+            valueKey="id"
+            labelKey="name"
+            options={this.props.industries}
+            noResultsText={
+              !this.props.fetchLoading ? "No Results Found" : "Loading..."
+            }
           />
           <Input
             type="text"
             required
-            placeholder="Name of College"
-            value={this.state.name_of_college}
-            onChange={this.onChange.bind(this, "name_of_college")}
+            placeholder="Designation"
+            value={this.state.designation}
+            onChange={this.onChange.bind(this, "designation")}
           />
           <Row>
             <Col xs="12">
@@ -153,22 +184,8 @@ class EducationDetailsComponent extends Component {
               </FormGroup>
             </Col>
           </Row>
-          <Row>
-            <Label check style={{ marginLeft: "30px", marginBottom: "20px" }}>
-              <Input
-                type="checkbox"
-                checked={this.state.show}
-                onChange={() =>
-                  this.setState({
-                    show: !this.state.show
-                  })
-                }
-              />
-              Show:
-            </Label>
-          </Row>
           <Button>
-            {this.props.onEducationDetailsSubmit ? "Submit" : "Edit"}
+            {this.props.onExperienceDetailsSubmit ? "Submit" : "Edit"}
           </Button>
         </Form>
       </div>
@@ -178,4 +195,4 @@ class EducationDetailsComponent extends Component {
   }
 }
 
-export default EducationDetailsComponent;
+export default ExperienceDetailsComponent;

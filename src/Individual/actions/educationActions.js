@@ -69,7 +69,6 @@ epics.push((action$, { getState }) =>
       .map(({ response }) => {
         if (response.msg === "success") {
           toast.success("Successfully Updated");
-          console.log("history:", action.payload.history);
           action.payload.history.replace(
             `/${action.payload.username}/userdashboard/education-details`
           );
