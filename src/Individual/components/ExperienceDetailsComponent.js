@@ -1,5 +1,16 @@
 import React, { Component } from "react";
-import { Col, Row, Input, FormGroup, Label, Form, Button } from "reactstrap";
+import {
+  Col,
+  Row,
+  Input,
+  FormGroup,
+  Label,
+  Form,
+  Button,
+  Card,
+  CardHeader,
+  CardBody
+} from "reactstrap";
 import Select from "react-select";
 import moment from "moment";
 import Datetime from "react-datetime";
@@ -114,80 +125,101 @@ class ExperienceDetailsComponent extends Component {
       this.props.individualName
     ) ? (
       <div>
-        <Form onSubmit={this.onFormSubmit}>
-          <Select
-            isClearable
-            tabSelectsValue={false}
-            isLoading={this.props.fetchLoading}
-            onInputChange={this.debouncedAutocomplete}
-            onFocus={() => this.debouncedAutocomplete(" ")}
-            value={this.state.company}
-            onChange={this.handleSelectChange}
-            valueKey="id"
-            labelKey="business_name"
-            filterOptions={options => options}
-            options={!this.props.fetchLoading ? this.props.businesses : []}
-            noResultsText={
-              !this.props.fetchLoading ? "No Results Found" : "Loading..."
-            }
-          />
-          <Select
-            value={this.state.industry}
-            onChange={industry => this.setState({ industry })}
-            valueKey="id"
-            labelKey="name"
-            options={this.props.industries}
-            noResultsText={
-              !this.props.fetchLoading ? "No Results Found" : "Loading..."
-            }
-          />
-          <Input
-            type="text"
-            required
-            placeholder="Designation"
-            value={this.state.designation}
-            onChange={this.onChange.bind(this, "designation")}
-          />
-          <Row>
-            <Col xs="12">
-              <FormGroup>
-                <Label>Start Date-Time</Label>
-                <Datetime
-                  //disabled={this.props.loading}
-                  value={this.state.start_date}
-                  onChange={time => {
-                    this.setState({
-                      start_date: moment(time)
-                    });
-                  }}
-                  // utc={true}
-                  disableOnClickOutside={false}
-                />
-              </FormGroup>
-            </Col>
-          </Row>
-          <Row>
-            <Col xs="12">
-              <FormGroup>
-                <Label>End Date-Time</Label>
-                <Datetime
-                  //disabled={this.props.loading}
-                  value={this.state.end_date}
-                  onChange={time => {
-                    this.setState({
-                      end_date: moment(time)
-                    });
-                  }}
-                  // utc={true}
-                  disableOnClickOutside={false}
-                />
-              </FormGroup>
-            </Col>
-          </Row>
-          <Button>
-            {this.props.onExperienceDetailsSubmit ? "Submit" : "Edit"}
-          </Button>
-        </Form>
+        <Card>
+          <CardHeader>
+            <strong>Add new Experience</strong>
+          </CardHeader>
+          <CardBody>
+            <Form onSubmit={this.onFormSubmit}>
+              <Row className="mb-4">
+                <Col>
+                  <Select
+                    placeholder="Select Business Name"
+                    isClearable
+                    tabSelectsValue={false}
+                    isLoading={this.props.fetchLoading}
+                    onInputChange={this.debouncedAutocomplete}
+                    onFocus={() => this.debouncedAutocomplete(" ")}
+                    value={this.state.company}
+                    onChange={this.handleSelectChange}
+                    valueKey="id"
+                    labelKey="business_name"
+                    filterOptions={options => options}
+                    options={
+                      !this.props.fetchLoading ? this.props.businesses : []
+                    }
+                    noResultsText={
+                      !this.props.fetchLoading
+                        ? "No Results Found"
+                        : "Loading..."
+                    }
+                  />
+                </Col>
+                <Col>
+                  <Select
+                    placeholder="Select Industry"
+                    value={this.state.industry}
+                    onChange={industry => this.setState({ industry })}
+                    valueKey="id"
+                    labelKey="name"
+                    options={this.props.industries}
+                    noResultsText={
+                      !this.props.fetchLoading
+                        ? "No Results Found"
+                        : "Loading..."
+                    }
+                  />
+                </Col>
+                <Col>
+                  <Input
+                    type="text"
+                    required
+                    placeholder="Designation"
+                    value={this.state.designation}
+                    onChange={this.onChange.bind(this, "designation")}
+                  />
+                </Col>
+              </Row>
+              <Row>
+                <Col>
+                  <FormGroup>
+                    <Label>Start Date-Time</Label>
+                    <Datetime
+                      //disabled={this.props.loading}
+                      value={this.state.start_date}
+                      onChange={time => {
+                        this.setState({
+                          start_date: moment(time)
+                        });
+                      }}
+                      // utc={true}
+                      disableOnClickOutside={false}
+                    />
+                  </FormGroup>
+                </Col>
+                <Col>
+                  <FormGroup>
+                    <Label>End Date-Time</Label>
+                    <Datetime
+                      //disabled={this.props.loading}
+                      value={this.state.end_date}
+                      onChange={time => {
+                        this.setState({
+                          end_date: moment(time)
+                        });
+                      }}
+                      // utc={true}
+                      disableOnClickOutside={false}
+                    />
+                  </FormGroup>
+                </Col>
+              </Row>
+              <Button color="primary">
+                {this.props.onExperienceDetailsSubmit ? "Submit" : "Edit"}
+              </Button>
+            </Form>
+          </CardBody>
+        </Card>
       </div>
     ) : (
       <Redirect to="/404" />

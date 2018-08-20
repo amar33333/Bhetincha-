@@ -1,5 +1,16 @@
 import React, { Component } from "react";
-import { Col, Row, Input, FormGroup, Label, Form, Button } from "reactstrap";
+import {
+  Col,
+  Row,
+  Input,
+  FormGroup,
+  Label,
+  Form,
+  Button,
+  Card,
+  CardBody,
+  CardHeader
+} from "reactstrap";
 import Select from "react-select";
 import moment from "moment";
 import Datetime from "react-datetime";
@@ -101,76 +112,92 @@ class EducationDetailsComponent extends Component {
       this.props.individualName
     ) ? (
       <div>
-        <Form onSubmit={this.onFormSubmit}>
-          <Select
-            tabSelectsValue={false}
-            value={this.state.level_of_education}
-            onChange={this.handleSelectChange}
-            valueKey="value"
-            labelKey="label"
-            options={EducationLevelVars}
-          />
-          <Input
-            type="text"
-            required
-            placeholder="Name of College"
-            value={this.state.name_of_college}
-            onChange={this.onChange.bind(this, "name_of_college")}
-          />
-          <Row>
-            <Col xs="12">
-              <FormGroup>
-                <Label>Start Date-Time</Label>
-                <Datetime
-                  //disabled={this.props.loading}
-                  value={this.state.start_date}
-                  onChange={time => {
-                    this.setState({
-                      start_date: moment(time)
-                    });
+        <Card>
+          <CardHeader>
+            <strong>Add new Academic Qualification</strong>
+          </CardHeader>
+          <CardBody>
+            <Form onSubmit={this.onFormSubmit}>
+              <Row className="mb-3">
+                <Col>
+                  <Select
+                    placeholder="Choose Education Level"
+                    tabSelectsValue={false}
+                    value={this.state.level_of_education}
+                    onChange={this.handleSelectChange}
+                    valueKey="value"
+                    labelKey="label"
+                    options={EducationLevelVars}
+                  />
+                </Col>
+                <Col>
+                  <Input
+                    type="text"
+                    required
+                    placeholder="Name of Institution"
+                    value={this.state.name_of_college}
+                    onChange={this.onChange.bind(this, "name_of_college")}
+                  />
+                </Col>
+              </Row>
+              <Row>
+                <Col>
+                  <FormGroup>
+                    <Label>Start Date-Time</Label>
+                    <Datetime
+                      //disabled={this.props.loading}
+                      value={this.state.start_date}
+                      onChange={time => {
+                        this.setState({
+                          start_date: moment(time)
+                        });
+                      }}
+                      // utc={true}
+                      disableOnClickOutside={false}
+                    />
+                  </FormGroup>
+                </Col>
+                <Col>
+                  <FormGroup>
+                    <Label>End Date-Time</Label>
+                    <Datetime
+                      //disabled={this.props.loading}
+                      value={this.state.end_date}
+                      onChange={time => {
+                        this.setState({
+                          end_date: moment(time)
+                        });
+                      }}
+                      // utc={true}
+                      disableOnClickOutside={false}
+                    />
+                  </FormGroup>
+                </Col>
+                <Col
+                  style={{
+                    paddingTop: 30
                   }}
-                  // utc={true}
-                  disableOnClickOutside={false}
-                />
-              </FormGroup>
-            </Col>
-          </Row>
-          <Row>
-            <Col xs="12">
-              <FormGroup>
-                <Label>End Date-Time</Label>
-                <Datetime
-                  //disabled={this.props.loading}
-                  value={this.state.end_date}
-                  onChange={time => {
-                    this.setState({
-                      end_date: moment(time)
-                    });
-                  }}
-                  // utc={true}
-                  disableOnClickOutside={false}
-                />
-              </FormGroup>
-            </Col>
-          </Row>
-          <Row>
-            <Label check style={{ marginLeft: "30px", marginBottom: "20px" }}>
-              <Input
-                type="checkbox"
-                checked={this.state.show}
-                onChange={() =>
-                  this.setState({
-                    show: !this.state.show
-                  })
-                }
-              />
-              Show:
-            </Label>
-          </Row>
-          <Button>
-            {this.props.onEducationDetailsSubmit ? "Submit" : "Edit"}
-          </Button>
-        </Form>
+                >
+                  <Label check style={{ marginLeft: "30px" }}>
+                    <Input
+                      type="checkbox"
+                      checked={this.state.show}
+                      onChange={() =>
+                        this.setState({
+                          show: !this.state.show
+                        })
+                      }
+                    />
+                    Show
+                  </Label>
+                </Col>
+              </Row>
+              <Button color="primary">
+                {this.props.onEducationDetailsSubmit ? "Submit" : "Save"}
+              </Button>
+            </Form>
+          </CardBody>
+        </Card>
       </div>
     ) : (
       <Redirect to="/404" />

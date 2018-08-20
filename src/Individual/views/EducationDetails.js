@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Redirect } from "react-router-dom";
 
-import { Card, Button } from "reactstrap";
+import { Card, CardHeader, CardBody, Button, Row, Col } from "reactstrap";
 
 import { isParamsUserSameAsLoggedUser } from "../../Common/utils/Extras";
 import EducationDetailsComponent from "../components/EducationDetailsComponent";
@@ -38,19 +38,32 @@ class EducationDetails extends Component {
   renderEducationDetails() {
     return this.props.educationDetails.length
       ? this.props.educationDetails.map(each => (
-          <Card key={each.educationID} style={{ marginBottom: 20 }}>
-            <p> {each.level_of_education}</p>
-            <p> {each.name_of_college}</p>
-            <p> {each.start_date}</p>
-            <p> {each.end_date}</p>
-            <p> Show in Profile: {each.show ? "True" : "False"}</p>
-            <Button color="primary" onClick={this.onEdit(each)}>
-              Edit
-            </Button>
-            <Button color="primary" onClick={this.onDelete(each)}>
-              Delete
-            </Button>
-          </Card>
+          <Col xs="12" md="4" className="mb-2">
+            <Card key={each.educationID}>
+              <CardHeader>
+                <strong>{each.level_of_education}</strong>
+              </CardHeader>
+              <CardBody>
+                <p>
+                  <strong>{each.name_of_college}</strong>
+                </p>
+                <p>
+                  Attended From: {each.start_date} to : {each.end_date}{" "}
+                </p>
+                <p> Show in Profile: {each.show ? "True" : "False"}</p>
+                <Button
+                  color="primary"
+                  onClick={this.onEdit(each)}
+                  className="mr-3"
+                >
+                  Edit
+                </Button>
+                <Button color="danger" onClick={this.onDelete(each)}>
+                  Delete
+                </Button>
+              </CardBody>
+            </Card>
+          </Col>
         ))
       : null;
   }
@@ -68,7 +81,7 @@ class EducationDetails extends Component {
           username={this.props.username}
           individual_id={this.props.individual_id}
         />
-        {this.renderEducationDetails()}
+        <Row>{this.renderEducationDetails()}</Row>
       </div>
     ) : (
       <Redirect to="/404" />

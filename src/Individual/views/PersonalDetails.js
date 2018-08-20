@@ -201,63 +201,64 @@ class PersonalDetails extends Component {
     return (
       <div className="animated fadeIn">
         <form onSubmit={this.onFormSubmit}>
-          <Card>
-            <CardHeader>
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  justifyContent: "space-between",
-                  alignItems: "center"
-                }}
-              >
-                <strong>Personal Details</strong>
-              </div>
-            </CardHeader>
-            <CardBody>
-              <Row>
-                <Col xs="12" md="6">
-                  <FormGroup>
-                    <Label for="First Name">First Name</Label>
-                    <Input
-                      required
-                      type="text"
-                      value={this.state.first_name}
-                      onChange={this.onChange.bind(this, "first_name")}
-                    />
-                  </FormGroup>
-                </Col>
-                <Col xs="12" md="6">
-                  {" "}
-                  <FormGroup>
-                    <Label for="Last Name">Last Name</Label>
-                    <Input
-                      type="text"
-                      value={this.state.last_name}
-                      onChange={this.onChange.bind(this, "last_name")}
-                    />
-                  </FormGroup>
-                </Col>
-              </Row>
-              <Row>
-                <Col xs="12" md="4">
-                  <FormGroup>
-                    <Label for="Email">Email</Label>
-                    <Input
-                      type="email"
-                      value={this.state.email}
-                      onChange={this.onChange.bind(this, "email")}
-                    />
-                  </FormGroup>
-                  {this.displayEmailValidationInfo()}
-                  <ErrorHandling
-                    error={
-                      this.props.personal_details_error &&
-                      this.props.personal_details_error.email
-                    }
-                  />
-                </Col>
-                {/* <Col xs="12" md="4">
+          <Row>
+            <Col>
+              <Card>
+                <CardHeader>
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "row",
+                      justifyContent: "space-between",
+                      alignItems: "center"
+                    }}
+                  >
+                    <strong>Personal Details</strong>
+                  </div>
+                </CardHeader>
+                <CardBody>
+                  <Row>
+                    <Col>
+                      <FormGroup>
+                        <Label for="First Name">First Name</Label>
+                        <Input
+                          required
+                          type="text"
+                          value={this.state.first_name}
+                          onChange={this.onChange.bind(this, "first_name")}
+                        />
+                      </FormGroup>
+                    </Col>
+                    <Col>
+                      <FormGroup>
+                        <Label for="Last Name">Last Name</Label>
+                        <Input
+                          type="text"
+                          value={this.state.last_name}
+                          onChange={this.onChange.bind(this, "last_name")}
+                        />
+                      </FormGroup>
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col>
+                      <FormGroup>
+                        <Label for="Email">Email</Label>
+                        <Input
+                          type="email"
+                          value={this.state.email}
+                          onChange={this.onChange.bind(this, "email")}
+                        />
+                      </FormGroup>
+                      {this.displayEmailValidationInfo()}
+                      <ErrorHandling
+                        error={
+                          this.props.personal_details_error &&
+                          this.props.personal_details_error.email
+                        }
+                      />
+                    </Col>
+                    {/* <Col xs="12" md="4">
                 <FormGroup>
                   <Label for="Desgination">Designation</Label>
                   <Input
@@ -267,229 +268,235 @@ class PersonalDetails extends Component {
                   />
                 </FormGroup>
               </Col> */}
-                <Col xs="12" md="4">
-                  <FormGroup>
-                    <Label for="Mobile Number">Mobile Number</Label>
-                    <Input
-                      type="text"
-                      value={this.state.phone_number}
-                      onKeyDown={this._handleKeyPress}
-                      onChange={this.onChange.bind(this, "phone_number")}
-                    />
-                  </FormGroup>
-                  {this.displayPhoneValidationInfo()}
-                  <ErrorHandling
-                    error={
-                      this.props.personal_details_error &&
-                      this.props.personal_details_error.aphone_number
-                    }
-                  />
-                </Col>
-                <FormGroup>
-                  <Label for="gender">Gender </Label>
-                  <div>
-                    <input
-                      type="radio"
-                      name="gender"
-                      className="radio"
-                      value="Male"
-                      onChange={this.onChange.bind(this, "gender")}
-                      checked={this.state.gender === "Male"}
-                    />{" "}
-                    Male
-                    <input
-                      type="radio"
-                      className="radio"
-                      name="gender"
-                      value="Female"
-                      onChange={this.onChange.bind(this, "gender")}
-                      checked={this.state.gender === "Female"}
-                    />{" "}
-                    Female
-                    <input
-                      type="radio"
-                      className="radio"
-                      name="gender"
-                      value="Other"
-                      onChange={this.onChange.bind(this, "gender")}
-                      checked={this.state.gender === "Other"}
-                    />{" "}
-                    Other
-                  </div>
-                </FormGroup>
-                <FormGroup>
-                  <Label>Date of Birth</Label>
-                  <Datetime
-                    //disabled={this.props.loading}
-                    value={this.state.date_of_birth}
-                    onChange={time => {
-                      this.setState({
-                        date_of_birth: moment(time)
-                      });
-                    }}
-                    timeFormat={false}
-                    // utc={true}
-                    disableOnClickOutside={false}
-                  />
-                </FormGroup>
-              </Row>
-            </CardBody>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  justifyContent: "space-between",
-                  alignItems: "center"
-                }}
-              >
-                <strong>Address</strong>
-              </div>
-            </CardHeader>
-            <CardBody>
-              <Row>
-                <Col xs="12" md="12">
-                  <Row>
-                    <Col xs="12" md="4">
-                      <Row>
-                        <Col xs="12" md="12">
-                          <FormGroup>
-                            <Label for="Country">Country</Label>
-                            <Select
-                              required={
-                                this.props.requiredParams &&
-                                this.props.requiredParams.country
-                              }
-                              name="Country"
-                              placeholder="Select a Country"
-                              noResultsText="No Data Found"
-                              value={this.state.country}
-                              onChange={this.handleSelectChange.bind(
-                                this,
-                                "country"
-                              )}
-                              options={this.props.countries}
-                              valueKey="id"
-                              labelKey="name"
-                            />
-                          </FormGroup>
-                        </Col>
-                      </Row>
-                      <Row>
-                        <Col xs="12">
-                          <FormGroup>
-                            <Label for="State">State</Label>
-                            <Select
-                              required={
-                                this.props.requiredParams &&
-                                this.props.requiredParams.state
-                              }
-                              name="State"
-                              placeholder="Select a State"
-                              noResultsText="No Data Found"
-                              value={this.state.state}
-                              onChange={this.handleSelectChange.bind(
-                                this,
-                                "state"
-                              )}
-                              options={
-                                this.state.country ? this.props.states : []
-                              }
-                              valueKey="id"
-                              labelKey="name"
-                            />
-                          </FormGroup>
-                        </Col>
-                      </Row>
-                      <Row>
-                        <Col xs="12">
-                          <FormGroup>
-                            <Label for="District">District</Label>
-                            <Select
-                              required={
-                                this.props.requiredParams &&
-                                this.props.requiredParams.district
-                              }
-                              name="District"
-                              placeholder="Select a District"
-                              noResultsText="No Data Found"
-                              value={this.state.district}
-                              onChange={this.handleSelectChange.bind(
-                                this,
-                                "district"
-                              )}
-                              options={
-                                this.state.state ? this.props.districts : []
-                              }
-                              valueKey="id"
-                              labelKey="name"
-                            />
-                          </FormGroup>
-                        </Col>
-                      </Row>
-                      <Row>
-                        <Col xs="12">
-                          <FormGroup>
-                            <Label for="City">City</Label>
-                            <Select
-                              required={
-                                this.props.requiredParams &&
-                                this.props.requiredParams.city
-                              }
-                              name="City"
-                              placeholder="Select a City"
-                              noResultsText="No Data Found"
-                              value={this.state.city}
-                              onChange={this.handleSelectChange.bind(
-                                this,
-                                "city"
-                              )}
-                              options={
-                                this.state.district ? this.props.cities : []
-                              }
-                              valueKey="id"
-                              labelKey="name"
-                            />
-                          </FormGroup>
-                        </Col>
-                      </Row>
-                      <Row>
-                        <Col>
-                          <FormGroup>
-                            <Label for="Area">Area</Label>
-                            <Select
-                              required={
-                                this.props.requiredParams &&
-                                this.props.requiredParams.area
-                              }
-                              name="Area"
-                              placeholder="Select an Area"
-                              noResultsText="No Data Found"
-                              value={this.state.area}
-                              onChange={this.handleSelectChange.bind(
-                                this,
-                                "area"
-                              )}
-                              options={this.state.city ? this.props.areas : []}
-                              valueKey="id"
-                              labelKey="name"
-                            />
-                          </FormGroup>
-                        </Col>
-                      </Row>
+                    <Col>
+                      <FormGroup>
+                        <Label for="Mobile Number">Mobile Number</Label>
+                        <Input
+                          type="text"
+                          value={this.state.phone_number}
+                          onKeyDown={this._handleKeyPress}
+                          onChange={this.onChange.bind(this, "phone_number")}
+                        />
+                      </FormGroup>
+                      {this.displayPhoneValidationInfo()}
+                      <ErrorHandling
+                        error={
+                          this.props.personal_details_error &&
+                          this.props.personal_details_error.aphone_number
+                        }
+                      />
                     </Col>
                   </Row>
-                </Col>
-              </Row>
-            </CardBody>
-          </Card>
-          <Row>
+                  <Row>
+                    <Col>
+                      <FormGroup>
+                        {/* <Label for="gender">Gender </Label> */}
+                        <FormGroup tag="fieldset" inline>
+                          <legend>Gender</legend>
+                          <FormGroup check>
+                            <Label check>
+                              <Input
+                                type="radio"
+                                name="gender"
+                                className="radio mr-2"
+                                value="Male"
+                                onChange={this.onChange.bind(this, "gender")}
+                                checked={this.state.gender === "Male"}
+                              />
+                              Male
+                            </Label>
+                          </FormGroup>
+                          <FormGroup check>
+                            <Label check>
+                              <Input
+                                type="radio"
+                                className="radio mr-2"
+                                name="gender"
+                                value="Female"
+                                onChange={this.onChange.bind(this, "gender")}
+                                checked={this.state.gender === "Female"}
+                              />
+                              Female
+                            </Label>
+                          </FormGroup>
+                          <FormGroup check>
+                            <Label check>
+                              <Input
+                                type="radio"
+                                className="radio"
+                                name="gender"
+                                value="Other"
+                                onChange={this.onChange.bind(this, "gender")}
+                                checked={this.state.gender === "Other"}
+                              />
+                              Other
+                            </Label>
+                          </FormGroup>
+                        </FormGroup>
+                        {/* <div>
+                          <input
+                            type="radio"
+                            name="gender"
+                            className="radio mr-2"
+                            value="Male"
+                            onChange={this.onChange.bind(this, "gender")}
+                            checked={this.state.gender === "Male"}
+                          />
+                          Male
+                          <input
+                            type="radio"
+                            className="radio mr-2"
+                            name="gender"
+                            value="Female"
+                            onChange={this.onChange.bind(this, "gender")}
+                            checked={this.state.gender === "Female"}
+                          />
+                          Female
+                          <input
+                            type="radio"
+                            className="radio"
+                            name="gender"
+                            value="Other"
+                            onChange={this.onChange.bind(this, "gender")}
+                            checked={this.state.gender === "Other"}
+                          />
+                          Other
+                        </div> */}
+                      </FormGroup>
+                    </Col>
+                    <Col>
+                      <FormGroup>
+                        <Label>Date of Birth</Label>
+                        <Datetime
+                          //disabled={this.props.loading}
+                          value={this.state.date_of_birth}
+                          onChange={time => {
+                            this.setState({
+                              date_of_birth: moment(time)
+                            });
+                          }}
+                          timeFormat={false}
+                          // utc={true}
+                          disableOnClickOutside={false}
+                        />
+                      </FormGroup>
+                    </Col>
+                  </Row>
+                </CardBody>
+              </Card>
+            </Col>
+            <Col>
+              <Card>
+                <CardHeader>
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "row",
+                      justifyContent: "space-between",
+                      alignItems: "center"
+                    }}
+                  >
+                    <strong>Address</strong>
+                  </div>
+                </CardHeader>
+                <CardBody>
+                  <FormGroup>
+                    <Label for="Country">Country</Label>
+                    <Select
+                      required={
+                        this.props.requiredParams &&
+                        this.props.requiredParams.country
+                      }
+                      name="Country"
+                      placeholder="Select a Country"
+                      noResultsText="No Data Found"
+                      value={this.state.country}
+                      onChange={this.handleSelectChange.bind(this, "country")}
+                      options={this.props.countries}
+                      valueKey="id"
+                      labelKey="name"
+                    />
+                  </FormGroup>
+
+                  <FormGroup>
+                    <Label for="State">State</Label>
+                    <Select
+                      required={
+                        this.props.requiredParams &&
+                        this.props.requiredParams.state
+                      }
+                      name="State"
+                      placeholder="Select a State"
+                      noResultsText="No Data Found"
+                      value={this.state.state}
+                      onChange={this.handleSelectChange.bind(this, "state")}
+                      options={this.state.country ? this.props.states : []}
+                      valueKey="id"
+                      labelKey="name"
+                    />
+                  </FormGroup>
+
+                  <FormGroup>
+                    <Label for="District">District</Label>
+                    <Select
+                      required={
+                        this.props.requiredParams &&
+                        this.props.requiredParams.district
+                      }
+                      name="District"
+                      placeholder="Select a District"
+                      noResultsText="No Data Found"
+                      value={this.state.district}
+                      onChange={this.handleSelectChange.bind(this, "district")}
+                      options={this.state.state ? this.props.districts : []}
+                      valueKey="id"
+                      labelKey="name"
+                    />
+                  </FormGroup>
+
+                  <FormGroup>
+                    <Label for="City">City</Label>
+                    <Select
+                      required={
+                        this.props.requiredParams &&
+                        this.props.requiredParams.city
+                      }
+                      name="City"
+                      placeholder="Select a City"
+                      noResultsText="No Data Found"
+                      value={this.state.city}
+                      onChange={this.handleSelectChange.bind(this, "city")}
+                      options={this.state.district ? this.props.cities : []}
+                      valueKey="id"
+                      labelKey="name"
+                    />
+                  </FormGroup>
+
+                  <FormGroup>
+                    <Label for="Area">Area</Label>
+                    <Select
+                      required={
+                        this.props.requiredParams &&
+                        this.props.requiredParams.area
+                      }
+                      name="Area"
+                      placeholder="Select an Area"
+                      noResultsText="No Data Found"
+                      value={this.state.area}
+                      onChange={this.handleSelectChange.bind(this, "area")}
+                      options={this.state.city ? this.props.areas : []}
+                      valueKey="id"
+                      labelKey="name"
+                    />
+                  </FormGroup>
+                </CardBody>
+              </Card>
+            </Col>
+          </Row>
+          <Row className="mb-4 mt-4 ml-2">
             <Col xs="12">
-              <Button color="primary" size="lg" style={{ marginRight: 20 }}>
-                SAVE
+              <Button color="primary" size="lg">
+                Save
               </Button>
             </Col>
           </Row>
