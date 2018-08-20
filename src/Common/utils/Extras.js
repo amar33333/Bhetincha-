@@ -1,6 +1,10 @@
 import React, { Component } from "react";
 import { Col, Row, FormText, Alert } from "reactstrap";
 
+// Check if the route's param name is same as redux store name
+export const isParamsUserSameAsLoggedUser = (routesName, storeName) =>
+  routesName === storeName;
+
 // This is for mobile number
 export const validatePhone = phoneNumber => {
   const phoneNumberPattern = /^\(?(9\d{2})\)?[- ]?(\d{3})[- ]?(\d{4})$/;

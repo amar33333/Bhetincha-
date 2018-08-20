@@ -37,10 +37,15 @@ class Home extends Component {
           speed: this.props.coords.speed
         }
       });
+    } else {
+      this.props.onStoreUserGeoLocation({
+        user_geo_coords: null
+      });
     }
   }
 
   render() {
+    console.log("prop: ", this.props);
     return (
       <div className="body-wrapper">
         {!this.props.cookies ? (

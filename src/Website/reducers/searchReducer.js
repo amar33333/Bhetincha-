@@ -54,12 +54,10 @@ export default function(state = INITIAL_STATE, action) {
     case SEARCH_RESULTS_PAGE_FULFILLED:
       const { businessMatch, subCategoryMatch, otherMatch } = action.payload;
       const address = {};
-      console.log("action : ", action.payload);
 
       const temp =
         (!isEmpty(otherMatch) && otherMatch) ||
         (!isEmpty(subCategoryMatch) && subCategoryMatch);
-      console.log("temp :", temp);
 
       if (temp) {
         console.log("enterererrerererrerer");
