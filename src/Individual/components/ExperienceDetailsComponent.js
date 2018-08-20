@@ -215,7 +215,7 @@ class ExperienceDetailsComponent extends Component {
                 </Col>
               </Row>
               <Button color="primary">
-                {this.props.onExperienceDetailsSubmit ? "Submit" : "Edit"}
+                {this.props.onExperienceDetailsSubmit ? "Submit" : "Save"}
               </Button>
             </Form>
           </CardBody>
