@@ -16,7 +16,7 @@ const INITIAL_STATE = {
   improveListingModal: false,
   improveListingData: null,
   problem_types: [],
-  user_geo_coords: null,
+  user_geo_coords: {},
   getDirectionModal: false,
   getDirectionData: null
 };

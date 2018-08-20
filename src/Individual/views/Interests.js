@@ -6,28 +6,44 @@ import { Col, Row, Form, Card, CardBody, CardHeader, Button } from "reactstrap";
 import TagsInput from "react-tagsinput";
 import "react-tagsinput/react-tagsinput.css";
 
-import { onSkillsSubmit } from "../actions";
+import { isParamsUserSameAsLoggedUser } from "../../Common/utils/Extras";
+
+import { onSkillsSubmit, onSkillsList } from "../actions";
 
 class Interests extends Component {
   state = { skills: [] };
 
-  handleTagsChange = skills => this.setState({ skills });
+  componentDidMount() {
+    this.props.onSkillsList({ id: this.props.individual_id });
+  }
 
-  isParamsUserSameAsLoggedUser = () =>
-    this.props.username === this.props.match.params.individualName;
+  componentDidUpdate = prevProps => {
+    if (this.props.skills !== prevProps.skills) {
+      this.setState({ skills: this.props.skills });
+    }
+  };
+
+  handleTagsChange = skills => this.setState({ skills });
 
   onFormSubmit = event => {
     event.preventDefault();
 
-    this.isParamsUserSameAsLoggedUser() &&
+    isParamsUserSameAsLoggedUser(
+      this.props.username,
+      this.props.match.params.individualName
+    ) &&
       this.props.onSkillsSubmit({
-        id: this.props.match.params.individualName,
+        id: this.props.individual_id,
         body: { skills: this.state.skills }
       });
   };
 
   render() {
-    return this.isParamsUserSameAsLoggedUser() ? (
+    console.log(this.props);
+    return isParamsUserSameAsLoggedUser(
+      this.props.username,
+      this.props.match.params.individualName
+    ) ? (
       <div className="animated fadeIn">
         <Row className="hr-centered">
           <Col xs="12" md="6">
@@ -48,7 +64,13 @@ class Interests extends Component {
                       />
                     </Col>
                   </Row>
-                  <Button color="primary"> Submit </Button>
+                  <Button
+                    color="primary"
+                    disabled={this.props.loading || this.props.skillsLoading}
+                  >
+                    {" "}
+                    Submit{" "}
+                  </Button>
                 </Form>
               </CardBody>
             </Card>
@@ -64,16 +86,17 @@ class Interests extends Component {
 const mapStateToProps = ({
   auth: {
     cookies: {
-      user_data: { username }
+      user_data: { username, individual_id }
     }
   },
-  IndividualContainer
+  IndividualContainer: { interests }
 }) => ({
-  ...IndividualContainer,
-  username
+  ...interests,
+  username,
+  individual_id
 });
 
 export default connect(
   mapStateToProps,
-  { onSkillsSubmit }
+  { onSkillsSubmit, onSkillsList }
 )(Interests);

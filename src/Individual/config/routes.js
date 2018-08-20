@@ -13,6 +13,7 @@ import {
   ROUTE_PARAMS_INDIVIDUAL_NAME,
   ROUTE_PARAMS_INDIVIDUAL_ROUTE
 } from "../../config/CONSTANTS";
+import EducationDetailsEdit from "../views/EducationDetailsEdit";
 
 class IndividualRoute extends Component {
   render() {
@@ -30,11 +31,18 @@ class IndividualRoute extends Component {
           name="PersonalDetails"
           component={PersonalDetails}
         />
+
         <Route
           exact
           path={`/:${ROUTE_PARAMS_INDIVIDUAL_NAME}/userdashboard/education-details`}
           name="EducationDetails"
           component={EducationDetails}
+        />
+        <Route
+          exact
+          path={`/:${ROUTE_PARAMS_INDIVIDUAL_NAME}/userdashboard/education-details/:id/edit`}
+          name="EducationDetailsEdit"
+          component={EducationDetailsEdit}
         />
         <Route
           exact
