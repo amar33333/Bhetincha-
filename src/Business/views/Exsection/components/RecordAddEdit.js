@@ -31,41 +31,52 @@ class RecordAddEdit extends Component {
       ...extra,
       documents: [DocumentInput],
       inputValues: [],
-      selectedOption: ""
-      // parentSectionId: null
+      selectedOption: null,
+      parentSectionId: null
     };
     this.renderField = this.renderField.bind(this);
     this.onChange = this.onChange.bind(this);
-    // this.saveClick = this.saveClick.bind(this);
+    this.getFirstChildUid = this.getFirstChildUid.bind(this);
+    this.handleNextSectionClick = this.handleNextSectionClick.bind(this);
+    this.checkTopSectionAlreadyExists = this.checkTopSectionAlreadyExists.bind(
+      this
+    );
+    this.checkSectionIsTop = this.checkSectionIsTop.bind(this);
   }
 
   componentDidUpdate(prevProps, prevState) {
-    //console.log("THIS OLD PROPS", prevProps);
-    console.log("componentDidUpdate", this.props);
-
-    // var parentSaved;
-    // if (this.props.activeSection !== prevProps.activeSection) {
-    //   //console.log("Reached inside iff");
-    //   //parentSaved = prevProps.activeSection;
-    //   this.setState({
-    //     // parentSectionId: parentSaved
-    //     selectedOption: ""
-    //   });
-    //   //   //console.log("Parent Saved", prevProps.activeSection);
-    // }
     if (
       this.props.attributes &&
       prevProps.attributes !== this.props.attributes
     ) {
       let testextra = this.getAttributesToState(this.props.attributes);
-      //console.log("prevProps consoling", prevProps);
-      //console.log("prevState consoling", prevState);
       this.setState({
         ...testextra,
         documents: [DocumentInput],
         inputValues: []
       });
     }
+  }
+
+  //check if top section has a initial entry for a particular business
+
+  checkSectionIsTop() {
+    console.log("breached", this.props);
+    if (Object.keys(this.props.parentSectionBiz).length === 0) {
+      return true;
+    }
+  }
+  checkTopSectionAlreadyExists() {
+    if (Object.keys(this.props.parentSectionBiz).length !== 0) {
+      return false;
+    } else if (
+      Object.keys(this.props.parentSectionBiz).length === 0 &&
+      this.props.selectedSectionDetailBiz
+        ? this.props.selectedSectionDetailBiz.sections.length === 0
+        : ""
+    ) {
+      return false;
+    } else return true;
   }
 
   // prepopulate states
@@ -91,18 +102,20 @@ class RecordAddEdit extends Component {
   }
 
   handleChange = selectedOption => {
+    // console.log("Handle change", selectedOption);
     this.setState({ selectedOption });
   };
 
   onChange = (key, value, mykey) => {
-    let inputValues = [...this.state.inputValues];
-    inputValues[mykey] = value;
-    this.setState({ inputValues });
-    //console.log("FROM ONCHANGE", this.state);
+    const newArray = Array.from(this.state.inputValues);
+    newArray[mykey] = { ...newArray[mykey], ...{ [key]: value } };
+
+    this.setState({ inputValues: newArray, [key]: value });
+
+    //console.log("state", this.state);
   };
 
   addClick() {
-    //console.log("Document Input", DocumentInput);
     const documents = this.state.documents.concat(DocumentInput);
     this.setState({ documents });
   }
@@ -110,17 +123,106 @@ class RecordAddEdit extends Component {
   saveClick(event) {
     event.preventDefault();
 
-    const { inputValues, parentSectionId } = this.state;
+    console.log("this.props", this.props);
+    const { inputValues } = this.state;
 
-    inputValues.forEach(value => {
-      //console.log("forEach:", value);
-      const body = {
-        asid: this.props.activeSection,
-        parentsectionId: parentSectionId,
-        name: value
-      };
-      this.props.onSubmit({ body });
-    });
+    const parentSectionId = this.state.selectedOption
+      ? this.state.selectedOption.value
+      : null || this.props.parentSectionBiz.sections
+        ? this.props.parentSectionBiz.sections[0].id
+        : null || 0;
+    this.setState({ parentsectionId: parentSectionId });
+
+    if (parentSectionId !== 0) {
+      console.log("inputValues", inputValues);
+      inputValues.forEach(value => {
+        const obj = value;
+        console.log("obj", obj);
+
+        const body = {
+          asid: this.props.activeSectionAdminId,
+          parentsectionId: parentSectionId
+        };
+        console.log("this.props.attributes", this.props.attributes);
+        //{start here}
+        this.props.attributes.forEach(({ name, fieldType: attributeType }) => {
+          for (var property in obj) {
+            if (obj.hasOwnProperty(property)) {
+              const upperCaseProperty = property;
+              property = property.charAt(0).toLowerCase() + property.slice(1);
+              let value = obj[upperCaseProperty];
+              //let propV = property;
+              if (property === "name") {
+                body[property] = obj[upperCaseProperty];
+              } else if (
+                attributeType === "DateTime" &&
+                name === upperCaseProperty
+              ) {
+                value = value.toISOString();
+                body[upperCaseProperty] = {
+                  attributeType,
+                  value
+                };
+              } else if (name === upperCaseProperty) {
+                console.log("loggin value", value);
+                body[upperCaseProperty] = {
+                  attributeType,
+                  value
+                };
+              }
+            }
+          }
+        });
+        //{end here}
+        this.props.onSubmit({ body });
+      });
+    } else {
+      inputValues.forEach(value => {
+        const obj = value;
+        console.log("forEach:", value);
+        const body = {
+          asid: this.props.activeSectionAdminId
+        };
+        for (let property in obj) {
+          if (obj.hasOwnProperty(property)) {
+            body.name = obj[property];
+          }
+        }
+
+        this.props.onSubmit({ body });
+      });
+    }
+  }
+
+  getFirstChildUid() {
+    return this.props.activeChildrenAdmin.uid;
+  }
+
+  handleNextSectionClick() {
+    const uid = this.getFirstChildUid();
+
+    var children;
+    if (this.props.activeChildrenAdmin.children) {
+      children = this.props.activeChildrenAdmin.children[0];
+    } else children = {};
+
+    if (uid) {
+      this.props.onChangeActiveSectionByButton(
+        uid,
+        this.props.activeSectionAdminId,
+        false,
+        children
+      );
+    } else {
+      console.log("Went here second");
+
+      this.props.onChangeActiveSectionByButton(
+        uid,
+        this.props.activeSectionAdminId,
+        false,
+        {}
+      );
+    }
   }
 
   renderField(attribute, mykey) {
@@ -136,8 +238,8 @@ class RecordAddEdit extends Component {
             <Col sm={9}>
               <DateTime
                 inputProps={{ required: attribute.required }}
-                value={this.state[attribute.name]}
-                onChange={value => this.onChange(attribute.name, value)}
+                //value={this.state[attribute.name]}
+                onChange={value => this.onChange(attribute.name, value, mykey)}
               />
             </Col>
           </FormGroup>
@@ -155,9 +257,9 @@ class RecordAddEdit extends Component {
                 type="number"
                 step="0.01"
                 placeholder={attribute.name}
-                value={this.state[attribute.name]}
+                // value={this.state[attribute.name]}
                 onChange={event =>
-                  this.onChange(attribute.name, event.target.value)
+                  this.onChange(attribute.name, event.target.value, mykey)
                 }
               />
             </Col>
@@ -175,9 +277,9 @@ class RecordAddEdit extends Component {
                 required={attribute.required}
                 type="number"
                 placeholder={attribute.name}
-                value={this.state[attribute.name]}
+                // value={this.state[attribute.name]}
                 onChange={event =>
-                  this.onChange(attribute.name, event.target.value)
+                  this.onChange(attribute.name, event.target.value, mykey)
                 }
               />
             </Col>
@@ -215,7 +317,7 @@ class RecordAddEdit extends Component {
                 options={attribute.options.map(x => ({ value: x, label: x }))}
                 required={attribute.required}
                 onChange={value =>
-                  this.onChange(attribute.name, value ? value.value : "")
+                  this.onChange(attribute.name, value ? value.value : "", mykey)
                 }
                 value={this.state[attribute.name]}
               />
@@ -248,11 +350,8 @@ class RecordAddEdit extends Component {
   }
 
   render() {
-    //console.log("Rendering TEST");
-
     const { selectedOption } = this.state;
     const documents = this.state.documents.map((Element, index) => {
-      //console.log("testing index", index);
       return (
         <Element
           key={index}
@@ -265,23 +364,31 @@ class RecordAddEdit extends Component {
     return (
       <Card>
         <CardHeader>
-          <strong>{"Add New"}</strong>
+          <strong>
+            Add New &nbsp;
+            {this.props.selectedSectionDetailAdmin.name
+              ? this.props.selectedSectionDetailAdmin.name
+              : ""}
+          </strong>
         </CardHeader>
         <CardBody>
           <Form onSubmit={this.onFormSubmit}>
             {/* {this.createUI()} */}
+            {/* {console.log("consoling this.state", this.state)} */}
             <FormGroup row>
-              <Label sm={3}>Select</Label>
+              {Object.keys(this.props.parentSectionBiz).length !== 0 && (
+                <Label sm={3}>Select</Label>
+              )}
 
               <Col sm={9}>
-                {this.props.parentSection.sections && (
+                {this.props.parentSectionBiz.sections && (
                   <Select
                     value={
-                      selectedOption === ""
-                        ? this.props.parentSection.sections[0].id
+                      selectedOption === null
+                        ? this.props.parentSectionBiz.sections[0].id
                         : selectedOption
                     }
-                    options={this.props.parentSection.sections.map(x => ({
+                    options={this.props.parentSectionBiz.sections.map(x => ({
                       value: x.id,
                       label: x.name
                     }))}
@@ -294,12 +401,51 @@ class RecordAddEdit extends Component {
             {documents}
 
             <FormGroup>
+              {/* {console.log("Proppping", this.props)} */}
+              {/* {!this.checkSectionIsTop() && (
+                <Button sm={2} onClick={this.addClick.bind(this)}>
+                  + &nbsp;
+                  {this.props.selectedSectionDetailAdmin.name
+                    ? this.props.selectedSectionDetailAdmin.name
+                    : ""}
+                </Button>
+              )}&nbsp; */}
               <Button sm={2} onClick={this.addClick.bind(this)}>
-                +
+                + &nbsp;
+                {this.props.selectedSectionDetailAdmin.name
+                  ? this.props.selectedSectionDetailAdmin.name
+                  : ""}
               </Button>
+              {/* {this.props.activeChildrenAdmin &&
+                Object.keys(this.props.activeChildrenAdmin).length !== 0 && (
+                  <Button
+                    sm={2}
+                    onClick={this.handleNextSectionClick}
+                    disabled={
+                      this.props.selectedSectionDetailBiz &&
+                      this.props.selectedSectionDetailBiz.sections.length === 0
+                    }
+                    title={
+                      this.props.selectedSectionDetailBiz &&
+                      this.props.selectedSectionDetailBiz.sections.length === 0
+                        ? "First add " +
+                          this.props.selectedSectionDetailAdmin.name
+                        : ""
+                    }
+                  >
+                    {this.props.activeChildrenAdmin.name}&nbsp;>>
+                  </Button>
+                )} */}
             </FormGroup>
             <FormGroup>
-              <Button onClick={this.saveClick.bind(this)}>Save</Button>&nbsp;
+              <Button
+                sm={2}
+                //color="primary"
+                onClick={this.saveClick.bind(this)}
+                disabled={this.checkTopSectionAlreadyExists()}
+              >
+                <span className="fa fa-check" /> Save
+              </Button>&nbsp;
             </FormGroup>
           </Form>
         </CardBody>

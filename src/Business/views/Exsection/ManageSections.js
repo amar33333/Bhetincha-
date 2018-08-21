@@ -1,58 +1,88 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Container, Row, Col } from "reactstrap";
-
 import { SideTreeView } from "./components";
-
 import { RecordAddNew } from "./components";
+
+import { SectionEntityList } from "./components";
+import { SectionListAdmin } from "./components";
 
 import {
   onSectionsListExsection,
   onChangeActiveSectionBusiness,
-  addSectionChild,
-  onChangeActiveSectionByButton,
-  onCreateSectionBusiness
+  onChangeActiveSectionBusinessByClick,
+  onCreateSectionBusiness,
+  resetState,
+  onSectionUpdateBusinessExsection
 } from "../../actions";
 
 class ManageSections extends Component {
   componentDidMount() {
-    //console.log("check Did Mount", this.props);
-
+    //this.props.resetState();
     this.props.onSectionsListExsection();
   }
 
-  componentDidUpdate() {
-    //console.log("Com Did Upd", this.props);
-    //console.log("check Did Update", this.props);
-  }
   render() {
-    //console.log("check Did Render");
-    //console.log("INITIAL RENDER", this.props);
     return (
       <div className="animated fadeIn">
         <Container fluid>
           <Row>
             <Col xs="12" md="3">
               <SideTreeView
-                sections={this.props.sections}
-                activeSection={this.props.activeSection}
+                sectionsAdmin={this.props.sectionsAdmin}
+                activeSectionAdminId={this.props.activeSectionAdminId}
                 onChangeActiveSection={this.props.onChangeActiveSectionBusiness}
                 isOpen={this.props.isOpenSections}
+                resetState={this.props.resetState}
               />
+              <br />
+              <br />
+              {this.props.activeChildrenAdmin !== null && (
+                <SectionListAdmin
+                  rootSectionAdmin={this.props.rootSectionAdmin}
+                  activeChildrenAdmin={this.props.activeChildrenAdmin}
+                  onChangeActiveSectionByClick={
+                    this.props.onChangeActiveSectionBusinessByClick
+                  }
+                />
+              )}
             </Col>
             <Col xs="12" md="9">
+              {/* {console.log("Proppppp", this.props)} */}
+              {/* //Object.keys(this.props.activeChildrenAdmin).length !== 0 */}
+
+              {this.props.selectedSectionDetailBiz &&
+                this.props.selectedSectionDetailBiz.sections && (
+                  <SectionEntityList
+                    sections={this.props.selectedSectionDetailBiz.sections}
+                    selectedSectionDetailAdmin={
+                      this.props.selectedSectionDetailAdmin
+                    }
+                    URL={`/${
+                      this.props.match.params.businessName
+                    }/dashboard/exsection/manage-sections`}
+                  />
+                )}
               {this.props.attributes &&
                 this.props.attributes.attributes &&
                 this.props.attributes.attributes.length !== 0 && (
                   <RecordAddNew
-                    activeSection={this.props.activeSection}
+                    activeSectionAdminId={this.props.activeSectionAdminId}
+                    activeChildrenAdmin={this.props.activeChildrenAdmin}
+                    // activeParentAdminId={this.props.activeParentAdminId}
+                    selectedSectionDetailAdmin={
+                      this.props.selectedSectionDetailAdmin
+                    }
+                    selectedSectionDetailBiz={
+                      this.props.selectedSectionDetailBiz
+                    }
+                    sectionsAdmin={this.props.sectionsAdmin}
                     onChangeActiveSectionByButton={
-                      this.props.onChangeActiveSectionByButton
+                      this.props.onChangeActiveSectionBusiness
                     }
                     attributes={this.props.attributes.attributes}
-                    addSectionChild={this.props.addSectionChild}
                     onSubmit={this.props.onCreateSectionBusiness}
-                    parentSection={this.props.parentSection}
+                    parentSectionBiz={this.props.parentSectionBiz}
                   />
                 )}
             </Col>
@@ -67,27 +97,36 @@ export default connect(
   ({
     BusinessContainer: {
       exsection: {
-        sections,
-        activeSection,
+        sectionsAdmin,
+        activeSectionAdminId,
+        activeChildrenAdmin,
+        activeParentAdminId,
         isOpenSections,
-        selectedSectionDetail,
+        selectedSectionDetailAdmin,
+        selectedSectionDetailBiz,
         attributes,
-        parentSection
+        parentSectionBiz,
+        rootSectionAdmin
       }
     }
   }) => ({
-    sections,
-    activeSection,
+    sectionsAdmin,
+    activeSectionAdminId,
+    activeChildrenAdmin,
+    activeParentAdminId,
     isOpenSections,
-    selectedSectionDetail,
+    selectedSectionDetailAdmin,
+    selectedSectionDetailBiz,
     attributes,
-    parentSection
+    parentSectionBiz,
+    rootSectionAdmin
   }),
   {
     onSectionsListExsection,
     onChangeActiveSectionBusiness,
-    addSectionChild,
-    onChangeActiveSectionByButton,
-    onCreateSectionBusiness
+    onCreateSectionBusiness,
+    resetState,
+    onSectionUpdateBusinessExsection,
+    onChangeActiveSectionBusinessByClick
   }
 )(ManageSections);

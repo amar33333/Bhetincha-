@@ -2,22 +2,23 @@ import React, { Component } from "react";
 import RecordAddEdit from "./RecordAddEdit";
 
 class RecordAddNew extends Component {
-  componentDidMount() {
-    // console.log("record add new lifecycle");
-    //console.log(this.props);
-  }
   render() {
     return (
       <div>
         <RecordAddEdit
-          activeSection={this.props.activeSection}
+          activeSectionAdminId={this.props.activeSectionAdminId}
+          activeChildrenAdmin={this.props.activeChildrenAdmin}
+          //activeParentAdminId={this.props.activeParentAdminId}
+          selectedSectionDetailAdmin={this.props.selectedSectionDetailAdmin}
+          selectedSectionDetailBiz={this.props.selectedSectionDetailBiz}
           onChangeActiveSectionByButton={
             this.props.onChangeActiveSectionByButton
           }
+          sectionsAdmin={this.props.sectionsAdmin}
           attributes={this.props.attributes}
           onAddChild={this.props.addSectionChild}
           onSubmit={this.props.onSubmit}
-          parentSection={this.props.parentSection}
+          parentSectionBiz={this.props.parentSectionBiz}
         />
       </div>
     );

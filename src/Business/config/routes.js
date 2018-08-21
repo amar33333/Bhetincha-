@@ -17,7 +17,8 @@ import {
   Gallery,
   SocialLinks,
   ManageSections,
-  ManageCoreMember
+  ManageCoreMember,
+  SectionEntityView
 } from "../views";
 
 import {
@@ -132,6 +133,11 @@ class BusinessRoute extends Component {
           name="core-member"
           component={ManageCoreMember}
         />{" "}
+        <Route
+          path={`/:${ROUTE_PARAMS_BUSINESS_NAME}/dashboard/exsection/manage-sections/:sectionEntityId`}
+          name="view-exsection-entity"
+          component={SectionEntityView}
+        />
         <Route
           path={`/:${ROUTE_PARAMS_BUSINESS_NAME}/dashboard`}
           render={props => {

@@ -24,7 +24,9 @@ import {
   CORE_MEMBER_RUD_URL,
   CREATE_MEMBERS_URL,
   MEMBERS_RUD_URL,
-  Social_LINK_URL
+  Social_LINK_URL,
+  //for implementing update
+  EXSECTION_SECTION_ENTITY_URL
 } from "./BUSINESS_API";
 import axios from "axios";
 import { ajax } from "rxjs/observable/dom/ajax";
@@ -685,6 +687,40 @@ export const onParentSectionBusinessGet = ({ body }) =>
     url: `${EXSECTION_SECTION_BUSINESS_LIST_URL}/?businessIdd=${
       body.businessIdd
     }&admin_sectionId=${body.asid}`,
+    headers: {
+      "Content-Type": "application/json"
+    }
+  });
+
+//onSectionsListExsectionBusinessData
+
+export const onSectionsListExsectionBusinessData = ({ body, businessIdd }) =>
+  ajax({
+    method: "GET",
+    url: `${EXSECTION_SECTION_BUSINESS_URL}?businessIdd=${businessIdd}&admin_sectionId=${
+      body.sectionId
+    }`,
+    headers: {
+      "Content-Type": "application/json"
+    }
+  });
+
+// calls for implementing updating Section Entity for bhetincha
+
+//onExsectionEntityEachGet
+//EXSECTION_SECTION_ENTITY_URL/uid
+//sample output
+//{
+//   "properties": {
+//     "price": 55,
+//     "name": "Wicked wings",
+//     "uid": "54dc195fdf4c40f7afff3e67e9899c16"
+// }
+// }
+export const onExsectionEntityEachGet = ({ uid }) =>
+  ajax({
+    method: "GET",
+    url: `${EXSECTION_SECTION_ENTITY_URL}${uid}/`,
     headers: {
       "Content-Type": "application/json"
     }

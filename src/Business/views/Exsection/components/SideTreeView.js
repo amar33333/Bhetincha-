@@ -17,51 +17,43 @@ class SideTreeView extends Component {
         this.updateSections(subSection)
       );
     }
+
     return {
       ...rest,
       toggled: this.props.isOpen.includes(section.uid),
-      active: this.props.activeSection === section.uid,
+      active: this.props.activeSectionAdminId === section.uid,
       ...extra
     };
   };
 
-  componentDidMount() {
-    //console.log("FROM SIDE TREE componentDidMount");
-    //console.log(this.state.sections); //ok
-  }
-
   componentDidUpdate(prevProps) {
     if (
-      prevProps.sections !== this.props.sections ||
-      (!prevProps.activeSection && this.props.activeSection) ||
+      prevProps.sectionsAdmin !== this.props.sectionsAdmin ||
+      (!prevProps.activeSectionAdminId && this.props.activeSectionAdminId) ||
       prevProps.isOpen !== this.props.isOpen
     ) {
       this.setState({
-        sections: this.updateSections(this.props.sections)
+        sections: this.updateSections(this.props.sectionsAdmin)
       });
     }
-    //console.log("FROM SIDE TREE componentDidUpdate");
-    //console.log(this.state.sections); //ok
   }
 
-  onToggle = ({ uid, children }) => {
-    console.log("toggle clicked"); //ok
-    console.log(uid); //ok
-    console.log(this.props.activeSection);
-    //console.log(children); //ok
-    //console.log(this.state.sections);
-
-    //console.log(this.props.activeSection); //ok
+  onToggle = ({ uid, name, children }) => {
+    const rootSectionAdmin = {};
+    rootSectionAdmin.name = name;
+    rootSectionAdmin.uid = uid;
+    //console.log("onToggle rootLevelData", rootSectionDataAdmin);
+    this.props.resetState();
     this.props.onChangeActiveSection(
       uid,
-      this.props.activeSection,
-      this.props.leafDetect ? !(children && children.length) : false
+      this.props.activeSectionAdminId,
+      this.props.leafDetect ? !(children && children.length) : false,
+      children ? children[0] : null,
+      rootSectionAdmin
     );
   };
 
   render() {
-    //console.log("Sections render");
-    //console.log(this.state.sections);
     return (
       <div>
         <Treebeard data={this.state.sections} onToggle={this.onToggle} />

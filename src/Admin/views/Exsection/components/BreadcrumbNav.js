@@ -5,7 +5,6 @@ class BreadcrumbNav extends Component {
   constructor(props) {
     super(props);
     this.state = { items: [] };
-    // this.breadCrumbs = [{ name: "testtube", uid: "001" }];
   }
 
   render() {
@@ -28,7 +27,6 @@ class BreadcrumbNav extends Component {
           })}
       </Breadcrumb>
     );
-    // return "hello from breadcrumb";
   }
 }
 

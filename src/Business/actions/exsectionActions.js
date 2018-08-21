@@ -14,17 +14,32 @@ import {
   FETCH_EXSECTION_SECTION_ATTRIBUTES_REJECTED,
   FETCH_PARENT_SECTION_LIST_BUSINESS_PENDING,
   FETCH_PARENT_SECTION_LIST_BUSINESS_FULFILLED,
-  FETCH_PARENT_SECTION_LIST_BUSINESS_REJECTED
+  FETCH_PARENT_SECTION_LIST_BUSINESS_REJECTED,
+  CHANGE_ACTIVE_CHILD_EXSECTION,
+  CHANGE_SELETED_SECTION_DETAILS_BUSINESS,
+  RESET_SECTION_STATE,
+  CHANGE_SELETED_SECTION_DETAILS_BUSINESS_DATA_PENDING,
+  CHANGE_SELETED_SECTION_DETAILS_BUSINESS_DATA_FULFILLED,
+  CHANGE_SELETED_SECTION_DETAILS_BUSINESS_DATA_REJECTED,
+  //entity update
+  FETCH_EXSECTION_SECTION_ENTITY_EACH_PENDING,
+  FETCH_EXSECTION_SECTION_ENTITY_EACH_FULFILLED,
+  FETCH_EXSECTION_SECTION_ENTITY_EACH_REJECTED,
+  CHANGE_ACTIVE_PARENT_ADMIN_EXSECTION,
+  CHANGE_ROOT_SECTION_ADMIN
 } from "./types";
 
 import {
   onExsectionSectionsGet,
-  onExsectionSectionAttributesGet
+  onExsectionSectionAttributesGet,
+  onExsectionSectionDetailGetAdmin
 } from "../../Admin/config/adminServerCall";
 
 import {
   onSectionBusinessPost,
-  onParentSectionBusinessGet
+  onParentSectionBusinessGet,
+  onSectionsListExsectionBusinessData,
+  onExsectionEntityEachGet
 } from "../config/businessServerCall";
 
 const epics = [];
@@ -45,13 +60,13 @@ epics.push((action$, { getState }) =>
           extra.push({
             type: CHANGE_ACTIVE_EXSECTION_SECTION,
             payload: response.uid,
-            first: first
+            first: first,
+            activeChildrenAdmin: null,
+            // oldSection: "9b4623c4d6c24531a8f64e9673397cf1"
+            oldSectionAdminId: response.uid
           });
         }
-        //use the below code to hide the treebeard child
-        // response.children.map(child => {
-        //   child.children = [];
-        // });
+
         return [
           {
             type: FETCH_EXSECTION_SECTIONS_FULFILLED,
@@ -67,106 +82,118 @@ epics.push((action$, { getState }) =>
   })
 );
 
-export const addSectionChild = payload => {
+//onChangeActiveSectionBusiness
+export const onChangeActiveSectionBusiness = (
+  newSectionAdminId,
+  oldSectionAdminId,
+  leafDetected = false,
+  activeChildrenAdmin = null,
+  rootSectionAdmin = null
+) => {
   return {
-    type: "ADD_SECTION_CHILD",
-    payload
+    type: CHANGE_ACTIVE_EXSECTION_SECTION,
+    payload: newSectionAdminId,
+    oldSectionAdminId,
+    leafDetected,
+    activeChildrenAdmin,
+    rootSectionAdmin
   };
 };
 
 epics.push((action$, { getState }) =>
-  action$.ofType("CHANGE_ACTIVE_EXSECTION_SECTION_TWO").concatMap(action => {
-    const { payload: childId, oldSection, leafDetected } = action;
+  action$.ofType(CHANGE_ACTIVE_EXSECTION_SECTION).mergeMap(action => {
+    // console.log("action", action);
+    const {
+      payload: newSectionAdminId,
+      oldSectionAdminId,
+      leafDetected,
+      activeChildrenAdmin,
+      rootSectionAdmin
+    } = action;
+    // console.log("activeChildrenAdmin", activeChildrenAdmin);
     const businessId = getState().auth.cookies.user_data.business_id;
-    const stuffs = [];
 
-    stuffs.push({
-      type: "FETCH_EXSECTION_SECTION_ATTRIBUTES_PENDING_TEST_TWO",
-      payload: {
-        body: { sectionId: childId }
+    return onExsectionSectionDetailGetAdmin({
+      uid: newSectionAdminId
+    }).concatMap(({ response }) => {
+      const stuffs = [];
+      stuffs.push({
+        type: CHANGE_SELETED_SECTION_DETAILS_BUSINESS,
+        payload: response
+      });
+
+      stuffs.push({
+        type: CHANGE_ACTIVE_CHILD_EXSECTION,
+        payload: activeChildrenAdmin
+      });
+
+      stuffs.push({
+        type: CHANGE_ROOT_SECTION_ADMIN,
+        payload: rootSectionAdmin
+      });
+
+      stuffs.push({
+        type: CHANGE_ACTIVE_PARENT_ADMIN_EXSECTION,
+        payload: oldSectionAdminId
+      });
+
+      stuffs.push({
+        type: FETCH_EXSECTION_SECTION_ATTRIBUTES_PENDING,
+        payload: {
+          body: { sectionId: newSectionAdminId }
+        }
+      });
+
+      if (!action.first) {
+        stuffs.push({
+          type: CHANGE_SELETED_SECTION_DETAILS_BUSINESS_DATA_PENDING,
+          payload: {
+            body: { sectionId: newSectionAdminId }
+          }
+        });
       }
-    });
 
-    return stuffs;
+      if (!action.first) {
+        if (action.oldSectionAdminId !== "9b4623c4d6c24531a8f64e9673397cf1") {
+          stuffs.push({
+            type: FETCH_PARENT_SECTION_LIST_BUSINESS_PENDING,
+            payload: {
+              body: {
+                businessIdd: businessId,
+                asid: oldSectionAdminId
+              }
+            }
+          });
+        }
+      }
+
+      return stuffs;
+    });
   })
 );
 
-epics.push(action$ =>
+epics.push((action$, { getState }) =>
   action$
-    .ofType("FETCH_EXSECTION_SECTION_ATTRIBUTES_PENDING_TEST_TWO")
+    .ofType(CHANGE_SELETED_SECTION_DETAILS_BUSINESS_DATA_PENDING)
     .mergeMap(({ payload: { body } }) => {
-      return onExsectionSectionAttributesGet({ body })
-        .map(({ response }) => {
-          if (response.msg === "success") {
+      const globalState = getState();
+      const businessIdd = globalState.auth.cookies.user_data.business_id;
+      return onSectionsListExsectionBusinessData({ body, businessIdd })
+        .map(data => {
+          if (data.status === 200) {
             return {
-              type: "FETCH_EXSECTION_SECTION_ATTRIBUTES_FULFILLED_TEST_TWO",
-              payload: response
+              type: CHANGE_SELETED_SECTION_DETAILS_BUSINESS_DATA_FULFILLED,
+              payload: data.response
             };
-          } else {
-            throw new Error(response.msg);
           }
         })
         .catch(ajaxError => {
           toast.error(ajaxError.toString());
           return Observable.of({
-            type: "FETCH_EXSECTION_SECTION_ATTRIBUTES_REJECTED_TEST"
+            type: CHANGE_SELETED_SECTION_DETAILS_BUSINESS_DATA_REJECTED
           });
         });
     })
-);
-
-export const onChangeActiveSectionByButton = newSection => ({
-  type: "CHANGE_ACTIVE_SECTION_BY_BUTTON",
-  payload: newSection
-});
-
-//onChangeActiveSectionBusiness
-export const onChangeActiveSectionBusiness = (
-  newSection,
-  oldSection,
-  leafDetected = false
-) => ({
-  type: CHANGE_ACTIVE_EXSECTION_SECTION,
-  payload: newSection,
-  oldSection,
-  leafDetected
-});
-
-epics.push((action$, { getState }) =>
-  action$.ofType(CHANGE_ACTIVE_EXSECTION_SECTION).concatMap(action => {
-    console.log("consoling action", action);
-    const { payload: newSection, oldSection, leafDetected } = action;
-    const businessId = getState().auth.cookies.user_data.business_id;
-    const stuffs = [];
-
-    stuffs.push({
-      type: FETCH_EXSECTION_SECTION_ATTRIBUTES_PENDING,
-      payload: {
-        body: { sectionId: newSection }
-      }
-    });
-
-    if (!action.first) {
-      if (action.oldSection !== "9b4623c4d6c24531a8f64e9673397cf1") {
-        stuffs.push({
-          type: FETCH_PARENT_SECTION_LIST_BUSINESS_PENDING,
-          payload: {
-            body: {
-              businessIdd: businessId,
-              asid: oldSection
-            }
-          }
-        });
-      }
-    }
-
-    //console.log("consoling payload", action);
-    // if (body.asid === "9b4623c4d6c24531a8f64e9673397cf1") {
-    //   return;
-    // }
-
-    return stuffs;
-  })
 );
 
 epics.push(action$ =>
@@ -176,7 +203,6 @@ epics.push(action$ =>
       return onExsectionSectionAttributesGet({ body })
         .map(({ response }) => {
           if (response.msg === "success") {
-            //console.log("On active change", response);
             return {
               type: FETCH_EXSECTION_SECTION_ATTRIBUTES_FULFILLED,
               payload: response
@@ -194,22 +220,43 @@ epics.push(action$ =>
     })
 );
 
-epics.push(action$ =>
+epics.push((action$, { getState }) =>
   action$
     .ofType(FETCH_PARENT_SECTION_LIST_BUSINESS_PENDING)
     .mergeMap(({ payload: { body } }) => {
-      console.log("CXonsong body", body);
-
+      const globalState = getState();
+      let rootSectionAdminIdd;
+      let activeSectionAdminIdd;
+      if (
+        globalState.BusinessContainer.exsection.rootSectionAdmin !== null &&
+        globalState.BusinessContainer.exsection.rootSectionAdmin !== undefined
+      ) {
+        rootSectionAdminIdd =
+          globalState.BusinessContainer.exsection.rootSectionAdmin.uid;
+        activeSectionAdminIdd =
+          globalState.BusinessContainer.exsection.activeSectionAdminId;
+      }
       return onParentSectionBusinessGet({ body })
         .map(({ response }) => {
           if (response.msg === "success") {
-            console.log("On active change", response);
+            if (
+              rootSectionAdminIdd &&
+              activeSectionAdminIdd &&
+              rootSectionAdminIdd === activeSectionAdminIdd
+            ) {
+              console.log("breached please", rootSectionAdminIdd);
+              console.log("breached please", activeSectionAdminIdd);
+              return {
+                type: FETCH_PARENT_SECTION_LIST_BUSINESS_FULFILLED,
+                payload: {}
+              };
+            }
+            // console.log("breached please");
             return {
               type: FETCH_PARENT_SECTION_LIST_BUSINESS_FULFILLED,
               payload: response
             };
           } else {
-            //console.log("ERROR logged");
             throw new Error(response.msg);
           }
         })
@@ -221,9 +268,9 @@ epics.push(action$ =>
         });
     })
 );
+
 //onCreateSectionBusiness as an Exsection Action
 //onSectionBusinessPost as a serverCall
-
 export const onCreateSectionBusiness = payload => ({
   type: CREATE_EXSECTION_BUSINESS_SECTION_PENDING,
   payload
@@ -234,18 +281,32 @@ epics.push((action$, { getState }) =>
     .ofType(CREATE_EXSECTION_BUSINESS_SECTION_PENDING)
     .mergeMap(({ payload }) => {
       const globalState = getState();
-      // const {
-      //   activeCategory: sectionId
-      // } = globalState.BusinessContainer.exsection;
+      // console.log("log global state", globalState);
+      const { activeSectionAdminId } = globalState.BusinessContainer.exsection;
+      const newSectionAdminId = activeSectionAdminId;
+      const { activeParentAdminId } = globalState.BusinessContainer.exsection;
+      const oldSectionAdminId = activeParentAdminId;
+      const { activeChildrenAdmin } = globalState.BusinessContainer.exsection;
       const businessIdd = globalState.auth.cookies.user_data.business_id;
-
+      const leafDetected = false;
       return onSectionBusinessPost({
         body: { ...payload.body, businessIdd }
       })
         .concatMap(({ response }) => {
           if (response.msg === "success") {
             toast.success("added successfully!");
-            return [{ type: CREATE_EXSECTION_BUSINESS_SECTION_FULFILLED }];
+
+            return [
+              { type: CREATE_EXSECTION_BUSINESS_SECTION_FULFILLED },
+              { type: FETCH_EXSECTION_SECTIONS_PENDING },
+              {
+                type: CHANGE_ACTIVE_EXSECTION_SECTION,
+                payload: newSectionAdminId,
+                oldSectionAdminId,
+                leafDetected,
+                activeChildrenAdmin
+              }
+            ];
           } else {
             throw new Error("Error Creating section");
           }
@@ -256,6 +317,102 @@ epics.push((action$, { getState }) =>
             type: CREATE_EXSECTION_BUSINESS_SECTION_REJECTED
           });
         });
+    })
+);
+
+//resetState
+export const resetState = () => ({
+  type: RESET_SECTION_STATE
+});
+
+export const onSectionUpdateBusinessExsection = () => {
+  return "hello";
+};
+
+///////Actions for implementing Section Entity Update in Bhetincha////
+
+//onExsectionSectionEachList
+
+export const onExsectionSectionEachList = payload => ({
+  type: FETCH_EXSECTION_SECTION_ENTITY_EACH_PENDING,
+  payload
+});
+
+epics.push((action$, { getState }) =>
+  action$
+    .ofType(FETCH_EXSECTION_SECTION_ENTITY_EACH_PENDING)
+    .mergeMap(action => {
+      const { uid } = action.payload;
+
+      return onExsectionEntityEachGet({ uid })
+        .concatMap(({ response }) => {
+          return [
+            {
+              type: FETCH_EXSECTION_SECTION_ENTITY_EACH_FULFILLED,
+              payload: response
+            }
+          ];
+        })
+        .catch(ajaxError => {
+          toast.error(ajaxError.toString());
+          return Observable.of({
+            type: FETCH_EXSECTION_SECTION_ENTITY_EACH_REJECTED
+          });
+        });
+    })
+);
+
+//onChangeActiveSectionBusinessByClick,
+export const onChangeActiveSectionBusinessByClick = uid => {
+  //console.log("Breached");
+  return {
+    type: "CHANGE_ACTIVE_EXSECTION_SECTION_BY_CLICK",
+    payload: uid
+  };
+};
+
+epics.push((action$, { getState }) =>
+  action$
+    .ofType("CHANGE_ACTIVE_EXSECTION_SECTION_BY_CLICK")
+    .mergeMap(action => {
+      const { payload: uid } = action;
+      const businessId = getState().auth.cookies.user_data.business_id;
+      return onExsectionSectionDetailGetAdmin({
+        uid: uid
+      }).concatMap(({ response }) => {
+        // console.log("breached with response", response);
+        // console.log("parent id", response.breadCrumbs[1].uid);
+        const parentSectionAdminId = response.breadCrumbs[1].uid;
+        const stuffs = [];
+        stuffs.push({
+          type: CHANGE_SELETED_SECTION_DETAILS_BUSINESS,
+          payload: response
+        });
+        stuffs.push({
+          type: FETCH_EXSECTION_SECTION_ATTRIBUTES_PENDING,
+          payload: {
+            body: { sectionId: uid }
+          }
+        });
+
+        stuffs.push({
+          type: CHANGE_SELETED_SECTION_DETAILS_BUSINESS_DATA_PENDING,
+          payload: {
+            body: { sectionId: uid }
+          }
+        });
+        stuffs.push({
+          type: FETCH_PARENT_SECTION_LIST_BUSINESS_PENDING,
+          payload: {
+            body: {
+              businessIdd: businessId,
+              asid: parentSectionAdminId
+            }
+          }
+        });
+
+        return stuffs;
+      });
     })
 );
 

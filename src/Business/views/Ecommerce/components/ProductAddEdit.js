@@ -28,7 +28,7 @@ class ProductAddEdit extends Component {
     super(props);
 
     let extra = this.getAttributesToState(props.attributes);
-
+    console.log("consoling ecom props", this.props);
     if (props.defaultValue && props.attributes) {
       extra = {
         ...extra,

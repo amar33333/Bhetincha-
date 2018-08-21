@@ -62,3 +62,4 @@ export const CORE_MEMBER_RUD_URL = "/section/core-member/core-member-rud/";
 export const CREATE_MEMBERS_URL = "/section/core-member/member/";
 export const MEMBERS_RUD_URL = "/section/core-member/member/";
 export const Social_LINK_URL = "/social-link/";
+export const EXSECTION_SECTION_ENTITY_URL = `${MAIN_URL}/${EXSECTION}/bizsec/`;

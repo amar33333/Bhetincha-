@@ -17,6 +17,7 @@ import SocialLinks from "./SocialLinks/SocialLinks";
 import ManageSections from "./Exsection/ManageSections";
 import ManageCoreMember from "./CoreMember/ManageCoreMember";
 
+import SectionEntityView from "./Exsection/SectionEntityView";
 export {
   Dashboard,
   BusinessDetail,
@@ -34,5 +35,6 @@ export {
   Gallery,
   SocialLinks,
   ManageSections,
-  ManageCoreMember
+  ManageCoreMember,
+  SectionEntityView
 };

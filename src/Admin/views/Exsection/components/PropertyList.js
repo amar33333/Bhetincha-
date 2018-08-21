@@ -12,25 +12,22 @@ import filterCaseInsesitive from "../../../../Common/utils/filterCaseInsesitive"
 class PropertyList extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
 
-    // this.state = {
-    //   properties: props.section.breadCrumbs
-    //     ? this.mapProperties(props.section)
-    //     : []
-    // };
+    this.state = {
+      properties: props.section.breadCrumbs
+        ? this.mapProperties(props.section)
+        : []
+    };
   }
 
   componentDidUpdate(prevProps) {
-    console.log("VAR");
-    console.log(this.props.section);
-    // if (this.props.section !== prevProps.section) {
-    //   this.setState({
-    //     properties: this.props.section.breadCrumbs
-    //       ? this.mapProperties(this.props.section)
-    //       : []
-    //   });
-    // }
+    if (this.props.section !== prevProps.section) {
+      this.setState({
+        properties: this.props.section.breadCrumbs
+          ? this.mapProperties(this.props.section)
+          : []
+      });
+    }
   }
 
   mapProperties = section => {
@@ -62,6 +59,55 @@ class PropertyList extends Component {
         // sortable: false,
         width: 70
       },
+      {
+        Header: "Ordering",
+        accessor: "order",
+        Cell: cellInfo =>
+          cellInfo.original.uidPage !== cellInfo.original.uidSection ? (
+            <div>{cellInfo.value}</div>
+          ) : (
+            <div
+              key={cellInfo.original.uid}
+              style={{ backgroundColor: "#fafafa" }}
+              contentEditable
+              suppressContentEditableWarning
+              onBlur={e => {
+                const value = parseInt(e.target.innerHTML, 10);
+                if (!isNaN(value)) {
+                  const properties = [...this.state.properties];
+                  if (
+                    value !== properties[cellInfo.index][cellInfo.column.id]
+                  ) {
+                    this.props.onPropertyUpdate({
+                      body: {
+                        order: value,
+                        sectionId: this.props.activeSection,
+                        relationshipId: cellInfo.original.uid
+                      }
+                    });
+                  } else {
+                    e.target.innerHTML = value;
+                  }
+                } else {
+                  e.target.innerHTML = this.state.properties[cellInfo.index][
+                    cellInfo.column.id
+                  ];
+                }
+              }}
+              onKeyDown={event => {
+                if (event.keyCode === 13) {
+                  event.target.blur();
+                }
+              }}
+              dangerouslySetInnerHTML={{
+                __html: this.state.properties[cellInfo.index][
+                  cellInfo.column.id
+                ]
+              }}
+            />
+          ),
+        width: 70
+      },
       { Header: "Name", accessor: "name" },
       { Header: "Section", accessor: "section" },
       { Header: "Field Type", accessor: "fieldType" },
@@ -87,13 +133,13 @@ class PropertyList extends Component {
           <PopoverDelete
             id={`delete-${value}`}
             disabled={uidPage !== uidSection}
-            onClick={() =>
+            onClick={() => {
               this.props.onPropertyRemove({
                 sectionId: uidSection,
                 attributeTypeId: uidAttributeType,
                 relationshipId: value
-              })
-            }
+              });
+            }}
           />
         )
       }
