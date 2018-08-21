@@ -5,13 +5,14 @@ import {
   FETCH_PARENT_SECTION_LIST_BUSINESS_FULFILLED,
   CHANGE_ACTIVE_CHILD_EXSECTION,
   CHANGE_SELETED_SECTION_DETAILS_BUSINESS,
-  //CHANGE_ACTIVE_PARENT_ADMIN_ID_EXSECTION_FULFILLED,
   RESET_SECTION_STATE,
   CHANGE_SELETED_SECTION_DETAILS_BUSINESS_DATA_FULFILLED,
   FETCH_EXSECTION_SECTION_ENTITY_EACH_PENDING,
   FETCH_EXSECTION_SECTION_ENTITY_EACH_FULFILLED,
   CHANGE_ACTIVE_PARENT_ADMIN_EXSECTION,
-  CHANGE_ROOT_SECTION_ADMIN
+  CHANGE_ROOT_SECTION_ADMIN,
+  CHANGE_ACTIVE_EXSECTION_SECTION_BY_CLICK,
+  INITIALIZE_TOP_SECTION_ADMIN_ID
 } from "../actions/types";
 
 import update from "immutability-helper";
@@ -20,20 +21,27 @@ const INITIAL_STATE = {
   sectionsAdmin: {},
   activeSectionAdminId: "",
   rootSectionAdmin: {},
-  isOpenSections: ["9b4623c4d6c24531a8f64e9673397cf1"],
+  isOpenSections: [],
   selectedSectionDetailAdmin: null,
   selectedSectionDetailBiz: null,
   attributes: [],
   parentSectionBiz: {},
   activeChildrenAdmin: null,
   sectionEntityDetailBiz: null,
-  activeParentAdminId: ""
+  activeParentAdminId: "",
+  topSectionAdminId: ""
 };
 
 export default function(state = INITIAL_STATE, action) {
   let isOpenSections;
 
   switch (action.type) {
+    case INITIALIZE_TOP_SECTION_ADMIN_ID:
+      return {
+        ...state,
+        topSectionAdminId: action.payload,
+        isOpenSections: [action.payload]
+      };
     case FETCH_EXSECTION_SECTIONS_FULFILLED:
       return {
         ...state,
@@ -52,7 +60,7 @@ export default function(state = INITIAL_STATE, action) {
       }
       return { ...state, isOpenSections, ...extra };
 
-    case "CHANGE_ACTIVE_EXSECTION_SECTION_BY_CLICK":
+    case CHANGE_ACTIVE_EXSECTION_SECTION_BY_CLICK:
       const extra2 = {};
       const uid2 = action.payload;
       isOpenSections = state.isOpenSections;
@@ -71,16 +79,6 @@ export default function(state = INITIAL_STATE, action) {
       };
 
     case FETCH_PARENT_SECTION_LIST_BUSINESS_FULFILLED:
-      // if (
-      //   state.rootSectionAdmin !== null &&
-      //   state.activeSectionAdminId !== null
-      // ) {
-      //   console.log("state.rootSectionAdmin", state.rootSectionAdmin);
-      //   console.log("state.activeSectionAdminId", state.activeSectionAdminId);
-      //   if (state.rootSectionAdmin[uid] === activeSectionAdminId) {
-      //     console.log("true");
-      //   }
-      // }
       return {
         ...state,
         parentSectionBiz: action.payload
@@ -111,8 +109,6 @@ export default function(state = INITIAL_STATE, action) {
       };
 
     case RESET_SECTION_STATE:
-      //  console.log({ ...state });
-
       return {
         ...state,
         parentSectionBiz: {}

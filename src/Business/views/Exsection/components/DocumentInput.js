@@ -9,9 +9,13 @@ class DocumentInput extends Component {
       <div key={this.props.mykey}>
         <br />
 
-        {this.props.attributes.map(attribute => {
-          return this.props.renderField(attribute, this.props.mykey);
-        })}
+        {this.props.attributes
+          .sort(function(a, b) {
+            return a.order - b.order;
+          })
+          .map(attribute => {
+            return this.props.renderField(attribute, this.props.mykey);
+          })}
       </div>
     );
   }

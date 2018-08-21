@@ -29,16 +29,18 @@ import {
   UPDATE_EXSECTION_SECTION_REJECTED,
   UPDATE_EXSECTION_PROPERTY_SECTION_PENDING,
   UPDATE_EXSECTION_PROPERTY_SECTION_FULFILLED,
-  UPDATE_EXSECTION_PROPERTY_SECTION_REJECTED
+  UPDATE_EXSECTION_PROPERTY_SECTION_REJECTED,
+  DELETE_EXSECTION_SUBSECTION_PENDING,
+  DELETE_EXSECTION_SUBSECTION_FULFILLED,
+  DELETE_EXSECTION_SUBSECTION_REJECTED
 } from "./types";
-
-//import { onEcommerceCategoriesGet } from "../config/adminServerCall";
 
 import {
   onExsectionAttributesGetAdmin,
   onExsectionSectionsGetAdmin,
   onExsectionSectionDetailGetAdmin,
   onExsectionSectionPostAdmin,
+  OnExsectionSubSectionDetailDelete,
   //onExsectionPropertiesPost,
   onExsectionAttributesPostAdmin,
   onExsectionPropertiesDelete,
@@ -110,6 +112,67 @@ epics.push((action$, { getState }) =>
       .catch(ajaxError => {
         toast.error(ajaxError.toString());
         return Observable.of({ type: CREATE_EXSECTION_SECTIONS_REJECTED });
+      });
+  })
+);
+
+//onSectionUpdateExsection
+
+export const onSectionUpdateExsection = payload => ({
+  type: UPDATE_EXSECTION_SECTION_PENDING,
+  payload
+});
+
+epics.push((action$, { getState }) =>
+  action$.ofType(UPDATE_EXSECTION_SECTION_PENDING).mergeMap(action => {
+    const uid = getState().AdminContainer.exsection.activeSection;
+    const { body } = action.payload;
+
+    return onExsectionSectionDetailPost({ body, uid })
+      .concatMap(({ response }) => {
+        if (response.msg === "success") {
+          toast.success("Category updated successfully");
+          return [
+            { type: UPDATE_EXSECTION_SECTION_FULFILLED },
+            { type: FETCH_EXSECTION_SECTIONS_PENDING },
+            { type: CHANGE_ACTIVE_EXSECTION_SECTION, payload: uid }
+          ];
+        } else {
+          toast.error(response.msg);
+          return [{ type: CHANGE_ACTIVE_EXSECTION_SECTION, payload: uid }];
+        }
+      })
+      .catch(ajaxError => {
+        toast.error(ajaxError.toString());
+        return Observable.of({ type: UPDATE_EXSECTION_SECTION_REJECTED });
+      });
+  })
+);
+
+export const onSubSectionDeleteExsection = payload => ({
+  type: "DELETE_EXSECTION_SUBSECTION_PENDING",
+  payload
+});
+
+epics.push((action$, { getState }) =>
+  action$.ofType(DELETE_EXSECTION_SUBSECTION_PENDING).mergeMap(action => {
+    const { uid } = action.payload;
+    //OnExsectionSubSectionDetailDelete
+    return OnExsectionSubSectionDetailDelete({ uid })
+      .concatMap(({ response }) => {
+        if (response.msg === "success") {
+          toast.success("Sub Section deleted successfully");
+          return [
+            { type: DELETE_EXSECTION_SUBSECTION_FULFILLED },
+            { type: FETCH_EXSECTION_SECTIONS_PENDING, first: true }
+          ];
+        } else {
+          throw new Error(response.msg);
+        }
+      })
+      .catch(ajaxError => {
+        toast.error(ajaxError.toString());
+        return Observable.of({ type: DELETE_EXSECTION_SUBSECTION_REJECTED });
       });
   })
 );
@@ -218,7 +281,7 @@ export const onPropertyUpdateExsection = payload => ({
 
 epics.push((action$, { getState }) =>
   action$.ofType(UPDATE_EXSECTION_PROPERTY_SECTION_PENDING).mergeMap(action => {
-    const payload = getState().AdminContainer.ecommerce.activeCategory;
+    const payload = getState().AdminContainer.exsection.activeSection;
     const { body } = action.payload;
 
     return onExsectionPropertiesPut({ body })
@@ -271,39 +334,6 @@ epics.push((action$, { getState }) =>
         return Observable.of({
           type: DELETE_EXSECTION_PROPERTY_SECTION_REJECTED
         });
-      });
-  })
-);
-
-//onSectionUpdateExsection
-
-export const onSectionUpdateExsection = payload => ({
-  type: UPDATE_EXSECTION_SECTION_PENDING,
-  payload
-});
-
-epics.push((action$, { getState }) =>
-  action$.ofType(UPDATE_EXSECTION_SECTION_PENDING).mergeMap(action => {
-    const uid = getState().AdminContainer.exsection.activeSection;
-    const { body } = action.payload;
-
-    return onExsectionSectionDetailPost({ body, uid })
-      .concatMap(({ response }) => {
-        if (response.msg === "success") {
-          toast.success("Category updated successfully");
-          return [
-            { type: UPDATE_EXSECTION_SECTION_FULFILLED },
-            { type: FETCH_EXSECTION_SECTIONS_PENDING },
-            { type: CHANGE_ACTIVE_EXSECTION_SECTION, payload: uid }
-          ];
-        } else {
-          toast.error(response.msg);
-          return [{ type: CHANGE_ACTIVE_EXSECTION_SECTION, payload: uid }];
-        }
-      })
-      .catch(ajaxError => {
-        toast.error(ajaxError.toString());
-        return Observable.of({ type: UPDATE_EXSECTION_SECTION_REJECTED });
       });
   })
 );

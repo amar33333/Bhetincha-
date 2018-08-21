@@ -15,12 +15,15 @@ import {
   onSectionsListExsection,
   onSectionSubmitExsection,
   onSectionUpdateExsection,
+  onSubSectionDeleteExsection,
   onChangeActiveSectionExsection,
   onAttributesListExsection,
   onPropertySubmitExsection,
   onPropertyRemoveExsection,
   onPropertyUpdateExsection
 } from "../../actions";
+
+import { PopoverDelete } from "../../../Common/components";
 
 class ManageSections extends Component {
   componentDidMount() {
@@ -57,6 +60,13 @@ class ManageSections extends Component {
                     this.props.sections &&
                     this.props.sections.uid !== this.props.activeSection && (
                       <div>
+                        <PopoverDelete
+                          onClick={() =>
+                            this.props.onSubSectionDeleteExsection({
+                              uid: this.props.selectedSectionDetail.uid
+                            })
+                          }
+                        />
                         <SectionEditView
                           onSectionUpdate={this.props.onSectionUpdateExsection}
                           section={this.props.selectedSectionDetail}
@@ -123,6 +133,7 @@ export default connect(
     onAttributesListExsection,
     onSectionSubmitExsection,
     onSectionUpdateExsection,
+    onSubSectionDeleteExsection,
     onChangeActiveSectionExsection,
     onPropertySubmitExsection,
     onPropertyRemoveExsection,

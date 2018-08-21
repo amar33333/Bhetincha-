@@ -18,8 +18,11 @@ import {
 
 class ManageSections extends Component {
   componentDidMount() {
-    //this.props.resetState();
     this.props.onSectionsListExsection();
+  }
+
+  componentDidUpdate() {
+    console.log("this props", this.props);
   }
 
   render() {
@@ -48,9 +51,6 @@ class ManageSections extends Component {
               )}
             </Col>
             <Col xs="12" md="9">
-              {/* {console.log("Proppppp", this.props)} */}
-              {/* //Object.keys(this.props.activeChildrenAdmin).length !== 0 */}
-
               {this.props.selectedSectionDetailBiz &&
                 this.props.selectedSectionDetailBiz.sections && (
                   <SectionEntityList
@@ -69,7 +69,6 @@ class ManageSections extends Component {
                   <RecordAddNew
                     activeSectionAdminId={this.props.activeSectionAdminId}
                     activeChildrenAdmin={this.props.activeChildrenAdmin}
-                    // activeParentAdminId={this.props.activeParentAdminId}
                     selectedSectionDetailAdmin={
                       this.props.selectedSectionDetailAdmin
                     }
@@ -106,7 +105,8 @@ export default connect(
         selectedSectionDetailBiz,
         attributes,
         parentSectionBiz,
-        rootSectionAdmin
+        rootSectionAdmin,
+        topSectionAdminId
       }
     }
   }) => ({
@@ -119,7 +119,8 @@ export default connect(
     selectedSectionDetailBiz,
     attributes,
     parentSectionBiz,
-    rootSectionAdmin
+    rootSectionAdmin,
+    topSectionAdminId
   }),
   {
     onSectionsListExsection,

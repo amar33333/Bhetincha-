@@ -39,15 +39,14 @@ class SideTreeView extends Component {
   }
 
   onToggle = ({ uid, name, children }) => {
+    //console.log("toogled now");
     const rootSectionAdmin = {};
     rootSectionAdmin.name = name;
     rootSectionAdmin.uid = uid;
-    //console.log("onToggle rootLevelData", rootSectionDataAdmin);
     this.props.resetState();
     this.props.onChangeActiveSection(
       uid,
       this.props.activeSectionAdminId,
-      this.props.leafDetect ? !(children && children.length) : false,
       children ? children[0] : null,
       rootSectionAdmin
     );

@@ -399,7 +399,7 @@ class RecordAddEdit extends Component {
               </Col>
             </FormGroup>
             {documents}
-
+            {/* {console.log("khoi khoi", this.props)} */}
             <FormGroup>
               {/* {console.log("Proppping", this.props)} */}
               {/* {!this.checkSectionIsTop() && (

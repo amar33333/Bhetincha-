@@ -1773,3 +1773,14 @@ export const onExsectionSectionDetailPost = ({ uid, body }) =>
       "Content-Type": "application/json"
     }
   });
+
+//OnExsectionSubSectionDetailDelete
+
+export const OnExsectionSubSectionDetailDelete = ({ uid }) =>
+  ajax({
+    method: "DELETE",
+    url: `${EXSECTION_SECTION_URL}${uid}/`,
+    headers: {
+      "Content-Type": "application/json"
+    }
+  });
