@@ -27,18 +27,21 @@ class Sections extends Component {
 
     this.state = {
       showDropdown: true,
-      selectedIds: []
+      selectedIds: [],
+      section_id: ""
     };
   }
   componentDidMount() {
     const { sectionId } = this.props.match.params;
     console.log(sectionId);
     this.props.eachSectionGet({ sectionId });
+    this.state.section_id = this.props.match.params;
   }
   componentDidUpdate(prevpreops) {
     if (prevpreops.match.params !== this.props.match.params) {
       this.forceUpdate();
       this.props.eachSectionGet(this.props.match.params);
+      this.state.section_id = this.props.match.params;
     }
   }
   handleSelectedId = (selected, depthLevel) => {
@@ -52,60 +55,54 @@ class Sections extends Component {
       });
     };
   };
-  renderDisplay() {
-    const classes = {
-      dropdown__display: true, //eslint-disable-line quote-props
-      "dropdown__display--with-caret": this.props.hasCaret
-    };
-
-    return <div className={classes}>{this.props.displayText}</div>;
-  }
-  renderSubMenu(options, depthLevel = 0) {
-    var display = [];
-    var menuOptions = Object.entries(options.attributes).forEach(element => {
-      if (element[0] != "uid") {
-        display.push(element[0] + ": " + element[1]);
+  renderSubMenu(options) {
+    // var display = [];
+    //  Object.entries(options.attributes).forEach(element => {
+    //     if (element[0] != "uid") {
+    //       display.push(element[1]);
+    //     }
+    //   });
+    console.log("lets see value of dusplay", Object.keys(options.attributes));
+    Object.keys(options.attributes).map(key => {
+      if (key !== "uid") {
+        console.log("wht is value of key= " + options.attributes[key]);
+        return (
+          <td className="whiteSpaceNoWrap">
+            {key}: {options.attributes[key]}
+          </td>
+        );
       }
     });
-    // console.log("lets see value of dusplay", Object.keys(options.attributes));
-    // var display = Object.keys(options.attributes).map((key) => {
-    //   if (key !== "uid") {
-    //     console.log("wht is value of key= " + options.attributes[key])
-    //     return <td className="whiteSpaceNoWrap">{key}: {options.attributes[key]}</td>
-    //   }
-    // })
-    console.log(display);
-    let subMenu;
-    if (options.children && options.children.length > 0) {
-      var newDepthLevel = depthLevel + 1;
-      console.log(options.children);
+    // console.log(display);
+    // let subMenu;
+    // if (options.children && options.children.length > 0) {
+    //   var newDepthLevel = depthLevel + 1;
+    //   console.log(options.children);
 
-      options.children.map(suboptions => {
-        console.log(options);
-        console.log(suboptions);
-        subMenu = this.renderSubMenu(suboptions, newDepthLevel);
-      });
+    //   options.children.map(suboptions => {
+    //     console.log(options);
+    //     console.log(suboptions);
+    //     subMenu = this.renderSubMenu(suboptions, newDepthLevel);
+    //   });
 
-      console.log(subMenu);
-      return (
-        <li>
-          {display}
-          {subMenu}
-        </li>
-      );
-    }
-    console.log(display);
-    return (
-      <Col sm="auto" xs="auto">
-        <ul>
-          {display.map(data => {
-            return <li>{data}</li>;
-          })}
-          {/* {display} */}
-        </ul>
-      </Col>
-    );
+    // console.log(subMenu);
+    // return (
+    //   // <li>
+    //   //   <strong>   {display}</strong>
+    //   //   {subMenu}
+    //   // </li>
+    // );
   }
+  //   console.log(display);
+  //   return (
+  //     <Col sm="auto" xs="auto">
+  //       <ul>
+  //         {display.map(data => { return <li>{data}</li>; })}
+  //         {/* {display} */}
+  //       </ul>
+  //     </Col>
+  //   );
+  // }
 
   render() {
     // const { sectionData } = this.props.Section.sections;
@@ -124,9 +121,7 @@ class Sections extends Component {
           paddingLeft: "50px"
         }}
       >
-        <p> hello sections!!! </p>
-
-        <Row>
+        <Row className="info">
           {this.props.Section.sections.map(options => {
             console.log("beforre calling subsection  " + options);
             var data = this.renderSubMenu(options);
@@ -158,3 +153,10 @@ export default withRepics(
     }
   )(Sections)
 );
+// console.log("lets see value of dusplay", Object.keys(options.attributes));
+// var display = Object.keys(options.attributes).map((key) => {
+//   if (key !== "uid") {
+//     console.log("wht is value of key= " + options.attributes[key])
+//     return <td className="whiteSpaceNoWrap">{key}: {options.attributes[key]}</td>
+//   }
+// })

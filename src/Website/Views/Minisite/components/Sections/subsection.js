@@ -141,3 +141,146 @@ export default class NestedDropdown extends React.Component {
     );
   }
 }
+
+// import React, { Component } from "react";
+// import { connect } from "react-redux";
+// import ReactDOM from "react-dom";
+// import "../../minisite.css";
+// import {
+//   Col,
+//   Row,
+//   Container,
+//   Card,
+//   CardHeader,
+//   CardBody,
+//   ListGroup,
+//   ListGroupItem,
+//   TabContent,
+//   TabPane,
+//   CardTitle,
+//   CardText
+// } from "reactstrap";
+// import { UncontrolledCollapse, Button } from "reactstrap";
+// import classnames from "classnames";
+// import { Link } from "react-router-dom";
+// import { MAIN_URL } from "../../config/MINISITE_API";
+
+// class Menu extends Component {
+//   constructor(props) {
+//     super(props);
+//     this.toggle = this.toggle.bind(this);
+//     this.state = {
+//       activeTab: 0
+//     };
+//   }
+
+//   toggle(tab) {
+//     if (tab !== 0) {
+//       var element = document.getElementById("0");
+//       element.className = element.className.replace(/\bactive\b/g, "");
+//     }
+//     if (this.state.activeTab !== tab) {
+//       this.setState({
+//         activeTab: tab
+//       });
+//       var element = document.getElementById(tab);
+//       element.className = element.className.replace("", "active");
+//     }
+//   }
+
+//   render() {
+//     //console.log("active tab : "+this.state.activeTab);
+//     var activeTab = this.state.activeTab;
+//     return (
+//       <div
+//         className="minisite_content__wrapper"
+//         style={{
+//           paddingTop: "60px"
+//         }}
+//       >
+//         <Container
+//           className="mb-4"
+//           style={{
+//             marginTop: "20px"
+//           }}
+//         >
+//           <div>
+//             {!this.props.menus.foodCategories.length ? (
+//               "No Food Group"
+//             ) : (
+//                 <div>
+//                   {this.props.menus.foodCategories.map((fg, i) => (
+//                     <div key={fg.foodCategoryID}>
+//                       {!this.props.menus.foodCategories[i].foods.length ? (
+//                         ""
+//                       ) : (
+//                           <ListGroupItem
+//                             id={i}
+//                             key={fg.foodCategoryID}
+//                             onClick={() => {
+//                               this.toggle(i);
+//                             }}
+//                             className={
+//                               i === 0
+//                                 ? " active "
+//                                 : classnames({ active: activeTab === i })
+//                             }
+//                           >
+//                             {fg.name}
+//                             <span
+//                               className={
+//                                 activeTab === i
+//                                   ? "fa fa-caret-down"
+//                                   : "fa fa-caret-right"
+//                               }
+//                               style={{ float: "right", fontSize: "20px" }}
+//                             />
+//                           </ListGroupItem>
+//                         )}
+
+//                       <TabContent activeTab={this.state.activeTab}>
+//                         <TabPane
+//                           tabId={this.state.activeTab}
+//                           style={{
+//                             display: activeTab === i ? "inline" : "none"
+//                           }}
+//                         >
+//                           {this.props.menus.foodCategories[i].foods.map(
+//                             fgitem => (
+//                               <Col sm="12" className="mb-3" key={fgitem.foodID}>
+//                                 <p>
+//                                   {fgitem.name} ................................{" "}
+//                                   <span style={{ float: "right" }}>
+//                                     {" "}
+//                                     Rs. {fgitem.price}
+//                                   </span>
+//                                 </p>
+//                               </Col>
+//                             )
+//                           )}
+//                         </TabPane>
+//                       </TabContent>
+//                     </div>
+//                   ))}
+//                 </div>
+//               )}
+//           </div>
+//         </Container>
+//       </div>
+//     );
+//   }
+// }
+
+// export default connect(
+//   ({
+//     MinisiteContainer: {
+//       crud: { logo, slug, menus }
+//     },
+//     auth: { cookies }
+//   }) => ({
+//     cookies,
+//     logo,
+//     slug,
+//     menus
+//   })
+// )(Menu);
