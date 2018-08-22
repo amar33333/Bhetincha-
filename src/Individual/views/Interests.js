@@ -64,13 +64,18 @@ class Interests extends Component {
                       />
                     </Col>
                   </Row>
-                  <Button
-                    color="primary"
-                    disabled={this.props.loading || this.props.skillsLoading}
-                  >
-                    {" "}
-                    Submit{" "}
-                  </Button>
+                  <Row className="mt-4">
+                    <Col>
+                      <Button
+                        color="primary"
+                        disabled={
+                          this.props.loading || this.props.skillsLoading
+                        }
+                      >
+                        Submit
+                      </Button>
+                    </Col>
+                  </Row>
                 </Form>
               </CardBody>
             </Card>

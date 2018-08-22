@@ -12,7 +12,7 @@ import {
 } from "reactstrap";
 
 class ComposeSMS extends Component {
-  state = { twoWay: false };
+  state = { twoWay: false, composeSMSText: "" };
 
   onFormSubmit = e => {
     e.preventDefault();
@@ -58,6 +58,14 @@ class ComposeSMS extends Component {
     });
   };
 
+  componentDidUpdate = prevProps => {
+    if (prevProps.composeSMSText !== this.props.composeSMSText) {
+      this.setState({
+        composeSMSText: this.props.composeSMSText
+      });
+    }
+  };
+
   render() {
     return (
       <Card>
@@ -73,12 +81,17 @@ class ComposeSMS extends Component {
                 type="textarea"
                 name="text"
                 id="message"
-                readOnly
+                // readOnly
+                onChange={e => {
+                  this.setState({
+                    composeSMSText: e.target.value
+                  });
+                }}
                 required
-                value={this.props.composeSMSText}
+                value={this.state.composeSMSText}
               />
               <FormText>
-                Character Count: {this.props.composeSMSText.length}
+                Character Count: {this.state.composeSMSText.length}
               </FormText>
             </FormGroup>
             <FormGroup check>

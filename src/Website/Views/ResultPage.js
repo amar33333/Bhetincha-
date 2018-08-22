@@ -431,7 +431,7 @@ class ResultPage extends Component {
             </span>
 
             {this.state.searchResults.area && (
-              <span className="mr-2">
+              <span className="mr-2 search-result__area__button">
                 <Button
                   basic
                   compact
@@ -447,7 +447,7 @@ class ResultPage extends Component {
               </span>
             )}
             {this.state.searchResults.city && (
-              <span className="mr-2">
+              <span className="mr-2 search-result__area__button">
                 <Button
                   compact
                   basic
@@ -463,7 +463,7 @@ class ResultPage extends Component {
               </span>
             )}
             {this.state.searchResults.district && (
-              <span className="mr-2">
+              <span className="mr-2 search-result__area__button">
                 <Button
                   compact
                   basic
@@ -479,7 +479,7 @@ class ResultPage extends Component {
               </span>
             )}
             {this.state.searchResults.state && (
-              <span className="mr-2">
+              <span className="mr-2 search-result__area__button">
                 <Button
                   compact
                   basic
@@ -495,7 +495,7 @@ class ResultPage extends Component {
               </span>
             )}
             {this.state.searchResults.country && (
-              <span className="mr-2">
+              <span className="mr-2 search-result__area__button">
                 <Button
                   compact
                   basic

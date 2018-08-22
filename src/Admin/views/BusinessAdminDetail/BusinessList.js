@@ -692,30 +692,38 @@ class BusinessList extends Component {
         </Row>
         <Row>
           <Col xs="12">
-            <Button
-              className="float-right"
-              color="link"
-              onClick={this.props.handleSearchKeywordCleared}
-            >
-              <i className="fa fa-close" /> Clear Search
-            </Button>
-            <Form onSubmit={this.handleSearchKeywordSubmit}>
-              <FormGroup>
-                <InputGroup>
-                  <Input
-                    size="lg"
-                    placeholder="Search for Business Name, email or number"
-                    onChange={this.handleChange.bind(null, "q")}
-                    value={this.state.q}
-                  />
-                  <InputGroupAddon addonType="append">
-                    <Button color="warning">
-                      <i className="fa fa-search" /> Search{" "}
-                    </Button>
-                  </InputGroupAddon>
-                </InputGroup>
-              </FormGroup>
-            </Form>
+            <Row>
+              <Col xs="12">
+                <Button
+                  className="float-right"
+                  color="link"
+                  onClick={this.props.handleSearchKeywordCleared}
+                >
+                  <i className="fa fa-close" /> Clear Search
+                </Button>
+              </Col>
+            </Row>
+            <Row>
+              <Col xs="12">
+                <Form onSubmit={this.handleSearchKeywordSubmit}>
+                  <FormGroup>
+                    <InputGroup>
+                      <Input
+                        size="lg"
+                        placeholder="Search for Business Name, email or number"
+                        onChange={this.handleChange.bind(null, "q")}
+                        value={this.state.q}
+                      />
+                      <InputGroupAddon addonType="append">
+                        <Button color="warning">
+                          <i className="fa fa-search" /> Search{" "}
+                        </Button>
+                      </InputGroupAddon>
+                    </InputGroup>
+                  </FormGroup>
+                </Form>
+              </Col>
+            </Row>
           </Col>
         </Row>
         <Row className="mt-3">
