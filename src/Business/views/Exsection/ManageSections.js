@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Container, Row, Col } from "reactstrap";
 import { SideTreeView } from "./components";
+import { SideSectionsView } from "./components";
 import { RecordAddNew } from "./components";
 
 import { SectionEntityList } from "./components";
@@ -21,22 +22,25 @@ class ManageSections extends Component {
     this.props.onSectionsListExsection();
   }
 
-  componentDidUpdate() {
-    console.log("this props", this.props);
-  }
-
   render() {
     return (
       <div className="animated fadeIn">
         <Container fluid>
           <Row>
             <Col xs="12" md="3">
-              <SideTreeView
+              {/* <SideTreeView
                 sectionsAdmin={this.props.sectionsAdmin}
                 activeSectionAdminId={this.props.activeSectionAdminId}
                 onChangeActiveSection={this.props.onChangeActiveSectionBusiness}
                 isOpen={this.props.isOpenSections}
                 resetState={this.props.resetState}
+              /> */}
+              <SideSectionsView
+                sectionsAdmin={this.props.sectionsAdmin}
+                resetState={this.props.resetState}
+                onChangeActiveSection={this.props.onChangeActiveSectionBusiness}
+                activeSectionAdminId={this.props.activeSectionAdminId}
+                topSectionAdminId={this.props.topSectionAdminId}
               />
               <br />
               <br />

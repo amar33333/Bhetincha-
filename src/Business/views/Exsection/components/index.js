@@ -1,4 +1,5 @@
 import SideTreeView from "./SideTreeView";
+import SideSectionsView from "./SideSectionsView";
 import RecordAddNew from "./RecordAddNew";
 
 import SectionEditViewBusiness from "./SectionEditViewBusiness";
@@ -9,6 +10,7 @@ import SectionListAdmin from "./SectionListAdmin";
 
 export {
   SideTreeView,
+  SideSectionsView,
   RecordAddNew,
   SectionEditViewBusiness,
   SectionEntityList,

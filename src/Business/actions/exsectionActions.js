@@ -65,8 +65,8 @@ epics.push((action$, { getState }) =>
             type: CHANGE_ACTIVE_EXSECTION_SECTION,
             payload: response.uid,
             first: first,
-            activeChildrenAdmin: null,
-            oldSectionAdminId: response.uid
+            activeChildrenAdmin: null
+            // oldSectionAdminId: response.uid
           });
         }
 
@@ -87,14 +87,14 @@ epics.push((action$, { getState }) =>
 
 export const onChangeActiveSectionBusiness = (
   newSectionAdminId,
-  oldSectionAdminId,
+  // oldSectionAdminId,
   activeChildrenAdmin = null,
   rootSectionAdmin = null
 ) => {
   return {
     type: CHANGE_ACTIVE_EXSECTION_SECTION,
     payload: newSectionAdminId,
-    oldSectionAdminId,
+    // oldSectionAdminId,
     activeChildrenAdmin,
     rootSectionAdmin
   };
@@ -104,7 +104,7 @@ epics.push((action$, { getState }) =>
   action$.ofType(CHANGE_ACTIVE_EXSECTION_SECTION).mergeMap(action => {
     const {
       payload: newSectionAdminId,
-      oldSectionAdminId,
+      // oldSectionAdminId,
       activeChildrenAdmin,
       rootSectionAdmin
     } = action;
@@ -126,15 +126,17 @@ epics.push((action$, { getState }) =>
         payload: activeChildrenAdmin
       });
 
-      stuffs.push({
-        type: CHANGE_ROOT_SECTION_ADMIN,
-        payload: rootSectionAdmin
-      });
+      if (rootSectionAdmin) {
+        stuffs.push({
+          type: CHANGE_ROOT_SECTION_ADMIN,
+          payload: rootSectionAdmin
+        });
+      }
 
-      stuffs.push({
-        type: CHANGE_ACTIVE_PARENT_ADMIN_EXSECTION,
-        payload: oldSectionAdminId
-      });
+      // stuffs.push({
+      //   type: CHANGE_ACTIVE_PARENT_ADMIN_EXSECTION,
+      //   payload: oldSectionAdminId
+      // });
 
       stuffs.push({
         type: FETCH_EXSECTION_SECTION_ATTRIBUTES_PENDING,
@@ -152,19 +154,19 @@ epics.push((action$, { getState }) =>
         });
       }
 
-      if (!action.first) {
-        if (action.oldSectionAdminId !== topSectionAdminId) {
-          stuffs.push({
-            type: FETCH_PARENT_SECTION_LIST_BUSINESS_PENDING,
-            payload: {
-              body: {
-                businessIdd: businessId,
-                asid: oldSectionAdminId
-              }
-            }
-          });
-        }
-      }
+      // if (!action.first) {
+      //   if (action.oldSectionAdminId !== topSectionAdminId) {
+      //     stuffs.push({
+      //       type: FETCH_PARENT_SECTION_LIST_BUSINESS_PENDING,
+      //       payload: {
+      //         body: {
+      //           businessIdd: businessId,
+      //           asid: oldSectionAdminId
+      //         }
+      //       }
+      //     });
+      //   }
+      // }
 
       return stuffs;
     });

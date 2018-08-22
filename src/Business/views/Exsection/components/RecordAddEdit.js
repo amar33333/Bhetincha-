@@ -16,9 +16,6 @@ import Select from "react-select";
 import DateTime from "react-datetime";
 import "react-datetime/css/react-datetime.css";
 
-import getBase64 from "../../../../Common/utils/getBase64";
-import { MAIN_URL } from "../../../../Common/utils/API";
-
 import DocumentInput from "./DocumentInput";
 
 class RecordAddEdit extends Component {
@@ -62,16 +59,15 @@ class RecordAddEdit extends Component {
 
   checkSectionIsTop() {
     console.log("breached", this.props);
-    if (Object.keys(this.props.parentSectionBiz).length === 0) {
+    if (!this.props.parentSectionBiz) {
       return true;
     }
   }
   checkTopSectionAlreadyExists() {
-    if (Object.keys(this.props.parentSectionBiz).length !== 0) {
+    if (this.props.parentSectionBiz) {
       return false;
     } else if (
-      Object.keys(this.props.parentSectionBiz).length === 0 &&
-      this.props.selectedSectionDetailBiz
+      !this.props.parentSectionBiz && this.props.selectedSectionDetailBiz
         ? this.props.selectedSectionDetailBiz.sections.length === 0
         : ""
     ) {
@@ -102,7 +98,6 @@ class RecordAddEdit extends Component {
   }
 
   handleChange = selectedOption => {
-    // console.log("Handle change", selectedOption);
     this.setState({ selectedOption });
   };
 
@@ -111,8 +106,6 @@ class RecordAddEdit extends Component {
     newArray[mykey] = { ...newArray[mykey], ...{ [key]: value } };
 
     this.setState({ inputValues: newArray, [key]: value });
-
-    //console.log("state", this.state);
   };
 
   addClick() {
@@ -373,69 +366,36 @@ class RecordAddEdit extends Component {
         </CardHeader>
         <CardBody>
           <Form onSubmit={this.onFormSubmit}>
-            {/* {this.createUI()} */}
-            {/* {console.log("consoling this.state", this.state)} */}
             <FormGroup row>
-              {Object.keys(this.props.parentSectionBiz).length !== 0 && (
-                <Label sm={3}>Select</Label>
-              )}
+              {this.props.parentSectionBiz && <Label sm={3}>Select</Label>}
 
               <Col sm={9}>
-                {this.props.parentSectionBiz.sections && (
-                  <Select
-                    value={
-                      selectedOption === null
-                        ? this.props.parentSectionBiz.sections[0].id
-                        : selectedOption
-                    }
-                    options={this.props.parentSectionBiz.sections.map(x => ({
-                      value: x.id,
-                      label: x.name
-                    }))}
-                    onChange={this.handleChange}
-                    // selectedValue={this.props.parentSection.sections[0].id}
-                  />
-                )}
+                {this.props.parentSectionBiz &&
+                  this.props.parentSectionBiz.sections && (
+                    <Select
+                      value={
+                        selectedOption === null
+                          ? this.props.parentSectionBiz.sections[0].id
+                          : selectedOption
+                      }
+                      options={this.props.parentSectionBiz.sections.map(x => ({
+                        value: x.id,
+                        label: x.name
+                      }))}
+                      onChange={this.handleChange}
+                    />
+                  )}
               </Col>
             </FormGroup>
             {documents}
-            {/* {console.log("khoi khoi", this.props)} */}
+
             <FormGroup>
-              {/* {console.log("Proppping", this.props)} */}
-              {/* {!this.checkSectionIsTop() && (
-                <Button sm={2} onClick={this.addClick.bind(this)}>
-                  + &nbsp;
-                  {this.props.selectedSectionDetailAdmin.name
-                    ? this.props.selectedSectionDetailAdmin.name
-                    : ""}
-                </Button>
-              )}&nbsp; */}
               <Button sm={2} onClick={this.addClick.bind(this)}>
                 + &nbsp;
                 {this.props.selectedSectionDetailAdmin.name
                   ? this.props.selectedSectionDetailAdmin.name
                   : ""}
               </Button>
-              {/* {this.props.activeChildrenAdmin &&
-                Object.keys(this.props.activeChildrenAdmin).length !== 0 && (
-                  <Button
-                    sm={2}
-                    onClick={this.handleNextSectionClick}
-                    disabled={
-                      this.props.selectedSectionDetailBiz &&
-                      this.props.selectedSectionDetailBiz.sections.length === 0
-                    }
-                    title={
-                      this.props.selectedSectionDetailBiz &&
-                      this.props.selectedSectionDetailBiz.sections.length === 0
-                        ? "First add " +
-                          this.props.selectedSectionDetailAdmin.name
-                        : ""
-                    }
-                  >
-                    {this.props.activeChildrenAdmin.name}&nbsp;>>
-                  </Button>
-                )} */}
             </FormGroup>
             <FormGroup>
               <Button

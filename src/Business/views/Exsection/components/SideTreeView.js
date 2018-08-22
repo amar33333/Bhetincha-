@@ -27,6 +27,7 @@ class SideTreeView extends Component {
   };
 
   componentDidUpdate(prevProps) {
+    //console.log("component did upate");
     if (
       prevProps.sectionsAdmin !== this.props.sectionsAdmin ||
       (!prevProps.activeSectionAdminId && this.props.activeSectionAdminId) ||

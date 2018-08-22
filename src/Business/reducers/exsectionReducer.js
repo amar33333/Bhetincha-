@@ -15,17 +15,15 @@ import {
   INITIALIZE_TOP_SECTION_ADMIN_ID
 } from "../actions/types";
 
-import update from "immutability-helper";
-
 const INITIAL_STATE = {
-  sectionsAdmin: {},
+  sectionsAdmin: null,
   activeSectionAdminId: "",
-  rootSectionAdmin: {},
+  rootSectionAdmin: null,
   isOpenSections: [],
   selectedSectionDetailAdmin: null,
   selectedSectionDetailBiz: null,
   attributes: [],
-  parentSectionBiz: {},
+  parentSectionBiz: null,
   activeChildrenAdmin: null,
   sectionEntityDetailBiz: null,
   activeParentAdminId: "",
@@ -111,7 +109,7 @@ export default function(state = INITIAL_STATE, action) {
     case RESET_SECTION_STATE:
       return {
         ...state,
-        parentSectionBiz: {}
+        parentSectionBiz: null //changed from {} to null
       };
 
     case CHANGE_SELETED_SECTION_DETAILS_BUSINESS_DATA_FULFILLED:
