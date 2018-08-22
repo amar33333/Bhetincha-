@@ -36,7 +36,10 @@ class EducationDetailsComponent extends Component {
   componentDidMount() {
     this.props.data &&
       this.setState({
-        level_of_education: this.props.data.level_of_education,
+        level_of_education: {
+          value: this.props.data.level_of_education,
+          label: this.props.data.level_of_education
+        },
         name_of_college: this.props.data.name_of_college,
         show: this.props.data.show,
         start_date: this.props.data.start_date,
@@ -49,7 +52,10 @@ class EducationDetailsComponent extends Component {
     if (this.props.data !== prevProps.data) {
       this.props.data &&
         this.setState({
-          level_of_education: this.props.data.level_of_education,
+          level_of_education: {
+            value: this.props.data.level_of_education,
+            label: this.props.data.level_of_education
+          },
           name_of_college: this.props.data.name_of_college,
           show: this.props.data.show,
           start_date: this.props.data.start_date,
