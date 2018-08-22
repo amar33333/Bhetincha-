@@ -108,6 +108,7 @@ class ExperienceDetailsComponent extends Component {
 
   render() {
     console.log("exper compo: ", this.props);
+    console.log("exper compo state: ", this.state);
 
     return this.props.isParamsUserSameAsLoggedUser(
       this.props.username,

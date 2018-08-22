@@ -31,7 +31,7 @@ class ExperienceDetailsEdit extends Component {
   }
 
   render() {
-    console.log("edit: ", this.props);
+    console.log("edit props: ", this.props);
 
     return isParamsUserSameAsLoggedUser(
       this.props.username,

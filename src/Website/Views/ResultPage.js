@@ -67,26 +67,26 @@ class ResultPage extends Component {
 
     window.addEventListener("scroll", this.onScroll, false);
 
-    // const { frm, size } = this.state;
+    const { frm, size } = this.state;
 
-    // this.props.onSearchResultsList({
-    //   body: {
-    //     query: parsedUrlStringObject["query"],
-    //     frm,
-    //     size,
-    //     lat: this.props.user_geo_coords
-    //       ? this.props.user_geo_coords.latitude
-    //       : undefined,
-    //     lon: this.props.user_geo_coordsom
-    //       ? this.props.user_geo_coords.longitude
-    //       : undefined,
-    //     distance: this.state.distance,
-    //     typeOfArea: this.state.areaName ? this.state.activeArea : undefined,
-    //     areaName: this.state.areaName ? this.state.areaName : undefined
-    //   }
-    // });
+    this.props.onSearchResultsList({
+      body: {
+        query: parsedUrlStringObject["query"],
+        frm,
+        size,
+        lat: this.props.user_geo_coords
+          ? this.props.user_geo_coords.latitude
+          : undefined,
+        lon: this.props.user_geo_coordsom
+          ? this.props.user_geo_coords.longitude
+          : undefined,
+        distance: this.state.distance,
+        typeOfArea: this.state.areaName ? this.state.activeArea : undefined,
+        areaName: this.state.areaName ? this.state.areaName : undefined
+      }
+    });
 
-    // this.setState({ frm: frm + size });
+    this.setState({ frm: frm + size });
 
     this.props.setInitialQuery(parsedUrlStringObject.query);
   };
@@ -98,10 +98,7 @@ class ResultPage extends Component {
 
     // console.log("pasdara: ", parsedUrlStringObject);
 
-    if (
-      this.props.location.search !== prevProps.location.search ||
-      this.props.user_geo_coords !== prevProps.user_geo_coords
-    ) {
+    if (this.props.location.search !== prevProps.location.search) {
       this.setState(
         {
           frm: 0,

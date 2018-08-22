@@ -26,7 +26,8 @@ class Home extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (prevProps.coords !== this.props.coords) {
+    // if (prevProps.coords !== this.props.coords) {
+    if (this.props.coords)
       this.props.onStoreUserGeoLocation({
         user_geo_coords: {
           accuracy: this.props.coords.accuracy,
@@ -37,11 +38,12 @@ class Home extends Component {
           speed: this.props.coords.speed
         }
       });
-    } else {
-      this.props.onStoreUserGeoLocation({
-        user_geo_coords: null
-      });
-    }
+
+    // } else {
+    //   this.props.onStoreUserGeoLocation({
+    //     user_geo_coords: null
+    //   });
+    // }
   }
 
   render() {
