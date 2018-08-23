@@ -1,5 +1,10 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import { Link } from "react-router-dom";
+import MinisiteRoutes from "../../config/routes";
+import slugify from "slugify";
+
+import { MAIN_URL } from "../../../../../Common/utils/API";
 import {
   Card,
   CardImg,
@@ -28,91 +33,108 @@ class Sections extends Component {
     this.state = {
       showDropdown: true,
       selectedIds: [],
-      section_id: ""
+      section_id: "",
+      count: 0,
+      hasChild: false,
+      subSections: [
+        {
+          uid: "",
+          name: ""
+        }
+      ]
     };
   }
   componentDidMount() {
     const { sectionId } = this.props.match.params;
-    console.log(sectionId);
+    // console.log(sectionId);
     this.props.eachSectionGet({ sectionId });
     this.state.section_id = this.props.match.params;
   }
   componentDidUpdate(prevpreops) {
-    if (prevpreops.match.params !== this.props.match.params) {
-      this.forceUpdate();
+    if (prevpreops.match.params !== this.state.section_id) {
+      // this.forceUpdate();
       this.props.eachSectionGet(this.props.match.params);
       this.state.section_id = this.props.match.params;
     }
   }
-  handleSelectedId = (selected, depthLevel) => {
-    return () => {
-      const updatedArray = this.state.selectedIds.slice(0);
 
-      updatedArray[depthLevel] = selected;
-
-      this.setState({
-        selectedIds: updatedArray
-      });
-    };
-  };
-  renderSubMenu(options) {
-    // var display = [];
-    //  Object.entries(options.attributes).forEach(element => {
-    //     if (element[0] != "uid") {
-    //       display.push(element[1]);
-    //     }
-    //   });
-    console.log("lets see value of dusplay", Object.keys(options.attributes));
-    Object.keys(options.attributes).map(key => {
-      if (key !== "uid") {
-        console.log("wht is value of key= " + options.attributes[key]);
+  renderSubMenu(options, da) {
+    var businessName = this.props.cookies.user_data.slug;
+    if (options.children && options.children.length > 0) {
+      this.state.hasChild = true;
+    } else {
+      this.state.hasChild = false;
+    }
+    // var businessName = "amt";
+    var sectionID;
+    var name;
+    // console.log("business Name= ", businessName)
+    // console.log("lets see value of dusplay", Object.keys(options.attributes));
+    var data = Object.keys(options.attributes).map(key => {
+      sectionID = options.attributes.uid;
+      name = slugify(options.attributes.name);
+      this.state.subSections.uid;
+      if (key !== "uid" && key !== "creation" && key !== "updation") {
+        // console.log("wht is value of key= " + options.attributes[key]);
+        const image =
+          "/media/5b6691958ffa8506520f8673/member-photos/Sameeee-c27fe911-e743-449f-9ebe-7e91978639f4.jpeg";
+        if (key === "Image") {
+          return (
+            <CardImg
+              key={da}
+              top
+              width="100%"
+              // src={`${MAIN_URL}${image}`}
+              src="https://bhetincha.app/static/media/logo_hd.8ae38422.png"
+              alt="img placeholder"
+              style={{
+                Maxwidth: "100%",
+                height: "auto",
+                color: "green"
+              }}
+              className="img-fluid"
+            />
+          );
+        }
+        if (key == "Price") {
+          return (
+            <h4 style={{ margin: "0" }} className="text-center" key={da++}>
+              Rs. {options.attributes[key]}
+            </h4>
+          );
+        }
         return (
-          <td className="whiteSpaceNoWrap">
-            {key}: {options.attributes[key]}
-          </td>
+          <h4
+            style={{ margin: "0" }}
+            className="text-center"
+            key={options.attributes.uid}
+          >
+            {options.attributes[key]}
+          </h4>
         );
       }
     });
-    // console.log(display);
-    // let subMenu;
-    // if (options.children && options.children.length > 0) {
-    //   var newDepthLevel = depthLevel + 1;
-    //   console.log(options.children);
 
-    //   options.children.map(suboptions => {
-    //     console.log(options);
-    //     console.log(suboptions);
-    //     subMenu = this.renderSubMenu(suboptions, newDepthLevel);
-    //   });
-
-    // console.log(subMenu);
-    // return (
-    //   // <li>
-    //   //   <strong>   {display}</strong>
-    //   //   {subMenu}
-    //   // </li>
-    // );
+    // console.log(data);
+    // console.log(name);
+    // console.log(sectionID);
+    // console.log(this.state.hasChild);
+    if (this.state.hasChild) {
+      return (
+        <Card>
+          <Link to={`/${businessName}/${name}/${sectionID}`} action="push">
+            {data}
+          </Link>
+        </Card>
+      );
+    } else {
+      return <Card key={da}>{data}</Card>;
+    }
   }
-  //   console.log(display);
-  //   return (
-  //     <Col sm="auto" xs="auto">
-  //       <ul>
-  //         {display.map(data => { return <li>{data}</li>; })}
-  //         {/* {display} */}
-  //       </ul>
-  //     </Col>
-  //   );
-  // }
 
   render() {
-    // const { sectionData } = this.props.Section.sections;
-    // console.log("this is my section=" + this.props.Section.sections);
-    // console.log("this is my section=" + { sectionData });
-    // var objectKeys = Object.keys(this.props.Section.sections);
-    // console.log("objectKeys: ", objectKeys);
-    // Object.keys(this.props.Section.sections).map(e => {
-    //   console.log(`key= ${e} value = ${this.props.Section.sections[e]}`)
-    // });
+    console.log("soling sub section from sections class", this.props);
+    var da = 0;
     return (
       <div
         className="minisite_content__wrapper "
@@ -121,14 +143,15 @@ class Sections extends Component {
           paddingLeft: "50px"
         }}
       >
-        <Row className="info">
+        <Row>
           {this.props.Section.sections.map(options => {
-            console.log("beforre calling subsection  " + options);
-            var data = this.renderSubMenu(options);
-            console.log(data);
+            // console.log("beforre calling subsection  " + options.attributes);
+            var data = this.renderSubMenu(options, da);
+            da = da + 1;
+            // console.log(data);
             return (
-              <Col xs="3">
-                <Card>{data}</Card>
+              <Col key={da} xs="3">
+                <div>{data}</div>
               </Col>
             );
           })}
@@ -138,25 +161,18 @@ class Sections extends Component {
   }
 }
 
-export default withRepics(
-  "SectionContainer",
-  sectionReducer,
-  combineEpics(...sectionEpics)
-)(
-  connect(
-    ({ SectionContainer: { Section }, auth }) => ({
-      Section,
-      ...auth
-    }),
-    {
-      eachSectionGet
-    }
-  )(Sections)
-);
-// console.log("lets see value of dusplay", Object.keys(options.attributes));
-// var display = Object.keys(options.attributes).map((key) => {
-//   if (key !== "uid") {
-//     console.log("wht is value of key= " + options.attributes[key])
-//     return <td className="whiteSpaceNoWrap">{key}: {options.attributes[key]}</td>
-//   }
-// })
+// export default withRepics(
+//   "SectionContainer",
+//   sectionReducer,
+//   combineEpics(...sectionEpics)
+// )(
+export default connect(
+  ({ auth: { cookies }, SectionContainer: { Section } }) => ({
+    Section,
+    cookies
+  }),
+  {
+    eachSectionGet
+  }
+)(Sections);
+// );

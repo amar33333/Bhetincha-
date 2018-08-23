@@ -28,9 +28,6 @@ class Minisite extends Component {
   componentDidMount() {
     this.getBusiness();
     this.props.OnSectionListGet();
-    // if (this.props.section.length > 0) {
-    //   console.log(this.props.section);
-    // }
   }
 
   componentDidUpdate(prevProps) {
@@ -45,8 +42,10 @@ class Minisite extends Component {
     this.props.clearBusiness();
   }
   render() {
-    console.log(this.props.section);
+    console.log("soling section", this.props.section);
+    console.log("soling subsection", this.props.subSection);
     if (this.props.section) {
+      console.log(this.props.section);
     }
     return (
       <div>
@@ -62,12 +61,15 @@ class Minisite extends Component {
         ) : (
           ""
         )}
-        {this.props.mainLoading && !this.props.section ? (
+        {this.props.mainLoading &&
+        !this.props.section &&
+        this.props.subSection ? (
           <Loading />
         ) : (
           <MinisiteRoutes
             params={this.props.match.params}
             sections={this.props.section}
+            subsections={this.props.subSection}
           />
         )}{" "}
         <BusinessFooter
@@ -86,9 +88,10 @@ export default withRepics(
   combineEpics(...minisiteEpics, ...sectionEpics)
 )(
   connect(
-    ({ MinisiteContainer: { edit } }) => ({
+    ({ MinisiteContainer: { edit }, SectionContainer: { Section } }) => ({
       mainLoading: edit.mainLoading,
-      section: edit.sections
+      section: edit.sections,
+      subSection: Section.sections
     }),
     {
       onBusinessGet,

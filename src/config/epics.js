@@ -4,10 +4,10 @@ import { combineEpics, createEpicMiddleware } from "redux-observable";
 import authEpics from "../actions";
 import homeEpics from "../Website/config/epics";
 import ecommerceEpics from "../Website/Views/Ecommerce/config/epics";
-
+import sectionEpics from "../Website/Views/Minisite/components/Sections/actions";
 const dependencies = {};
 const epic$ = new BehaviorSubject(
-  combineEpics(...authEpics, ...homeEpics, ...ecommerceEpics)
+  combineEpics(...authEpics, ...homeEpics, ...ecommerceEpics, ...sectionEpics)
 );
 
 const rootEpic = (action$, store) =>

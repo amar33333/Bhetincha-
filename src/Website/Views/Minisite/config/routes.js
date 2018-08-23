@@ -25,21 +25,43 @@ class MinisiteRoute extends Component {
       ROUTE_PARAMS_MINISITE_BUSINESS_ROUTE
     ];
     console.log(this.props.sections);
-
+    console.log(this.props.subsections);
+    var subsectionsroute;
+    if (this.props.subsections !== undefined) {
+      subsectionsroute = this.props.subsections.map((section, index) => {
+        let name = slugify(section.attributes.name);
+        if (section.children.length > 0) {
+          console.log("my name for route=", name);
+          return (
+            <Route
+              path={`/:${ROUTE_PARAMS_BUSINESS_NAME}/${name}/:sectionId`}
+              name="sections"
+              component={Sections}
+              key={index}
+            />
+          );
+        }
+      });
+    }
+    console.log("this is my subsection route =>", { subsectionsroute });
     var sectionroute;
     if (this.props.sections !== undefined) {
-      sectionroute = this.props.sections.map(section => {
+      sectionroute = this.props.sections.map((section, index) => {
         let name = slugify(section.name);
+        console.log(section.uid);
         return (
           <Route
             path={`/:${ROUTE_PARAMS_BUSINESS_NAME}/${name}/:sectionId`}
             name="sections"
             component={Sections}
+            key={index}
           />
         );
       });
     }
-    console.log(this.props.sections);
+
+    console.log("this is my section route =>", { sectionroute });
+
     return (
       <Switch>
         <Route
@@ -58,6 +80,11 @@ class MinisiteRoute extends Component {
           name="theme"
           component={ThemeLight}
         />{" "}
+        {/* <Route
+          path={`/:${ROUTE_PARAMS_BUSINESS_NAME}/test-me/:sectionId`}
+          name="theme"
+          component={Sections}
+        />{" "} */}
         <Route
           path={`/:${ROUTE_PARAMS_BUSINESS_NAME}/about`}
           name="about-us"
@@ -69,6 +96,7 @@ class MinisiteRoute extends Component {
           component={EcommerceProduct}
         />{" "}
         {this.props.sections ? sectionroute : ""}
+        {this.props.subsections ? subsectionsroute : ""}
         <Route
           path={`/:${ROUTE_PARAMS_BUSINESS_NAME}/ecommerce/:categoryId`}
           name="ecommerce"

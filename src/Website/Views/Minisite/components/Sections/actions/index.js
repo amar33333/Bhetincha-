@@ -1,2 +1,2 @@
 import sectionEpics from "./sectionActions";
-export default sectionEpics;
+export default [...sectionEpics];

@@ -11,6 +11,8 @@ const INITIAL_STATE = {
 export default function(state = INITIAL_STATE, action) {
   switch (action.type) {
     case FETCH_EACHSECTION_PENDING:
+      console.log(" fetcheach section reducer== pending");
+
       return {
         ...state
       };
