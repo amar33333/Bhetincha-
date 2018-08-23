@@ -24,12 +24,10 @@ class SectionEntityView extends Component {
   };
 
   render() {
-    // console.log("Props", this.props);
     const { sectionEntityDetailBiz } = this.props;
 
     return (
       <div>
-        {console.log("propppp", this.props)}
         {sectionEntityDetailBiz &&
           this.props.attributes &&
           this.props.attributes.attributes && (

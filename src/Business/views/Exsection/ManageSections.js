@@ -86,6 +86,8 @@ class ManageSections extends Component {
                     attributes={this.props.attributes.attributes}
                     onSubmit={this.props.onCreateSectionBusiness}
                     parentSectionBiz={this.props.parentSectionBiz}
+                    rootSectionAdmin={this.props.rootSectionAdmin}
+                    parentSectionBizFlag={this.props.parentSectionBizFlag}
                   />
                 )}
             </Col>
@@ -110,7 +112,8 @@ export default connect(
         attributes,
         parentSectionBiz,
         rootSectionAdmin,
-        topSectionAdminId
+        topSectionAdminId,
+        parentSectionBizFlag
       }
     }
   }) => ({
@@ -124,7 +127,8 @@ export default connect(
     attributes,
     parentSectionBiz,
     rootSectionAdmin,
-    topSectionAdminId
+    topSectionAdminId,
+    parentSectionBizFlag
   }),
   {
     onSectionsListExsection,

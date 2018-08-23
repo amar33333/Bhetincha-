@@ -19,6 +19,8 @@ class RecordAddNew extends Component {
           onAddChild={this.props.addSectionChild}
           onSubmit={this.props.onSubmit}
           parentSectionBiz={this.props.parentSectionBiz}
+          rootSectionAdmin={this.props.rootSectionAdmin}
+          parentSectionBizFlag={this.props.parentSectionBizFlag}
         />
       </div>
     );

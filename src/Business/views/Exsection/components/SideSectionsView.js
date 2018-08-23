@@ -16,7 +16,8 @@ class SideSectionsView extends Component {
     }
   }
 
-  onSectionClick(index, { uid, name, children }) {
+  onSectionClick(index, { uid, name, children }, event) {
+    event.preventDefault();
     const rootSectionAdmin = {};
     rootSectionAdmin.name = name;
     rootSectionAdmin.uid = uid;

@@ -27,7 +27,8 @@ import {
   CHANGE_ACTIVE_PARENT_ADMIN_EXSECTION,
   CHANGE_ROOT_SECTION_ADMIN,
   CHANGE_ACTIVE_EXSECTION_SECTION_BY_CLICK,
-  INITIALIZE_TOP_SECTION_ADMIN_ID
+  INITIALIZE_TOP_SECTION_ADMIN_ID,
+  PARENT_SECTION_BIZ_FLAG
 } from "./types";
 
 import {
@@ -256,7 +257,15 @@ epics.push((action$, { getState }) =>
               type: FETCH_PARENT_SECTION_LIST_BUSINESS_FULFILLED,
               payload: response
             };
+          } else if (response.msg.length === 0) {
+            // console.log("eroor from else if");
+            const parent_flag = false;
+            return {
+              type: PARENT_SECTION_BIZ_FLAG,
+              payload: parent_flag
+            };
           } else {
+            // console.log("error from here");
             throw new Error(response.msg);
           }
         })
@@ -381,6 +390,9 @@ epics.push((action$, { getState }) =>
     }).concatMap(({ response }) => {
       const parentSectionAdminId = response.breadCrumbs[1].uid;
       const stuffs = [];
+      stuffs.push({
+        type: RESET_SECTION_STATE
+      });
 
       stuffs.push({
         type: CHANGE_SELETED_SECTION_DETAILS_BUSINESS,

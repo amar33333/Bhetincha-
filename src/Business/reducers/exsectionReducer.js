@@ -12,7 +12,8 @@ import {
   CHANGE_ACTIVE_PARENT_ADMIN_EXSECTION,
   CHANGE_ROOT_SECTION_ADMIN,
   CHANGE_ACTIVE_EXSECTION_SECTION_BY_CLICK,
-  INITIALIZE_TOP_SECTION_ADMIN_ID
+  INITIALIZE_TOP_SECTION_ADMIN_ID,
+  PARENT_SECTION_BIZ_FLAG
 } from "../actions/types";
 
 const INITIAL_STATE = {
@@ -27,7 +28,8 @@ const INITIAL_STATE = {
   activeChildrenAdmin: null,
   sectionEntityDetailBiz: null,
   activeParentAdminId: "",
-  topSectionAdminId: ""
+  topSectionAdminId: "",
+  parentSectionBizFlag: true
 };
 
 export default function(state = INITIAL_STATE, action) {
@@ -109,7 +111,9 @@ export default function(state = INITIAL_STATE, action) {
     case RESET_SECTION_STATE:
       return {
         ...state,
-        parentSectionBiz: null //changed from {} to null
+        parentSectionBiz: null,
+        parentSectionBizFlag: true
+        //changed from {} to nullPARENT_SECTION_BIZ_FLAG
       };
 
     case CHANGE_SELETED_SECTION_DETAILS_BUSINESS_DATA_FULFILLED:
@@ -123,6 +127,9 @@ export default function(state = INITIAL_STATE, action) {
 
     case FETCH_EXSECTION_SECTION_ENTITY_EACH_PENDING:
       return { ...state, sectionEntityDetailBiz: null };
+
+    case PARENT_SECTION_BIZ_FLAG:
+      return { ...state, parentSectionBizFlag: action.payload };
 
     default:
       return state;

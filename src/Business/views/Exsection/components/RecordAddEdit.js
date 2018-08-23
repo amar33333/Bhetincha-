@@ -9,7 +9,8 @@ import {
   Row,
   Col,
   Input,
-  Button
+  Button,
+  Alert
 } from "reactstrap";
 import Select from "react-select";
 
@@ -116,27 +117,29 @@ class RecordAddEdit extends Component {
   saveClick(event) {
     event.preventDefault();
 
-    console.log("this.props", this.props);
+    //console.log("this.props", this.props);
     const { inputValues } = this.state;
-
-    const parentSectionId = this.state.selectedOption
-      ? this.state.selectedOption.value
-      : null || this.props.parentSectionBiz.sections
-        ? this.props.parentSectionBiz.sections[0].id
-        : null || 0;
-    this.setState({ parentsectionId: parentSectionId });
+    let parentSectionId;
+    if (this.props.parentSectionBiz && this.props.parentSectionBiz.sections) {
+      parentSectionId = this.state.selectedOption
+        ? this.state.selectedOption.value
+        : null || this.props.parentSectionBiz.sections
+          ? this.props.parentSectionBiz.sections[0].id
+          : null || 0;
+      this.setState({ parentsectionId: parentSectionId });
+    }
 
     if (parentSectionId !== 0) {
-      console.log("inputValues", inputValues);
+      //console.log("inputValues", inputValues);
       inputValues.forEach(value => {
         const obj = value;
-        console.log("obj", obj);
+        // console.log("obj", obj);
 
         const body = {
           asid: this.props.activeSectionAdminId,
           parentsectionId: parentSectionId
         };
-        console.log("this.props.attributes", this.props.attributes);
+        // console.log("this.props.attributes", this.props.attributes);
         //{start here}
         this.props.attributes.forEach(({ name, fieldType: attributeType }) => {
           for (var property in obj) {
@@ -157,7 +160,7 @@ class RecordAddEdit extends Component {
                   value
                 };
               } else if (name === upperCaseProperty) {
-                console.log("loggin value", value);
+                // console.log("loggin value", value);
                 body[upperCaseProperty] = {
                   attributeType,
                   value
@@ -387,26 +390,55 @@ class RecordAddEdit extends Component {
                   )}
               </Col>
             </FormGroup>
-            {documents}
+            {/* {console.log("soling props", this.props)} */}
+            {/* {console.log("soling props", this.props)}
+            {!this.props.parentSectionBiz && (
+              <strong>You havent't added Menu</strong>
+            )} */}
 
-            <FormGroup>
-              <Button sm={2} onClick={this.addClick.bind(this)}>
-                + &nbsp;
-                {this.props.selectedSectionDetailAdmin.name
-                  ? this.props.selectedSectionDetailAdmin.name
-                  : ""}
-              </Button>
-            </FormGroup>
-            <FormGroup>
-              <Button
-                sm={2}
-                //color="primary"
-                onClick={this.saveClick.bind(this)}
-                disabled={this.checkTopSectionAlreadyExists()}
-              >
-                <span className="fa fa-check" /> Save
-              </Button>&nbsp;
-            </FormGroup>
+            {/* {console.log("rootSectionAdmin", this.props.rootSectionAdmin)} */}
+
+            {this.props.activeSectionAdminId !==
+              this.props.rootSectionAdmin.uid &&
+              !this.props.parentSectionBizFlag && (
+                <Alert color="danger">
+                  Missing {this.props.rootSectionAdmin.name} data or other
+                  Section Data. Please add them first.
+                </Alert>
+              )}
+
+            {(this.props.activeSectionAdminId ===
+              this.props.rootSectionAdmin.uid ||
+              this.props.parentSectionBizFlag) && (
+              <div>
+                {documents}
+
+                {!(
+                  this.props.activeSectionAdminId ===
+                  this.props.rootSectionAdmin.uid
+                ) && (
+                  <FormGroup>
+                    <Button sm={2} onClick={this.addClick.bind(this)}>
+                      + &nbsp;
+                      {this.props.selectedSectionDetailAdmin.name
+                        ? this.props.selectedSectionDetailAdmin.name
+                        : ""}
+                    </Button>
+                  </FormGroup>
+                )}
+
+                <FormGroup>
+                  <Button
+                    sm={2}
+                    //color="primary"
+                    onClick={this.saveClick.bind(this)}
+                    disabled={this.checkTopSectionAlreadyExists()}
+                  >
+                    <span className="fa fa-check" /> Save
+                  </Button>&nbsp;
+                </FormGroup>
+              </div>
+            )}
           </Form>
         </CardBody>
       </Card>
