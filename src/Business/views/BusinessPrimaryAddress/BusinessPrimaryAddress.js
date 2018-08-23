@@ -66,10 +66,10 @@ class BusinessPrimaryAddress extends Component {
             EDIT={this.props.EDIT}
             primaryAddressEditErrors={this.props.primaryAddressEditErrors}
           />
-          <Row>
+          <Row className="mb-4">
             <Col xs="12">
               <Button color="primary" size="lg" style={{ marginRight: 20 }}>
-                SAVE
+                Save
               </Button>
             </Col>
           </Row>

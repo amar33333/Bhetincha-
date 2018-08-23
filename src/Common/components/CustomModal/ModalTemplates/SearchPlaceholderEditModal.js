@@ -76,6 +76,7 @@ class SearchPlaceholderEditModal extends Component {
             <FormGroup>
               <Label>Start Date-Time</Label>
               <Datetime
+                closeOnSelect
                 disabled={this.props.loading}
                 value={this.state.start_date}
                 onChange={time => {
@@ -94,6 +95,7 @@ class SearchPlaceholderEditModal extends Component {
             <FormGroup>
               <Label>End Date-Time</Label>
               <Datetime
+                closeOnSelect
                 disabled={this.props.loading}
                 value={this.state.end_date}
                 onChange={time => {

@@ -26,8 +26,8 @@ class Home extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    // if (prevProps.coords !== this.props.coords) {
-    if (this.props.coords)
+    if (prevProps.coords !== this.props.coords) {
+      // if (this.props.coords)
       this.props.onStoreUserGeoLocation({
         user_geo_coords: {
           accuracy: this.props.coords.accuracy,
@@ -38,6 +38,7 @@ class Home extends Component {
           speed: this.props.coords.speed
         }
       });
+    }
 
     // } else {
     //   this.props.onStoreUserGeoLocation({
@@ -47,7 +48,7 @@ class Home extends Component {
   }
 
   render() {
-    console.log("prop: ", this.props);
+    // console.log("prop: ", this.props);
     return (
       <div className="body-wrapper">
         {!this.props.cookies ? (

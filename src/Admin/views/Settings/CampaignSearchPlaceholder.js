@@ -179,6 +179,7 @@ class CampaignSearchPlaceholder extends Component {
                           <Label>Start Date-Time</Label>
                           <Datetime
                             //disabled={this.props.loading}
+                            closeOnSelect
                             value={this.state.start_date}
                             onChange={time => {
                               this.setState({
@@ -197,6 +198,7 @@ class CampaignSearchPlaceholder extends Component {
                           <Label>End Date-Time</Label>
                           <Datetime
                             //disabled={this.props.loading}
+                            closeOnSelect
                             value={this.state.end_date}
                             onChange={time => {
                               this.setState({

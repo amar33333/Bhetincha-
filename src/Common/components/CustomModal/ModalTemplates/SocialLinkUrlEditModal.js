@@ -89,7 +89,7 @@ class SocialLinkUrlEditModal extends Component {
             value="Add Group"
             disabled={this.props.socialLinksFetchLoading}
           >
-            <i className="fa fa-plus" /> Edit Social Link
+            <i className="fa fa-check" /> Save
           </Button>
         </form>
       </div>

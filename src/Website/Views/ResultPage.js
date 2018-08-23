@@ -77,7 +77,7 @@ class ResultPage extends Component {
         lat: this.props.user_geo_coords
           ? this.props.user_geo_coords.latitude
           : undefined,
-        lon: this.props.user_geo_coordsom
+        lon: this.props.user_geo_coords
           ? this.props.user_geo_coords.longitude
           : undefined,
         distance: this.state.distance,

@@ -18,7 +18,7 @@ const items = {
     {
       name: "General Setup",
       url: "/admin/countries",
-      icon: "fa fa-users",
+      icon: "fa fa-info-circle",
       // permission: "CAN_VIEW_ECOMMERCE",
       children: [
         {
@@ -73,19 +73,19 @@ const items = {
     {
       name: "List Business",
       url: "/admin/list-business",
-      icon: "fa fa-industry",
+      icon: "fa fa-list",
       permission: "CAN_VIEW_BUSINESS"
     },
     {
       name: "Assign Business",
       url: "/admin/business-assign",
-      icon: "fa fa-industry",
+      icon: "fa fa-hand-pointer-o",
       permission: "CAN_VIEW_BUSINESS_ASSIGN"
     },
     {
       name: "List App Business",
       url: "/admin/approve-app-business",
-      icon: "fa fa-industry",
+      icon: "fa fa-list",
       permission: "CAN_VIEW_APP_BUSINESS"
     },
     {
@@ -109,13 +109,13 @@ const items = {
     {
       name: "Company Type",
       url: "/admin/company-type",
-      icon: "fa fa-cubes",
+      icon: "fa fa-building",
       permission: "CAN_VIEW_COMPANY_TYPE"
     },
     {
       name: "Payment Method",
       url: "/admin/payment-method",
-      icon: "fa fa-cubes",
+      icon: "fa fa-money",
       permission: "CAN_VIEW_PAYMENT_METHOD"
     },
     // {
@@ -161,13 +161,13 @@ const items = {
     {
       name: "Ecommerce",
       url: "/admin/ecommerce",
-      icon: "fa fa-users",
+      icon: "fa fa-shopping-cart",
       permission: "CAN_VIEW_ECOMMERCE",
       children: [
         {
           name: "Manage Categories",
           url: "/admin/ecommerce/categories",
-          icon: "icon-user-follow",
+          icon: "fa fa-bars",
           permission: "CAN_VIEW_ECOMMERCE_CATEGORIES"
         }
       ]
@@ -203,7 +203,7 @@ const items = {
         {
           name: "Reset Password",
           url: "/admin/users/reset-password",
-          icon: "icon-tag",
+          icon: "fa fa-unlock-alt",
           permission: "CAN_ACCESS_RESET_PASSWORD"
         }
       ]
@@ -221,19 +221,19 @@ const items = {
         {
           name: "Manage Social Links",
           url: "/admin/manage-social-links",
-          icon: "icon-user-follow",
+          icon: "fa fa-facebook-square",
           permission: "CAN_VIEW_SOCIAL_LINKS"
         },
         {
           name: "Improve Listing",
           url: "/admin/improve-listing",
-          icon: "icon-user-follow",
+          icon: "fa fa-list",
           permission: "CAN_VIEW_IMPROVE_LISTING"
         },
         {
           name: "Subscription",
           url: "/admin/subscription-package",
-          icon: "icon-user-follow",
+          icon: "fa fa-briefcase",
           permission: "CAN_VIEW_IMPROVE_LISTING"
         }
 
@@ -248,13 +248,13 @@ const items = {
     {
       name: "Campaigns",
       // url: "/admin/settings",
-      icon: "icon-settings",
+      icon: "fa fa-clone",
       permission: "CAN_VIEW_CAMPAIGN",
       children: [
         {
           name: "Search Placeholder",
           url: "/admin/campaign-search-placeholder",
-          icon: "icon-user-follow",
+          icon: "fa fa-search-plus",
           permission: "CAN_VIEW_SEARCH_PLACEHOLDER"
         }
       ]

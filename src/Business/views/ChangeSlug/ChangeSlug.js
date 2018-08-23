@@ -12,7 +12,8 @@ import {
   FormGroup,
   Label,
   Button,
-  Input
+  Input,
+  Alert
 } from "reactstrap";
 import { onSlugEdit, onSlugCheckSubmit } from "../../actions";
 
@@ -47,8 +48,8 @@ class BusinessAbout extends Component {
 
   onSlugAvailable = () => {
     if (this.props.slugAvailable)
-      return <p style={{ color: "green" }}> Slug Available </p>;
-    else return <p style={{ color: "red" }}> Slug Not Available </p>;
+      return <Alert color="success">Slug Available!</Alert>;
+    else return <Alert color="warning">Slug Not Available!</Alert>;
   };
 
   onFormSubmit = event => {
@@ -103,7 +104,7 @@ class BusinessAbout extends Component {
                         size="lg"
                         style={{ marginRight: 20 }}
                       >
-                        CHANGE
+                        Change
                       </Button>
                     </Col>
                   </Row>

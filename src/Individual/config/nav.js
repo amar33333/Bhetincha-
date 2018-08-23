@@ -11,25 +11,25 @@ const items = {
     {
       name: "Personal Details",
       url: `/${ROUTE_PARAMS_INDIVIDUAL_NAME}/userdashboard/personal-details`,
-      icon: "icon-speedometer"
+      icon: "fa fa-info-circle"
       // permission: "CAN_VIEW_DASHBOARD"
     },
     {
       name: "Education",
       url: `/${ROUTE_PARAMS_INDIVIDUAL_NAME}/userdashboard/education-details`,
-      icon: "icon-speedometer"
+      icon: "fa fa-graduation-cap"
       // permission: "CAN_VIEW_DASHBOARD"
     },
     {
       name: "Experience Details",
       url: `/${ROUTE_PARAMS_INDIVIDUAL_NAME}/userdashboard/experience-details`,
-      icon: "icon-speedometer"
+      icon: "fa fa-lightbulb-o"
       // permission: "CAN_VIEW_DASHBOARD"
     },
     {
       name: "Interests",
       url: `/${ROUTE_PARAMS_INDIVIDUAL_NAME}/userdashboard/interests`,
-      icon: "icon-speedometer"
+      icon: "fa fa-tags"
       // permission: "CAN_VIEW_DASHBOARD"
     }
   ]
