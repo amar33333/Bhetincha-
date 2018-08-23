@@ -22,56 +22,56 @@ const items = {
       name: "Change Slug",
       className: "joyride-slug",
       url: `/${ROUTE_PARAMS_BUSINESS_NAME}/dashboard/change-slug`,
-      icon: "fa fa-map-o"
+      icon: "fa fa-external-link"
       // permission: "CAN_VIEW_USERS"
     },
     {
       name: "General Info",
-      icon: "fa fa-users",
+      icon: "fa fa-info-circle",
       // permission: "CAN_VIEW_USER",
       children: [
         {
           name: "Business Details",
           url: `/${ROUTE_PARAMS_BUSINESS_NAME}/dashboard/business-details`,
-          icon: "fa fa-map-o"
+          icon: "fa fa-info"
           // permission: "CAN_VIEW_USERS"
         },
         {
           name: "Logo & Cover Image",
           url: `/${ROUTE_PARAMS_BUSINESS_NAME}/dashboard/business-logo-cover-image`,
-          icon: "fa fa-map-o"
+          icon: "fa fa-picture-o"
           // permission: "CAN_VIEW_USERS"
         },
 
         {
           name: "About",
           url: `/${ROUTE_PARAMS_BUSINESS_NAME}/dashboard/business-about`,
-          icon: "fa fa-map-o"
+          icon: "fa fa-tag"
           // permission: "CAN_VIEW_USERS"
         },
         {
           name: "WorkingHour",
           url: `/${ROUTE_PARAMS_BUSINESS_NAME}/dashboard/business-working-hour`,
-          icon: "fa fa-map-o"
+          icon: "fa fa-calendar-check-o"
           // permission: "CAN_VIEW_USERS"
         }
       ]
     },
     {
       name: "Contact",
-      icon: "fa fa-users",
+      icon: "fa fa-location-arrow",
       // permission: "CAN_VIEW_USER",
       children: [
         {
           name: "PrimaryAddress",
           url: `/${ROUTE_PARAMS_BUSINESS_NAME}/dashboard/business-primary-address`,
-          icon: "fa fa-map-o"
+          icon: "fa fa-map-marker"
           // permission: "CAN_VIEW_USERS"
         },
         {
           name: "BranchAddress",
           url: `/${ROUTE_PARAMS_BUSINESS_NAME}/dashboard/business-branch-address`,
-          icon: "fa fa-map-o"
+          icon: "fa fa-map-marker"
           // permission: "CAN_VIEW_USERS"
         }
       ]
@@ -79,26 +79,26 @@ const items = {
     {
       name: "Gallery",
       url: `/${ROUTE_PARAMS_BUSINESS_NAME}/dashboard/gallery`,
-      icon: "fa fa-users"
+      icon: "fa fa-picture-o"
       // permission: "CAN_VIEW_USER",
     },
     {
       name: "Social Links",
       url: `/${ROUTE_PARAMS_BUSINESS_NAME}/dashboard/social-links`,
-      icon: "fa fa-users"
+      icon: "fa fa-facebook-square"
       // permission: "CAN_VIEW_USER",
     },
 
     {
       name: "Ecommerce",
       url: `/${ROUTE_PARAMS_BUSINESS_NAME}/dashboard/ecommerce`,
-      icon: "fa fa-users",
+      icon: "fa fa-shopping-cart",
       // permission: "CAN_VIEW_USER",
       children: [
         {
           name: "Manage Products",
           url: `/${ROUTE_PARAMS_BUSINESS_NAME}/dashboard/ecommerce/manage-products`,
-          icon: "icon-user-follow"
+          icon: "fa fa-reorder"
           // permission: "CAN_VIEW_USER"
         }
       ]
