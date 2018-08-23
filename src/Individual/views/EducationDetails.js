@@ -38,8 +38,8 @@ class EducationDetails extends Component {
   renderEducationDetails() {
     return this.props.educationDetails.length
       ? this.props.educationDetails.map(each => (
-          <Col xs="12" md="4" className="mb-2">
-            <Card key={each.educationID}>
+          <Col xs="12" md="4" className="mb-2" key={each.educationID}>
+            <Card>
               <CardHeader>
                 <strong>{each.level_of_education}</strong>
               </CardHeader>
@@ -48,7 +48,8 @@ class EducationDetails extends Component {
                   <strong>{each.name_of_college}</strong>
                 </p>
                 <p>
-                  Attended From: {each.start_date} to : {each.end_date}{" "}
+                  Attended From: {new Date(each.start_date).getFullYear()} to{" "}
+                  {new Date(each.end_date).getFullYear()}
                 </p>
                 <p> Show in Profile: {each.show ? "True" : "False"}</p>
                 <Button
