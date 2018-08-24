@@ -96,9 +96,15 @@ class ResultPage extends Component {
       this.props.location.search.slice(1)
     );
 
-    // console.log("pasdara: ", parsedUrlStringObject);
-
-    if (this.props.location.search !== prevProps.location.search) {
+    if (
+      this.props.location.search !== prevProps.location.search ||
+      (this.props.location.state &&
+        this.props.location.state.enterCount &&
+        (prevProps.location.state && prevProps.location.state.enterCount
+          ? this.props.location.state.enterCount !==
+            prevProps.location.state.enterCount
+          : true))
+    ) {
       this.setState(
         {
           frm: 0,
@@ -418,7 +424,7 @@ class ResultPage extends Component {
     //     ? this.state.searchResults.cat._source.name
     //     : parsedUrlStringObject["query"]);
 
-    console.log("name: ", name);
+    // console.log("name: ", name);
 
     return (
       this.state.searchResults &&
@@ -530,7 +536,7 @@ class ResultPage extends Component {
   render() {
     // console.log("props: ", this.props);
 
-    console.log("state: ", this.state);
+    // console.log("state: ", this.state);
     return (
       <div
         className="pb-5"

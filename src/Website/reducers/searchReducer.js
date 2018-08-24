@@ -60,7 +60,7 @@ export default function(state = INITIAL_STATE, action) {
         (!isEmpty(subCategoryMatch) && subCategoryMatch);
 
       if (temp) {
-        console.log("enterererrerererrerer");
+        // console.log("enterererrerererrerer");
         if (
           temp.findings.area._source.Kind === "country" ||
           temp.findings.area._source.kind === "country"
@@ -108,7 +108,7 @@ export default function(state = INITIAL_STATE, action) {
           address.area = temp.findings.area._source.name;
         }
       }
-      console.log("asdasd: ", address);
+      // console.log("asdasd: ", address);
 
       const hitMatch =
         (!isEmpty(businessMatch) &&

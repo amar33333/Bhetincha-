@@ -37,12 +37,14 @@ class AutoSuggestion extends Component {
   render() {
     return (
       <Autosuggest
+        ref={ref => (this.autosuggestEl = ref)}
         from={this.props.from}
         suggestions={this.props.suggestions}
         onSuggestionsFetchRequested={({ value }) => {
           value.length > 0 &&
             this.props.onSuggestionsFetchRequested({ query: value });
         }}
+        focusInputOnSuggestionClick={false}
         onSuggestionsClearRequested={this.onSuggestionsClearRequested}
         getSuggestionValue={this.getSuggestionValue}
         renderSuggestion={this.renderSuggestion}
@@ -64,9 +66,9 @@ class AutoSuggestion extends Component {
               }}
               onSubmit={event => {
                 event.preventDefault();
-                // this.state.selected
-                //   ? this.setState({ selected: false })
-                //   : this.props.onSearchComplete(this.state.value);
+                this.autosuggestEl.setState({
+                  isCollapsed: true
+                });
                 this.props.onSearchComplete(this.state.value);
               }}
             >
