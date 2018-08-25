@@ -53,7 +53,7 @@ import querystring from "querystring";
 
 export const onSubscriptionPackageAssignPost = ({ id, body, access_token }) =>
   ajax({
-    method: "PUT",
+    method: "POST",
     url: `${SUBSCRIPTION_PACKAGE_ASSIGN_URL}${id}/`,
     body,
     headers: {
