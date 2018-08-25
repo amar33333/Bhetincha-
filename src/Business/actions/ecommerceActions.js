@@ -189,21 +189,24 @@ epics.push((action$, { getState }) =>
 );
 
 // categories
-export const onCategoriesListEcommerce = () => ({
+export const onCategoriesListEcommerce = (currentId, routeOnError) => ({
   type: FETCH_ECOMMERCE_CATEGORIES_PENDING,
-  first: true
+  first: true,
+  payload: currentId,
+  routeOnError
 });
 
 epics.push((action$, { getState }) =>
   action$.ofType(FETCH_ECOMMERCE_CATEGORIES_PENDING).mergeMap(action => {
-    const { first } = action;
+    const { first, payload, routeOnError } = action;
     return onEcommerceCategoriesGet()
       .concatMap(({ response }) => {
         const extra = [];
         if (first) {
           extra.push({
             type: CHANGE_ACTIVE_ECOMMERCE_CATEGORY,
-            payload: response.uid
+            payload: payload || response.uid,
+            routeOnError
           });
         }
         return [
@@ -224,25 +227,47 @@ epics.push((action$, { getState }) =>
 export const onChangeActiveCategoryEcommerce = (
   newCategory,
   oldCategory,
-  leafDetected = false
+  routeOnError,
+  justToggle
 ) => ({
   type: CHANGE_ACTIVE_ECOMMERCE_CATEGORY,
   payload: newCategory,
   oldCategory,
-  leafDetected
+  routeOnError,
+  justToggle
 });
 
 epics.push((action$, { getState }) =>
   action$.ofType(CHANGE_ACTIVE_ECOMMERCE_CATEGORY).concatMap(action => {
-    const { payload: newCategory, oldCategory, leafDetected } = action;
+    const { payload: newCategory, oldCategory, routeOnError } = action;
     const businessId = getState().auth.cookies.user_data.business_id;
     const stuffs = [];
+    const categories = getState().BusinessContainer.ecommerce.categories;
+
+    let leafDetected = false;
+
+    const updateLeafDetected = category => {
+      const { children, uid, hasProduct } = category;
+      if (children && children.length) {
+        children.forEach(subCategory => updateLeafDetected(subCategory));
+      }
+
+      if (uid === newCategory && hasProduct) {
+        leafDetected = true;
+      }
+    };
+
+    if (categories && (!oldCategory || newCategory !== oldCategory)) {
+      updateLeafDetected(categories);
+    }
+
     if (leafDetected && (!oldCategory || newCategory !== oldCategory)) {
       stuffs.push({
         type: FETCH_ECOMMERCE_CATEGORY_ATTRIBUTES_PENDING,
         payload: {
           body: { categoryId: newCategory }
-        }
+        },
+        routeOnError
       });
     }
     if (!oldCategory || newCategory !== oldCategory) {
@@ -250,7 +275,8 @@ epics.push((action$, { getState }) =>
         type: FETCH_ECOMMERCE_CATEGORY_PRODUCTS_PENDING,
         payload: {
           params: { categoryId: newCategory, businessId }
-        }
+        },
+        routeOnError
       });
     }
     return stuffs;
@@ -260,7 +286,7 @@ epics.push((action$, { getState }) =>
 epics.push(action$ =>
   action$
     .ofType(FETCH_ECOMMERCE_CATEGORY_ATTRIBUTES_PENDING)
-    .mergeMap(({ payload: { body } }) => {
+    .switchMap(({ payload: { body }, routeOnError }) => {
       return onEcommerceCategoryAttributesGet({ body })
         .map(({ response }) => {
           if (response.msg === "success") {
@@ -269,11 +295,12 @@ epics.push(action$ =>
               payload: response
             };
           } else {
+            routeOnError && routeOnError();
             throw new Error(response.msg);
           }
         })
         .catch(ajaxError => {
-          toast.error(ajaxError.toString());
+          // toast.error(ajaxError.toString());
           return Observable.of({
             type: FETCH_ECOMMERCE_CATEGORY_ATTRIBUTES_REJECTED
           });
@@ -289,7 +316,7 @@ export const onFetchEcommerceProducts = payload => ({
 epics.push((action$, { getState }) =>
   action$
     .ofType(FETCH_ECOMMERCE_CATEGORY_PRODUCTS_PENDING)
-    .mergeMap(({ payload }) => {
+    .switchMap(({ payload, routeOnError }) => {
       const params = payload ? payload.params : {};
       return onEcommerceCategoryProductsGet({
         params: {
@@ -307,11 +334,12 @@ epics.push((action$, { getState }) =>
               payload: response
             };
           } else {
+            routeOnError && routeOnError();
             throw new Error(response.msg);
           }
         })
         .catch(ajaxError => {
-          toast.error(ajaxError.toString());
+          // toast.error(ajaxError.toString());
           return Observable.of({
             type: FETCH_ECOMMERCE_CATEGORY_PRODUCTS_REJECTED
           });

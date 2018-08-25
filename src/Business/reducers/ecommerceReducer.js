@@ -114,6 +114,40 @@ export default function(state = INITIAL_STATE, action) {
       if (activeCategory !== uid) {
         extra.activeCategory = uid;
       }
+
+      if (
+        state.categories.uid &&
+        !isOpenCategories.includes(state.categories.uid)
+      ) {
+        isOpenCategories.push(state.categories.uid);
+      }
+
+      let parents = [];
+      let temp = [];
+      // let temp2 = [];
+
+      const updateIsOpenCategoriesParent = category => {
+        const { children, uid: catUid } = category;
+        temp.push(catUid);
+        // temp2.push(category.name);
+        // console.log(temp2);
+        if (catUid === uid) {
+          parents = [...temp];
+        }
+        if (children && children.length) {
+          children.forEach(subCategory =>
+            updateIsOpenCategoriesParent(subCategory)
+          );
+        }
+        temp.pop();
+        // temp2.pop();
+      };
+
+      if (!action.justToggle) {
+        updateIsOpenCategoriesParent(state.categories);
+        isOpenCategories = [...new Set([...isOpenCategories, ...parents])];
+      }
+
       return { ...state, isOpenCategories, ...extra };
 
     case OPEN_ALL_ON_SEARCH:

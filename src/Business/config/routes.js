@@ -106,19 +106,24 @@ class BusinessRoute extends Component {
           component={BusinessLogoCoverImage}
         />{" "}
         <Route
-          path={`/:${ROUTE_PARAMS_BUSINESS_NAME}/dashboard/ecommerce/manage-products/:productId/edit`}
-          name="edit-ecommerce-product"
-          component={ProductEdit}
-        />
-        <Route
-          path={`/:${ROUTE_PARAMS_BUSINESS_NAME}/dashboard/ecommerce/manage-products/:productId`}
-          name="view-ecommerce-product"
-          component={ProductView}
+          path={`/:${ROUTE_PARAMS_BUSINESS_NAME}/dashboard/ecommerce/manage-products/:categoryId`}
+          name="manage-ecommerce-products"
+          component={ManageProducts}
         />
         <Route
           path={`/:${ROUTE_PARAMS_BUSINESS_NAME}/dashboard/ecommerce/manage-products`}
           name="manage-ecommerce-products"
           component={ManageProducts}
+        />
+        <Route
+          path={`/:${ROUTE_PARAMS_BUSINESS_NAME}/dashboard/ecommerce/:productId/edit`}
+          name="edit-ecommerce-product"
+          component={ProductEdit}
+        />
+        <Route
+          path={`/:${ROUTE_PARAMS_BUSINESS_NAME}/dashboard/ecommerce/:productId`}
+          name="view-ecommerce-product"
+          component={ProductView}
         />
         <Route
           path={`/:${ROUTE_PARAMS_BUSINESS_NAME}/dashboard`}

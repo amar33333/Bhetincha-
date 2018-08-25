@@ -33,9 +33,7 @@ class ProductView extends Component {
             <ProductDetail
               editURL={`/${
                 this.props.match.params.businessName
-              }/dashboard/ecommerce/manage-products/${
-                this.props.match.params.productId
-              }/edit`}
+              }/dashboard/ecommerce/${this.props.match.params.productId}/edit`}
               onRemoveEcommerceProduct={this.props.onRemoveEcommerceProduct}
               productDetail={this.props.productDetail}
               routeToManageProducts={this.routeToManageProducts}

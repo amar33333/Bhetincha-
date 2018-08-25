@@ -220,21 +220,24 @@ epics.push((action$, { getState }) =>
 );
 
 // categories
-export const onCategoriesListEcommerce = payload => ({
+export const onCategoriesListEcommerce = (currentId, routeOnError) => ({
   type: FETCH_ECOMMERCE_CATEGORIES_PENDING,
-  first: !payload
+  first: true,
+  payload: currentId,
+  routeOnError
 });
 
 epics.push((action$, { getState }) =>
   action$.ofType(FETCH_ECOMMERCE_CATEGORIES_PENDING).mergeMap(action => {
-    const { first } = action;
+    const { first, payload, routeOnError } = action;
     return onEcommerceCategoriesGet()
       .concatMap(({ response }) => {
         const extra = [];
         if (first) {
           extra.push({
             type: CHANGE_ACTIVE_ECOMMERCE_CATEGORY,
-            payload: response.uid
+            payload: payload || response.uid,
+            routeOnError
           });
         }
         return [
@@ -360,27 +363,39 @@ epics.push((action$, { getState }) =>
   })
 );
 
-export const onChangeActiveCategoryEcommerce = (newCategory, oldCategory) => ({
+export const onChangeActiveCategoryEcommerce = (
+  newCategory,
+  oldCategory,
+  routeOnError,
+  justToggle
+) => ({
   type: CHANGE_ACTIVE_ECOMMERCE_CATEGORY,
   payload: newCategory,
-  oldCategory
+  oldCategory,
+  routeOnError,
+  justToggle
 });
 
 epics.push((action$, { getState }) =>
   action$
     .ofType(CHANGE_ACTIVE_ECOMMERCE_CATEGORY)
-    .mergeMap(action => {
-      const { payload: newCategory, oldCategory } = action;
+    .switchMap(action => {
+      const { payload: newCategory, oldCategory, routeOnError } = action;
       if (!oldCategory || newCategory !== oldCategory) {
         return onEcommerceCategoryDetailGet({ uid: newCategory })
           .map(({ response }) => {
-            return {
-              type: FETCH_ECOMMERCE_CATEGORY_FULFILLED,
-              payload: response
-            };
+            if (!response.msg || (response.msg && response.msg === "success")) {
+              return {
+                type: FETCH_ECOMMERCE_CATEGORY_FULFILLED,
+                payload: response
+              };
+            } else {
+              routeOnError && routeOnError();
+              throw new Error(response.msg);
+            }
           })
           .catch(ajaxError => {
-            toast.error("Error fetching Categories");
+            // toast.error("Error fetching Categories");
             return Observable.of({ type: FETCH_ECOMMERCE_CATEGORY_REJECTED });
           });
       } else {

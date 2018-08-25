@@ -18,8 +18,39 @@ import {
 
 class ManageProducts extends Component {
   componentDidMount() {
-    this.props.onCategoriesListEcommerce();
+    this.props.onCategoriesListEcommerce(
+      this.props.match.params.categoryId,
+      this.routeToManageProducts
+    );
   }
+
+  componentDidUpdate(prevProps) {
+    if (
+      this.props.match.params.categoryId !== prevProps.match.params.categoryId
+    ) {
+      if (!this.props.match.params.categoryId) {
+        this.props.onCategoriesListEcommerce(
+          this.props.match.params.categoryId,
+          this.routeToManageProducts
+        );
+      } else {
+        this.props.onChangeActiveCategoryEcommerce(
+          this.props.match.params.categoryId,
+          prevProps.match.params.categoryId,
+          this.routeToManageProducts
+        );
+      }
+    }
+  }
+
+  routeToManageProducts = () => {
+    this.props.history.push(
+      `/${
+        this.props.match.params.businessName
+      }/dashboard/ecommerce/manage-products`
+    );
+  };
+
   render() {
     return (
       <div className="animated fadeIn">
@@ -30,7 +61,23 @@ class ManageProducts extends Component {
                 categories={this.props.categories}
                 activeCategory={this.props.activeCategory}
                 onChangeActiveCategory={
-                  this.props.onChangeActiveCategoryEcommerce
+                  // this.props.onChangeActiveCategoryEcommerce
+                  uid => {
+                    if (this.props.match.params.categoryId !== uid) {
+                      this.props.history.push(
+                        `/${
+                          this.props.match.params.businessName
+                        }/dashboard/ecommerce/manage-products/${uid}`
+                      );
+                    } else {
+                      this.props.onChangeActiveCategoryEcommerce(
+                        uid,
+                        this.props.match.params.categoryId,
+                        this.routeToManageProducts,
+                        true
+                      );
+                    }
+                  }
                 }
                 isOpen={this.props.isOpenCategories}
                 openAllOnSearch={this.props.openAllOnSearchEcommerce}
@@ -42,8 +89,12 @@ class ManageProducts extends Component {
                 <div>
                   <BreadcrumbNav
                     breadCrumbs={this.props.selectedCategoryDetail.breadCrumbs}
-                    onChangeActiveCategory={
-                      this.props.onChangeActiveCategoryEcommerce
+                    onChangeActiveCategory={uid =>
+                      this.props.history.push(
+                        `/${
+                          this.props.match.params.businessName
+                        }/dashboard/ecommerce/manage-products/${uid}`
+                      )
                     }
                   />
                 </div>
@@ -70,7 +121,7 @@ class ManageProducts extends Component {
                     fetchData={this.props.onFetchEcommerceProducts}
                     URL={`/${
                       this.props.match.params.businessName
-                    }/dashboard/ecommerce/manage-products`}
+                    }/dashboard/ecommerce`}
                     loading={this.props.productsFetchLoading}
                     onDelete={this.props.onRemoveEcommerceProduct}
                   />
