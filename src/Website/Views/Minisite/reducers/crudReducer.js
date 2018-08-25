@@ -8,7 +8,10 @@ import {
   UPDATE_BUSINESS_FULFILLED,
   DELETE_GALLERY_PHOTO_FULFILLED,
   DELETE_GALLERY_ALBUM_FULFILLED,
-  UPDATE_NAV_LAYOUT_FULFILLED
+  UPDATE_NAV_LAYOUT_FULFILLED,
+  FETCH_MINISITE_PERMISSIONS_FULFILLED,
+  FETCH_MINISITE_PERMISSIONS_PENDING,
+  FETCH_MINISITE_PERMISSIONS_REJECTED
 } from "../actions/types";
 
 const INITIAL_STATE = {
@@ -46,7 +49,8 @@ const INITIAL_STATE = {
     latitude: "",
     longitude: ""
   },
-  links: []
+  links: [],
+  minisitePermissions: null
 
   // nav_layout: [
   //   {
@@ -86,6 +90,17 @@ const INITIAL_STATE = {
 
 export default function(state = INITIAL_STATE, action) {
   switch (action.type) {
+    case FETCH_MINISITE_PERMISSIONS_PENDING:
+      return { ...state, minisitePermissionsFetchLoading: true };
+    case FETCH_MINISITE_PERMISSIONS_FULFILLED:
+      return {
+        ...state,
+        minisitePermissionsFetchLoading: false,
+        minisitePermissions: action.payload
+      };
+    case FETCH_MINISITE_PERMISSIONS_REJECTED:
+      return { ...state, minisitePermissionsFetchLoading: false };
+
     case FETCH_BUSINESS_FULFILLED:
       return { ...INITIAL_STATE, ...action.payload };
 

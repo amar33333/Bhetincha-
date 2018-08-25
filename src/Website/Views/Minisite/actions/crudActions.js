@@ -41,10 +41,34 @@ import {
   CLEAR_MINISITE_DATA,
   UPDATE_NAV_LAYOUT_PENDING,
   UPDATE_NAV_LAYOUT_FULFILLED,
-  UPDATE_NAV_LAYOUT_REJECTED
+  UPDATE_NAV_LAYOUT_REJECTED,
+  FETCH_MINISITE_PERMISSIONS_FULFILLED,
+  FETCH_MINISITE_PERMISSIONS_PENDING,
+  FETCH_MINISITE_PERMISSIONS_REJECTED
 } from "./types";
+import { onMinisitePermissionsGet } from "../config/minisiteServerCall";
 
 const epics = [];
+
+export const onMinisitePermissionsList = payload => ({
+  type: FETCH_MINISITE_PERMISSIONS_PENDING,
+  payload
+});
+
+epics.push((action$, { getState }) =>
+  action$.ofType(FETCH_MINISITE_PERMISSIONS_PENDING).mergeMap(({ payload }) =>
+    onMinisitePermissionsGet({
+      ...payload
+    })
+      .map(({ response }) => ({
+        type: FETCH_MINISITE_PERMISSIONS_FULFILLED,
+        payload: response
+      }))
+      .catch(ajaxError =>
+        Observable.of({ type: FETCH_MINISITE_PERMISSIONS_REJECTED })
+      )
+  )
+);
 
 export const onBusinessUpdate = payload => ({
   type: UPDATE_BUSINESS_PENDING,
