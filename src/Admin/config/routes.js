@@ -33,10 +33,11 @@ import {
   CampaignSearchPlaceholder,
   SocialUrlLinks,
   SubscriptionPackage,
-  ManageSubscription
+  ManageSubscription,
+  ManageProducts
 } from "../views";
 
-import { ManageCategories } from "../views/Ecommerce";
+import { ManageCategories, AssignCategories } from "../views/Ecommerce";
 
 import CustomRoute from "../../Common/utils/CustomRoute";
 
@@ -156,6 +157,12 @@ class AdminRoute extends Component {
           permission="CAN_VIEW_BRANCH"
         />
         <CustomRoute
+          path="/admin/list-business/:businessSlug/manage-products"
+          name="Manage Products"
+          component={ManageProducts}
+          permission="CAN_VIEW_BRANCH"
+        />
+        <CustomRoute
           path="/admin/list-business/:businessSlug/social-url-links"
           name="Social Url Links"
           component={SocialUrlLinks}
@@ -218,9 +225,16 @@ class AdminRoute extends Component {
         />
         <CustomRoute
           exact
-          path="/admin/ecommerce/categories"
+          path="/admin/ecommerce/manage-categories"
           name="Ecommerce-categories"
           component={ManageCategories}
+          permission="CAN_VIEW_ECOMMERCE_CATEGORIES"
+        />
+        <CustomRoute
+          exact
+          path="/admin/ecommerce/assign-categories"
+          name="Ecommerce-assign"
+          component={AssignCategories}
           permission="CAN_VIEW_ECOMMERCE_CATEGORIES"
         />
         <CustomRoute

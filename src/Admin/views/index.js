@@ -19,6 +19,7 @@ import CampaignSearchPlaceholder from "./Settings/CampaignSearchPlaceholder";
 import SubscriptionPackage from "./Settings/SubscriptionPackage";
 import SocialUrlLinks from "./BusinessAdminDetail/SocialUrlLinks";
 import ManageSubscription from "./BusinessAdminDetail/ManageSubscription";
+import ManageProducts from "./BusinessAdminDetail/ManageProducts";
 
 import {
   Areas,
@@ -67,5 +68,6 @@ export {
   CampaignSearchPlaceholder,
   SocialUrlLinks,
   SubscriptionPackage,
-  ManageSubscription
+  ManageSubscription,
+  ManageProducts
 };

@@ -166,8 +166,14 @@ const items = {
       children: [
         {
           name: "Manage Categories",
-          url: "/admin/ecommerce/categories",
+          url: "/admin/ecommerce/manage-categories",
           icon: "fa fa-bars",
+          permission: "CAN_VIEW_ECOMMERCE_CATEGORIES"
+        },
+        {
+          name: "Assign Categories",
+          url: "/admin/ecommerce/assign-categories",
+          icon: "fa fa-snowflake-o",
           permission: "CAN_VIEW_ECOMMERCE_CATEGORIES"
         }
       ]
@@ -290,7 +296,8 @@ items.routes = {
     // "/admin/list-business/:x/manage-branchs/:x": "YBranch",
     "/admin/list-business/:x/manage-branchs/:x/edit-branch": "Edit",
     "/admin/list-business/:x/social-url-links": "Social Links",
-    "/admin/list-business/:x/manage-subscription": "Subscription"
+    "/admin/list-business/:x/manage-subscription": "Subscription",
+    "/admin/list-business/:x/manage-products": "Products"
   }
 };
 

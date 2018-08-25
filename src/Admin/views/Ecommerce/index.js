@@ -1,3 +1,4 @@
 import ManageCategories from "./ManageCategories";
+import AssignCategories from "./AssignCategories";
 
-export { ManageCategories };
+export { ManageCategories, AssignCategories };

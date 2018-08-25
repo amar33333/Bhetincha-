@@ -631,6 +631,16 @@ export const onCategoryEachGet = ({ id, access_token }) =>
     }
   });
 
+export const onCategoryEachGetAjax = ({ id, access_token }) =>
+  ajax({
+    method: "get",
+    url: `${CATEGORY_URL}${id}/`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
 export const onCategoryPost = ({ category, industry, access_token }) =>
   axios({
     method: "post",
@@ -645,14 +655,11 @@ export const onCategoryPost = ({ category, industry, access_token }) =>
     }
   });
 
-export const onCategoryPut = ({ category, industry, access_token }) =>
+export const onCategoryPut = ({ body, id, access_token }) =>
   ajax({
     method: "PUT",
-    url: `${CATEGORY_URL}${category.id}/`,
-    body: {
-      name: category.name,
-      industry
-    },
+    url: `${CATEGORY_URL}${id}/`,
+    body,
     headers: {
       "Content-Type": "application/json",
       Authorization: "Bearer " + access_token

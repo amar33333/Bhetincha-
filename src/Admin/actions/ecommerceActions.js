@@ -30,7 +30,11 @@ import {
   DELETE_ECOMMERCE_PROPERTY_CATEGORY_REJECTED,
   UPDATE_ECOMMERCE_PROPERTY_CATEGORY_FULFILLED,
   UPDATE_ECOMMERCE_PROPERTY_CATEGORY_PENDING,
-  UPDATE_ECOMMERCE_PROPERTY_CATEGORY_REJECTED
+  UPDATE_ECOMMERCE_PROPERTY_CATEGORY_REJECTED,
+  ASSIGN_CATEGORIES_ECOMMERCE_FULFILLED,
+  ASSIGN_CATEGORIES_ECOMMERCE_PENDING,
+  ASSIGN_CATEGORIES_ECOMMERCE_REJECTED,
+  FETCH_CATEGORY_DETAIL_PENDING
 } from "./types";
 
 import {
@@ -42,10 +46,55 @@ import {
   onEcommerceAttributesGet,
   onEcommercePropertiesPost,
   onEcommercePropertiesPut,
-  onEcommercePropertiesDelete
+  onEcommercePropertiesDelete,
+  onCategoryPut
 } from "../config/adminServerCall";
 
 const epics = [];
+
+// category assignment
+
+export const onCategoryAssignEcommerce = payload => ({
+  type: ASSIGN_CATEGORIES_ECOMMERCE_PENDING,
+  payload
+});
+
+epics.push((action$, { getState }) =>
+  action$
+    .ofType(ASSIGN_CATEGORIES_ECOMMERCE_PENDING)
+    .mergeMap(({ payload }) => {
+      const { ecommerce_categories, id } = payload;
+      const access_token = getState().auth.cookies.token_data.access_token;
+
+      return onCategoryPut({
+        body: {
+          ecommerce_categories
+        },
+        id: id,
+        access_token
+      })
+        .concatMap(({ response }) => {
+          if (response.msg === "success") {
+            toast.success("Category Updated successfully!");
+            return [
+              { type: ASSIGN_CATEGORIES_ECOMMERCE_FULFILLED },
+              { type: FETCH_CATEGORY_DETAIL_PENDING, payload: { id } }
+            ];
+          } else {
+            throw new Error(JSON.stringify(response.msg));
+          }
+        })
+        .catch(ajaxError => {
+          toast.error("Error: Updating Category");
+          return Observable.of({
+            type: ASSIGN_CATEGORIES_ECOMMERCE_REJECTED,
+            payload: ajaxError.status
+              ? ajaxError.message
+              : JSON.parse(ajaxError.message)
+          });
+        });
+    })
+);
 
 // attirbutes
 export const onAttributesListEcommerce = () => ({
@@ -167,9 +216,9 @@ epics.push((action$, { getState }) =>
 );
 
 // categories
-export const onCategoriesListEcommerce = () => ({
+export const onCategoriesListEcommerce = payload => ({
   type: FETCH_ECOMMERCE_CATEGORIES_PENDING,
-  first: true
+  first: !payload
 });
 
 epics.push((action$, { getState }) =>

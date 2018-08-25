@@ -18,7 +18,10 @@ import {
   FETCH_CATEGORY_ARRAY_FULFILLED,
   FETCH_CATEGORY_ARRAY_REJECTED,
   RESET_CATEGORY_ERRORS,
-  UNMOUNT_CATEGORY
+  UNMOUNT_CATEGORY,
+  FETCH_CATEGORY_DETAIL_FULFILLED,
+  FETCH_CATEGORY_DETAIL_PENDING,
+  FETCH_CATEGORY_DETAIL_REJECTED
 } from "../actions/types";
 
 const INITIAL_STATE = {
@@ -31,7 +34,9 @@ const INITIAL_STATE = {
   categoryData: [],
   categoryEditModal: false,
   categoryErrors: null,
-  categoryEditErrors: null
+  categoryEditErrors: null,
+  category: null,
+  detailLoading: false
 };
 
 export default function(state = INITIAL_STATE, action) {
@@ -97,6 +102,15 @@ export default function(state = INITIAL_STATE, action) {
         error: false,
         categoryErrors: null
       };
+
+    case FETCH_CATEGORY_DETAIL_PENDING:
+      return { ...state, detailLoading: true };
+
+    case FETCH_CATEGORY_DETAIL_FULFILLED:
+      return { ...state, detailLoading: false, category: action.payload };
+
+    case FETCH_CATEGORY_DETAIL_REJECTED:
+      return { ...state, detailLoading: false };
 
     case FETCH_CATEGORY_PENDING:
       return { ...state, fetchLoading: true };
