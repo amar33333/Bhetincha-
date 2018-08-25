@@ -160,7 +160,7 @@ const items = {
     },
     {
       name: "Ecommerce",
-      url: "/admin/ecommerce",
+      // url: "/admin/ecommerce",
       icon: "fa fa-shopping-cart",
       permission: "CAN_VIEW_ECOMMERCE",
       children: [

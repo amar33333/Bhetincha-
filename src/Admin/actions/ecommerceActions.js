@@ -34,11 +34,15 @@ import {
   ASSIGN_CATEGORIES_ECOMMERCE_FULFILLED,
   ASSIGN_CATEGORIES_ECOMMERCE_PENDING,
   ASSIGN_CATEGORIES_ECOMMERCE_REJECTED,
-  FETCH_CATEGORY_DETAIL_PENDING
+  FETCH_CATEGORY_DETAIL_PENDING,
+  FETCH_ECOMMERCE_ROOT_CATEGORIES_FULFILLED,
+  FETCH_ECOMMERCE_ROOT_CATEGORIES_PENDING,
+  FETCH_ECOMMERCE_ROOT_CATEGORIES_REJECTED
 } from "./types";
 
 import {
   onEcommerceCategoriesGet,
+  onEcommerceRootCategoriesGet,
   onEcommerceCategoryPost,
   onEcommerceCategoryDetailGet,
   onEcommerceCategoryDetailPost,
@@ -244,6 +248,26 @@ epics.push((action$, { getState }) =>
       .catch(ajaxError => {
         toast.error("Error Fetching Categories");
         return Observable.of({ type: FETCH_ECOMMERCE_CATEGORIES_REJECTED });
+      });
+  })
+);
+
+export const onRootCategoriesListEcommerce = () => ({
+  type: FETCH_ECOMMERCE_ROOT_CATEGORIES_PENDING
+});
+
+epics.push((action$, { getState }) =>
+  action$.ofType(FETCH_ECOMMERCE_ROOT_CATEGORIES_PENDING).mergeMap(action => {
+    return onEcommerceRootCategoriesGet()
+      .map(({ response }) => ({
+        type: FETCH_ECOMMERCE_ROOT_CATEGORIES_FULFILLED,
+        payload: response
+      }))
+      .catch(ajaxError => {
+        toast.error("Error Fetching Categories");
+        return Observable.of({
+          type: FETCH_ECOMMERCE_ROOT_CATEGORIES_REJECTED
+        });
       });
   })
 );

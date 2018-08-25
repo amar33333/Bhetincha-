@@ -6,11 +6,13 @@ import {
   OPEN_ALL_ON_SEARCH,
   CREATE_ECOMMERCE_PROPERTY_CATEGORY_FULFILLED,
   CREATE_ECOMMERCE_PROPERTY_CATEGORY_PENDING,
-  CREATE_ECOMMERCE_PROPERTY_CATEGORY_REJECTED
+  CREATE_ECOMMERCE_PROPERTY_CATEGORY_REJECTED,
+  FETCH_ECOMMERCE_ROOT_CATEGORIES_FULFILLED
 } from "../actions/types";
 
 const INITIAL_STATE = {
   categories: {},
+  rootCategories: [],
   activeCategory: "",
   isOpenCategories: [],
   selectedCategoryDetail: null,
@@ -36,10 +38,10 @@ export default function(state = INITIAL_STATE, action) {
       return { ...state, attributes: action.payload };
 
     case FETCH_ECOMMERCE_CATEGORIES_FULFILLED:
-      return {
-        ...state,
-        categories: action.payload
-      };
+      return { ...state, categories: action.payload };
+
+    case FETCH_ECOMMERCE_ROOT_CATEGORIES_FULFILLED:
+      return { ...state, rootCategories: action.payload };
 
     case CHANGE_ACTIVE_ECOMMERCE_CATEGORY:
       const extra = {};

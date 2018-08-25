@@ -11,7 +11,9 @@ import {
   onCategoriesListEcommerce,
   onChangeActiveCategoryEcommerce,
   openAllOnSearchEcommerce,
-  onCreateEcommerceProduct
+  onCreateEcommerceProduct,
+  onFetchEcommerceProducts,
+  onRemoveEcommerceProduct
 } from "../../actions";
 
 class ManageProducts extends Component {
@@ -44,12 +46,6 @@ class ManageProducts extends Component {
                       this.props.onChangeActiveCategoryEcommerce
                     }
                   />
-                  <ProductsList
-                    products={this.props.selectedCategoryDetail.products}
-                    URL={`/${
-                      this.props.match.params.businessName
-                    }/dashboard/ecommerce/manage-products`}
-                  />
                 </div>
               )}
               {this.props.attributes &&
@@ -63,6 +59,23 @@ class ManageProducts extends Component {
                     error={this.props.productError}
                   />
                 )}
+              {this.props.selectedCategoryDetail && (
+                <div>
+                  <h5>Products</h5>
+                  <ProductsList
+                    products={this.props.selectedCategoryDetail.products}
+                    rowCount={this.props.selectedCategoryDetail.totalProducts}
+                    count={this.props.count}
+                    page={this.props.page}
+                    fetchData={this.props.onFetchEcommerceProducts}
+                    URL={`/${
+                      this.props.match.params.businessName
+                    }/dashboard/ecommerce/manage-products`}
+                    loading={this.props.productsFetchLoading}
+                    onDelete={this.props.onRemoveEcommerceProduct}
+                  />
+                </div>
+              )}
             </Col>
           </Row>
         </Container>
@@ -81,7 +94,10 @@ export default connect(
         attributes,
         selectedCategoryDetail,
         productLoading,
-        productError
+        productError,
+        count,
+        page,
+        productsFetchLoading
       }
     }
   }) => ({
@@ -91,12 +107,17 @@ export default connect(
     attributes,
     selectedCategoryDetail,
     productLoading,
-    productError
+    productError,
+    count,
+    page,
+    productsFetchLoading
   }),
   {
     onCategoriesListEcommerce,
     onChangeActiveCategoryEcommerce,
     openAllOnSearchEcommerce,
-    onCreateEcommerceProduct
+    onCreateEcommerceProduct,
+    onFetchEcommerceProducts,
+    onRemoveEcommerceProduct
   }
 )(ManageProducts);

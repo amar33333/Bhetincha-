@@ -399,7 +399,9 @@ class ProductAddEdit extends Component {
                 ) : null}
                 <Input
                   required={attribute.required}
-                  type="number"
+                  // type="number"
+                  // step="1"
+                  pattern="[0-9]+"
                   placeholder={attribute.name}
                   value={this.state[attribute.name]}
                   onChange={event =>

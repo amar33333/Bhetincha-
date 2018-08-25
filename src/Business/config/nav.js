@@ -117,7 +117,9 @@ items.items.forEach(item => {
 
 items.routes = {
   ...items.routes,
-  "/:x/dashboard": "Home"
+  "/:x/dashboard": "Home",
+  "/:x/dashboard/ecommerce/manage-products/:x": "YProduct",
+  "/:x/dashboard/ecommerce/manage-products/:x/edit": "Edit"
 };
 
 export default items;

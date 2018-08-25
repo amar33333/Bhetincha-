@@ -135,14 +135,18 @@ export const onRemoveEcommerceProduct = payload => ({
 epics.push((action$, { getState }) =>
   action$.ofType(DELETE_ECOMMERCE_PRODUCT_PENDING).mergeMap(action => {
     // const payload = getState().AdminContainer.ecommerce.activeCategory;
-    const { uid, routeToManageProducts } = action.payload;
+    const { uid, routeToManageProducts, fetchProductsAgain } = action.payload;
 
     return onEcommerceProductEachDelete({ uid })
-      .map(({ response }) => {
+      .concatMap(({ response }) => {
         if (response.msg === "success") {
           toast.success("Product Deleted Successfully");
-          routeToManageProducts();
-          return { type: DELETE_ECOMMERCE_PRODUCT_FULFILLED };
+          routeToManageProducts && routeToManageProducts();
+          const extra = [];
+          if (fetchProductsAgain) {
+            extra.push({ type: FETCH_ECOMMERCE_CATEGORY_PRODUCTS_PENDING });
+          }
+          return [{ type: DELETE_ECOMMERCE_PRODUCT_FULFILLED }, ...extra];
         } else {
           throw new Error(response.msg);
         }
@@ -277,11 +281,25 @@ epics.push(action$ =>
     })
 );
 
-epics.push(action$ =>
+export const onFetchEcommerceProducts = payload => ({
+  type: FETCH_ECOMMERCE_CATEGORY_PRODUCTS_PENDING,
+  payload
+});
+
+epics.push((action$, { getState }) =>
   action$
     .ofType(FETCH_ECOMMERCE_CATEGORY_PRODUCTS_PENDING)
-    .mergeMap(({ payload: { params } }) => {
-      return onEcommerceCategoryProductsGet({ params })
+    .mergeMap(({ payload }) => {
+      const params = payload ? payload.params : {};
+      return onEcommerceCategoryProductsGet({
+        params: {
+          businessId: getState().auth.cookies.user_data.business_id,
+          categoryId: getState().BusinessContainer.ecommerce.activeCategory,
+          count: getState().BusinessContainer.ecommerce.count,
+          page: getState().BusinessContainer.ecommerce.page,
+          ...params
+        }
+      })
         .map(({ response }) => {
           if (response.msg === "success") {
             return {

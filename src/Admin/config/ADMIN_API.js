@@ -81,6 +81,7 @@ export const SEARCH_PLACEHOLDER_URL = `${MAIN_URL}/${SEARCH_PLACEHOLDER}`;
 
 // ecommerce
 export const ECOMMERCE_CATEGORY_URL = `${MAIN_URL}/${ECOMMERCE}/category/`;
+export const ECOMMERCE_ROOT_CATEGORY_URL = `${MAIN_URL}/${ECOMMERCE}/category-root/`;
 export const ECOMMERCE_ATTRIBUTE_URL = `${MAIN_URL}/${ECOMMERCE}/attribute/`;
 export const ECOMMERCE_PRODUCT_URL = `${MAIN_URL}/${ECOMMERCE}/product/`;
 export const ECOMMERCE_PRODUCT_ATTRIBUTE_URL = `${ECOMMERCE_PRODUCT_URL}attributes/`;

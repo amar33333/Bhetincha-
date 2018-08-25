@@ -13,7 +13,7 @@ import {
 } from "reactstrap";
 
 import {
-  onCategoriesListEcommerce,
+  onRootCategoriesListEcommerce,
   onIndustryList,
   onIndustryEachList,
   onCategoryDetail,
@@ -33,7 +33,7 @@ class AssignCategories extends Component {
   }
 
   componentDidMount() {
-    this.props.onCategoriesListEcommerce(true);
+    this.props.onRootCategoriesListEcommerce();
     this.props.onIndustryList();
   }
 
@@ -114,40 +114,37 @@ class AssignCategories extends Component {
               <CardHeader>Assign Ecommerce Categories</CardHeader>
               <CardBody>
                 <div>
-                  {ecommerceCategories.children &&
-                    ecommerceCategories.children.map(ecommerceCategory => (
-                      <div key={ecommerceCategory.uid}>
-                        <FormGroup check>
-                          <Label check>
-                            <Input
-                              type="checkbox"
-                              disabled={
-                                this.props.loading ||
-                                !this.state.selectedCategory
-                              }
-                              checked={this.state.selectedEcommerceCategories.includes(
-                                ecommerceCategory.uid
-                              )}
-                              onChange={e => {
-                                const checked = e.target.checked;
-                                this.setState({
-                                  selectedEcommerceCategories: checked
-                                    ? [
-                                        ...this.state
-                                          .selectedEcommerceCategories,
-                                        ecommerceCategory.uid
-                                      ]
-                                    : this.state.selectedEcommerceCategories.filter(
-                                        x => x !== ecommerceCategory.uid
-                                      )
-                                });
-                              }}
-                            />{" "}
-                            {ecommerceCategory.name}
-                          </Label>
-                        </FormGroup>
-                      </div>
-                    ))}
+                  {ecommerceCategories.map(ecommerceCategory => (
+                    <div key={ecommerceCategory.uid}>
+                      <FormGroup check>
+                        <Label check>
+                          <Input
+                            type="checkbox"
+                            disabled={
+                              this.props.loading || !this.state.selectedCategory
+                            }
+                            checked={this.state.selectedEcommerceCategories.includes(
+                              ecommerceCategory.uid
+                            )}
+                            onChange={e => {
+                              const checked = e.target.checked;
+                              this.setState({
+                                selectedEcommerceCategories: checked
+                                  ? [
+                                      ...this.state.selectedEcommerceCategories,
+                                      ecommerceCategory.uid
+                                    ]
+                                  : this.state.selectedEcommerceCategories.filter(
+                                      x => x !== ecommerceCategory.uid
+                                    )
+                              });
+                            }}
+                          />{" "}
+                          {ecommerceCategory.name}
+                        </Label>
+                      </FormGroup>
+                    </div>
+                  ))}
                   <Button
                     color="primary"
                     disabled={
@@ -177,7 +174,7 @@ class AssignCategories extends Component {
 export default connect(
   ({
     AdminContainer: {
-      ecommerce: { categories: ecommerceCategories },
+      ecommerce: { rootCategories: ecommerceCategories },
       industries: {
         fetchLoading: fetchLoadingIndustry,
         fetchLoadingData: fetchLoadingCategory,
@@ -196,7 +193,7 @@ export default connect(
     category
   }),
   {
-    onCategoriesListEcommerce,
+    onRootCategoriesListEcommerce,
     onIndustryList,
     onIndustryEachList,
     onCategoryDetail,

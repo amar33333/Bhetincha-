@@ -14,6 +14,7 @@ import CustomModal from "./CustomModal";
 import Select from "./ReactSelect/ReactSelect";
 import PaginationComponent from "./CBReactTablePagination";
 import Chip from "./Chip";
+import ManualReactTable from "./ManualReactTable";
 
 export {
   Aside,
@@ -31,5 +32,6 @@ export {
   CustomModal,
   Select,
   PaginationComponent,
-  Chip
+  Chip,
+  ManualReactTable
 };

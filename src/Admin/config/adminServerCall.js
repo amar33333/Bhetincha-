@@ -34,7 +34,8 @@ import {
   SEARCH_PLACEHOLDER_URL,
   SUBSCRIPTION_PACKAGE_PERMISSIONS_URL,
   SUBSCRIPTION_PACKAGE_URL,
-  SUBSCRIPTION_PACKAGE_ASSIGN_URL
+  SUBSCRIPTION_PACKAGE_ASSIGN_URL,
+  ECOMMERCE_ROOT_CATEGORY_URL
 } from "./ADMIN_API";
 
 import {
@@ -1446,6 +1447,15 @@ export const onEcommerceCategoriesGet = () =>
   ajax({
     method: "GET",
     url: ECOMMERCE_CATEGORY_URL,
+    headers: {
+      "Content-Type": "application/json"
+    }
+  });
+
+export const onEcommerceRootCategoriesGet = () =>
+  ajax({
+    method: "GET",
+    url: ECOMMERCE_ROOT_CATEGORY_URL,
     headers: {
       "Content-Type": "application/json"
     }
