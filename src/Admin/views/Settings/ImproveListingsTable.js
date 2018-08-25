@@ -61,7 +61,14 @@ class ImproveListingsTables extends Component {
         ),
         id: "created_date",
         filterable: false
+      },
+      {
+        Header: "More Information",
+        accessor: "more_information",
+        sortable: false,
+        filterable: false
       }
+
       // {
       //   Header: "Actions",
       //   id: "edit",

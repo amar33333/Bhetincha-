@@ -54,13 +54,13 @@ export default [
     link: null,
     group: USER_GROUP_BUSINESS
   },
-  {
-    className: "fa fa-bell",
-    title: "Notifications",
-    id: "notifications",
-    badge: false,
-    link: "/"
-  },
+  // {
+  //   className: "fa fa-bell",
+  //   title: "Notifications",
+  //   id: "notifications",
+  //   badge: false,
+  //   link: "/"
+  // },
   // {
   //   className: "fa fa-lock",
   //   title: "Change Password",

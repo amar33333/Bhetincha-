@@ -140,19 +140,19 @@ class PhotoEditor extends Component {
                         ? this.props[this.state.active]
                         : this.state[this.state.active].files[0]
                     }
-                    crossOrigin="anonymous"
+                    // crossOrigin="anonymous"
                   />
-                  {/* {this.state[this.state.active].files.length !== 0 && ( */}
-                  <div style={{ margin: "20px", width: "160px" }}>
-                    <span>Zoom</span>
-                    <Slider
-                      min={80}
-                      max={300}
-                      value={this.state[this.state.active].zoomSlider}
-                      onChange={this.handleSliderChange}
-                    />
-                  </div>
-                  {/* )} */}
+                  {this.state[this.state.active].files.length !== 0 && (
+                    <div style={{ margin: "20px", width: "160px" }}>
+                      <span>Zoom</span>
+                      <Slider
+                        min={80}
+                        max={300}
+                        value={this.state[this.state.active].zoomSlider}
+                        onChange={this.handleSliderChange}
+                      />
+                    </div>
+                  )}
                 </Col>
               </Row>
             </div>
@@ -161,9 +161,9 @@ class PhotoEditor extends Component {
                 <Button
                   color="primary"
                   disabled={
-                    false &&
-                    (this.props.loading ||
-                      this.state[this.state.active].files.length === 0)
+                    // false &&
+                    this.props.loading ||
+                    this.state[this.state.active].files.length === 0
                   }
                   onClick={this.onImageSave}
                 >

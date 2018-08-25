@@ -280,8 +280,17 @@ items.items.forEach(item => {
 items.routes = {
   ...items.routes,
   ...{
+    "/admin": "Home",
     "/admin/list-business/add-business": "Add Business",
-    "/admin/list-business/add-free-business": "Add Free Business"
+    "/admin/list-business/add-free-business": "Add Free Business",
+    // "/admin/list-business/:x": "YUser",
+    "/admin/list-business/:x/edit": "Edit",
+    "/admin/list-business/:x/manage-branchs": "Branches",
+    "/admin/list-business/:x/manage-branchs/add-branch": "Add New",
+    // "/admin/list-business/:x/manage-branchs/:x": "YBranch",
+    "/admin/list-business/:x/manage-branchs/:x/edit-branch": "Edit",
+    "/admin/list-business/:x/social-url-links": "Social Links",
+    "/admin/list-business/:x/manage-subscription": "Subscription"
   }
 };
 

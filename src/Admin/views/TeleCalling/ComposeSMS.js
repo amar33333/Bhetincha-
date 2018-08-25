@@ -49,7 +49,7 @@ class ComposeSMS extends Component {
       body: {
         log: {
           date: new Date().toISOString(),
-          message: this.props.composeSMSText,
+          message: this.state.composeSMSText,
           ...extra
         },
         at: this.props.teleUser.at

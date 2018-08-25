@@ -39,7 +39,7 @@ export const onBusinessTeleCallingList = payload => ({
 });
 
 epics.push((action$, { getState }) =>
-  action$.ofType(FETCH_BUSINESS_TELE_CALLING_PENDING).mergeMap(action =>
+  action$.ofType(FETCH_BUSINESS_TELE_CALLING_PENDING).switchMap(action =>
     onBusinessTeleCallingGetAjax({
       access_token: getState().auth.cookies.token_data.access_token,
       ...action.payload

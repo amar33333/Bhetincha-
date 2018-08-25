@@ -115,4 +115,9 @@ items.items.forEach(item => {
   else if (item.url) items.routes[item.url] = item.name;
 });
 
+items.routes = {
+  ...items.routes,
+  "/:x/dashboard": "Home"
+};
+
 export default items;
