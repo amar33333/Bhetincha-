@@ -18,8 +18,11 @@ import {
   onSubscriptionPackageDelete,
   onSubscriptionPackageAssignPost,
   onSubscriptionPackageAssignGet,
-  onSubscriptionPackageAssignDelete
+  onSubscriptionPackageAssignDelete,
+  onBusinessThemesGet,
+  onBusinessThemePost
 } from "../config/adminServerCall";
+
 import {
   CREATE_SOCIAL_LINK_FULFILLED,
   CREATE_SOCIAL_LINK_PENDING,
@@ -75,6 +78,12 @@ import {
   DELETE_SUBSCRIPTION_PACKAGE_ASSIGN_PENDING,
   DELETE_SUBSCRIPTION_PACKAGE_ASSIGN_FULFILLED,
   DELETE_SUBSCRIPTION_PACKAGE_ASSIGN_REJECTED,
+  CREATE_BUSINESS_THEME_FULFILLED,
+  CREATE_BUSINESS_THEME_PENDING,
+  CREATE_BUSINESS_THEME_REJECTED,
+  FETCH_BUSINESS_THEMES_FULFILLED,
+  FETCH_BUSINESS_THEMES_PENDING,
+  FETCH_BUSINESS_THEMES_REJECTED,
   RESET_SETTINGS_ERRORS
 } from "./types";
 
@@ -88,6 +97,61 @@ export const toggleSearchPlaceholderEditModal = payload => ({
   type: TOGGLE_SEARCH_PLACEHOLDER_EDIT_MODAL,
   payload
 });
+
+export const onBusinessThemeSubmit = payload => ({
+  type: CREATE_SUBSCRIPTION_PACKAGE_PENDING,
+  payload
+});
+
+epics.push((action$, { getState }) =>
+  action$.ofType(CREATE_BUSINESS_THEME_PENDING).mergeMap(action => {
+    const access_token = getState().auth.cookies.token_data.access_token;
+
+    return onBusinessThemePost({ ...action.payload, access_token })
+      .concatMap(({ response }) => {
+        if (response.msg === "success") {
+          toast.success("Business Theme created successfully!");
+          return [
+            { type: CREATE_BUSINESS_THEME_FULFILLED },
+            { type: FETCH_BUSINESS_THEMES_PENDING }
+          ];
+        } else {
+          throw new Error(JSON.stringify(response.msg));
+        }
+      })
+      .catch(ajaxError => {
+        toast.error("Error: Creating Business Theme");
+        return Observable.of({
+          type: CREATE_BUSINESS_THEME_REJECTED,
+          payload: ajaxError.status
+            ? ajaxError.message
+            : JSON.parse(ajaxError.message)
+        });
+      });
+  })
+);
+
+export const onBusinessThemesList = () => ({
+  type: FETCH_BUSINESS_THEMES_PENDING
+});
+
+epics.push((action$, { getState }) =>
+  action$.ofType(FETCH_BUSINESS_THEMES_PENDING).mergeMap(action => {
+    return onBusinessThemesGet({
+      access_token: getState().auth.cookies.token_data.access_token
+    })
+      .map(({ response }) => ({
+        type: FETCH_BUSINESS_THEMES_FULFILLED,
+        payload: response
+      }))
+      .catch(ajaxError => {
+        toast.error("Error Fetching Themes List!");
+        return Observable.of({
+          type: FETCH_BUSINESS_THEMES_REJECTED
+        });
+      });
+  })
+);
 
 export const onSubscriptionPackagePermissionsList = () => ({
   type: FETCH_SUBSCRIPTION_PACKAGE_PERMISSIONS_PENDING

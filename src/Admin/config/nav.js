@@ -241,6 +241,12 @@ const items = {
           url: "/admin/subscription-package",
           icon: "fa fa-briefcase",
           permission: "CAN_VIEW_IMPROVE_LISTING"
+        },
+        {
+          name: "Themes",
+          url: "/admin/business-themes",
+          icon: "fa fa-briefcase",
+          permission: "CAN_VIEW_IMPROVE_LISTING"
         }
 
         // {

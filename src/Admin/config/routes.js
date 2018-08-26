@@ -34,7 +34,8 @@ import {
   SocialUrlLinks,
   SubscriptionPackage,
   ManageSubscription,
-  ManageProducts
+  ManageProducts,
+  BusinessThemes
 } from "../views";
 
 import { ManageCategories, AssignCategories } from "../views/Ecommerce";
@@ -305,8 +306,13 @@ class AdminRoute extends Component {
           component={ImproveListings}
           permission="CAN_VIEW_IMPROVE_LISTING"
         />
-
-        <Route
+        <CustomRoute
+          path="/admin/business-themes"
+          name="Themes"
+          component={BusinessThemes}
+          permission="CAN_VIEW_IMPROVE_LISTING"
+        />
+        <CustomRoute
           path="/admin/campaign-search-placeholder"
           name="Campaign"
           component={CampaignSearchPlaceholder}

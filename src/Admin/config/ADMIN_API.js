@@ -44,6 +44,8 @@ const ECOMMERCE = "ecommerce";
 
 export { MAIN_URL };
 
+export const THEME_URL = `${MAIN_URL}/business-theme-url`;
+
 export const COUNTRY_URL = `${MAIN_URL}/${ADDRESS}/${COUNTRY}`;
 export const DISTRICT_URL = `${MAIN_URL}/${ADDRESS}/${DISTRICT}`;
 export const STATE_URL = `${MAIN_URL}/${ADDRESS}/${STATE}`;

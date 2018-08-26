@@ -35,7 +35,8 @@ import {
   SUBSCRIPTION_PACKAGE_PERMISSIONS_URL,
   SUBSCRIPTION_PACKAGE_URL,
   SUBSCRIPTION_PACKAGE_ASSIGN_URL,
-  ECOMMERCE_ROOT_CATEGORY_URL
+  ECOMMERCE_ROOT_CATEGORY_URL,
+  THEME_URL
 } from "./ADMIN_API";
 
 import {
@@ -51,6 +52,27 @@ import axios from "axios";
 
 import { ajax } from "rxjs/observable/dom/ajax";
 import querystring from "querystring";
+
+export const onBusinessThemePost = ({ body, access_token }) =>
+  ajax({
+    method: "POST",
+    url: THEME_URL,
+    body,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
+export const onBusinessThemesGet = ({ access_token }) =>
+  ajax({
+    method: "GET",
+    url: THEME_URL,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
 
 export const onSubscriptionPackageAssignPost = ({ id, body, access_token }) =>
   ajax({

@@ -43,6 +43,12 @@ import {
   FETCH_SUBSCRIPTION_PACKAGE_ASSIGN_PENDING,
   FETCH_SUBSCRIPTION_PACKAGE_ASSIGN_FULFILLED,
   FETCH_SUBSCRIPTION_PACKAGE_ASSIGN_REJECTED,
+  CREATE_BUSINESS_THEME_FULFILLED,
+  CREATE_BUSINESS_THEME_PENDING,
+  CREATE_BUSINESS_THEME_REJECTED,
+  FETCH_BUSINESS_THEMES_FULFILLED,
+  FETCH_BUSINESS_THEMES_PENDING,
+  FETCH_BUSINESS_THEMES_REJECTED,
   RESET_SETTINGS_ERRORS
 } from "../actions/types";
 
@@ -74,7 +80,10 @@ const INITIAL_STATE = {
   subscriptionPackagePermissionsList: [],
   subscriptionPackageList: [],
   subscriptionPackageError: null,
-  subscriptionPackageEditError: null
+  subscriptionPackageEditError: null,
+  businessThemes: [],
+  businessThemeSubmitLoading: false,
+  businessThemesFetchLoading: false
 };
 
 export default function(state = INITIAL_STATE, action) {
@@ -92,6 +101,34 @@ export default function(state = INITIAL_STATE, action) {
         searchPlaceholderEditModal: !state.searchPlaceholderEditModal,
         searchPlaceholderEditData: action.payload
       };
+
+    case CREATE_BUSINESS_THEME_PENDING:
+      return { ...state, businessThemeSubmitLoading: true };
+
+    case CREATE_BUSINESS_THEME_FULFILLED:
+      return {
+        ...state,
+        businessThemeSubmitLoading: false
+      };
+
+    case CREATE_BUSINESS_THEME_REJECTED:
+      return {
+        ...state,
+        businessThemeSubmitLoading: false
+      };
+
+    case FETCH_BUSINESS_THEMES_PENDING:
+      return { ...state, businessThemesFetchLoading: true };
+
+    case FETCH_BUSINESS_THEMES_FULFILLED:
+      return {
+        ...state,
+        businessThemes: action.payload,
+        businessThemesFetchLoading: false
+      };
+
+    case FETCH_BUSINESS_THEMES_REJECTED:
+      return { ...state, businessThemesFetchLoading: false };
 
     case CREATE_SUBSCRIPTION_PACKAGE_ASSIGN_PENDING:
       return { ...state, subscriptionPackageAssignLoading: true };
