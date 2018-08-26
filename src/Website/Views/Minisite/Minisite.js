@@ -39,22 +39,28 @@ class Minisite extends Component {
     return (
       <div>
         <MainNavbar history={this.props.history} match={this.props.match} />
-        <BusinessNav
-          isHome={this.props.match.path.indexOf(":minisiteRoute") === -1}
-          url={this.props.match.params["minisiteRoute"]}
-          history={this.props.history}
-          businessName={this.props.match.params[ROUTE_PARAMS_BUSINESS_NAME]}
-        />
+        {!this.props.isGeneric && (
+          <BusinessNav
+            isHome={this.props.match.path.indexOf(":minisiteRoute") === -1}
+            url={this.props.match.params["minisiteRoute"]}
+            history={this.props.history}
+            businessName={this.props.match.params[ROUTE_PARAMS_BUSINESS_NAME]}
+          />
+        )}
+
         {this.props.mainLoading ? (
           <Loading />
         ) : (
           <MinisiteRoutes params={this.props.match.params} />
         )}
-        <BusinessFooter
-          businessName={this.props.match.params[ROUTE_PARAMS_BUSINESS_NAME]}
-          sabai={this.props}
-          theme="dark"
-        />
+
+        {!this.props.isGeneric && (
+          <BusinessFooter
+            businessName={this.props.match.params[ROUTE_PARAMS_BUSINESS_NAME]}
+            sabai={this.props}
+            theme="dark"
+          />
+        )}
       </div>
     );
   }

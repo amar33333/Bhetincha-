@@ -396,6 +396,9 @@ body {
   top: 20%;
   font-size: 20px;
   color: grey;
+  -webkit-box-shadow: 10px 10px 5px 0px rgba(255, 255, 255, 1);
+  -moz-box-shadow: 10px 10px 5px 0px rgba(255, 255, 255, 1);
+  box-shadow: inset -5px 0px 6px 11px rgba(255, 255, 255, 1);
 }
 
 .in-navbar__autosuggest__input {
