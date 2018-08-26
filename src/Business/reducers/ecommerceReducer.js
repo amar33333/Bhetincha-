@@ -12,8 +12,10 @@ import {
   FETCH_ECOMMERCE_PRODUCT_EACH_REJECTED,
   UPDATE_ECOMMERCE_PRODUCT_PENDING,
   UPDATE_ECOMMERCE_PRODUCT_FULFILLED,
-  UPDATE_ECOMMERCE_PRODUCT_REJECTED
+  UPDATE_ECOMMERCE_PRODUCT_REJECTED,
+  FETCH_ECOMMERCE_CATEGORY_PRODUCTS_PENDING
 } from "../actions/types";
+import { FETCH_ECOMMERCE_PRODUCTS_REJECTED } from "../../Website/Views/Ecommerce/actions/types";
 
 const INITIAL_STATE = {
   categories: null,
@@ -23,7 +25,10 @@ const INITIAL_STATE = {
   selectedCategoryDetail: null,
   productError: false,
   productLoading: false,
-  productDetail: null
+  productDetail: null,
+  productsFetchLoading: false,
+  count: 20,
+  page: 1
 };
 
 export default function(state = INITIAL_STATE, action) {
@@ -66,11 +71,35 @@ export default function(state = INITIAL_STATE, action) {
         attributes: action.payload
       };
 
+    case FETCH_ECOMMERCE_CATEGORY_PRODUCTS_PENDING:
+      return {
+        ...state,
+        count:
+          action.payload && action.payload.count !== undefined
+            ? action.payload.count
+            : state.count,
+        page:
+          action.payload && action.payload.page !== undefined
+            ? action.payload.page
+            : state.page,
+        productsFetchLoading: true
+      };
+
     case FETCH_ECOMMERCE_CATEGORY_PRODUCTS_FULFILLED:
       return {
         ...state,
-        selectedCategoryDetail: action.payload
+        selectedCategoryDetail: {
+          ...action.payload,
+          products: action.payload.products.map((product, i) => ({
+            ...product,
+            s_no: state.count * (state.page - 1) + i + 1
+          }))
+        },
+        productsFetchLoading: false
       };
+
+    case FETCH_ECOMMERCE_PRODUCTS_REJECTED:
+      return { ...state, productsFetchLoading: false };
 
     case CHANGE_ACTIVE_ECOMMERCE_CATEGORY:
       const extra = {};
@@ -85,6 +114,40 @@ export default function(state = INITIAL_STATE, action) {
       if (activeCategory !== uid) {
         extra.activeCategory = uid;
       }
+
+      if (
+        state.categories.uid &&
+        !isOpenCategories.includes(state.categories.uid)
+      ) {
+        isOpenCategories.push(state.categories.uid);
+      }
+
+      let parents = [];
+      let temp = [];
+      // let temp2 = [];
+
+      const updateIsOpenCategoriesParent = category => {
+        const { children, uid: catUid } = category;
+        temp.push(catUid);
+        // temp2.push(category.name);
+        // console.log(temp2);
+        if (catUid === uid) {
+          parents = [...temp];
+        }
+        if (children && children.length) {
+          children.forEach(subCategory =>
+            updateIsOpenCategoriesParent(subCategory)
+          );
+        }
+        temp.pop();
+        // temp2.pop();
+      };
+
+      if (!action.justToggle) {
+        updateIsOpenCategoriesParent(state.categories);
+        isOpenCategories = [...new Set([...isOpenCategories, ...parents])];
+      }
+
       return { ...state, isOpenCategories, ...extra };
 
     case OPEN_ALL_ON_SEARCH:

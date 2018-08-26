@@ -11,8 +11,11 @@ import {
   FETCH_TELE_USER_REJECTED
 } from "../actions/types";
 
+import { TELECALLING_DATA_SIZE } from "../views/TeleCalling/TeleCalling";
+
 const INITIAL_STATE = {
   businessFetchLoading: false,
+  businessFetchExtraLoading: false,
   business: [],
   businessRowCount: 0,
   userLoading: false,
@@ -25,14 +28,28 @@ const INITIAL_STATE = {
 export default function(state = INITIAL_STATE, action) {
   switch (action.type) {
     case FETCH_BUSINESS_TELE_CALLING_PENDING:
-      return { ...state, businessFetchLoading: false };
+      return {
+        ...state,
+        businessFetchLoading:
+          action.payload.body.size !== TELECALLING_DATA_SIZE ? false : true,
+        businessFetchExtraLoading:
+          action.payload.body.size !== TELECALLING_DATA_SIZE ? true : false
+      };
 
     case FETCH_BUSINESS_TELE_CALLING_FULFILLED:
       return {
         ...state,
         business: action.payload.hits,
         businessRowCount: action.payload.total,
-        businessFetchLoading: true
+        businessFetchLoading: false,
+        businessFetchExtraLoading: false
+      };
+
+    case FETCH_BUSINESS_TELE_CALLING_REJECTED:
+      return {
+        ...state,
+        businessFetchLoading: false,
+        businessFetchExtraLoading: false
       };
 
     case FETCH_TELE_USER_FULFILLED:

@@ -34,7 +34,8 @@ import {
   SEARCH_PLACEHOLDER_URL,
   SUBSCRIPTION_PACKAGE_PERMISSIONS_URL,
   SUBSCRIPTION_PACKAGE_URL,
-  SUBSCRIPTION_PACKAGE_ASSIGN_URL
+  SUBSCRIPTION_PACKAGE_ASSIGN_URL,
+  ECOMMERCE_ROOT_CATEGORY_URL
 } from "./ADMIN_API";
 
 import {
@@ -53,7 +54,7 @@ import querystring from "querystring";
 
 export const onSubscriptionPackageAssignPost = ({ id, body, access_token }) =>
   ajax({
-    method: "PUT",
+    method: "POST",
     url: `${SUBSCRIPTION_PACKAGE_ASSIGN_URL}${id}/`,
     body,
     headers: {
@@ -631,6 +632,16 @@ export const onCategoryEachGet = ({ id, access_token }) =>
     }
   });
 
+export const onCategoryEachGetAjax = ({ id, access_token }) =>
+  ajax({
+    method: "get",
+    url: `${CATEGORY_URL}${id}/`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
 export const onCategoryPost = ({ category, industry, access_token }) =>
   axios({
     method: "post",
@@ -645,14 +656,11 @@ export const onCategoryPost = ({ category, industry, access_token }) =>
     }
   });
 
-export const onCategoryPut = ({ category, industry, access_token }) =>
+export const onCategoryPut = ({ body, id, access_token }) =>
   ajax({
     method: "PUT",
-    url: `${CATEGORY_URL}${category.id}/`,
-    body: {
-      name: category.name,
-      industry
-    },
+    url: `${CATEGORY_URL}${id}/`,
+    body,
     headers: {
       "Content-Type": "application/json",
       Authorization: "Bearer " + access_token
@@ -1439,6 +1447,15 @@ export const onEcommerceCategoriesGet = () =>
   ajax({
     method: "GET",
     url: ECOMMERCE_CATEGORY_URL,
+    headers: {
+      "Content-Type": "application/json"
+    }
+  });
+
+export const onEcommerceRootCategoriesGet = () =>
+  ajax({
+    method: "GET",
+    url: ECOMMERCE_ROOT_CATEGORY_URL,
     headers: {
       "Content-Type": "application/json"
     }

@@ -21,6 +21,8 @@ import { USER_GROUP_BUSINESS } from "../../config/CONSTANTS";
 // import theme from "./theme-small.css";
 
 class MainNavbar extends Component {
+  state = { enterCount: 1 };
+
   componentDidUpdate(prevProps) {
     if (prevProps.coords !== this.props.coords) {
       this.props.onStoreUserGeoLocation({
@@ -49,7 +51,10 @@ class MainNavbar extends Component {
               // style={{ height: "85px" }}
               // fixed="top"
             >
-              <NavbarBrand href="/">Bhetincha</NavbarBrand>
+              {/* <NavbarBrand href="/">Bhetincha</NavbarBrand> */}
+              <Link className="navbar-brand" to="/">
+                Bhetincha
+              </Link>
 
               <NavItem
                 className="main_nav__autosuggest__wrapper"
@@ -67,20 +72,24 @@ class MainNavbar extends Component {
                     this.props.history.push(`/${business.slug}`);
                   }}
                   onSearchComplete={keyword => {
-                    this.props.history.push({
-                      pathname: "/businesses",
-                      //query: keyword
-                      //search: `?query=${keyword}&frm=0&size=5`
-                      search: `?${querystring.stringify({
-                        query: keyword
-                        /* lat: this.props.coords && this.props.coords.latitude,
+                    this.setState(
+                      { enterCount: this.state.enterCount + 1 },
+                      () =>
+                        this.props.history.push({
+                          pathname: "/businesses",
+                          //query: keyword
+                          //search: `?query=${keyword}&frm=0&size=5`
+                          search: `?${querystring.stringify({
+                            query: keyword
+                            /* lat: this.props.coords && this.props.coords.latitude,
                         lon: this.props.coords && this.props.coords.longitude*/
 
-                        //frm: 0,
-                        //size: 5
-                      })}`
-                      // state: { detail: response.data }
-                    });
+                            //frm: 0,
+                            //size: 5
+                          })}`,
+                          state: { enterCount: this.state.enterCount }
+                        })
+                    );
                   }}
                 />
               </NavItem>

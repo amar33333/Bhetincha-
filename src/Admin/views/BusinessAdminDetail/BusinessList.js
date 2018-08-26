@@ -178,6 +178,24 @@ class BusinessList extends Component {
 
             <PermissionProvider permission="CAN_EDIT_BUSINESS">
               <Button
+                data-tooltip="Manage Products"
+                data-position="bottom center"
+                color="primary"
+                className="mr-2"
+                onClick={() =>
+                  this.props.history.push({
+                    pathname: `${this.props.match.path}/${
+                      props.value
+                    }/manage-products`
+                  })
+                }
+              >
+                <i className="fa fa-shopping-cart" />
+              </Button>
+            </PermissionProvider>
+
+            <PermissionProvider permission="CAN_EDIT_BUSINESS">
+              <Button
                 data-tooltip="Manage Subscription"
                 data-position="bottom center"
                 color="primary"
@@ -298,6 +316,16 @@ class BusinessList extends Component {
   );
 
   toggleFilterCollapse = () => {
+    if (this.state.filterCollapsed) {
+      this.props.onIndustryList();
+      this.props.onCategoryList({ rows: 50, page: 1 });
+      this.props.onSubCategoryList({ rows: 50, page: 1 });
+      this.props.onCountryList();
+      this.props.onStateList({ rows: 50, page: 1 });
+      this.props.onDistrictList({ rows: 50, page: 1 });
+      this.props.onCityList({ rows: 50, page: 1 });
+      this.props.onAreaList({ rows: 50, page: 1 });
+    }
     this.setState({
       filterCollapsed: !this.state.filterCollapsed
     });
@@ -305,14 +333,7 @@ class BusinessList extends Component {
 
   componentDidMount = () => {
     this.setState({ q: this.props.q });
-    this.props.onIndustryList();
-    this.props.onCategoryList({ rows: 50, page: 1 });
-    this.props.onSubCategoryList({ rows: 50, page: 1 });
-    this.props.onCountryList();
-    this.props.onStateList({ rows: 50, page: 1 });
-    this.props.onDistrictList({ rows: 50, page: 1 });
-    this.props.onCityList({ rows: 50, page: 1 });
-    this.props.onAreaList({ rows: 50, page: 1 });
+
     this.props.onBusinessAllGet();
   };
 
@@ -365,7 +386,7 @@ class BusinessList extends Component {
           <Col xs="12" md="12">
             <Card>
               <CardHeader onClick={this.toggleFilterCollapse}>
-                <strong>Filters</strong>
+                <strong style={{ cursor: "pointer" }}>Filters</strong>
                 <span className="pull-left" style={{ marginRight: "10px" }}>
                   {this.state.filterCollapsed ? (
                     <i className="fa fa-angle-right" />

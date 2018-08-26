@@ -22,13 +22,13 @@ class ManageSubscriptionTable extends Component {
       },
       { Header: "Package Name", accessor: "name" },
       { Header: "Index Scoring", accessor: "indexScoring" },
-      {
-        Header: "Package Permission",
-        accessor: "packagePermissions",
-        Cell: ({ value }) => value.join(", "),
-        sortable: false,
-        filterable: false
-      },
+      // {
+      //   Header: "Package Permission",
+      //   accessor: "packagePermissions",
+      //   Cell: ({ value }) => value.join(", "),
+      //   sortable: false,
+      //   filterable: false
+      // },
       {
         Header: "Actions",
         id: "edit",

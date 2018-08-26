@@ -111,7 +111,7 @@ class CategoryEditView extends Component {
                     <Input
                       type="checkbox"
                       checked={this.state.hasProduct}
-                      onClick={event =>
+                      onChange={event =>
                         this.setState({ hasProduct: event.target.checked })
                       }
                     />

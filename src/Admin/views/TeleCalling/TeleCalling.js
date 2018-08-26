@@ -39,74 +39,83 @@ import {
   onTeleUserNameList
 } from "../../actions";
 
-const TabPane = ({ businesses, show, checkedBusinesses, updateChecked }) => (
-  <Tab.Pane>
-    {show && (
-      <div>
-        {businesses.map(business => {
-          const { _id, _source: data, selectedAddress } = business;
+export const TELECALLING_DATA_SIZE = 20;
 
-          return (
-            <div
-              key={_id}
-              style={
-                checkedBusinesses.map(({ _id }) => _id).includes(_id)
-                  ? { backgroundColor: "#ebfaff" }
-                  : {}
-              }
-            >
-              <FormGroup check>
-                <Label check style={{ width: "100%" }}>
-                  <Input
-                    type="checkbox"
-                    checked={checkedBusinesses
-                      .map(({ _id }) => _id)
-                      .includes(_id)}
-                    onChange={e => updateChecked(business, e.target.checked)}
-                  />
-                  <div>
-                    <h3>{data.business_name}</h3>
-                    <em>Industry: </em>
-                    {data.industry}
-                    <br />
-                    <em>Categories: </em>
-                    {data.categories ? data.categories.join(", ") : "n/a"}
-                    <br />
-                    <em>Sub Categories: </em>
-                    {data.sub_categories
-                      ? data.sub_categories.join(", ")
-                      : "n/a"}
-                    <br />
-                    <em>Tags: </em>
-                    {data.tags ? data.tags.join(", ") : "n/a"}
-                    <br />
-                    <em>Landline Number: </em>
-                    {selectedAddress && selectedAddress.landlineNumber
-                      ? selectedAddress.landlineNumber
-                      : "n/a"}
-                    <br />
-                    <em>Address: </em>
-                    {selectedAddress && selectedAddress.areaText
-                      ? selectedAddress.areaText
-                      : "n/a"}
-                    <br />
-                    <em>Contact Person: </em>
-                    {selectedAddress && selectedAddress.contactPersonText
-                      ? selectedAddress.contactPersonText
-                      : "n/a"}
-                    <br />
-                  </div>
-                </Label>
-              </FormGroup>
-              <hr />
-              {/* <Link to={`/${data.slug}`}>
+const TabPane = ({
+  loading,
+  businesses,
+  show,
+  checkedBusinesses,
+  updateChecked
+}) => (
+  <Tab.Pane>
+    {!loading &&
+      show && (
+        <div>
+          {businesses.map(business => {
+            const { _id, _source: data, selectedAddress } = business;
+
+            return (
+              <div
+                key={_id}
+                style={
+                  checkedBusinesses.map(({ _id }) => _id).includes(_id)
+                    ? { backgroundColor: "#ebfaff" }
+                    : {}
+                }
+              >
+                <FormGroup check>
+                  <Label check style={{ width: "100%" }}>
+                    <Input
+                      type="checkbox"
+                      checked={checkedBusinesses
+                        .map(({ _id }) => _id)
+                        .includes(_id)}
+                      onChange={e => updateChecked(business, e.target.checked)}
+                    />
+                    <div>
+                      <h3>{data.business_name}</h3>
+                      <em>Industry: </em>
+                      {data.industry}
+                      <br />
+                      <em>Categories: </em>
+                      {data.categories ? data.categories.join(", ") : "n/a"}
+                      <br />
+                      <em>Sub Categories: </em>
+                      {data.sub_categories
+                        ? data.sub_categories.join(", ")
+                        : "n/a"}
+                      <br />
+                      <em>Tags: </em>
+                      {data.tags ? data.tags.join(", ") : "n/a"}
+                      <br />
+                      <em>Landline Number: </em>
+                      {selectedAddress && selectedAddress.landlineNumber
+                        ? selectedAddress.landlineNumber
+                        : "n/a"}
+                      <br />
+                      <em>Address: </em>
+                      {selectedAddress && selectedAddress.areaText
+                        ? selectedAddress.areaText
+                        : "n/a"}
+                      <br />
+                      <em>Contact Person: </em>
+                      {selectedAddress && selectedAddress.contactPersonText
+                        ? selectedAddress.contactPersonText
+                        : "n/a"}
+                      <br />
+                    </div>
+                  </Label>
+                </FormGroup>
+                <hr />
+                {/* <Link to={`/${data.slug}`}>
               {data.business_name}
             </Link> */}
-            </div>
-          );
-        })}
-      </div>
-    )}
+              </div>
+            );
+          })}
+        </div>
+      )}
     {!businesses.length && <p>No business found</p>}
   </Tab.Pane>
 );
@@ -126,7 +135,7 @@ class TeleCalling extends Component {
       industry: "",
       searchForBusinessNameOnly: false,
       frm: 0,
-      size: 20
+      size: TELECALLING_DATA_SIZE
     };
 
     this.panes = [
@@ -135,23 +144,27 @@ class TeleCalling extends Component {
         render: () => (
           <div>
             <TabPane
+              loading={this.props.businessFetchLoading}
               businesses={this.state.businesses}
               show={!this.state.activeIndex}
               checkedBusinesses={this.state.checkedBusinesses}
               updateChecked={this.updateChecked}
             />
-            {this.props.businessRowCount > this.state.businesses.length && (
-              <button
-                onClick={() => {
-                  this.setState(
-                    { size: this.state.size + 20 },
-                    this.onFormSubmit
-                  );
-                }}
-              >
-                Load More
-              </button>
-            )}
+            {!this.props.businessFetchLoading &&
+              this.props.businessRowCount > this.state.businesses.length && (
+                <button
+                  onClick={() => {
+                    this.setState(
+                      {
+                        size: this.state.size + TELECALLING_DATA_SIZE
+                      },
+                      this.onFormSubmit
+                    );
+                  }}
+                >
+                  Load More
+                </button>
+              )}
           </div>
         )
       },
@@ -160,23 +173,27 @@ class TeleCalling extends Component {
         render: () => (
           <div>
             <TabPane
+              loading={this.props.businessFetchLoading}
               businesses={this.state.businesses}
               show={this.state.activeIndex}
               checkedBusinesses={this.state.checkedBusinesses}
               updateChecked={this.updateChecked}
             />
-            {this.props.businessRowCount > this.state.businesses.length && (
-              <button
-                onClick={() => {
-                  this.setState(
-                    { size: this.state.size + 20 },
-                    this.onFormSubmit
-                  );
-                }}
-              >
-                Load More
-              </button>
-            )}
+            {!this.props.businessFetchLoading &&
+              this.props.businessRowCount > this.state.businesses.length && (
+                <button
+                  onClick={() => {
+                    this.setState(
+                      {
+                        size: this.state.size + TELECALLING_DATA_SIZE
+                      },
+                      this.onFormSubmit
+                    );
+                  }}
+                >
+                  Load More
+                </button>
+              )}
           </div>
         )
       }
@@ -295,7 +312,7 @@ class TeleCalling extends Component {
     });
 
     if (data.length) {
-      text += "Behtincha";
+      text += "Bhetincha";
     }
     return text;
   };
@@ -322,7 +339,7 @@ class TeleCalling extends Component {
 
   onTabChange = (_, data) => {
     this.setState(
-      { activeIndex: data.activeIndex, size: 20 },
+      { activeIndex: data.activeIndex, size: TELECALLING_DATA_SIZE },
       this.onFormSubmit
     );
   };

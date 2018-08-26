@@ -72,18 +72,18 @@ class MinisiteRoute extends Component {
           to={`/${businessName}`}
         />
 
-        <Route
+        {/* <Route
           path={`/:${ROUTE_PARAMS_BUSINESS_NAME}`}
           name="Minisite-Generic"
           component={props => <GenericSiteMainPage {...this.props} />}
           // component={MainPage}
-        />
-        {/* <Route
+        /> */}
+        <Route
           path={`/:${ROUTE_PARAMS_BUSINESS_NAME}`}
           name="Minisite-MainPage"
           component={props => <MainPage {...this.props} />}
           // component={MainPage}
-        /> */}
+        />
       </Switch>
     );
   }

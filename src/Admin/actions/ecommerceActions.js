@@ -30,11 +30,19 @@ import {
   DELETE_ECOMMERCE_PROPERTY_CATEGORY_REJECTED,
   UPDATE_ECOMMERCE_PROPERTY_CATEGORY_FULFILLED,
   UPDATE_ECOMMERCE_PROPERTY_CATEGORY_PENDING,
-  UPDATE_ECOMMERCE_PROPERTY_CATEGORY_REJECTED
+  UPDATE_ECOMMERCE_PROPERTY_CATEGORY_REJECTED,
+  ASSIGN_CATEGORIES_ECOMMERCE_FULFILLED,
+  ASSIGN_CATEGORIES_ECOMMERCE_PENDING,
+  ASSIGN_CATEGORIES_ECOMMERCE_REJECTED,
+  FETCH_CATEGORY_DETAIL_PENDING,
+  FETCH_ECOMMERCE_ROOT_CATEGORIES_FULFILLED,
+  FETCH_ECOMMERCE_ROOT_CATEGORIES_PENDING,
+  FETCH_ECOMMERCE_ROOT_CATEGORIES_REJECTED
 } from "./types";
 
 import {
   onEcommerceCategoriesGet,
+  onEcommerceRootCategoriesGet,
   onEcommerceCategoryPost,
   onEcommerceCategoryDetailGet,
   onEcommerceCategoryDetailPost,
@@ -42,10 +50,55 @@ import {
   onEcommerceAttributesGet,
   onEcommercePropertiesPost,
   onEcommercePropertiesPut,
-  onEcommercePropertiesDelete
+  onEcommercePropertiesDelete,
+  onCategoryPut
 } from "../config/adminServerCall";
 
 const epics = [];
+
+// category assignment
+
+export const onCategoryAssignEcommerce = payload => ({
+  type: ASSIGN_CATEGORIES_ECOMMERCE_PENDING,
+  payload
+});
+
+epics.push((action$, { getState }) =>
+  action$
+    .ofType(ASSIGN_CATEGORIES_ECOMMERCE_PENDING)
+    .mergeMap(({ payload }) => {
+      const { ecommerce_categories, id } = payload;
+      const access_token = getState().auth.cookies.token_data.access_token;
+
+      return onCategoryPut({
+        body: {
+          ecommerce_categories
+        },
+        id: id,
+        access_token
+      })
+        .concatMap(({ response }) => {
+          if (response.msg === "success") {
+            toast.success("Category Updated successfully!");
+            return [
+              { type: ASSIGN_CATEGORIES_ECOMMERCE_FULFILLED },
+              { type: FETCH_CATEGORY_DETAIL_PENDING, payload: { id } }
+            ];
+          } else {
+            throw new Error(JSON.stringify(response.msg));
+          }
+        })
+        .catch(ajaxError => {
+          toast.error("Error: Updating Category");
+          return Observable.of({
+            type: ASSIGN_CATEGORIES_ECOMMERCE_REJECTED,
+            payload: ajaxError.status
+              ? ajaxError.message
+              : JSON.parse(ajaxError.message)
+          });
+        });
+    })
+);
 
 // attirbutes
 export const onAttributesListEcommerce = () => ({
@@ -167,21 +220,24 @@ epics.push((action$, { getState }) =>
 );
 
 // categories
-export const onCategoriesListEcommerce = () => ({
+export const onCategoriesListEcommerce = (currentId, routeOnError) => ({
   type: FETCH_ECOMMERCE_CATEGORIES_PENDING,
-  first: true
+  first: true,
+  payload: currentId,
+  routeOnError
 });
 
 epics.push((action$, { getState }) =>
   action$.ofType(FETCH_ECOMMERCE_CATEGORIES_PENDING).mergeMap(action => {
-    const { first } = action;
+    const { first, payload, routeOnError } = action;
     return onEcommerceCategoriesGet()
       .concatMap(({ response }) => {
         const extra = [];
         if (first) {
           extra.push({
             type: CHANGE_ACTIVE_ECOMMERCE_CATEGORY,
-            payload: response.uid
+            payload: payload || response.uid,
+            routeOnError
           });
         }
         return [
@@ -195,6 +251,26 @@ epics.push((action$, { getState }) =>
       .catch(ajaxError => {
         toast.error("Error Fetching Categories");
         return Observable.of({ type: FETCH_ECOMMERCE_CATEGORIES_REJECTED });
+      });
+  })
+);
+
+export const onRootCategoriesListEcommerce = () => ({
+  type: FETCH_ECOMMERCE_ROOT_CATEGORIES_PENDING
+});
+
+epics.push((action$, { getState }) =>
+  action$.ofType(FETCH_ECOMMERCE_ROOT_CATEGORIES_PENDING).mergeMap(action => {
+    return onEcommerceRootCategoriesGet()
+      .map(({ response }) => ({
+        type: FETCH_ECOMMERCE_ROOT_CATEGORIES_FULFILLED,
+        payload: response
+      }))
+      .catch(ajaxError => {
+        toast.error("Error Fetching Categories");
+        return Observable.of({
+          type: FETCH_ECOMMERCE_ROOT_CATEGORIES_REJECTED
+        });
       });
   })
 );
@@ -287,27 +363,39 @@ epics.push((action$, { getState }) =>
   })
 );
 
-export const onChangeActiveCategoryEcommerce = (newCategory, oldCategory) => ({
+export const onChangeActiveCategoryEcommerce = (
+  newCategory,
+  oldCategory,
+  routeOnError,
+  justToggle
+) => ({
   type: CHANGE_ACTIVE_ECOMMERCE_CATEGORY,
   payload: newCategory,
-  oldCategory
+  oldCategory,
+  routeOnError,
+  justToggle
 });
 
 epics.push((action$, { getState }) =>
   action$
     .ofType(CHANGE_ACTIVE_ECOMMERCE_CATEGORY)
-    .mergeMap(action => {
-      const { payload: newCategory, oldCategory } = action;
+    .switchMap(action => {
+      const { payload: newCategory, oldCategory, routeOnError } = action;
       if (!oldCategory || newCategory !== oldCategory) {
         return onEcommerceCategoryDetailGet({ uid: newCategory })
           .map(({ response }) => {
-            return {
-              type: FETCH_ECOMMERCE_CATEGORY_FULFILLED,
-              payload: response
-            };
+            if (!response.msg || (response.msg && response.msg === "success")) {
+              return {
+                type: FETCH_ECOMMERCE_CATEGORY_FULFILLED,
+                payload: response
+              };
+            } else {
+              routeOnError && routeOnError();
+              throw new Error(response.msg);
+            }
           })
           .catch(ajaxError => {
-            toast.error("Error fetching Categories");
+            // toast.error("Error fetching Categories");
             return Observable.of({ type: FETCH_ECOMMERCE_CATEGORY_REJECTED });
           });
       } else {

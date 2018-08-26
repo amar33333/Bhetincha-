@@ -7,7 +7,8 @@ import {
   onCategoryGetAjax,
   onCategoryEachGet,
   onCategoryPut,
-  onCategoryArrayGet
+  onCategoryArrayGet,
+  onCategoryEachGetAjax
 } from "../config/adminServerCall";
 
 import {
@@ -36,7 +37,10 @@ import {
   UNMOUNT_CATEGORY_DATA,
   UNMOUNT_SUB_CATEGORY,
   UNMOUNT_CATEGORY,
-  RESET_CATEGORY_ERRORS
+  RESET_CATEGORY_ERRORS,
+  FETCH_CATEGORY_DETAIL_FULFILLED,
+  FETCH_CATEGORY_DETAIL_PENDING,
+  FETCH_CATEGORY_DETAIL_REJECTED
 } from "./types";
 
 const epics = [];
@@ -116,7 +120,14 @@ epics.push((action$, { getState }) =>
     const { category, industry } = payload;
     const access_token = getState().auth.cookies.token_data.access_token;
 
-    return onCategoryPut({ category, industry, access_token })
+    return onCategoryPut({
+      body: {
+        name: category.name,
+        industry
+      },
+      id: category.id,
+      access_token
+    })
       .concatMap(({ response }) => {
         if (response.msg === "success") {
           toast.success("Category Updated successfully!");
@@ -211,6 +222,27 @@ epics.push((action$, { getState }) =>
       .catch(ajaxError => {
         toast.error("Error Deleting Category");
         return Observable.of({ type: DELETE_CATEGORY_REJECTED });
+      })
+  )
+);
+
+export const onCategoryDetail = payload => ({
+  type: FETCH_CATEGORY_DETAIL_PENDING,
+  payload
+});
+
+epics.push((action$, { getState }) =>
+  action$.ofType(FETCH_CATEGORY_DETAIL_PENDING).mergeMap(({ payload }) =>
+    onCategoryEachGetAjax({
+      id: payload.id,
+      access_token: getState().auth.cookies.token_data.access_token
+    })
+      .map(({ response }) => ({
+        type: FETCH_CATEGORY_DETAIL_FULFILLED,
+        payload: response
+      }))
+      .catch(ajaxError => {
+        return Observable.of({ type: FETCH_CATEGORY_DETAIL_REJECTED });
       })
   )
 );

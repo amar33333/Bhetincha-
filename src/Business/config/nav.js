@@ -115,4 +115,12 @@ items.items.forEach(item => {
   else if (item.url) items.routes[item.url] = item.name;
 });
 
+items.routes = {
+  ...items.routes,
+  "/:x/dashboard": "Home",
+  "/:x/dashboard/ecommerce/:x": "YProduct",
+  "/:x/dashboard/ecommerce/:x/edit": "Edit",
+  "/:x/dashboard/ecommerce/manage-products/:x": "XCategory Detail"
+};
+
 export default items;
