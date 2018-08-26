@@ -18,6 +18,8 @@ import minisiteEpics, {
 } from "./actions";
 import { MainNavbar } from "../../components";
 
+import GenericSiteMainPage from "./GenericSiteMainPage";
+
 class Minisite extends Component {
   componentDidMount() {
     this.getBusiness();
@@ -49,13 +51,17 @@ class Minisite extends Component {
     return (
       <div>
         <MainNavbar history={this.props.history} match={this.props.match} />
-        <BusinessNav
-          isHome={this.props.match.path.indexOf(":minisiteRoute") === -1}
-          url={this.props.match.params["minisiteRoute"]}
-          history={this.props.history}
-          businessName={this.props.match.params[ROUTE_PARAMS_BUSINESS_NAME]}
-          minisitePermissions={this.props.minisitePermissions}
-        />
+        {!this.props.minisitePermissionsFetchLoading &&
+          this.props.minisitePermissions &&
+          this.props.minisitePermissions.MINISITE && (
+            <BusinessNav
+              isHome={this.props.match.path.indexOf(":minisiteRoute") === -1}
+              url={this.props.match.params["minisiteRoute"]}
+              history={this.props.history}
+              businessName={this.props.match.params[ROUTE_PARAMS_BUSINESS_NAME]}
+              minisitePermissions={this.props.minisitePermissions}
+            />
+          )}
         {this.props.mainLoading ||
         this.props.minisitePermissionsFetchLoading ? (
           <Loading />
@@ -66,16 +72,17 @@ class Minisite extends Component {
             minisitePermissions={this.props.minisitePermissions}
           />
         ) : (
-          <Redirect to="/404" />
+          <GenericSiteMainPage />
         )}
-
-        {!this.props.isGeneric && (
-          <BusinessFooter
-            businessName={this.props.match.params[ROUTE_PARAMS_BUSINESS_NAME]}
-            sabai={this.props}
-            theme="dark"
-          />
-        )}
+        {!this.props.minisitePermissionsFetchLoading &&
+          this.props.minisitePermissions &&
+          this.props.minisitePermissions.MINISITE && (
+            <BusinessFooter
+              businessName={this.props.match.params[ROUTE_PARAMS_BUSINESS_NAME]}
+              sabai={this.props}
+              theme="dark"
+            />
+          )}
       </div>
     );
   }

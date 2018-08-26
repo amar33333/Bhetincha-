@@ -1,3 +1,11 @@
+/* brandPrimary: platform === 'ios' ? '#37b8df' : '#37b8df',
+  brandInfo: '#62B1F6',
+  brandSuccess: '#478b31',
+  brandDanger: '#d9534f',
+  brandWarning: '#f0ad4e',
+  brandDark: '#2999bb',
+  brandLight: '#f4f4f4', */
+
 body {
   /* font-family: "Palanquin", sans-serif; */
   font-family: "Poppins", sans-serif;
@@ -8,6 +16,10 @@ body {
   position: relative;
   background-color: rgba(255, 255, 255, 0.5) !important;
   margin-top: 0px !important;
+}
+
+.generic-page__wrapper {
+  min-height: 80vh;
 }
 
 .full-height {

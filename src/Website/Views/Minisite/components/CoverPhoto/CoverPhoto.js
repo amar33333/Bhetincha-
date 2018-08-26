@@ -38,11 +38,14 @@ class CoverPhoto extends Component {
           src={`${MAIN_URL}${this.props.cover_photo}`}
           alt="banner"
         />
-        <img
-          src={`${MAIN_URL}${this.props.logo}`}
-          alt="brand-logo"
-          className=" navbar-brand main_nav__brand-logo"
-        />
+        {!this.props.genericSite && (
+          <img
+            src={`${MAIN_URL}${this.props.logo}`}
+            alt="brand-logo"
+            className=" navbar-brand main_nav__brand-logo"
+          />
+        )}
+
         {/* <div className="minisite_banner__img__text__overlay">
           <h1>We are best in Town,</h1>
           <h1>We get things Done!</h1>
