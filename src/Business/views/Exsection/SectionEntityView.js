@@ -23,7 +23,7 @@ class SectionEntityView extends Component {
     this.props.history.replace(
       `/${
         this.props.match.params.businessName
-      }/dashboard/exsection/manage-sections`
+      }/dashboard/section/manage-sections`
     );
   };
 

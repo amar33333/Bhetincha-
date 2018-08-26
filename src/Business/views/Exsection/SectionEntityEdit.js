@@ -35,7 +35,7 @@ class SectionEntityEdit extends Component {
           this.props.history.push(
             `/${
               this.props.match.params.businessName
-            }/dashboard/exsection/manage-sections/${
+            }/dashboard/section/manage-sections/${
               this.props.match.params.sectionEntityId
             }`
           )
