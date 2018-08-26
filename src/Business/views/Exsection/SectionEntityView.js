@@ -4,11 +4,15 @@ import { connect } from "react-redux";
 import { SectionEntityDetail } from "./components";
 
 import {
-  onExsectionSectionEachList
-  // onRemoveExsectionSection
+  onExsectionSectionEachList,
+  onRemoveExsectionSectionEntity
 } from "../../actions";
 
 class SectionEntityView extends Component {
+  constructor(props) {
+    super(props);
+    //console.log("Section Entity ID",this.props.match.params.sectionEntityId);
+  }
   componentDidMount() {
     this.props.onExsectionSectionEachList({
       uid: this.props.match.params.sectionEntityId
@@ -25,21 +29,25 @@ class SectionEntityView extends Component {
 
   render() {
     const { sectionEntityDetailBiz } = this.props;
-
+    // console.log("Section Entity View: Attributes",this.props.attributes);
+    // console.log("Section Entity View:  Attributes.Attributes",this.props.attributes.attributes);
+    // console.log("Section Entity View:  Detail Biz",sectionEntityDetailBiz);
     return (
       <div>
         {sectionEntityDetailBiz &&
           this.props.attributes &&
           this.props.attributes.attributes && (
             <SectionEntityDetail
-              // editURL={`/${
-              //   this.props.match.params.businessName
-              // }/dashboard/exsection/manage-sections/${
-              //   this.props.match.params.sectionEntityId
-              // }/edit`}
-              // onRemoveEcommerceProduct={this.props.onRemoveEcommerceProduct}
+              editURL={`/${
+                this.props.match.params.businessName
+              }/dashboard/exsection/manage-sections/${
+                this.props.match.params.sectionEntityId
+              }/edit`}
+              onRemoveExsectionSectionEntity={
+                this.props.onRemoveExsectionSectionEntity
+              }
               sectionEntityDetailBiz={this.props.sectionEntityDetailBiz}
-              //routeToManageProducts={this.routeToManageProducts}
+              routeToManageSections={this.routeToManageSections}
               attributes={this.props.attributes.attributes}
             />
           )}
@@ -55,9 +63,7 @@ export default connect(
     }
   }) => ({ sectionEntityDetailBiz, attributes }),
   {
-    //onEcommerceProductEachList,
-    onExsectionSectionEachList
-    // onRemoveEcommerceProduct
-    //onRemoveExsectionSection
+    onExsectionSectionEachList,
+    onRemoveExsectionSectionEntity
   }
 )(SectionEntityView);

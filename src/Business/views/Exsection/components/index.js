@@ -7,6 +7,7 @@ import SectionEntityList from "./SectionEntityList";
 import SectionEntityDetail from "./SectionEntityDetail";
 
 import SectionListAdmin from "./SectionListAdmin";
+import SectionEntityEditDetail from "./SectionEntityEditDetail";
 
 export {
   SideTreeView,
@@ -15,5 +16,6 @@ export {
   SectionEditViewBusiness,
   SectionEntityList,
   SectionEntityDetail,
-  SectionListAdmin
+  SectionListAdmin,
+  SectionEntityEditDetail
 };

@@ -14,15 +14,20 @@ import {
   onChangeActiveSectionBusinessByClick,
   onCreateSectionBusiness,
   resetState,
-  onSectionUpdateBusinessExsection
+  onSectionUpdateBusinessExsection,
+  onBusinessCatDetailsList
 } from "../../actions";
 
 class ManageSections extends Component {
   componentDidMount() {
     this.props.onSectionsListExsection();
+    this.props.onBusinessCatDetailsList({
+      id: this.props.cookies.user_data.business_id
+    });
   }
 
   render() {
+    //console.log("Business Section Data", this.props.businessSection);
     return (
       <div className="animated fadeIn">
         <Container fluid>
@@ -113,9 +118,11 @@ export default connect(
         parentSectionBiz,
         rootSectionAdmin,
         topSectionAdminId,
-        parentSectionBizFlag
+        parentSectionBizFlag,
+        businessSection
       }
-    }
+    },
+    auth: { cookies }
   }) => ({
     sectionsAdmin,
     activeSectionAdminId,
@@ -128,7 +135,9 @@ export default connect(
     parentSectionBiz,
     rootSectionAdmin,
     topSectionAdminId,
-    parentSectionBizFlag
+    parentSectionBizFlag,
+    cookies,
+    businessSection
   }),
   {
     onSectionsListExsection,
@@ -136,6 +145,7 @@ export default connect(
     onCreateSectionBusiness,
     resetState,
     onSectionUpdateBusinessExsection,
-    onChangeActiveSectionBusinessByClick
+    onChangeActiveSectionBusinessByClick,
+    onBusinessCatDetailsList
   }
 )(ManageSections);

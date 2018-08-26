@@ -28,20 +28,37 @@ import {
   CHANGE_ROOT_SECTION_ADMIN,
   CHANGE_ACTIVE_EXSECTION_SECTION_BY_CLICK,
   INITIALIZE_TOP_SECTION_ADMIN_ID,
-  PARENT_SECTION_BIZ_FLAG
+  PARENT_SECTION_BIZ_FLAG,
+  FETCH_BUSINESS_CAT_DETAILS_FULFILLED,
+  FETCH_BUSINESS_CAT_DETAILS_PENDING,
+  FETCH_BUSINESS_CAT_DETAILS_REJECTED,
+  FETCH_CATEGORY_EACH_FULFILLED,
+  FETCH_CATEGORY_EACH_PENDING,
+  FETCH_CATEGORY_EACH_REJECTED,
+  FETCH_CATEGORY_SECTION_DATA,
+  UPDATE_EXSECTION_SECTION_ENTITY_EACH_PENDING,
+  UPDATE_EXSECTION_SECTION_ENTITY_EACH_FULFILLED,
+  UPDATE_EXSECTION_SECTION_ENTITY_EACH_REJECTED,
+  DELETE_EXSECTION_SECTION_ENTITY_PENDING,
+  DELETE_EXSECTION_SECTION_ENTITY_FULFILLED,
+  DELETE_EXSECTION_SECTION_ENTITY_REJECTED
 } from "./types";
 
 import {
   onExsectionSectionsGet,
   onExsectionSectionAttributesGet,
-  onExsectionSectionDetailGetAdmin
+  onExsectionSectionDetailGetAdmin,
+  onCategoryEachGet
 } from "../../Admin/config/adminServerCall";
 
 import {
   onSectionBusinessPost,
   onParentSectionBusinessGet,
   onSectionsListExsectionBusinessData,
-  onExsectionEntityEachGet
+  onExsectionEntityEachGet,
+  onBusinessCatDetailsGet,
+  onUpdateExsectionSectionEntityPut,
+  onRemoveExsectionSectionEntityDelete
 } from "../config/businessServerCall";
 
 const epics = [];
@@ -352,14 +369,23 @@ epics.push((action$, { getState }) =>
     .ofType(FETCH_EXSECTION_SECTION_ENTITY_EACH_PENDING)
     .mergeMap(action => {
       const { uid } = action.payload;
-
+      //console.log("UID",uid);
       return onExsectionEntityEachGet({ uid })
         .concatMap(({ response }) => {
+          //console.log("SectionEntity",response);
           return [
             {
               type: FETCH_EXSECTION_SECTION_ENTITY_EACH_FULFILLED,
               payload: response
             }
+            // {
+            //   type: FETCH_EXSECTION_SECTION_ATTRIBUTES_PENDING,
+            //   payload: {
+            //     body: {
+            //       sectionId: uid
+            //     }
+            //   }
+            // }
           ];
         })
         .catch(ajaxError => {
@@ -431,6 +457,115 @@ epics.push((action$, { getState }) =>
 
       return stuffs;
     });
+  })
+);
+
+//Get Category For Business
+export const onBusinessCatDetailsList = payload => ({
+  type: FETCH_BUSINESS_CAT_DETAILS_PENDING,
+  payload
+});
+epics.push((action$, { getState }) =>
+  action$.ofType(FETCH_BUSINESS_CAT_DETAILS_PENDING).mergeMap(({ payload }) => {
+    const access_token = getState().auth.cookies.token_data.access_token;
+    const { id } = payload;
+
+    return onBusinessCatDetailsGet({ id, access_token })
+      .concatMap(({ response }) => {
+        let catSections = [];
+        response.categories.map(category => {
+          let id = category.id;
+          //console.log("CatID : ", id);
+          let access_token = getState().auth.cookies.token_data.access_token;
+          //console.log("Access Token : ",access_token);
+          return onCategoryEachGet({ id, access_token }).then(response => {
+            //console.log("Response : ", response);
+            if (response.data.sections.length > 0) {
+              catSections.push(response.data.sections);
+            }
+          });
+        });
+        return [
+          {
+            type: FETCH_CATEGORY_SECTION_DATA,
+            payload: catSections
+          }
+        ];
+      })
+      .catch(ajaxError => {
+        // toast.error(ajaxError.toString());
+        console.log("business detais errror: ", ajaxError);
+        return Observable.of({
+          type: FETCH_BUSINESS_CAT_DETAILS_REJECTED,
+          payload: ajaxError
+        });
+      });
+  })
+);
+
+//Update Section Entity Each Data
+export const onUpdateExsectionSectionEntity = payload => ({
+  type: UPDATE_EXSECTION_SECTION_ENTITY_EACH_PENDING,
+  payload
+});
+epics.push((action$, { getState }) =>
+  action$
+    .ofType(UPDATE_EXSECTION_SECTION_ENTITY_EACH_PENDING)
+    .mergeMap(({ payload }) => {
+      const { body, uid } = payload;
+      const access_token = getState().auth.cookies.token_data.access_token;
+      //console.log("Payload From Component", body);
+      //console.log("UID", uid);
+      //console.log("Access Token", access_token);
+      return onUpdateExsectionSectionEntityPut({
+        body,
+        uid,
+        access_token
+      })
+        .concatMap(({ response }) => {
+          if (response.msg === "success") {
+            toast.success("Updated successfully!");
+            return [{ type: UPDATE_EXSECTION_SECTION_ENTITY_EACH_FULFILLED }];
+          } else {
+            throw new Error("Error Updating Section Entity");
+          }
+        })
+        .catch(ajaxError => {
+          toast.error(ajaxError.toString());
+          return Observable.of({
+            type: UPDATE_EXSECTION_SECTION_ENTITY_EACH_REJECTED
+          });
+        });
+    })
+);
+
+//Delete Section Entity Data
+export const onRemoveExsectionSectionEntity = payload => ({
+  type: DELETE_EXSECTION_SECTION_ENTITY_PENDING,
+  payload
+});
+
+epics.push((action$, { getState }) =>
+  action$.ofType(DELETE_EXSECTION_SECTION_ENTITY_PENDING).mergeMap(action => {
+    const access_token = getState().auth.cookies.token_data.access_token;
+    const { uid, routeToManageSections } = action.payload;
+
+    return onRemoveExsectionSectionEntityDelete({ uid, access_token })
+      .map(({ response }) => {
+        if (response.msg === "success") {
+          toast.success("Deleted Successfully");
+          routeToManageSections();
+          return { type: DELETE_EXSECTION_SECTION_ENTITY_FULFILLED };
+        } else {
+          throw new Error(response.msg);
+        }
+      })
+      .catch(ajaxError => {
+        toast.error(ajaxError.toString());
+        return Observable.of({
+          type: DELETE_EXSECTION_SECTION_ENTITY_REJECTED
+        });
+      });
   })
 );
 
