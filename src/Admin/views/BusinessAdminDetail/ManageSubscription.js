@@ -106,6 +106,7 @@ class ManageSubscription extends Component {
                   <FormGroup>
                     <Label>Start Date-Time</Label>
                     <Datetime
+                      required
                       //disabled={this.props.loading}
                       closeOnSelect
                       value={this.state.from_date}
@@ -125,6 +126,7 @@ class ManageSubscription extends Component {
                   <FormGroup>
                     <Label>End Date-Time</Label>
                     <Datetime
+                      required
                       //disabled={this.props.loading}
                       closeOnSelect
                       value={this.state.end_date}

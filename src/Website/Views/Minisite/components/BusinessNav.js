@@ -70,17 +70,20 @@ class BusinessNav extends Component {
                     Gallery
                   </Link>
                 </NavItem>
-                <NavItem
-                  key="ecommerce"
-                  className={url === "ecommerce" ? "active" : ""}
-                >
-                  <Link
-                    to={`/${this.props.businessName}/ecommerce`}
-                    className=""
-                  >
-                    Ecommerce
-                  </Link>
-                </NavItem>
+                {this.props.minisitePermissions &&
+                  this.props.minisitePermissions.ECOMMERCE && (
+                    <NavItem
+                      key="ecommerce"
+                      className={url === "ecommerce" ? "active" : ""}
+                    >
+                      <Link
+                        to={`/${this.props.businessName}/ecommerce`}
+                        className=""
+                      >
+                        Ecommerce
+                      </Link>
+                    </NavItem>
+                  )}
                 <NavItem
                   key="contact"
                   className={url === "contact" ? "active" : ""}

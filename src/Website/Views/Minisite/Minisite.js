@@ -54,13 +54,17 @@ class Minisite extends Component {
           url={this.props.match.params["minisiteRoute"]}
           history={this.props.history}
           businessName={this.props.match.params[ROUTE_PARAMS_BUSINESS_NAME]}
+          minisitePermissions={this.props.minisitePermissions}
         />
-        {this.props.mainLoading &&
+        {this.props.mainLoading ||
         this.props.minisitePermissionsFetchLoading ? (
           <Loading />
         ) : this.props.minisitePermissions &&
         this.props.minisitePermissions.MINISITE ? (
-          <MinisiteRoutes params={this.props.match.params} />
+          <MinisiteRoutes
+            params={this.props.match.params}
+            minisitePermissions={this.props.minisitePermissions}
+          />
         ) : (
           <Redirect to="/404" />
         )}
@@ -83,8 +87,7 @@ export default withRepics(
     ({
       MinisiteContainer: {
         edit,
-        minisitePermissions,
-        minisitePermissionsFetchLoading
+        crud: { minisitePermissions, minisitePermissionsFetchLoading }
       }
     }) => ({
       mainLoading: edit.mainLoading,

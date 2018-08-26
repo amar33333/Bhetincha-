@@ -9,6 +9,8 @@ import {
   EcommerceProduct
 } from "../components";
 
+import MinisitePermissionRoute from "./MinisitePermissionRoute";
+
 import {
   ROUTE_PARAMS_BUSINESS_NAME,
   ROUTE_PARAMS_MINISITE_BUSINESS_ROUTE
@@ -22,6 +24,7 @@ class MinisiteRoute extends Component {
     const minisiteBusinessRoute = this.props.params[
       ROUTE_PARAMS_MINISITE_BUSINESS_ROUTE
     ];
+
     return (
       <Switch>
         <Route
@@ -45,20 +48,23 @@ class MinisiteRoute extends Component {
           name="about-us"
           component={AboutUs}
         />
-        <Route
-          path={`/:${ROUTE_PARAMS_BUSINESS_NAME}/ecommerce/product/:productId`}
-          name="ecommerce"
-          component={EcommerceProduct}
-        />
-        <Route
-          path={`/:${ROUTE_PARAMS_BUSINESS_NAME}/ecommerce/:categoryId`}
-          name="ecommerce"
-          component={Ecommerce}
-        />
-        <Route
+        <MinisitePermissionRoute
           path={`/:${ROUTE_PARAMS_BUSINESS_NAME}/ecommerce`}
           name="ecommerce"
           component={Ecommerce}
+          permission={this.props.minisitePermissions.ECOMMERCE}
+        />
+        <MinisitePermissionRoute
+          path={`/:${ROUTE_PARAMS_BUSINESS_NAME}/ecommerce/product/:productId`}
+          name="ecommerce"
+          component={EcommerceProduct}
+          permission={this.props.minisitePermissions.ECOMMERCE}
+        />
+        <MinisitePermissionRoute
+          path={`/:${ROUTE_PARAMS_BUSINESS_NAME}/ecommerce/:categoryId`}
+          name="ecommerce"
+          component={Ecommerce}
+          permission={this.props.minisitePermissions.ECOMMERCE}
         />
         <Route
           path={`/:${ROUTE_PARAMS_BUSINESS_NAME}/contact`}

@@ -50,7 +50,8 @@ const INITIAL_STATE = {
     longitude: ""
   },
   links: [],
-  minisitePermissions: null
+  minisitePermissions: null,
+  minisitePermissionsFetchLoading: false
 
   // nav_layout: [
   //   {
@@ -102,7 +103,12 @@ export default function(state = INITIAL_STATE, action) {
       return { ...state, minisitePermissionsFetchLoading: false };
 
     case FETCH_BUSINESS_FULFILLED:
-      return { ...INITIAL_STATE, ...action.payload };
+      return {
+        ...INITIAL_STATE,
+        minisitePermissions: state.minisitePermissions,
+        minisitePermissionsFetchLoading: state.minisitePermissionsFetchLoading,
+        ...action.payload
+      };
 
     case UPDATE_NAV_LAYOUT_FULFILLED:
     case UPDATE_ABOUT_FULFILLED:
@@ -115,7 +121,11 @@ export default function(state = INITIAL_STATE, action) {
       return { ...state, ...action.payload };
 
     case CLEAR_MINISITE_DATA:
-      return { ...INITIAL_STATE };
+      return {
+        ...INITIAL_STATE,
+        minisitePermissions: state.minisitePermissions,
+        minisitePermissionsFetchLoading: state.minisitePermissionsFetchLoading
+      };
 
     default:
       return state;
