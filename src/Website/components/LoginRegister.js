@@ -25,6 +25,14 @@ class LoginRegister extends Component {
       opened: false
     });
   };
+
+  toggleDropdown = () => {
+    this.setState({
+      // opened: !this.state.opened
+      opened: false
+    });
+  };
+
   render() {
     return (
       <div className="login-register-avatar">
@@ -48,7 +56,10 @@ class LoginRegister extends Component {
             </p>
             <Button
               fluid
-              onClick={this.props.toggleLoginModal}
+              onClick={() => {
+                this.toggleDropdown();
+                this.props.toggleLoginModal();
+              }}
               variant="raised"
               color="blue"
             >

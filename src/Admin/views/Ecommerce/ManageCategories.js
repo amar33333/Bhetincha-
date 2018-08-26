@@ -27,9 +27,35 @@ import {
 
 class ManageCategories extends Component {
   componentDidMount() {
-    this.props.onCategoriesListEcommerce();
+    this.props.onCategoriesListEcommerce(
+      this.props.match.params.categoryId,
+      this.routeToManageCategories
+    );
     this.props.onAttributesListEcommerce();
   }
+
+  componentDidUpdate(prevProps) {
+    if (
+      this.props.match.params.categoryId !== prevProps.match.params.categoryId
+    ) {
+      if (!this.props.match.params.categoryId) {
+        this.props.onCategoriesListEcommerce(
+          this.props.match.params.categoryId,
+          this.routeToManageCategories
+        );
+      } else {
+        this.props.onChangeActiveCategoryEcommerce(
+          this.props.match.params.categoryId,
+          prevProps.match.params.categoryId,
+          this.routeToManageCategories
+        );
+      }
+    }
+  }
+
+  routeToManageCategories = () => {
+    this.props.history.push(`/admin/ecommerce/manage-categories`);
+  };
 
   render() {
     return (
@@ -41,7 +67,21 @@ class ManageCategories extends Component {
                 categories={this.props.categories}
                 activeCategory={this.props.activeCategory}
                 onChangeActiveCategory={
-                  this.props.onChangeActiveCategoryEcommerce
+                  // this.props.onChangeActiveCategoryEcommerce
+                  uid => {
+                    if (this.props.match.params.categoryId !== uid) {
+                      this.props.history.push(
+                        `/admin/ecommerce/manage-categories/${uid}`
+                      );
+                    } else {
+                      this.props.onChangeActiveCategoryEcommerce(
+                        uid,
+                        this.props.match.params.categoryId,
+                        this.routeToManageCategories,
+                        true
+                      );
+                    }
+                  }
                 }
                 isOpen={this.props.isOpenCategories}
                 openAllOnSearch={this.props.openAllOnSearchEcommerce}
@@ -53,7 +93,11 @@ class ManageCategories extends Component {
                   <BreadcrumbNav
                     breadCrumbs={this.props.selectedCategoryDetail.breadCrumbs}
                     onChangeActiveCategory={
-                      this.props.onChangeActiveCategoryEcommerce
+                      // this.props.onChangeActiveCategoryEcommerce
+                      uid =>
+                        this.props.history.push(
+                          `/admin/ecommerce/manage-categories/${uid}`
+                        )
                     }
                   />
                   {this.props.activeCategory &&

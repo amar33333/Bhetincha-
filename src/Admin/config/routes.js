@@ -232,6 +232,13 @@ class AdminRoute extends Component {
         />
         <CustomRoute
           exact
+          path="/admin/ecommerce/manage-categories/:categoryId"
+          name="Ecommerce-categories"
+          component={ManageCategories}
+          permission="CAN_VIEW_ECOMMERCE_CATEGORIES"
+        />
+        <CustomRoute
+          exact
           path="/admin/ecommerce/assign-categories"
           name="Ecommerce-assign"
           component={AssignCategories}

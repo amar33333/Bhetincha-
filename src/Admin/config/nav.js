@@ -297,7 +297,8 @@ items.routes = {
     "/admin/list-business/:x/manage-branchs/:x/edit-branch": "Edit",
     "/admin/list-business/:x/social-url-links": "Social Links",
     "/admin/list-business/:x/manage-subscription": "Subscription",
-    "/admin/list-business/:x/manage-products": "Products"
+    "/admin/list-business/:x/manage-products": "Products",
+    "/admin/ecommerce/manage-categories/:x": "XCategory Detail"
   }
 };
 

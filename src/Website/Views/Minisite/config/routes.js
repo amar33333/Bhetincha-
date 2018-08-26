@@ -17,6 +17,7 @@ import {
 } from "../../../../config/CONSTANTS";
 import ThemeLight from "../theme-light/ThemeLight";
 import GalleryView from "../components/Gallery/GalleryView";
+import GenericSiteMainPage from "../GenericSiteMainPage";
 
 class MinisiteRoute extends Component {
   render() {
@@ -77,6 +78,12 @@ class MinisiteRoute extends Component {
           to={`/${businessName}`}
         />
 
+        {/* <Route
+          path={`/:${ROUTE_PARAMS_BUSINESS_NAME}`}
+          name="Minisite-Generic"
+          component={props => <GenericSiteMainPage {...this.props} />}
+          // component={MainPage}
+        /> */}
         <Route
           path={`/:${ROUTE_PARAMS_BUSINESS_NAME}`}
           name="Minisite-MainPage"

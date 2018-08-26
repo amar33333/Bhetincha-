@@ -3,6 +3,7 @@ import DynamicImport from "../../Common/utils/DynamicImport";
 import { Route, Switch } from "react-router-dom";
 import { Loading } from "../../Common/pages";
 import { Home, BusinessList, ResultPage } from "../Views";
+
 import Ecommerce from "../Views/Ecommerce";
 import {
   ROUTE_PARAMS_BUSINESS_NAME,
@@ -57,6 +58,7 @@ class WebsiteRoute extends Component {
         <Route
           path={`/:${ROUTE_PARAMS_BUSINESS_NAME}`}
           name="Minisite"
+          // component={props => <AsyncMinisite {...props} isGeneric={true} />}
           component={AsyncMinisite}
         />
         <Route path="/" name="Home" component={Home} />

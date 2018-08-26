@@ -68,11 +68,14 @@ class Minisite extends Component {
         ) : (
           <Redirect to="/404" />
         )}
-        <BusinessFooter
-          businessName={this.props.match.params[ROUTE_PARAMS_BUSINESS_NAME]}
-          sabai={this.props}
-          theme="dark"
-        />
+
+        {!this.props.isGeneric && (
+          <BusinessFooter
+            businessName={this.props.match.params[ROUTE_PARAMS_BUSINESS_NAME]}
+            sabai={this.props}
+            theme="dark"
+          />
+        )}
       </div>
     );
   }

@@ -34,9 +34,7 @@ class ProductEdit extends Component {
         onSubmit={this.props.onUpdateEcommerceProduct}
         routeToView={() =>
           this.props.history.push(
-            `/${
-              this.props.match.params.businessName
-            }/dashboard/ecommerce/manage-products/${
+            `/${this.props.match.params.businessName}/dashboard/ecommerce/${
               this.props.match.params.productId
             }`
           )

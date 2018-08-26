@@ -1,15 +1,7 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 
-import {
-  Row,
-  Col,
-  Media,
-  // Card,
-  // CardBody,
-  // CardFooter,
-  Badge
-} from "reactstrap";
+import { Row, Col, Media, Badge } from "reactstrap";
 import { Card, Divider, Button } from "semantic-ui-react";
 import moment from "moment";
 
