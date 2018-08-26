@@ -24,7 +24,6 @@ import {
   FETCH_EXSECTION_SECTION_ENTITY_EACH_PENDING,
   FETCH_EXSECTION_SECTION_ENTITY_EACH_FULFILLED,
   FETCH_EXSECTION_SECTION_ENTITY_EACH_REJECTED,
-  CHANGE_ACTIVE_PARENT_ADMIN_EXSECTION,
   CHANGE_ROOT_SECTION_ADMIN,
   CHANGE_ACTIVE_EXSECTION_SECTION_BY_CLICK,
   INITIALIZE_TOP_SECTION_ADMIN_ID,
@@ -51,7 +50,7 @@ export const onSectionsListExsection = () => ({
   first: true
 });
 
-epics.push((action$, { getState }) =>
+epics.push(action$ =>
   action$.ofType(FETCH_EXSECTION_SECTIONS_PENDING).mergeMap(action => {
     const { first } = action;
     return onExsectionSectionsGet()
@@ -62,15 +61,7 @@ epics.push((action$, { getState }) =>
             type: INITIALIZE_TOP_SECTION_ADMIN_ID,
             payload: response.uid
           });
-          extra.push({
-            type: CHANGE_ACTIVE_EXSECTION_SECTION,
-            payload: response.uid,
-            first: first,
-            activeChildrenAdmin: null
-            // oldSectionAdminId: response.uid
-          });
         }
-
         return [
           {
             type: FETCH_EXSECTION_SECTIONS_FULFILLED,
@@ -80,7 +71,7 @@ epics.push((action$, { getState }) =>
         ];
       })
       .catch(ajaxError => {
-        toast.error("Error Fetching Categories");
+        toast.error("Error Fetching Sections");
         return Observable.of({ type: FETCH_EXSECTION_SECTIONS_REJECTED });
       });
   })

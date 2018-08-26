@@ -40,6 +40,7 @@ class RecordAddEdit extends Component {
       this
     );
     this.checkSectionIsTop = this.checkSectionIsTop.bind(this);
+    this.removeClick = this.removeClick.bind(this);
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -103,7 +104,11 @@ class RecordAddEdit extends Component {
   };
 
   onChange = (key, value, mykey) => {
+    //console.log("key", key);
+    //console.log("value", value);
+    //console.log("mykey", mykey);
     const newArray = Array.from(this.state.inputValues);
+    //console.log(newArray);
     newArray[mykey] = { ...newArray[mykey], ...{ [key]: value } };
 
     this.setState({ inputValues: newArray, [key]: value });
@@ -114,11 +119,19 @@ class RecordAddEdit extends Component {
     this.setState({ documents });
   }
 
+  removeClick(i) {
+    let documents = [...this.state.documents];
+    documents.splice(i, 1);
+    this.setState({ documents });
+  }
+
   saveClick(event) {
     event.preventDefault();
 
     //console.log("this.props", this.props);
     const { inputValues } = this.state;
+
+    console.log("soling inputValues", inputValues);
     let parentSectionId;
     if (this.props.parentSectionBiz && this.props.parentSectionBiz.sections) {
       parentSectionId = this.state.selectedOption
@@ -148,6 +161,16 @@ class RecordAddEdit extends Component {
               property = property.charAt(0).toLowerCase() + property.slice(1);
               let value = obj[upperCaseProperty];
               //let propV = property;
+
+              // else if (attributeType === "MultipleChoices") {
+              //   if (rest[name] && rest[name].length) {
+              //     value = rest[name].map(({ value }) => value);
+              //   } else {
+              //     value = rest[name];
+              //   }
+              //console.log("attribute type", attributeType);
+              // console.log("name", name);
+              //console.log("uppserCaseProperty", upperCaseProperty);
               if (property === "name") {
                 body[property] = obj[upperCaseProperty];
               } else if (
@@ -155,6 +178,16 @@ class RecordAddEdit extends Component {
                 name === upperCaseProperty
               ) {
                 value = value.toISOString();
+                body[upperCaseProperty] = {
+                  attributeType,
+                  value
+                };
+              } else if (
+                attributeType === "MultipleChoices" &&
+                name === upperCaseProperty
+              ) {
+                value = value.map(({ value }) => value);
+                console.log("for case is multi choice breached", value);
                 body[upperCaseProperty] = {
                   attributeType,
                   value
@@ -170,6 +203,7 @@ class RecordAddEdit extends Component {
           }
         });
         //{end here}
+        //console.log("your body is a wonderland", { body });
         this.props.onSubmit({ body });
       });
     } else {
@@ -311,11 +345,20 @@ class RecordAddEdit extends Component {
             <Col sm={9}>
               <Select
                 options={attribute.options.map(x => ({ value: x, label: x }))}
-                required={attribute.required}
+                // required={attribute.required}
                 onChange={value =>
                   this.onChange(attribute.name, value ? value.value : "", mykey)
                 }
-                value={this.state[attribute.name]}
+                //value={this.state[attribute.name]}
+                value={
+                  //this.state["inputValues"] &&
+                  this.state["inputValues"][mykey] &&
+                  //this.state["inputValues"][mykey].Name &&
+                  this.state["inputValues"][mykey][attribute.name]
+                    ? this.state["inputValues"][mykey][attribute.name]
+                    : ""
+                }
+                //this.state[inputValues][mykey].attributeName
               />
             </Col>
           </FormGroup>
@@ -332,9 +375,15 @@ class RecordAddEdit extends Component {
                 multi
                 tabSelectsValue={false}
                 options={attribute.options.map(x => ({ value: x, label: x }))}
-                required={attribute.required}
-                onChange={value => this.onChange(attribute.name, value)}
-                value={this.state[attribute.name]}
+                // required={attribute.required}
+                onChange={value => this.onChange(attribute.name, value, mykey)}
+                //value={this.state[attribute.name]}
+                value={
+                  this.state["inputValues"][mykey] &&
+                  this.state["inputValues"][mykey][attribute.name]
+                    ? this.state["inputValues"][mykey][attribute.name]
+                    : ""
+                }
               />
             </Col>
           </FormGroup>
@@ -347,6 +396,13 @@ class RecordAddEdit extends Component {
 
   render() {
     const { selectedOption } = this.state;
+    //console.log("this state", this.state);
+    // if (
+    //   this.state["inputValues"] &&
+    //   this.state["inputValues"][0] &&
+    //   this.state["inputValues"][0].Name
+    // )
+    //   console.log("this state again", this.state["inputValues"][0].Name);
     const documents = this.state.documents.map((Element, index) => {
       return (
         <Element
@@ -354,6 +410,7 @@ class RecordAddEdit extends Component {
           mykey={index}
           attributes={this.props.attributes}
           renderField={this.renderField}
+          removeClick={this.removeClick}
         />
       );
     });

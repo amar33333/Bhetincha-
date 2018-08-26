@@ -223,7 +223,7 @@ class ProductAddEdit extends Component {
             }
           }
         );
-
+        //console.log("Prod Body", { body });
         this.setState({ productSubmit: true }, () =>
           this.props.onSubmit({ body })
         );

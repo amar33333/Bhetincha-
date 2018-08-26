@@ -27,11 +27,11 @@ class SectionEntityDetail extends Component {
                   {/* {console.log("sectionEntityDetail", sectionEntityDetail)}
                   {console.log("attributes", this.props.attributes)} */}
                 </h3>
-                {/* <Link to={this.props.editURL} className="ml-2"> */}
-                <Button color="primary">
-                  <i className="fa fa-pencil" /> Edit
-                </Button>
-                {/* </Link> */}
+                <Link to={this.props.editURL} className="ml-2">
+                  <Button color="primary">
+                    <i className="fa fa-pencil" /> Edit
+                  </Button>
+                </Link>
                 <div className="ml-2">
                   {/* <PopoverDelete
                     text="Delete"

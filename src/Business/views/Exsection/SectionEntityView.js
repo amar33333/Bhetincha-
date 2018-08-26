@@ -32,11 +32,11 @@ class SectionEntityView extends Component {
           this.props.attributes &&
           this.props.attributes.attributes && (
             <SectionEntityDetail
-              // editURL={`/${
-              //   this.props.match.params.businessName
-              // }/dashboard/exsection/manage-sections/${
-              //   this.props.match.params.sectionEntityId
-              // }/edit`}
+              editURL={`/${
+                this.props.match.params.businessName
+              }/dashboard/exsection/manage-sections/${
+                this.props.match.params.sectionEntityId
+              }/edit`}
               // onRemoveEcommerceProduct={this.props.onRemoveEcommerceProduct}
               sectionEntityDetailBiz={this.props.sectionEntityDetailBiz}
               //routeToManageProducts={this.routeToManageProducts}
