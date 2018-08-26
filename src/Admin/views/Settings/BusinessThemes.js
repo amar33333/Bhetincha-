@@ -1,5 +1,9 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import ColorPicker from "rc-color-picker";
+import "rc-color-picker/assets/index.css";
+
+import ThemeColorCard from "../../../Common/components/ThemeColorCard";
 
 import {
   Button,
@@ -19,13 +23,13 @@ import { onBusinessThemesList, onBusinessThemeSubmit } from "../../actions";
 class BusinessThemes extends Component {
   state = {
     themeTitle: "",
-    brandPrimaryColor: "",
-    brandInfoColor: "",
-    brandSuccessColor: "",
-    brandDangerColor: "",
-    brandWarningColor: "",
-    brandDarkColor: "",
-    brandLightColor: ""
+    brandPrimaryColor: { color: "#2e7a29", alpha: 100 },
+    brandDarkColor: { color: "#12520e", alpha: 100 },
+    brandLightColor: { color: "#25c11c", alpha: 100 },
+    brandInfoColor: { color: "#fff", alpha: 100 },
+    brandSuccessColor: { color: "#fff", alpha: 100 },
+    brandDangerColor: { color: "#fff", alpha: 100 },
+    brandWarningColor: { color: "#fff", alpha: 100 }
   };
 
   componentDidMount() {
@@ -44,6 +48,7 @@ class BusinessThemes extends Component {
       themeTitle,
       brandPrimaryColor,
       brandInfoColor,
+      brandWarningColor,
       brandSuccessColor,
       brandDangerColor,
       brandDarkColor,
@@ -57,18 +62,38 @@ class BusinessThemes extends Component {
         brandInfoColor,
         brandSuccessColor,
         brandDangerColor,
+        brandWarningColor,
         brandDarkColor,
         brandLightColor
       }
     });
   };
 
+  onColorChange = (name, color) => {
+    this.setState({
+      [name]: {
+        color: color.color,
+        alpha: color.alpha
+      }
+    });
+  };
+
   render() {
+    const testTheme = {
+      themeTitle: "Green Theme",
+      brandPrimaryColor: { color: "#2e7a29", alpha: 100 },
+      brandDarkColor: { color: "#12520e", alpha: 100 },
+      brandLightColor: { color: "#25c11c", alpha: 100 },
+      brandInfoColor: { color: "#fff", alpha: 100 },
+      brandSuccessColor: { color: "#fff", alpha: 100 },
+      brandDangerColor: { color: "#fff", alpha: 100 },
+      brandWarningColor: { color: "#fff", alpha: 100 }
+    };
     console.log(this.state);
     return (
       <div className="animated fadeIn">
         <Row className="hr-centered">
-          <Col xs="12" md="6">
+          <Col xs="12" md="10">
             {/* <PermissionProvider permission="CAN_ADD_INDUSTRY"> */}
             <Card>
               <CardHeader>
@@ -77,7 +102,7 @@ class BusinessThemes extends Component {
               <CardBody>
                 <Form onSubmit={this.onFormSubmit}>
                   <Row>
-                    <Col xs="12">
+                    <Col>
                       <FormGroup>
                         <Label>Theme Title</Label>
                         <Input
@@ -89,173 +114,115 @@ class BusinessThemes extends Component {
                           onChange={this.onChange.bind(this, "themeTitle")}
                         />
                       </FormGroup>
-                      {/* <ErrorHandling
-                        error={
-                          this.props.settingsErrors &&
-                          this.props.settingsErrors.name
-                        }
-                      /> */}
                     </Col>
                   </Row>
                   <Row>
-                    <Col xs="12">
-                      <FormGroup>
-                        <Label for="brandPrimaryColor">
-                          Brand Primary Color
-                        </Label>
-                        <Input
-                          type="color"
-                          name="brandPrimaryColor"
-                          id="brandPrimaryColor"
-                          placeholder="Brand Primary Color"
-                          onChange={this.onChange.bind(
-                            this,
-                            "brandPrimaryColor"
-                          )}
-                        />
-                      </FormGroup>
-                      {/* <ErrorHandling
-                        error={
-                          this.props.settingsErrors &&
-                          this.props.settingsErrors.name
+                    <Col className="d-flex flex-column">
+                      <ColorPicker
+                        color={this.state.brandPrimaryColor.color}
+                        alpha={this.state.brandPrimaryColor.alpha}
+                        onChange={color =>
+                          this.onColorChange("brandPrimaryColor", color)
                         }
-                      /> */}
+                        placement="topLeft"
+                      >
+                        <span className="rc-color-picker-trigger" />
+                      </ColorPicker>
+                      <p>
+                        <strong>Brand Primary</strong>
+                      </p>
+                    </Col>
+                    <Col className="d-flex flex-column">
+                      <ColorPicker
+                        color={this.state.brandDarkColor.color}
+                        alpha={this.state.brandDarkColor.alpha}
+                        onChange={color =>
+                          this.onColorChange("brandDarkColor", color)
+                        }
+                        placement="topLeft"
+                      >
+                        <span className="rc-color-picker-trigger" />
+                      </ColorPicker>
+                      <p>
+                        <strong>Brand Primary Dark</strong>
+                      </p>
+                    </Col>
+                    <Col className="d-flex flex-column">
+                      <ColorPicker
+                        color={this.state.brandLightColor.color}
+                        alpha={this.state.brandLightColor.alpha}
+                        onChange={color =>
+                          this.onColorChange("brandLightColor", color)
+                        }
+                        placement="topLeft"
+                      >
+                        <span className="rc-color-picker-trigger" />
+                      </ColorPicker>
+                      <p>
+                        <strong>Brand Primary Light</strong>
+                      </p>
+                    </Col>
+                    <Col className="d-flex flex-column">
+                      <ColorPicker
+                        color={this.state.brandInfoColor.color}
+                        alpha={this.state.brandInfoColor.alpha}
+                        onChange={color =>
+                          this.onColorChange("brandInfoColor", color)
+                        }
+                        placement="topLeft"
+                      >
+                        <span className="rc-color-picker-trigger" />
+                      </ColorPicker>
+                      <p>
+                        <strong>Brand Info Color</strong>
+                      </p>
+                    </Col>
+                    <Col className="d-flex flex-column">
+                      <ColorPicker
+                        color={this.state.brandSuccessColor.color}
+                        alpha={this.state.brandSuccessColor.alpha}
+                        onChange={color =>
+                          this.onColorChange("brandSuccessColor", color)
+                        }
+                        placement="topLeft"
+                      >
+                        <span className="rc-color-picker-trigger" />
+                      </ColorPicker>
+                      <p>
+                        <strong>Brand Success Color</strong>
+                      </p>
+                    </Col>
+                    <Col className="d-flex flex-column">
+                      <ColorPicker
+                        color={this.state.brandWarningColor.color}
+                        alpha={this.state.brandWarningColor.alpha}
+                        onChange={color =>
+                          this.onColorChange("brandWarningColor", color)
+                        }
+                        placement="topLeft"
+                      >
+                        <span className="rc-color-picker-trigger" />
+                      </ColorPicker>
+                      <p>
+                        <strong>Brand Warning Color</strong>
+                      </p>
+                    </Col>
+                    <Col className="d-flex flex-column">
+                      <ColorPicker
+                        color={this.state.brandDangerColor.color}
+                        alpha={this.state.brandDangerColor.alpha}
+                        onChange={color =>
+                          this.onColorChange("brandDangerColor", color)
+                        }
+                        placement="topLeft"
+                      >
+                        <span className="rc-color-picker-trigger" />
+                      </ColorPicker>
+                      <p>
+                        <strong>Brand Danger Color</strong>
+                      </p>
                     </Col>
                   </Row>
-                  <Row>
-                    <Col xs="12">
-                      <FormGroup>
-                        <Label for="brandInfoColor">Brand Info Color</Label>
-                        <Input
-                          type="color"
-                          name="brandInfoColor"
-                          id="brandInfoColor"
-                          placeholder="Brand Info Color"
-                          onChange={this.onChange.bind(this, "brandInfoColor")}
-                        />
-                      </FormGroup>
-                      {/* <ErrorHandling
-                        error={
-                          this.props.settingsErrors &&
-                          this.props.settingsErrors.name
-                        }
-                      /> */}
-                    </Col>
-                  </Row>
-                  <Row>
-                    <Col xs="12">
-                      <FormGroup>
-                        <Label for="brandSuccessColor">
-                          Brand Success Color
-                        </Label>
-                        <Input
-                          type="color"
-                          name="brandSuccessColor"
-                          id="brandSuccessColor"
-                          placeholder="Brand Success Color"
-                          onChange={this.onChange.bind(
-                            this,
-                            "brandSuccessColor"
-                          )}
-                        />
-                      </FormGroup>
-                      {/* <ErrorHandling
-                        error={
-                          this.props.settingsErrors &&
-                          this.props.settingsErrors.name
-                        }
-                      /> */}
-                    </Col>
-                  </Row>
-                  <Row>
-                    <Col xs="12">
-                      <FormGroup>
-                        <Label for="brandDangerColor">Brand Danger Color</Label>
-                        <Input
-                          type="color"
-                          name="brandDangerColor"
-                          id="brandDangerColor"
-                          placeholder="Brand Danger Color"
-                          onChange={this.onChange.bind(
-                            this,
-                            "brandDangerColor"
-                          )}
-                        />
-                      </FormGroup>
-                      {/* <ErrorHandling
-                        error={
-                          this.props.settingsErrors &&
-                          this.props.settingsErrors.name
-                        }
-                      /> */}
-                    </Col>
-                  </Row>
-                  <Row>
-                    <Col xs="12">
-                      <FormGroup>
-                        <Label for="brandWarningColor">
-                          Brand Warning Color
-                        </Label>
-                        <Input
-                          type="color"
-                          name="brandWarningColor"
-                          id="brandWarningColor"
-                          placeholder="Brand Warning Color"
-                          onChange={this.onChange.bind(
-                            this,
-                            "brandWarningColor"
-                          )}
-                        />
-                      </FormGroup>
-                      {/* <ErrorHandling
-                        error={
-                          this.props.settingsErrors &&
-                          this.props.settingsErrors.name
-                        }
-                      /> */}
-                    </Col>
-                  </Row>
-                  <Row>
-                    <Col xs="12">
-                      <FormGroup>
-                        <Label for="brandDarkColor">Brand Dark Color</Label>
-                        <Input
-                          type="color"
-                          name="brandDarkColor"
-                          id="brandDarkColor"
-                          placeholder="Brand Dark Color"
-                          onChange={this.onChange.bind(this, "brandDarkColor")}
-                        />
-                      </FormGroup>
-                      {/* <ErrorHandling
-                        error={
-                          this.props.settingsErrors &&
-                          this.props.settingsErrors.name
-                        }
-                      /> */}
-                    </Col>
-                  </Row>
-                  <Row>
-                    <Col xs="12">
-                      <FormGroup>
-                        <Label for="brandLightColor">Brand Light Color</Label>
-                        <Input
-                          type="color"
-                          name="brandLightColor"
-                          id="brandLightColor"
-                          placeholder="Brand Light Color"
-                          onChange={this.onChange.bind(this, "brandLightColor")}
-                        />
-                      </FormGroup>
-                      {/* <ErrorHandling
-                        error={
-                          this.props.settingsErrors &&
-                          this.props.settingsErrors.name
-                        }
-                      /> */}
-                    </Col>
-                  </Row>
-
                   <Row>
                     <Col>
                       <Button
@@ -270,6 +237,11 @@ class BusinessThemes extends Component {
               </CardBody>
             </Card>
             {/* </PermissionProvider> */}
+          </Col>
+        </Row>
+        <Row>
+          <Col>
+            <ThemeColorCard theme={testTheme} />
           </Col>
         </Row>
       </div>

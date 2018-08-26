@@ -783,3 +783,19 @@ body {
   border-bottom: 0.5px solid lightgray;
   padding-bottom: 10px;
 }
+
+/* ========= Color Picker ======= */
+.rc-color-picker-trigger {
+  height: 50px !important;
+  width: 50px !important;
+}
+
+.theme-card-color__wrapper {
+  display: flex;
+  flex-direction: row;
+}
+
+.theme-card-color {
+  height: 100px;
+  width: 40px;
+}
