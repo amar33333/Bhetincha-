@@ -28,7 +28,9 @@ class Product extends Component {
 
   onSelectCategory = categoryId =>
     this.props.history.push(
-      `${this.props.ECOMMERCE_URL || "/ecommerce/"}${categoryId}`
+      categoryId
+        ? `${this.props.ECOMMERCE_URL || "/ecommerce/"}${categoryId}`
+        : `${this.props.ECOMMERCE_URL || "/ecommerce"}`
     );
 
   render() {

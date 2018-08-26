@@ -50,12 +50,6 @@ class MinisiteRoute extends Component {
           component={AboutUs}
         />
         <MinisitePermissionRoute
-          path={`/:${ROUTE_PARAMS_BUSINESS_NAME}/ecommerce`}
-          name="ecommerce"
-          component={Ecommerce}
-          permission={this.props.minisitePermissions.ECOMMERCE}
-        />
-        <MinisitePermissionRoute
           path={`/:${ROUTE_PARAMS_BUSINESS_NAME}/ecommerce/product/:productId`}
           name="ecommerce"
           component={EcommerceProduct}
@@ -63,6 +57,12 @@ class MinisiteRoute extends Component {
         />
         <MinisitePermissionRoute
           path={`/:${ROUTE_PARAMS_BUSINESS_NAME}/ecommerce/:categoryId`}
+          name="ecommerce"
+          component={Ecommerce}
+          permission={this.props.minisitePermissions.ECOMMERCE}
+        />
+        <MinisitePermissionRoute
+          path={`/:${ROUTE_PARAMS_BUSINESS_NAME}/ecommerce`}
           name="ecommerce"
           component={Ecommerce}
           permission={this.props.minisitePermissions.ECOMMERCE}

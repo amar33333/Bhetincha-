@@ -75,6 +75,7 @@ class MainNavbar extends Component {
                     this.setState(
                       { enterCount: this.state.enterCount + 1 },
                       () =>
+                        keyword &&
                         this.props.history.push({
                           pathname: "/businesses",
                           //query: keyword
