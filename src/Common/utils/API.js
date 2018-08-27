@@ -1,26 +1,20 @@
-const HOST = "https://bhetincha.app";
-const MONGO_PORT = "8025";
+//const HOST = "https://bhetincha.app";
+const HOST = "http://52.78.51.237:8025";
+//const MONGO_PORT = "8025";
 
-// const HOST = "http://13.250.104.102";
-// const MONGO_PORT = "8050";
+// export const CLIENT_ID = "e6dysH1DbOAvh4BHfHIen647yB5Z0XRbYYoCMYfR";
 
-export const CLIENT_ID = "e6dysH1DbOAvh4BHfHIen647yB5Z0XRbYYoCMYfR";
-export const CLIENT_SECRET =
-  "6XfWulrr1jG4SWVxVLm217l9rQPrcZHjRoBwtYTi30bjIBGmJXfCGf08zFYPRW1qk6AlZRF85zCeUbeJizDp9jQ8R91XS0SiUPQxmTcLPqDWDMyAIydZSeiL2AL3X0HW";
+export const CLIENT_ID = "abcd";
+//export const CLIENT_SECRET =
+// "RHIlaZJMAFOeFFCnSTT7v5oLNJxH04dti5VUEe5i7CUAbnJk3EAWILaIE7kjYWnx18DoONY5xq3J1fKNx0zBKjWxVDzgQYcuxAO8U6eiHmOJ35Z21tadgW1oIUAtE8Jj";
+export const CLIENT_SECRET = "abcd";
 
-// const HOST = "https://bhetincha.app";
-// const MONGO_PORT = "8025";
+// export const MAIN_URL = `${HOST}:${MONGO_PORT}`;
+// export const ELASTIC_URL = `${HOST}:${MONGO_PORT}`;
 
-// export const CLIENT_ID = "gbDlrzHDWV0In05ycj9pRn5ijzQkWVcQ7Grc7g9J";
-// export const CLIENT_SECRET =
-//   "hbWICg1DDWk1AUmnAU4QBekfWbTrpoQmy2JVKkHVAICEOniLB6Mtd4BlXadJ3JnmLhQI1APlJuBP5qWKFKqbGVWYImZeEAAWMWJFayyFfLXKPIksrTNAh5YiE2amc0HH";
+export const MAIN_URL = `${HOST}`;
 
-// const HOST = "http://202.51.75.111";
-// const MONGO_PORT = "8000";
-const ELASTIC_PORT = "9200";
-export const MAIN_URL = `${HOST}:${MONGO_PORT}`;
-export const ELASTIC_URL = `${HOST}:${MONGO_PORT}`;
-
+export const ELASTIC_URL = `${HOST}`;
 // const MAPS_API_KEY = "AIzaSyC5jpMbvHuSQVcVdUN_hYD-XWRxJT6az_g";
 // const MAPS_API_KEY = "AIzaSyDhwdTQSE86U4GFQDhZZZvtgxKxtj78TOI";
 const MAPS_API_KEY = "AIzaSyCrFkQNEVe8APwyvTLa-0bSMvr3B-mzBFg";

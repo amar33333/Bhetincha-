@@ -102,6 +102,20 @@ const items = {
           // permission: "CAN_VIEW_USER"
         }
       ]
+    },
+    {
+      name: "Sections",
+      url: `/${ROUTE_PARAMS_BUSINESS_NAME}/dashboard/section`,
+      icon: "fa fa-users",
+      // permission: "CAN_VIEW_USER",
+      children: [
+        {
+          name: "Manage Sections",
+          url: `/${ROUTE_PARAMS_BUSINESS_NAME}/dashboard/section/manage-sections`,
+          icon: "icon-user-follow"
+          // permission: "CAN_VIEW_USER"
+        }
+      ]
     }
   ]
 };

@@ -15,7 +15,10 @@ import {
   AddBranch,
   ChangeSlug,
   Gallery,
-  SocialLinks
+  SocialLinks,
+  ManageSections,
+  SectionEntityView,
+  SectionEntityEdit
 } from "../views";
 
 import {
@@ -124,6 +127,21 @@ class BusinessRoute extends Component {
           path={`/:${ROUTE_PARAMS_BUSINESS_NAME}/dashboard/ecommerce/:productId`}
           name="view-ecommerce-product"
           component={ProductView}
+        />
+        <Route
+          path={`/:${ROUTE_PARAMS_BUSINESS_NAME}/dashboard/exsection/manage-sections/:sectionEntityId/edit`}
+          name="edit-exsection-entity"
+          component={SectionEntityEdit}
+        />
+        <Route
+          path={`/:${ROUTE_PARAMS_BUSINESS_NAME}/dashboard/exsection/manage-sections/:sectionEntityId`}
+          name="view-exsection-entity"
+          component={SectionEntityView}
+        />
+        <Route
+          path={`/:${ROUTE_PARAMS_BUSINESS_NAME}/dashboard/section/manage-sections`}
+          name="manage-exsection-sections"
+          component={ManageSections}
         />
         <Route
           path={`/:${ROUTE_PARAMS_BUSINESS_NAME}/dashboard`}

@@ -16,7 +16,11 @@ import {
   LOGO_COVER_IMAGE_GET_URL,
   ABOUT_GET_URL,
   CHANGE_SLUG_URL,
-  CHECK_SLUG_URL
+  CHECK_SLUG_URL,
+  EXSECTION_SECTION_BUSINESS_URL,
+  EXSECTION_SECTION_BUSINESS_LIST_URL,
+  //for implementing update
+  EXSECTION_SECTION_ENTITY_URL
 } from "./BUSINESS_API";
 import axios from "axios";
 import { ajax } from "rxjs/observable/dom/ajax";
@@ -520,5 +524,65 @@ export const onCompanyTypeGet = ({ access_token }) =>
     headers: {
       "Content-Type": "application/json",
       Authorization: "Bearer " + access_token
+    }
+  });
+
+// Exsection Goes Here
+
+// onSectionBusinessPost //post data about each section from business dash
+
+export const onSectionBusinessPost = ({ body }) =>
+  ajax({
+    method: "POST",
+    url: EXSECTION_SECTION_BUSINESS_URL,
+    body,
+    headers: {
+      "Content-Type": "application/json"
+    }
+  });
+
+//onParentSectionBusinessGet // get me the parent section info for a particular child section
+export const onParentSectionBusinessGet = ({ body }) =>
+  ajax({
+    method: "GET",
+    url: `${EXSECTION_SECTION_BUSINESS_LIST_URL}/?businessIdd=${
+      body.businessIdd
+    }&admin_sectionId=${body.asid}`,
+    headers: {
+      "Content-Type": "application/json"
+    }
+  });
+
+//onSectionsListExsectionBusinessData
+
+export const onSectionsListExsectionBusinessData = ({ body, businessIdd }) =>
+  ajax({
+    method: "GET",
+    url: `${EXSECTION_SECTION_BUSINESS_URL}?businessIdd=${businessIdd}&admin_sectionId=${
+      body.sectionId
+    }`,
+    headers: {
+      "Content-Type": "application/json"
+    }
+  });
+
+// calls for implementing updating Section Entity for bhetincha
+
+//onExsectionEntityEachGet
+//EXSECTION_SECTION_ENTITY_URL/uid
+//sample output
+//{
+//   "properties": {
+//     "price": 55,
+//     "name": "Wicked wings",
+//     "uid": "54dc195fdf4c40f7afff3e67e9899c16"
+// }
+// }
+export const onExsectionEntityEachGet = ({ uid }) =>
+  ajax({
+    method: "GET",
+    url: `${EXSECTION_SECTION_ENTITY_URL}${uid}/`,
+    headers: {
+      "Content-Type": "application/json"
     }
   });

@@ -180,6 +180,24 @@ const items = {
     },
     {
       title: true,
+      name: "Section"
+    },
+    {
+      name: "Section",
+      url: "/admin/exsection",
+      icon: "fa fa-users",
+      permission: "CAN_VIEW_ECOMMERCE",
+      children: [
+        {
+          name: "Manage Sections",
+          url: "/admin/exsection/section-manage",
+          icon: "icon-user-follow",
+          permission: "CAN_VIEW_ECOMMERCE_CATEGORIES"
+        }
+      ]
+    },
+    {
+      title: true,
       name: "User Management"
     },
     {
