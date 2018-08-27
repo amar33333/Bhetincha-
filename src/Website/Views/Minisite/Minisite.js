@@ -19,6 +19,14 @@ import minisiteEpics, {
 import { MainNavbar } from "../../components";
 
 class Minisite extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      showDropdown: true,
+      subSect: []
+    };
+  }
   getBusiness = () => {
     this.props.onBusinessGet({
       slug: this.props.match.params[ROUTE_PARAMS_BUSINESS_NAME],
@@ -28,6 +36,9 @@ class Minisite extends Component {
   componentDidMount() {
     this.getBusiness();
     this.props.OnSectionListGet();
+    this.setState({
+      subSect: this.props.subSection
+    });
   }
 
   componentDidUpdate(prevProps) {
@@ -36,6 +47,8 @@ class Minisite extends Component {
       this.props.match.params[ROUTE_PARAMS_BUSINESS_NAME]
     )
       this.getBusiness();
+    console.log("my previous subsection si=>", prevProps);
+    console.log("my current subsection is=>", this.props);
   }
 
   componentWillUnmount() {
@@ -70,6 +83,7 @@ class Minisite extends Component {
             params={this.props.match.params}
             sections={this.props.section}
             subsections={this.props.subSection}
+            test={this.props.test}
           />
         )}{" "}
         <BusinessFooter
@@ -91,7 +105,8 @@ export default withRepics(
     ({ MinisiteContainer: { edit }, SectionContainer: { Section } }) => ({
       mainLoading: edit.mainLoading,
       section: edit.sections,
-      subSection: Section.sections
+      subSection: Section.sections,
+      test: Section.subsection
     }),
     {
       onBusinessGet,

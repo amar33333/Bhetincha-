@@ -5,7 +5,8 @@ import {
 } from "../actions/types";
 
 const INITIAL_STATE = {
-  sections: []
+  sections: [],
+  subsection: []
 };
 
 export default function(state = INITIAL_STATE, action) {
@@ -22,7 +23,9 @@ export default function(state = INITIAL_STATE, action) {
 
       return {
         ...state,
-        sections: action.payload.sections[0].children
+        // sections: action.payload.sections
+        sections: action.payload.sections[0].children,
+        subsection: action.payload.sections
       };
     case FETCH_EACHSECTION_REJECTED:
       console.log("fetch each section== rejected /n");

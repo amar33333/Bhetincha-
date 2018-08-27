@@ -20,18 +20,22 @@ import GalleryView from "../components/Gallery/GalleryView";
 
 class MinisiteRoute extends Component {
   render() {
+    var sectionrouting = [];
+    var haschild = false;
     const businessName = this.props.params[ROUTE_PARAMS_BUSINESS_NAME];
     const minisiteBusinessRoute = this.props.params[
       ROUTE_PARAMS_MINISITE_BUSINESS_ROUTE
     ];
-    console.log(this.props.sections);
-    console.log(this.props.subsections);
-    var subsectionsroute;
-    if (this.props.subsections !== undefined) {
-      subsectionsroute = this.props.subsections.map((section, index) => {
-        let name = slugify(section.attributes.name);
-        if (section.children.length > 0) {
-          console.log("my name for route=", name);
+    console.log("section", this.props.sections);
+    console.log("subsections=", this.props.subsections);
+    console.log("test=", this.props.test);
+
+    var testroute;
+
+    if (this.props.test !== undefined) {
+      {
+        testroute = this.props.test.map((section, index) => {
+          let name = slugify(section.attributes.name);
           return (
             <Route
               path={`/:${ROUTE_PARAMS_BUSINESS_NAME}/${name}/:sectionId`}
@@ -40,10 +44,31 @@ class MinisiteRoute extends Component {
               key={index}
             />
           );
-        }
-      });
+        });
+      }
+    }
+
+    var subsectionsroute;
+    if (this.props.subsections !== undefined) {
+      {
+        subsectionsroute = this.props.subsections.map((section, index) => {
+          let name = slugify(section.attributes.name);
+          return (
+            <Route
+              path={`/:${ROUTE_PARAMS_BUSINESS_NAME}/${name}/:sectionId`}
+              name="sections"
+              component={Sections}
+              key={index}
+            />
+          );
+        });
+      }
     }
     console.log("this is my subsection route =>", { subsectionsroute });
+    // sectionrouting.push[subsectionsroute];
+    console.log("this is my sectionrouting route =>", { subsectionsroute });
+    console.log("this is my testroute route =>", { testroute });
+
     var sectionroute;
     if (this.props.sections !== undefined) {
       sectionroute = this.props.sections.map((section, index) => {
@@ -96,7 +121,6 @@ class MinisiteRoute extends Component {
           component={EcommerceProduct}
         />{" "}
         {this.props.sections ? sectionroute : ""}
-        {this.props.subsections ? subsectionsroute : ""}
         <Route
           path={`/:${ROUTE_PARAMS_BUSINESS_NAME}/ecommerce/:categoryId`}
           name="ecommerce"
@@ -117,10 +141,12 @@ class MinisiteRoute extends Component {
           name="coremember"
           component={CoreMember}
         />
-        <Redirect
+        {this.props.subsections ? subsectionsroute : ""}
+        {this.props.test ? testroute : ""}
+        {/* <Redirect
           from={`/${businessName}/${minisiteBusinessRoute}`}
           to={`/${businessName}`}
-        />
+        /> */}
         <Route
           path={`/:${ROUTE_PARAMS_BUSINESS_NAME}`}
           name="Minisite-MainPage"
