@@ -52,6 +52,7 @@ class Contact extends Component {
   };
 
   renderPrimaryAddress = () => {
+    console.log(this.props.address);
     return (
       this.props.address && (
         <Col sm="3">
@@ -108,7 +109,7 @@ class Contact extends Component {
                 </p>
               )}
               {this.props.address.contactPerson.map(person => (
-                <div>
+                <div key={person.contactID}>
                   <p className="mt-3">
                     <i className="fa fa-user" /> <strong>{person.name}</strong>
                     <small>
@@ -116,7 +117,10 @@ class Contact extends Component {
                     </small>
                   </p>
                   {person.mobileNumber ? (
-                    <a href={`tel:${person.mobileNumber}`}>
+                    <a
+                      href={`tel:${person.mobileNumber}`}
+                      key={person.contactID}
+                    >
                       <i className="fa fa-mobile"> {person.mobileNumber}</i>
                     </a>
                   ) : null}
@@ -216,7 +220,7 @@ class Contact extends Component {
 
                   {branch.contactPerson &&
                     branch.contactPerson.map(person => (
-                      <div>
+                      <div key={person.contactID}>
                         <p className="mt-3">
                           <i className="fa fa-user" />{" "}
                           <strong>{person.name}</strong>
@@ -225,7 +229,10 @@ class Contact extends Component {
                           </small>
                         </p>
                         {person.mobileNumber ? (
-                          <a href={`tel: ${person.mobileNumber}`}>
+                          <a
+                            href={`tel: ${person.mobileNumber}`}
+                            key={person.contactID}
+                          >
                             <i className="fa fa-mobile">
                               {" "}
                               {person.mobileNumber}

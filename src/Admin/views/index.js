@@ -21,6 +21,7 @@ import SocialUrlLinks from "./BusinessAdminDetail/SocialUrlLinks";
 import ManageSubscription from "./BusinessAdminDetail/ManageSubscription";
 import ManageProducts from "./BusinessAdminDetail/ManageProducts";
 import BusinessThemes from "./Settings/BusinessThemes";
+import BusinessThemeEdit from "./Settings/BusinessThemeEdit";
 
 import {
   Areas,
@@ -71,5 +72,6 @@ export {
   SubscriptionPackage,
   ManageSubscription,
   ManageProducts,
-  BusinessThemes
+  BusinessThemes,
+  BusinessThemeEdit
 };

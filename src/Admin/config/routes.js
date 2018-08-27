@@ -35,7 +35,8 @@ import {
   SubscriptionPackage,
   ManageSubscription,
   ManageProducts,
-  BusinessThemes
+  BusinessThemes,
+  BusinessThemeEdit
 } from "../views";
 
 import { ManageCategories, AssignCategories } from "../views/Ecommerce";
@@ -304,6 +305,12 @@ class AdminRoute extends Component {
           path="/admin/improve-listing"
           name="Improve Listing"
           component={ImproveListings}
+          permission="CAN_VIEW_IMPROVE_LISTING"
+        />
+        <CustomRoute
+          path="/admin/business-themes/:id/edit"
+          name="Themes"
+          component={BusinessThemeEdit}
           permission="CAN_VIEW_IMPROVE_LISTING"
         />
         <CustomRoute

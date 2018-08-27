@@ -49,6 +49,9 @@ import {
   FETCH_BUSINESS_THEMES_FULFILLED,
   FETCH_BUSINESS_THEMES_PENDING,
   FETCH_BUSINESS_THEMES_REJECTED,
+  FETCH_BUSINESS_THEME_FULFILLED,
+  FETCH_BUSINESS_THEME_PENDING,
+  FETCH_BUSINESS_THEME_REJECTED,
   RESET_SETTINGS_ERRORS
 } from "../actions/types";
 
@@ -82,6 +85,7 @@ const INITIAL_STATE = {
   subscriptionPackageError: null,
   subscriptionPackageEditError: null,
   businessThemes: [],
+  businessTheme: null,
   businessThemeSubmitLoading: false,
   businessThemesFetchLoading: false
 };
@@ -101,6 +105,19 @@ export default function(state = INITIAL_STATE, action) {
         searchPlaceholderEditModal: !state.searchPlaceholderEditModal,
         searchPlaceholderEditData: action.payload
       };
+
+    case FETCH_BUSINESS_THEME_PENDING:
+      return { ...state, businessThemeFetchLoading: true };
+
+    case FETCH_BUSINESS_THEME_FULFILLED:
+      return {
+        ...state,
+        businessTheme: action.payload,
+        businessThemeFetchLoading: false
+      };
+
+    case FETCH_BUSINESS_THEME_REJECTED:
+      return { ...state, businessThemeFetchLoading: false };
 
     case CREATE_BUSINESS_THEME_PENDING:
       return { ...state, businessThemeSubmitLoading: true };

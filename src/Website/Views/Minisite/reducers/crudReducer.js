@@ -11,7 +11,10 @@ import {
   UPDATE_NAV_LAYOUT_FULFILLED,
   FETCH_MINISITE_PERMISSIONS_FULFILLED,
   FETCH_MINISITE_PERMISSIONS_PENDING,
-  FETCH_MINISITE_PERMISSIONS_REJECTED
+  FETCH_MINISITE_PERMISSIONS_REJECTED,
+  CREATE_REVIEW_RATING_PENDING,
+  CREATE_REVIEW_RATING_FULFILLED,
+  CREATE_REVIEW_RATING_REJECTED
 } from "../actions/types";
 
 const INITIAL_STATE = {
@@ -51,7 +54,8 @@ const INITIAL_STATE = {
   },
   links: [],
   minisitePermissions: null,
-  minisitePermissionsFetchLoading: false
+  minisitePermissionsFetchLoading: false,
+  reviewRatingSubmitLoading: false
 
   // nav_layout: [
   //   {
@@ -91,6 +95,16 @@ const INITIAL_STATE = {
 
 export default function(state = INITIAL_STATE, action) {
   switch (action.type) {
+    case CREATE_REVIEW_RATING_PENDING:
+      return { ...state, reviewRatingSubmitLoading: true };
+    case CREATE_REVIEW_RATING_FULFILLED:
+      return {
+        ...state,
+        reviewRatingSubmitLoading: false
+      };
+    case CREATE_REVIEW_RATING_REJECTED:
+      return { ...state, reviewRatingSubmitLoading: false };
+
     case FETCH_MINISITE_PERMISSIONS_PENDING:
       return { ...state, minisitePermissionsFetchLoading: true };
     case FETCH_MINISITE_PERMISSIONS_FULFILLED:
@@ -107,6 +121,7 @@ export default function(state = INITIAL_STATE, action) {
         ...INITIAL_STATE,
         minisitePermissions: state.minisitePermissions,
         minisitePermissionsFetchLoading: state.minisitePermissionsFetchLoading,
+        reviewRatingSubmitLoading: state.reviewRatingSubmitLoading,
         ...action.payload
       };
 
@@ -124,7 +139,8 @@ export default function(state = INITIAL_STATE, action) {
       return {
         ...INITIAL_STATE,
         minisitePermissions: state.minisitePermissions,
-        minisitePermissionsFetchLoading: state.minisitePermissionsFetchLoading
+        minisitePermissionsFetchLoading: state.minisitePermissionsFetchLoading,
+        reviewRatingSubmitLoading: state.reviewRatingSubmitLoading
       };
 
     default:

@@ -44,11 +44,44 @@ import {
   UPDATE_NAV_LAYOUT_REJECTED,
   FETCH_MINISITE_PERMISSIONS_FULFILLED,
   FETCH_MINISITE_PERMISSIONS_PENDING,
-  FETCH_MINISITE_PERMISSIONS_REJECTED
+  FETCH_MINISITE_PERMISSIONS_REJECTED,
+  CREATE_REVIEW_RATING_PENDING,
+  CREATE_REVIEW_RATING_FULFILLED,
+  CREATE_REVIEW_RATING_REJECTED
 } from "./types";
-import { onMinisitePermissionsGet } from "../config/minisiteServerCall";
+import {
+  onMinisitePermissionsGet,
+  onReviewRatingPost
+} from "../config/minisiteServerCall";
 
 const epics = [];
+
+export const onReviewRatingSubmit = payload => ({
+  type: CREATE_REVIEW_RATING_PENDING,
+  payload
+});
+
+epics.push((action$, { getState }) =>
+  action$.ofType(CREATE_REVIEW_RATING_PENDING).mergeMap(({ payload }) =>
+    onReviewRatingPost({
+      access_token: getState().auth.cookies.token_data.access_token,
+      ...payload
+    })
+      .map(({ response }) => {
+        if (response.msg === "success") {
+          return {
+            type: CREATE_REVIEW_RATING_FULFILLED,
+            payload: response
+          };
+        } else throw new Error(response.msg);
+      })
+      .catch(ajaxError => {
+        console.log("rating error crudActions.js: ", ajaxError);
+        toast.error("Error Submitting Your Review");
+        return Observable.of({ type: CREATE_REVIEW_RATING_REJECTED });
+      })
+  )
+);
 
 export const onMinisitePermissionsList = payload => ({
   type: FETCH_MINISITE_PERMISSIONS_PENDING,

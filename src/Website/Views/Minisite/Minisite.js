@@ -2,10 +2,9 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import "./minisite.css";
 import { combineEpics } from "redux-observable";
-import { Redirect } from "react-router-dom";
 
 import { Loading } from "../../../Common/pages";
-import { BusinessNav, BusinessFooter } from "./components";
+import { BusinessNav, BusinessFooter, ReviewRating } from "./components";
 import MinisiteRoutes from "./config/routes";
 import withRepics from "../../../config/withRepics";
 import reducers from "./reducers";
@@ -14,7 +13,8 @@ import { ROUTE_PARAMS_BUSINESS_NAME } from "../../../config/CONSTANTS";
 import minisiteEpics, {
   onBusinessGet,
   clearBusiness,
-  onMinisitePermissionsList
+  onMinisitePermissionsList,
+  onReviewRatingSubmit
 } from "./actions";
 import { MainNavbar } from "../../components";
 
@@ -77,6 +77,16 @@ class Minisite extends Component {
         {!this.props.minisitePermissionsFetchLoading &&
           this.props.minisitePermissions &&
           this.props.minisitePermissions.MINISITE && (
+            <ReviewRating
+              slug={this.props.match.params[ROUTE_PARAMS_BUSINESS_NAME]}
+              reviewedBy={this.props.mongo_id}
+              onReviewRatingSubmit={this.props.onReviewRatingSubmit}
+              reviewRatingSubmitLoading={this.props.reviewRatingSubmitLoading}
+            />
+          )}
+        {!this.props.minisitePermissionsFetchLoading &&
+          this.props.minisitePermissions &&
+          this.props.minisitePermissions.MINISITE && (
             <BusinessFooter
               businessName={this.props.match.params[ROUTE_PARAMS_BUSINESS_NAME]}
               sabai={this.props}
@@ -95,15 +105,30 @@ export default withRepics(
 )(
   connect(
     ({
+      auth: {
+        cookies: {
+          user_data: { mongo_id }
+        }
+      },
       MinisiteContainer: {
         edit,
-        crud: { minisitePermissions, minisitePermissionsFetchLoading }
+        crud: {
+          minisitePermissions,
+          minisitePermissionsFetchLoading,
+          reviewRatingSubmitLoading
+        }
       }
     }) => ({
+      mongo_id,
       mainLoading: edit.mainLoading,
       minisitePermissions,
       minisitePermissionsFetchLoading
     }),
-    { onBusinessGet, clearBusiness, onMinisitePermissionsList }
+    {
+      onBusinessGet,
+      clearBusiness,
+      onMinisitePermissionsList,
+      onReviewRatingSubmit
+    }
   )(Minisite)
 );

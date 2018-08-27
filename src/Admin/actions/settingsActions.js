@@ -20,7 +20,10 @@ import {
   onSubscriptionPackageAssignGet,
   onSubscriptionPackageAssignDelete,
   onBusinessThemesGet,
-  onBusinessThemePost
+  onBusinessThemeGet,
+  onBusinessThemePost,
+  onBusinessThemeDelete,
+  onBusinessThemePut
 } from "../config/adminServerCall";
 
 import {
@@ -81,6 +84,15 @@ import {
   CREATE_BUSINESS_THEME_FULFILLED,
   CREATE_BUSINESS_THEME_PENDING,
   CREATE_BUSINESS_THEME_REJECTED,
+  EDIT_BUSINESS_THEME_FULFILLED,
+  EDIT_BUSINESS_THEME_PENDING,
+  EDIT_BUSINESS_THEME_REJECTED,
+  DELETE_BUSINESS_THEME_FULFILLED,
+  DELETE_BUSINESS_THEME_PENDING,
+  DELETE_BUSINESS_THEME_REJECTED,
+  FETCH_BUSINESS_THEME_FULFILLED,
+  FETCH_BUSINESS_THEME_PENDING,
+  FETCH_BUSINESS_THEME_REJECTED,
   FETCH_BUSINESS_THEMES_FULFILLED,
   FETCH_BUSINESS_THEMES_PENDING,
   FETCH_BUSINESS_THEMES_REJECTED,
@@ -98,8 +110,97 @@ export const toggleSearchPlaceholderEditModal = payload => ({
   payload
 });
 
+export const onBusinessThemeList = payload => ({
+  type: FETCH_BUSINESS_THEME_PENDING,
+  payload
+});
+
+epics.push((action$, { getState }) =>
+  action$.ofType(FETCH_BUSINESS_THEME_PENDING).mergeMap(action => {
+    return onBusinessThemeGet({
+      access_token: getState().auth.cookies.token_data.access_token,
+      ...action.payload
+    })
+      .map(({ response }) => ({
+        type: FETCH_BUSINESS_THEME_FULFILLED,
+        payload: response
+      }))
+      .catch(ajaxError => {
+        toast.error("Error Fetching Theme!");
+        return Observable.of({
+          type: FETCH_BUSINESS_THEME_REJECTED
+        });
+      });
+  })
+);
+export const onBusinessThemeEdit = payload => ({
+  type: EDIT_BUSINESS_THEME_PENDING,
+  payload
+});
+
+epics.push((action$, { getState }) =>
+  action$.ofType(EDIT_BUSINESS_THEME_PENDING).mergeMap(action => {
+    const access_token = getState().auth.cookies.token_data.access_token;
+
+    return onBusinessThemePut({ ...action.payload, access_token })
+      .concatMap(({ response }) => {
+        if (response.msg === "success") {
+          toast.success("Business Theme Updated successfully!");
+          return [
+            { type: EDIT_BUSINESS_THEME_FULFILLED },
+            { type: FETCH_BUSINESS_THEMES_PENDING }
+          ];
+        } else {
+          throw new Error(JSON.stringify(response.msg));
+        }
+      })
+      .catch(ajaxError => {
+        toast.error("Error: Updating Business Theme");
+        return Observable.of({
+          type: EDIT_BUSINESS_THEME_REJECTED,
+          payload: ajaxError.status
+            ? ajaxError.message
+            : JSON.parse(ajaxError.message)
+        });
+      });
+  })
+);
+
+export const onBusinessThemeRemove = payload => ({
+  type: DELETE_BUSINESS_THEME_PENDING,
+  payload
+});
+
+epics.push((action$, { getState }) =>
+  action$.ofType(DELETE_BUSINESS_THEME_PENDING).mergeMap(action => {
+    const access_token = getState().auth.cookies.token_data.access_token;
+
+    return onBusinessThemeDelete({ ...action.payload, access_token })
+      .concatMap(({ response }) => {
+        if (response.msg === "success") {
+          toast.success("Business Theme Deleted successfully!");
+          return [
+            { type: DELETE_BUSINESS_THEME_FULFILLED },
+            { type: FETCH_BUSINESS_THEMES_PENDING }
+          ];
+        } else {
+          throw new Error(JSON.stringify(response.msg));
+        }
+      })
+      .catch(ajaxError => {
+        toast.error("Error: Deleting Business Theme");
+        return Observable.of({
+          type: DELETE_BUSINESS_THEME_REJECTED,
+          payload: ajaxError.status
+            ? ajaxError.message
+            : JSON.parse(ajaxError.message)
+        });
+      });
+  })
+);
+
 export const onBusinessThemeSubmit = payload => ({
-  type: CREATE_SUBSCRIPTION_PACKAGE_PENDING,
+  type: CREATE_BUSINESS_THEME_PENDING,
   payload
 });
 
