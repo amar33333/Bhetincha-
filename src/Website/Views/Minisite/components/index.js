@@ -7,6 +7,7 @@ import Contact from "./Contact/Contact";
 import Ecommerce from "./Ecommerce/Ecommerce";
 import EcommerceProduct from "./Ecommerce/EcommerceProduct";
 // import MainPage from "./MainPage";
+import ReviewRating from "./ReviewRating";
 
 export {
   BusinessFooter,
@@ -16,5 +17,6 @@ export {
   Gallery,
   Contact,
   Ecommerce,
-  EcommerceProduct
+  EcommerceProduct,
+  ReviewRating
 };

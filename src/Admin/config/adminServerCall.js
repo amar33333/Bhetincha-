@@ -53,6 +53,37 @@ import axios from "axios";
 import { ajax } from "rxjs/observable/dom/ajax";
 import querystring from "querystring";
 
+export const onBusinessThemeGet = ({ id, access_token }) =>
+  ajax({
+    method: "GET",
+    url: `${THEME_URL}${id}/`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
+export const onBusinessThemePut = ({ id, body, access_token }) =>
+  ajax({
+    method: "PUT",
+    url: `${THEME_URL}${id}/`,
+    body,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
+export const onBusinessThemeDelete = ({ id, access_token }) =>
+  ajax({
+    method: "DELETE",
+    url: `${THEME_URL}${id}/`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
 export const onBusinessThemePost = ({ body, access_token }) =>
   ajax({
     method: "POST",
