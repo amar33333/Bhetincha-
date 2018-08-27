@@ -84,10 +84,10 @@ class BusinessThemes extends Component {
       brandPrimaryColor: { color: "#2e7a29", alpha: 100 },
       brandDarkColor: { color: "#12520e", alpha: 100 },
       brandLightColor: { color: "#25c11c", alpha: 100 },
-      brandInfoColor: { color: "#fff", alpha: 100 },
-      brandSuccessColor: { color: "#fff", alpha: 100 },
-      brandDangerColor: { color: "#fff", alpha: 100 },
-      brandWarningColor: { color: "#fff", alpha: 100 }
+      brandInfoColor: { color: "#fff111", alpha: 100 },
+      brandSuccessColor: { color: "#fef89e", alpha: 100 },
+      brandDangerColor: { color: "#fff78e", alpha: 100 },
+      brandWarningColor: { color: "#d3d3d3", alpha: 100 }
     };
     console.log(this.state);
     return (
