@@ -13,7 +13,14 @@ import {
   CHANGE_ROOT_SECTION_ADMIN,
   CHANGE_ACTIVE_EXSECTION_SECTION_BY_CLICK,
   INITIALIZE_TOP_SECTION_ADMIN_ID,
-  PARENT_SECTION_BIZ_FLAG
+  PARENT_SECTION_BIZ_FLAG,
+  FETCH_BUSINESS_CAT_DETAILS_FULFILLED,
+  FETCH_BUSINESS_CAT_DETAILS_PENDING,
+  FETCH_BUSINESS_CAT_DETAILS_REJECTED,
+  FETCH_CATEGORY_EACH_FULFILLED,
+  FETCH_CATEGORY_EACH_PENDING,
+  FETCH_CATEGORY_EACH_REJECTED,
+  FETCH_CATEGORY_SECTION_DATA
 } from "../actions/types";
 
 const INITIAL_STATE = {
@@ -29,7 +36,8 @@ const INITIAL_STATE = {
   sectionEntityDetailBiz: null,
   activeParentAdminId: "",
   topSectionAdminId: "",
-  parentSectionBizFlag: true
+  parentSectionBizFlag: true,
+  businessSection: []
 };
 
 export default function(state = INITIAL_STATE, action) {
@@ -130,6 +138,45 @@ export default function(state = INITIAL_STATE, action) {
 
     case PARENT_SECTION_BIZ_FLAG:
       return { ...state, parentSectionBizFlag: action.payload };
+
+    // case FETCH_BUSINESS_CAT_DETAILS_PENDING:
+    //   //return { ...state, fetchLoading: true, businessGet: true };
+    //   return {
+    //     ...state,
+    //     catIds: action.payload,
+    //     businessGet: false,
+    //     fetchLoading: false
+    //   };
+    // case FETCH_BUSINESS_CAT_DETAILS_REJECTED:
+    //   return { ...state, fetchLoading: false, businessGet: false };
+    // case FETCH_BUSINESS_CAT_DETAILS_FULFILLED:
+    //   //console.log("details: ", action.payload);
+    //   return {
+    //     ...state,
+    //     catIds: action.payload,
+    //     businessGet: false,
+    //     fetchLoading: false
+    //   };
+
+    case FETCH_CATEGORY_EACH_PENDING:
+      return { ...state, loading: true };
+
+    case FETCH_CATEGORY_EACH_FULFILLED:
+      return {
+        ...state,
+        categoryData: state.categoryData
+          ? [...state.categoryData, action.payload]
+          : [action.payload],
+        loading: false
+      };
+
+    case FETCH_CATEGORY_EACH_REJECTED:
+      return { ...state, loading: false };
+
+    case FETCH_CATEGORY_SECTION_DATA:
+      //console.log("SECTIONS IN REDUCER : ", action.payload);
+      //console.log("SECTIONS Length IN REDUCER : ", action.payload.length);
+      return { ...state, businessSection: action.payload, loading: false };
 
     default:
       return state;

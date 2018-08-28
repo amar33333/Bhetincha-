@@ -28,7 +28,7 @@ class ProductAddEdit extends Component {
     super(props);
 
     let extra = this.getAttributesToState(props.attributes);
-
+    console.log("consoling ecom props", this.props);
     if (props.defaultValue && props.attributes) {
       extra = {
         ...extra,
@@ -223,7 +223,7 @@ class ProductAddEdit extends Component {
             }
           }
         );
-
+        //console.log("Prod Body", { body });
         this.setState({ productSubmit: true }, () =>
           this.props.onSubmit({ body })
         );

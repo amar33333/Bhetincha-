@@ -16,8 +16,7 @@ import Gallery from "./Gallery/Gallery";
 import SocialLinks from "./SocialLinks/SocialLinks";
 import ManageSections from "./Exsection/ManageSections";
 import SectionEntityView from "./Exsection/SectionEntityView";
-import SectionEntityEdit from "./Exsection/components/SectionEntityEdit";
-
+import SectionEntityEdit from "./Exsection/SectionEntityEdit";
 export {
   Dashboard,
   BusinessDetail,

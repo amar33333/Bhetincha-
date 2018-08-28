@@ -6,6 +6,8 @@ import SectionEntityList from "./SectionEntityList";
 import SectionEntityDetail from "./SectionEntityDetail";
 
 import SectionListAdmin from "./SectionListAdmin";
+import SectionEntityEditDetail from "./SectionEntityEditDetail";
+import ManageAvailableBusinessSection from "./ManageAvailableBusinessSection";
 
 export {
   SideSectionsView,
@@ -13,5 +15,7 @@ export {
   SectionEditViewBusiness,
   SectionEntityList,
   SectionEntityDetail,
-  SectionListAdmin
+  SectionListAdmin,
+  SectionEntityEditDetail,
+  ManageAvailableBusinessSection
 };

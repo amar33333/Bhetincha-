@@ -21,7 +21,7 @@ class ProductDetail extends Component {
                 }}
               >
                 <h3 className="mb-0">
-                  Product Information of {productDetail.name}{" "}
+                  Product Information of {productDetail.name}
                 </h3>
                 <Link to={this.props.editURL} className="ml-2">
                   <Button color="primary">
@@ -50,10 +50,12 @@ class ProductDetail extends Component {
                 <p className="product-spec-item">
                   Discount: {productDetail.discount} %
                 </p>
+                {console.log("Product detail", productDetail)}
                 {this.props.attributes.map(attribute => {
                   let selectedKey = "";
                   if (
                     Object.keys(productDetail).find(key => {
+                      console.log("key", key);
                       const found = key.split("--")[0] === attribute.name;
                       if (found) selectedKey = key;
                       return found;

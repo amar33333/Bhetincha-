@@ -2,6 +2,13 @@ import React, { Component } from "react";
 import { Button } from "reactstrap";
 
 class DocumentInput extends Component {
+  constructor(props) {
+    super(props);
+  }
+
+  // removeClick(i){
+
+  // }
   render() {
     return (
       <div key={this.props.mykey}>
@@ -10,6 +17,7 @@ class DocumentInput extends Component {
         <div className="text-right">
           <Button
             color="danger"
+            //onClick={this.removeClick.bind(this.props.mykey)}
             onClick={() => this.props.removeClick(this.props.mykey)}
           >
             x

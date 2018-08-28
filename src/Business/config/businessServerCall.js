@@ -586,3 +586,38 @@ export const onExsectionEntityEachGet = ({ uid }) =>
       "Content-Type": "application/json"
     }
   });
+
+export const onBusinessCatDetailsGet = ({ access_token, id }) =>
+  ajax({
+    method: "GET",
+    url: `${BUSINESS_DETAILS_GET_URL}${id}/`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
+export const onUpdateExsectionSectionEntityPut = ({
+  uid,
+  access_token,
+  body
+}) =>
+  ajax({
+    method: "PUT",
+    url: `${EXSECTION_SECTION_ENTITY_URL}${uid}/`,
+    body,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });
+
+export const onRemoveExsectionSectionEntityDelete = ({ uid, access_token }) =>
+  ajax({
+    method: "DELETE",
+    url: `${EXSECTION_SECTION_ENTITY_URL}${uid}/`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
+    }
+  });

@@ -45,7 +45,6 @@ class SideSectionsView extends Component {
         })
         .map((section, index) => {
           const className = this.state.activeIndex === index ? "active" : "";
-          //console.log("this soling section", section);
           return (
             <ListGroupItem
               key={index}

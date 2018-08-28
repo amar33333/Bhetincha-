@@ -160,7 +160,17 @@ class RecordAddEdit extends Component {
               const upperCaseProperty = property;
               property = property.charAt(0).toLowerCase() + property.slice(1);
               let value = obj[upperCaseProperty];
+              //let propV = property;
 
+              // else if (attributeType === "MultipleChoices") {
+              //   if (rest[name] && rest[name].length) {
+              //     value = rest[name].map(({ value }) => value);
+              //   } else {
+              //     value = rest[name];
+              //   }
+              //console.log("attribute type", attributeType);
+              // console.log("name", name);
+              //console.log("uppserCaseProperty", upperCaseProperty);
               if (property === "name") {
                 body[property] = obj[upperCaseProperty];
               } else if (
@@ -386,7 +396,6 @@ class RecordAddEdit extends Component {
 
   render() {
     const { selectedOption } = this.state;
-
     const documents = this.state.documents.map((Element, index) => {
       return (
         <Element
