@@ -440,6 +440,9 @@ class RecordAddEdit extends Component {
                   Section Data. Please add them first.
                 </Alert>
               )}
+            {this.checkTopSectionAlreadyExists() && (
+              <Alert color="danger">Can only add one Top Section</Alert>
+            )}
 
             {(this.props.activeSectionAdminId ===
               this.props.rootSectionAdmin.uid ||
