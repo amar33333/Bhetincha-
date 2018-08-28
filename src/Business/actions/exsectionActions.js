@@ -473,6 +473,9 @@ epics.push((action$, { getState }) =>
             //console.log("Response : ", response);
             if (response.data.sections.length > 0) {
               catSections.push(response.data.sections);
+              //Array.prototype.push.apply(catSections, response.data.sections);
+            } else {
+              catSections;
             }
           });
         });

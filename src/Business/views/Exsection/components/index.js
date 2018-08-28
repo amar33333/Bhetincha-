@@ -8,6 +8,7 @@ import SectionEntityDetail from "./SectionEntityDetail";
 
 import SectionListAdmin from "./SectionListAdmin";
 import SectionEntityEditDetail from "./SectionEntityEditDetail";
+import ManageAvailableBusinessSection from "./ManageAvailableBusinessSection";
 
 export {
   SideTreeView,
@@ -17,5 +18,6 @@ export {
   SectionEntityList,
   SectionEntityDetail,
   SectionListAdmin,
-  SectionEntityEditDetail
+  SectionEntityEditDetail,
+  ManageAvailableBusinessSection
 };

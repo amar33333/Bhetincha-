@@ -37,7 +37,7 @@ const INITIAL_STATE = {
   activeParentAdminId: "",
   topSectionAdminId: "",
   parentSectionBizFlag: true,
-  businessSection: {}
+  businessSection: []
 };
 
 export default function(state = INITIAL_STATE, action) {
@@ -175,6 +175,7 @@ export default function(state = INITIAL_STATE, action) {
 
     case FETCH_CATEGORY_SECTION_DATA:
       //console.log("SECTIONS IN REDUCER : ", action.payload);
+      //console.log("SECTIONS Length IN REDUCER : ", action.payload.length);
       return { ...state, businessSection: action.payload, loading: false };
 
     default:
