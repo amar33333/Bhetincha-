@@ -28,6 +28,25 @@ class ManageSections extends Component {
 
   render() {
     console.log("Business Section Data", this.props.businessSection);
+    //console.log("Business Section Data1", JSON.parse(JSON.stringify(this.props.businessSection)));
+    // storing our array as a string
+    //localStorage.setItem("abc", JSON.stringify(this.props.businessSection));
+
+    // retrieving our data and converting it back into an array
+    //var retrievedData = localStorage.getItem("abc");
+    //var abc1 = JSON.parse(retrievedData);
+    //console.log("Converted",abc1);
+
+    // const arrayToObject = (array, keyField) =>
+    //   array.reduce((obj, item) => {
+    //     obj[item[keyField]] = item
+    //     return obj
+    //   }, {});
+    // const peopleObject = arrayToObject(this.props.businessSection, "id");
+    // console.log("new array reduced",peopleObject);
+
+    //console.log("Length",this.props.businessSection[0].length);
+    //console.log("Length",Object(this.props.businessSection).length);
     //let sectionArray = JSON.stringify(this.props.businessSection);
     //console.log("Business Section Data", JSON.stringify(this.props.businessSection));
     //console.log("Section Length", Object.keys(this.props.businessSection).length);
@@ -42,13 +61,6 @@ class ManageSections extends Component {
       button = (
         <Row>
           <Col xs="12" md="3">
-            {/* <SideTreeView
-        sectionsAdmin={this.props.sectionsAdmin}
-        activeSectionAdminId={this.props.activeSectionAdminId}
-        onChangeActiveSection={this.props.onChangeActiveSectionBusiness}
-        isOpen={this.props.isOpenSections}
-        resetState={this.props.resetState}
-      /> */}
             <SideSectionsView
               sectionsAdmin={this.props.sectionsAdmin}
               resetState={this.props.resetState}

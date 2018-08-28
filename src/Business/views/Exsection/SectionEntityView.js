@@ -46,6 +46,7 @@ class SectionEntityView extends Component {
               sectionEntityDetailBiz={this.props.sectionEntityDetailBiz}
               routeToManageSections={this.routeToManageSections}
               attributes={this.props.attributes.attributes}
+              sectionDetail={this.props.selectedSectionDetailBiz}
             />
           )}
       </div>
@@ -56,9 +57,13 @@ class SectionEntityView extends Component {
 export default connect(
   ({
     BusinessContainer: {
-      exsection: { sectionEntityDetailBiz, attributes }
+      exsection: {
+        sectionEntityDetailBiz,
+        attributes,
+        selectedSectionDetailBiz
+      }
     }
-  }) => ({ sectionEntityDetailBiz, attributes }),
+  }) => ({ sectionEntityDetailBiz, attributes, selectedSectionDetailBiz }),
   {
     onExsectionSectionEachList,
     onRemoveExsectionSectionEntity

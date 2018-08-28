@@ -466,13 +466,11 @@ epics.push((action$, { getState }) =>
         let catSections = [];
         response.categories.map(category => {
           let id = category.id;
-          //console.log("CatID : ", id);
           let access_token = getState().auth.cookies.token_data.access_token;
-          //console.log("Access Token : ",access_token);
           return onCategoryEachGet({ id, access_token }).then(response => {
-            //console.log("Response : ", response);
             if (response.data.sections.length > 0) {
-              catSections.push(response.data.sections);
+              let resData = response.data.sections;
+              catSections.push(resData);
               //Array.prototype.push.apply(catSections, response.data.sections);
             } else {
               catSections;
@@ -508,9 +506,6 @@ epics.push((action$, { getState }) =>
     .mergeMap(({ payload }) => {
       const { body, uid } = payload;
       const access_token = getState().auth.cookies.token_data.access_token;
-      //console.log("Payload From Component", body);
-      //console.log("UID", uid);
-      //console.log("Access Token", access_token);
       return onUpdateExsectionSectionEntityPut({
         body,
         uid,

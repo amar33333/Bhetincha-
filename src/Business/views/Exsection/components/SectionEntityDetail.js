@@ -7,6 +7,36 @@ import { Row, Col, Button } from "reactstrap";
 class SectionEntityDetail extends Component {
   render() {
     const { sectionEntityDetailBiz } = this.props;
+    let deleteButton;
+    if (this.props.sectionDetail.sections[0].children.length < 1) {
+      deleteButton = (
+        <PopoverDelete
+          text="Delete"
+          onClick={() =>
+            this.props.onRemoveExsectionSectionEntity({
+              uid: sectionEntityDetailBiz.properties.uid,
+              routeToManageSections: this.props.routeToManageSections
+            })
+          }
+        />
+      );
+    } else {
+      let childCount = this.props.sectionDetail.sections[0].children.length;
+      let parentName = sectionEntityDetailBiz.properties.name;
+      deleteButton = (
+        <PopoverDelete
+          text="Delete"
+          childCountValue={childCount}
+          parentNameText={parentName}
+          onClick={() =>
+            this.props.onRemoveExsectionSectionEntity({
+              uid: sectionEntityDetailBiz.properties.uid,
+              routeToManageSections: this.props.routeToManageSections
+            })
+          }
+        />
+      );
+    }
     return (
       <div>
         {sectionEntityDetailBiz.properties && (
@@ -29,7 +59,8 @@ class SectionEntityDetail extends Component {
                   </Button>
                 </Link>
                 <div className="ml-2">
-                  <PopoverDelete
+                  {deleteButton}
+                  {/* <PopoverDelete
                     text="Delete"
                     onClick={() =>
                       this.props.onRemoveExsectionSectionEntity({
@@ -37,7 +68,7 @@ class SectionEntityDetail extends Component {
                         routeToManageSections: this.props.routeToManageSections
                       })
                     }
-                  />
+                  /> */}
                 </div>
               </Col>
             </Row>
