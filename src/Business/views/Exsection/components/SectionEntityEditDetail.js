@@ -152,7 +152,7 @@ class SectionEntityEditDetail extends Component {
             .join(",") !== defaultValue[selectedKey].sort().join(",")) &&
         (value instanceof Date
           ? defaultValue[selectedKey] !== value.toISOString()
-          : defaultValue[selectedKey] != value)
+          : defaultValue[selectedKey] !== value)
       ) {
         const attribute = this.props.attributes.find(x => x.name === key);
         const attributeType = attribute.fieldType;

@@ -26,25 +26,8 @@ class ManageSections extends Component {
     });
   }
 
-  // componentDidUpdate(prevProps) {
-  //   if (
-  //     this.props.match.params.sectionAdminId !==
-  //     prevProps.match.params.sectionAdminId
-  //   ) {
-  //     if (!this.props.match.params.sectionAdminId) {
-  //       this.props.onSectionsListExsection();
-  //     } else {
-  //       this.props.onChangeActiveCategoryEcommerce(
-  //         this.props.match.params.categoryId,
-  //         prevProps.match.params.categoryId,
-  //         this.routeToManageProducts
-  //       );
-  //     }
-  //   }
-  // }
-
   render() {
-    console.log("Business Section Data", this.props.businessSection);
+    //console.log("Business Section Data", this.props.businessSection);
     //let sectionArray = JSON.stringify(this.props.businessSection);
     //console.log("Business Section Data", JSON.stringify(this.props.businessSection));
     //console.log("Section Length", Object.keys(this.props.businessSection).length);
@@ -59,13 +42,6 @@ class ManageSections extends Component {
       button = (
         <Row>
           <Col xs="12" md="3">
-            {/* <SideTreeView
-        sectionsAdmin={this.props.sectionsAdmin}
-        activeSectionAdminId={this.props.activeSectionAdminId}
-        onChangeActiveSection={this.props.onChangeActiveSectionBusiness}
-        isOpen={this.props.isOpenSections}
-        resetState={this.props.resetState}
-      /> */}
             <SideSectionsView
               sectionsAdmin={this.props.sectionsAdmin}
               resetState={this.props.resetState}
@@ -82,22 +58,6 @@ class ManageSections extends Component {
                   topSectionAdmin
                 );
               }}
-              // onChangeActiveSection={uid => {
-              //   if (this.props.match.params.sectionAdminId !== uid) {
-              //     this.props.history.push(
-              //       `/${
-              //         this.props.match.params.businessName
-              //       }/dashboard/section/manage-sections/${uid}`
-              //     );
-              //   } else {
-              //     this.props.onChangeActiveSectionBusiness(
-              //       uid,
-              //       this.props.match.params.sectionAdminId,
-              //       this.routeToManageSections,
-              //       true
-              //     );
-              //   }
-              // }}
               activeSectionAdminId={this.props.activeSectionAdminId}
               rootNodeAdminId={this.props.rootNodeAdminId}
             />
@@ -148,6 +108,7 @@ class ManageSections extends Component {
                   parentSectionBizFlag={this.props.parentSectionBizFlag}
                   loading={this.props.loading}
                   activeParentAdminId={this.props.activeParentAdminId}
+                  activeParentAdmin={this.props.activeParentAdmin}
                 />
               )}
           </Col>
@@ -171,6 +132,7 @@ export default connect(
         activeSectionAdminId,
         activeChildrenAdmin,
         activeParentAdminId,
+        activeParentAdmin,
         isOpenSections,
         selectedSectionDetailAdmin,
         selectedSectionDetailBiz,
@@ -189,6 +151,7 @@ export default connect(
     activeSectionAdminId,
     activeChildrenAdmin,
     activeParentAdminId,
+    activeParentAdmin,
     isOpenSections,
     selectedSectionDetailAdmin,
     selectedSectionDetailBiz,

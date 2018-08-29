@@ -404,6 +404,8 @@ epics.push((action$, { getState }) =>
       uid: uid
     }).concatMap(({ response }) => {
       const parentSectionAdminId = response.breadCrumbs[1].uid;
+      const parentSectionAdmin = response.breadCrumbs[1];
+      // console.log("whaaa colsi", response.breadCrumbs[1]);
       const stuffs = [];
       stuffs.push({
         type: RESET_SECTION_STATE
@@ -440,7 +442,8 @@ epics.push((action$, { getState }) =>
         });
         stuffs.push({
           type: "FETCH_PARENT_SECTION_LIST_ADMIN_FULFILLED",
-          payload: parentSectionAdminId
+          payload: parentSectionAdminId,
+          parentSectionAdmin: parentSectionAdmin
         });
       } else {
         stuffs.push({

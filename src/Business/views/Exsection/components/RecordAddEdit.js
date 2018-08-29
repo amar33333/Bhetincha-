@@ -431,7 +431,9 @@ class RecordAddEdit extends Component {
                   ) && (
                     <FormGroup row>
                       {this.props.parentSectionBiz && (
-                        <Label sm={3}>Select</Label>
+                        <Label sm={3}>
+                          Select {this.props.activeParentAdmin.name}
+                        </Label>
                       )}
 
                       <Col sm={9}>

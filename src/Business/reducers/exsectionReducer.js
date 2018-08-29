@@ -36,6 +36,7 @@ const INITIAL_STATE = {
   activeChildrenAdmin: null,
   sectionEntityDetailBiz: null, //active section detail of business
   activeParentAdminId: "",
+  activeParentAdmin: null,
   rootNodeAdminId: "", //this is the root node id which has no parent, in our app it is static section neo4j node
   parentSectionBizFlag: true,
   loading: false,
@@ -104,7 +105,8 @@ export default function(state = INITIAL_STATE, action) {
     case "FETCH_PARENT_SECTION_LIST_ADMIN_FULFILLED":
       return {
         ...state,
-        activeParentAdminId: action.payload
+        activeParentAdminId: action.payload,
+        activeParentAdmin: action.parentSectionAdmin
       };
 
     case CHANGE_ACTIVE_CHILD_EXSECTION:
