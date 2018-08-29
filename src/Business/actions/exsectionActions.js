@@ -469,14 +469,21 @@ epics.push((action$, { getState }) =>
           let access_token = getState().auth.cookies.token_data.access_token;
           return onCategoryEachGet({ id, access_token }).then(response => {
             if (response.data.sections.length > 0) {
-              let resData = response.data.sections;
-              catSections.push(resData);
-              //Array.prototype.push.apply(catSections, response.data.sections);
+              //let resData = JSON.stringify(response.data.sections);
+              //catSections.push(response.data.sections);
+              // for (var key in response.data.sections) {
+              //   catSections.push(response.data.sections[key]);
+              // }
+              Array.prototype.push.apply(catSections, response.data.sections);
+              //JSON.stringify(catSections);
+              //Array.from(catSections);
             } else {
               catSections;
             }
+            console.log("Cat Section Action Each Length", catSections.length);
           });
         });
+        console.log("Cat Section", catSections);
         return [
           {
             type: FETCH_CATEGORY_SECTION_DATA,

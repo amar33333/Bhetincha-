@@ -27,7 +27,20 @@ class ManageSections extends Component {
   }
 
   render() {
-    console.log("Business Section Data", this.props.businessSection);
+    //console.log("Business Section Data", this.props.businessSection);
+    //console.log("Business Section Data length", this.props.businessSection.length);
+
+    //const sectionsToRender = this.props.businessSection.filter(x => x.name);
+    //const numRows = sectionsToRender.length;
+    //console.log("Count",numRows);
+    //console.log("Is Array",Array.isArray(this.props.businessSection));
+    //console.log("Array of",Array.of(Array.of(this.props.businessSection)));
+    //console.log("Array from",(Array.from(this.props.businessSection)).length);
+    //console.log("New",this.props.businessSection.toString());
+    // var iterator1 = this.props.businessSection.entries();
+    // console.log("New",iterator1);
+    //let receivedArraySection = Array.of(this.props.businessSection);
+    //console.log("Length",receivedArraySection[Array(0)].length);
     //console.log("Business Section Data1", JSON.parse(JSON.stringify(this.props.businessSection)));
     // storing our array as a string
     //localStorage.setItem("abc", JSON.stringify(this.props.businessSection));
@@ -45,8 +58,8 @@ class ManageSections extends Component {
     // const peopleObject = arrayToObject(this.props.businessSection, "id");
     // console.log("new array reduced",peopleObject);
 
-    //console.log("Length",this.props.businessSection[0].length);
-    //console.log("Length",Object(this.props.businessSection).length);
+    //console.log("Length",this.props.businessSection.length);
+    //console.log("Length",Object.keys(this.props.businessSection).length);
     //let sectionArray = JSON.stringify(this.props.businessSection);
     //console.log("Business Section Data", JSON.stringify(this.props.businessSection));
     //console.log("Section Length", Object.keys(this.props.businessSection).length);
