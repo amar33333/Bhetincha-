@@ -3,10 +3,7 @@ import { connect } from "react-redux";
 
 import { SectionEntityDetail } from "./components";
 
-import {
-  onExsectionSectionEachList,
-  onRemoveExsectionSectionEntity
-} from "../../actions";
+import { onExsectionSectionEachList } from "../../actions";
 
 class SectionEntityView extends Component {
   constructor(props) {
@@ -35,18 +32,8 @@ class SectionEntityView extends Component {
           this.props.attributes &&
           this.props.attributes.attributes && (
             <SectionEntityDetail
-              editURL={`/${
-                this.props.match.params.businessName
-              }/dashboard/exsection/manage-sections/${
-                this.props.match.params.sectionEntityId
-              }/edit`}
-              onRemoveExsectionSectionEntity={
-                this.props.onRemoveExsectionSectionEntity
-              }
               sectionEntityDetailBiz={this.props.sectionEntityDetailBiz}
-              routeToManageSections={this.routeToManageSections}
               attributes={this.props.attributes.attributes}
-              sectionDetail={this.props.selectedSectionDetailBiz}
             />
           )}
       </div>
@@ -57,15 +44,10 @@ class SectionEntityView extends Component {
 export default connect(
   ({
     BusinessContainer: {
-      exsection: {
-        sectionEntityDetailBiz,
-        attributes,
-        selectedSectionDetailBiz
-      }
+      exsection: { sectionEntityDetailBiz, attributes }
     }
-  }) => ({ sectionEntityDetailBiz, attributes, selectedSectionDetailBiz }),
+  }) => ({ sectionEntityDetailBiz, attributes }),
   {
-    onExsectionSectionEachList,
-    onRemoveExsectionSectionEntity
+    onExsectionSectionEachList
   }
 )(SectionEntityView);

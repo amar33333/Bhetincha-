@@ -177,7 +177,8 @@ class SectionEntityEditDetail extends Component {
       this.setState({ sectionEntitySubmit: true }, () =>
         this.props.onSubmit({
           body: updates,
-          uid: defaultValue.uid
+          uid: defaultValue.uid,
+          routeToView: this.props.routeToView
         })
       );
     } else {

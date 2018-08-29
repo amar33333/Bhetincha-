@@ -5,6 +5,8 @@ import { SectionLoadingEffect } from "../../../../Common/components";
 import { PopoverDelete } from "../../../../Common/components";
 class SectionEntityList extends Component {
   render() {
+    console.log("Sections", this.props.sections);
+
     return (
       <div>
         <Card>
@@ -30,21 +32,44 @@ class SectionEntityList extends Component {
                       </Link>
                     </Col>
                     <Col sm={6}>
-                      <Button
-                        data-tooltip="Detail"
-                        color="secondary"
-                        className="mr-2"
+                      <Link to={`${this.props.URL}/${section.attributes.uid}`}>
+                        <Button
+                          data-tooltip="Detail"
+                          color="secondary"
+                          className="mr-2"
+                        >
+                          <i className="fa fa-eye" />
+                        </Button>
+                      </Link>
+                      <Link
+                        to={`${this.props.URL}/${section.attributes.uid}/edit`}
                       >
-                        <i className="fa fa-eye" />
-                      </Button>
-                      <Button
-                        data-tooltip="Edit"
-                        color="primary"
-                        className="mr-2"
-                      >
-                        <i className="fa fa-pencil" />
-                      </Button>
-                      <PopoverDelete />
+                        <Button
+                          data-tooltip="Edit"
+                          color="primary"
+                          className="mr-2"
+                        >
+                          <i className="fa fa-pencil" />
+                        </Button>
+                      </Link>
+                      {section.children.length < 1 ? (
+                        <PopoverDelete
+                          id={section.attributes.uid}
+                          onClick={() =>
+                            this.props.onRemoveExsectionSectionEntity({
+                              uid: section.attributes.uid,
+                              routeToManageSections: this.props
+                                .routeToManageSections
+                            })
+                          }
+                        />
+                      ) : (
+                        <PopoverDelete
+                          id={section.attributes.uid}
+                          childCountValue={section.children.length}
+                          parentNameText={section.attributes.name}
+                        />
+                      )}
                     </Col>
                   </Row>
                 </div>

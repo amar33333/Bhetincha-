@@ -482,10 +482,10 @@ epics.push((action$, { getState }) =>
             } else {
               catSections;
             }
-            console.log("Cat Section Action Each Length", catSections.length);
+            //console.log("Cat Section Action Each Length", catSections.length);
           });
         });
-        console.log("Cat Section", catSections);
+        //console.log("Cat Section", catSections);
         return [
           {
             type: FETCH_CATEGORY_SECTION_DATA,
@@ -513,8 +513,15 @@ epics.push((action$, { getState }) =>
   action$
     .ofType(UPDATE_EXSECTION_SECTION_ENTITY_EACH_PENDING)
     .mergeMap(({ payload }) => {
-      const { body, uid } = payload;
+      const { body, uid, routeToView } = payload;
       const access_token = getState().auth.cookies.token_data.access_token;
+      const globalState = getState();
+      const { activeSectionAdminId } = globalState.BusinessContainer.exsection;
+      const newSectionAdminId = activeSectionAdminId;
+      const { activeParentAdminId } = globalState.BusinessContainer.exsection;
+      const oldSectionAdminId = activeParentAdminId;
+      const { activeChildrenAdmin } = globalState.BusinessContainer.exsection;
+      const leafDetected = false;
       return onUpdateExsectionSectionEntityPut({
         body,
         uid,
@@ -523,7 +530,19 @@ epics.push((action$, { getState }) =>
         .concatMap(({ response }) => {
           if (response.msg === "success") {
             toast.success("Updated successfully!");
-            return [{ type: UPDATE_EXSECTION_SECTION_ENTITY_EACH_FULFILLED }];
+            routeToView();
+            return [
+              { type: UPDATE_EXSECTION_SECTION_ENTITY_EACH_FULFILLED },
+              { type: FETCH_EXSECTION_SECTIONS_PENDING },
+              {
+                type: CHANGE_ACTIVE_EXSECTION_SECTION,
+                payload: newSectionAdminId,
+                oldSectionAdminId,
+                leafDetected,
+                activeChildrenAdmin
+              }
+            ];
+            //return [{ type: UPDATE_EXSECTION_SECTION_ENTITY_EACH_FULFILLED }];
           } else {
             throw new Error("Error Updating Section Entity");
           }
@@ -546,14 +565,29 @@ export const onRemoveExsectionSectionEntity = payload => ({
 epics.push((action$, { getState }) =>
   action$.ofType(DELETE_EXSECTION_SECTION_ENTITY_PENDING).mergeMap(action => {
     const access_token = getState().auth.cookies.token_data.access_token;
-    const { uid, routeToManageSections } = action.payload;
-
+    const { uid } = action.payload;
+    const globalState = getState();
+    const { activeSectionAdminId } = globalState.BusinessContainer.exsection;
+    const newSectionAdminId = activeSectionAdminId;
+    const { activeParentAdminId } = globalState.BusinessContainer.exsection;
+    const oldSectionAdminId = activeParentAdminId;
+    const { activeChildrenAdmin } = globalState.BusinessContainer.exsection;
+    const leafDetected = false;
     return onRemoveExsectionSectionEntityDelete({ uid, access_token })
-      .map(({ response }) => {
+      .concatMap(({ response }) => {
         if (response.msg === "success") {
           toast.success("Deleted Successfully");
-          routeToManageSections();
-          return { type: DELETE_EXSECTION_SECTION_ENTITY_FULFILLED };
+          return [
+            { type: DELETE_EXSECTION_SECTION_ENTITY_FULFILLED },
+            { type: FETCH_EXSECTION_SECTIONS_PENDING },
+            {
+              type: CHANGE_ACTIVE_EXSECTION_SECTION,
+              payload: newSectionAdminId,
+              oldSectionAdminId,
+              leafDetected,
+              activeChildrenAdmin
+            }
+          ];
         } else {
           throw new Error(response.msg);
         }
