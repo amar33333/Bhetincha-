@@ -26,6 +26,23 @@ class ManageSections extends Component {
     });
   }
 
+  // componentDidUpdate(prevProps) {
+  //   if (
+  //     this.props.match.params.sectionAdminId !==
+  //     prevProps.match.params.sectionAdminId
+  //   ) {
+  //     if (!this.props.match.params.sectionAdminId) {
+  //       this.props.onSectionsListExsection();
+  //     } else {
+  //       this.props.onChangeActiveCategoryEcommerce(
+  //         this.props.match.params.categoryId,
+  //         prevProps.match.params.categoryId,
+  //         this.routeToManageProducts
+  //       );
+  //     }
+  //   }
+  // }
+
   render() {
     //console.log("Business Section Data", this.props.businessSection);
     //console.log("Business Section Data length", this.props.businessSection.length);
@@ -77,15 +94,43 @@ class ManageSections extends Component {
             <SideSectionsView
               sectionsAdmin={this.props.sectionsAdmin}
               resetState={this.props.resetState}
-              onChangeActiveSection={this.props.onChangeActiveSectionBusiness}
+              //onChangeActiveSection={this.props.onChangeActiveSectionBusiness}
+              onChangeActiveSection={(uid, children, topSectionAdmin) => {
+                this.props.history.push(
+                  `/${
+                    this.props.match.params.businessName
+                  }/dashboard/section/manage-sections/${uid}`
+                );
+                this.props.onChangeActiveSectionBusiness(
+                  uid,
+                  children,
+                  topSectionAdmin
+                );
+              }}
+              // onChangeActiveSection={uid => {
+              //   if (this.props.match.params.sectionAdminId !== uid) {
+              //     this.props.history.push(
+              //       `/${
+              //         this.props.match.params.businessName
+              //       }/dashboard/section/manage-sections/${uid}`
+              //     );
+              //   } else {
+              //     this.props.onChangeActiveSectionBusiness(
+              //       uid,
+              //       this.props.match.params.sectionAdminId,
+              //       this.routeToManageSections,
+              //       true
+              //     );
+              //   }
+              // }}
               activeSectionAdminId={this.props.activeSectionAdminId}
-              topSectionAdminId={this.props.topSectionAdminId}
+              rootNodeAdminId={this.props.rootNodeAdminId}
             />
             <br />
             <br />
             {this.props.activeChildrenAdmin !== null && (
               <SectionListAdmin
-                rootSectionAdmin={this.props.rootSectionAdmin}
+                topSectionAdmin={this.props.topSectionAdmin}
                 activeChildrenAdmin={this.props.activeChildrenAdmin}
                 onChangeActiveSectionByClick={
                   this.props.onChangeActiveSectionBusinessByClick
@@ -104,6 +149,7 @@ class ManageSections extends Component {
                   URL={`/${
                     this.props.match.params.businessName
                   }/dashboard/exsection/manage-sections`}
+                  loading={this.props.loading}
                 />
               )}
             {this.props.attributes &&
@@ -123,8 +169,10 @@ class ManageSections extends Component {
                   attributes={this.props.attributes.attributes}
                   onSubmit={this.props.onCreateSectionBusiness}
                   parentSectionBiz={this.props.parentSectionBiz}
-                  rootSectionAdmin={this.props.rootSectionAdmin}
+                  topSectionAdmin={this.props.topSectionAdmin}
                   parentSectionBizFlag={this.props.parentSectionBizFlag}
+                  loading={this.props.loading}
+                  activeParentAdminId={this.props.activeParentAdminId}
                 />
               )}
           </Col>
@@ -153,9 +201,10 @@ export default connect(
         selectedSectionDetailBiz,
         attributes,
         parentSectionBiz,
-        rootSectionAdmin,
-        topSectionAdminId,
+        topSectionAdmin,
+        rootNodeAdminId,
         parentSectionBizFlag,
+        loading,
         businessSection
       }
     },
@@ -170,9 +219,10 @@ export default connect(
     selectedSectionDetailBiz,
     attributes,
     parentSectionBiz,
-    rootSectionAdmin,
-    topSectionAdminId,
+    topSectionAdmin,
+    rootNodeAdminId,
     parentSectionBizFlag,
+    loading,
     cookies,
     businessSection
   }),
