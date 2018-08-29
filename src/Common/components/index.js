@@ -16,6 +16,8 @@ import PaginationComponent from "./CBReactTablePagination";
 import Chip from "./Chip";
 import ManualReactTable from "./ManualReactTable";
 
+import SectionLoadingEffect from "./SectionLoadingEffect";
+
 export {
   Aside,
   Breadcrumb,
@@ -33,5 +35,6 @@ export {
   Select,
   PaginationComponent,
   Chip,
-  ManualReactTable
+  ManualReactTable,
+  SectionLoadingEffect
 };

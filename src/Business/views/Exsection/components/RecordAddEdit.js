@@ -19,6 +19,8 @@ import "react-datetime/css/react-datetime.css";
 
 import DocumentInput from "./DocumentInput";
 
+import { SectionLoadingEffect } from "../../../../Common/components";
+
 class RecordAddEdit extends Component {
   constructor(props) {
     super(props);
@@ -399,86 +401,102 @@ class RecordAddEdit extends Component {
       );
     });
     return (
-      <Card>
-        <CardHeader>
-          <strong>
-            Add New &nbsp;
-            {this.props.selectedSectionDetailAdmin.name
-              ? this.props.selectedSectionDetailAdmin.name
-              : ""}
-          </strong>
-        </CardHeader>
-        <CardBody>
-          <Form onSubmit={this.onFormSubmit}>
-            <FormGroup row>
-              {this.props.parentSectionBiz && <Label sm={3}>Select</Label>}
+      <div>
+        {!this.checkTopSectionAlreadyExists() && (
+          <Card>
+            <CardHeader>
+              <strong>
+                Add New &nbsp;
+                {this.props.selectedSectionDetailAdmin.name
+                  ? this.props.selectedSectionDetailAdmin.name
+                  : ""}
+              </strong>
+            </CardHeader>
+            <CardBody>
+              {this.props.loading && <SectionLoadingEffect />}
+              {!this.props.loading && (
+                <Form onSubmit={this.onFormSubmit}>
+                  {!(
+                    this.props.activeParentAdminId ===
+                    this.props.topSectionAdmin.uid
+                  ) && (
+                    <FormGroup row>
+                      {this.props.parentSectionBiz && (
+                        <Label sm={3}>Select</Label>
+                      )}
 
-              <Col sm={9}>
-                {this.props.parentSectionBiz &&
-                  this.props.parentSectionBiz.sections && (
-                    <Select
-                      value={
-                        selectedOption === null
-                          ? this.props.parentSectionBiz.sections[0].id
-                          : selectedOption
-                      }
-                      options={this.props.parentSectionBiz.sections.map(x => ({
-                        value: x.id,
-                        label: x.name
-                      }))}
-                      onChange={this.handleChange}
-                    />
+                      <Col sm={9}>
+                        {this.props.parentSectionBiz &&
+                          this.props.parentSectionBiz.sections && (
+                            <Select
+                              value={
+                                selectedOption === null
+                                  ? this.props.parentSectionBiz.sections[0].id
+                                  : selectedOption
+                              }
+                              options={this.props.parentSectionBiz.sections.map(
+                                x => ({
+                                  value: x.id,
+                                  label: x.name
+                                })
+                              )}
+                              onChange={this.handleChange}
+                            />
+                          )}
+                      </Col>
+                    </FormGroup>
                   )}
-              </Col>
-            </FormGroup>
 
-            {this.props.activeSectionAdminId !==
-              this.props.rootSectionAdmin.uid &&
-              !this.props.parentSectionBizFlag && (
-                <Alert color="danger">
-                  Missing {this.props.rootSectionAdmin.name} data or other
-                  Section Data. Please add them first.
-                </Alert>
+                  {this.props.activeSectionAdminId !==
+                    this.props.topSectionAdmin.uid &&
+                    !this.props.parentSectionBizFlag && (
+                      <Alert color="danger">
+                        Missing {this.props.topSectionAdmin.name} data or other
+                        Section Data. Please add them first.
+                      </Alert>
+                    )}
+                  {this.checkTopSectionAlreadyExists() && (
+                    <Alert color="danger">Can only add one Top Section</Alert>
+                  )}
+
+                  {(this.props.activeSectionAdminId ===
+                    this.props.topSectionAdmin.uid ||
+                    this.props.parentSectionBizFlag) && (
+                    <div>
+                      {documents}
+
+                      {!(
+                        this.props.activeSectionAdminId ===
+                        this.props.topSectionAdmin.uid
+                      ) && (
+                        <FormGroup>
+                          <Button sm={2} onClick={this.addClick.bind(this)}>
+                            + &nbsp;
+                            {this.props.selectedSectionDetailAdmin.name
+                              ? this.props.selectedSectionDetailAdmin.name
+                              : ""}
+                          </Button>
+                        </FormGroup>
+                      )}
+
+                      <FormGroup>
+                        <Button
+                          sm={2}
+                          //color="primary"
+                          onClick={this.saveClick.bind(this)}
+                          disabled={this.checkTopSectionAlreadyExists()}
+                        >
+                          <span className="fa fa-check" /> Save
+                        </Button>&nbsp;
+                      </FormGroup>
+                    </div>
+                  )}
+                </Form>
               )}
-            {this.checkTopSectionAlreadyExists() && (
-              <Alert color="danger">Can only add one Top Section</Alert>
-            )}
-
-            {(this.props.activeSectionAdminId ===
-              this.props.rootSectionAdmin.uid ||
-              this.props.parentSectionBizFlag) && (
-              <div>
-                {documents}
-
-                {!(
-                  this.props.activeSectionAdminId ===
-                  this.props.rootSectionAdmin.uid
-                ) && (
-                  <FormGroup>
-                    <Button sm={2} onClick={this.addClick.bind(this)}>
-                      + &nbsp;
-                      {this.props.selectedSectionDetailAdmin.name
-                        ? this.props.selectedSectionDetailAdmin.name
-                        : ""}
-                    </Button>
-                  </FormGroup>
-                )}
-
-                <FormGroup>
-                  <Button
-                    sm={2}
-                    //color="primary"
-                    onClick={this.saveClick.bind(this)}
-                    disabled={this.checkTopSectionAlreadyExists()}
-                  >
-                    <span className="fa fa-check" /> Save
-                  </Button>&nbsp;
-                </FormGroup>
-              </div>
-            )}
-          </Form>
-        </CardBody>
-      </Card>
+            </CardBody>
+          </Card>
+        )}
+      </div>
     );
   }
 }

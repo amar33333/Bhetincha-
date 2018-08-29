@@ -81,14 +81,14 @@ export const onChangeActiveSectionBusiness = (
   newSectionAdminId,
   // oldSectionAdminId,
   activeChildrenAdmin = null,
-  rootSectionAdmin = null
+  topSectionAdmin = null
 ) => {
   return {
     type: CHANGE_ACTIVE_EXSECTION_SECTION,
     payload: newSectionAdminId,
     // oldSectionAdminId,
     activeChildrenAdmin,
-    rootSectionAdmin
+    topSectionAdmin
   };
 };
 
@@ -98,11 +98,11 @@ epics.push((action$, { getState }) =>
       payload: newSectionAdminId,
       // oldSectionAdminId,
       activeChildrenAdmin,
-      rootSectionAdmin
+      topSectionAdmin
     } = action;
     const businessId = getState().auth.cookies.user_data.business_id;
-    const topSectionAdminId = getState().BusinessContainer.exsection
-      .topSectionAdminId;
+    const rootNodeAdminId = getState().BusinessContainer.exsection
+      .rootNodeAdminId;
 
     return onExsectionSectionDetailGetAdmin({
       uid: newSectionAdminId
@@ -118,10 +118,10 @@ epics.push((action$, { getState }) =>
         payload: activeChildrenAdmin
       });
 
-      if (rootSectionAdmin) {
+      if (topSectionAdmin) {
         stuffs.push({
           type: CHANGE_ROOT_SECTION_ADMIN,
-          payload: rootSectionAdmin
+          payload: topSectionAdmin
         });
       }
 
@@ -218,14 +218,14 @@ epics.push((action$, { getState }) =>
     .ofType(FETCH_PARENT_SECTION_LIST_BUSINESS_PENDING)
     .mergeMap(({ payload: { body } }) => {
       const globalState = getState();
-      let rootSectionAdminIdd;
+      let topSectionAdminIdd;
       let activeSectionAdminIdd;
       if (
-        globalState.BusinessContainer.exsection.rootSectionAdmin !== null &&
-        globalState.BusinessContainer.exsection.rootSectionAdmin !== undefined
+        globalState.BusinessContainer.exsection.topSectionAdmin !== null &&
+        globalState.BusinessContainer.exsection.topSectionAdmin !== undefined
       ) {
-        rootSectionAdminIdd =
-          globalState.BusinessContainer.exsection.rootSectionAdmin.uid;
+        topSectionAdminIdd =
+          globalState.BusinessContainer.exsection.topSectionAdmin.uid;
         activeSectionAdminIdd =
           globalState.BusinessContainer.exsection.activeSectionAdminId;
       }
@@ -233,12 +233,10 @@ epics.push((action$, { getState }) =>
         .map(({ response }) => {
           if (response.msg === "success") {
             if (
-              rootSectionAdminIdd &&
+              topSectionAdminIdd &&
               activeSectionAdminIdd &&
-              rootSectionAdminIdd === activeSectionAdminIdd
+              topSectionAdminIdd === activeSectionAdminIdd
             ) {
-              // console.log("breached please", rootSectionAdminIdd);
-              // console.log("breached please", activeSectionAdminIdd);
               return {
                 type: FETCH_PARENT_SECTION_LIST_BUSINESS_FULFILLED,
                 payload: {}
@@ -374,8 +372,8 @@ epics.push((action$, { getState }) =>
   action$.ofType(CHANGE_ACTIVE_EXSECTION_SECTION_BY_CLICK).mergeMap(action => {
     const { payload: uid } = action;
     const businessId = getState().auth.cookies.user_data.business_id;
-    const topSectionAdminId = getState().BusinessContainer.exsection
-      .topSectionAdminId;
+    const rootNodeAdminId = getState().BusinessContainer.exsection
+      .rootNodeAdminId;
     return onExsectionSectionDetailGetAdmin({
       uid: uid
     }).concatMap(({ response }) => {
@@ -404,7 +402,7 @@ epics.push((action$, { getState }) =>
         }
       });
 
-      if (parentSectionAdminId !== topSectionAdminId) {
+      if (parentSectionAdminId !== rootNodeAdminId) {
         stuffs.push({
           type: FETCH_PARENT_SECTION_LIST_BUSINESS_PENDING,
           payload: {
@@ -413,6 +411,10 @@ epics.push((action$, { getState }) =>
               asid: parentSectionAdminId
             }
           }
+        });
+        stuffs.push({
+          type: "FETCH_PARENT_SECTION_LIST_ADMIN_FULFILLED",
+          payload: parentSectionAdminId
         });
       } else {
         stuffs.push({

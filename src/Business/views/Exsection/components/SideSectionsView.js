@@ -18,16 +18,22 @@ class SideSectionsView extends Component {
 
   onSectionClick(index, { uid, name, children }, event) {
     event.preventDefault();
-    const rootSectionAdmin = {};
-    rootSectionAdmin.name = name;
-    rootSectionAdmin.uid = uid;
+    const topSectionAdmin = {};
+    topSectionAdmin.name = name;
+    topSectionAdmin.uid = uid;
     this.props.resetState();
     this.props.onChangeActiveSection(
       uid,
       //  this.props.topSectionAdminId, //this.props.activeSectionAdminId,
       children ? children[0] : null,
-      rootSectionAdmin
+      topSectionAdmin
     );
+
+    // this.props.history.push(
+    //   `/${
+    //     this.props.match.params.businessName
+    //   }/dashboard/section/manage-sections/${uid}`
+    // );
     this.setState({ activeIndex: index });
   }
 

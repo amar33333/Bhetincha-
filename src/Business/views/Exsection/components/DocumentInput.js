@@ -7,14 +7,16 @@ class DocumentInput extends Component {
       <div key={this.props.mykey}>
         <br />
 
-        <div className="text-right">
-          <Button
-            color="danger"
-            onClick={() => this.props.removeClick(this.props.mykey)}
-          >
-            x
-          </Button>
-        </div>
+        {!(this.props.mykey === 0) && (
+          <div className="text-right">
+            <Button
+              color="danger"
+              onClick={() => this.props.removeClick(this.props.mykey)}
+            >
+              x
+            </Button>
+          </div>
+        )}
 
         {this.props.attributes
           .sort(function(a, b) {

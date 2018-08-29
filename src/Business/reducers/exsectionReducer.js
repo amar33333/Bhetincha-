@@ -13,23 +13,25 @@ import {
   CHANGE_ROOT_SECTION_ADMIN,
   CHANGE_ACTIVE_EXSECTION_SECTION_BY_CLICK,
   INITIALIZE_TOP_SECTION_ADMIN_ID,
-  PARENT_SECTION_BIZ_FLAG
+  PARENT_SECTION_BIZ_FLAG,
+  FETCH_EXSECTION_SECTION_ATTRIBUTES_PENDING
 } from "../actions/types";
 
 const INITIAL_STATE = {
-  sectionsAdmin: null,
-  activeSectionAdminId: "",
-  rootSectionAdmin: null,
+  sectionsAdmin: null, // all the sections in our app
+  activeSectionAdminId: "", // currently clicked active section admin id
+  topSectionAdmin: null, // this holds the top section information of any new section created in admin
   isOpenSections: [],
   selectedSectionDetailAdmin: null,
   selectedSectionDetailBiz: null,
-  attributes: [],
+  attributes: [], // holding attributes type according to context
   parentSectionBiz: null,
   activeChildrenAdmin: null,
-  sectionEntityDetailBiz: null,
+  sectionEntityDetailBiz: null, //active section detail of business
   activeParentAdminId: "",
-  topSectionAdminId: "",
-  parentSectionBizFlag: true
+  rootNodeAdminId: "", //this is the root node id which has no parent, in our app it is static section neo4j node
+  parentSectionBizFlag: true,
+  loading: false
 };
 
 export default function(state = INITIAL_STATE, action) {
@@ -39,7 +41,7 @@ export default function(state = INITIAL_STATE, action) {
     case INITIALIZE_TOP_SECTION_ADMIN_ID:
       return {
         ...state,
-        topSectionAdminId: action.payload,
+        rootNodeAdminId: action.payload,
         isOpenSections: [action.payload]
       };
     case FETCH_EXSECTION_SECTIONS_FULFILLED:
@@ -72,16 +74,29 @@ export default function(state = INITIAL_STATE, action) {
       }
       return { ...state, isOpenSections, ...extra2 };
 
+    case FETCH_EXSECTION_SECTION_ATTRIBUTES_PENDING:
+      return {
+        ...state,
+        loading: true
+      };
+
     case FETCH_EXSECTION_SECTION_ATTRIBUTES_FULFILLED:
       return {
         ...state,
-        attributes: action.payload
+        attributes: action.payload,
+        loading: false
       };
 
     case FETCH_PARENT_SECTION_LIST_BUSINESS_FULFILLED:
       return {
         ...state,
         parentSectionBiz: action.payload
+      };
+
+    case "FETCH_PARENT_SECTION_LIST_ADMIN_FULFILLED":
+      return {
+        ...state,
+        activeParentAdminId: action.payload
       };
 
     case CHANGE_ACTIVE_CHILD_EXSECTION:
@@ -93,7 +108,7 @@ export default function(state = INITIAL_STATE, action) {
     case CHANGE_ROOT_SECTION_ADMIN:
       return {
         ...state,
-        rootSectionAdmin: action.payload
+        topSectionAdmin: action.payload
       };
 
     case CHANGE_ACTIVE_PARENT_ADMIN_EXSECTION:
