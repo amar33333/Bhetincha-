@@ -1,14 +1,6 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-import {
-  Card,
-  CardHeader,
-  CardBody,
-  Alert,
-  Button,
-  Row,
-  Col
-} from "reactstrap";
+import { Card, CardHeader, CardBody, Nav, NavItem, NavLink } from "reactstrap";
 
 class SectionListAdmin extends Component {
   constructor(props) {
@@ -27,20 +19,21 @@ class SectionListAdmin extends Component {
       return (
         <div key={option.uid}>
           {option.name && (
-            <Alert color="warning">
-              <Row className="ml-sm-2 mb-sm-1">
-                {this.props.rootSectionAdmin && (
-                  <Button
-                    color="link"
+            <Nav vertical style={{ marginTop: 10 }}>
+              <NavItem>
+                {this.props.topSectionAdmin && (
+                  <NavLink
+                    className="navbar-light bg-light"
+                    style={{ cursor: "pointer" }}
                     onClick={() => {
                       return this.handleSectionClick(option.uid);
                     }}
                   >
                     {option ? option.name : ""}
-                  </Button>
+                  </NavLink>
                 )}
-              </Row>
-            </Alert>
+              </NavItem>
+            </Nav>
           )}
           {subMenu ? subMenu : ""}
         </div>
@@ -58,45 +51,31 @@ class SectionListAdmin extends Component {
       <div>
         <Card>
           <CardHeader>
-            <strong>Edit Sub Section</strong>
+            <strong>
+              {this.props.topSectionAdmin
+                ? this.props.topSectionAdmin.name
+                : ""}
+            </strong>
           </CardHeader>
           <CardBody>
-            <Alert color="warning">
-              <Row className="ml-sm-2 mb-sm-1">
-                {this.props.rootSectionAdmin && (
-                  <Button
-                    color="link"
-                    onClick={() => {
-                      return this.handleSectionClick(
-                        this.props.rootSectionAdmin.uid
-                      );
-                    }}
-                  >
-                    {this.props.rootSectionAdmin
-                      ? this.props.rootSectionAdmin.name
-                      : ""}{" "}
-                  </Button>
-                )}
-              </Row>
-            </Alert>
-            <Alert color="warning">
-              <Row className="ml-sm-2 mb-sm-1">
-                {this.props.activeChildrenAdmin && (
-                  <Button
-                    color="link"
-                    onClick={() => {
-                      return this.handleSectionClick(
-                        this.props.activeChildrenAdmin.uid
-                      );
-                    }}
-                  >
-                    {this.props.activeChildrenAdmin
-                      ? this.props.activeChildrenAdmin.name
-                      : ""}{" "}
-                  </Button>
-                )}
-              </Row>
-            </Alert>
+            <Nav vertical>
+              <NavItem>
+                <NavLink
+                  className="navbar-light
+                  bg-light"
+                  style={{ cursor: "pointer" }}
+                  onClick={() => {
+                    return this.handleSectionClick(
+                      this.props.activeChildrenAdmin.uid
+                    );
+                  }}
+                >
+                  {this.props.activeChildrenAdmin
+                    ? this.props.activeChildrenAdmin.name
+                    : ""}
+                </NavLink>
+              </NavItem>
+            </Nav>
             {this.props.activeChildrenAdmin &&
             this.props.activeChildrenAdmin.children
               ? this.renderSubSection(this.props.activeChildrenAdmin.children)

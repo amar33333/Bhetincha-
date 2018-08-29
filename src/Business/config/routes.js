@@ -139,6 +139,11 @@ class BusinessRoute extends Component {
           component={SectionEntityView}
         />
         <Route
+          path={`/:${ROUTE_PARAMS_BUSINESS_NAME}/dashboard/section/manage-sections/:sectionAdminId`}
+          name="manage-exsection-sections"
+          component={ManageSections}
+        />
+        <Route
           path={`/:${ROUTE_PARAMS_BUSINESS_NAME}/dashboard/section/manage-sections`}
           name="manage-exsection-sections"
           component={ManageSections}
