@@ -21,7 +21,9 @@ import {
   UNMOUNT_CATEGORY,
   FETCH_CATEGORY_DETAIL_FULFILLED,
   FETCH_CATEGORY_DETAIL_PENDING,
-  FETCH_CATEGORY_DETAIL_REJECTED
+  FETCH_CATEGORY_DETAIL_REJECTED,
+  FETCH_SECTION_LIST_CATEGORY_FULFILLED,
+  UNMOUNT_SECTION_CATEGORY
 } from "../actions/types";
 
 const INITIAL_STATE = {
@@ -36,7 +38,8 @@ const INITIAL_STATE = {
   categoryErrors: null,
   categoryEditErrors: null,
   category: null,
-  detailLoading: false
+  detailLoading: false,
+  sectionsAdmin: []
 };
 
 export default function(state = INITIAL_STATE, action) {
@@ -195,6 +198,21 @@ export default function(state = INITIAL_STATE, action) {
 
     case UNMOUNT_CATEGORY_DATA:
       return { ...state, categoryData: action.payload, loading: false };
+
+    case FETCH_SECTION_LIST_CATEGORY_FULFILLED:
+      return {
+        ...state,
+        sectionsAdmin: action.payload,
+        // sections: action.payload.map((section, i) => ({
+        //   ...section,
+        //   s_no: i + 1
+        // })),
+        fetchLoading: false
+      };
+
+    case UNMOUNT_SECTION_CATEGORY:
+      return { ...state, sectionsAdmin: [] };
+
     default:
       return state;
   }

@@ -8,7 +8,8 @@ import {
   onCategoryEachGet,
   onCategoryPut,
   onCategoryArrayGet,
-  onCategoryEachGetAjax
+  onCategoryEachGetAjax,
+  onSectionsListCategoryGet
 } from "../config/adminServerCall";
 
 import {
@@ -40,7 +41,11 @@ import {
   RESET_CATEGORY_ERRORS,
   FETCH_CATEGORY_DETAIL_FULFILLED,
   FETCH_CATEGORY_DETAIL_PENDING,
-  FETCH_CATEGORY_DETAIL_REJECTED
+  FETCH_CATEGORY_DETAIL_REJECTED,
+  FETCH_SECTION_LIST_CATEGORY_FULFILLED,
+  FETCH_SECTION_LIST_CATEGORY_REJECTED,
+  FETCH_SECTION_LIST_CATEGORY_PENDING,
+  UNMOUNT_SECTION_CATEGORY
 } from "./types";
 
 const epics = [];
@@ -83,10 +88,10 @@ export const onCategorySubmit = payload => ({
 
 epics.push((action$, { getState }) =>
   action$.ofType(CREATE_CATEGORY_PENDING).mergeMap(({ payload }) => {
-    const { category, industry } = payload;
+    const { category, industry, sections } = payload;
     const access_token = getState().auth.cookies.token_data.access_token;
 
-    return onCategoryPostAjax({ category, industry, access_token })
+    return onCategoryPostAjax({ category, industry, sections, access_token })
       .concatMap(({ response }) => {
         if (response.msg === "success") {
           toast.success("Category added successfully!");
@@ -117,13 +122,14 @@ export const onCategoryEdit = payload => ({
 
 epics.push((action$, { getState }) =>
   action$.ofType(EDIT_CATEGORY_PENDING).mergeMap(({ payload }) => {
-    const { category, industry } = payload;
+    const { category, industry, sections } = payload;
     const access_token = getState().auth.cookies.token_data.access_token;
 
     return onCategoryPut({
       body: {
         name: category.name,
-        industry
+        industry,
+        sections
       },
       id: category.id,
       access_token
@@ -284,5 +290,29 @@ export const onUnmountSubCategories = () => {
     payload: []
   };
 };
+
+export const onSectionsListCategory = () => ({
+  type: FETCH_SECTION_LIST_CATEGORY_PENDING
+});
+
+epics.push((action$, { getState }) =>
+  action$.ofType(FETCH_SECTION_LIST_CATEGORY_PENDING).mergeMap(action =>
+    onSectionsListCategoryGet({
+      access_token: getState().auth.cookies.token_data.access_token
+    })
+      .map(({ response }) => ({
+        type: FETCH_SECTION_LIST_CATEGORY_FULFILLED,
+        payload: response
+      }))
+      .catch(ajaxError =>
+        Observable.of({ type: FETCH_SECTION_LIST_CATEGORY_REJECTED })
+      )
+  )
+);
+
+export const onUnmountSectionsCategory = () => ({
+  type: UNMOUNT_SECTION_CATEGORY,
+  payload: null
+});
 
 export default epics;

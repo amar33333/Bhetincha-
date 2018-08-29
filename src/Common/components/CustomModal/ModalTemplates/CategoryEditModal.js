@@ -16,12 +16,16 @@ import Select from "react-select";
 import { ErrorHandling } from "../../../utils/Extras";
 
 class CategoryEditModal extends Component {
-  state = { category: "", industry: "" };
+  state = { category: "", industry: "", sections: [] };
 
   componentDidMount() {
     this.setState({
       category: this.props.data ? this.props.data : "",
-      industry: this.props.data.industry
+      industry: this.props.data.industry,
+      sections: this.props.data.sections.map(sections => ({
+        id: sections.id,
+        name: sections.name
+      }))
     });
   }
 
@@ -42,13 +46,19 @@ class CategoryEditModal extends Component {
     this.setState({ industry });
   };
 
+  handleSelectSectionsAdminChange = (key, value) => {
+    this.setState({ [key]: value });
+    //console.log("Sections : "+ value);
+  };
+
   onFormEdit = event => {
     event.preventDefault();
     const {
       category,
       industry: { id }
     } = this.state;
-    this.props.onCategoryEdit({ category, industry: id });
+    const sections = this.state.sections.map(section => section.id);
+    this.props.onCategoryEdit({ category, industry: id, sections });
   };
 
   render() {
@@ -102,6 +112,35 @@ class CategoryEditModal extends Component {
               }
             />
           </Col>
+          {/* <Col xs="12" md="2">
+            <Button color="primary" disabled={this.props.loading}>
+              <span className="fa fa-check" /> Save
+            </Button>
+          </Col> */}
+        </Row>
+        <Row>
+          <Col xs="12" md="12">
+            <FormGroup>
+              <Label for="Sections">Section</Label>
+              <Select
+                multi
+                onChange={this.handleSelectSectionsAdminChange.bind(
+                  this,
+                  "sections"
+                )}
+                clearable
+                required
+                name="Sections"
+                className="select-section"
+                value={this.state.sections}
+                options={this.props.sectionsAdmin}
+                valueKey="id"
+                labelKey="name"
+              />
+            </FormGroup>
+          </Col>
+        </Row>
+        <Row>
           <Col xs="12" md="2">
             <Button color="primary" disabled={this.props.loading}>
               <span className="fa fa-check" /> Save
