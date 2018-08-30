@@ -26,12 +26,12 @@ class SectionEntityList extends Component {
               this.props.sections.map(section => (
                 <div key={section.attributes.uid} style={{ marginBottom: 5 }}>
                   <Row>
-                    <Col sm={6} style={{ paddingTop: 5 }}>
+                    <Col sm={9} style={{ paddingTop: 5 }}>
                       <Link to={`${this.props.URL}/${section.attributes.uid}`}>
                         {section.attributes.name}
                       </Link>
                     </Col>
-                    <Col sm={6}>
+                    <Col sm={3}>
                       <Link to={`${this.props.URL}/${section.attributes.uid}`}>
                         <Button
                           data-tooltip="Detail"
