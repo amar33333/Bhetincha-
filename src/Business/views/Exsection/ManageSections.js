@@ -28,8 +28,11 @@ class ManageSections extends Component {
   }
 
   render() {
-    //console.log("Business Section Data", this.props.businessSection);
-    //console.log("Business Section Data length", this.props.businessSection.length);
+    console.log("Business Section Data", this.props.businessSection);
+    console.log(
+      "Business Section Data length",
+      this.props.businessSection.length
+    );
     let button;
     if (JSON.stringify(this.props.businessSection).length < 1) {
       button = <ManageAvailableBusinessSection />;

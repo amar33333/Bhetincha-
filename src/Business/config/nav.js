@@ -12,12 +12,12 @@ const items = {
       title: true,
       name: `${ROUTE_PARAMS_BUSINESS_NAME}`
     },
-    {
-      name: "Business Detail",
-      url: `/${ROUTE_PARAMS_BUSINESS_NAME}/dashboard/business-detail`,
-      icon: "fa fa-map-o"
-      // permission: "CAN_VIEW_USERS"
-    },
+    // {
+    //   name: "Business Detail",
+    //   url: `/${ROUTE_PARAMS_BUSINESS_NAME}/dashboard/business-detail`,
+    //   icon: "fa fa-map-o"
+    //   // permission: "CAN_VIEW_USERS"
+    // },
     {
       name: "Change Slug",
       className: "joyride-slug",

@@ -185,13 +185,13 @@ const items = {
     {
       name: "Section",
       url: "/admin/exsection",
-      icon: "fa fa-users",
+      icon: "fa fa-th-large",
       permission: "CAN_VIEW_ECOMMERCE",
       children: [
         {
           name: "Manage Sections",
           url: "/admin/exsection/section-manage",
-          icon: "icon-user-follow",
+          icon: "fa fa-th",
           permission: "CAN_VIEW_ECOMMERCE_CATEGORIES"
         }
       ]
