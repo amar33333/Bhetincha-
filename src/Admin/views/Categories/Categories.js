@@ -221,6 +221,9 @@ class Categories extends Component {
   handleIndustryChange = industry => this.setState({ industry });
 
   render() {
+    var mapped = this.props.sectionsAdmin.map(s => {
+      return { ...s, info: `${s.name} (${s.label})` };
+    });
     return (
       <div className="animated fadeIn">
         <Row className="hr-centered">
@@ -292,9 +295,11 @@ class Categories extends Component {
                             name="Sections"
                             className="select-section"
                             value={this.state.sections}
-                            options={this.props.sectionsAdmin}
+                            //options={this.props.sectionsAdmin}
+                            options={mapped}
                             valueKey="id"
-                            labelKey="name"
+                            //labelKey="name"
+                            labelKey="info"
                           />
                         </FormGroup>
                       </Col>
