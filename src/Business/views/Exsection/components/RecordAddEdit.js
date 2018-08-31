@@ -350,7 +350,7 @@ class RecordAddEdit extends Component {
             <Label sm={3}>{`${attribute.name.split("_").join(" ")} ${
               attribute.required ? "*" : ""
             }`}</Label>
-            <Col sm={4}>
+            <Col sm={6}>
               <InputGroup>
                 <Input
                   type="textarea"
@@ -394,7 +394,27 @@ class RecordAddEdit extends Component {
         );
       //end here
 
-      //start here
+      //start here case File
+      case "File":
+        return (
+          <FormGroup row key={attribute.uid}>
+            <Label sm={3}>{`${attribute.name.split("_").join(" ")} ${
+              attribute.required ? "*" : ""
+            }`}</Label>
+            <Col sm={6}>
+              <InputGroup>
+                <Input
+                  type="file"
+                  required={attribute.required}
+                  placeholder={attribute.name}
+                />
+              </InputGroup>
+            </Col>
+          </FormGroup>
+        );
+      //end her case File
+
+      //start here case Image
 
       case "Image":
         return (
