@@ -40,7 +40,8 @@ import {
   EXSECTION_SECTION_URL,
   EXSECTION_ATTRIBUTE_URL,
   EXSECTION_PROPERTY_URL,
-  EXSECTION_SUBSECTION_ATTRIBUTE_URL
+  EXSECTION_SUBSECTION_ATTRIBUTE_URL,
+  CATEGORY_SECTION_URL
 } from "./ADMIN_API";
 
 import {
@@ -724,13 +725,19 @@ export const onCategoryPut = ({ body, id, access_token }) =>
     }
   });
 
-export const onCategoryPostAjax = ({ category, industry, access_token }) =>
+export const onCategoryPostAjax = ({
+  category,
+  industry,
+  sections,
+  access_token
+}) =>
   ajax({
     method: "post",
     url: CATEGORY_URL,
     body: {
       name: category,
-      industry
+      industry,
+      sections
     },
     headers: {
       "Content-Type": "application/json",
@@ -1884,5 +1891,16 @@ export const OnExsectionSubSectionDetailDelete = ({ uid }) =>
     url: `${EXSECTION_SECTION_URL}${uid}/`,
     headers: {
       "Content-Type": "application/json"
+    }
+  });
+
+//Category Section : Section
+export const onSectionsListCategoryGet = ({ access_token }) =>
+  ajax({
+    method: "GET",
+    url: CATEGORY_SECTION_URL,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token
     }
   });

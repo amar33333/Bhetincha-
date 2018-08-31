@@ -13,6 +13,7 @@ const CITY = "city/";
 const AREA = "area/";
 
 const CATEGORY = "category/category/";
+const CATEGORY_SECTION = "interface/mongo-section/";
 const SUB_CATEGORY = "category/subcategory/";
 const API = "api";
 const ACCOUNTS = "accounts";
@@ -103,3 +104,5 @@ export const EXSECTION_SECTION_URL = `${MAIN_URL}/${EXSECTION}/sections/`;
 export const EXSECTION_ATTRIBUTE_URL = `${MAIN_URL}/${EXSECTION}/attribute/`;
 
 export const EXSECTION_SUBSECTION_ATTRIBUTE_URL = `${MAIN_URL}/${EXSECTION}/prop/attrone/`;
+
+export const CATEGORY_SECTION_URL = `${MAIN_URL}/${CATEGORY_SECTION}`;

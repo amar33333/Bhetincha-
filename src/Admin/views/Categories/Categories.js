@@ -39,7 +39,8 @@ import {
   onUnmountCategory,
   onCategoryDelete,
   toggleCategoryEditModal,
-  resetCategoryErrors
+  resetCategoryErrors,
+  onSectionsListCategory
 } from "../../actions";
 
 import PermissionProvider from "../../../Common/utils/PermissionProvider";
@@ -49,6 +50,7 @@ class Categories extends Component {
   state = {
     category: "",
     industry: "",
+    sections: [],
     categorySubmit: false
   };
 
@@ -62,6 +64,35 @@ class Categories extends Component {
         width: 70
       },
       { Header: "Category", accessor: "name", id: "category" },
+      {
+        Header: "Section",
+        accessor: "sections.name",
+        //Cell: ({ value }) => value.join(", "),
+        Cell: props => {
+          const sectionsArray = props.original;
+          const sectionsList = sectionsArray.sections
+            .map(x => x.name)
+            .join(", ");
+          return <div>{sectionsList}</div>;
+        },
+        id: "section",
+        sortable: false,
+        filterable: false
+        // Filter: () => (
+        //   <Select
+        //     clearable
+        //     tabSelectsValue={false}
+        //     multi
+        //     value={this.props.filterSections}
+        //     onChange={filterSections =>
+        //       this.props.handleOnCategoryFilterChange({ filterSections })
+        //     }
+        //     valueKey="id"
+        //     labelKey="name"
+        //     options={this.props.sectionsAdmin}
+        //   />
+        // )
+      },
       {
         Header: "Industry",
         accessor: "industry.name",
@@ -89,7 +120,7 @@ class Categories extends Component {
         filterable: false,
         sortable: false,
         width: 145,
-        Cell: ({ value, original: { id, industry, name } }) => (
+        Cell: ({ value, original: { id, industry, name, sections } }) => (
           <div>
             <PermissionProvider permission="CAN_EDIT_CATEGORY">
               <Button
@@ -98,7 +129,12 @@ class Categories extends Component {
                 color="secondary"
                 className="mr-2"
                 onClick={() =>
-                  this.props.toggleCategoryEditModal({ id, industry, name })
+                  this.props.toggleCategoryEditModal({
+                    id,
+                    industry,
+                    name,
+                    sections
+                  })
                 }
               >
                 <i className="fa fa-pencil" />
@@ -128,6 +164,7 @@ class Categories extends Component {
   componentDidMount() {
     this.props.onIndustryList();
     this.props.onCategoryList();
+    this.props.onSectionsListCategory();
   }
 
   componentDidUpdate = (_, prevState) => {
@@ -135,6 +172,7 @@ class Categories extends Component {
       const updates = { categorySubmit: false };
       if (!this.props.error) {
         updates.category = "";
+        updates.sections = [];
       }
       this.setState(updates, () => this.focusableInput.focus());
     }
@@ -161,12 +199,23 @@ class Categories extends Component {
       [key]: event.target.value.replace(/\b\w/g, l => l.toUpperCase())
     });
 
+  handleSelectSectionsAdminChange = (key, value) => {
+    this.setState({ [key]: value });
+  };
+
   onFormSubmit = event => {
     event.preventDefault();
     const { category, industry } = this.state;
+    const sections = this.state.sections.map(section => section.id);
     this.setState({ categorySubmit: true }, () =>
-      this.props.onCategorySubmit({ industry: industry.id, category })
+      this.props.onCategorySubmit({ industry: industry.id, category, sections })
     );
+    this.setState({
+      category: "",
+      industry: "",
+      sections: [],
+      categorySubmit: false
+    });
   };
 
   handleIndustryChange = industry => this.setState({ industry });
@@ -227,6 +276,30 @@ class Categories extends Component {
                           }
                         />
                       </Col>
+                    </Row>
+                    <Row>
+                      <Col xs="12" md="12">
+                        <FormGroup>
+                          <Label for="Sections">Section</Label>
+                          <Select
+                            multi
+                            onChange={this.handleSelectSectionsAdminChange.bind(
+                              this,
+                              "sections"
+                            )}
+                            clearable
+                            required
+                            name="Sections"
+                            className="select-section"
+                            value={this.state.sections}
+                            options={this.props.sectionsAdmin}
+                            valueKey="id"
+                            labelKey="name"
+                          />
+                        </FormGroup>
+                      </Col>
+                    </Row>
+                    <Row>
                       <Col xs="12" md="2">
                         <Button color="primary">
                           <span className="fa fa-plus" /> Add
@@ -267,6 +340,7 @@ class Categories extends Component {
             data={this.props.categoryEditData}
             onCategoryEdit={this.props.onCategoryEdit}
             industries={this.props.industries}
+            sectionsAdmin={this.props.sectionsAdmin}
             categoryEditErrors={this.props.categoryEditErrors}
             loading={this.props.loading}
             resetCategoryErrors={this.props.resetCategoryErrors}
@@ -281,11 +355,13 @@ export default connect(
   ({
     AdminContainer: {
       industries: { industries },
+      sectionsAdmin,
       categories,
       filterCategory
     }
   }) => ({
     industries,
+    sectionsAdmin,
     ...categories,
     ...filterCategory
   }),
@@ -300,6 +376,7 @@ export default connect(
     onUnmountCategory,
     onCategoryList,
     onCategoryDelete,
-    resetCategoryErrors
+    resetCategoryErrors,
+    onSectionsListCategory
   }
 )(Categories);

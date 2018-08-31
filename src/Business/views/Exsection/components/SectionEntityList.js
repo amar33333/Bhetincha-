@@ -24,27 +24,50 @@ class SectionEntityList extends Component {
               this.props.sections.map(section => (
                 <div key={section.attributes.uid} style={{ marginBottom: 5 }}>
                   <Row>
-                    <Col sm={6} style={{ paddingTop: 5 }}>
+                    <Col sm={9} style={{ paddingTop: 5 }}>
                       <Link to={`${this.props.URL}/${section.attributes.uid}`}>
                         {section.attributes.name}
                       </Link>
                     </Col>
-                    <Col sm={6}>
-                      <Button
-                        data-tooltip="Detail"
-                        color="secondary"
-                        className="mr-2"
+                    <Col sm={3}>
+                      <Link to={`${this.props.URL}/${section.attributes.uid}`}>
+                        <Button
+                          data-tooltip="Detail"
+                          color="secondary"
+                          className="mr-2"
+                        >
+                          <i className="fa fa-eye" />
+                        </Button>
+                      </Link>
+                      <Link
+                        to={`${this.props.URL}/${section.attributes.uid}/edit`}
                       >
-                        <i className="fa fa-eye" />
-                      </Button>
-                      <Button
-                        data-tooltip="Edit"
-                        color="primary"
-                        className="mr-2"
-                      >
-                        <i className="fa fa-pencil" />
-                      </Button>
-                      <PopoverDelete />
+                        <Button
+                          data-tooltip="Edit"
+                          color="primary"
+                          className="mr-2"
+                        >
+                          <i className="fa fa-pencil" />
+                        </Button>
+                      </Link>
+                      {section.children.length < 1 ? (
+                        <PopoverDelete
+                          id={section.attributes.uid}
+                          onClick={() =>
+                            this.props.onRemoveExsectionSectionEntity({
+                              uid: section.attributes.uid,
+                              routeToManageSections: this.props
+                                .routeToManageSections
+                            })
+                          }
+                        />
+                      ) : (
+                        <PopoverDelete
+                          id={section.attributes.uid}
+                          childCountValue={section.children.length}
+                          parentNameText={section.attributes.name}
+                        />
+                      )}
                     </Col>
                   </Row>
                 </div>

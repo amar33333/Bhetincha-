@@ -15,7 +15,8 @@ import {
   onCreateSectionBusiness,
   resetState,
   onSectionUpdateBusinessExsection,
-  onBusinessCatDetailsList
+  onBusinessCatDetailsList,
+  onRemoveExsectionSectionEntity
 } from "../../actions";
 
 class ManageSections extends Component {
@@ -27,14 +28,6 @@ class ManageSections extends Component {
   }
 
   render() {
-    // console.log("cole attributes", this.props);
-    //let sectionArray = JSON.stringify(this.props.businessSection);
-    //console.log("Business Section Data", JSON.stringify(this.props.businessSection));
-    //console.log("Section Length", Object.keys(this.props.businessSection).length);
-    //console.log("Section Length", sectionArray.length);
-    //console.log("Section Length", this.props.businessSection.[0].length);
-    // let mapped = this.props.businessSection.map(x => x.name);
-    // console.log(mapped);
     let button;
     if (JSON.stringify(this.props.businessSection).length < 1) {
       button = <ManageAvailableBusinessSection />;
@@ -45,7 +38,6 @@ class ManageSections extends Component {
             <SideSectionsView
               sectionsAdmin={this.props.sectionsAdmin}
               resetState={this.props.resetState}
-              //onChangeActiveSection={this.props.onChangeActiveSectionBusiness}
               onChangeActiveSection={(uid, children, topSectionAdmin) => {
                 this.props.history.push(
                   `/${
@@ -85,6 +77,9 @@ class ManageSections extends Component {
                   URL={`/${
                     this.props.match.params.businessName
                   }/dashboard/exsection/manage-sections`}
+                  onRemoveExsectionSectionEntity={
+                    this.props.onRemoveExsectionSectionEntity
+                  }
                   loading={this.props.loading}
                 />
               )}
@@ -172,6 +167,7 @@ export default connect(
     resetState,
     onSectionUpdateBusinessExsection,
     onChangeActiveSectionBusinessByClick,
-    onBusinessCatDetailsList
+    onBusinessCatDetailsList,
+    onRemoveExsectionSectionEntity
   }
 )(ManageSections);

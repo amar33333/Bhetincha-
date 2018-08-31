@@ -12,12 +12,12 @@ const items = {
       title: true,
       name: `${ROUTE_PARAMS_BUSINESS_NAME}`
     },
-    {
-      name: "Business Detail",
-      url: `/${ROUTE_PARAMS_BUSINESS_NAME}/dashboard/business-detail`,
-      icon: "fa fa-map-o"
-      // permission: "CAN_VIEW_USERS"
-    },
+    // {
+    //   name: "Business Detail",
+    //   url: `/${ROUTE_PARAMS_BUSINESS_NAME}/dashboard/business-detail`,
+    //   icon: "fa fa-map-o"
+    //   // permission: "CAN_VIEW_USERS"
+    // },
     {
       name: "Change Slug",
       className: "joyride-slug",
@@ -106,13 +106,13 @@ const items = {
     {
       name: "Sections",
       url: `/${ROUTE_PARAMS_BUSINESS_NAME}/dashboard/section`,
-      icon: "fa fa-users",
+      icon: "fa fa-th-large",
       // permission: "CAN_VIEW_USER",
       children: [
         {
           name: "Manage Sections",
           url: `/${ROUTE_PARAMS_BUSINESS_NAME}/dashboard/section/manage-sections`,
-          icon: "icon-user-follow"
+          icon: "fa fa-th"
           // permission: "CAN_VIEW_USER"
         }
       ]

@@ -36,29 +36,32 @@ class PropertyItemAddNew extends Component {
       filterable: false,
       loading: false,
       error: false,
-      propertySubmit: false
+      propertySubmit: false,
+      placeholder: "",
+      showKey: false
     };
   }
-  // componentDidUpdate = (_, prevState) => {
-  //   if (prevState.propertySubmit && !this.props.loading) {
-  //     const updates = { propertySubmit: false };
-  //     if (!this.props.error) {
-  //       updates.name = "";
-  //       updates.fieldType = null;
-  //       updates.required = false;
-  //       updates.defaultValueString = "";
-  //       updates.defaultValueLongString = "";
-  //       updates.defaultValueDateTime = new Date();
-  //       updates.defaultValueChoices = null;
-  //       updates.defaultValueMultipleChoices = null;
-  //       updates.defaultValueInteger = 0;
-  //       updates.defaultValueFloat = 0;
-  //       updates.options = [];
-  //       updates.filterable = false;
-  //     }
-  //     this.setState(updates, () => this.focusableInput.focus());
-  //   }
-  // };
+  componentDidUpdate = (_, prevState) => {
+    if (prevState.propertySubmit && !this.props.loading) {
+      const updates = { propertySubmit: false };
+      if (!this.props.error) {
+        updates.name = "";
+        updates.fieldType = null;
+        updates.required = false;
+        updates.defaultValueString = "";
+        updates.defaultValueDateTime = new Date();
+        updates.defaultValueChoices = null;
+        updates.defaultValueMultipleChoices = null;
+        updates.defaultValueInteger = 0;
+        updates.defaultValueFloat = 0;
+        updates.options = [];
+        updates.filterable = false;
+        updates.placeholder = "";
+        updates.showKey = false;
+      }
+      this.setState(updates, () => this.focusableInput.focus());
+    }
+  };
 
   componentDidUpdate = (_, prevState) => {
     if (prevState.propertySubmit && !this.props.loading) {
@@ -76,6 +79,8 @@ class PropertyItemAddNew extends Component {
         updates.defaultValueFloat = 0;
         updates.options = [];
         updates.filterable = false;
+        updates.placeholder = "";
+        updates.showKey = false;
       }
       this.setState(updates, () => this.focusableInput.focus());
     }
@@ -86,6 +91,9 @@ class PropertyItemAddNew extends Component {
       "name",
       event.target.value.replace(/\b\w/g, l => l.toUpperCase())
     );
+
+  onChangePlaceholder = event =>
+    this.onChange("placeholder", event.target.value);
 
   onChange = (key, value) => this.setState({ [key]: value });
 
@@ -105,7 +113,9 @@ class PropertyItemAddNew extends Component {
       defaultValueLongString,
       options,
       optionsMultiple,
-      filterable
+      filterable,
+      placeholder,
+      showKey
     } = this.state;
 
     const body = {
@@ -114,8 +124,8 @@ class PropertyItemAddNew extends Component {
       sectionId: this.props.activeSection,
       required,
       filterAble: filterable,
-      showKey: false,
-      placeholder: "Default placeholder"
+      placeholder,
+      showKey: showKey
     };
 
     if (fieldType.name === "Choices") {
@@ -159,6 +169,7 @@ class PropertyItemAddNew extends Component {
     );
   };
   render() {
+    //console.log("Show Key",showKey);
     return (
       <div>
         <Card>
@@ -416,8 +427,38 @@ class PropertyItemAddNew extends Component {
                     </FormGroup>
                   </div>
                 )}
-              </FormGroup>
 
+                <FormGroup row>
+                  <Label sm={3}>Placeholder</Label>
+                  <Col sm={9}>
+                    <Input
+                      required
+                      placeholder="Placeholder Text"
+                      type="text"
+                      value={this.state.placeholder}
+                      onChange={this.onChangePlaceholder}
+                    />
+                  </Col>
+                </FormGroup>
+
+                <FormGroup row>
+                  <Label sm={3} />
+                  <Col sm={9}>
+                    <FormGroup check>
+                      <Label check>
+                        <Input
+                          type="checkbox"
+                          checked={this.state.showKey}
+                          onChange={event =>
+                            this.setState({ showKey: event.target.checked })
+                          }
+                        />
+                        Show Key
+                      </Label>
+                    </FormGroup>
+                  </Col>
+                </FormGroup>
+              </FormGroup>
               <Button color="primary">
                 <span className="fa fa-plus" /> Add
               </Button>

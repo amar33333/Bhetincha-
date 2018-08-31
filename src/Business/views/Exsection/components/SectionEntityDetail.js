@@ -1,7 +1,4 @@
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
-
-import { PopoverDelete } from "../../../../Common/components";
 import { Row, Col, Button } from "reactstrap";
 
 class SectionEntityDetail extends Component {
@@ -23,22 +20,6 @@ class SectionEntityDetail extends Component {
                 <h3 className="mb-0">
                   Entity Information of {sectionEntityDetailBiz.properties.name}
                 </h3>
-                <Link to={this.props.editURL} className="ml-2">
-                  <Button color="primary">
-                    <i className="fa fa-pencil" /> Edit
-                  </Button>
-                </Link>
-                <div className="ml-2">
-                  <PopoverDelete
-                    text="Delete"
-                    onClick={() =>
-                      this.props.onRemoveExsectionSectionEntity({
-                        uid: sectionEntityDetailBiz.properties.uid,
-                        routeToManageSections: this.props.routeToManageSections
-                      })
-                    }
-                  />
-                </div>
               </Col>
             </Row>
             <Row>
