@@ -10,7 +10,8 @@ import {
   Col,
   Input,
   Button,
-  Alert
+  Alert,
+  InputGroup
 } from "reactstrap";
 import Select from "react-select";
 
@@ -20,6 +21,9 @@ import "react-datetime/css/react-datetime.css";
 import DocumentInput from "./DocumentInput";
 
 import { SectionLoadingEffect } from "../../../../Common/components";
+
+import getBase64 from "../../../../Common/utils/getBase64";
+import { MAIN_URL } from "../../../../Common/utils/API";
 
 class RecordAddEdit extends Component {
   constructor(props) {
@@ -32,7 +36,8 @@ class RecordAddEdit extends Component {
       documents: [DocumentInput],
       inputValues: [],
       selectedOption: null,
-      parentSectionId: null
+      parentSectionId: null,
+      profilePictureFile: ""
     };
     this.renderField = this.renderField.bind(this);
     this.onChange = this.onChange.bind(this);
@@ -133,7 +138,7 @@ class RecordAddEdit extends Component {
     //console.log("this.props", this.props);
     const { inputValues } = this.state;
 
-    console.log("soling inputValues", inputValues);
+    // console.log("soling inputValues", inputValues);
     let parentSectionId;
     if (this.props.parentSectionBiz && this.props.parentSectionBiz.sections) {
       parentSectionId = this.state.selectedOption
@@ -338,6 +343,122 @@ class RecordAddEdit extends Component {
           </FormGroup>
         );
 
+      // Start here
+      case "LongString":
+        return (
+          <FormGroup row key={attribute.uid}>
+            <Label sm={3}>{`${attribute.name.split("_").join(" ")} ${
+              attribute.required ? "*" : ""
+            }`}</Label>
+            <Col sm={4}>
+              <InputGroup>
+                <Input
+                  type="textarea"
+                  rows={8}
+                  required={attribute.required}
+                  placeholder={attribute.name}
+                  // value={this.state[attribute.name]}
+                  onChange={event =>
+                    this.onChange(attribute.name, event.target.value, mykey)
+                  }
+                />
+              </InputGroup>
+            </Col>
+          </FormGroup>
+        );
+      //end here
+
+      //start here
+
+      case "URL":
+        return (
+          <FormGroup row key={attribute.uid}>
+            <Label sm={3}>{`${attribute.name.split("_").join(" ")} ${
+              attribute.required ? "*" : ""
+            }`}</Label>
+
+            <Col sm={6}>
+              <InputGroup>
+                <Input
+                  type="text"
+                  required={attribute.required}
+                  placeholder={attribute.name}
+                  //value={this.state[attribute.name]}
+                  onChange={event =>
+                    this.onChange(attribute.name, event.target.value, mykey)
+                  }
+                />
+              </InputGroup>
+            </Col>
+          </FormGroup>
+        );
+      //end here
+
+      //start here
+
+      case "Image":
+        return (
+          <div key={attribute.uid}>
+            {/* reminder // need profilePicture variable in the state  */}
+            {/* uploaded photo section start here */}
+            {/* {this.state.profilePicture && (
+              <FormGroup row key={attribute.uid}>
+                <Label sm={3}>Uploaded Photo</Label>
+                <Col sm={9}>
+                  <img
+                    alt="main"
+                    style={{ width: 100, height: 100 }}
+                    src={`${MAIN_URL}${this.state.profilePicture}`}
+                  />
+                </Col>
+              </FormGroup>
+            )} */}
+            {/* uploaded photo section end here */}
+
+            <FormGroup row key={attribute.uid}>
+              <Label sm={3}>{`${attribute.name.split("_").join(" ")} ${
+                attribute.required ? "*" : ""
+              }`}</Label>
+              <Col sm={6}>
+                <InputGroup>
+                  <Input
+                    type="file"
+                    required={attribute.required}
+                    placeholder={attribute.name}
+                    accept="image/*"
+                    //value={this.state[attribute.name]}
+                    // onChange={event =>
+                    //   this.onChange(attribute.name, event.target.value, mykey)
+                    // }
+                    onChange={event =>
+                      getBase64(event.target.files[0]).then(file =>
+                        this.setState({ profilePictureFile: file })
+                      )
+                    }
+                  />
+                </InputGroup>
+              </Col>
+            </FormGroup>
+
+            {/* selected photo section start here */}
+
+            {this.state.profilePictureFile && (
+              <div>
+                <h5>Selected Photo</h5>
+                <img
+                  alt={this.state.profilePictureFile.name}
+                  src={this.state.profilePictureFile.base64}
+                  key={this.state.profilePictureFile.name}
+                  style={{ width: 50, height: 50 }}
+                />
+              </div>
+            )}
+
+            {/* selected photo section end here */}
+          </div>
+        );
+
+      //end here
       case "Choices":
         return (
           <FormGroup row key={attribute.uid}>

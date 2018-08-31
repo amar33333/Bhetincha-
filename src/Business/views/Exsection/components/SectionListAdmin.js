@@ -1,18 +1,26 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import { Card, CardHeader, CardBody, Nav, NavItem, NavLink } from "reactstrap";
+import "./sectionListAdmin.css";
 
 class SectionListAdmin extends Component {
   constructor(props) {
     super(props);
 
+    this.state = { activeIndex: 20, activeIndex2: 20 };
+
     this.renderSubSection = this.renderSubSection.bind(this);
     this.handleSectionClick = this.handleSectionClick.bind(this);
+    this.handleSectionClick2 = this.handleSectionClick2.bind(this);
   }
 
   renderSubSection(options) {
     const menuOptions = options.map(option => {
       let subMenu;
+      const className2 =
+        this.state.activeIndex2 === this.props.activeSectionAdminId
+          ? "bg-dark txtColorWhite"
+          : "";
       if (option.children && option.children.length > 0) {
         subMenu = this.renderSubSection(option.children);
       }
@@ -23,10 +31,11 @@ class SectionListAdmin extends Component {
               <NavItem>
                 {this.props.topSectionAdmin && (
                   <NavLink
-                    className="navbar-light bg-light"
+                    className={`navbar-light
+                  bg-light ${className2}`}
                     style={{ cursor: "pointer" }}
                     onClick={() => {
-                      return this.handleSectionClick(option.uid);
+                      return this.handleSectionClick2(option.uid);
                     }}
                   >
                     {option ? option.name : ""}
@@ -44,9 +53,21 @@ class SectionListAdmin extends Component {
 
   handleSectionClick(uid) {
     this.props.onChangeActiveSectionByClick(uid);
+
+    this.setState({ activeIndex: uid, activeIndex2: 20 });
+  }
+
+  handleSectionClick2(uid) {
+    this.props.onChangeActiveSectionByClick(uid);
+
+    this.setState({ activeIndex: 20, activeIndex2: uid });
   }
 
   render() {
+    const className =
+      this.state.activeIndex === this.props.activeSectionAdminId
+        ? "bg-dark txtColorWhite"
+        : "";
     return (
       <div>
         <Card>
@@ -61,8 +82,8 @@ class SectionListAdmin extends Component {
             <Nav vertical>
               <NavItem>
                 <NavLink
-                  className="navbar-light
-                  bg-light"
+                  className={`navbar-light
+                  bg-light ${className}`}
                   style={{ cursor: "pointer" }}
                   onClick={() => {
                     return this.handleSectionClick(

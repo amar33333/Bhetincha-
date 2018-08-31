@@ -25,6 +25,7 @@ class PropertyItemAddNew extends Component {
       fieldType: null,
       required: false,
       defaultValueString: "",
+      defaultValueLongString: "",
       defaultValueDateTime: new Date(),
       defaultValueChoices: null,
       defaultValueMultipleChoices: null,
@@ -38,25 +39,26 @@ class PropertyItemAddNew extends Component {
       propertySubmit: false
     };
   }
-  componentDidUpdate = (_, prevState) => {
-    if (prevState.propertySubmit && !this.props.loading) {
-      const updates = { propertySubmit: false };
-      if (!this.props.error) {
-        updates.name = "";
-        updates.fieldType = null;
-        updates.required = false;
-        updates.defaultValueString = "";
-        updates.defaultValueDateTime = new Date();
-        updates.defaultValueChoices = null;
-        updates.defaultValueMultipleChoices = null;
-        updates.defaultValueInteger = 0;
-        updates.defaultValueFloat = 0;
-        updates.options = [];
-        updates.filterable = false;
-      }
-      this.setState(updates, () => this.focusableInput.focus());
-    }
-  };
+  // componentDidUpdate = (_, prevState) => {
+  //   if (prevState.propertySubmit && !this.props.loading) {
+  //     const updates = { propertySubmit: false };
+  //     if (!this.props.error) {
+  //       updates.name = "";
+  //       updates.fieldType = null;
+  //       updates.required = false;
+  //       updates.defaultValueString = "";
+  //       updates.defaultValueLongString = "";
+  //       updates.defaultValueDateTime = new Date();
+  //       updates.defaultValueChoices = null;
+  //       updates.defaultValueMultipleChoices = null;
+  //       updates.defaultValueInteger = 0;
+  //       updates.defaultValueFloat = 0;
+  //       updates.options = [];
+  //       updates.filterable = false;
+  //     }
+  //     this.setState(updates, () => this.focusableInput.focus());
+  //   }
+  // };
 
   componentDidUpdate = (_, prevState) => {
     if (prevState.propertySubmit && !this.props.loading) {
@@ -66,6 +68,7 @@ class PropertyItemAddNew extends Component {
         updates.fieldType = null;
         updates.required = false;
         updates.defaultValueString = "";
+        updates.defaultValueLongString = "";
         updates.defaultValueDateTime = new Date();
         updates.defaultValueChoices = null;
         updates.defaultValueMultipleChoices = null;
@@ -99,6 +102,7 @@ class PropertyItemAddNew extends Component {
       defaultValueChoices,
       defaultValueMultipleChoices,
       defaultValueString,
+      defaultValueLongString,
       options,
       optionsMultiple,
       filterable
@@ -109,7 +113,9 @@ class PropertyItemAddNew extends Component {
       attributeTypeId: fieldType.uid,
       sectionId: this.props.activeSection,
       required,
-      filterAble: filterable
+      filterAble: filterable,
+      showKey: false,
+      placeholder: "Default placeholder"
     };
 
     if (fieldType.name === "Choices") {
@@ -139,6 +145,9 @@ class PropertyItemAddNew extends Component {
           break;
         case "MultipleChoices":
           body.defaultValue = defaultValueMultipleChoices.value;
+          break;
+        case "LongString":
+          body.defaultValue = defaultValueLongString;
           break;
         default:
           break;
@@ -306,6 +315,28 @@ class PropertyItemAddNew extends Component {
                             </Col>
                           </FormGroup>
                         )}
+
+                        {/* start */}
+                        {this.state.fieldType.name === "LongString" && (
+                          <FormGroup row>
+                            <Label sm={3}>Default Value</Label>
+                            <Col sm={9}>
+                              <Input
+                                required
+                                type="textarea"
+                                placeholder="Default Value"
+                                value={this.state.defaultValueLongString}
+                                onChange={event =>
+                                  this.onChange(
+                                    "defaultValueLongString",
+                                    event.target.value
+                                  )
+                                }
+                              />
+                            </Col>
+                          </FormGroup>
+                        )}
+                        {/* end */}
                         {this.state.fieldType.name === "Integer" && (
                           <FormGroup row>
                             <Label sm={3}>Default Value</Label>

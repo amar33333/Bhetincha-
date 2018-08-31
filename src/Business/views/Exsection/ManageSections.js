@@ -27,7 +27,7 @@ class ManageSections extends Component {
   }
 
   render() {
-    //console.log("Business Section Data", this.props.businessSection);
+    // console.log("cole attributes", this.props);
     //let sectionArray = JSON.stringify(this.props.businessSection);
     //console.log("Business Section Data", JSON.stringify(this.props.businessSection));
     //console.log("Section Length", Object.keys(this.props.businessSection).length);
@@ -70,6 +70,7 @@ class ManageSections extends Component {
                 onChangeActiveSectionByClick={
                   this.props.onChangeActiveSectionBusinessByClick
                 }
+                activeSectionAdminId={this.props.activeSectionAdminId}
               />
             )}
           </Col>

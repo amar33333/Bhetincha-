@@ -1767,11 +1767,11 @@ export const onExsectionSectionDetailGetAdmin = ({ uid }) =>
 //will create new section for eg menu section in admin
 //while creating FoodCategory
 //req payload {name: "Food Category", hasAttr: true, parent: "fdcde3ca3f3e4b249a9db0d7982d57b5"}
-export const onExsectionSectionPostAdmin = ({ name, hasAttr, parent }) =>
+export const onExsectionSectionPostAdmin = ({ name, label, hasAttr, parent }) =>
   ajax({
     method: "POST",
     url: EXSECTION_SECTION_URL,
-    body: { name, hasAttr, parent },
+    body: { name, label, hasAttr, parent },
     headers: {
       "Content-Type": "application/json"
     }

@@ -13,7 +13,7 @@ import {
 } from "reactstrap";
 
 class SectionDetailView extends Component {
-  state = { section: "" };
+  state = { section: "", label: "default labell" };
 
   onChangeSection = event =>
     this.setState({
@@ -22,7 +22,10 @@ class SectionDetailView extends Component {
 
   onFormSubmit = event => {
     event.preventDefault();
-    this.props.onSectionSubmit({ name: this.state.section });
+    this.props.onSectionSubmit({
+      name: this.state.section,
+      label: this.state.label
+    });
     this.setState({ section: "" });
   };
 
