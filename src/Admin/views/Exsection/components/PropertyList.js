@@ -43,7 +43,8 @@ class PropertyList extends Component {
           s_no: ++len,
           section: breadcrumb.name,
           uidSection: breadcrumb.uid,
-          uidPage: section.uid
+          uidPage: section.uid,
+          showKey: property.showKey ? "Yes" : "No"
         }))
       );
     });
@@ -119,6 +120,8 @@ class PropertyList extends Component {
         Header: "Filterable",
         accessor: "filterAble"
       },
+      { Header: "Placeholder", accessor: "placeholder" },
+      { Header: "Show Key", accessor: "showKey" },
       {
         Header: "Actions",
         id: "edit",

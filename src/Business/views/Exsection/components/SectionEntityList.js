@@ -5,8 +5,6 @@ import { SectionLoadingEffect } from "../../../../Common/components";
 import { PopoverDelete } from "../../../../Common/components";
 class SectionEntityList extends Component {
   render() {
-    console.log("Sections", this.props.sections);
-
     return (
       <div>
         <Card>

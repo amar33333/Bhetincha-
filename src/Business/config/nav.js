@@ -106,13 +106,13 @@ const items = {
     {
       name: "Sections",
       url: `/${ROUTE_PARAMS_BUSINESS_NAME}/dashboard/section`,
-      icon: "fa fa-users",
+      icon: "fa fa-th-large",
       // permission: "CAN_VIEW_USER",
       children: [
         {
           name: "Manage Sections",
           url: `/${ROUTE_PARAMS_BUSINESS_NAME}/dashboard/section/manage-sections`,
-          icon: "icon-user-follow"
+          icon: "fa fa-th"
           // permission: "CAN_VIEW_USER"
         }
       ]

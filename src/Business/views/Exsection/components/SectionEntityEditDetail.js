@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import AboutUsEditor from "../../../../Website/Views/Minisite/components/AboutUs/AboutUsEditor";
 import {
   Card,
   CardHeader,
@@ -344,9 +345,9 @@ class SectionEntityEditDetail extends Component {
             <Label sm={3}>{`${attribute.name.split("_").join(" ")} ${
               attribute.required ? "*" : ""
             }`}</Label>
-            <Col sm={4}>
+            <Col sm={9}>
               <InputGroup>
-                {attribute.unit &&
+                {/* {attribute.unit &&
                 attribute.unit.length &&
                 attribute.unit[0].indexOf("--") !== -1 ? (
                   <InputGroupAddon addonType="prepend">
@@ -354,8 +355,19 @@ class SectionEntityEditDetail extends Component {
                       {attribute.unit[0].split("--")[0]}
                     </InputGroupText>
                   </InputGroupAddon>
-                ) : null}
-                <Input
+                ) : null} */}
+                <AboutUsEditor
+                  readOnly={this.props.loading}
+                  required={attribute.required}
+                  placeholder={attribute.name}
+                  value={this.state[attribute.name]}
+                  onChange={value => this.onChange(attribute.name, value)}
+                  // onChange={event =>
+                  //   this.onChange(attribute.name, event.target.value)
+                  // }
+                />
+
+                {/* <Input
                   type="textarea"
                   rows={6}
                   required={attribute.required}
@@ -364,14 +376,14 @@ class SectionEntityEditDetail extends Component {
                   onChange={event =>
                     this.onChange(attribute.name, event.target.value)
                   }
-                />
-                {attribute.unit &&
+                /> */}
+                {/* {attribute.unit &&
                 attribute.unit.length &&
                 attribute.unit[0].indexOf("--") === -1 ? (
                   <InputGroupAddon addonType="append">
                     {attribute.unit[0].split("--")[0]}
                   </InputGroupAddon>
-                ) : null}
+                ) : null} */}
               </InputGroup>
             </Col>
           </FormGroup>
@@ -464,12 +476,13 @@ class SectionEntityEditDetail extends Component {
         </CardHeader>
         <CardBody>
           <Form onSubmit={this.onFormSubmit}>
-            <FormGroup className="mb-2 mr-sm-2 mb-sm-0">
-              {this.props.attributes.map(attribute =>
-                this.renderField(attribute)
-              )}
-
-              <div>
+            {this.props.attributes.map(attribute =>
+              this.renderField(attribute)
+            )}
+            <br />
+            <br />
+            <Row>
+              <Col sm={4}>
                 <Button
                   type="submit"
                   color="primary"
@@ -478,8 +491,8 @@ class SectionEntityEditDetail extends Component {
                   <span className="fa fa-floppy-o" /> Save Changes
                 </Button>{" "}
                 <Button onClick={() => this.props.routeToView()}>Cancel</Button>
-              </div>
-            </FormGroup>
+              </Col>
+            </Row>
           </Form>
         </CardBody>
       </Card>
