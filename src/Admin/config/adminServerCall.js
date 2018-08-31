@@ -1860,6 +1860,15 @@ export const onExsectionPropertiesPut = ({ body }) =>
       "Content-Type": "application/json"
     }
   });
+export const onExsectionPropertiesPlaceholderPut = ({ body }) =>
+  ajax({
+    method: "PUT",
+    url: EXSECTION_ATTRIBUTE_URL,
+    body,
+    headers: {
+      "Content-Type": "application/json"
+    }
+  });
 
 //onExsectionPropertiesDelete
 export const onExsectionPropertiesDelete = ({ body }) =>

@@ -20,7 +20,8 @@ import {
   onAttributesListExsection,
   onPropertySubmitExsection,
   onPropertyRemoveExsection,
-  onPropertyUpdateExsection
+  onPropertyUpdateExsection,
+  onPropertyUpdatePlaceholderExsection
 } from "../../actions";
 
 import { PopoverDelete } from "../../../Common/components";
@@ -97,6 +98,9 @@ class ManageSections extends Component {
                     activeSection={this.props.activeSection}
                     onPropertyRemove={this.props.onPropertyRemoveExsection}
                     onPropertyUpdate={this.props.onPropertyUpdateExsection}
+                    onPropertyUpdatePlaceholder={
+                      this.props.onPropertyUpdatePlaceholderExsection
+                    }
                   />
                 </div>
               )}
@@ -139,6 +143,7 @@ export default connect(
     onChangeActiveSectionExsection,
     onPropertySubmitExsection,
     onPropertyRemoveExsection,
-    onPropertyUpdateExsection
+    onPropertyUpdateExsection,
+    onPropertyUpdatePlaceholderExsection
   }
 )(ManageSections);
