@@ -52,4 +52,4 @@ const EXSECTION = "sections";
 export const EXSECTION_SECTION_BUSINESS_URL = `${MAIN_URL}/${EXSECTION}/bizsec/`;
 export const EXSECTION_SECTION_BUSINESS_LIST_URL = `${MAIN_URL}/${EXSECTION}/biz/seclist`;
 
-export const EXSECTION_SECTION_ENTITY_URL = `${MAIN_URL}/${EXSECTION}/bizsec/`;
+export const EXSECTION_SUB_SECTION_DATA_URL = `${MAIN_URL}/${EXSECTION}/bizsec/`;

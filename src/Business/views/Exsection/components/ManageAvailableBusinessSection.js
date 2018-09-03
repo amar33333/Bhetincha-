@@ -1,17 +1,5 @@
 import React, { Component } from "react";
-import {
-  Card,
-  CardHeader,
-  CardBody,
-  Form,
-  FormGroup,
-  Label,
-  Row,
-  Col,
-  Input,
-  Button,
-  Alert
-} from "reactstrap";
+import { Card, CardHeader, CardBody } from "reactstrap";
 class ManageAvailableBusinessSection extends Component {
   render() {
     return (

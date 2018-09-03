@@ -1,12 +1,12 @@
 import React, { Component } from "react";
 import { Row, Col, Button } from "reactstrap";
 
-class SectionEntityDetail extends Component {
+class SubSectionDataDetail extends Component {
   render() {
-    const { sectionEntityDetailBiz } = this.props;
+    const { subSectionDataDetailBiz } = this.props;
     return (
       <div>
-        {sectionEntityDetailBiz.properties && (
+        {subSectionDataDetailBiz.properties && (
           <div>
             <Row className="mb-4">
               <Col
@@ -18,7 +18,8 @@ class SectionEntityDetail extends Component {
                 }}
               >
                 <h3 className="mb-0">
-                  Entity Information of {sectionEntityDetailBiz.properties.name}
+                  Sub-Section Information of
+                  {subSectionDataDetailBiz.properties.name}
                 </h3>
               </Col>
             </Row>
@@ -27,24 +28,26 @@ class SectionEntityDetail extends Component {
                 {this.props.attributes.map(attribute => {
                   let selectedKey = "";
                   if (
-                    Object.keys(sectionEntityDetailBiz.properties).find(key => {
-                      let attributeNameUpper = attribute.name;
-                      if (attributeNameUpper === "Name") {
-                        attributeNameUpper =
-                          attributeNameUpper.charAt(0).toLowerCase() +
-                          attributeNameUpper.slice(1);
+                    Object.keys(subSectionDataDetailBiz.properties).find(
+                      key => {
+                        let attributeNameUpper = attribute.name;
+                        if (attributeNameUpper === "Name") {
+                          attributeNameUpper =
+                            attributeNameUpper.charAt(0).toLowerCase() +
+                            attributeNameUpper.slice(1);
+                        }
+                        const found = key.split("--")[0] === attributeNameUpper;
+                        if (found) selectedKey = key;
+                        return found;
                       }
-                      const found = key.split("--")[0] === attributeNameUpper;
-                      if (found) selectedKey = key;
-                      return found;
-                    })
+                    )
                   ) {
                     return (
                       <p key={attribute.uid} className="product-spec-item">
                         {attribute.name.split("_").join(" ")}:{" "}
                         {selectedKey.split("--").length === 2
                           ? `${
-                              sectionEntityDetailBiz.properties[selectedKey]
+                              subSectionDataDetailBiz.properties[selectedKey]
                             } ${
                               selectedKey.split("--").length > 1
                                 ? selectedKey.split("--")[1]
@@ -55,7 +58,7 @@ class SectionEntityDetail extends Component {
                                 ? selectedKey.split("--")[1]
                                 : ""
                             } ${
-                              sectionEntityDetailBiz.properties[selectedKey]
+                              subSectionDataDetailBiz.properties[selectedKey]
                             }`}
                       </p>
                     );
@@ -72,4 +75,4 @@ class SectionEntityDetail extends Component {
   }
 }
 
-export default SectionEntityDetail;
+export default SubSectionDataDetail;

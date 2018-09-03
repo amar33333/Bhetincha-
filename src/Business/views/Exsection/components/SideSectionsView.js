@@ -24,16 +24,10 @@ class SideSectionsView extends Component {
     this.props.resetState();
     this.props.onChangeActiveSection(
       uid,
-      //  this.props.topSectionAdminId, //this.props.activeSectionAdminId,
       children ? children[0] : null,
       topSectionAdmin
     );
 
-    // this.props.history.push(
-    //   `/${
-    //     this.props.match.params.businessName
-    //   }/dashboard/section/manage-sections/${uid}`
-    // );
     this.setState({ activeIndex: index });
   }
 

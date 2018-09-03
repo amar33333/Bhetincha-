@@ -2,20 +2,20 @@ import SideSectionsView from "./SideSectionsView";
 import RecordAddNew from "./RecordAddNew";
 
 import SectionEditViewBusiness from "./SectionEditViewBusiness";
-import SectionEntityList from "./SectionEntityList";
-import SectionEntityDetail from "./SectionEntityDetail";
+import SubSectionDataList from "./SubSectionDataList";
+import SubSectionDataDetail from "./SubSectionDataDetail";
 
 import SectionListAdmin from "./SectionListAdmin";
-import SectionEntityEditDetail from "./SectionEntityEditDetail";
+import SubSectionDataEditDetail from "./SubSectionDataEditDetail";
 import ManageAvailableBusinessSection from "./ManageAvailableBusinessSection";
 
 export {
   SideSectionsView,
   RecordAddNew,
   SectionEditViewBusiness,
-  SectionEntityList,
-  SectionEntityDetail,
+  SubSectionDataList,
+  SubSectionDataDetail,
   SectionListAdmin,
-  SectionEntityEditDetail,
+  SubSectionDataEditDetail,
   ManageAvailableBusinessSection
 };

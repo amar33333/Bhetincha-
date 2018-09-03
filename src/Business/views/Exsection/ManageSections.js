@@ -4,7 +4,7 @@ import { Container, Row, Col } from "reactstrap";
 import { SideSectionsView } from "./components";
 import { RecordAddNew } from "./components";
 
-import { SectionEntityList } from "./components";
+import { SubSectionDataList } from "./components";
 import { SectionListAdmin } from "./components";
 import { ManageAvailableBusinessSection } from "./components";
 
@@ -16,7 +16,7 @@ import {
   resetState,
   onSectionUpdateBusinessExsection,
   onBusinessCatDetailsList,
-  onRemoveExsectionSectionEntity
+  onRemoveExsectionSubSectionData
 } from "../../actions";
 
 class ManageSections extends Component {
@@ -53,8 +53,6 @@ class ManageSections extends Component {
               activeSectionAdminId={this.props.activeSectionAdminId}
               rootNodeAdminId={this.props.rootNodeAdminId}
             />
-            <br />
-            <br />
             {this.props.activeChildrenAdmin !== null && (
               <SectionListAdmin
                 topSectionAdmin={this.props.topSectionAdmin}
@@ -69,7 +67,7 @@ class ManageSections extends Component {
           <Col xs="12" md="9">
             {this.props.selectedSectionDetailBiz &&
               this.props.selectedSectionDetailBiz.sections && (
-                <SectionEntityList
+                <SubSectionDataList
                   sections={this.props.selectedSectionDetailBiz.sections}
                   selectedSectionDetailAdmin={
                     this.props.selectedSectionDetailAdmin
@@ -77,8 +75,8 @@ class ManageSections extends Component {
                   URL={`/${
                     this.props.match.params.businessName
                   }/dashboard/exsection/manage-sections`}
-                  onRemoveExsectionSectionEntity={
-                    this.props.onRemoveExsectionSectionEntity
+                  onRemoveExsectionSubSectionData={
+                    this.props.onRemoveExsectionSubSectionData
                   }
                   loading={this.props.loading}
                 />
@@ -168,6 +166,6 @@ export default connect(
     onSectionUpdateBusinessExsection,
     onChangeActiveSectionBusinessByClick,
     onBusinessCatDetailsList,
-    onRemoveExsectionSectionEntity
+    onRemoveExsectionSubSectionData
   }
 )(ManageSections);

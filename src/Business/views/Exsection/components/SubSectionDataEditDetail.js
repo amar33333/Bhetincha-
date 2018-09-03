@@ -19,17 +19,16 @@ import Select from "react-select";
 
 import DateTime from "react-datetime";
 import "react-datetime/css/react-datetime.css";
-import "./sectionEntityEditDetail.css";
+import "./subSectionDataEditDetail.css";
 
 import getBase64 from "../../../../Common/utils/getBase64";
 import { MAIN_URL } from "../../../../Common/utils/API";
 
-class SectionEntityEditDetail extends Component {
+class SubSectionDataEditDetail extends Component {
   constructor(props) {
     super(props);
 
     let extra = this.getAttributesToState(props.attributes);
-    //console.log("consoling section entity props", this.props);
     if (props.defaultValue && props.attributes) {
       extra = {
         ...extra,
@@ -39,7 +38,7 @@ class SectionEntityEditDetail extends Component {
 
     this.state = {
       dropdownOpen: false,
-      sectionEntitySubmit: false,
+      subSectionDataSubmit: false,
       ...extra
     };
   }
@@ -68,8 +67,8 @@ class SectionEntityEditDetail extends Component {
       }
     }
 
-    if (prevState.sectionEntitySubmit && !this.props.loading) {
-      let updates = { sectionEntitySubmit: false };
+    if (prevState.subSectionDataSubmit && !this.props.loading) {
+      let updates = { subSectionDataSubmit: false };
       if (!this.props.error) {
         if (!this.props.add) {
           this.props.routeToView();
@@ -84,11 +83,6 @@ class SectionEntityEditDetail extends Component {
     const extra = {};
     attributes.forEach(attribute => {
       extra[attribute.name] = "";
-      // attribute.defaultValue
-      //   ? attribute.fieldType === "DateTime"
-      //     ? new Date(attribute.defaultValue)
-      //     : attribute.defaultValue
-      //   : "";
     });
 
     return extra;
@@ -126,12 +120,8 @@ class SectionEntityEditDetail extends Component {
 
   onFormSubmit = event => {
     event.preventDefault();
-    const { sectionEntitySubmit, ...rest } = this.state;
-    //console.log("sectionEntitySubmit",sectionEntitySubmit);
-    //console.log("Rest Data",rest);
-
+    const { subSectionDataSubmit, ...rest } = this.state;
     const { defaultValue } = this.props;
-    //console.log("Default Data",defaultValue);
 
     const updates = {};
 
@@ -160,7 +150,6 @@ class SectionEntityEditDetail extends Component {
         if (key === "Name") {
           key = key.toLowerCase();
         }
-        //const unit = attribute.unit;
         updates[key] = {
           attributeType,
           value:
@@ -169,13 +158,11 @@ class SectionEntityEditDetail extends Component {
               : attributeType === "MultipleChoices"
                 ? value.map(({ value }) => value)
                 : value
-          //unit: unit && unit.length ? unit[0] : undefined
         };
       }
     });
-    //console.log("Update Data",updates);
     if (Object.keys(updates).length) {
-      this.setState({ sectionEntitySubmit: true }, () =>
+      this.setState({ subSectionDataSubmit: true }, () =>
         this.props.onSubmit({
           body: updates,
           uid: defaultValue.uid,
@@ -347,43 +334,13 @@ class SectionEntityEditDetail extends Component {
             }`}</Label>
             <Col sm={9}>
               <InputGroup>
-                {/* {attribute.unit &&
-                attribute.unit.length &&
-                attribute.unit[0].indexOf("--") !== -1 ? (
-                  <InputGroupAddon addonType="prepend">
-                    <InputGroupText>
-                      {attribute.unit[0].split("--")[0]}
-                    </InputGroupText>
-                  </InputGroupAddon>
-                ) : null} */}
                 <AboutUsEditor
                   readOnly={this.props.loading}
                   required={attribute.required}
                   placeholder={attribute.name}
                   value={this.state[attribute.name]}
                   onChange={value => this.onChange(attribute.name, value)}
-                  // onChange={event =>
-                  //   this.onChange(attribute.name, event.target.value)
-                  // }
                 />
-
-                {/* <Input
-                  type="textarea"
-                  rows={6}
-                  required={attribute.required}
-                  placeholder={attribute.name}
-                  value={this.state[attribute.name]}
-                  onChange={event =>
-                    this.onChange(attribute.name, event.target.value)
-                  }
-                /> */}
-                {/* {attribute.unit &&
-                attribute.unit.length &&
-                attribute.unit[0].indexOf("--") === -1 ? (
-                  <InputGroupAddon addonType="append">
-                    {attribute.unit[0].split("--")[0]}
-                  </InputGroupAddon>
-                ) : null} */}
               </InputGroup>
             </Col>
           </FormGroup>
@@ -472,7 +429,7 @@ class SectionEntityEditDetail extends Component {
     return (
       <Card>
         <CardHeader>
-          <strong>Edit Section Entity</strong>
+          <strong>Edit Sub-Section</strong>
         </CardHeader>
         <CardBody>
           <Form onSubmit={this.onFormSubmit}>
@@ -500,4 +457,4 @@ class SectionEntityEditDetail extends Component {
   }
 }
 
-export default SectionEntityEditDetail;
+export default SubSectionDataEditDetail;

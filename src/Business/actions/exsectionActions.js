@@ -21,9 +21,9 @@ import {
   CHANGE_SELETED_SECTION_DETAILS_BUSINESS_DATA_PENDING,
   CHANGE_SELETED_SECTION_DETAILS_BUSINESS_DATA_FULFILLED,
   CHANGE_SELETED_SECTION_DETAILS_BUSINESS_DATA_REJECTED,
-  FETCH_EXSECTION_SECTION_ENTITY_EACH_PENDING,
-  FETCH_EXSECTION_SECTION_ENTITY_EACH_FULFILLED,
-  FETCH_EXSECTION_SECTION_ENTITY_EACH_REJECTED,
+  FETCH_EXSECTION_SUB_SECTION_DATA_EACH_PENDING,
+  FETCH_EXSECTION_SUB_SECTION_DATA_EACH_FULFILLED,
+  FETCH_EXSECTION_SUB_SECTION_DATA_EACH_REJECTED,
   CHANGE_ROOT_SECTION_ADMIN,
   CHANGE_ACTIVE_EXSECTION_SECTION_BY_CLICK,
   INITIALIZE_TOP_SECTION_ADMIN_ID,
@@ -35,12 +35,12 @@ import {
   FETCH_CATEGORY_EACH_PENDING,
   FETCH_CATEGORY_EACH_REJECTED,
   FETCH_CATEGORY_SECTION_DATA,
-  UPDATE_EXSECTION_SECTION_ENTITY_EACH_PENDING,
-  UPDATE_EXSECTION_SECTION_ENTITY_EACH_FULFILLED,
-  UPDATE_EXSECTION_SECTION_ENTITY_EACH_REJECTED,
-  DELETE_EXSECTION_SECTION_ENTITY_PENDING,
-  DELETE_EXSECTION_SECTION_ENTITY_FULFILLED,
-  DELETE_EXSECTION_SECTION_ENTITY_REJECTED
+  UPDATE_EXSECTION_SUB_SECTION_DATA_EACH_PENDING,
+  UPDATE_EXSECTION_SUB_SECTION_DATA_EACH_FULFILLED,
+  UPDATE_EXSECTION_SUB_SECTION_DATA_EACH_REJECTED,
+  DELETE_EXSECTION_SUB_SECTION_DATA_PENDING,
+  DELETE_EXSECTION_SUB_SECTION_DATA_FULFILLED,
+  DELETE_EXSECTION_SUB_SECTION_DATA_REJECTED
 } from "./types";
 
 import {
@@ -54,10 +54,10 @@ import {
   onSectionBusinessPost,
   onParentSectionBusinessGet,
   onSectionsListExsectionBusinessData,
-  onExsectionEntityEachGet,
+  onExsectionSubSectionDataEachGet,
   onBusinessCatDetailsGet,
-  onUpdateExsectionSectionEntityPut,
-  onRemoveExsectionSectionEntityDelete
+  onUpdateExsectionSubSectionDataPut,
+  onRemoveExsectionSubSectionDataDelete
 } from "../config/businessServerCall";
 
 const epics = [];
@@ -349,22 +349,22 @@ export const onSectionUpdateBusinessExsection = () => {
 //onExsectionSectionEachList
 
 export const onExsectionSectionEachList = payload => ({
-  type: FETCH_EXSECTION_SECTION_ENTITY_EACH_PENDING,
+  type: FETCH_EXSECTION_SUB_SECTION_DATA_EACH_PENDING,
   payload
 });
 
 epics.push((action$, { getState }) =>
   action$
-    .ofType(FETCH_EXSECTION_SECTION_ENTITY_EACH_PENDING)
+    .ofType(FETCH_EXSECTION_SUB_SECTION_DATA_EACH_PENDING)
     .mergeMap(action => {
       const { uid } = action.payload;
       //console.log("UID",uid);
-      return onExsectionEntityEachGet({ uid })
+      return onExsectionSubSectionDataEachGet({ uid })
         .concatMap(({ response }) => {
           //console.log("SectionEntity",response);
           return [
             {
-              type: FETCH_EXSECTION_SECTION_ENTITY_EACH_FULFILLED,
+              type: FETCH_EXSECTION_SUB_SECTION_DATA_EACH_FULFILLED,
               payload: response
             }
             // {
@@ -380,7 +380,7 @@ epics.push((action$, { getState }) =>
         .catch(ajaxError => {
           toast.error(ajaxError.toString());
           return Observable.of({
-            type: FETCH_EXSECTION_SECTION_ENTITY_EACH_REJECTED
+            type: FETCH_EXSECTION_SUB_SECTION_DATA_EACH_REJECTED
           });
         });
     })
@@ -507,14 +507,14 @@ epics.push((action$, { getState }) =>
   })
 );
 
-//Update Section Entity Each Data
-export const onUpdateExsectionSectionEntity = payload => ({
-  type: UPDATE_EXSECTION_SECTION_ENTITY_EACH_PENDING,
+//Update SUB_SECTION_DATA Each Data
+export const onUpdateExsectionSubSectionData = payload => ({
+  type: UPDATE_EXSECTION_SUB_SECTION_DATA_EACH_PENDING,
   payload
 });
 epics.push((action$, { getState }) =>
   action$
-    .ofType(UPDATE_EXSECTION_SECTION_ENTITY_EACH_PENDING)
+    .ofType(UPDATE_EXSECTION_SUB_SECTION_DATA_EACH_PENDING)
     .mergeMap(({ payload }) => {
       const { body, uid, routeToView } = payload;
       const access_token = getState().auth.cookies.token_data.access_token;
@@ -525,7 +525,7 @@ epics.push((action$, { getState }) =>
       const oldSectionAdminId = activeParentAdminId;
       const { activeChildrenAdmin } = globalState.BusinessContainer.exsection;
       const leafDetected = false;
-      return onUpdateExsectionSectionEntityPut({
+      return onUpdateExsectionSubSectionDataPut({
         body,
         uid,
         access_token
@@ -535,7 +535,7 @@ epics.push((action$, { getState }) =>
             toast.success("Updated successfully!");
             routeToView();
             return [
-              { type: UPDATE_EXSECTION_SECTION_ENTITY_EACH_FULFILLED },
+              { type: UPDATE_EXSECTION_SUB_SECTION_DATA_EACH_FULFILLED },
               { type: FETCH_EXSECTION_SECTIONS_PENDING },
               {
                 type: CHANGE_ACTIVE_EXSECTION_SECTION,
@@ -545,28 +545,28 @@ epics.push((action$, { getState }) =>
                 activeChildrenAdmin
               }
             ];
-            //return [{ type: UPDATE_EXSECTION_SECTION_ENTITY_EACH_FULFILLED }];
+            //return [{ type: UPDATE_EXSECTION_SUB_SECTION_DATA_EACH_FULFILLED }];
           } else {
-            throw new Error("Error Updating Section Entity");
+            throw new Error("Error Updating SUB_SECTION_DATA");
           }
         })
         .catch(ajaxError => {
           toast.error(ajaxError.toString());
           return Observable.of({
-            type: UPDATE_EXSECTION_SECTION_ENTITY_EACH_REJECTED
+            type: UPDATE_EXSECTION_SUB_SECTION_DATA_EACH_REJECTED
           });
         });
     })
 );
 
-//Delete Section Entity Data
-export const onRemoveExsectionSectionEntity = payload => ({
-  type: DELETE_EXSECTION_SECTION_ENTITY_PENDING,
+//Delete SUB_SECTION_DATA Data
+export const onRemoveExsectionSubSectionData = payload => ({
+  type: DELETE_EXSECTION_SUB_SECTION_DATA_PENDING,
   payload
 });
 
 epics.push((action$, { getState }) =>
-  action$.ofType(DELETE_EXSECTION_SECTION_ENTITY_PENDING).mergeMap(action => {
+  action$.ofType(DELETE_EXSECTION_SUB_SECTION_DATA_PENDING).mergeMap(action => {
     const access_token = getState().auth.cookies.token_data.access_token;
     const { uid } = action.payload;
     const globalState = getState();
@@ -576,12 +576,12 @@ epics.push((action$, { getState }) =>
     const oldSectionAdminId = activeParentAdminId;
     const { activeChildrenAdmin } = globalState.BusinessContainer.exsection;
     const leafDetected = false;
-    return onRemoveExsectionSectionEntityDelete({ uid, access_token })
+    return onRemoveExsectionSubSectionDataDelete({ uid, access_token })
       .concatMap(({ response }) => {
         if (response.msg === "success") {
           toast.success("Deleted Successfully");
           return [
-            { type: DELETE_EXSECTION_SECTION_ENTITY_FULFILLED },
+            { type: DELETE_EXSECTION_SUB_SECTION_DATA_FULFILLED },
             { type: FETCH_EXSECTION_SECTIONS_PENDING },
             {
               type: CHANGE_ACTIVE_EXSECTION_SECTION,
@@ -598,7 +598,7 @@ epics.push((action$, { getState }) =>
       .catch(ajaxError => {
         toast.error(ajaxError.toString());
         return Observable.of({
-          type: DELETE_EXSECTION_SECTION_ENTITY_REJECTED
+          type: DELETE_EXSECTION_SUB_SECTION_DATA_REJECTED
         });
       });
   })

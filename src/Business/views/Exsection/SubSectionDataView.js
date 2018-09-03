@@ -1,18 +1,14 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 
-import { SectionEntityDetail } from "./components";
+import { SubSectionDataDetail } from "./components";
 
 import { onExsectionSectionEachList } from "../../actions";
 
-class SectionEntityView extends Component {
-  constructor(props) {
-    super(props);
-    //console.log("Section Entity ID",this.props.match.params.sectionEntityId);
-  }
+class SubSectionDataView extends Component {
   componentDidMount() {
     this.props.onExsectionSectionEachList({
-      uid: this.props.match.params.sectionEntityId
+      uid: this.props.match.params.subSectionDataId
     });
   }
 
@@ -25,14 +21,14 @@ class SectionEntityView extends Component {
   };
 
   render() {
-    const { sectionEntityDetailBiz } = this.props;
+    const { subSectionDataDetailBiz } = this.props;
     return (
       <div>
-        {sectionEntityDetailBiz &&
+        {subSectionDataDetailBiz &&
           this.props.attributes &&
           this.props.attributes.attributes && (
-            <SectionEntityDetail
-              sectionEntityDetailBiz={this.props.sectionEntityDetailBiz}
+            <SubSectionDataDetail
+              subSectionDataDetailBiz={this.props.subSectionDataDetailBiz}
               attributes={this.props.attributes.attributes}
             />
           )}
@@ -44,10 +40,10 @@ class SectionEntityView extends Component {
 export default connect(
   ({
     BusinessContainer: {
-      exsection: { sectionEntityDetailBiz, attributes }
+      exsection: { subSectionDataDetailBiz, attributes }
     }
-  }) => ({ sectionEntityDetailBiz, attributes }),
+  }) => ({ subSectionDataDetailBiz, attributes }),
   {
     onExsectionSectionEachList
   }
-)(SectionEntityView);
+)(SubSectionDataView);

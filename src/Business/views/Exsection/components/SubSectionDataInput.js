@@ -1,14 +1,7 @@
 import React, { Component } from "react";
 import { Button } from "reactstrap";
 
-class DocumentInput extends Component {
-  constructor(props) {
-    super(props);
-  }
-
-  // removeClick(i){
-
-  // }
+class SubSectionDataInput extends Component {
   render() {
     return (
       <div key={this.props.mykey}>
@@ -37,4 +30,4 @@ class DocumentInput extends Component {
   }
 }
 
-export default DocumentInput;
+export default SubSectionDataInput;

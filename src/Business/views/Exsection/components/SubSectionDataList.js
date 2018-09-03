@@ -3,7 +3,8 @@ import { Link } from "react-router-dom";
 import { Card, CardHeader, CardBody, Row, Col, Button } from "reactstrap";
 import { SectionLoadingEffect } from "../../../../Common/components";
 import { PopoverDelete } from "../../../../Common/components";
-class SectionEntityList extends Component {
+
+class SubSectionDataList extends Component {
   render() {
     return (
       <div>
@@ -19,7 +20,7 @@ class SectionEntityList extends Component {
           <CardBody>
             {this.props.loading && <SectionLoadingEffect />}
             {!this.props.loading &&
-              !this.props.sections.length && <p>No Entity Data</p>}
+              !this.props.sections.length && <p>No Sub-Section Data</p>}
             {!this.props.loading &&
               this.props.sections.map(section => (
                 <div key={section.attributes.uid} style={{ marginBottom: 5 }}>
@@ -54,7 +55,7 @@ class SectionEntityList extends Component {
                         <PopoverDelete
                           id={section.attributes.uid}
                           onClick={() =>
-                            this.props.onRemoveExsectionSectionEntity({
+                            this.props.onRemoveExsectionSubSectionData({
                               uid: section.attributes.uid,
                               routeToManageSections: this.props
                                 .routeToManageSections
@@ -79,4 +80,4 @@ class SectionEntityList extends Component {
   }
 }
 
-export default SectionEntityList;
+export default SubSectionDataList;

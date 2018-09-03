@@ -18,7 +18,7 @@ import Select from "react-select";
 import DateTime from "react-datetime";
 import "react-datetime/css/react-datetime.css";
 
-import DocumentInput from "./DocumentInput";
+import SubSectionDataInput from "./SubSectionDataInput";
 
 import { SectionLoadingEffect } from "../../../../Common/components";
 
@@ -33,7 +33,7 @@ class RecordAddEdit extends Component {
 
     this.state = {
       ...extra,
-      documents: [DocumentInput],
+      subSectionDataInputs: [SubSectionDataInput],
       inputValues: [],
       selectedOption: null,
       parentSectionId: null,
@@ -58,7 +58,7 @@ class RecordAddEdit extends Component {
       let testextra = this.getAttributesToState(this.props.attributes);
       this.setState({
         ...testextra,
-        documents: [DocumentInput],
+        subSectionDataInputs: [SubSectionDataInput],
         inputValues: []
       });
     }
@@ -122,14 +122,16 @@ class RecordAddEdit extends Component {
   };
 
   addClick() {
-    const documents = this.state.documents.concat(DocumentInput);
-    this.setState({ documents });
+    const subSectionDataInputs = this.state.subSectionDataInputs.concat(
+      SubSectionDataInput
+    );
+    this.setState({ subSectionDataInputs });
   }
 
   removeClick(i) {
-    let documents = [...this.state.documents];
-    documents.splice(i, 1);
-    this.setState({ documents });
+    let subSectionDataInputs = [...this.state.subSectionDataInputs];
+    subSectionDataInputs.splice(i, 1);
+    this.setState({ subSectionDataInputs });
   }
 
   saveClick(event) {
@@ -539,17 +541,19 @@ class RecordAddEdit extends Component {
 
   render() {
     const { selectedOption } = this.state;
-    const documents = this.state.documents.map((Element, index) => {
-      return (
-        <Element
-          key={index}
-          mykey={index}
-          attributes={this.props.attributes}
-          renderField={this.renderField}
-          removeClick={this.removeClick}
-        />
-      );
-    });
+    const subSectionDataInputs = this.state.subSectionDataInputs.map(
+      (Element, index) => {
+        return (
+          <Element
+            key={index}
+            mykey={index}
+            attributes={this.props.attributes}
+            renderField={this.renderField}
+            removeClick={this.removeClick}
+          />
+        );
+      }
+    );
     return (
       <div>
         {!this.checkTopSectionAlreadyExists() && (
@@ -615,7 +619,7 @@ class RecordAddEdit extends Component {
                     this.props.topSectionAdmin.uid ||
                     this.props.parentSectionBizFlag) && (
                     <div>
-                      {documents}
+                      {subSectionDataInputs}
 
                       {!(
                         this.props.activeSectionAdminId ===

@@ -17,8 +17,8 @@ import {
   Gallery,
   SocialLinks,
   ManageSections,
-  SectionEntityView,
-  SectionEntityEdit
+  SubSectionDataView,
+  SubSectionDataEdit
 } from "../views";
 
 import {
@@ -129,14 +129,14 @@ class BusinessRoute extends Component {
           component={ProductView}
         />
         <Route
-          path={`/:${ROUTE_PARAMS_BUSINESS_NAME}/dashboard/exsection/manage-sections/:sectionEntityId/edit`}
+          path={`/:${ROUTE_PARAMS_BUSINESS_NAME}/dashboard/exsection/manage-sections/:subSectionDataId/edit`}
           name="edit-exsection-entity"
-          component={SectionEntityEdit}
+          component={SubSectionDataEdit}
         />
         <Route
-          path={`/:${ROUTE_PARAMS_BUSINESS_NAME}/dashboard/exsection/manage-sections/:sectionEntityId`}
+          path={`/:${ROUTE_PARAMS_BUSINESS_NAME}/dashboard/exsection/manage-sections/:subSectionDataId`}
           name="view-exsection-entity"
-          component={SectionEntityView}
+          component={SubSectionDataView}
         />
         <Route
           path={`/:${ROUTE_PARAMS_BUSINESS_NAME}/dashboard/section/manage-sections/:sectionAdminId`}
@@ -149,14 +149,14 @@ class BusinessRoute extends Component {
           component={ManageSections}
         />
         <Route
-          path={`/:${ROUTE_PARAMS_BUSINESS_NAME}/dashboard/exsection/manage-sections/:sectionEntityId/edit`}
+          path={`/:${ROUTE_PARAMS_BUSINESS_NAME}/dashboard/exsection/manage-sections/:subSectionDataId/edit`}
           name="edit-exsection-entity"
-          component={SectionEntityEdit}
+          component={SubSectionDataEdit}
         />
         <Route
-          path={`/:${ROUTE_PARAMS_BUSINESS_NAME}/dashboard/exsection/manage-sections/:sectionEntityId`}
+          path={`/:${ROUTE_PARAMS_BUSINESS_NAME}/dashboard/exsection/manage-sections/:subSectionDataId`}
           name="view-exsection-entity"
-          component={SectionEntityView}
+          component={SubSectionDataView}
         />
         <Route
           path={`/:${ROUTE_PARAMS_BUSINESS_NAME}/dashboard/section/manage-sections`}
