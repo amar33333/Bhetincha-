@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import {
+  Row,
+  Col,
   Card,
   CardHeader,
   CardBody,
@@ -13,20 +15,25 @@ import {
 } from "reactstrap";
 
 class SectionDetailView extends Component {
-  state = { section: "", label: "default labell" };
+  state = { section: "", label: "" };
 
   onChangeSection = event =>
     this.setState({
       section: event.target.value.replace(/\b\w/g, l => l.toUpperCase())
     });
 
+  onChangeLabel = event =>
+    this.setState({
+      label: event.target.value
+    });
+
   onFormSubmit = event => {
     event.preventDefault();
     this.props.onSectionSubmit({
       name: this.state.section,
-      label: this.state.label
+      label: this.state.label == "" ? "Default Label" : this.state.label
     });
-    this.setState({ section: "" });
+    this.setState({ section: "", label: "" });
   };
 
   render() {
@@ -37,27 +44,39 @@ class SectionDetailView extends Component {
             <strong>Add New Section inside {this.props.name} </strong>
           </CardHeader>
           <CardBody>
-            <Form onSubmit={this.onFormSubmit} inline>
-              <FormGroup className="mb-2 mr-sm-2 mb-sm-0">
-                <InputGroup>
-                  <InputGroupAddon addonType="prepend">
-                    <InputGroupText>
-                      <i className="fa fa-industry" />
-                    </InputGroupText>
-                  </InputGroupAddon>
+            <Form onSubmit={this.onFormSubmit}>
+              <Row>
+                <Col xs="12" md="5">
+                  <InputGroup>
+                    <InputGroupAddon addonType="prepend">
+                      <InputGroupText>
+                        <i className="fa fa-industry" />
+                      </InputGroupText>
+                    </InputGroupAddon>
+                    <Input
+                      required
+                      innerRef={ref => (this.focusableInput = ref)}
+                      type="text"
+                      placeholder="Type New Section Name"
+                      value={this.state.section}
+                      onChange={this.onChangeSection}
+                    />
+                  </InputGroup>
+                </Col>
+                <Col xs="12" md="5">
                   <Input
-                    required
-                    innerRef={ref => (this.focusableInput = ref)}
                     type="text"
-                    placeholder="Type New Section Name"
-                    value={this.state.section}
-                    onChange={this.onChangeSection}
+                    placeholder="Type Label"
+                    value={this.state.label}
+                    onChange={this.onChangeLabel}
                   />
-                </InputGroup>
-              </FormGroup>
-              <Button color="primary">
-                <span className="fa fa-plus" /> Add
-              </Button>
+                </Col>
+                <Col xs="12" md="2">
+                  <Button color="primary">
+                    <span className="fa fa-plus" /> Add
+                  </Button>
+                </Col>
+              </Row>
             </Form>
           </CardBody>
         </Card>

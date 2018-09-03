@@ -69,7 +69,7 @@ class PropertyList extends Component {
           ) : (
             <div
               key={cellInfo.original.uid}
-              style={{ backgroundColor: "#fafafa" }}
+              style={{ backgroundColor: "#c2f9d5" }}
               contentEditable
               suppressContentEditableWarning
               onBlur={e => {
@@ -120,7 +120,47 @@ class PropertyList extends Component {
         Header: "Filterable",
         accessor: "filterAble"
       },
-      { Header: "Placeholder", accessor: "placeholder" },
+      {
+        Header: "Placeholder",
+        accessor: "placeholder",
+        Cell: cellInfo =>
+          cellInfo.original.uidPage !== cellInfo.original.uidSection ? (
+            <div>{cellInfo.value}</div>
+          ) : (
+            <div
+              key={cellInfo.original.placeholder}
+              style={{ backgroundColor: "#c2f9d5" }}
+              contentEditable
+              suppressContentEditableWarning
+              onBlur={e => {
+                const value = e.target.innerHTML;
+
+                const properties = [...this.state.properties];
+                if (value !== properties[cellInfo.index][cellInfo.column.id]) {
+                  this.props.onPropertyUpdatePlaceholder({
+                    body: {
+                      placeholder: value,
+                      sectionId: this.props.activeSection,
+                      relationshipId: cellInfo.original.uid
+                    }
+                  });
+                } else {
+                  e.target.innerHTML = value;
+                }
+              }}
+              onKeyDown={event => {
+                if (event.keyCode === 13) {
+                  event.target.blur();
+                }
+              }}
+              dangerouslySetInnerHTML={{
+                __html: this.state.properties[cellInfo.index][
+                  cellInfo.column.id
+                ]
+              }}
+            />
+          )
+      },
       { Header: "Show Key", accessor: "showKey" },
       {
         Header: "Actions",
@@ -151,14 +191,21 @@ class PropertyList extends Component {
     defaultPageSize: 20,
     className: "-striped -highlight",
     filterable: true,
-    style: { background: "white" },
+    //style: { background: "white" },
     defaultFilterMethod: filterCaseInsesitive,
     noDataText: "No Attributes assigned",
     PaginationComponent
   };
 
   render() {
-    return <ReactTable {...this.tableProps} data={this.state.properties} />;
+    return (
+      <div>
+        <p style={{ fontSize: "12px", marginBottom: 0 }}>
+          * Order and Placeholder Columns are Editable
+        </p>
+        <ReactTable {...this.tableProps} data={this.state.properties} />
+      </div>
+    );
   }
 }
 

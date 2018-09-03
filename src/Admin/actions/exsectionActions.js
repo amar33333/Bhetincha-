@@ -30,6 +30,9 @@ import {
   UPDATE_EXSECTION_PROPERTY_SECTION_PENDING,
   UPDATE_EXSECTION_PROPERTY_SECTION_FULFILLED,
   UPDATE_EXSECTION_PROPERTY_SECTION_REJECTED,
+  UPDATE_EXSECTION_PROPERTY_SECTION_PLACEHOLDER_PENDING,
+  UPDATE_EXSECTION_PROPERTY_SECTION_PLACEHOLDER_FULFILLED,
+  UPDATE_EXSECTION_PROPERTY_SECTION_PLACEHOLDER_REJECTED,
   DELETE_EXSECTION_SUBSECTION_PENDING,
   DELETE_EXSECTION_SUBSECTION_FULFILLED,
   DELETE_EXSECTION_SUBSECTION_REJECTED
@@ -45,7 +48,8 @@ import {
   onExsectionAttributesPostAdmin,
   onExsectionPropertiesDelete,
   onExsectionSectionDetailPost,
-  onExsectionPropertiesPut
+  onExsectionPropertiesPut,
+  onExsectionPropertiesPlaceholderPut
 } from "../config/adminServerCall";
 import { EXSECTION_ATTRIBUTE_URL } from "../config/ADMIN_API";
 
@@ -283,7 +287,7 @@ epics.push((action$, { getState }) =>
   action$.ofType(UPDATE_EXSECTION_PROPERTY_SECTION_PENDING).mergeMap(action => {
     const payload = getState().AdminContainer.exsection.activeSection;
     const { body } = action.payload;
-
+    console.log("Order", body);
     return onExsectionPropertiesPut({ body })
       .concatMap(({ response }) => {
         if (response.msg === "success") {
@@ -303,6 +307,39 @@ epics.push((action$, { getState }) =>
         });
       });
   })
+);
+
+export const onPropertyUpdatePlaceholderExsection = payload => ({
+  type: UPDATE_EXSECTION_PROPERTY_SECTION_PLACEHOLDER_PENDING,
+  payload
+});
+
+epics.push((action$, { getState }) =>
+  action$
+    .ofType(UPDATE_EXSECTION_PROPERTY_SECTION_PLACEHOLDER_PENDING)
+    .mergeMap(action => {
+      const payload = getState().AdminContainer.exsection.activeSection;
+      const { body } = action.payload;
+      console.log("Placeholder", body);
+      return onExsectionPropertiesPlaceholderPut({ body })
+        .concatMap(({ response }) => {
+          if (response.msg === "success") {
+            toast.success("Attribute updated successfully");
+            return [
+              { type: UPDATE_EXSECTION_PROPERTY_SECTION_PLACEHOLDER_FULFILLED },
+              { type: CHANGE_ACTIVE_EXSECTION_SECTION, payload }
+            ];
+          } else {
+            throw new Error(response.msg);
+          }
+        })
+        .catch(ajaxError => {
+          toast.error(ajaxError.toString());
+          return Observable.of({
+            type: UPDATE_EXSECTION_PROPERTY_SECTION_PLACEHOLDER_REJECTED
+          });
+        });
+    })
 );
 
 //onPropertyRemoveExsection

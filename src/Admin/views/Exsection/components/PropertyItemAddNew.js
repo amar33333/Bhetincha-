@@ -193,6 +193,19 @@ class PropertyItemAddNew extends Component {
                   </Col>
                 </FormGroup>
                 <FormGroup row>
+                  <Label sm={3}>Placeholder</Label>
+                  <Col sm={9}>
+                    <Input
+                      required
+                      placeholder="Placeholder Text"
+                      type="text"
+                      value={this.state.placeholder}
+                      onChange={this.onChangePlaceholder}
+                    />
+                  </Col>
+                </FormGroup>
+
+                <FormGroup row>
                   <Label for="fieldType" sm={3}>
                     Field Type
                   </Label>
@@ -251,24 +264,63 @@ class PropertyItemAddNew extends Component {
                         </Col>
                       </FormGroup>
                     )}
-                    <FormGroup check>
-                      <Label check>
-                        <Input
-                          type="checkbox"
-                          checked={this.state.required}
-                          onClick={event => {
-                            const extra = {};
-                            if (!event.target.checked) {
-                              extra.filterable = false;
-                            }
-                            this.setState({
-                              required: event.target.checked,
-                              ...extra
-                            });
-                          }}
-                        />
-                        Required
-                      </Label>
+                    <FormGroup row>
+                      <Col sm={4}>
+                        <FormGroup check>
+                          <Label check>
+                            <Input
+                              type="checkbox"
+                              checked={this.state.required}
+                              onClick={event => {
+                                const extra = {};
+                                if (!event.target.checked) {
+                                  extra.filterable = false;
+                                }
+                                this.setState({
+                                  required: event.target.checked,
+                                  ...extra
+                                });
+                              }}
+                            />
+                            Required
+                          </Label>
+                        </FormGroup>
+                      </Col>
+                      <Col sm={4}>
+                        <FormGroup check>
+                          <Label check>
+                            <Input
+                              type="checkbox"
+                              checked={this.state.filterable}
+                              onClick={event => {
+                                const extra = {};
+                                if (event.target.checked) {
+                                  extra.required = true;
+                                }
+                                this.setState({
+                                  filterable: event.target.checked,
+                                  ...extra
+                                });
+                              }}
+                            />
+                            Filterable
+                          </Label>
+                        </FormGroup>
+                      </Col>
+                      <Col sm={4}>
+                        <FormGroup check>
+                          <Label check>
+                            <Input
+                              type="checkbox"
+                              checked={this.state.showKey}
+                              onChange={event =>
+                                this.setState({ showKey: event.target.checked })
+                              }
+                            />
+                            Show Key
+                          </Label>
+                        </FormGroup>
+                      </Col>
                     </FormGroup>
                     {this.state.required && (
                       <div>
@@ -406,58 +458,8 @@ class PropertyItemAddNew extends Component {
                         )}
                       </div>
                     )}
-                    <FormGroup check>
-                      <Label check>
-                        <Input
-                          type="checkbox"
-                          checked={this.state.filterable}
-                          onClick={event => {
-                            const extra = {};
-                            if (event.target.checked) {
-                              extra.required = true;
-                            }
-                            this.setState({
-                              filterable: event.target.checked,
-                              ...extra
-                            });
-                          }}
-                        />
-                        Filterable
-                      </Label>
-                    </FormGroup>
                   </div>
                 )}
-
-                <FormGroup row>
-                  <Label sm={3}>Placeholder</Label>
-                  <Col sm={9}>
-                    <Input
-                      required
-                      placeholder="Placeholder Text"
-                      type="text"
-                      value={this.state.placeholder}
-                      onChange={this.onChangePlaceholder}
-                    />
-                  </Col>
-                </FormGroup>
-
-                <FormGroup row>
-                  <Label sm={3} />
-                  <Col sm={9}>
-                    <FormGroup check>
-                      <Label check>
-                        <Input
-                          type="checkbox"
-                          checked={this.state.showKey}
-                          onChange={event =>
-                            this.setState({ showKey: event.target.checked })
-                          }
-                        />
-                        Show Key
-                      </Label>
-                    </FormGroup>
-                  </Col>
-                </FormGroup>
               </FormGroup>
               <Button color="primary">
                 <span className="fa fa-plus" /> Add
