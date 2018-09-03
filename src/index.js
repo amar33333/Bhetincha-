@@ -30,6 +30,8 @@ if (process.env.NODE_ENV === "production") {
   ).install();
 }
 
+//console.log("soling store", store.getState());
+
 ReactDOM.render(
   <Provider store={store}>
     <App />

@@ -19,8 +19,7 @@ import {
   CHECK_SLUG_URL,
   EXSECTION_SECTION_BUSINESS_URL,
   EXSECTION_SECTION_BUSINESS_LIST_URL,
-  //for implementing update
-  EXSECTION_SECTION_ENTITY_URL
+  EXSECTION_SUB_SECTION_DATA_URL
 } from "./BUSINESS_API";
 import axios from "axios";
 import { ajax } from "rxjs/observable/dom/ajax";
@@ -578,10 +577,10 @@ export const onSectionsListExsectionBusinessData = ({ body, businessIdd }) =>
 //     "uid": "54dc195fdf4c40f7afff3e67e9899c16"
 // }
 // }
-export const onExsectionEntityEachGet = ({ uid }) =>
+export const onExsectionSubSectionDataEachGet = ({ uid }) =>
   ajax({
     method: "GET",
-    url: `${EXSECTION_SECTION_ENTITY_URL}${uid}/`,
+    url: `${EXSECTION_SUB_SECTION_DATA_URL}${uid}/`,
     headers: {
       "Content-Type": "application/json"
     }
@@ -597,14 +596,14 @@ export const onBusinessCatDetailsGet = ({ access_token, id }) =>
     }
   });
 
-export const onUpdateExsectionSectionEntityPut = ({
+export const onUpdateExsectionSubSectionDataPut = ({
   uid,
   access_token,
   body
 }) =>
   ajax({
     method: "PUT",
-    url: `${EXSECTION_SECTION_ENTITY_URL}${uid}/`,
+    url: `${EXSECTION_SUB_SECTION_DATA_URL}${uid}/`,
     body,
     headers: {
       "Content-Type": "application/json",
@@ -612,10 +611,10 @@ export const onUpdateExsectionSectionEntityPut = ({
     }
   });
 
-export const onRemoveExsectionSectionEntityDelete = ({ uid, access_token }) =>
+export const onRemoveExsectionSubSectionDataDelete = ({ uid, access_token }) =>
   ajax({
     method: "DELETE",
-    url: `${EXSECTION_SECTION_ENTITY_URL}${uid}/`,
+    url: `${EXSECTION_SUB_SECTION_DATA_URL}${uid}/`,
     headers: {
       "Content-Type": "application/json",
       Authorization: "Bearer " + access_token

@@ -1,17 +1,16 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { SectionEntityEditDetail } from "./components";
+import { SubSectionDataEditDetail } from "./components";
 
 import {
   onExsectionSectionEachList,
-  onUpdateExsectionSectionEntity
-  //onUpdateEcommerceProduct
+  onUpdateExsectionSubSectionData
 } from "../../actions";
 
-class SectionEntityEdit extends Component {
+class SubSectionDataEdit extends Component {
   componentDidMount() {
     this.props.onExsectionSectionEachList({
-      uid: this.props.match.params.sectionEntityId
+      uid: this.props.match.params.subSectionDataId
     });
   }
 
@@ -20,23 +19,23 @@ class SectionEntityEdit extends Component {
       !(
         this.props.attributes &&
         this.props.attributes.attributes &&
-        this.props.sectionEntityDetailBiz
+        this.props.subSectionDataDetailBiz
       )
     ) {
-      return <div>Fetching section entity information</div>;
+      return <div>Fetching sub-section information</div>;
     }
     return (
-      <SectionEntityEditDetail
+      <SubSectionDataEditDetail
         attributes={this.props.attributes.attributes}
         add={false}
-        defaultValue={this.props.sectionEntityDetailBiz.properties}
-        onSubmit={this.props.onUpdateExsectionSectionEntity}
+        defaultValue={this.props.subSectionDataDetailBiz.properties}
+        onSubmit={this.props.onUpdateExsectionSubSectionData}
         routeToView={() =>
           this.props.history.push(
             `/${
               this.props.match.params.businessName
             }/dashboard/section/manage-sections/${
-              this.props.match.params.sectionEntityId
+              this.props.match.params.subSectionDataId
             }`
           )
         }
@@ -48,14 +47,14 @@ class SectionEntityEdit extends Component {
 export default connect(
   ({
     BusinessContainer: {
-      exsection: { attributes, sectionEntityDetailBiz }
+      exsection: { attributes, subSectionDataDetailBiz }
     }
   }) => ({
     attributes,
-    sectionEntityDetailBiz
+    subSectionDataDetailBiz
   }),
   {
     onExsectionSectionEachList,
-    onUpdateExsectionSectionEntity
+    onUpdateExsectionSubSectionData
   }
-)(SectionEntityEdit);
+)(SubSectionDataEdit);

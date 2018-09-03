@@ -15,8 +15,8 @@ import ChangeSlug from "./ChangeSlug/ChangeSlug";
 import Gallery from "./Gallery/Gallery";
 import SocialLinks from "./SocialLinks/SocialLinks";
 import ManageSections from "./Exsection/ManageSections";
-import SectionEntityView from "./Exsection/SectionEntityView";
-import SectionEntityEdit from "./Exsection/SectionEntityEdit";
+import SubSectionDataView from "./Exsection/SubSectionDataView";
+import SubSectionDataEdit from "./Exsection/SubSectionDataEdit";
 export {
   Dashboard,
   BusinessDetail,
@@ -34,6 +34,6 @@ export {
   Gallery,
   SocialLinks,
   ManageSections,
-  SectionEntityView,
-  SectionEntityEdit
+  SubSectionDataView,
+  SubSectionDataEdit
 };

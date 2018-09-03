@@ -7,8 +7,8 @@ import {
   CHANGE_SELETED_SECTION_DETAILS_BUSINESS,
   RESET_SECTION_STATE,
   CHANGE_SELETED_SECTION_DETAILS_BUSINESS_DATA_FULFILLED,
-  FETCH_EXSECTION_SECTION_ENTITY_EACH_PENDING,
-  FETCH_EXSECTION_SECTION_ENTITY_EACH_FULFILLED,
+  FETCH_EXSECTION_SUB_SECTION_DATA_EACH_PENDING,
+  FETCH_EXSECTION_SUB_SECTION_DATA_EACH_FULFILLED,
   CHANGE_ACTIVE_PARENT_ADMIN_EXSECTION,
   CHANGE_ROOT_SECTION_ADMIN,
   CHANGE_ACTIVE_EXSECTION_SECTION_BY_CLICK,
@@ -34,7 +34,7 @@ const INITIAL_STATE = {
   attributes: [], // holding attributes type according to context
   parentSectionBiz: null,
   activeChildrenAdmin: null,
-  sectionEntityDetailBiz: null, //active section detail of business
+  subSectionDataDetailBiz: null, //active section detail of business
   activeParentAdminId: "",
   activeParentAdmin: null,
   rootNodeAdminId: "", //this is the root node id which has no parent, in our app it is static section neo4j node
@@ -147,11 +147,11 @@ export default function(state = INITIAL_STATE, action) {
         selectedSectionDetailBiz: action.payload
       };
 
-    case FETCH_EXSECTION_SECTION_ENTITY_EACH_FULFILLED:
-      return { ...state, sectionEntityDetailBiz: action.payload };
+    case FETCH_EXSECTION_SUB_SECTION_DATA_EACH_FULFILLED:
+      return { ...state, subSectionDataDetailBiz: action.payload };
 
-    case FETCH_EXSECTION_SECTION_ENTITY_EACH_PENDING:
-      return { ...state, sectionEntityDetailBiz: null };
+    case FETCH_EXSECTION_SUB_SECTION_DATA_EACH_PENDING:
+      return { ...state, subSectionDataDetailBiz: null };
 
     case PARENT_SECTION_BIZ_FLAG:
       return { ...state, parentSectionBizFlag: action.payload };
