@@ -8,7 +8,8 @@ import {
   Ecommerce,
   EcommerceProduct,
   CoreMember,
-  Sections
+  Sections,
+  SectionsDetails
 } from "../components";
 import slugify from "slugify";
 import {
@@ -36,14 +37,25 @@ class MinisiteRoute extends Component {
       {
         testroute = this.props.test.map((section, index) => {
           let name = slugify(section.attributes.name);
-          return (
-            <Route
-              path={`/:${ROUTE_PARAMS_BUSINESS_NAME}/${name}/:sectionId`}
-              name="sections"
-              component={Sections}
-              key={index}
-            />
-          );
+          if (section.children.length > 0) {
+            return (
+              <Route
+                path={`/:${ROUTE_PARAMS_BUSINESS_NAME}/${name}/:sectionId`}
+                name="sections"
+                component={Sections}
+                key={index}
+              />
+            );
+          } else {
+            return (
+              <Route
+                path={`/:${ROUTE_PARAMS_BUSINESS_NAME}/${name}/:sectionId`}
+                name="sectionsDetails"
+                component={SectionsDetails}
+                key={index}
+              />
+            );
+          }
         });
       }
     }
@@ -53,19 +65,28 @@ class MinisiteRoute extends Component {
       {
         subsectionsroute = this.props.subsections.map((section, index) => {
           let name = slugify(section.attributes.name);
-          return (
-            <Route
-              path={`/:${ROUTE_PARAMS_BUSINESS_NAME}/${name}/:sectionId`}
-              name="sections"
-              component={Sections}
-              key={index}
-            />
-          );
+          if (section.children.length > 0) {
+            return (
+              <Route
+                path={`/:${ROUTE_PARAMS_BUSINESS_NAME}/${name}/:sectionId`}
+                name="sections"
+                component={Sections}
+                key={index}
+              />
+            );
+          } else {
+            return (
+              <Route
+                path={`/:${ROUTE_PARAMS_BUSINESS_NAME}/${name}/:sectionId`}
+                name="sectionsDetails"
+                component={SectionsDetails}
+                key={index}
+              />
+            );
+          }
         });
       }
     }
-    console.log("this is my subsection route =>", { subsectionsroute });
-    // sectionrouting.push[subsectionsroute];
     console.log("this is my sectionrouting route =>", { subsectionsroute });
     console.log("this is my testroute route =>", { testroute });
 
@@ -73,7 +94,6 @@ class MinisiteRoute extends Component {
     if (this.props.sections !== undefined) {
       sectionroute = this.props.sections.map((section, index) => {
         let name = slugify(section.name);
-        console.log(section.uid);
         return (
           <Route
             path={`/:${ROUTE_PARAMS_BUSINESS_NAME}/${name}/:sectionId`}
@@ -141,12 +161,12 @@ class MinisiteRoute extends Component {
           name="coremember"
           component={CoreMember}
         />
-        {this.props.subsections ? subsectionsroute : ""}
         {this.props.test ? testroute : ""}
-        {/* <Redirect
+        {this.props.subsections ? subsectionsroute : ""}
+        <Redirect
           from={`/${businessName}/${minisiteBusinessRoute}`}
           to={`/${businessName}`}
-        /> */}
+        />
         <Route
           path={`/:${ROUTE_PARAMS_BUSINESS_NAME}`}
           name="Minisite-MainPage"

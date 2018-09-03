@@ -14,43 +14,86 @@ import {
 import "react-grid-layout/css/styles.css";
 import "react-resizable/css/styles.css";
 
-import { Collapse, Navbar, NavbarToggler, Nav, NavItem } from "reactstrap";
+import {
+  Collapse,
+  Navbar,
+  NavbarToggler,
+  Nav,
+  NavItem,
+  Dropdown,
+  DropdownItem,
+  DropdownToggle,
+  DropdownMenu,
+  NavLink
+} from "reactstrap";
+// import { Dropdown } from "semantic-ui-react";
 
 import { onEditMainClicked } from "../actions";
 
-class BusinessNav extends Component {
-  state = {
-    isOpen: false
-  };
+const MAX_SEC = 3;
 
-  toggle = () =>
+class BusinessNav extends Component {
+  constructor(props) {
+    super(props);
+
+    this.toggle = this.toggle.bind(this);
+    this.state = {
+      dropdownOpen: false
+    };
+  }
+
+  toggle() {
     this.setState({
-      isOpen: !this.state.isOpen
+      dropdownOpen: !this.state.dropdownOpen
     });
-  props;
+  }
   render() {
+    console.log(this.props.subSection);
+
     const { url } = this.props;
     console.log(this.props.sections);
     var sectionlist;
+    var Dropdownlist;
+
     if (this.props.sections !== undefined) {
-      sectionlist = this.props.sections.map(section => {
+      sectionlist = this.props.sections.map((section, index) => {
         let sectionID = section.uid;
         let name = slugify(section.name);
-        return (
-          <NavItem
-            key={section.name}
-            className={url === section.name ? "active" : ""}
-          >
-            <Link
-              to={`/${this.props.businessName}/${name}/${sectionID}`}
-              className=""
-            >
-              {section.name}
-            </Link>{" "}
-          </NavItem>
-        );
+        if (index < MAX_SEC) {
+          return (
+            <NavItem key={index} className={url === name ? "active" : ""}>
+              <Link
+                to={`/${this.props.businessName}/${name}/${sectionID}`}
+                className=""
+              >
+                {section.name}
+              </Link>{" "}
+            </NavItem>
+          );
+        }
       });
     }
+    if (this.props.sections !== undefined) {
+      Dropdownlist = this.props.sections.map((section, index) => {
+        let sectionID = section.uid;
+        let name = slugify(section.name);
+        if (index >= MAX_SEC) {
+          return (
+            <DropdownItem key={index}>
+              <Link
+                to={`/${this.props.businessName}/${name}/${sectionID}`}
+                className=""
+              >
+                {section.name}
+              </Link>{" "}
+            </DropdownItem>
+          );
+        }
+      });
+    }
+    console.log("my dropdownlist=", Dropdownlist);
+    console.log("my sectionlist=", sectionlist);
+
     return (
       <div>
         <ScrollInNav scrollInHeight={1}>
@@ -105,7 +148,7 @@ class BusinessNav extends Component {
                     Ecommerce{" "}
                   </Link>{" "}
                 </NavItem>{" "}
-                {this.props.coreMember ? (
+                {/* {this.props.coreMember ? (
                   <NavItem
                     key="coremember"
                     className={url === "coremember" ? "active" : ""}
@@ -118,8 +161,8 @@ class BusinessNav extends Component {
                     </Link>{" "}
                   </NavItem>
                 ) : (
-                  ""
-                )}
+                    ""
+                  )} */}
                 {sectionlist}
                 <NavItem
                   key="contact"
@@ -129,6 +172,20 @@ class BusinessNav extends Component {
                     Contact{" "}
                   </Link>{" "}
                 </NavItem>{" "}
+                {this.props.sections.length > MAX_SEC ? (
+                  <Dropdown
+                    nav
+                    isOpen={this.state.dropdownOpen}
+                    toggle={this.toggle}
+                  >
+                    <DropdownToggle nav caret>
+                      More
+                    </DropdownToggle>
+                    <DropdownMenu>{Dropdownlist}</DropdownMenu>
+                  </Dropdown>
+                ) : (
+                  ""
+                )}
               </Nav>{" "}
             </Collapse>{" "}
           </Navbar>{" "}
@@ -159,3 +216,28 @@ export default connect(
     onSearchResultsList
   }
 )(BusinessNav);
+// renderRemainingSections = () => {
+//   var remainingsec = this.props.sections.filter((sec, i) => {
+//     if (i >= MAX_SEC) {
+//       return sec;
+//     }
+//   });
+//   return (
+//     <Dropdown.Menu>
+//       {remainingsec.map((sec, index) => {
+//         return <Dropdown.Item key={index}>{sec.name}</Dropdown.Item>;
+//       })}
+//     </Dropdown.Menu>
+//   );
+// };
+
+// const trigger = (
+//   <span>
+//     <small>
+//       +{this.props.sections.length - MAX_SEC} more{" "}
+//       {this.props.sections.length - MAX_SEC === 1
+//         ? `Section`
+//         : `Sections`}
+//     </small>
+//   </span>
+// );

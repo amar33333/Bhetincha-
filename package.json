@@ -64,6 +64,7 @@
     "react-toastify": "^4.0.0-rc.5",
     "react-treebeard": "^2.1.0",
     "reactstrap": "^6.3.0",
+    "read-more-react": "^1.0.6",
     "redux": "^3.7.2",
     "redux-observable": "^0.18.0",
     "redux-thunk": "^2.2.0",

@@ -3,8 +3,10 @@ import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import MinisiteRoutes from "../../config/routes";
 import slugify from "slugify";
-
+import ReadMoreReact from "read-more-react";
 import { MAIN_URL } from "../../../../../Common/utils/API";
+import { Collapse, Navbar, NavbarToggler, Nav, NavItem } from "reactstrap";
+import SideNav from "./sideNav";
 import {
   Card,
   CardImg,
@@ -52,83 +54,154 @@ class Sections extends Component {
   }
   componentDidUpdate(prevpreops) {
     if (prevpreops.match.params !== this.state.section_id) {
-      // this.forceUpdate();
+      this.forceUpdate();
       this.props.eachSectionGet(this.props.match.params);
       this.state.section_id = this.props.match.params;
     }
   }
 
   renderSubMenu(options, da) {
+    console.log("my options=,", options);
     var businessName = this.props.cookies.user_data.slug;
     if (options.children && options.children.length > 0) {
       this.state.hasChild = true;
     } else {
       this.state.hasChild = false;
     }
-    // var businessName = "amt";
+    const min = 80;
+    const idel = 100;
+    const max = 130;
     var sectionID;
     var name;
-    // console.log("business Name= ", businessName)
-    // console.log("lets see value of dusplay", Object.keys(options.attributes));
-    var data = Object.keys(options.attributes).map(key => {
+    var data = Object.keys(options.attributes).map((key, index) => {
       sectionID = options.attributes.uid;
       name = slugify(options.attributes.name);
       this.state.subSections.uid;
-      if (key !== "uid" && key !== "creation" && key !== "updation") {
-        // console.log("wht is value of key= " + options.attributes[key]);
-        const image =
-          "/media/5b6691958ffa8506520f8673/member-photos/Sameeee-c27fe911-e743-449f-9ebe-7e91978639f4.jpeg";
+      if (
+        key !== "uid" &&
+        key !== "creation" &&
+        key !== "updation" &&
+        key !== "name"
+      ) {
+        const image = options.attributes[key];
         if (key === "Image") {
           return (
-            <CardImg
-              key={da}
-              top
-              width="100%"
-              // src={`${MAIN_URL}${image}`}
-              src="https://bhetincha.app/static/media/logo_hd.8ae38422.png"
-              alt="img placeholder"
-              style={{
-                Maxwidth: "100%",
-                height: "auto",
-                color: "green"
-              }}
-              className="img-fluid"
-            />
+            <CardBody>
+              <CardImg
+                key={index}
+                top
+                width="100%"
+                // src={`${MAIN_URL}${image}`}
+                src="https://bhetincha.app/static/media/logo_hd.8ae38422.png"
+                alt="img placeholder"
+                style={{
+                  Maxwidth: "100%",
+                  height: "auto",
+                  color: "green"
+                }}
+                className="img-fluid"
+              />
+            </CardBody>
           );
         }
-        if (key == "Price") {
-          return (
-            <h4 style={{ margin: "0" }} className="text-center" key={da++}>
-              Rs. {options.attributes[key]}
-            </h4>
-          );
-        }
+        // else if (key === "name") {
+        //   return (
+        //     <CardText style={{ margin: "0" }} className="text-center" key={index}>
+        //       <strong> {options.attributes[key]}</strong>
+        //     </CardText>
+        //   );
+        // }
+        // else if (key === "Price") {
+        //   return (
+        //     <CardText style={{ margin: "0" }} className="text-center" key={index}>
+        //       Rs. {options.attributes[key]}
+        //     </CardText>
+        //   );
+        // }
+        // console.log("my length=>", options.attributes[key].length, "my text=", options.attributes[key])
         return (
-          <h4
-            style={{ margin: "0" }}
-            className="text-center"
-            key={options.attributes.uid}
-          >
+          <CardText key={index}>
             {options.attributes[key]}
-          </h4>
+            {/* <ReadMoreReact text={options.attributes[key]}
+            //   min={min} */}
+            {/* //   ideal={idel}
+            //   max={max}
+            //   style={{ color: "rgb(11, 133, 152)" }}
+            // /> */}
+          </CardText>
         );
       }
     });
 
-    // console.log(data);
-    // console.log(name);
-    // console.log(sectionID);
-    // console.log(this.state.hasChild);
     if (this.state.hasChild) {
       return (
-        <Card>
+        <Card
+          style={{
+            textAlign: "center",
+            borderColor: "#0b8598"
+          }}
+        >
+          <CardImg
+            top
+            width="100%"
+            // src={`${MAIN_URL}${image}`}
+            src="https://i0.wp.com/magazine.foodpanda.hk/wp-content/uploads/sites/9/2016/05/Big-Fernand-1-1.jpg"
+            alt="img placeholder"
+            style={{
+              Maxwidth: "100%",
+              height: "auto",
+              color: "green"
+            }}
+            className="img-fluid"
+          />
           <Link to={`/${businessName}/${name}/${sectionID}`} action="push">
+            <CardText>
+              {" "}
+              <strong>{options.attributes.name}</strong>
+            </CardText>
             {data}
           </Link>
         </Card>
       );
     } else {
-      return <Card key={da}>{data}</Card>;
+      return (
+        <Card
+          style={{
+            // borderColor: "#0b8598",
+            textAlign: "center",
+            textJustify: "inter-word",
+            paddingLeft: "2px",
+            border: "1px solid  lightgrey"
+            // float: "left"
+          }}
+          key={da}
+        >
+          <CardImg
+            top
+            width="100%"
+            // src={`${MAIN_URL}${image}`}
+            src="https://i2.wp.com/magazine.foodpanda.hk/wp-content/uploads/sites/9/2016/05/Big-Fernand-2-1.jpg"
+            alt="img placeholder"
+            style={{
+              Maxwidth: "100%",
+              height: "auto",
+              color: "green"
+            }}
+            className="img-fluid"
+          />
+          <Link
+            to={`/${businessName}/${name}/${sectionID}`}
+            style={{ color: "black" }}
+            action="push"
+          >
+            <CardText>
+              {" "}
+              <strong>{options.attributes.name}</strong>
+            </CardText>
+            {data}
+          </Link>
+        </Card>
+      );
     }
   }
 
@@ -140,39 +213,46 @@ class Sections extends Component {
         className="minisite_content__wrapper "
         style={{
           paddingTop: "70px",
-          paddingLeft: "50px"
+          paddingLeft: "50px",
+          backgroundColor: "#FAFAFC"
         }}
       >
         <Row>
-          {this.props.Section.sections.map(options => {
-            // console.log("beforre calling subsection  " + options.attributes);
-            var data = this.renderSubMenu(options, da);
-            da = da + 1;
-            // console.log(data);
-            return (
-              <Col key={da} xs="3">
-                <div>{data}</div>
-              </Col>
-            );
-          })}
+          <Col md="12">
+            <Row>
+              {this.props.Section.sections.map((options, index) => {
+                var data = this.renderSubMenu(options, da);
+                da = da + 1;
+                console.log("my data object=>", data);
+                return (
+                  <Col key={index} md="3">
+                    <div style={{ textAlign: "justify" }}>{data}</div>
+                  </Col>
+                );
+              })}
+            </Row>
+          </Col>
+          {/* <Col md="3">
+            <SideNav subsection={this.props.Section.sections} businessName={this.props.cookies.user_data.slug} sect={this.props.test} secList={this.props.secList} > </SideNav>
+
+          </Col> */}
         </Row>
       </div>
     );
   }
 }
-
-// export default withRepics(
-//   "SectionContainer",
-//   sectionReducer,
-//   combineEpics(...sectionEpics)
-// )(
 export default connect(
-  ({ auth: { cookies }, SectionContainer: { Section } }) => ({
+  ({
+    auth: { cookies },
+    SectionContainer: { Section },
+    MinisiteContainer: { edit }
+  }) => ({
     Section,
-    cookies
+    test: Section.subsection,
+    cookies,
+    secList: edit.sections
   }),
   {
     eachSectionGet
   }
 )(Sections);
-// );
