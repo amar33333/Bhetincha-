@@ -233,6 +233,21 @@ class SectionsDetails extends Component {
             <CardText>
               {" "}
               <strong>{this.props.test[0].attributes.name}</strong>
+              {Object.keys(this.props.test[0].attributes).map((key, index) => {
+                if (
+                  key !== "uid" &&
+                  key !== "creation" &&
+                  key !== "updation" &&
+                  key !== "name" &&
+                  key !== "image"
+                ) {
+                  return (
+                    <CardText key={index}>
+                      {this.props.test[0].attributes[key]}
+                    </CardText>
+                  );
+                }
+              })}
             </CardText>
           </Col>
         </Row>
