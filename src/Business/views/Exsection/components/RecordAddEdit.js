@@ -37,7 +37,8 @@ class RecordAddEdit extends Component {
       inputValues: [],
       selectedOption: null,
       parentSectionId: null,
-      profilePictureFile: ""
+      imageFile: "",
+      documentFile: ""
     };
     this.renderField = this.renderField.bind(this);
     this.onChange = this.onChange.bind(this);
@@ -59,7 +60,9 @@ class RecordAddEdit extends Component {
       this.setState({
         ...testextra,
         subSectionDataInputs: [SubSectionDataInput],
-        inputValues: []
+        inputValues: [],
+        imageFile: "",
+        documentFile: ""
       });
     }
   }
@@ -67,7 +70,7 @@ class RecordAddEdit extends Component {
   //check if top section has a initial entry for a particular business
 
   checkSectionIsTop() {
-    console.log("breached", this.props);
+    //console.log("breached", this.props);
     if (!this.props.parentSectionBiz) {
       return true;
     }
@@ -111,11 +114,7 @@ class RecordAddEdit extends Component {
   };
 
   onChange = (key, value, mykey) => {
-    //console.log("key", key);
-    //console.log("value", value);
-    //console.log("mykey", mykey);
     const newArray = Array.from(this.state.inputValues);
-    //console.log(newArray);
     newArray[mykey] = { ...newArray[mykey], ...{ [key]: value } };
 
     this.setState({ inputValues: newArray, [key]: value });
@@ -132,105 +131,6 @@ class RecordAddEdit extends Component {
     let subSectionDataInputs = [...this.state.subSectionDataInputs];
     subSectionDataInputs.splice(i, 1);
     this.setState({ subSectionDataInputs });
-  }
-
-  saveClick(event) {
-    event.preventDefault();
-
-    //console.log("this.props", this.props);
-    const { inputValues } = this.state;
-
-    // console.log("soling inputValues", inputValues);
-    let parentSectionId;
-    if (this.props.parentSectionBiz && this.props.parentSectionBiz.sections) {
-      parentSectionId = this.state.selectedOption
-        ? this.state.selectedOption.value
-        : null || this.props.parentSectionBiz.sections
-          ? this.props.parentSectionBiz.sections[0].id
-          : null || 0;
-      this.setState({ parentsectionId: parentSectionId });
-    }
-
-    if (parentSectionId !== 0) {
-      //console.log("inputValues", inputValues);
-      inputValues.forEach(value => {
-        const obj = value;
-        // console.log("obj", obj);
-
-        const body = {
-          asid: this.props.activeSectionAdminId,
-          parentsectionId: parentSectionId
-        };
-        // console.log("this.props.attributes", this.props.attributes);
-        //{start here}
-        this.props.attributes.forEach(({ name, fieldType: attributeType }) => {
-          for (var property in obj) {
-            if (obj.hasOwnProperty(property)) {
-              const upperCaseProperty = property;
-              property = property.charAt(0).toLowerCase() + property.slice(1);
-              let value = obj[upperCaseProperty];
-              //let propV = property;
-
-              // else if (attributeType === "MultipleChoices") {
-              //   if (rest[name] && rest[name].length) {
-              //     value = rest[name].map(({ value }) => value);
-              //   } else {
-              //     value = rest[name];
-              //   }
-              //console.log("attribute type", attributeType);
-              // console.log("name", name);
-              //console.log("uppserCaseProperty", upperCaseProperty);
-              if (property === "name") {
-                body[property] = obj[upperCaseProperty];
-              } else if (
-                attributeType === "DateTime" &&
-                name === upperCaseProperty
-              ) {
-                value = value.toISOString();
-                body[upperCaseProperty] = {
-                  attributeType,
-                  value
-                };
-              } else if (
-                attributeType === "MultipleChoices" &&
-                name === upperCaseProperty
-              ) {
-                value = value.map(({ value }) => value);
-                console.log("for case is multi choice breached", value);
-                body[upperCaseProperty] = {
-                  attributeType,
-                  value
-                };
-              } else if (name === upperCaseProperty) {
-                // console.log("loggin value", value);
-                body[upperCaseProperty] = {
-                  attributeType,
-                  value
-                };
-              }
-            }
-          }
-        });
-        //{end here}
-        //console.log("your body is a wonderland", { body });
-        this.props.onSubmit({ body });
-      });
-    } else {
-      inputValues.forEach(value => {
-        const obj = value;
-        console.log("forEach:", value);
-        const body = {
-          asid: this.props.activeSectionAdminId
-        };
-        for (let property in obj) {
-          if (obj.hasOwnProperty(property)) {
-            body.name = obj[property];
-          }
-        }
-
-        this.props.onSubmit({ body });
-      });
-    }
   }
 
   getFirstChildUid() {
@@ -253,14 +153,135 @@ class RecordAddEdit extends Component {
         children
       );
     } else {
-      console.log("Went here second");
-
       this.props.onChangeActiveSectionByButton(
         uid,
         this.props.activeSectionAdminId,
         false,
         {}
       );
+    }
+  }
+
+  saveClick(event) {
+    event.preventDefault();
+
+    const { inputValues } = this.state;
+    //console.log("Input Values", inputValues);
+
+    let parentSectionId;
+    if (this.props.parentSectionBiz && this.props.parentSectionBiz.sections) {
+      parentSectionId = this.state.selectedOption
+        ? this.state.selectedOption.value
+        : null || this.props.parentSectionBiz.sections
+          ? this.props.parentSectionBiz.sections[0].id
+          : null || 0;
+      this.setState({ parentsectionId: parentSectionId });
+    }
+
+    if (parentSectionId !== 0) {
+      const body = {
+        asid: this.props.activeSectionAdminId,
+        parentsectionId: parentSectionId
+      };
+
+      this.props.attributes.forEach(({ name, fieldType: attributeType }) => {
+        inputValues.forEach(value => {
+          const obj = value;
+          if (name in obj) {
+            //console.log("True = "+name);
+            for (var property in obj) {
+              if (obj.hasOwnProperty(property)) {
+                const upperCaseProperty = property;
+                property = property.charAt(0).toLowerCase() + property.slice(1);
+                let value = obj[upperCaseProperty];
+                if (property === "name") {
+                  body[property] = obj[upperCaseProperty];
+                } else if (
+                  attributeType === "DateTime" &&
+                  name === upperCaseProperty
+                ) {
+                  value = value.toISOString();
+                  body[upperCaseProperty] = {
+                    attributeType,
+                    value
+                  };
+                } else if (
+                  attributeType === "MultipleChoices" &&
+                  name === upperCaseProperty
+                ) {
+                  value = value.map(({ value }) => value);
+                  body[upperCaseProperty] = {
+                    attributeType,
+                    value
+                  };
+                } else if (name === upperCaseProperty) {
+                  body[upperCaseProperty] = {
+                    attributeType,
+                    value
+                  };
+                }
+              }
+            }
+          } else {
+            if (attributeType === "Image") {
+              //let attributeType = "Image";
+              if (this.state.imageFile !== "") {
+                let value = this.state.imageFile.base64;
+                let attributeType = this.state.imageFile.name;
+                body["image"] = {
+                  name: attributeType,
+                  value
+                };
+              } else {
+                let value = "";
+                let attributeType = this.state.imageFile.name;
+                body["image"] = {
+                  name: attributeType,
+                  value
+                };
+              }
+            } else if (attributeType === "File") {
+              let attributeType = "File";
+              if (this.state.documentFile !== "") {
+                let value = this.state.documentFile.base64;
+                body["File"] = {
+                  attributeType,
+                  value
+                };
+              } else {
+                let value = "";
+                body["File"] = {
+                  attributeType,
+                  value
+                };
+              }
+            } else {
+              let value = "";
+              body[name] = {
+                attributeType,
+                value
+              };
+            }
+          }
+        });
+      });
+      console.log("Body", body);
+      this.props.onSubmit({ body });
+    } else {
+      inputValues.forEach(value => {
+        const obj = value;
+        //console.log("forEach:", value);
+        const body = {
+          asid: this.props.activeSectionAdminId
+        };
+        for (let property in obj) {
+          if (obj.hasOwnProperty(property)) {
+            body.name = obj[property];
+          }
+        }
+
+        this.props.onSubmit({ body });
+      });
     }
   }
 
@@ -277,7 +298,6 @@ class RecordAddEdit extends Component {
             <Col sm={9}>
               <DateTime
                 inputProps={{ required: attribute.required }}
-                //value={this.state[attribute.name]}
                 onChange={value => this.onChange(attribute.name, value, mykey)}
               />
             </Col>
@@ -295,8 +315,7 @@ class RecordAddEdit extends Component {
                 required={attribute.required}
                 type="number"
                 step="0.01"
-                placeholder={attribute.name}
-                // value={this.state[attribute.name]}
+                placeholder={attribute.placeholder}
                 onChange={event =>
                   this.onChange(attribute.name, event.target.value, mykey)
                 }
@@ -315,8 +334,7 @@ class RecordAddEdit extends Component {
               <Input
                 required={attribute.required}
                 type="number"
-                placeholder={attribute.name}
-                // value={this.state[attribute.name]}
+                placeholder={attribute.placeholder}
                 onChange={event =>
                   this.onChange(attribute.name, event.target.value, mykey)
                 }
@@ -326,7 +344,6 @@ class RecordAddEdit extends Component {
         );
 
       case "String":
-        // console.log("MYKEY", mykey);
         return (
           <FormGroup row key={attribute.uid}>
             <Label sm={3}>{`${attribute.name} ${
@@ -335,8 +352,7 @@ class RecordAddEdit extends Component {
             <Col sm={6}>
               <Input
                 required={attribute.required}
-                placeholder={attribute.name}
-                //value={this.state[attribute.name]}
+                placeholder={attribute.placeholder}
                 onChange={event =>
                   this.onChange(attribute.name, event.target.value, mykey)
                 }
@@ -358,8 +374,7 @@ class RecordAddEdit extends Component {
                   type="textarea"
                   rows={8}
                   required={attribute.required}
-                  placeholder={attribute.name}
-                  // value={this.state[attribute.name]}
+                  placeholder={attribute.placeholder}
                   onChange={event =>
                     this.onChange(attribute.name, event.target.value, mykey)
                   }
@@ -371,21 +386,18 @@ class RecordAddEdit extends Component {
       //end here
 
       //start here
-
       case "URL":
         return (
           <FormGroup row key={attribute.uid}>
             <Label sm={3}>{`${attribute.name.split("_").join(" ")} ${
               attribute.required ? "*" : ""
             }`}</Label>
-
             <Col sm={6}>
               <InputGroup>
                 <Input
                   type="text"
                   required={attribute.required}
-                  placeholder={attribute.name}
-                  //value={this.state[attribute.name]}
+                  placeholder={attribute.placeholder}
                   onChange={event =>
                     this.onChange(attribute.name, event.target.value, mykey)
                   }
@@ -396,48 +408,10 @@ class RecordAddEdit extends Component {
         );
       //end here
 
-      //start here case File
-      case "File":
-        return (
-          <FormGroup row key={attribute.uid}>
-            <Label sm={3}>{`${attribute.name.split("_").join(" ")} ${
-              attribute.required ? "*" : ""
-            }`}</Label>
-            <Col sm={6}>
-              <InputGroup>
-                <Input
-                  type="file"
-                  required={attribute.required}
-                  placeholder={attribute.name}
-                />
-              </InputGroup>
-            </Col>
-          </FormGroup>
-        );
-      //end her case File
-
-      //start here case Image
-
       case "Image":
         return (
           <div key={attribute.uid}>
-            {/* reminder // need profilePicture variable in the state  */}
-            {/* uploaded photo section start here */}
-            {/* {this.state.profilePicture && (
-              <FormGroup row key={attribute.uid}>
-                <Label sm={3}>Uploaded Photo</Label>
-                <Col sm={9}>
-                  <img
-                    alt="main"
-                    style={{ width: 100, height: 100 }}
-                    src={`${MAIN_URL}${this.state.profilePicture}`}
-                  />
-                </Col>
-              </FormGroup>
-            )} */}
-            {/* uploaded photo section end here */}
-
-            <FormGroup row key={attribute.uid}>
+            <FormGroup row>
               <Label sm={3}>{`${attribute.name.split("_").join(" ")} ${
                 attribute.required ? "*" : ""
               }`}</Label>
@@ -446,41 +420,58 @@ class RecordAddEdit extends Component {
                   <Input
                     type="file"
                     required={attribute.required}
-                    placeholder={attribute.name}
+                    placeholder={attribute.placeholder}
                     accept="image/*"
-                    //value={this.state[attribute.name]}
-                    // onChange={event =>
-                    //   this.onChange(attribute.name, event.target.value, mykey)
-                    // }
                     onChange={event =>
                       getBase64(event.target.files[0]).then(file =>
-                        this.setState({ profilePictureFile: file })
+                        this.setState({ imageFile: file })
                       )
                     }
                   />
                 </InputGroup>
               </Col>
             </FormGroup>
-
-            {/* selected photo section start here */}
-
-            {this.state.profilePictureFile && (
+            {/* selected image preview section */}
+            {this.state.imageFile && (
               <div>
                 <h5>Selected Photo</h5>
                 <img
-                  alt={this.state.profilePictureFile.name}
-                  src={this.state.profilePictureFile.base64}
-                  key={this.state.profilePictureFile.name}
+                  alt={this.state.imageFile.name}
+                  src={this.state.imageFile.base64}
+                  key={this.state.imageFile.name}
                   style={{ width: 50, height: 50 }}
                 />
               </div>
             )}
-
-            {/* selected photo section end here */}
           </div>
         );
 
-      //end here
+      case "File":
+        return (
+          <div key={attribute.uid}>
+            <FormGroup row>
+              <Label sm={3}>{`${attribute.name.split("_").join(" ")} ${
+                attribute.required ? "*" : ""
+              }`}</Label>
+              <Col sm={6}>
+                <InputGroup>
+                  <Input
+                    type="file"
+                    required={attribute.required}
+                    placeholder={attribute.placeholder}
+                    accept="application/pdf"
+                    onChange={event =>
+                      getBase64(event.target.files[0]).then(file =>
+                        this.setState({ documentFile: file })
+                      )
+                    }
+                  />
+                </InputGroup>
+              </Col>
+            </FormGroup>
+          </div>
+        );
+
       case "Choices":
         return (
           <FormGroup row key={attribute.uid}>
@@ -494,11 +485,8 @@ class RecordAddEdit extends Component {
                 onChange={value =>
                   this.onChange(attribute.name, value ? value.value : "", mykey)
                 }
-                //value={this.state[attribute.name]}
                 value={
-                  //this.state["inputValues"] &&
                   this.state["inputValues"][mykey] &&
-                  //this.state["inputValues"][mykey].Name &&
                   this.state["inputValues"][mykey][attribute.name]
                     ? this.state["inputValues"][mykey][attribute.name]
                     : ""
@@ -520,9 +508,7 @@ class RecordAddEdit extends Component {
                 multi
                 tabSelectsValue={false}
                 options={attribute.options.map(x => ({ value: x, label: x }))}
-                // required={attribute.required}
                 onChange={value => this.onChange(attribute.name, value, mykey)}
-                //value={this.state[attribute.name]}
                 value={
                   this.state["inputValues"][mykey] &&
                   this.state["inputValues"][mykey][attribute.name]
@@ -540,6 +526,8 @@ class RecordAddEdit extends Component {
   }
 
   render() {
+    //console.log("Attributes",this.props.attributes);
+
     const { selectedOption } = this.state;
     const subSectionDataInputs = this.state.subSectionDataInputs.map(
       (Element, index) => {
