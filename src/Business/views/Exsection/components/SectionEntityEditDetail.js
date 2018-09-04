@@ -40,6 +40,8 @@ class SectionEntityEditDetail extends Component {
     this.state = {
       dropdownOpen: false,
       sectionEntitySubmit: false,
+      imageFile: "",
+      documentFile: "",
       ...extra
     };
   }
@@ -173,6 +175,33 @@ class SectionEntityEditDetail extends Component {
         };
       }
     });
+
+    //For Image type attribute
+    if (this.state.imageFile !== "") {
+      let value = this.state.imageFile.base64;
+      let attributeType = this.state.imageFile.name;
+      updates["image"] = {
+        name: attributeType,
+        value
+      };
+    }
+    //For File type attribute
+    // if (this.state.documentFile) {
+    //   let attributeType = "File";
+    //   let value = this.state.documentFile.base64;
+    //   updates["File"] = {
+    //     attributeType,
+    //     value
+    //   };
+    // } else {
+    //   let attributeType = "File";
+    //   let value = "";
+    //   updates["File"] = {
+    //     attributeType,
+    //     value
+    //   };
+    // }
+
     //console.log("Update Data",updates);
     if (Object.keys(updates).length) {
       this.setState({ sectionEntitySubmit: true }, () =>
@@ -347,7 +376,7 @@ class SectionEntityEditDetail extends Component {
             }`}</Label>
             <Col sm={9}>
               <InputGroup>
-                {/* {attribute.unit &&
+                {attribute.unit &&
                 attribute.unit.length &&
                 attribute.unit[0].indexOf("--") !== -1 ? (
                   <InputGroupAddon addonType="prepend">
@@ -355,8 +384,8 @@ class SectionEntityEditDetail extends Component {
                       {attribute.unit[0].split("--")[0]}
                     </InputGroupText>
                   </InputGroupAddon>
-                ) : null} */}
-                <AboutUsEditor
+                ) : null}
+                {/* <AboutUsEditor
                   readOnly={this.props.loading}
                   required={attribute.required}
                   placeholder={attribute.name}
@@ -365,9 +394,9 @@ class SectionEntityEditDetail extends Component {
                   // onChange={event =>
                   //   this.onChange(attribute.name, event.target.value)
                   // }
-                />
+                /> */}
 
-                {/* <Input
+                <Input
                   type="textarea"
                   rows={6}
                   required={attribute.required}
@@ -376,14 +405,14 @@ class SectionEntityEditDetail extends Component {
                   onChange={event =>
                     this.onChange(attribute.name, event.target.value)
                   }
-                /> */}
-                {/* {attribute.unit &&
+                />
+                {attribute.unit &&
                 attribute.unit.length &&
                 attribute.unit[0].indexOf("--") === -1 ? (
                   <InputGroupAddon addonType="append">
                     {attribute.unit[0].split("--")[0]}
                   </InputGroupAddon>
-                ) : null} */}
+                ) : null}
               </InputGroup>
             </Col>
           </FormGroup>
@@ -463,12 +492,105 @@ class SectionEntityEditDetail extends Component {
           </FormGroup>
         );
 
+      case "Image":
+        const imgTag = this.props.defaultValue.images.map((img, index) => {
+          return (
+            <img
+              key={index}
+              alt="main"
+              style={{ width: 100, height: 100 }}
+              src={`${MAIN_URL}${this.props.defaultValue.images[index].url}`}
+            />
+          );
+        });
+        return (
+          <div key={attribute.uid}>
+            {this.props.defaultValue.images && (
+              <FormGroup row>
+                <Label sm={3}>
+                  Uploaded {`${attribute.name.split("_").join(" ")}`}
+                </Label>
+                <Col sm={9}>
+                  {imgTag}
+                  {/* <img
+                    alt="main"
+                    style={{ width: 100, height: 100 }}
+                    src={`${MAIN_URL}${this.props.defaultValue.images[0].url}`}
+                  /> */}
+                </Col>
+              </FormGroup>
+            )}
+
+            <FormGroup row>
+              <Label sm={3}>
+                Change{" "}
+                {`${attribute.name.split("_").join(" ")} ${
+                  attribute.required ? "*" : ""
+                }`}
+              </Label>
+              <Col sm={4}>
+                <Input
+                  id="image"
+                  //required={attribute.required ? "true" : "false"}
+                  type="file"
+                  //className="file-product-add"
+                  accept="image/*"
+                  onChange={event =>
+                    getBase64(event.target.files[0]).then(file =>
+                      this.setState({ imageFile: file })
+                    )
+                  }
+                />
+              </Col>
+            </FormGroup>
+
+            {this.state.imageFile && (
+              <div>
+                <h5>Selected {`${attribute.name.split("_").join(" ")}`}</h5>
+                <img
+                  alt={this.state.imageFile.name}
+                  src={this.state.imageFile.base64}
+                  key={this.state.imageFile.name}
+                  style={{ width: 50, height: 50 }}
+                />
+              </div>
+            )}
+          </div>
+        );
+
+      case "File":
+        return (
+          <div key={attribute.uid}>
+            <FormGroup row>
+              <Label sm={3}>{`${attribute.name.split("_").join(" ")} ${
+                attribute.required ? "*" : ""
+              }`}</Label>
+              <Col sm={6}>
+                <InputGroup>
+                  <Input
+                    type="file"
+                    required={attribute.required}
+                    placeholder={attribute.placeholder}
+                    accept="application/pdf"
+                    onChange={event =>
+                      getBase64(event.target.files[0]).then(file =>
+                        this.setState({ documentFile: file })
+                      )
+                    }
+                  />
+                </InputGroup>
+              </Col>
+            </FormGroup>
+          </div>
+        );
+
       default:
         return null;
     }
   }
 
   render() {
+    console.log("Props", this.props);
     return (
       <Card>
         <CardHeader>
