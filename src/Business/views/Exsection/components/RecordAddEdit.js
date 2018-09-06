@@ -6,7 +6,6 @@ import {
   Form,
   FormGroup,
   Label,
-  Row,
   Col,
   Input,
   Button,
@@ -23,7 +22,6 @@ import SubSectionDataInput from "./SubSectionDataInput";
 import { SectionLoadingEffect } from "../../../../Common/components";
 
 import getBase64 from "../../../../Common/utils/getBase64";
-import { MAIN_URL } from "../../../../Common/utils/API";
 
 class RecordAddEdit extends Component {
   constructor(props) {
@@ -42,8 +40,6 @@ class RecordAddEdit extends Component {
     };
     this.renderField = this.renderField.bind(this);
     this.onChange = this.onChange.bind(this);
-    this.getFirstChildUid = this.getFirstChildUid.bind(this);
-    this.handleNextSectionClick = this.handleNextSectionClick.bind(this);
     this.checkTopSectionAlreadyExists = this.checkTopSectionAlreadyExists.bind(
       this
     );
@@ -68,9 +64,7 @@ class RecordAddEdit extends Component {
   }
 
   //check if top section has a initial entry for a particular business
-
   checkSectionIsTop() {
-    //console.log("breached", this.props);
     if (!this.props.parentSectionBiz) {
       return true;
     }
@@ -118,6 +112,7 @@ class RecordAddEdit extends Component {
     newArray[mykey] = { ...newArray[mykey], ...{ [key]: value } };
 
     this.setState({ inputValues: newArray, [key]: value });
+    // console.log("coling this state inputValues", this.state.inputValues);
   };
 
   addClick() {
@@ -133,42 +128,12 @@ class RecordAddEdit extends Component {
     this.setState({ subSectionDataInputs });
   }
 
-  getFirstChildUid() {
-    return this.props.activeChildrenAdmin.uid;
-  }
-
-  handleNextSectionClick() {
-    const uid = this.getFirstChildUid();
-
-    var children;
-    if (this.props.activeChildrenAdmin.children) {
-      children = this.props.activeChildrenAdmin.children[0];
-    } else children = {};
-
-    if (uid) {
-      this.props.onChangeActiveSectionByButton(
-        uid,
-        this.props.activeSectionAdminId,
-        false,
-        children
-      );
-    } else {
-      this.props.onChangeActiveSectionByButton(
-        uid,
-        this.props.activeSectionAdminId,
-        false,
-        {}
-      );
-    }
-  }
-
   saveClick(event) {
     event.preventDefault();
-
     const { inputValues } = this.state;
-    //console.log("Input Values", inputValues);
-
     let parentSectionId;
+    //** comment not to be deleted
+    //if parentselectbox is not present use the parentSectionBiz props
     if (this.props.parentSectionBiz && this.props.parentSectionBiz.sections) {
       parentSectionId = this.state.selectedOption
         ? this.state.selectedOption.value
@@ -178,99 +143,92 @@ class RecordAddEdit extends Component {
       this.setState({ parentsectionId: parentSectionId });
     }
 
-    if (parentSectionId !== 0) {
+    if (parentSectionId) {
       const body = {
         asid: this.props.activeSectionAdminId,
         parentsectionId: parentSectionId
       };
 
-      this.props.attributes.forEach(({ name, fieldType: attributeType }) => {
-        inputValues.forEach(value => {
-          const obj = value;
+      // console.log("initially body", body);
+      //console.log("this props attributes", this.props.attributes);
+      //console.log("this props input values", inputValues);
+
+      inputValues.forEach(value => {
+        const obj = value;
+        this.props.attributes.forEach(({ name, fieldType: attributeType }) => {
+          //console.log("soling object", obj);
+          //console.log("soling name", name);
+          // console.log("soling attributeType", attributeType);
+
           if (name in obj) {
-            //console.log("True = "+name);
+            //  console.log("true", name);
             for (var property in obj) {
-              if (obj.hasOwnProperty(property)) {
-                const upperCaseProperty = property;
-                property = property.charAt(0).toLowerCase() + property.slice(1);
-                let value = obj[upperCaseProperty];
-                if (property === "name") {
-                  body[property] = obj[upperCaseProperty];
-                } else if (
-                  attributeType === "DateTime" &&
-                  name === upperCaseProperty
-                ) {
-                  value = value.toISOString();
-                  body[upperCaseProperty] = {
-                    attributeType,
-                    value
+              let bodyValue = obj[property];
+              if (property === "Name") {
+                const lowerCaseProperty =
+                  property.charAt(0).toLowerCase() + property.slice(1);
+                //  console.log("breached here in name if");
+                body[lowerCaseProperty] = obj[property];
+              } else if (attributeType === "Float") {
+                //  console.log("breached hre in else if float");
+                body[name] = {
+                  attributeType,
+                  value: bodyValue
+                };
+              } else if (attributeType === "DateTime") {
+                bodyValue = bodyValue.toISOString();
+                body[name] = {
+                  attributeType,
+                  value: bodyValue
+                };
+              } else if (attributeType === "MultipleChoices") {
+                bodyValue = bodyValue.map(({ value }) => value);
+                body[name] = {
+                  attributeType,
+                  value: bodyValue
+                };
+              } else if (attributeType === "Image") {
+                if (this.state.imageFile !== "") {
+                  let imgvalue = this.state.imageFile.base64;
+                  let attributeType = this.state.imageFile.name;
+                  body["image"] = {
+                    name: attributeType,
+                    imgvalue
                   };
-                } else if (
-                  attributeType === "MultipleChoices" &&
-                  name === upperCaseProperty
-                ) {
-                  value = value.map(({ value }) => value);
-                  body[upperCaseProperty] = {
+                }
+              } else if (attributeType === "File") {
+                if (this.state.documentFile !== "") {
+                  let bodyValue = this.state.documentFile.base64;
+                  body["File"] = {
                     attributeType,
-                    value
+                    bodyValue
                   };
-                } else if (name === upperCaseProperty) {
-                  body[upperCaseProperty] = {
+                } else {
+                  let bodyValue = "";
+                  body["File"] = {
                     attributeType,
-                    value
+                    bodyValue
                   };
                 }
               }
-            }
-          } else {
-            if (attributeType === "Image") {
-              //let attributeType = "Image";
-              if (this.state.imageFile !== "") {
-                let value = this.state.imageFile.base64;
-                let attributeType = this.state.imageFile.name;
-                body["image"] = {
-                  name: attributeType,
-                  value
-                };
-              } else {
-                let value = "";
-                let attributeType = this.state.imageFile.name;
-                body["image"] = {
-                  name: attributeType,
-                  value
+              //for any other attributeType beside above mentioned do this
+              else {
+                body[name] = {
+                  attributeType,
+                  value: bodyValue
                 };
               }
-            } else if (attributeType === "File") {
-              let attributeType = "File";
-              if (this.state.documentFile !== "") {
-                let value = this.state.documentFile.base64;
-                body["File"] = {
-                  attributeType,
-                  value
-                };
-              } else {
-                let value = "";
-                body["File"] = {
-                  attributeType,
-                  value
-                };
-              }
-            } else {
-              let value = "";
-              body[name] = {
-                attributeType,
-                value
-              };
             }
           }
         });
+        console.log("Body from if", body);
+        this.props.onSubmit({ body });
       });
-      console.log("Body", body);
-      this.props.onSubmit({ body });
-    } else {
+    }
+    // for top section if there is no parentSectionId use this
+    else {
       inputValues.forEach(value => {
         const obj = value;
-        //console.log("forEach:", value);
         const body = {
           asid: this.props.activeSectionAdminId
         };
@@ -279,7 +237,7 @@ class RecordAddEdit extends Component {
             body.name = obj[property];
           }
         }
-
+        console.log(" from else Body", body);
         this.props.onSubmit({ body });
       });
     }
@@ -361,7 +319,6 @@ class RecordAddEdit extends Component {
           </FormGroup>
         );
 
-      // Start here
       case "LongString":
         return (
           <FormGroup row key={attribute.uid}>
@@ -383,9 +340,7 @@ class RecordAddEdit extends Component {
             </Col>
           </FormGroup>
         );
-      //end here
 
-      //start here
       case "URL":
         return (
           <FormGroup row key={attribute.uid}>
@@ -406,7 +361,6 @@ class RecordAddEdit extends Component {
             </Col>
           </FormGroup>
         );
-      //end here
 
       case "Image":
         return (
@@ -526,8 +480,6 @@ class RecordAddEdit extends Component {
   }
 
   render() {
-    //console.log("Attributes",this.props.attributes);
-
     const { selectedOption } = this.state;
     const subSectionDataInputs = this.state.subSectionDataInputs.map(
       (Element, index) => {

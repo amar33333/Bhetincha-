@@ -1,7 +1,6 @@
 import SideSectionsView from "./SideSectionsView";
 import RecordAddNew from "./RecordAddNew";
 
-import SectionEditViewBusiness from "./SectionEditViewBusiness";
 import SubSectionDataList from "./SubSectionDataList";
 import SubSectionDataDetail from "./SubSectionDataDetail";
 
@@ -12,7 +11,6 @@ import ManageAvailableBusinessSection from "./ManageAvailableBusinessSection";
 export {
   SideSectionsView,
   RecordAddNew,
-  SectionEditViewBusiness,
   SubSectionDataList,
   SubSectionDataDetail,
   SectionListAdmin,

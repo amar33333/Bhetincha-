@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
 import { Card, CardHeader, CardBody, Nav, NavItem, NavLink } from "reactstrap";
 import "./sectionListAdmin.css";
 

@@ -527,9 +527,7 @@ export const onCompanyTypeGet = ({ access_token }) =>
   });
 
 // Exsection Goes Here
-
 // onSectionBusinessPost //post data about each section from business dash
-
 export const onSectionBusinessPost = ({ body }) =>
   ajax({
     method: "POST",
@@ -553,7 +551,6 @@ export const onParentSectionBusinessGet = ({ body }) =>
   });
 
 //onSectionsListExsectionBusinessData
-
 export const onSectionsListExsectionBusinessData = ({ body, businessIdd }) =>
   ajax({
     method: "GET",
@@ -566,17 +563,6 @@ export const onSectionsListExsectionBusinessData = ({ body, businessIdd }) =>
   });
 
 // calls for implementing updating Section Entity for bhetincha
-
-//onExsectionEntityEachGet
-//EXSECTION_SECTION_ENTITY_URL/uid
-//sample output
-//{
-//   "properties": {
-//     "price": 55,
-//     "name": "Wicked wings",
-//     "uid": "54dc195fdf4c40f7afff3e67e9899c16"
-// }
-// }
 export const onExsectionSubSectionDataEachGet = ({ uid }) =>
   ajax({
     method: "GET",
