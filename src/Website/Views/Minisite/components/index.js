@@ -8,6 +8,8 @@ import Ecommerce from "./Ecommerce/Ecommerce";
 import EcommerceProduct from "./Ecommerce/EcommerceProduct";
 // import MainPage from "./MainPage";
 import ReviewRating from "./ReviewRating";
+import Sections from "./Sections/Sections";
+import SectionsDetails from "./Sections/sectionDetails";
 
 export {
   BusinessFooter,
@@ -18,5 +20,7 @@ export {
   Contact,
   Ecommerce,
   EcommerceProduct,
+  Sections,
+  SectionsDetails,
   ReviewRating
 };
